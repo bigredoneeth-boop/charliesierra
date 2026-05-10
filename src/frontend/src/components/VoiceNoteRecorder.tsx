@@ -114,15 +114,18 @@ export function VoiceNoteRecorder({
       const { ExternalBlob } = await import("@/backend");
       const arrayBuf = await audioBlob.arrayBuffer();
       const { encryptBlob } = await import("@/lib/crypto");
-      const encryptedBlob = await encryptBlob(convKey, arrayBuf);
+      const encrypted = await encryptBlob(convKey, arrayBuf);
 
-      // Upload ciphertext only — object-storage hashes and num_blob_bytes must match encrypted bytes,
-      // not the raw recording Blob.
+      // Upload encrypted audio blob to object-storage.
+      // Allocate a brand-new, fully-isolated ArrayBuffer and copy the encrypted
+      // bytes into it byte-by-byte. This guarantees the backing buffer is not
+      // shared with the IV-prepend stage of encryptBlob(), which can produce a
+      // non-zero byteOffset composite view that confuses the blob_tree hasher
+      // and causes a 403 "Invalid Payload" when the hashes don't match the data.
+      const isolatedBuffer = new ArrayBuffer(encrypted.byteLength);
+      new Uint8Array(isolatedBuffer).set(encrypted);
       const safeBytes = new Uint8Array(
-        encryptedBlob.buffer.slice(
-          encryptedBlob.byteOffset,
-          encryptedBlob.byteOffset + encryptedBlob.byteLength,
-        ),
+        isolatedBuffer,
       ) as Uint8Array<ArrayBuffer>;
       const externalBlob = ExternalBlob.fromBytes(safeBytes);
       const storageKeyBytes = await uploadBlob(externalBlob);
@@ -146,7 +149,7 @@ export function VoiceNoteRecorder({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: audioBlob.type,
-        encryptedSizeBytes: BigInt(encryptedBlob.byteLength),
+        encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);

@@ -99,21 +99,23 @@ export function AttachmentUpload({
     setUploading(true);
     setError(null);
     try {
-      // Step 1: Encrypt first — ICFS hashing and num_blob_bytes on the gateway are derived from
-      // the ciphertext we upload (not from the plaintext File selectedFile).
+      // Step 1: Read file and encrypt it client-side
       const arrayBuf = await selectedFile.arrayBuffer();
       setProgress(10);
       const { encryptBlob } = await import("@/lib/crypto");
-      const encryptedBlob = await encryptBlob(convKey, arrayBuf);
+      const encrypted = await encryptBlob(convKey, arrayBuf);
       setProgress(25);
 
-      // Step 2: Upload encrypted ciphertext to object-storage (_uploadFile → putFile).
-      // Defensive contiguous copy so chunk hashing and parallel chunk PUTs agree on payload length.
+      // Step 2: Upload encrypted blob to object-storage.
+      // Allocate a brand-new, fully-isolated ArrayBuffer and copy the encrypted
+      // bytes into it byte-by-byte. This guarantees the backing buffer is not
+      // shared with the IV-prepend stage of encryptBlob(), which can produce a
+      // non-zero byteOffset composite view that confuses the blob_tree hasher
+      // and causes a 403 "Invalid Payload" when the hashes don't match the data.
+      const isolatedBuffer = new ArrayBuffer(encrypted.byteLength);
+      new Uint8Array(isolatedBuffer).set(encrypted);
       const safeBytes = new Uint8Array(
-        encryptedBlob.buffer.slice(
-          encryptedBlob.byteOffset,
-          encryptedBlob.byteOffset + encryptedBlob.byteLength,
-        ),
+        isolatedBuffer,
       ) as Uint8Array<ArrayBuffer>;
       const externalBlob = ExternalBlob.fromBytes(safeBytes).withUploadProgress(
         (pct) => setProgress(25 + Math.round(pct * 0.4)), // 25–65%
@@ -150,7 +152,7 @@ export function AttachmentUpload({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(encryptedBlob.byteLength),
+        encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);

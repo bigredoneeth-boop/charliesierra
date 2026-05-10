@@ -1,11 +1,6 @@
 {
   "name": "@caffeine/template-app",
   "type": "module",
-  "pnpm": {
-    "patchedDependencies": {
-      "@caffeineai/object-storage@0.1.1": "patches/@caffeineai__object-storage@0.1.1.patch"
-    }
-  },
   "engines": {
     "node": ">=16.0.0",
     "pnpm": ">=7.0.0",

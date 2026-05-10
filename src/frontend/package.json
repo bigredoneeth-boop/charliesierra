@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && pnpm copy:env",
-    "copy:env": "copy env.json dist\\ || copy env.json dist/ || echo env.json already copied",
+    "copy:env": "cp env.json dist/",
     "typecheck": "tsc --noEmit",
     "check": "biome check src",
     "fix": "biome check --write src"
