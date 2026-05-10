@@ -1,0 +1,555 @@
+type UserProfilePublic = 
+ record {
+   ecdhPublicKey: EcdhPublicKey;
+   encryptedAvatarKey: opt text;
+   encryptedDisplayName: blob;
+   id: UserId;
+   lastSeen: Timestamp;
+   registeredAt: Timestamp;
+ };
+type UserId = principal;
+type UpdateProfileRequest = 
+ record {
+   ecdhPublicKey: opt EcdhPublicKey;
+   encryptedAvatarKey: opt text;
+   encryptedDisplayName: opt blob;
+ };
+type TypingIndicatorPublic = 
+ record {
+   conversationId: ConversationId;
+   expiresAt: Timestamp;
+   userId: UserId;
+ };
+type Timestamp = int;
+type SubmitJoinRequestRequest = 
+ record {
+   conversationId: ConversationId;
+   message: opt text;
+ };
+type SovereignConfig = 
+ record {
+   canisters: text;
+   cyclesCostMultiplier: opt float64;
+   lastUpdated: Timestamp;
+   nodeCount: opt nat;
+   residencyLabel: DataResidency;
+   subnetPrincipal: opt principal;
+ };
+type SendMessageRequest = 
+ record {
+   conversationId: ConversationId;
+   encryptedContent: blob;
+   messageType: MessageType;
+   priority: opt MessagePriority;
+   ttlSeconds: opt nat;
+ };
+type RetentionMetadataRecord = 
+ record {
+   convId: ConversationId;
+   messageId: MessageId;
+   recipientPrincipals: vec UserId;
+   senderPrincipal: UserId;
+   sentAt: Timestamp;
+ };
+type Result_9 = 
+ variant {
+   err: Error;
+   ok: vec RetentionMetadataRecord;
+ };
+type Result_8 = 
+ variant {
+   err: Error;
+   ok: CallRecordPublic;
+ };
+type Result_7 = 
+ variant {
+   err: Error;
+   ok: vec UserId;
+ };
+type Result_6 = 
+ variant {
+   err: Error;
+   ok: DeviceRecordPublic;
+ };
+type Result_5 = 
+ variant {
+   err: Error;
+   ok: Attachment;
+ };
+type Result_4 = 
+ variant {
+   err: Error;
+   ok: MessagePublic;
+ };
+type Result_3 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result_2 = 
+ variant {
+   err: Error;
+   ok: SovereignConfig;
+ };
+type Result_18 = 
+ variant {
+   err: Error;
+   ok: vec EscrowAccessGrant;
+ };
+type Result_17 = 
+ variant {
+   err: Error;
+   ok: EscrowAccessGrant;
+ };
+type Result_16 = 
+ variant {
+   err: Error;
+   ok: ConversationPublic;
+ };
+type Result_15 = 
+ variant {
+   err: Error;
+   ok: ConfigExportBundle;
+ };
+type Result_14 = 
+ variant {
+   err: Error;
+   ok: text;
+ };
+type Result_13 = 
+ variant {
+   err: Error;
+   ok: vec AuditEvent;
+ };
+type Result_12 = 
+ variant {
+   err: Error;
+   ok: vec JoinRequest;
+ };
+type Result_11 = 
+ variant {
+   err: Error;
+   ok: GroupRetentionPolicy;
+ };
+type Result_10 = 
+ variant {
+   err: Error;
+   ok: vec MessagePublic;
+ };
+type Result_1 = 
+ variant {
+   err: Error;
+   ok: JoinRequest;
+ };
+type Result = 
+ variant {
+   err: Error;
+   ok: UserProfilePublic;
+ };
+type RemoveMemberRequest = 
+ record {
+   conversationId: ConversationId;
+   member: UserId;
+ };
+type RegisterRequest = 
+ record {
+   ecdhPublicKey: EcdhPublicKey;
+   encryptedAvatarKey: opt text;
+   encryptedDisplayName: blob;
+ };
+type RegisterAttachmentRequest = 
+ record {
+   encryptedSizeBytes: nat;
+   messageId: MessageId;
+   mimeType: text;
+   storageKey: text;
+ };
+type ReadReceipt = 
+ record {
+   readAt: Timestamp;
+   userId: UserId;
+ };
+type PublicGroupSummary = 
+ record {
+   category: opt text;
+   description: opt text;
+   id: ConversationId;
+   memberCount: nat;
+   name: text;
+ };
+type MessageType = 
+ variant {
+   audio;
+   file;
+   image;
+   "text";
+   video;
+ };
+type MessagePublic = 
+ record {
+   conversationId: ConversationId;
+   encryptedContent: blob;
+   id: MessageId;
+   isDeleted: bool;
+   messageType: MessageType;
+   priority: opt MessagePriority;
+   readBy: vec ReadReceipt;
+   sender: UserId;
+   sentAt: Timestamp;
+   ttlSeconds: opt nat;
+ };
+type MessagePriority = 
+ variant {
+   high;
+   normal;
+ };
+type MessageId = nat;
+type ListPublicGroupsRequest = 
+ record {
+   category: opt text;
+   limit: nat;
+   offset: nat;
+ };
+type JoinRequestStatus = 
+ variant {
+   approved;
+   denied;
+   pending;
+ };
+type JoinRequestActionRequest = 
+ record {
+   conversationId: ConversationId;
+   denialReason: opt DenialReason;
+   requestId: text;
+ };
+type JoinRequest = 
+ record {
+   conversationId: ConversationId;
+   createdAt: Timestamp;
+   message: opt text;
+   requestId: text;
+   requesterId: UserId;
+   status: JoinRequestStatus;
+ };
+type InitiateCallRequest = 
+ record {
+   callType: CallType;
+   callees: vec UserId;
+   conversationId: opt ConversationId;
+   encryptedSdpOffer: blob;
+ };
+type GroupRetentionPolicy = 
+ record {
+   convId: ConversationId;
+   enabledAt: opt Timestamp;
+   enabledBy: opt UserId;
+   retentionEnabled: bool;
+ };
+type GetRetentionMetadataRequest = 
+ record {
+   afterMessageId: opt MessageId;
+   convId: opt ConversationId;
+   endDate: opt Timestamp;
+   limit: nat;
+   startDate: opt Timestamp;
+ };
+type GetMessagesRequest = 
+ record {
+   beforeMessageId: opt MessageId;
+   conversationId: ConversationId;
+   limit: nat;
+ };
+type GetAuditLogRequest = 
+ record {
+   afterEventId: opt nat;
+   filterEventType: opt AuditEventType;
+   limit: nat;
+ };
+type EscrowRecord = 
+ record {
+   consentLanguageVersion: text;
+   consentTimestamp: Timestamp;
+   deviceId: text;
+   deviceLabel: text;
+   devicePublicKeyFingerprint: text;
+   revokedAt: opt Timestamp;
+   revokedReason: opt text;
+   userId: UserId;
+   wrappedKey: blob;
+ };
+type EscrowAccessGrant = 
+ record {
+   accessOutcome: text;
+   grantId: nat;
+   grantTimestamp: Timestamp;
+   reason: text;
+   requestingAdmin: UserId;
+   targetDeviceId: text;
+   targetUserId: UserId;
+ };
+type Error = 
+ variant {
+   alreadyExists;
+   forbidden;
+   invalidInput;
+   notFound;
+   unauthorized;
+ };
+type EcdhPublicKey = blob;
+type DeviceRecordPublic = 
+ record {
+   deviceId: text;
+   deviceLabel: text;
+   lastSeen: Timestamp;
+   publicKey: blob;
+   registeredAt: Timestamp;
+ };
+type DenialReason = text;
+type DataResidency = 
+ variant {
+   apac;
+   eu;
+   global;
+   us;
+ };
+type CreateGroupRequest = 
+ record {
+   category: opt text;
+   description: opt text;
+   discoverable: bool;
+   displayName: opt text;
+   encryptedName: blob;
+   initialMembers: vec UserId;
+ };
+type CreateDirectRequest = record {peer: UserId;};
+type ConversationPublic = 
+ record {
+   category: opt text;
+   createdAt: Timestamp;
+   createdBy: UserId;
+   description: opt text;
+   discoverable: bool;
+   displayName: opt text;
+   encryptedName: opt blob;
+   id: ConversationId;
+   kind: ConversationKind;
+   lastMessageAt: Timestamp;
+   members: vec UserId;
+ };
+type ConversationKind = 
+ variant {
+   direct;
+   group;
+ };
+type ConversationId = nat;
+type ConfigExportBundle = 
+ record {
+   adminPrincipals: vec UserId;
+   canisters: text;
+   compartmentMappings: vec record {
+                              ConversationId;
+                              CompartmentLabel;
+                            };
+   exportedAt: Timestamp;
+   exportedBy: UserId;
+   groupRetentionPolicies: vec record {
+                                 ConversationId;
+                                 GroupRetentionPolicy;
+                               };
+   residencyLabel: DataResidency;
+   subnetPrincipal: opt text;
+ };
+type CompartmentLabel = 
+ variant {
+   classified;
+   unclassified;
+ };
+type CallType = 
+ variant {
+   audio;
+   video;
+ };
+type CallStatus = 
+ variant {
+   active;
+   declined;
+   ended;
+   missed;
+   ringing;
+ };
+type CallRecordPublic = 
+ record {
+   callType: CallType;
+   callees: vec UserId;
+   caller: UserId;
+   conversationId: opt ConversationId;
+   encryptedSdpAnswer: opt blob;
+   encryptedSdpOffer: opt blob;
+   iceCandidates: vec blob;
+   id: CallId;
+   initiatedAt: Timestamp;
+   status: CallStatus;
+   updatedAt: Timestamp;
+ };
+type CallId = nat;
+type AuditExportRequest = 
+ record {
+   affectedUser: opt UserId;
+   endDate: opt Timestamp;
+   eventTypes: opt vec AuditExportEventType;
+   format: AuditExportFormat;
+   startDate: opt Timestamp;
+ };
+type AuditExportFormat = 
+ variant {
+   csv;
+   json;
+ };
+type AuditExportEventType = 
+ variant {
+   adminAction;
+   auditLogExported;
+   callInitiated;
+   escrowAccessGranted;
+   escrowEnrolled;
+   escrowRevoked;
+   memberAdded;
+   memberRemoved;
+   messageSent;
+   retentionDisabled;
+   retentionEnabled;
+   userRegistered;
+   userRemoved;
+ };
+type AuditEventType = 
+ variant {
+   adminAction;
+   auditLogExported;
+   callInitiated;
+   compartmentAssigned;
+   escrowAccessGranted;
+   escrowEnrolled;
+   escrowRevoked;
+   memberAdded;
+   memberRemoved;
+   messageQueueDrained;
+   messageSent;
+   priorityMessageSent;
+   retentionDisabled;
+   retentionEnabled;
+   sovereignConfigUpdated;
+   userRegistered;
+   userRemoved;
+ };
+type AuditEvent = 
+ record {
+   actorPrincipal: UserId;
+   encryptedDetails: opt blob;
+   eventType: AuditEventType;
+   id: nat;
+   targetPrincipal: opt UserId;
+   timestamp: Timestamp;
+ };
+type AttachmentId = nat;
+type Attachment = 
+ record {
+   encryptedSizeBytes: nat;
+   id: AttachmentId;
+   messageId: MessageId;
+   mimeType: text;
+   storageKey: text;
+   uploadedAt: Timestamp;
+   uploader: UserId;
+ };
+type AnswerCallRequest = 
+ record {
+   callId: CallId;
+   encryptedSdpAnswer: blob;
+ };
+type AddMemberRequest = 
+ record {
+   conversationId: ConversationId;
+   member: UserId;
+ };
+type AddIceCandidateRequest = 
+ record {
+   callId: CallId;
+   encryptedIceCandidate: blob;
+ };
+type AddDeviceRequest = 
+ record {
+   deviceId: text;
+   deviceLabel: text;
+   publicKey: blob;
+ };
+service : {
+  addAdmin: (newAdmin: UserId) -> (Result_3);
+  addConversationMember: (req: AddMemberRequest) -> (Result_3);
+  addDevice: (req: AddDeviceRequest) -> (Result_6);
+  addIceCandidate: (req: AddIceCandidateRequest) -> (Result_3);
+  adminGetEscrowGrants: (targetUserId: opt UserId, limit: nat, afterGrantId:
+   opt nat) -> (Result_18) query;
+  adminGrantEscrowAccess: (targetUserId: UserId, targetDeviceId: text,
+   reason: text) -> (Result_17);
+  answerCall: (req: AnswerCallRequest) -> (Result_8);
+  approveJoinRequest: (req: JoinRequestActionRequest) -> (Result_3);
+  clearTypingIndicator: (conversationId: ConversationId) -> ();
+  createDirectConversation: (req: CreateDirectRequest) -> (Result_16);
+  createGroupConversation: (req: CreateGroupRequest) -> (Result_16);
+  declineCall: (callId: CallId) -> (Result_3);
+  deleteAttachment: (attachmentId: AttachmentId) -> (Result_3);
+  deleteGroupConversation: (conversationId: ConversationId) -> (Result_3);
+  denyJoinRequest: (req: JoinRequestActionRequest) -> (Result_3);
+  disableGroupRetention: (convId: ConversationId) -> (Result_3);
+  enableGroupRetention: (convId: ConversationId) -> (Result_3);
+  endCall: (callId: CallId, reason: CallStatus) -> (Result_3);
+  enrollKeyEscrow: (deviceId: text, deviceLabel: text,
+   devicePublicKeyFingerprint: text, wrappedKey: blob,
+   consentLanguageVersion: text) -> (Result_3);
+  exportAuditLog: (req: AuditExportRequest) -> (Result_14);
+  exportConfigBundle: () -> (Result_15);
+  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_14);
+  getAuditLog: (req: GetAuditLogRequest) -> (Result_13) query;
+  getCall: (callId: CallId) -> (opt CallRecordPublic) query;
+  getConversation: (id: ConversationId) -> (opt ConversationPublic) query;
+  getDeploymentInfo: () -> (SovereignConfig) query;
+  getGroupCompartment: (convId: ConversationId) ->
+   (opt CompartmentLabel) query;
+  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_12) query;
+  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_11) query;
+  getMessageAttachments: (messageId: MessageId) -> (vec Attachment) query;
+  getMessages: (req: GetMessagesRequest) -> (Result_10) query;
+  getMyEscrowStatus: () -> (vec EscrowRecord) query;
+  getRetentionMetadata: (req: GetRetentionMetadataRequest) ->
+   (Result_9) query;
+  getTypingIndicators: (conversationId: ConversationId) ->
+   (vec TypingIndicatorPublic) query;
+  getUserProfile: (userId: UserId) -> (opt UserProfilePublic) query;
+  getUserProfiles: (userIds: vec UserId) -> (vec UserProfilePublic) query;
+  initiateCall: (req: InitiateCallRequest) -> (Result_8);
+  isAdminCheck: ("principal": UserId) -> (bool) query;
+  listActiveCalls: () -> (vec CallRecordPublic) query;
+  listAdmins: () -> (Result_7) query;
+  listConversations: () -> (vec ConversationPublic) query;
+  listMyDevices: () -> (vec DeviceRecordPublic) query;
+  listPublicGroups: (req: ListPublicGroupsRequest) ->
+   (vec PublicGroupSummary) query;
+  markMessageRead: (messageId: MessageId) -> (Result_3);
+  redeemDeviceSyncToken: (token: text, deviceId: text, deviceLabel: text) ->
+   (Result_6);
+  registerAttachment: (req: RegisterAttachmentRequest) -> (Result_5);
+  registerUser: (req: RegisterRequest) -> (Result);
+  removeAdmin: (target: UserId) -> (Result_3);
+  removeConversationMember: (req: RemoveMemberRequest) -> (Result_3);
+  revokeDevice: (deviceId: text) -> (Result_3);
+  revokeKeyEscrow: (deviceId: text, reason: text) -> (Result_3);
+  sendMessage: (req: SendMessageRequest) -> (Result_4);
+  setGroupCompartment: (convId: ConversationId, compartment:
+   CompartmentLabel) -> (Result_3);
+  setSovereignConfig: (residency: DataResidency, subnet: opt principal,
+   nodeCount: opt nat, costMult: opt float64) -> (Result_2);
+  setTypingIndicator: (conversationId: ConversationId, ttlSeconds: nat) -> ();
+  submitJoinRequest: (req: SubmitJoinRequestRequest) -> (Result_1);
+  touchPresence: () -> ();
+  updateUserProfile: (req: UpdateProfileRequest) -> (Result);
+}

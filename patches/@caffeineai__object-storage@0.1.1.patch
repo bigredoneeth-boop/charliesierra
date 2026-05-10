@@ -1,0 +1,36 @@
+diff --git a/dist/StorageClient.js b/dist/StorageClient.js
+--- a/dist/StorageClient.js
++++ b/dist/StorageClient.js
+@@ -348,22 +348,26 @@
+     async putFile(blobBytes, onProgress) {
+         // HTTP headers for fetch requests (used for the PUT request to gateway)
+         const httpHeaders = {
+             "Content-Type": "application/json",
+         };
+-        // Create a Blob from the bytes
+-        const file = new Blob([new Uint8Array(blobBytes)], {
++        // Exact byte stream that will be uploaded (plaintext or already-encrypted ciphertext from the app).
++        // Copy into a contiguous buffer so hashing (processFileForUpload -> chunk hashes) and
++        // num_blob_bytes always match chunk bodies (avoids mismatches from subarrays / pooled buffers).
++        const payloadBytes = new Uint8Array(blobBytes);
++        const numBlobBytes = payloadBytes.byteLength;
++        // Blob used only for deterministic chunk slicing; MUST cover the same numBlobBytes as uploadBlobTree.
++        const blobForChunks = new Blob([payloadBytes], {
+             type: "application/octet-stream",
+         });
+-        // File metadata headers that will be stored with the blob tree
+         const fileHeaders = {
+             "Content-Type": "application/octet-stream",
+-            "Content-Length": file.size.toString(),
++            "Content-Length": numBlobBytes.toString(),
+         };
+-        const { chunks, chunkHashes, blobHashTree } = await this.processFileForUpload(file, fileHeaders);
++        const { chunks, chunkHashes, blobHashTree } = await this.processFileForUpload(blobForChunks, fileHeaders);
+         const blobRootHash = blobHashTree.tree.hash;
+         const hashString = blobRootHash.toShaString();
+         const certificateBytes = await this.getCertificate(hashString);
+-        await this.storageGatewayClient.uploadBlobTree(blobHashTree, this.bucket, file.size, this.backendCanisterId, this.projectId, certificateBytes);
++        await this.storageGatewayClient.uploadBlobTree(blobHashTree, this.bucket, numBlobBytes, this.backendCanisterId, this.projectId, certificateBytes);
+         await this.parallelUpload(chunks, chunkHashes, blobRootHash, httpHeaders, onProgress);
+         return { hash: hashString };
+     }

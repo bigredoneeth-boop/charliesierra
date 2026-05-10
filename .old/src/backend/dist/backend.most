@@ -1,0 +1,292 @@
+// Version: 1.0.0
+type AttachmentId__640090544 = Nat;
+type Attachment__831262237 =
+  {
+    encryptedSizeBytes : Nat;
+    id : AttachmentId__640090544;
+    messageId : MessageId__291319400;
+    mimeType : Text;
+    storageKey : Text;
+    uploadedAt : Timestamp__301639476;
+    uploader : UserId__158757552
+  };
+type AuditEventType__334976789 =
+  {
+    #adminAction;
+    #auditLogExported;
+    #callInitiated;
+    #compartmentAssigned;
+    #escrowAccessGranted;
+    #escrowEnrolled;
+    #escrowRevoked;
+    #memberAdded;
+    #memberRemoved;
+    #messageQueueDrained;
+    #messageSent;
+    #priorityMessageSent;
+    #retentionDisabled;
+    #retentionEnabled;
+    #sovereignConfigUpdated;
+    #userRegistered;
+    #userRemoved
+  };
+type AuditEvent__699314008 =
+  {
+    actorPrincipal : UserId__158757552;
+    encryptedDetails : ?Blob;
+    eventType : AuditEventType__334976789;
+    id : Nat;
+    targetPrincipal : ?UserId__158757552;
+    timestamp : Timestamp__301639476
+  };
+type CallId__642369320 = Nat;
+type CallRecord__52248411 =
+  {
+    callType : CallType__447539110;
+    callees : [UserId__158757552];
+    caller : UserId__158757552;
+    conversationId : ?ConversationId__966455625;
+    var encryptedSdpAnswer : ?Blob;
+    encryptedSdpOffer : ?Blob;
+    var iceCandiates : [Blob];
+    id : CallId__642369320;
+    initiatedAt : Timestamp__301639476;
+    var status : CallStatus__25797007;
+    var updatedAt : Timestamp__301639476
+  };
+type CallStatus__25797007 = {#active; #declined; #ended; #missed; #ringing};
+type CallType__447539110 = {#audio; #video};
+type CompartmentLabel__761974401 = {#classified; #unclassified};
+type ConversationId__966455625 = Nat;
+type ConversationKind__373380977 = {#direct; #group};
+type Conversation__442121514 =
+  {
+    category : ?Text;
+    createdAt : Timestamp__301639476;
+    createdBy : UserId__158757552;
+    description : ?Text;
+    discoverable : Bool;
+    displayName : ?Text;
+    encryptedName : ?Blob;
+    id : ConversationId__966455625;
+    kind : ConversationKind__373380977;
+    var lastMessageAt : Timestamp__301639476;
+    members : [UserId__158757552]
+  };
+type DataResidency__814192359 = {#apac; #eu; #global; #us};
+type Data__159895909<T> = {var count : Nat__490723111; elements : [var ?T]};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type DeviceRecord__387655850 =
+  {
+    deviceId : Text;
+    deviceLabel : Text;
+    var lastSeen : Timestamp__301639476;
+    publicKey : Blob;
+    registeredAt : Timestamp__301639476
+  };
+type DeviceSyncToken__919843731 =
+  {
+    devicePublicKey : Blob;
+    expiresAt : Timestamp__301639476;
+    ownerPrincipal : UserId__158757552
+  };
+type EcdhPublicKey__310434782 = Blob;
+type EscrowAccessGrant__445250214 =
+  {
+    accessOutcome : Text;
+    grantId : Nat;
+    grantTimestamp : Timestamp__301639476;
+    reason : Text;
+    requestingAdmin : UserId__158757552;
+    targetDeviceId : Text;
+    targetUserId : UserId__158757552
+  };
+type EscrowRecord__427528100 =
+  {
+    consentLanguageVersion : Text;
+    consentTimestamp : Timestamp__301639476;
+    deviceId : Text;
+    deviceLabel : Text;
+    devicePublicKeyFingerprint : Text;
+    revokedAt : ?Timestamp__301639476;
+    revokedReason : ?Text;
+    userId : UserId__158757552;
+    wrappedKey : Blob
+  };
+type GroupRetentionPolicy__233071989 =
+  {
+    convId : ConversationId__966455625;
+    enabledAt : ?Timestamp__301639476;
+    enabledBy : ?UserId__158757552;
+    retentionEnabled : Bool
+  };
+type Internal__667636161<T> =
+  {children : [var ?Node__92254746<T>]; data : Data__159895909<T>};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type JoinRequestStatus__965962348 = {#approved; #denied; #pending};
+type JoinRequest__726477487 =
+  {
+    conversationId : ConversationId__966455625;
+    createdAt : Timestamp__301639476;
+    message : ?Text;
+    requestId : Text;
+    requesterId : UserId__158757552;
+    status : JoinRequestStatus__965962348
+  };
+type Leaf__520550824<T> = {data : Data__159895909<T>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type MessageId__291319400 = Nat;
+type MessagePriority__710871321 = {#high; #normal};
+type MessageType__339792795 = {#audio; #file; #image; #text; #video};
+type Message__714344397 =
+  {
+    conversationId : ConversationId__966455625;
+    encryptedContent : Blob;
+    id : MessageId__291319400;
+    var isDeleted : Bool;
+    messageType : MessageType__339792795;
+    priority : ?MessagePriority__710871321;
+    sender : UserId__158757552;
+    sentAt : Timestamp__301639476;
+    ttlSeconds : ?Nat
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type Node__92254746<T> =
+  {#internal : Internal__667636161<T>; #leaf : Leaf__520550824<T>};
+type ReadReceiptRecord__853033662 =
+  {
+    messageId : MessageId__291319400;
+    var readAt : Timestamp__301639476;
+    userId : UserId__158757552
+  };
+type RetentionMetadataRecord__943494619 =
+  {
+    convId : ConversationId__966455625;
+    messageId : MessageId__291319400;
+    recipientPrincipals : [UserId__158757552];
+    senderPrincipal : UserId__158757552;
+    sentAt : Timestamp__301639476
+  };
+type Set__532252804<T> = Set__710576254<T>;
+type Set__710576254<T> =
+  {var root : Node__92254746<T>; var size : Nat__490723111};
+type SovereignConfig__682828137 =
+  {
+    canisters : Text;
+    cyclesCostMultiplier : ?Float;
+    lastUpdated : Timestamp__301639476;
+    nodeCount : ?Nat;
+    residencyLabel : DataResidency__814192359;
+    subnetPrincipal : ?Principal
+  };
+type Timestamp__301639476 = Int;
+type TypingIndicator__500933211 =
+  {
+    conversationId : ConversationId__966455625;
+    var expiresAt : Timestamp__301639476;
+    userId : UserId__158757552
+  };
+type UserId__158757552 = Principal;
+type UserProfile__277265826 =
+  {
+    ecdhPublicKey : EcdhPublicKey__310434782;
+    encryptedAvatarKey : ?Text;
+    encryptedDisplayName : Blob;
+    id : UserId__158757552;
+    var lastSeen : Timestamp__301639476;
+    registeredAt : Timestamp__301639476
+  };
+actor {
+  stable adminState :
+    {
+      adminPrincipals : Set__532252804<UserId__158757552>;
+      auditLog : Map__605269027<Nat, AuditEvent__699314008>;
+      state : {var nextEventId : Nat}
+    };
+  stable attState :
+    {
+      attachments :
+        Map__605269027<AttachmentId__640090544, Attachment__831262237>;
+      messageAttachments :
+        Map__605269027<MessageId__291319400, [AttachmentId__640090544]>;
+      state : {var nextId : AttachmentId__640090544}
+    };
+  stable callsState :
+    {
+      calls : Map__605269027<CallId__642369320, CallRecord__52248411>;
+      state : {var nextId : CallId__642369320};
+      userActiveCalls :
+        Map__605269027<UserId__158757552, [CallId__642369320]>
+    };
+  stable convsState :
+    {
+      conversations :
+        Map__605269027<ConversationId__966455625, Conversation__442121514>;
+      directIndex : Map__605269027<Text, ConversationId__966455625>;
+      state : {var nextId : ConversationId__966455625}
+    };
+  stable devicesState :
+    {
+      devices :
+        Map__605269027<UserId__158757552,
+                        List__415060402<DeviceRecord__387655850>>;
+      syncTokens : Map__605269027<Text, DeviceSyncToken__919843731>
+    };
+  stable discoveryState :
+    {
+      joinRequests :
+        Map__605269027<ConversationId__966455625,
+                        Map__605269027<Text, JoinRequest__726477487>>
+    };
+  stable enterpriseState :
+    {
+      escrowGrants : Map__605269027<Nat, EscrowAccessGrant__445250214>;
+      escrowRecords :
+        Map__605269027<(UserId__158757552, Text), EscrowRecord__427528100>;
+      retentionMetadata : List__415060402<RetentionMetadataRecord__943494619>;
+      retentionPolicies :
+        Map__605269027<ConversationId__966455625,
+                        GroupRetentionPolicy__233071989>;
+      state : {var nextGrantId : Nat}
+    };
+  stable msgsState :
+    {
+      conversationMessages :
+        Map__605269027<ConversationId__966455625, [MessageId__291319400]>;
+      messages : Map__605269027<MessageId__291319400, Message__714344397>;
+      readReceipts :
+        Map__605269027<(MessageId__291319400, UserId__158757552),
+                        ReadReceiptRecord__853033662>;
+      state : {var nextId : MessageId__291319400};
+      typingIndicators :
+        Map__605269027<(ConversationId__966455625, UserId__158757552),
+                        TypingIndicator__500933211>
+    };
+  stable sovereignState :
+    {
+      groupCompartments :
+        Map__605269027<ConversationId__966455625, CompartmentLabel__761974401>;
+      state : {var sovereignConfig : SovereignConfig__682828137}
+    };
+  stable usersState :
+    {
+      profiles : Map__605269027<UserId__158757552, UserProfile__277265826>;
+      state : {var nextId : Nat}
+    }
+};

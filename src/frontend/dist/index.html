@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CharlieSierra</title>
+    <meta name="description" content="End-to-end encrypted, decentralized messaging on the Internet Computer" />
+    <meta property="og:title" content="CharlieSierra" />
+    <meta property="og:description" content="Secure, encrypted messaging powered by the Internet Computer" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <script>
+      (function () {
+        var path = window.location.pathname;
+        var isLoginRoute = path === '/' || path === '/login';
+        var stored = localStorage.getItem('cs_theme');
+        if (isLoginRoute || stored !== 'light') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-CdQ3PtYv.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-7OeWUNQo.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
