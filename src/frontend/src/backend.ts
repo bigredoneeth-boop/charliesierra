@@ -574,6 +574,7 @@ export interface backendInterface {
     createGroupConversation(req: CreateGroupRequest): Promise<Result_16>;
     declineCall(callId: CallId): Promise<Result_3>;
     deleteAttachment(attachmentId: AttachmentId): Promise<Result_3>;
+    deleteConversation(conversationId: ConversationId): Promise<Result_3>;
     deleteGroupConversation(conversationId: ConversationId): Promise<Result_3>;
     denyJoinRequest(req: JoinRequestActionRequest): Promise<Result_3>;
     disableGroupRetention(convId: ConversationId): Promise<Result_3>;
@@ -802,6 +803,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.deleteAttachment(arg0);
+            return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async deleteConversation(arg0: ConversationId): Promise<Result_3> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteConversation(arg0);
+                return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteConversation(arg0);
             return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
         }
     }

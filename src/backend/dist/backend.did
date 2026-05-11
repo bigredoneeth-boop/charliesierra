@@ -498,6 +498,7 @@ service : {
   createGroupConversation: (req: CreateGroupRequest) -> (Result_16);
   declineCall: (callId: CallId) -> (Result_3);
   deleteAttachment: (attachmentId: AttachmentId) -> (Result_3);
+  deleteConversation: (conversationId: ConversationId) -> (Result_3);
   deleteGroupConversation: (conversationId: ConversationId) -> (Result_3);
   denyJoinRequest: (req: JoinRequestActionRequest) -> (Result_3);
   disableGroupRetention: (convId: ConversationId) -> (Result_3);

@@ -374,6 +374,7 @@ export interface _SERVICE {
   'createGroupConversation' : ActorMethod<[CreateGroupRequest], Result_16>,
   'declineCall' : ActorMethod<[CallId], Result_3>,
   'deleteAttachment' : ActorMethod<[AttachmentId], Result_3>,
+  'deleteConversation' : ActorMethod<[ConversationId], Result_3>,
   'deleteGroupConversation' : ActorMethod<[ConversationId], Result_3>,
   'denyJoinRequest' : ActorMethod<[JoinRequestActionRequest], Result_3>,
   'disableGroupRetention' : ActorMethod<[ConversationId], Result_3>,

@@ -118,7 +118,11 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         }
         setIsReady(true);
       })
-      .catch(() => setIsReady(false));
+      .catch(() => {
+        // Key load failed — still mark ready so the app isn't stuck forever.
+        // The keypair will be null, which crypto operations gracefully handle.
+        setIsReady(true);
+      });
   }, [principal]);
 
   const getConversationKey = useCallback(

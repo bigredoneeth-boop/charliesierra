@@ -27932,6 +27932,7 @@ Service({
   "createGroupConversation": Func([CreateGroupRequest], [Result_16], []),
   "declineCall": Func([CallId], [Result_3], []),
   "deleteAttachment": Func([AttachmentId], [Result_3], []),
+  "deleteConversation": Func([ConversationId], [Result_3], []),
   "deleteGroupConversation": Func([ConversationId], [Result_3], []),
   "denyJoinRequest": Func([JoinRequestActionRequest], [Result_3], []),
   "disableGroupRetention": Func([ConversationId], [Result_3], []),
@@ -28424,6 +28425,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_162], []),
     "declineCall": IDL2.Func([CallId2], [Result_32], []),
     "deleteAttachment": IDL2.Func([AttachmentId2], [Result_32], []),
+    "deleteConversation": IDL2.Func([ConversationId2], [Result_32], []),
     "deleteGroupConversation": IDL2.Func([ConversationId2], [Result_32], []),
     "denyJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_32], []),
     "disableGroupRetention": IDL2.Func([ConversationId2], [Result_32], []),
@@ -28873,6 +28875,20 @@ class Backend {
       }
     } else {
       const result = await this.actor.deleteAttachment(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async deleteConversation(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteConversation(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteConversation(arg0);
       return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
     }
   }
@@ -30415,27 +30431,29 @@ function useAuth() {
   return ctx;
 }
 function useUserProfile(userId) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor } = useActor(createActor);
   return useQuery({
     queryKey: ["profile", userId == null ? void 0 : userId.toText()],
     queryFn: async () => {
       if (!actor || !userId) return null;
       return actor.getUserProfile(userId);
     },
-    enabled: !!actor && !isFetching && !!userId,
-    staleTime: 3e4
+    enabled: !!actor && !!userId,
+    staleTime: 3e4,
+    retry: 2
   });
 }
 function useUserProfiles(userIds) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor } = useActor(createActor);
   return useQuery({
     queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
     queryFn: async () => {
       if (!actor || userIds.length === 0) return [];
       return actor.getUserProfiles(userIds);
     },
-    enabled: !!actor && !isFetching && userIds.length > 0,
-    staleTime: 3e4
+    enabled: !!actor && userIds.length > 0,
+    staleTime: 3e4,
+    retry: 2
   });
 }
 function useUpdateProfile() {
@@ -30572,9 +30590,13 @@ function useDisplayName(principal) {
 function useHasDisplayName() {
   const { principal } = useAuth();
   const principalText = (principal == null ? void 0 : principal.toText()) ?? null;
-  const { data: profile, isLoading } = useUserProfile(principal ?? null);
+  const {
+    data: profile,
+    isLoading,
+    isFetched
+  } = useUserProfile(principal ?? null);
   if (!principalText) return null;
-  if (isLoading) return null;
+  if (isLoading && !isFetched) return null;
   const cached = getLocalDisplayName(principalText);
   if (cached && cached.trim().length >= 2) return true;
   if (profile && profile.encryptedDisplayName.length > 0) return true;
@@ -43327,7 +43349,9 @@ function CryptoProvider({ children }) {
       } catch {
       }
       setIsReady(true);
-    }).catch(() => setIsReady(false));
+    }).catch(() => {
+      setIsReady(true);
+    });
   }, [principal]);
   const getConversationKey = reactExports.useCallback(
     (convId) => convKeys.current.get(convId),
@@ -43769,6 +43793,17 @@ function OnboardingGate({ children }) {
   const [name, setName] = reactExports.useState("");
   const [saving, setSaving] = reactExports.useState(false);
   const [localReady, setLocalReady] = reactExports.useState(false);
+  const [loadingTooLong, setLoadingTooLong] = reactExports.useState(false);
+  const [timedOut, setTimedOut] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    if (hasDisplayName !== null) return;
+    const hintTimer = setTimeout(() => setLoadingTooLong(true), 2e3);
+    const giveUpTimer = setTimeout(() => setTimedOut(true), 6e3);
+    return () => {
+      clearTimeout(hintTimer);
+      clearTimeout(giveUpTimer);
+    };
+  }, [hasDisplayName]);
   const { decryptOwnDisplayName } = useCrypto();
   reactExports.useEffect(() => {
     if (!principal || !isReady || !keyPair || !profile) return;
@@ -43810,13 +43845,16 @@ function OnboardingGate({ children }) {
     }
   };
   const isValid = name.trim().length >= 2 && name.trim().length <= 50 && isReady && !!keyPair;
-  if (hasDisplayName === null) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+  if (hasDisplayName === null && !timedOut) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
-        className: "fixed inset-0 z-50 flex items-center justify-center bg-background",
+        className: "fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-background",
         "data-ocid": "onboarding.loading_state",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36, label: "Securing your session…" })
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36, label: "Securing your session…" }),
+          loadingTooLong && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground animate-pulse", children: "Still setting up… this usually takes a few seconds." })
+        ]
       }
     );
   }
@@ -47138,25 +47176,29 @@ function useRemoveConversationMember() {
     }
   });
 }
-function useDeleteGroupConversation() {
+function useDeleteConversation() {
   const { actor } = useActor(createActor);
   const queryClient2 = useQueryClient();
   return useMutation({
     mutationFn: async (conversationId) => {
       if (!actor) throw new Error("Not connected");
-      const a2 = actor;
-      if (!a2.deleteGroupConversation)
-        throw new Error(
-          "deleteGroupConversation not yet available in this canister version"
-        );
-      const result = await a2.deleteGroupConversation(conversationId);
+      const result = await actor.deleteConversation(conversationId);
       if (result.__kind__ === "err") throw new Error(result.err);
       return result.ok;
     },
-    onSuccess: () => {
+    onSuccess: (_2, conversationId) => {
+      queryClient2.removeQueries({
+        queryKey: ["conversation", conversationId.toString()]
+      });
+      queryClient2.removeQueries({
+        queryKey: ["messages", conversationId.toString()]
+      });
       queryClient2.invalidateQueries({ queryKey: ["conversations"] });
     }
   });
+}
+function useDeleteGroupConversation() {
+  return useDeleteConversation();
 }
 function usePublicGroups(category, offset2 = 0n) {
   const { actor, isFetching } = useActor(createActor);
@@ -52111,65 +52153,122 @@ function relativeTime(timestampNs) {
 function ConversationListItem({
   conversation,
   isActive = false,
-  index: index2
+  index: index2,
+  onDeleted
 }) {
   const navigate = useNavigate();
   const { principal } = useAuth();
+  const [confirmOpen, setConfirmOpen] = reactExports.useState(false);
+  const deleteConversation = useDeleteConversation();
+  const params = useParams({ strict: false });
   const isDirect = conversation.kind === "direct";
   const peer = isDirect ? conversation.members.find((m2) => m2.toText() !== (principal == null ? void 0 : principal.toText())) ?? conversation.members[0] : null;
   const peerPrincipalText = (peer == null ? void 0 : peer.toText()) ?? null;
   const cachedName = useDisplayName(peerPrincipalText);
   const displayName = isDirect ? cachedName || (peer ? `${peer.toText().slice(0, 10)}…${peer.toText().slice(-6)}` : "Direct Message") : "Encrypted Group";
   const unreadCount = 0;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "button",
-    {
-      type: "button",
-      onClick: () => navigate({
-        to: "/app/conversations/$id",
-        params: { id: conversation.id.toString() }
-      }),
-      "data-ocid": `conversations.item.${index2}`,
-      className: [
-        "w-full flex items-start gap-3 px-4 py-3 transition-colors duration-150 text-left border-b border-border/40 last:border-b-0",
-        isActive ? "bg-primary/10 border-l-2 border-l-primary" : "hover:bg-muted/50"
-      ].join(" "),
-      "aria-current": isActive ? "page" : void 0,
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-shrink-0", children: [
-          isDirect && peer ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-            UserAvatar,
-            {
-              principal: peer.toText(),
-              avatarUrl: getLocalAvatarDataUrl(peer.toText()) ?? void 0,
-              size: 40
-            }
-          ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 rounded-full bg-secondary flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 16, className: "text-secondary-foreground" }) }),
-          unreadCount > 0
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "p",
+  function handleDeleteClick(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    setConfirmOpen(true);
+  }
+  async function handleConfirmDelete() {
+    await deleteConversation.mutateAsync(conversation.id);
+    setConfirmOpen(false);
+    if ((params == null ? void 0 : params.id) === conversation.id.toString()) {
+      navigate({ to: "/app/conversations" });
+    }
+    onDeleted == null ? void 0 : onDeleted();
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        className: [
+          "group relative w-full flex items-start gap-3 px-4 py-3 transition-colors duration-150 text-left border-b border-border/40 last:border-b-0 cursor-pointer select-none",
+          isActive ? "bg-primary/10 border-l-2 border-l-primary" : "hover:bg-muted/50"
+        ].join(" "),
+        "aria-current": isActive ? "page" : void 0,
+        "data-ocid": `conversations.item.${index2}`,
+        onClick: () => navigate({
+          to: "/app/conversations/$id",
+          params: { id: conversation.id.toString() }
+        }),
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-shrink-0", children: [
+            isDirect && peer ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              UserAvatar,
               {
-                className: `text-sm truncate ${isActive ? "font-semibold text-foreground" : "font-medium text-foreground"}`,
-                children: displayName
+                principal: peer.toText(),
+                avatarUrl: getLocalAvatarDataUrl(peer.toText()) ?? void 0,
+                size: 40
+              }
+            ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 rounded-full bg-secondary flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 16, className: "text-secondary-foreground" }) }),
+            unreadCount > 0
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "p",
+                {
+                  className: `text-sm truncate ${isActive ? "font-semibold text-foreground" : "font-medium text-foreground"}`,
+                  children: displayName
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] text-muted-foreground flex-shrink-0", children: relativeTime(conversation.lastMessageAt) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground truncate mt-0.5", children: isDirect ? "End-to-end encrypted" : `${conversation.members.length} member${conversation.members.length !== 1 ? "s" : ""} · Encrypted` })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              "aria-label": "Delete thread",
+              "data-ocid": `conversations.delete_button.${index2}`,
+              onClick: handleDeleteClick,
+              className: "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 flex-shrink-0 self-center p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-150",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14 })
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialog, { open: confirmOpen, onOpenChange: setConfirmOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      AlertDialogContent,
+      {
+        className: "bg-card border-border",
+        "data-ocid": "conversations.delete_dialog",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogHeader, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogTitle, { className: "text-foreground", children: "Delete Thread" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogDescription, { className: "text-muted-foreground", children: "Are you sure you want to permanently delete thread?" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogFooter, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              AlertDialogCancel,
+              {
+                "data-ocid": "conversations.delete_cancel_button",
+                className: "border-border text-foreground hover:bg-muted",
+                onClick: () => setConfirmOpen(false),
+                children: "No"
               }
             ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] text-muted-foreground flex-shrink-0", children: relativeTime(conversation.lastMessageAt) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground truncate mt-0.5", children: isDirect ? "End-to-end encrypted" : `${conversation.members.length} member${conversation.members.length !== 1 ? "s" : ""} · Encrypted` })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            className: "w-2 h-2 rounded-full flex-shrink-0 self-center",
-            "aria-hidden": "true"
-          }
-        )
-      ]
-    }
-  );
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              AlertDialogAction,
+              {
+                "data-ocid": "conversations.delete_confirm_button",
+                className: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+                onClick: handleConfirmDelete,
+                disabled: deleteConversation.isPending,
+                children: deleteConversation.isPending ? "Deleting…" : "Yes"
+              }
+            )
+          ] })
+        ]
+      }
+    ) })
+  ] });
 }
 function EmptyState({
   icon: Icon2,
@@ -55228,7 +55327,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-BhAAcmly.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-CXHOnsit.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

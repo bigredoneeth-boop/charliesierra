@@ -492,6 +492,7 @@ export interface backendInterface {
     createGroupConversation(req: CreateGroupRequest): Promise<Result_16>;
     declineCall(callId: CallId): Promise<Result_3>;
     deleteAttachment(attachmentId: AttachmentId): Promise<Result_3>;
+    deleteConversation(conversationId: ConversationId): Promise<Result_3>;
     deleteGroupConversation(conversationId: ConversationId): Promise<Result_3>;
     denyJoinRequest(req: JoinRequestActionRequest): Promise<Result_3>;
     disableGroupRetention(convId: ConversationId): Promise<Result_3>;

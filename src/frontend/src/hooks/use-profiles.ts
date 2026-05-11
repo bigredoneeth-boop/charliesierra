@@ -6,28 +6,30 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export function useUserProfile(userId: UserId | null) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor } = useActor(createActor);
   return useQuery<UserProfilePublic | null>({
     queryKey: ["profile", userId?.toText()],
     queryFn: async () => {
       if (!actor || !userId) return null;
       return actor.getUserProfile(userId);
     },
-    enabled: !!actor && !isFetching && !!userId,
+    enabled: !!actor && !!userId,
     staleTime: 30_000,
+    retry: 2,
   });
 }
 
 export function useUserProfiles(userIds: UserId[]) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor } = useActor(createActor);
   return useQuery<UserProfilePublic[]>({
     queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
     queryFn: async () => {
       if (!actor || userIds.length === 0) return [];
       return actor.getUserProfiles(userIds);
     },
-    enabled: !!actor && !isFetching && userIds.length > 0,
+    enabled: !!actor && userIds.length > 0,
     staleTime: 30_000,
+    retry: 2,
   });
 }
 
@@ -246,10 +248,16 @@ export function useDisplayName(principal: string | null | undefined): string {
 export function useHasDisplayName(): boolean | null {
   const { principal } = useAuth();
   const principalText = principal?.toText() ?? null;
-  const { data: profile, isLoading } = useUserProfile(principal ?? null);
+  const {
+    data: profile,
+    isLoading,
+    isFetched,
+  } = useUserProfile(principal ?? null);
 
   if (!principalText) return null;
-  if (isLoading) return null;
+  // Only hold null while a real in-flight request is pending.
+  // Once the query settles (success or error), return a definitive answer.
+  if (isLoading && !isFetched) return null;
 
   // Check localStorage cache first (fastest)
   const cached = getLocalDisplayName(principalText);

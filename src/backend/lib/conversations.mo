@@ -187,7 +187,11 @@ module {
 
   /// Delete a group conversation. Caller must be the creator.
   /// Also purges the conversation's messages from msgsState.
-  public func deleteGroup(
+  /// Delete a conversation (group or direct). 
+  /// For groups: caller must be the creator.
+  /// For direct: caller must be a member.
+  /// Also purges the conversation's messages from msgsState.
+  public func deleteConversation(
     s : State,
     msgsConvMessages : Map.Map<Common.ConversationId, [Common.MessageId]>,
     msgsMessages : Map.Map<Common.MessageId, MsgsT.Message>,
@@ -197,8 +201,21 @@ module {
     switch (s.conversations.get(conversationId)) {
       case null { #err(#notFound) };
       case (?c) {
-        if (c.kind != #group) { return #err(#forbidden) };
-        if (not Principal.equal(caller, c.createdBy)) { return #err(#unauthorized) };
+        // Authorization check
+        switch (c.kind) {
+          case (#group) {
+            if (not Principal.equal(caller, c.createdBy)) { return #err(#unauthorized) };
+          };
+          case (#direct) {
+            if (not isMember(c, caller)) { return #err(#unauthorized) };
+            // Remove from directIndex
+            let members = c.members;
+            if (members.size() == 2) {
+              let key = directKey(members[0], members[1]);
+              s.directIndex.remove(key);
+            };
+          };
+        };
         // Remove message data for this conversation
         switch (msgsConvMessages.get(conversationId)) {
           case null {};

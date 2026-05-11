@@ -256,4 +256,5 @@ export const mockBackend: backendInterface = {
     },
   }),
   deleteGroupConversation: async () => ({ __kind__: "ok", ok: null }),
+  deleteConversation: async () => ({ __kind__: "ok", ok: null }),
 };

@@ -45,10 +45,25 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
     ConvsLib.removeMember(convsState, caller, req);
   };
   /// Delete a group conversation. Only the group creator may call this.
+  /// Kept for backward-compatibility; delegates to deleteConversation.
   public shared ({ caller }) func deleteGroupConversation(
     conversationId : Common.ConversationId
   ) : async Common.Result<(), Common.Error> {
-    ConvsLib.deleteGroup(
+    ConvsLib.deleteConversation(
+      convsState,
+      msgsState.conversationMessages,
+      msgsState.messages,
+      caller,
+      conversationId,
+    );
+  };
+
+  /// Delete any conversation (group or direct). Caller must be creator (group)
+  /// or a member (direct).
+  public shared ({ caller }) func deleteConversation(
+    conversationId : Common.ConversationId
+  ) : async Common.Result<(), Common.Error> {
+    ConvsLib.deleteConversation(
       convsState,
       msgsState.conversationMessages,
       msgsState.messages,

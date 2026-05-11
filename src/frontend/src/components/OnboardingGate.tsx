@@ -41,6 +41,19 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
   const [localReady, setLocalReady] = useState(false);
+  const [loadingTooLong, setLoadingTooLong] = useState(false);
+  const [timedOut, setTimedOut] = useState(false);
+
+  // Show "Still loading…" hint after 2s; treat null as false (new user) after 6s
+  useEffect(() => {
+    if (hasDisplayName !== null) return;
+    const hintTimer = setTimeout(() => setLoadingTooLong(true), 2_000);
+    const giveUpTimer = setTimeout(() => setTimedOut(true), 6_000);
+    return () => {
+      clearTimeout(hintTimer);
+      clearTimeout(giveUpTimer);
+    };
+  }, [hasDisplayName]);
 
   // Decrypt and cache own display name once profile + keyPair are ready
   const { decryptOwnDisplayName } = useCrypto();
@@ -98,15 +111,20 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
     name.trim().length >= 2 && name.trim().length <= 50 && isReady && !!keyPair;
 
   // Wait until we know definitively whether the user has a display name.
-  // Show a full-screen spinner while the profile query is in flight so users
-  // never see a blank screen after authenticating via Internet Identity.
-  if (hasDisplayName === null) {
+  // - After 6s timeout, treat as new user (timedOut=true) and show setup form.
+  // - Show a hint after 2s so users know it's still working.
+  if (hasDisplayName === null && !timedOut) {
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-background"
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-background"
         data-ocid="onboarding.loading_state"
       >
         <LoadingSpinner size={36} label="Securing your session…" />
+        {loadingTooLong && (
+          <p className="text-xs text-muted-foreground animate-pulse">
+            Still setting up… this usually takes a few seconds.
+          </p>
+        )}
       </div>
     );
   }

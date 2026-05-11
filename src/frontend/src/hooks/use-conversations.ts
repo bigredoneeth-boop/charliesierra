@@ -143,32 +143,31 @@ export function useRemoveConversationMember() {
   });
 }
 export type { ConversationPublic, MessagePublic, MessageType };
-// TODO: remove cast once backend.d.ts + bindgen include deleteGroupConversation
-type DeleteResult =
-  | { __kind__: "ok"; ok: null }
-  | { __kind__: "err"; err: string };
-type ActorWithDelete = Record<string, unknown> & {
-  deleteGroupConversation?: (id: bigint) => Promise<DeleteResult>;
-};
 
-export function useDeleteGroupConversation() {
+/** Delete any conversation — group (creator only) or direct (any member). */
+export function useDeleteConversation() {
   const { actor } = useActor(createActor);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (conversationId: bigint) => {
       if (!actor) throw new Error("Not connected");
-      // TODO: remove cast once backend type includes deleteGroupConversation
-      const a = actor as unknown as ActorWithDelete;
-      if (!a.deleteGroupConversation)
-        throw new Error(
-          "deleteGroupConversation not yet available in this canister version",
-        );
-      const result = await a.deleteGroupConversation(conversationId);
+      const result = await actor.deleteConversation(conversationId);
       if (result.__kind__ === "err") throw new Error(result.err);
       return result.ok;
     },
-    onSuccess: () => {
+    onSuccess: (_, conversationId) => {
+      queryClient.removeQueries({
+        queryKey: ["conversation", conversationId.toString()],
+      });
+      queryClient.removeQueries({
+        queryKey: ["messages", conversationId.toString()],
+      });
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
+}
+
+/** @deprecated Use useDeleteConversation — works for both group and direct. */
+export function useDeleteGroupConversation() {
+  return useDeleteConversation();
 }
