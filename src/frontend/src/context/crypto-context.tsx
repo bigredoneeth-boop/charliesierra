@@ -187,19 +187,46 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       convId: string,
       theirPublicKeyBytes: Uint8Array,
     ): Promise<CryptoKey | null> => {
-      if (!keyPair?.privateKey) return null;
+      if (!keyPair?.privateKey) {
+        console.error(
+          `[E2EE] deriveAndStoreKey: no local privateKey for convId=${convId}`,
+        );
+        return null;
+      }
       try {
         const theirKey = await importPublicKey(theirPublicKeyBytes);
+        // Validate the imported key is an ECDH P-256 public key before deriving.
+        if (
+          theirKey.type !== "public" ||
+          (theirKey.algorithm as { name: string }).name !== "ECDH"
+        ) {
+          console.error(
+            "[E2EE] deriveAndStoreKey: imported peer key has unexpected type/algorithm",
+            `type=${theirKey.type}`,
+            `algorithm=${JSON.stringify(theirKey.algorithm)}`,
+            `convId=${convId}`,
+          );
+          return null;
+        }
         const sharedKey = await deriveSharedSecret(
           keyPair.privateKey,
           theirKey,
         );
         convKeys.current.set(convId, sharedKey);
+        console.log(
+          `[E2EE] deriveAndStoreKey: key derived and cached for convId=${convId}`,
+        );
         // NOTE: ECDH-derived keys are non-extractable (exportable: false) so we
         // cannot persist them directly. They are cheap to re-derive on reload
         // from the peer profile, so we skip persisting them here.
         return sharedKey;
-      } catch {
+      } catch (err) {
+        console.error(
+          `[E2EE] deriveAndStoreKey FAILED for convId=${convId}:`,
+          `theirPublicKeyBytes.length=${theirPublicKeyBytes.length}`,
+          `privateKey exists=${!!keyPair?.privateKey}`,
+          err,
+        );
         return null;
       }
     },
@@ -222,10 +249,20 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   const decryptFromConv = useCallback(
     async (convId: string, blob: Uint8Array): Promise<string | null> => {
       const key = convKeys.current.get(convId);
-      if (!key) return null;
+      if (!key) {
+        console.error(
+          `[E2EE] decryptFromConv: no conversation key in cache for convId=${convId}`,
+        );
+        return null;
+      }
       try {
         return await decryptMessage(key, blob);
-      } catch {
+      } catch (err) {
+        console.error(
+          `[E2EE] decryptFromConv FAILED for convId=${convId}:`,
+          `blob.length=${blob.length}`,
+          err,
+        );
         return null;
       }
     },

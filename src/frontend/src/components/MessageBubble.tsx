@@ -4,7 +4,8 @@ import { PriorityMessageBadge } from "@/components/PriorityMessageBadge";
 import { UserAvatar } from "@/components/UserAvatar";
 import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
-import { getDisplayName } from "@/hooks/use-profiles";
+import { getDisplayName, setLocalDisplayName } from "@/hooks/use-profiles";
+import { decryptMessage, deriveDisplayNameKey } from "@/lib/crypto";
 import {
   Check,
   CheckCheck,
@@ -89,13 +90,52 @@ export function useDecryptedContent(
       setText(null);
       return;
     }
-    decryptFromConv(conversationId, message.encryptedContent).then((result) => {
-      if (result === null) setFailed(true);
-      else {
-        setText(result);
-        setFailed(false);
-      }
+
+    let cancelled = false;
+
+    // Retry loop: attempt up to 5 times (0.5s apart) then a final 6th attempt
+    // after 2s — handles the race where the peer profile/key arrives after the message.
+    const RETRY_DELAYS = [0, 500, 500, 500, 500, 2000]; // ms before each attempt
+    let cumulativeDelay = 0;
+
+    const attempts = RETRY_DELAYS.map((delay, index) => {
+      cumulativeDelay += delay;
+      return { attempt: index + 1, delay: cumulativeDelay };
     });
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    for (const { attempt, delay } of attempts) {
+      const t = setTimeout(async () => {
+        if (cancelled) return;
+        console.log(
+          `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`,
+        );
+        const result = await decryptFromConv(
+          conversationId,
+          message.encryptedContent,
+        );
+        if (cancelled) return;
+        if (result !== null) {
+          setText(result);
+          setFailed(false);
+          // Cancel remaining retries — success
+          cancelled = true;
+        } else if (attempt === attempts.length) {
+          // All retries exhausted
+          console.error(
+            `[E2EE] useDecryptedContent: all ${attempts.length} attempts failed for convId=${conversationId} msgId=${message.id}`,
+          );
+          setFailed(true);
+        }
+      }, delay);
+      timers.push(t);
+    }
+
+    return () => {
+      cancelled = true;
+      for (const t of timers) clearTimeout(t);
+    };
   }, [message, conversationId, decryptFromConv]);
 
   return { text, failed };
@@ -391,7 +431,34 @@ export function MessageBubble({
     ? senderProfile.id.toText()
     : senderPrincipalText;
   // Resolve sender display name: use localStorage cache, fall back to short principal
-  const senderDisplayName = getDisplayName(senderPrincipalText);
+  const [senderDisplayName, setSenderDisplayName] = useState<string>(() =>
+    getDisplayName(senderPrincipalText),
+  );
+
+  // When senderProfile arrives, decrypt their encryptedDisplayName and populate
+  // the localStorage cache so the name is available instantly in future renders.
+  useEffect(() => {
+    if (!senderProfile || senderProfile.encryptedDisplayName.length === 0)
+      return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const key = await deriveDisplayNameKey(senderProfile.id);
+        const decrypted = await decryptMessage(
+          key,
+          new Uint8Array(senderProfile.encryptedDisplayName),
+        );
+        if (cancelled || !decrypted?.trim()) return;
+        setLocalDisplayName(senderPrincipalText, decrypted);
+        setSenderDisplayName(decrypted);
+      } catch {
+        // Ignore — name stays as short principal fallback
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [senderProfile, senderPrincipalText]);
 
   const openContextMenu = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
@@ -441,12 +508,14 @@ export function MessageBubble({
         } flex flex-col`}
         onContextMenu={openContextMenu}
       >
-        {/* Sender name label (group chats only, non-self messages) */}
-        {isGroup && !isMine && showAvatar && (
-          <span className="text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full">
-            {senderDisplayName}
-          </span>
-        )}
+        {/* Sender name label — shown in group chats and direct chats when name is known */}
+        {!isMine &&
+          showAvatar &&
+          (isGroup || senderDisplayName !== senderPrincipalText) && (
+            <span className="text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full">
+              {senderDisplayName}
+            </span>
+          )}
         <div
           className={`rounded-2xl px-3.5 py-2.5 shadow-message break-words ${
             isMine ? "rounded-br-sm" : "rounded-bl-sm"

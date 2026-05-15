@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/auth-context";
 import { deriveGroupKey, encryptMessage } from "@/lib/crypto";
+import { parseIcError } from "@/utils/ic-errors";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useNavigate } from "@tanstack/react-router";
 import { Globe, Loader2, X } from "lucide-react";
@@ -93,9 +94,31 @@ export function NewConversationDialog({
     if (!actor || !directPeer) return;
     setDirectLoading(true);
     try {
+      console.log(
+        "[CharlieSierra] Starting direct chat with:",
+        directPeer.toText(),
+      );
       const result = await actor.createDirectConversation({ peer: directPeer });
       if (result.__kind__ === "err") {
-        toast.error(`Failed to create chat: ${result.err}`);
+        // result.err may be undefined due to a known bindgen issue; treat
+        // both undefined and explicit error strings gracefully.
+        const errKey = result.err as string | undefined;
+        const errMessages: Record<string, string> = {
+          notFound:
+            "User not found. Ask them to open CharlieSierra first so their account is registered.",
+          alreadyExists: "A conversation with this user already exists.",
+          unauthorized: "You must be logged in to start a conversation.",
+          forbidden: "You cannot start a conversation with this principal.",
+          invalidInput: "Invalid principal ID. Please check and try again.",
+        };
+        const msg =
+          (errKey && errMessages[errKey]) ??
+          "Failed to create conversation. Please try again.";
+        console.error(
+          "[CharlieSierra] createDirectConversation error:",
+          errKey,
+        );
+        toast.error(msg);
         return;
       }
       onOpenChange(false);
@@ -104,8 +127,18 @@ export function NewConversationDialog({
         to: "/app/conversations/$id",
         params: { id: result.ok.id.toString() },
       });
-    } catch {
-      toast.error("Something went wrong. Please try again.");
+    } catch (err) {
+      console.error("[CharlieSierra] createDirectConversation threw:", err);
+      const message = err instanceof Error ? err.message : String(err);
+      const isNotFound =
+        message.includes("notFound") ||
+        message.includes("not_found") ||
+        message.includes("NotFound");
+      toast.error(
+        isNotFound
+          ? "User not found on CharlieSierra. Ask them to log in first so their account is registered."
+          : parseIcError(err),
+      );
     } finally {
       setDirectLoading(false);
     }
@@ -202,12 +235,7 @@ export function NewConversationDialog({
       });
     } catch (err) {
       console.error("[CharlieSierra] createGroup unexpected error:", err);
-      const message = err instanceof Error ? err.message : String(err);
-      toast.error(
-        message
-          ? `Failed to create group: ${message}`
-          : "Something went wrong. Please try again.",
-      );
+      toast.error(parseIcError(err));
     } finally {
       setGroupLoading(false);
     }
@@ -268,7 +296,7 @@ export function NewConversationDialog({
                     {directPeer.toText().slice(0, 20)}…
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {directProfile ? "User found" : "Unknown user"}
+                    {directProfile ? "Registered user" : "Principal selected"}
                   </p>
                 </div>
                 <button

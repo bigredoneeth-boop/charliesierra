@@ -1,5 +1,9 @@
 import { ConversationKind, JoinRequestStatus, createActor } from "@/backend";
-import type { ConversationPublic, MessagePublic } from "@/backend";
+import type {
+  ConversationPublic,
+  MessagePublic,
+  UserProfilePublic,
+} from "@/backend";
 import { EncryptedBadge } from "@/components/EncryptedBadge";
 import { GroupManagePanel } from "@/components/GroupManagePanel";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -28,8 +32,16 @@ import {
   useGroupRetentionPolicy,
 } from "@/hooks/use-enterprise";
 import { useOfflineQueue } from "@/hooks/use-offline-queue";
-import { getDisplayName, useUserProfiles } from "@/hooks/use-profiles";
-import { deriveGroupKey } from "@/lib/crypto";
+import {
+  getDisplayName,
+  setLocalDisplayName,
+  useUserProfiles,
+} from "@/hooks/use-profiles";
+import {
+  decryptMessage,
+  deriveDisplayNameKey,
+  deriveGroupKey,
+} from "@/lib/crypto";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -49,6 +61,26 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // ── Peer display name ────────────────────────────────────────────────────────
+async function decryptProfileDisplayName(
+  profile: UserProfilePublic,
+): Promise<string | null> {
+  if (
+    !profile.encryptedDisplayName ||
+    profile.encryptedDisplayName.length === 0
+  )
+    return null;
+  try {
+    const principalText = profile.id.toText();
+    const key = await deriveDisplayNameKey({ toText: () => principalText });
+    return await decryptMessage(
+      key,
+      new Uint8Array(profile.encryptedDisplayName),
+    );
+  } catch {
+    return null;
+  }
+}
+
 function usePeerName(
   conv: ConversationPublic | null | undefined,
   myPrincipal: string,
@@ -60,10 +92,19 @@ function usePeerName(
   const { data: profiles = [] } = useUserProfiles(peerId ? [peerId] : []);
   const profile = profiles[0];
   const peerText = peerId?.toText() ?? null;
-  // Use localStorage cached name (set when user sets their own name),
-  // falling back to a shortened principal.
-  const cachedName = peerText ? getDisplayName(peerText) : "Group";
-  return { peerId, displayName: cachedName, profile };
+
+  // Decrypt and cache peer display name whenever their profile arrives
+  useEffect(() => {
+    if (!profile || !peerText) return;
+    decryptProfileDisplayName(profile).then((name) => {
+      if (name) {
+        setLocalDisplayName(peerText, name);
+      }
+    });
+  }, [profile, peerText]);
+
+  const displayName = peerText ? getDisplayName(peerText) : "Group";
+  return { peerId, displayName, profile };
 }
 
 // ── Retention Banner ─────────────────────────────────────────────────────────
@@ -568,21 +609,52 @@ export default function ChatPage() {
 
   // Track whether a group key derivation is in-flight to avoid duplicate calls.
   const derivingGroupKey = useRef<string | null>(null);
+  // Track the last peer ecdhPublicKey bytes string we derived a key from,
+  // so we always re-derive when a new/different key arrives.
+  const lastDerivedPeerKey = useRef<string>("");
+
+  // FIX: Reset lastDerivedPeerKey when convId changes so each new conversation
+  // always triggers a fresh ECDH key derivation from the peer's current profile.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional — lastDerivedPeerKey is a ref (not reactive state); convId is the only real trigger
+  useEffect(() => {
+    lastDerivedPeerKey.current = "";
+  }, [convId]);
 
   useEffect(() => {
     if (!conv || convId === null) return;
     const convIdStr = convId.toString();
 
     // Direct: derive ECDH shared key from peer's public key.
-    // Run whenever peerProfiles changes -- do NOT short-circuit when key
-    // already exists, because peerProfiles may arrive after the first render.
+    // ALWAYS re-derive when peerProfiles changes AND the key bytes are new —
+    // this handles the race where the profile arrives after the first render.
     if (conv.kind === ConversationKind.direct) {
       if (peerProfiles.length > 0) {
         const peer = peerProfiles[0];
-        // Only re-derive if we don't already have a key (avoids redundant
-        // deriveKey calls on every poll cycle).
-        if (!getConversationKey(convIdStr)) {
-          deriveAndStoreKey(convIdStr, peer.ecdhPublicKey);
+        if (peer.ecdhPublicKey.length === 0) {
+          console.warn(
+            `[E2EE] ChatPage: peer profile arrived with empty ecdhPublicKey for convId=${convIdStr}`,
+          );
+        } else {
+          console.log(
+            `[E2EE] ChatPage: peer ecdhPublicKey arrived, byteLength=${peer.ecdhPublicKey.byteLength} for convId=${convIdStr}`,
+          );
+          // Serialize the key bytes to a string for change detection.
+          const keyFingerprint = Array.from(
+            peer.ecdhPublicKey.slice(0, 8),
+          ).join(",");
+          const needsDerivation =
+            !getConversationKey(convIdStr) ||
+            lastDerivedPeerKey.current !== keyFingerprint;
+          if (needsDerivation) {
+            lastDerivedPeerKey.current = keyFingerprint;
+            deriveAndStoreKey(convIdStr, peer.ecdhPublicKey).then((key) => {
+              if (!key) {
+                console.error(
+                  `[E2EE] ChatPage: deriveAndStoreKey returned null for convId=${convIdStr}`,
+                );
+              }
+            });
+          }
         }
       }
       return; // nothing more to do for direct chats

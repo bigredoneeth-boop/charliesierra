@@ -22,8 +22,9 @@ export function usePublicGroups(category?: string, offset = 0n) {
       });
     },
     enabled: !!actor && !isFetching,
-    staleTime: 15_000,
-    refetchInterval: 30_000,
+    staleTime: 60_000,
+    gcTime: 300_000,
+    refetchInterval: 60_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
   });
@@ -58,8 +59,9 @@ export function useGroupJoinRequests(conversationId: bigint | null) {
       return result.ok;
     },
     enabled: !!actor && !isFetching && conversationId !== null,
-    staleTime: 5_000,
-    refetchInterval: 12_000,
+    staleTime: 15_000,
+    gcTime: 300_000,
+    refetchInterval: 15_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
   });

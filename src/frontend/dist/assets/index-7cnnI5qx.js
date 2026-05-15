@@ -43179,9 +43179,10 @@ async function exportPublicKey(key) {
   return new Uint8Array(spki);
 }
 async function importPublicKey(bytes) {
+  const copy = new Uint8Array(bytes);
   return crypto.subtle.importKey(
     "spki",
-    bytes.buffer,
+    copy.buffer,
     { name: "ECDH", namedCurve: "P-256" },
     true,
     []
@@ -43210,14 +43211,32 @@ async function encryptMessage(key, plaintext) {
   return result;
 }
 async function decryptMessage(key, ciphertext) {
-  const iv = ciphertext.slice(0, IV_LENGTH);
-  const data = ciphertext.slice(IV_LENGTH);
-  const plaintext = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
-    key,
-    data
-  );
-  return new TextDecoder().decode(plaintext);
+  const bytes = new Uint8Array(ciphertext);
+  if (bytes.length < IV_LENGTH) {
+    const err = `[E2EE] Ciphertext too short for IV: got ${bytes.length} bytes, need at least ${IV_LENGTH}`;
+    console.error(err);
+    throw new Error(err);
+  }
+  const iv = bytes.slice(0, IV_LENGTH);
+  const data = bytes.slice(IV_LENGTH);
+  try {
+    const plaintext = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      key,
+      data
+    );
+    const result = new TextDecoder().decode(plaintext);
+    console.log(
+      `[E2EE] Decryption successful (ciphertext length: ${bytes.length})`
+    );
+    return result;
+  } catch (err) {
+    console.error(
+      `[E2EE] AES-GCM decryption failed (ciphertext length: ${bytes.length}):`,
+      err
+    );
+    throw err;
+  }
 }
 async function encryptBlob(key, data) {
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
@@ -43247,9 +43266,10 @@ async function exportKey(key) {
   return new Uint8Array(raw);
 }
 async function importAESKey(bytes) {
+  const copy = new Uint8Array(bytes);
   return crypto.subtle.importKey(
     "raw",
-    bytes.buffer,
+    copy.buffer,
     { name: "AES-GCM" },
     false,
     ["encrypt", "decrypt"]
@@ -43398,16 +43418,39 @@ function CryptoProvider({ children }) {
   );
   const deriveAndStoreKey = reactExports.useCallback(
     async (convId, theirPublicKeyBytes) => {
-      if (!(keyPair == null ? void 0 : keyPair.privateKey)) return null;
+      if (!(keyPair == null ? void 0 : keyPair.privateKey)) {
+        console.error(
+          `[E2EE] deriveAndStoreKey: no local privateKey for convId=${convId}`
+        );
+        return null;
+      }
       try {
         const theirKey = await importPublicKey(theirPublicKeyBytes);
+        if (theirKey.type !== "public" || theirKey.algorithm.name !== "ECDH") {
+          console.error(
+            "[E2EE] deriveAndStoreKey: imported peer key has unexpected type/algorithm",
+            `type=${theirKey.type}`,
+            `algorithm=${JSON.stringify(theirKey.algorithm)}`,
+            `convId=${convId}`
+          );
+          return null;
+        }
         const sharedKey = await deriveSharedSecret(
           keyPair.privateKey,
           theirKey
         );
         convKeys.current.set(convId, sharedKey);
+        console.log(
+          `[E2EE] deriveAndStoreKey: key derived and cached for convId=${convId}`
+        );
         return sharedKey;
-      } catch {
+      } catch (err) {
+        console.error(
+          `[E2EE] deriveAndStoreKey FAILED for convId=${convId}:`,
+          `theirPublicKeyBytes.length=${theirPublicKeyBytes.length}`,
+          `privateKey exists=${!!(keyPair == null ? void 0 : keyPair.privateKey)}`,
+          err
+        );
         return null;
       }
     },
@@ -43428,10 +43471,20 @@ function CryptoProvider({ children }) {
   const decryptFromConv = reactExports.useCallback(
     async (convId, blob) => {
       const key = convKeys.current.get(convId);
-      if (!key) return null;
+      if (!key) {
+        console.error(
+          `[E2EE] decryptFromConv: no conversation key in cache for convId=${convId}`
+        );
+        return null;
+      }
       try {
         return await decryptMessage(key, blob);
-      } catch {
+      } catch (err) {
+        console.error(
+          `[E2EE] decryptFromConv FAILED for convId=${convId}:`,
+          `blob.length=${blob.length}`,
+          err
+        );
         return null;
       }
     },
@@ -47084,8 +47137,9 @@ function useConversations() {
       return actor.listConversations();
     },
     enabled: !!actor && !isFetching,
-    staleTime: 1e4,
-    refetchInterval: 15e3,
+    staleTime: 6e4,
+    gcTime: 3e5,
+    refetchInterval: 3e4,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false
   });
@@ -47099,8 +47153,9 @@ function useConversation(id) {
       return actor.getConversation(id);
     },
     enabled: !!actor && !isFetching && id !== null,
-    staleTime: 1e4,
-    refetchInterval: 15e3,
+    staleTime: 6e4,
+    gcTime: 3e5,
+    refetchInterval: 3e4,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false
   });
@@ -47121,8 +47176,9 @@ function useMessages(conversationId, limit = 50n) {
       return [];
     },
     enabled: !!actor && !isFetching && conversationId !== null,
-    staleTime: 3e3,
-    refetchInterval: 6e3,
+    staleTime: 1e4,
+    gcTime: 3e5,
+    refetchInterval: 1e4,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false
   });
@@ -47213,8 +47269,9 @@ function usePublicGroups(category, offset2 = 0n) {
       });
     },
     enabled: !!actor && !isFetching,
-    staleTime: 15e3,
-    refetchInterval: 3e4,
+    staleTime: 6e4,
+    gcTime: 3e5,
+    refetchInterval: 6e4,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false
   });
@@ -47245,8 +47302,9 @@ function useGroupJoinRequests(conversationId) {
       return result.ok;
     },
     enabled: !!actor && !isFetching && conversationId !== null,
-    staleTime: 5e3,
-    refetchInterval: 12e3,
+    staleTime: 15e3,
+    gcTime: 3e5,
+    refetchInterval: 15e3,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false
   });
@@ -47287,18 +47345,31 @@ function useDenyJoinRequest() {
     }
   });
 }
+function parseIcError(err) {
+  const raw = err instanceof Error ? err.message : typeof err === "string" ? err : JSON.stringify(err);
+  if (raw.includes("IC0508") || raw.includes("is stopped")) {
+    return "The service is temporarily unavailable. Please try again in a moment.";
+  }
+  if (raw.includes("Reject code") || raw.includes("rejection") || raw.includes("replica returned")) {
+    return "Unable to reach the service. Please check your connection and try again.";
+  }
+  return raw.trim() || "Something went wrong. Please try again.";
+}
 function ContactSearchInput({
   onSelect,
   placeholder = "Search by name or paste principal ID…",
   exclude = []
 }) {
-  const { actor } = useActor(createActor);
+  const { actor, isFetching } = useActor(createActor);
   const [value, setValue] = reactExports.useState("");
   const [profile, setProfile] = reactExports.useState(null);
   const [lookupState, setLookupState] = reactExports.useState("idle");
+  const [canisterError, setCanisterError] = reactExports.useState(null);
   const [nameMatches, setNameMatches] = reactExports.useState([]);
   const debounceRef = reactExports.useRef(null);
   const dropdownRef = reactExports.useRef(null);
+  const pendingLookupRef = reactExports.useRef(null);
+  const pendingNameQueryRef = reactExports.useRef(null);
   const cachedContacts = reactExports.useMemo(() => {
     const results = [];
     try {
@@ -47328,9 +47399,18 @@ function ContactSearchInput({
     },
     [cachedContacts, exclude]
   );
+  const looksLikePrincipal = reactExports.useCallback((text) => {
+    if (!text.trim()) return false;
+    try {
+      Principal$1.fromText(text.trim());
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
   const lookupByPrincipal = reactExports.useCallback(
     async (text) => {
-      if (!actor || !text.trim()) {
+      if (!text.trim()) {
         setLookupState("idle");
         setProfile(null);
         return;
@@ -47348,18 +47428,56 @@ function ContactSearchInput({
         setProfile(null);
         return;
       }
+      if (!actor || isFetching) {
+        pendingLookupRef.current = text;
+        setLookupState("loading");
+        return;
+      }
+      pendingLookupRef.current = null;
       setLookupState("loading");
       try {
         const found = await actor.getUserProfile(principal);
-        setProfile(found ?? null);
-        setLookupState("found");
-      } catch {
-        setProfile(null);
-        setLookupState("found");
+        setCanisterError(null);
+        if (found === null || found === void 0) {
+          setProfile(null);
+          setLookupState("not_registered");
+        } else {
+          setProfile(found);
+          setLookupState("found");
+        }
+      } catch (err) {
+        const errMsg = String(err);
+        const isNotRegistered = errMsg.toLowerCase().includes("not_registered") || errMsg.toLowerCase().includes("not registered") || errMsg.toLowerCase().includes("notfound") || errMsg.toLowerCase().includes("not found");
+        if (isNotRegistered) {
+          setProfile(null);
+          setLookupState("not_registered");
+          setCanisterError(null);
+        } else {
+          const friendly = parseIcError(err);
+          console.error("[ContactSearch] getUserProfile error:", err);
+          setProfile(null);
+          setCanisterError(friendly);
+          setLookupState("canister_error");
+        }
       }
     },
-    [actor, exclude]
+    [actor, isFetching, exclude]
   );
+  reactExports.useEffect(() => {
+    if (!actor || isFetching) return;
+    if (pendingLookupRef.current) {
+      const pending = pendingLookupRef.current;
+      pendingLookupRef.current = null;
+      lookupByPrincipal(pending);
+    } else if (pendingNameQueryRef.current) {
+      const pendingName = pendingNameQueryRef.current;
+      pendingNameQueryRef.current = null;
+      const matches = searchByName(pendingName);
+      setNameMatches(matches);
+      setLookupState(matches.length > 0 ? "name_results" : "no_name_match");
+      setProfile(null);
+    }
+  }, [actor, isFetching, lookupByPrincipal, searchByName]);
   reactExports.useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     const trimmed = value.trim();
@@ -47370,10 +47488,17 @@ function ContactSearchInput({
       return;
     }
     debounceRef.current = setTimeout(() => {
-      if (trimmed.includes("-")) {
+      if (looksLikePrincipal(trimmed)) {
         setNameMatches([]);
         lookupByPrincipal(trimmed);
       } else {
+        if (!actor || isFetching) {
+          pendingNameQueryRef.current = trimmed;
+          setLookupState("loading");
+          setProfile(null);
+          return;
+        }
+        pendingNameQueryRef.current = null;
         const matches = searchByName(trimmed);
         setNameMatches(matches);
         setLookupState(matches.length > 0 ? "name_results" : "no_name_match");
@@ -47383,9 +47508,17 @@ function ContactSearchInput({
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [value, lookupByPrincipal, searchByName]);
+  }, [
+    value,
+    actor,
+    isFetching,
+    lookupByPrincipal,
+    searchByName,
+    looksLikePrincipal
+  ]);
   const handlePrincipalSelect = () => {
-    if (lookupState !== "found" || !value.trim()) return;
+    if (lookupState !== "found" && lookupState !== "not_registered" || !value.trim())
+      return;
     try {
       const principal = Principal$1.fromText(value.trim());
       onSelect(principal, profile);
@@ -47406,6 +47539,11 @@ function ContactSearchInput({
     }
   };
   const principalDisplayLabel = profile ? `${value.trim().slice(0, 20)}…` : `${value.trim().slice(0, 8)}…`;
+  reactExports.useEffect(() => {
+    if (!value.trim()) {
+      setCanisterError(null);
+    }
+  }, [value]);
   const showDropdown = lookupState === "name_results" && nameMatches.length > 0;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", "data-ocid": "contact_search.panel", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
@@ -47465,12 +47603,20 @@ function ContactSearchInput({
         ))
       }
     ),
-    lookupState === "no_name_match" && value.trim() && !value.trim().includes("-") && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    lookupState === "no_name_match" && value.trim() && /* @__PURE__ */ jsxRuntimeExports.jsx(
       "p",
       {
         className: "text-xs text-muted-foreground px-1",
         "data-ocid": "contact_search.no_results_hint",
-        children: "No contacts found — enter a principal ID to look up directly."
+        children: "No contacts found by name — paste the user's Principal ID to look up directly."
+      }
+    ),
+    lookupState === "canister_error" && canisterError && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "p",
+      {
+        className: "text-xs text-destructive px-1",
+        "data-ocid": "contact_search.error_state",
+        children: canisterError
       }
     ),
     lookupState === "invalid" && value.trim() && /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -47489,6 +47635,39 @@ function ContactSearchInput({
         children: "Already added to this group"
       }
     ),
+    lookupState === "not_registered" && value.trim() && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "p",
+        {
+          className: "text-xs text-destructive px-1",
+          "data-ocid": "contact_search.not_registered_hint",
+          children: "User not found — they may not be registered on CharlieSierra."
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          onClick: handlePrincipalSelect,
+          "data-ocid": "contact_search.select_button",
+          className: "w-full flex items-center gap-3 px-3 py-2.5 rounded-md bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-colors duration-150 text-left",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: value.trim(), size: 32 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground truncate", children: principalDisplayLabel }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-amber-700 dark:text-amber-400", children: "Start a chat anyway and they can join later." })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              UserCheck,
+              {
+                size: 16,
+                className: "text-amber-600 dark:text-amber-400 flex-shrink-0"
+              }
+            )
+          ]
+        }
+      )
+    ] }),
     lookupState === "found" && value.trim() && /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
@@ -47500,7 +47679,7 @@ function ContactSearchInput({
           /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: value.trim(), size: 32 }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground truncate", children: principalDisplayLabel }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: profile ? "Tap to add" : "Valid principal — tap to add" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: profile ? "User found — tap to start chat" : "Tap to add" })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(UserCheck, { size: 16, className: "text-primary flex-shrink-0" })
         ]
@@ -50561,13 +50740,42 @@ function useDecryptedContent(message, conversationId, _isMine) {
       setText(null);
       return;
     }
-    decryptFromConv(conversationId, message.encryptedContent).then((result) => {
-      if (result === null) setFailed(true);
-      else {
-        setText(result);
-        setFailed(false);
-      }
+    let cancelled = false;
+    const RETRY_DELAYS = [0, 500, 500, 500, 500, 2e3];
+    let cumulativeDelay = 0;
+    const attempts = RETRY_DELAYS.map((delay, index2) => {
+      cumulativeDelay += delay;
+      return { attempt: index2 + 1, delay: cumulativeDelay };
     });
+    const timers = [];
+    for (const { attempt, delay } of attempts) {
+      const t = setTimeout(async () => {
+        if (cancelled) return;
+        console.log(
+          `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`
+        );
+        const result = await decryptFromConv(
+          conversationId,
+          message.encryptedContent
+        );
+        if (cancelled) return;
+        if (result !== null) {
+          setText(result);
+          setFailed(false);
+          cancelled = true;
+        } else if (attempt === attempts.length) {
+          console.error(
+            `[E2EE] useDecryptedContent: all ${attempts.length} attempts failed for convId=${conversationId} msgId=${message.id}`
+          );
+          setFailed(true);
+        }
+      }, delay);
+      timers.push(t);
+    }
+    return () => {
+      cancelled = true;
+      for (const t of timers) clearTimeout(t);
+    };
   }, [message, conversationId, decryptFromConv]);
   return { text, failed };
 }
@@ -50779,7 +50987,30 @@ function MessageBubble({
   });
   const senderPrincipalText = message.sender.toText();
   const senderInitial = senderProfile ? senderProfile.id.toText() : senderPrincipalText;
-  const senderDisplayName = getDisplayName(senderPrincipalText);
+  const [senderDisplayName, setSenderDisplayName] = reactExports.useState(
+    () => getDisplayName(senderPrincipalText)
+  );
+  reactExports.useEffect(() => {
+    if (!senderProfile || senderProfile.encryptedDisplayName.length === 0)
+      return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const key = await deriveDisplayNameKey(senderProfile.id);
+        const decrypted = await decryptMessage(
+          key,
+          new Uint8Array(senderProfile.encryptedDisplayName)
+        );
+        if (cancelled || !(decrypted == null ? void 0 : decrypted.trim())) return;
+        setLocalDisplayName(senderPrincipalText, decrypted);
+        setSenderDisplayName(decrypted);
+      } catch {
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [senderProfile, senderPrincipalText]);
   const openContextMenu = reactExports.useCallback(
     (e) => {
       e.preventDefault();
@@ -50812,7 +51043,7 @@ function MessageBubble({
             className: `relative max-w-[70%] min-w-0 ${isMine ? "items-end" : "items-start"} flex flex-col`,
             onContextMenu: openContextMenu,
             children: [
-              isGroup && !isMine && showAvatar && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full", children: senderDisplayName }),
+              !isMine && showAvatar && (isGroup || senderDisplayName !== senderPrincipalText) && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full", children: senderDisplayName }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "div",
                 {
@@ -51508,6 +51739,20 @@ function useRevokeKeyEscrow() {
     }
   });
 }
+async function decryptProfileDisplayName(profile) {
+  if (!profile.encryptedDisplayName || profile.encryptedDisplayName.length === 0)
+    return null;
+  try {
+    const principalText = profile.id.toText();
+    const key = await deriveDisplayNameKey({ toText: () => principalText });
+    return await decryptMessage(
+      key,
+      new Uint8Array(profile.encryptedDisplayName)
+    );
+  } catch {
+    return null;
+  }
+}
 function usePeerName(conv, myPrincipal) {
   const peerId = reactExports.useMemo(() => {
     if (!conv || conv.kind === ConversationKind.group) return null;
@@ -51516,8 +51761,16 @@ function usePeerName(conv, myPrincipal) {
   const { data: profiles = [] } = useUserProfiles(peerId ? [peerId] : []);
   const profile = profiles[0];
   const peerText = (peerId == null ? void 0 : peerId.toText()) ?? null;
-  const cachedName = peerText ? getDisplayName(peerText) : "Group";
-  return { peerId, displayName: cachedName, profile };
+  reactExports.useEffect(() => {
+    if (!profile || !peerText) return;
+    decryptProfileDisplayName(profile).then((name) => {
+      if (name) {
+        setLocalDisplayName(peerText, name);
+      }
+    });
+  }, [profile, peerText]);
+  const displayName = peerText ? getDisplayName(peerText) : "Group";
+  return { peerId, displayName, profile };
 }
 function RetentionBanner({ convId, isAdmin }) {
   const { data: policy } = useGroupRetentionPolicy(convId);
@@ -51952,14 +52205,38 @@ function ChatPage() {
   }, [conv, myPrincipal]);
   const { data: peerProfiles = [] } = useUserProfiles(peerIds);
   const derivingGroupKey = reactExports.useRef(null);
+  const lastDerivedPeerKey = reactExports.useRef("");
+  reactExports.useEffect(() => {
+    lastDerivedPeerKey.current = "";
+  }, [convId]);
   reactExports.useEffect(() => {
     if (!conv || convId === null) return;
     const convIdStr = convId.toString();
     if (conv.kind === ConversationKind.direct) {
       if (peerProfiles.length > 0) {
         const peer = peerProfiles[0];
-        if (!getConversationKey(convIdStr)) {
-          deriveAndStoreKey(convIdStr, peer.ecdhPublicKey);
+        if (peer.ecdhPublicKey.length === 0) {
+          console.warn(
+            `[E2EE] ChatPage: peer profile arrived with empty ecdhPublicKey for convId=${convIdStr}`
+          );
+        } else {
+          console.log(
+            `[E2EE] ChatPage: peer ecdhPublicKey arrived, byteLength=${peer.ecdhPublicKey.byteLength} for convId=${convIdStr}`
+          );
+          const keyFingerprint = Array.from(
+            peer.ecdhPublicKey.slice(0, 8)
+          ).join(",");
+          const needsDerivation = !getConversationKey(convIdStr) || lastDerivedPeerKey.current !== keyFingerprint;
+          if (needsDerivation) {
+            lastDerivedPeerKey.current = keyFingerprint;
+            deriveAndStoreKey(convIdStr, peer.ecdhPublicKey).then((key) => {
+              if (!key) {
+                console.error(
+                  `[E2EE] ChatPage: deriveAndStoreKey returned null for convId=${convIdStr}`
+                );
+              }
+            });
+          }
         }
       }
       return;
@@ -53292,9 +53569,26 @@ function NewConversationDialog({
     if (!actor || !directPeer) return;
     setDirectLoading(true);
     try {
+      console.log(
+        "[CharlieSierra] Starting direct chat with:",
+        directPeer.toText()
+      );
       const result = await actor.createDirectConversation({ peer: directPeer });
       if (result.__kind__ === "err") {
-        ue.error(`Failed to create chat: ${result.err}`);
+        const errKey = result.err;
+        const errMessages = {
+          notFound: "User not found. Ask them to open CharlieSierra first so their account is registered.",
+          alreadyExists: "A conversation with this user already exists.",
+          unauthorized: "You must be logged in to start a conversation.",
+          forbidden: "You cannot start a conversation with this principal.",
+          invalidInput: "Invalid principal ID. Please check and try again."
+        };
+        const msg = (errKey && errMessages[errKey]) ?? "Failed to create conversation. Please try again.";
+        console.error(
+          "[CharlieSierra] createDirectConversation error:",
+          errKey
+        );
+        ue.error(msg);
         return;
       }
       onOpenChange(false);
@@ -53303,8 +53597,13 @@ function NewConversationDialog({
         to: "/app/conversations/$id",
         params: { id: result.ok.id.toString() }
       });
-    } catch {
-      ue.error("Something went wrong. Please try again.");
+    } catch (err) {
+      console.error("[CharlieSierra] createDirectConversation threw:", err);
+      const message = err instanceof Error ? err.message : String(err);
+      const isNotFound2 = message.includes("notFound") || message.includes("not_found") || message.includes("NotFound");
+      ue.error(
+        isNotFound2 ? "User not found on CharlieSierra. Ask them to log in first so their account is registered." : parseIcError(err)
+      );
     } finally {
       setDirectLoading(false);
     }
@@ -53380,10 +53679,7 @@ function NewConversationDialog({
       });
     } catch (err) {
       console.error("[CharlieSierra] createGroup unexpected error:", err);
-      const message = err instanceof Error ? err.message : String(err);
-      ue.error(
-        message ? `Failed to create group: ${message}` : "Something went wrong. Please try again."
-      );
+      ue.error(parseIcError(err));
     } finally {
       setGroupLoading(false);
     }
@@ -53440,7 +53736,7 @@ function NewConversationDialog({
                       directPeer.toText().slice(0, 20),
                       "…"
                     ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: directProfile ? "User found" : "Unknown user" })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: directProfile ? "Registered user" : "Principal selected" })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "button",
@@ -55327,7 +55623,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-CXHOnsit.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-pGiQquWo.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

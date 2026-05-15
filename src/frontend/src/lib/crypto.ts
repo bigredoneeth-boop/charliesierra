@@ -70,9 +70,13 @@ export async function exportPublicKey(key: CryptoKey): Promise<Uint8Array> {
 }
 
 export async function importPublicKey(bytes: Uint8Array): Promise<CryptoKey> {
+  // CRITICAL: Candid-decoded Uint8Array values often have a non-zero byteOffset.
+  // Passing bytes.buffer directly would read from the wrong position in the underlying
+  // ArrayBuffer. We must copy to a fresh Uint8Array first to guarantee byteOffset === 0.
+  const copy = new Uint8Array(bytes);
   return crypto.subtle.importKey(
     "spki",
-    bytes.buffer as ArrayBuffer,
+    copy.buffer,
     { name: "ECDH", namedCurve: "P-256" },
     true,
     [],
@@ -115,14 +119,34 @@ export async function decryptMessage(
   key: CryptoKey,
   ciphertext: Uint8Array,
 ): Promise<string> {
-  const iv = ciphertext.slice(0, IV_LENGTH);
-  const data = ciphertext.slice(IV_LENGTH);
-  const plaintext = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
-    key,
-    data,
-  );
-  return new TextDecoder().decode(plaintext);
+  // FIX: Normalize to a zero-byteOffset copy so that slice() works correctly
+  // on Candid-decoded vec nat8 typed arrays which may have a non-zero byteOffset.
+  const bytes = new Uint8Array(ciphertext);
+  if (bytes.length < IV_LENGTH) {
+    const err = `[E2EE] Ciphertext too short for IV: got ${bytes.length} bytes, need at least ${IV_LENGTH}`;
+    console.error(err);
+    throw new Error(err);
+  }
+  const iv = bytes.slice(0, IV_LENGTH);
+  const data = bytes.slice(IV_LENGTH);
+  try {
+    const plaintext = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      key,
+      data,
+    );
+    const result = new TextDecoder().decode(plaintext);
+    console.log(
+      `[E2EE] Decryption successful (ciphertext length: ${bytes.length})`,
+    );
+    return result;
+  } catch (err) {
+    console.error(
+      `[E2EE] AES-GCM decryption failed (ciphertext length: ${bytes.length}):`,
+      err,
+    );
+    throw err;
+  }
 }
 
 // ── Blob (file) encryption ────────────────────────────────────────────────────
@@ -167,9 +191,13 @@ export async function exportKey(key: CryptoKey): Promise<Uint8Array> {
 }
 
 export async function importAESKey(bytes: Uint8Array): Promise<CryptoKey> {
+  // CRITICAL: Candid-decoded Uint8Array values often have a non-zero byteOffset.
+  // Passing bytes.buffer directly would read from the wrong position in the underlying
+  // ArrayBuffer. We must copy to a fresh Uint8Array first to guarantee byteOffset === 0.
+  const copy = new Uint8Array(bytes);
   return crypto.subtle.importKey(
     "raw",
-    bytes.buffer as ArrayBuffer,
+    copy.buffer,
     { name: "AES-GCM" },
     false,
     ["encrypt", "decrypt"],

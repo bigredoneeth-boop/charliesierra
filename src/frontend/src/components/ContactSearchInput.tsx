@@ -3,6 +3,7 @@ import type { UserId, UserProfilePublic } from "@/backend";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Input } from "@/components/ui/input";
 import { DISPLAY_NAME_PREFIX, shortPrincipal } from "@/hooks/use-profiles";
+import { parseIcError } from "@/utils/ic-errors";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { Principal } from "@icp-sdk/core/principal";
 import { Loader2, Search, UserCheck } from "lucide-react";
@@ -24,21 +25,28 @@ export function ContactSearchInput({
   placeholder = "Search by name or paste principal ID…",
   exclude = [],
 }: ContactSearchInputProps) {
-  const { actor } = useActor(createActor);
+  const { actor, isFetching } = useActor(createActor);
   const [value, setValue] = useState("");
   const [profile, setProfile] = useState<UserProfilePublic | null>(null);
   const [lookupState, setLookupState] = useState<
     | "idle"
     | "loading"
     | "found"
+    | "not_registered"
     | "excluded"
     | "invalid"
     | "name_results"
     | "no_name_match"
+    | "canister_error"
   >("idle");
+  const [canisterError, setCanisterError] = useState<string | null>(null);
   const [nameMatches, setNameMatches] = useState<CachedContact[]>([]);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  // Track a pending lookup so it retries once the actor becomes available
+  const pendingLookupRef = useRef<string | null>(null);
+  // Track a pending name search query that was attempted while actor was null
+  const pendingNameQueryRef = useRef<string | null>(null);
 
   // Build an index of all locally-cached display names on mount
   const cachedContacts = useMemo<CachedContact[]>(() => {
@@ -51,7 +59,6 @@ export function ContactSearchInput({
         const name = localStorage.getItem(key);
         if (!name?.trim()) continue;
         try {
-          // Validate it's actually a parseable principal
           Principal.fromText(principal);
           results.push({ principal, displayName: name.trim() });
         } catch {
@@ -77,13 +84,25 @@ export function ContactSearchInput({
     [cachedContacts, exclude],
   );
 
+  /** Returns true if the string parses as a valid IC Principal. */
+  const looksLikePrincipal = useCallback((text: string): boolean => {
+    if (!text.trim()) return false;
+    try {
+      Principal.fromText(text.trim());
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
+
   const lookupByPrincipal = useCallback(
     async (text: string) => {
-      if (!actor || !text.trim()) {
+      if (!text.trim()) {
         setLookupState("idle");
         setProfile(null);
         return;
       }
+
       let principal: UserId;
       try {
         principal = Principal.fromText(text.trim());
@@ -92,23 +111,71 @@ export function ContactSearchInput({
         setProfile(null);
         return;
       }
+
       if (exclude.includes(principal.toText())) {
         setLookupState("excluded");
         setProfile(null);
         return;
       }
+
+      // Actor not ready — store and wait for retry via useEffect
+      if (!actor || isFetching) {
+        pendingLookupRef.current = text;
+        setLookupState("loading");
+        return;
+      }
+
+      pendingLookupRef.current = null;
       setLookupState("loading");
       try {
         const found = await actor.getUserProfile(principal);
-        setProfile(found ?? null);
-        setLookupState("found");
-      } catch {
-        setProfile(null);
-        setLookupState("found");
+        setCanisterError(null);
+        if (found === null || found === undefined) {
+          setProfile(null);
+          setLookupState("not_registered");
+        } else {
+          setProfile(found);
+          setLookupState("found");
+        }
+      } catch (err) {
+        const errMsg = String(err);
+        const isNotRegistered =
+          errMsg.toLowerCase().includes("not_registered") ||
+          errMsg.toLowerCase().includes("not registered") ||
+          errMsg.toLowerCase().includes("notfound") ||
+          errMsg.toLowerCase().includes("not found");
+        if (isNotRegistered) {
+          setProfile(null);
+          setLookupState("not_registered");
+          setCanisterError(null);
+        } else {
+          const friendly = parseIcError(err);
+          console.error("[ContactSearch] getUserProfile error:", err);
+          setProfile(null);
+          setCanisterError(friendly);
+          setLookupState("canister_error");
+        }
       }
     },
-    [actor, exclude],
+    [actor, isFetching, exclude],
   );
+
+  // Retry pending principal lookup OR pending name search once actor becomes available
+  useEffect(() => {
+    if (!actor || isFetching) return;
+    if (pendingLookupRef.current) {
+      const pending = pendingLookupRef.current;
+      pendingLookupRef.current = null;
+      lookupByPrincipal(pending);
+    } else if (pendingNameQueryRef.current) {
+      const pendingName = pendingNameQueryRef.current;
+      pendingNameQueryRef.current = null;
+      const matches = searchByName(pendingName);
+      setNameMatches(matches);
+      setLookupState(matches.length > 0 ? "name_results" : "no_name_match");
+      setProfile(null);
+    }
+  }, [actor, isFetching, lookupByPrincipal, searchByName]);
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -120,12 +187,20 @@ export function ContactSearchInput({
       return;
     }
     debounceRef.current = setTimeout(() => {
-      // If it looks like a principal ID (contains dashes) → principal lookup
-      if (trimmed.includes("-")) {
+      // Try to parse as a principal first — most reliable
+      if (looksLikePrincipal(trimmed)) {
         setNameMatches([]);
         lookupByPrincipal(trimmed);
       } else {
-        // Name search
+        // Name search in local cache
+        // If actor isn't ready yet, store the query for retry when it becomes available
+        if (!actor || isFetching) {
+          pendingNameQueryRef.current = trimmed;
+          setLookupState("loading");
+          setProfile(null);
+          return;
+        }
+        pendingNameQueryRef.current = null;
         const matches = searchByName(trimmed);
         setNameMatches(matches);
         setLookupState(matches.length > 0 ? "name_results" : "no_name_match");
@@ -135,10 +210,21 @@ export function ContactSearchInput({
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [value, lookupByPrincipal, searchByName]);
+  }, [
+    value,
+    actor,
+    isFetching,
+    lookupByPrincipal,
+    searchByName,
+    looksLikePrincipal,
+  ]);
 
   const handlePrincipalSelect = () => {
-    if (lookupState !== "found" || !value.trim()) return;
+    if (
+      (lookupState !== "found" && lookupState !== "not_registered") ||
+      !value.trim()
+    )
+      return;
     try {
       const principal = Principal.fromText(value.trim());
       onSelect(principal, profile);
@@ -162,10 +248,17 @@ export function ContactSearchInput({
     }
   };
 
-  // Principal display label (when doing a principal lookup)
+  // Principal display label
   const principalDisplayLabel = profile
     ? `${value.trim().slice(0, 20)}…`
     : `${value.trim().slice(0, 8)}…`;
+
+  // Clear canister error when input is cleared
+  useEffect(() => {
+    if (!value.trim()) {
+      setCanisterError(null);
+    }
+  }, [value]);
 
   const showDropdown = lookupState === "name_results" && nameMatches.length > 0;
 
@@ -227,16 +320,25 @@ export function ContactSearchInput({
       )}
 
       {/* No name match hint */}
-      {lookupState === "no_name_match" &&
-        value.trim() &&
-        !value.trim().includes("-") && (
-          <p
-            className="text-xs text-muted-foreground px-1"
-            data-ocid="contact_search.no_results_hint"
-          >
-            No contacts found — enter a principal ID to look up directly.
-          </p>
-        )}
+      {lookupState === "no_name_match" && value.trim() && (
+        <p
+          className="text-xs text-muted-foreground px-1"
+          data-ocid="contact_search.no_results_hint"
+        >
+          No contacts found by name — paste the user's Principal ID to look up
+          directly.
+        </p>
+      )}
+
+      {/* Canister / IC error feedback */}
+      {lookupState === "canister_error" && canisterError && (
+        <p
+          className="text-xs text-destructive px-1"
+          data-ocid="contact_search.error_state"
+        >
+          {canisterError}
+        </p>
+      )}
 
       {/* Validation / exclusion feedback */}
       {lookupState === "invalid" && value.trim() && (
@@ -257,7 +359,39 @@ export function ContactSearchInput({
         </p>
       )}
 
-      {/* Principal lookup result */}
+      {/* Principal found but not yet registered on CharlieSierra */}
+      {lookupState === "not_registered" && value.trim() && (
+        <div className="space-y-1.5">
+          <p
+            className="text-xs text-destructive px-1"
+            data-ocid="contact_search.not_registered_hint"
+          >
+            User not found — they may not be registered on CharlieSierra.
+          </p>
+          <button
+            type="button"
+            onClick={handlePrincipalSelect}
+            data-ocid="contact_search.select_button"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-colors duration-150 text-left"
+          >
+            <UserAvatar principal={value.trim()} size={32} />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-foreground truncate">
+                {principalDisplayLabel}
+              </p>
+              <p className="text-xs text-amber-700 dark:text-amber-400">
+                Start a chat anyway and they can join later.
+              </p>
+            </div>
+            <UserCheck
+              size={16}
+              className="text-amber-600 dark:text-amber-400 flex-shrink-0"
+            />
+          </button>
+        </div>
+      )}
+
+      {/* Registered user found */}
       {lookupState === "found" && value.trim() && (
         <button
           type="button"
@@ -271,7 +405,7 @@ export function ContactSearchInput({
               {principalDisplayLabel}
             </p>
             <p className="text-xs text-muted-foreground">
-              {profile ? "Tap to add" : "Valid principal — tap to add"}
+              {profile ? "User found — tap to start chat" : "Tap to add"}
             </p>
           </div>
           <UserCheck size={16} className="text-primary flex-shrink-0" />

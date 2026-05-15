@@ -22,8 +22,9 @@ export function useConversations() {
       return actor.listConversations();
     },
     enabled: !!actor && !isFetching,
-    staleTime: 10_000,
-    refetchInterval: 15_000,
+    staleTime: 60_000,
+    gcTime: 300_000,
+    refetchInterval: 30_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
   });
@@ -38,8 +39,9 @@ export function useConversation(id: bigint | null) {
       return actor.getConversation(id);
     },
     enabled: !!actor && !isFetching && id !== null,
-    staleTime: 10_000,
-    refetchInterval: 15_000,
+    staleTime: 60_000,
+    gcTime: 300_000,
+    refetchInterval: 30_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
   });
@@ -61,8 +63,9 @@ export function useMessages(conversationId: bigint | null, limit = 50n) {
       return [];
     },
     enabled: !!actor && !isFetching && conversationId !== null,
-    staleTime: 3_000,
-    refetchInterval: 6_000,
+    staleTime: 10_000,
+    gcTime: 300_000,
+    refetchInterval: 10_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
   });
