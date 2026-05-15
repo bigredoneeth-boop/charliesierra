@@ -55,7 +55,6 @@ import {
   Search,
   Settings,
   Timer,
-  Video,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -346,7 +345,6 @@ interface HeaderProps {
   myPrincipal: string;
   onBack: () => void;
   onVoiceCall: () => void;
-  onVideoCall: () => void;
   onSearchOpen: () => void;
   isSearchOpen: boolean;
   isCreator: boolean;
@@ -359,7 +357,6 @@ function ChatHeader({
   myPrincipal,
   onBack,
   onVoiceCall,
-  onVideoCall,
   onSearchOpen,
   isSearchOpen,
   isCreator,
@@ -434,15 +431,6 @@ function ChatHeader({
           data-ocid="chat.voice_call_button"
         >
           <Phone size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={onVideoCall}
-          className="p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-smooth"
-          aria-label="Start video call"
-          data-ocid="chat.video_call_button"
-        >
-          <Video size={18} />
         </button>
         <button
           type="button"
@@ -772,12 +760,6 @@ export default function ChatPage() {
 
   const handleVoiceCall = () =>
     navigate({ to: "/app/calls/$id", params: { id } });
-  const handleVideoCall = () =>
-    navigate({
-      to: "/app/calls/$id",
-      params: { id },
-      search: { type: "video" } as never,
-    });
   const handleBack = () => navigate({ to: "/app/conversations" });
 
   return (
@@ -787,7 +769,6 @@ export default function ChatPage() {
         myPrincipal={myPrincipal}
         onBack={handleBack}
         onVoiceCall={handleVoiceCall}
-        onVideoCall={handleVideoCall}
         onSearchOpen={() => setSearchOpen((p) => !p)}
         isSearchOpen={searchOpen}
         isCreator={isCreator}

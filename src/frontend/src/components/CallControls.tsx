@@ -1,18 +1,9 @@
 import { useEndCall } from "@/hooks/use-calls";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  Mic,
-  MicOff,
-  PhoneOff,
-  Video,
-  VideoOff,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+import { Mic, MicOff, PhoneOff, Volume2, VolumeX } from "lucide-react";
 import { useCallback, useState } from "react";
 
 interface CallControlsProps {
-  callType: "audio" | "video";
   localStream: MediaStream | null;
   onEnd: () => void;
 }
@@ -58,16 +49,11 @@ function ControlButton({
   );
 }
 
-export function CallControls({
-  callType,
-  localStream,
-  onEnd,
-}: CallControlsProps) {
+export function CallControls({ localStream, onEnd }: CallControlsProps) {
   const navigate = useNavigate();
   const endCall = useEndCall();
 
   const [isMuted, setIsMuted] = useState(false);
-  const [isCameraOff, setIsCameraOff] = useState(false);
   const [isSpeakerOff, setIsSpeakerOff] = useState(false);
 
   const toggleMute = useCallback(() => {
@@ -78,15 +64,6 @@ export function CallControls({
     }
     setIsMuted(newMuted);
   }, [localStream, isMuted]);
-
-  const toggleCamera = useCallback(() => {
-    if (!localStream) return;
-    const newOff = !isCameraOff;
-    for (const track of localStream.getVideoTracks()) {
-      track.enabled = !newOff;
-    }
-    setIsCameraOff(newOff);
-  }, [localStream, isCameraOff]);
 
   const toggleSpeaker = useCallback(() => {
     setIsSpeakerOff((v) => !v);
@@ -115,18 +92,6 @@ export function CallControls({
         label={isMuted ? "Unmute microphone" : "Mute microphone"}
         ocid="call.mute_toggle"
       />
-
-      {/* Camera (video only) */}
-      {callType === "video" && (
-        <ControlButton
-          onClick={toggleCamera}
-          active={!isCameraOff}
-          activeIcon={<Video size={22} />}
-          inactiveIcon={<VideoOff size={22} />}
-          label={isCameraOff ? "Turn camera on" : "Turn camera off"}
-          ocid="call.camera_toggle"
-        />
-      )}
 
       {/* Speaker */}
       <ControlButton

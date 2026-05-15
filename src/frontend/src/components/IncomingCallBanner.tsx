@@ -1,11 +1,11 @@
-import { CallStatus, CallType } from "@/backend";
+import { CallStatus } from "@/backend";
 import { UserAvatar } from "@/components/UserAvatar";
 import { useAuth } from "@/context/auth-context";
 import type { CallRecordPublic } from "@/hooks/use-calls";
 import { useActiveCalls, useEndCall } from "@/hooks/use-calls";
 import { useUserProfile } from "@/hooks/use-profiles";
 import { useNavigate } from "@tanstack/react-router";
-import { Phone, PhoneOff, Video } from "lucide-react";
+import { Phone, PhoneOff } from "lucide-react";
 import { useCallback } from "react";
 
 function BannerItem({ call }: { call: CallRecordPublic }) {
@@ -39,14 +39,8 @@ function BannerItem({ call }: { call: CallRecordPublic }) {
           {displayName}…
         </p>
         <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-          {call.callType === CallType.video ? (
-            <Video size={11} />
-          ) : (
-            <Phone size={11} />
-          )}
-          <span>
-            {call.callType === CallType.video ? "Video call" : "Voice call"}
-          </span>
+          <Phone size={11} />
+          <span>Voice call</span>
         </div>
       </div>
       <div className="flex gap-2 flex-shrink-0">

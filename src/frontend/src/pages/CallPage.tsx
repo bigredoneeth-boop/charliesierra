@@ -1,4 +1,4 @@
-import { CallStatus, CallType } from "@/backend";
+import { CallStatus } from "@/backend";
 import { CallControls } from "@/components/CallControls";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { UserAvatar } from "@/components/UserAvatar";
@@ -15,7 +15,7 @@ import {
 import { useUserProfile } from "@/hooks/use-profiles";
 import { decryptMessage, encryptMessage, generateGroupKey } from "@/lib/crypto";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { Phone, PhoneOff, Video } from "lucide-react";
+import { Phone, PhoneOff } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // Simple symmetric key for this call session (caller generates, embeds in SDP envelope)
@@ -82,14 +82,8 @@ function RingingIncoming({
           {profile ? "Incoming call" : `${principalStr.slice(0, 8)}…`}
         </p>
         <div className="flex items-center justify-center gap-1.5 mt-1 text-muted-foreground text-sm">
-          {call.callType === CallType.video ? (
-            <Video size={14} />
-          ) : (
-            <Phone size={14} />
-          )}
-          <span>
-            {call.callType === CallType.video ? "Video call" : "Voice call"}
-          </span>
+          <Phone size={14} />
+          <span>Voice call</span>
         </div>
       </div>
       <div className="flex gap-6">
@@ -135,14 +129,10 @@ export default function CallPage() {
   const callerSetupDone = useRef(false);
   const calleeSetupDone = useRef(false);
 
-  const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
-
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [callActive, setCallActive] = useState(false);
   const [setupError, setSetupError] = useState<string | null>(null);
 
-  const isVideo = call?.callType === CallType.video;
   const isCaller =
     principal && call ? call.caller.toText() === principal.toText() : null;
 
@@ -191,21 +181,14 @@ export default function CallPage() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
-          video: isVideo,
+          video: false,
         });
         localStreamRef.current = stream;
         setLocalStream(stream);
-        if (localVideoRef.current) localVideoRef.current.srcObject = stream;
 
         const pc = new RTCPeerConnection(STUN_CONFIG);
         peerConnectionRef.current = pc;
         for (const track of stream.getTracks()) pc.addTrack(track, stream);
-
-        pc.ontrack = (ev) => {
-          if (remoteVideoRef.current && ev.streams[0]) {
-            remoteVideoRef.current.srcObject = ev.streams[0];
-          }
-        };
 
         pc.onconnectionstatechange = () => {
           if (pc.connectionState === "connected") setCallActive(true);
@@ -228,7 +211,7 @@ export default function CallPage() {
         setSetupError(err instanceof Error ? err.message : "Setup failed");
       }
     })();
-  }, [call, isCaller, isVideo, encryptSdp, initiateCall]);
+  }, [call, isCaller, encryptSdp, initiateCall]);
 
   // ── Callee: when answer accepted, set remote description + create answer ────
   const handleAccept = useCallback(async () => {
@@ -236,21 +219,14 @@ export default function CallPage() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
-        video: isVideo,
+        video: false,
       });
       localStreamRef.current = stream;
       setLocalStream(stream);
-      if (localVideoRef.current) localVideoRef.current.srcObject = stream;
 
       const pc = new RTCPeerConnection(STUN_CONFIG);
       peerConnectionRef.current = pc;
       for (const track of stream.getTracks()) pc.addTrack(track, stream);
-
-      pc.ontrack = (ev) => {
-        if (remoteVideoRef.current && ev.streams[0]) {
-          remoteVideoRef.current.srcObject = ev.streams[0];
-        }
-      };
 
       pc.onconnectionstatechange = () => {
         if (pc.connectionState === "connected") setCallActive(true);
@@ -272,7 +248,7 @@ export default function CallPage() {
     } catch (err) {
       setSetupError(err instanceof Error ? err.message : "Accept failed");
     }
-  }, [call, isVideo, decryptSdp, encryptSdp, answerCall]);
+  }, [call, decryptSdp, encryptSdp, answerCall]);
 
   // ── Caller: once answer is set on backend, set remote description ───────────
   useEffect(() => {
@@ -376,9 +352,7 @@ export default function CallPage() {
         </div>
         <div className="text-center">
           <p className="text-lg font-semibold text-foreground">{statusLabel}</p>
-          <p className="text-sm text-muted-foreground mt-1">
-            {call.callType === CallType.video ? "Video call" : "Voice call"}
-          </p>
+          <p className="text-sm text-muted-foreground mt-1">Voice call</p>
         </div>
         {call.conversationId && (
           <Button
@@ -407,50 +381,8 @@ export default function CallPage() {
     );
   }
 
-  // ── Active video call ────────────────────────────────────────────────────────
-  if (callActive && isVideo) {
-    return (
-      <div
-        data-ocid="call.page"
-        className="relative flex h-screen w-full bg-black overflow-hidden"
-      >
-        {/* Remote video fullscreen */}
-        <video
-          ref={remoteVideoRef}
-          autoPlay
-          playsInline
-          className="w-full h-full object-cover"
-          aria-label="Remote participant video"
-        >
-          <track kind="captions" />
-        </video>
-        {/* Local video PiP */}
-        <video
-          ref={localVideoRef}
-          autoPlay
-          playsInline
-          muted
-          className="absolute top-4 right-4 w-32 h-48 object-cover rounded-xl shadow-elevated border border-border/30"
-          aria-label="Your video"
-        />
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center">
-          <CallControls
-            callType="video"
-            localStream={localStream}
-            onEnd={handleEnd}
-          />
-        </div>
-        {setupError && (
-          <div className="absolute top-4 left-4 rounded-lg bg-destructive/90 text-destructive-foreground text-xs px-3 py-2">
-            {setupError}
-          </div>
-        )}
-      </div>
-    );
-  }
-
   // ── Active audio call ────────────────────────────────────────────────────────
-  if (callActive && !isVideo) {
+  if (callActive) {
     const callee = call.callees[0] ?? null;
     const peerPrincipal = isCaller ? callee : call.caller;
     const peerStr = peerPrincipal?.toText() ?? "";
@@ -467,11 +399,7 @@ export default function CallPage() {
           <p className="text-sm text-muted-foreground mt-1">Call in progress</p>
         </div>
         <AudioWaves />
-        <CallControls
-          callType="audio"
-          localStream={localStream}
-          onEnd={handleEnd}
-        />
+        <CallControls localStream={localStream} onEnd={handleEnd} />
       </div>
     );
   }
