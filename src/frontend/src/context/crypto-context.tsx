@@ -307,19 +307,20 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         );
         return null;
       }
+      // CRITICAL: copy ALL bytes element-by-element into a fully-owned fresh
+      // Uint8Array. This is the ONLY safe pattern — .buffer.slice() can still
+      // produce a view with a non-zero byteOffset in some JS engines.
+      const fresh = new Uint8Array(blob.length);
+      for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
       console.log(
-        `[E2EE BUBBLE] received encryptedContent length=${blob.byteLength}, byteOffset=${blob.byteOffset}, copying to fresh buffer`,
-      );
-      // Always copy into a completely fresh ArrayBuffer before decrypting
-      const fresh = new Uint8Array(
-        blob.buffer.slice(blob.byteOffset, blob.byteOffset + blob.byteLength),
+        `[E2EE RECV] Received blob length=${fresh.length} bytes (original byteOffset=${(blob as Uint8Array & { byteOffset?: number }).byteOffset ?? 0}), copied to fresh buffer, convId=${convId}`,
       );
       try {
         return await decryptMessage(key, fresh);
       } catch (err) {
         const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
         console.error(
-          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.byteLength} bytes, keyFp=${keyFp}`,
+          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${fresh.length} bytes, keyFp=${keyFp}`,
           err,
         );
         return null;

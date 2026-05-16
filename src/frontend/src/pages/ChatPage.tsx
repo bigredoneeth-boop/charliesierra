@@ -540,7 +540,12 @@ export default function ChatPage() {
     Promise.all(
       msgs.map(async (m) => {
         try {
-          const text = await decryptFromConv(convIdStr, m.encryptedContent);
+          // Element-by-element copy before decryption — same pattern as all
+          // other call sites to guarantee byteOffset=0 on the fresh buffer.
+          const raw = m.encryptedContent as unknown as Uint8Array;
+          const fresh = new Uint8Array(raw.length);
+          for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+          const text = await decryptFromConv(convIdStr, fresh);
           return { id: m.id.toString(), text: text ?? "" };
         } catch {
           return { id: m.id.toString(), text: "" };

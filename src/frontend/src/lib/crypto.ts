@@ -152,51 +152,49 @@ export async function encryptMessage(
   );
 
   // Step 4: concatenate into a brand-new owned buffer: [IV(12)] [ciphertext+tag]
-  const fullBlob = new Uint8Array(IV_LENGTH + ciphertextBuffer.byteLength);
-  fullBlob.set(iv, 0);
-  fullBlob.set(new Uint8Array(ciphertextBuffer), IV_LENGTH);
+  // Use element-by-element copy to guarantee byteOffset=0 in the result.
+  const ciphertextAndTag = new Uint8Array(ciphertextBuffer);
+  const fullBlob = new Uint8Array(IV_LENGTH + ciphertextAndTag.length);
+  for (let i = 0; i < IV_LENGTH; i++) fullBlob[i] = iv[i];
+  for (let i = 0; i < ciphertextAndTag.length; i++)
+    fullBlob[IV_LENGTH + i] = ciphertextAndTag[i];
 
   const keyFp = await getKeyFingerprint(key);
   console.log(
-    `[E2EE SEND] Encrypting ${plaintextBytes.byteLength} bytes, IV=${ivHex}, keyFp=${keyFp}, fullBlob=${fullBlob.byteLength} bytes (${IV_LENGTH} IV + ${ciphertextBuffer.byteLength} ciphertext+tag)`,
+    `[E2EE SEND] Encrypting ${plaintextBytes.byteLength} bytes, IV=${ivHex}, keyFp=${keyFp}, fullBlob=${fullBlob.length} bytes (${IV_LENGTH} IV + ${ciphertextAndTag.length} ciphertext+tag)`,
   );
 
-  // Return a slice(0) so callers always receive an independent buffer
-  return fullBlob.slice(0);
+  return fullBlob;
 }
 
 export async function decryptMessage(
   key: CryptoKey,
   rawInput: Uint8Array,
 ): Promise<string> {
-  // Step 1: copy ALL bytes into a fresh owned buffer immediately — Candid-decoded
-  // Uint8Arrays have non-zero byteOffset and may alias the transport buffer.
-  const blob = new Uint8Array(
-    rawInput.buffer.slice(
-      rawInput.byteOffset,
-      rawInput.byteOffset + rawInput.byteLength,
-    ),
-  );
+  // Step 1: ALWAYS copy ALL bytes into a fresh, fully-owned Uint8Array using
+  // element-by-element copy. This is the ONLY safe way to guarantee byteOffset=0
+  // regardless of how the input was allocated (Candid transport buffer, slice, etc.).
+  const data = new Uint8Array(rawInput.length);
+  for (let i = 0; i < rawInput.length; i++) data[i] = rawInput[i];
 
-  // Step 2: extract IV (first 12 bytes)
-  const iv = blob.slice(0, IV_LENGTH);
-  const ivHex = Array.from(iv)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-
-  // Step 3: remaining bytes = ciphertext + auth tag
-  const ciphertextAndTag = blob.slice(IV_LENGTH);
-
-  const keyFp = await getKeyFingerprint(key);
-  console.log(
-    `[E2EE RECV] blob=${blob.byteLength} bytes, IV=${ivHex}, ciphertext+tag=${ciphertextAndTag.byteLength} bytes, keyFp=${keyFp}`,
-  );
-
-  if (blob.byteLength < IV_LENGTH + 1) {
-    const err = `[E2EE RECV] Blob too short: ${blob.byteLength} bytes (need >${IV_LENGTH})`;
+  // Step 2: validate minimum size: 12 (IV) + 1 (plaintext) + 16 (auth tag) = 29
+  if (data.length < 29) {
+    const err = `[E2EE RECV] Blob too small: ${data.length} bytes (minimum 29 = 12 IV + 1 plaintext + 16 tag)`;
     console.error(err);
     throw new Error(err);
   }
+
+  // Step 3: extract IV (first 12 bytes) and ciphertext+tag (remaining bytes)
+  const iv = data.slice(0, IV_LENGTH);
+  const ciphertextAndTag = data.slice(IV_LENGTH);
+
+  const ivHex = Array.from(iv)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  const keyFp = await getKeyFingerprint(key);
+  console.log(
+    `[E2EE RECV] blob=${data.length} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.length} bytes, keyFp=${keyFp}`,
+  );
 
   // Step 4: decrypt
   try {
@@ -212,7 +210,7 @@ export async function decryptMessage(
     return result;
   } catch (err) {
     console.error(
-      `[E2EE RECV] AES-GCM decryption FAILED: blob=${blob.byteLength} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.byteLength} bytes, keyFp=${keyFp}`,
+      `[E2EE RECV] AES-GCM decryption FAILED: blob=${data.length} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.length} bytes, keyFp=${keyFp}`,
       err,
     );
     throw err;

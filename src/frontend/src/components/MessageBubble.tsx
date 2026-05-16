@@ -111,19 +111,14 @@ export function useDecryptedContent(
         console.log(
           `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`,
         );
-        // CRITICAL FIX: Allocate a fresh, fully-isolated buffer before handing
-        // the bytes to decryptFromConv. The Candid decoder produces Uint8Array
-        // VIEWS into a shared transport buffer. The view's byteLength may be
-        // correct but its byteOffset is non-zero, causing the wrong bytes to be
-        // read as IV/ciphertext. Using new Uint8Array(n) + .set() guarantees the
-        // copy starts at byteOffset=0 in a brand-new ArrayBuffer — identical to
-        // the fix already in AttachmentUpload.tsx for file uploads.
+        // CRITICAL: Element-by-element copy — the ONLY safe way to produce a
+        // Uint8Array with byteOffset=0 regardless of how the Candid decoder
+        // allocated the source buffer.
         const raw = message.encryptedContent as unknown as Uint8Array;
+        const fresh = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
         console.log(
-          `[E2EE BUBBLE] encryptedContent.length=${raw.byteLength}, byteOffset=${raw.byteOffset} — copying to fresh buffer`,
-        );
-        const fresh = new Uint8Array(
-          raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength),
+          `[E2EE RECV] useDecryptedContent: blob length=${fresh.length} bytes (attempt ${attempt}/${attempts.length}), convId=${conversationId}`,
         );
         const result = await decryptFromConv(conversationId, fresh);
         if (cancelled) return;
@@ -166,9 +161,10 @@ function useAttachmentMeta(
 
   useEffect(() => {
     if (message.messageType === MessageType.text) return;
-    const raw = message.encryptedContent;
-    const fresh = new Uint8Array(raw.byteLength);
-    fresh.set(raw);
+    // Element-by-element copy to guarantee byteOffset=0 on the fresh buffer
+    const raw = message.encryptedContent as unknown as Uint8Array;
+    const fresh = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
     decryptFromConv(conversationId, fresh).then((result) => {
       if (!result) return;
       try {
