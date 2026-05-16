@@ -41,6 +41,8 @@ import {
   decryptMessage,
   deriveDisplayNameKey,
   deriveGroupKey,
+  exportPublicKey,
+  getKeyFingerprint,
 } from "@/lib/crypto";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -477,6 +479,7 @@ export default function ChatPage() {
   const { principal } = useAuth();
   const { actor, isFetching: actorFetching } = useActor(createActor);
   const {
+    keyPair,
     deriveAndStoreKey,
     getConversationKey,
     setGroupConversationKey,
@@ -635,13 +638,35 @@ export default function ChatPage() {
             lastDerivedPeerKey.current !== keyFingerprint;
           if (needsDerivation) {
             lastDerivedPeerKey.current = keyFingerprint;
-            deriveAndStoreKey(convIdStr, peer.ecdhPublicKey).then((key) => {
-              if (!key) {
-                console.error(
-                  `[E2EE] ChatPage: deriveAndStoreKey returned null for convId=${convIdStr}`,
-                );
-              }
-            });
+            // Always use a fresh buffer copy of the peer's ecdhPublicKey so Candid
+            // buffer offsets don't corrupt the WebCrypto key import.
+            const freshPeerKeyBytes = new Uint8Array(
+              peer.ecdhPublicKey.buffer.slice(
+                peer.ecdhPublicKey.byteOffset,
+                peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength,
+              ),
+            );
+            deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(
+              async (key) => {
+                if (!key) {
+                  console.error(
+                    `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`,
+                  );
+                } else if (keyPair) {
+                  const myPubBytes = await exportPublicKey(keyPair.publicKey);
+                  const myFp = Array.from(myPubBytes.slice(0, 8))
+                    .map((b) => b.toString(16).padStart(2, "0"))
+                    .join("");
+                  const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8))
+                    .map((b) => b.toString(16).padStart(2, "0"))
+                    .join("");
+                  const sharedFp = await getKeyFingerprint(key);
+                  console.log(
+                    `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`,
+                  );
+                }
+              },
+            );
           }
         }
       }
@@ -698,6 +723,7 @@ export default function ChatPage() {
     conv,
     convId,
     peerProfiles,
+    keyPair,
     deriveAndStoreKey,
     getConversationKey,
     setGroupConversationKey,

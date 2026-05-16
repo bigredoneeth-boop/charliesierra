@@ -8,6 +8,8 @@ import {
   deriveSharedSecret,
   encryptMessage,
   exportKey,
+  exportPublicKey,
+  getKeyFingerprint,
   importAESKey,
   importPublicKey,
   loadOrCreateKeyPair,
@@ -26,6 +28,8 @@ import { useAuth } from "./auth-context";
 interface CryptoContextValue {
   keyPair: CryptoKeyPair | null;
   isReady: boolean;
+  /** True if the key pair was freshly generated this session (not loaded from IndexedDB). */
+  isNewKeyPair: boolean;
   getConversationKey: (convId: string) => CryptoKey | undefined;
   setConversationKey: (convId: string, key: CryptoKey) => void;
   /**
@@ -62,6 +66,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   const { principal } = useAuth();
   const [keyPair, setKeyPair] = useState<CryptoKeyPair | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [isNewKeyPair, setIsNewKeyPair] = useState(false);
   const convKeys = useRef<Map<string, CryptoKey>>(new Map());
   // Stores member fingerprints for group keys so stale-member detection survives page reloads.
   const groupKeyFingerprints = useRef<Map<string, string>>(new Map());
@@ -71,18 +76,32 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
     if (!principal) {
       setKeyPair(null);
       setIsReady(false);
+      setIsNewKeyPair(false);
       convKeys.current.clear();
       groupKeyFingerprints.current.clear();
       return;
     }
     const principalText = principal.toText();
     loadOrCreateKeyPair(principalText)
-      .then(async (kp) => {
+      .then(async ({ keyPair: kp, isNew }) => {
         setKeyPair(kp);
-        // Restore all persisted conversation keys for this principal.
-        // Each entry is stored as either a raw Uint8Array (direct-chat ECDH key
-        // exported bytes) or an object { raw: Uint8Array, fingerprint: string }
-        // (group key with member fingerprint).
+        setIsNewKeyPair(isNew);
+        if (isNew) {
+          // A brand-new key pair was generated. Log a fingerprint so we can
+          // verify the profile update went through with the matching public key.
+          exportPublicKey(kp.publicKey).then((pubBytes) => {
+            const fp = Array.from(pubBytes.slice(0, 8))
+              .map((b) => b.toString(16).padStart(2, "0"))
+              .join("");
+            console.log(
+              `[E2EE KEYS] NEW key pair generated for ${principalText}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`,
+            );
+          });
+        }
+        // Restore persisted group conversation keys from IndexedDB.
+        // NOTE: ECDH-derived direct-chat keys are non-extractable and cannot be
+        // persisted — they are always re-derived from the peer's profile on load.
+        // Only group keys (AES, extractable) are persisted here.
         try {
           const prefix = `${CONV_KEY_PREFIX}${principalText}:`;
           const allKeys = await dbGetKeysWithPrefix(prefix);
@@ -194,7 +213,21 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
       try {
-        const theirKey = await importPublicKey(theirPublicKeyBytes);
+        // Copy peer key bytes into a fresh owned buffer — Candid-decoded arrays
+        // have non-zero byteOffset which corrupts WebCrypto key imports.
+        const freshKeyBytes = new Uint8Array(
+          theirPublicKeyBytes.buffer.slice(
+            theirPublicKeyBytes.byteOffset,
+            theirPublicKeyBytes.byteOffset + theirPublicKeyBytes.byteLength,
+          ),
+        );
+        const peerPubFp = Array.from(freshKeyBytes.slice(0, 8))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+        console.log(
+          `[E2EE] deriveAndStoreKey: importing peer public key, byteLength=${freshKeyBytes.byteLength}, fingerprint(first8)=${peerPubFp}, convId=${convId}`,
+        );
+        const theirKey = await importPublicKey(freshKeyBytes);
         // Validate the imported key is an ECDH P-256 public key before deriving.
         if (
           theirKey.type !== "public" ||
@@ -208,17 +241,36 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           );
           return null;
         }
+        // Log our own public key fingerprint so we can compare with what's in the profile
+        const myPubBytes = await exportPublicKey(keyPair.publicKey);
+        const myPubFp = Array.from(myPubBytes.slice(0, 8))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+        console.log(
+          `[E2EE] deriveAndStoreKey: my public key fingerprint(first8)=${myPubFp}, peer fingerprint(first8)=${peerPubFp}, convId=${convId}`,
+        );
+        // deriveSharedSecret now uses deriveBits(32 bytes) → importAESKey so
+        // both sides produce the same extractable AES-GCM key.
         const sharedKey = await deriveSharedSecret(
           keyPair.privateKey,
           theirKey,
         );
-        convKeys.current.set(convId, sharedKey);
+        const sharedFp = await getKeyFingerprint(sharedKey);
         console.log(
-          `[E2EE] deriveAndStoreKey: key derived and cached for convId=${convId}`,
+          `[E2EE] deriveAndStoreKey: ECDH shared key derived, fingerprint=${sharedFp}, convId=${convId}`,
         );
-        // NOTE: ECDH-derived keys are non-extractable (exportable: false) so we
-        // cannot persist them directly. They are cheap to re-derive on reload
-        // from the peer profile, so we skip persisting them here.
+        convKeys.current.set(convId, sharedKey);
+        // Persist the shared key to IndexedDB so it survives page reloads.
+        // The key is now extractable (importAESKey uses extractable:false by default
+        // but we need extractable:true for persistence — update importAESKey).
+        if (principal) {
+          const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+          exportKey(sharedKey)
+            .then((raw) => dbSet(dbKey, raw))
+            .catch(() => {
+              /* best effort */
+            });
+        }
         return sharedKey;
       } catch (err) {
         console.error(
@@ -230,7 +282,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
     },
-    [keyPair],
+    [keyPair, principal],
   );
 
   const encryptForConv = useCallback(
@@ -255,12 +307,19 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         );
         return null;
       }
+      console.log(
+        `[E2EE BUBBLE] received encryptedContent length=${blob.byteLength}, byteOffset=${blob.byteOffset}, copying to fresh buffer`,
+      );
+      // Always copy into a completely fresh ArrayBuffer before decrypting
+      const fresh = new Uint8Array(
+        blob.buffer.slice(blob.byteOffset, blob.byteOffset + blob.byteLength),
+      );
       try {
-        return await decryptMessage(key, blob);
+        return await decryptMessage(key, fresh);
       } catch (err) {
+        const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
         console.error(
-          `[E2EE] decryptFromConv FAILED for convId=${convId}:`,
-          `blob.length=${blob.length}`,
+          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.byteLength} bytes, keyFp=${keyFp}`,
           err,
         );
         return null;
@@ -287,6 +346,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       value={{
         keyPair,
         isReady,
+        isNewKeyPair,
         getConversationKey,
         setConversationKey,
         setGroupConversationKey,

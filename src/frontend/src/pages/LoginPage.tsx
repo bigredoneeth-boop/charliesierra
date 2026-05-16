@@ -40,7 +40,7 @@ export default function LoginPage() {
         <img
           src="/assets/logo.png"
           alt="CharlieSierra"
-          className="h-12 w-auto object-contain"
+          className="h-24 w-auto object-contain"
         />
       </header>
 
@@ -53,7 +53,7 @@ export default function LoginPage() {
               <img
                 src="/assets/logo.png"
                 alt="CharlieSierra"
-                className="h-28 w-auto object-contain"
+                className="h-[28rem] w-auto object-contain"
               />
             </div>
             <h1 className="text-3xl font-display font-bold text-foreground tracking-tight">

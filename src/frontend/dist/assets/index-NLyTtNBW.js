@@ -43163,61 +43163,90 @@ async function exportPublicKey(key) {
   const spki = await crypto.subtle.exportKey("spki", key);
   return new Uint8Array(spki);
 }
+async function getKeyFingerprint(key) {
+  try {
+    const raw = await crypto.subtle.exportKey("raw", key);
+    const bytes = new Uint8Array(raw);
+    return Array.from(bytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+  } catch {
+    return "(non-extractable)";
+  }
+}
 async function importPublicKey(bytes) {
-  const copy = new Uint8Array(bytes);
+  console.log("[E2EE] importPublicKey byteLength:", bytes.byteLength);
+  const fresh = bytes.slice(0);
   return crypto.subtle.importKey(
     "spki",
-    copy.buffer,
+    fresh,
     { name: "ECDH", namedCurve: "P-256" },
     true,
     []
   );
 }
 async function deriveSharedSecret(myPrivateKey, theirPublicKey) {
-  return crypto.subtle.deriveKey(
+  const bits = await crypto.subtle.deriveBits(
     { name: "ECDH", public: theirPublicKey },
     myPrivateKey,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt", "decrypt"]
+    256
   );
+  const rawBytes = new Uint8Array(bits.slice(0));
+  const fingerprint = Array.from(rawBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+  console.log(
+    `[E2EE ECDH] deriveBits succeeded: 32 bytes, fingerprint=${fingerprint}`
+  );
+  return importAESKey(rawBytes);
 }
 async function encryptMessage(key, plaintext) {
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const data = new TextEncoder().encode(plaintext);
-  const ciphertext = await crypto.subtle.encrypt(
+  const ivHex = Array.from(iv).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+  const plaintextBytes = new TextEncoder().encode(plaintext);
+  const ciphertextBuffer = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
-    data
+    plaintextBytes
   );
-  const result = new Uint8Array(IV_LENGTH + ciphertext.byteLength);
-  result.set(iv, 0);
-  result.set(new Uint8Array(ciphertext), IV_LENGTH);
-  return result;
+  const fullBlob = new Uint8Array(IV_LENGTH + ciphertextBuffer.byteLength);
+  fullBlob.set(iv, 0);
+  fullBlob.set(new Uint8Array(ciphertextBuffer), IV_LENGTH);
+  const keyFp = await getKeyFingerprint(key);
+  console.log(
+    `[E2EE SEND] Encrypting ${plaintextBytes.byteLength} bytes, IV=${ivHex}, keyFp=${keyFp}, fullBlob=${fullBlob.byteLength} bytes (${IV_LENGTH} IV + ${ciphertextBuffer.byteLength} ciphertext+tag)`
+  );
+  return fullBlob.slice(0);
 }
-async function decryptMessage(key, ciphertext) {
-  const bytes = new Uint8Array(ciphertext);
-  if (bytes.length < IV_LENGTH) {
-    const err = `[E2EE] Ciphertext too short for IV: got ${bytes.length} bytes, need at least ${IV_LENGTH}`;
+async function decryptMessage(key, rawInput) {
+  const blob = new Uint8Array(
+    rawInput.buffer.slice(
+      rawInput.byteOffset,
+      rawInput.byteOffset + rawInput.byteLength
+    )
+  );
+  const iv = blob.slice(0, IV_LENGTH);
+  const ivHex = Array.from(iv).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+  const ciphertextAndTag = blob.slice(IV_LENGTH);
+  const keyFp = await getKeyFingerprint(key);
+  console.log(
+    `[E2EE RECV] blob=${blob.byteLength} bytes, IV=${ivHex}, ciphertext+tag=${ciphertextAndTag.byteLength} bytes, keyFp=${keyFp}`
+  );
+  if (blob.byteLength < IV_LENGTH + 1) {
+    const err = `[E2EE RECV] Blob too short: ${blob.byteLength} bytes (need >${IV_LENGTH})`;
     console.error(err);
     throw new Error(err);
   }
-  const iv = bytes.slice(0, IV_LENGTH);
-  const data = bytes.slice(IV_LENGTH);
   try {
-    const plaintext = await crypto.subtle.decrypt(
+    const plainBuffer = await crypto.subtle.decrypt(
       { name: "AES-GCM", iv },
       key,
-      data
+      ciphertextAndTag
     );
-    const result = new TextDecoder().decode(plaintext);
+    const result = new TextDecoder().decode(plainBuffer);
     console.log(
-      `[E2EE] Decryption successful (ciphertext length: ${bytes.length})`
+      `[E2EE RECV] Decryption successful, plaintext=${result.length} chars`
     );
     return result;
   } catch (err) {
     console.error(
-      `[E2EE] AES-GCM decryption failed (ciphertext length: ${bytes.length}):`,
+      `[E2EE RECV] AES-GCM decryption FAILED: blob=${blob.byteLength} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.byteLength} bytes, keyFp=${keyFp}`,
       err
     );
     throw err;
@@ -43251,14 +43280,12 @@ async function exportKey(key) {
   return new Uint8Array(raw);
 }
 async function importAESKey(bytes) {
-  const copy = new Uint8Array(bytes);
-  return crypto.subtle.importKey(
-    "raw",
-    copy.buffer,
-    { name: "AES-GCM" },
-    false,
-    ["encrypt", "decrypt"]
-  );
+  console.log("[E2EE] importAESKey byteLength:", bytes.byteLength);
+  const fresh = bytes.slice(0);
+  return crypto.subtle.importKey("raw", fresh, { name: "AES-GCM" }, true, [
+    "encrypt",
+    "decrypt"
+  ]);
 }
 async function deriveGroupKey(memberPrincipalStrings) {
   const sorted = [...memberPrincipalStrings].sort();
@@ -43283,14 +43310,21 @@ async function deriveDisplayNameKey(principal) {
 async function loadOrCreateKeyPair(principal) {
   const stored = await dbGet(`ecdh:${principal}`);
   if ((stored == null ? void 0 : stored.privateKey) && (stored == null ? void 0 : stored.publicKey)) {
-    return { privateKey: stored.privateKey, publicKey: stored.publicKey };
+    console.log(`[E2EE KEYS] Loaded existing ECDH key pair for ${principal}`);
+    return {
+      keyPair: { privateKey: stored.privateKey, publicKey: stored.publicKey },
+      isNew: false
+    };
   }
+  console.log(
+    `[E2EE KEYS] Generating NEW ECDH key pair for ${principal} — profile update required`
+  );
   const kp = await generateECDHKeyPair();
   await dbSet(`ecdh:${principal}`, {
     privateKey: kp.privateKey,
     publicKey: kp.publicKey
   });
-  return kp;
+  return { keyPair: kp, isNew: true };
 }
 const crypto$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -43309,6 +43343,7 @@ const crypto$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProp
   exportPublicKey,
   generateECDHKeyPair,
   generateGroupKey,
+  getKeyFingerprint,
   importAESKey,
   importPublicKey,
   loadOrCreateKeyPair
@@ -43318,19 +43353,30 @@ function CryptoProvider({ children }) {
   const { principal } = useAuth();
   const [keyPair, setKeyPair] = reactExports.useState(null);
   const [isReady, setIsReady] = reactExports.useState(false);
+  const [isNewKeyPair, setIsNewKeyPair] = reactExports.useState(false);
   const convKeys = reactExports.useRef(/* @__PURE__ */ new Map());
   const groupKeyFingerprints = reactExports.useRef(/* @__PURE__ */ new Map());
   reactExports.useEffect(() => {
     if (!principal) {
       setKeyPair(null);
       setIsReady(false);
+      setIsNewKeyPair(false);
       convKeys.current.clear();
       groupKeyFingerprints.current.clear();
       return;
     }
     const principalText = principal.toText();
-    loadOrCreateKeyPair(principalText).then(async (kp) => {
+    loadOrCreateKeyPair(principalText).then(async ({ keyPair: kp, isNew }) => {
       setKeyPair(kp);
+      setIsNewKeyPair(isNew);
+      if (isNew) {
+        exportPublicKey(kp.publicKey).then((pubBytes) => {
+          const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+          console.log(
+            `[E2EE KEYS] NEW key pair generated for ${principalText}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`
+          );
+        });
+      }
       try {
         const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
         const allKeys = await dbGetKeysWithPrefix(prefix2);
@@ -43410,7 +43456,17 @@ function CryptoProvider({ children }) {
         return null;
       }
       try {
-        const theirKey = await importPublicKey(theirPublicKeyBytes);
+        const freshKeyBytes = new Uint8Array(
+          theirPublicKeyBytes.buffer.slice(
+            theirPublicKeyBytes.byteOffset,
+            theirPublicKeyBytes.byteOffset + theirPublicKeyBytes.byteLength
+          )
+        );
+        const peerPubFp = Array.from(freshKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+        console.log(
+          `[E2EE] deriveAndStoreKey: importing peer public key, byteLength=${freshKeyBytes.byteLength}, fingerprint(first8)=${peerPubFp}, convId=${convId}`
+        );
+        const theirKey = await importPublicKey(freshKeyBytes);
         if (theirKey.type !== "public" || theirKey.algorithm.name !== "ECDH") {
           console.error(
             "[E2EE] deriveAndStoreKey: imported peer key has unexpected type/algorithm",
@@ -43420,14 +43476,25 @@ function CryptoProvider({ children }) {
           );
           return null;
         }
+        const myPubBytes = await exportPublicKey(keyPair.publicKey);
+        const myPubFp = Array.from(myPubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+        console.log(
+          `[E2EE] deriveAndStoreKey: my public key fingerprint(first8)=${myPubFp}, peer fingerprint(first8)=${peerPubFp}, convId=${convId}`
+        );
         const sharedKey = await deriveSharedSecret(
           keyPair.privateKey,
           theirKey
         );
-        convKeys.current.set(convId, sharedKey);
+        const sharedFp = await getKeyFingerprint(sharedKey);
         console.log(
-          `[E2EE] deriveAndStoreKey: key derived and cached for convId=${convId}`
+          `[E2EE] deriveAndStoreKey: ECDH shared key derived, fingerprint=${sharedFp}, convId=${convId}`
         );
+        convKeys.current.set(convId, sharedKey);
+        if (principal) {
+          const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+          exportKey(sharedKey).then((raw) => dbSet(dbKey, raw)).catch(() => {
+          });
+        }
         return sharedKey;
       } catch (err) {
         console.error(
@@ -43439,7 +43506,7 @@ function CryptoProvider({ children }) {
         return null;
       }
     },
-    [keyPair]
+    [keyPair, principal]
   );
   const encryptForConv = reactExports.useCallback(
     async (convId, text) => {
@@ -43462,12 +43529,18 @@ function CryptoProvider({ children }) {
         );
         return null;
       }
+      console.log(
+        `[E2EE BUBBLE] received encryptedContent length=${blob.byteLength}, byteOffset=${blob.byteOffset}, copying to fresh buffer`
+      );
+      const fresh = new Uint8Array(
+        blob.buffer.slice(blob.byteOffset, blob.byteOffset + blob.byteLength)
+      );
       try {
-        return await decryptMessage(key, blob);
+        return await decryptMessage(key, fresh);
       } catch (err) {
+        const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
         console.error(
-          `[E2EE] decryptFromConv FAILED for convId=${convId}:`,
-          `blob.length=${blob.length}`,
+          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.byteLength} bytes, keyFp=${keyFp}`,
           err
         );
         return null;
@@ -43493,6 +43566,7 @@ function CryptoProvider({ children }) {
       value: {
         keyPair,
         isReady,
+        isNewKeyPair,
         getConversationKey,
         setConversationKey,
         setGroupConversationKey,
@@ -43824,7 +43898,7 @@ function Label({
 }
 function OnboardingGate({ children }) {
   const { principal } = useAuth();
-  const { keyPair, isReady } = useCrypto();
+  const { keyPair, isReady, isNewKeyPair } = useCrypto();
   const hasDisplayName = useHasDisplayName();
   const updateProfile = useUpdateProfile();
   const { data: profile } = useUserProfile(principal ?? null);
@@ -43842,6 +43916,36 @@ function OnboardingGate({ children }) {
       clearTimeout(giveUpTimer);
     };
   }, [hasDisplayName]);
+  reactExports.useEffect(() => {
+    if (!isNewKeyPair || !keyPair || !isReady || !principal) return;
+    console.log(
+      "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile"
+    );
+    (async () => {
+      try {
+        const pubBytes = await exportPublicKey(keyPair.publicKey);
+        const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+        console.log(
+          `[E2EE KEYSYNC] Exporting public key fingerprint=${fp}, publishing to profile`
+        );
+        const existingDisplayName = (profile == null ? void 0 : profile.encryptedDisplayName) && profile.encryptedDisplayName.length > 0 ? new Uint8Array(
+          profile.encryptedDisplayName
+        ) : new Uint8Array(0);
+        await updateProfile.mutateAsync({
+          encryptedDisplayName: existingDisplayName,
+          ecdhPublicKey: pubBytes
+        });
+        console.log(
+          "[E2EE KEYSYNC] Public key published to backend profile successfully"
+        );
+      } catch (err) {
+        console.warn(
+          "[E2EE KEYSYNC] Failed to publish public key to profile:",
+          err
+        );
+      }
+    })();
+  }, [isNewKeyPair, keyPair, isReady, principal, profile, updateProfile]);
   const { decryptOwnDisplayName } = useCrypto();
   reactExports.useEffect(() => {
     if (!principal || !isReady || !keyPair || !profile) return;
@@ -50405,12 +50509,16 @@ function MessageInput({
     setError(null);
     clearTypingIndicator();
     try {
+      const plaintextBytes = new TextEncoder().encode(trimmed).byteLength;
       const encrypted = await encryptForConv(
         conversationId.toString(),
         trimmed
       );
       if (!encrypted)
         throw new Error("Encryption key not ready. Try again in a moment.");
+      console.log(
+        `[E2EE INPUT] plaintext=${plaintextBytes} bytes, encrypted blob=${encrypted.byteLength} bytes`
+      );
       const ttlValue = readConversationTtl(conversationId.toString());
       if (!connection.isOnline) {
         await queueMessage({
@@ -50426,6 +50534,9 @@ function MessageInput({
         return;
       }
       if (!backend2) throw new Error("Not connected");
+      console.log(
+        `[E2EE] Sending encrypted message: payload=${encrypted.byteLength} bytes (byteOffset=${encrypted.byteOffset ?? "n/a"})`
+      );
       const result = await backend2.sendMessage({
         conversationId,
         encryptedContent: encrypted,
@@ -50651,10 +50762,14 @@ function useDecryptedContent(message, conversationId, _isMine) {
         console.log(
           `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`
         );
-        const result = await decryptFromConv(
-          conversationId,
-          message.encryptedContent
+        const raw = message.encryptedContent;
+        console.log(
+          `[E2EE BUBBLE] encryptedContent.length=${raw.byteLength}, byteOffset=${raw.byteOffset} — copying to fresh buffer`
         );
+        const fresh = new Uint8Array(
+          raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength)
+        );
+        const result = await decryptFromConv(conversationId, fresh);
         if (cancelled) return;
         if (result !== null) {
           setText(result);
@@ -50681,7 +50796,10 @@ function useAttachmentMeta(message, conversationId) {
   const [meta, setMeta] = reactExports.useState({});
   reactExports.useEffect(() => {
     if (message.messageType === MessageType.text) return;
-    decryptFromConv(conversationId, message.encryptedContent).then((result) => {
+    const raw = message.encryptedContent;
+    const fresh = new Uint8Array(raw.byteLength);
+    fresh.set(raw);
+    decryptFromConv(conversationId, fresh).then((result) => {
       if (!result) return;
       try {
         const parsed = JSON.parse(result);
@@ -50896,7 +51014,7 @@ function MessageBubble({
         const key = await deriveDisplayNameKey(senderProfile.id);
         const decrypted = await decryptMessage(
           key,
-          new Uint8Array(senderProfile.encryptedDisplayName)
+          new Uint8Array(senderProfile.encryptedDisplayName).slice(0)
         );
         if (cancelled || !(decrypted == null ? void 0 : decrypted.trim())) return;
         setLocalDisplayName(senderPrincipalText, decrypted);
@@ -51997,6 +52115,7 @@ function ChatPage() {
   const { principal } = useAuth();
   const { actor, isFetching: actorFetching } = useActor(createActor);
   const {
+    keyPair,
     deriveAndStoreKey,
     getConversationKey,
     setGroupConversationKey,
@@ -52114,13 +52233,29 @@ function ChatPage() {
           const needsDerivation = !getConversationKey(convIdStr) || lastDerivedPeerKey.current !== keyFingerprint;
           if (needsDerivation) {
             lastDerivedPeerKey.current = keyFingerprint;
-            deriveAndStoreKey(convIdStr, peer.ecdhPublicKey).then((key) => {
-              if (!key) {
-                console.error(
-                  `[E2EE] ChatPage: deriveAndStoreKey returned null for convId=${convIdStr}`
-                );
+            const freshPeerKeyBytes = new Uint8Array(
+              peer.ecdhPublicKey.buffer.slice(
+                peer.ecdhPublicKey.byteOffset,
+                peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength
+              )
+            );
+            deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(
+              async (key) => {
+                if (!key) {
+                  console.error(
+                    `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`
+                  );
+                } else if (keyPair) {
+                  const myPubBytes = await exportPublicKey(keyPair.publicKey);
+                  const myFp = Array.from(myPubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+                  const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+                  const sharedFp = await getKeyFingerprint(key);
+                  console.log(
+                    `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`
+                  );
+                }
               }
-            });
+            );
           }
         }
       }
@@ -52152,6 +52287,7 @@ function ChatPage() {
     conv,
     convId,
     peerProfiles,
+    keyPair,
     deriveAndStoreKey,
     getConversationKey,
     setGroupConversationKey,
@@ -53954,7 +54090,7 @@ function LoginPage() {
       {
         src: "/assets/logo.png",
         alt: "CharlieSierra",
-        className: "h-12 w-auto object-contain"
+        className: "h-24 w-auto object-contain"
       }
     ) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-center px-4 py-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-md space-y-10", children: [
@@ -53964,7 +54100,7 @@ function LoginPage() {
           {
             src: "/assets/logo.png",
             alt: "CharlieSierra",
-            className: "h-28 w-auto object-contain"
+            className: "h-[28rem] w-auto object-contain"
           }
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl font-display font-bold text-foreground tracking-tight", children: "Secure by Default" }),
@@ -55502,7 +55638,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-CbNBUGiZ.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-3CeaKOY0.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

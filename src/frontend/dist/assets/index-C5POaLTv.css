@@ -987,8 +987,8 @@ video {
 .h-20 {
   height: 5rem;
 }
-.h-28 {
-  height: 7rem;
+.h-24 {
+  height: 6rem;
 }
 .h-3 {
   height: 0.75rem;
@@ -1019,6 +1019,9 @@ video {
 }
 .h-\[16px\] {
   height: 16px;
+}
+.h-\[28rem\] {
+  height: 28rem;
 }
 .h-\[calc\(100\%-1px\)\] {
   height: calc(100% - 1px);

@@ -33,7 +33,7 @@ interface OnboardingGateProps {
 
 export function OnboardingGate({ children }: OnboardingGateProps) {
   const { principal } = useAuth();
-  const { keyPair, isReady } = useCrypto();
+  const { keyPair, isReady, isNewKeyPair } = useCrypto();
   const hasDisplayName = useHasDisplayName();
   const updateProfile = useUpdateProfile();
   const { data: profile } = useUserProfile(principal ?? null);
@@ -54,6 +54,48 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
       clearTimeout(giveUpTimer);
     };
   }, [hasDisplayName]);
+
+  // Auto-publish ECDH public key to backend profile whenever a brand-new key pair is generated.
+  // This ensures the backend profile always has the current public key so peers can derive the shared secret.
+  // IMPORTANT: preserve any existing encryptedDisplayName — only overwrite ecdhPublicKey.
+  useEffect(() => {
+    if (!isNewKeyPair || !keyPair || !isReady || !principal) return;
+    console.log(
+      "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile",
+    );
+    (async () => {
+      try {
+        const pubBytes = await exportPublicKey(keyPair.publicKey);
+        const fp = Array.from(pubBytes.slice(0, 8))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+        console.log(
+          `[E2EE KEYSYNC] Exporting public key fingerprint=${fp}, publishing to profile`,
+        );
+        // Preserve existing encryptedDisplayName bytes — never replace them with an empty array.
+        // If the profile has not loaded yet, pass empty bytes as a safe default for a brand-new account.
+        const existingDisplayName =
+          profile?.encryptedDisplayName &&
+          profile.encryptedDisplayName.length > 0
+            ? new Uint8Array(
+                profile.encryptedDisplayName as unknown as ArrayBuffer,
+              )
+            : new Uint8Array(0);
+        await updateProfile.mutateAsync({
+          encryptedDisplayName: existingDisplayName,
+          ecdhPublicKey: pubBytes,
+        });
+        console.log(
+          "[E2EE KEYSYNC] Public key published to backend profile successfully",
+        );
+      } catch (err) {
+        console.warn(
+          "[E2EE KEYSYNC] Failed to publish public key to profile:",
+          err,
+        );
+      }
+    })();
+  }, [isNewKeyPair, keyPair, isReady, principal, profile, updateProfile]);
 
   // Decrypt and cache own display name once profile + keyPair are ready
   const { decryptOwnDisplayName } = useCrypto();

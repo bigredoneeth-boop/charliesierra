@@ -111,10 +111,21 @@ export function useDecryptedContent(
         console.log(
           `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`,
         );
-        const result = await decryptFromConv(
-          conversationId,
-          message.encryptedContent,
+        // CRITICAL FIX: Allocate a fresh, fully-isolated buffer before handing
+        // the bytes to decryptFromConv. The Candid decoder produces Uint8Array
+        // VIEWS into a shared transport buffer. The view's byteLength may be
+        // correct but its byteOffset is non-zero, causing the wrong bytes to be
+        // read as IV/ciphertext. Using new Uint8Array(n) + .set() guarantees the
+        // copy starts at byteOffset=0 in a brand-new ArrayBuffer — identical to
+        // the fix already in AttachmentUpload.tsx for file uploads.
+        const raw = message.encryptedContent as unknown as Uint8Array;
+        console.log(
+          `[E2EE BUBBLE] encryptedContent.length=${raw.byteLength}, byteOffset=${raw.byteOffset} — copying to fresh buffer`,
         );
+        const fresh = new Uint8Array(
+          raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength),
+        );
+        const result = await decryptFromConv(conversationId, fresh);
         if (cancelled) return;
         if (result !== null) {
           setText(result);
@@ -155,7 +166,10 @@ function useAttachmentMeta(
 
   useEffect(() => {
     if (message.messageType === MessageType.text) return;
-    decryptFromConv(conversationId, message.encryptedContent).then((result) => {
+    const raw = message.encryptedContent;
+    const fresh = new Uint8Array(raw.byteLength);
+    fresh.set(raw);
+    decryptFromConv(conversationId, fresh).then((result) => {
       if (!result) return;
       try {
         const parsed = JSON.parse(result) as {
@@ -446,7 +460,7 @@ export function MessageBubble({
         const key = await deriveDisplayNameKey(senderProfile.id);
         const decrypted = await decryptMessage(
           key,
-          new Uint8Array(senderProfile.encryptedDisplayName),
+          new Uint8Array(senderProfile.encryptedDisplayName).slice(0),
         );
         if (cancelled || !decrypted?.trim()) return;
         setLocalDisplayName(senderPrincipalText, decrypted);

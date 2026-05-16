@@ -69,31 +69,64 @@ export async function exportPublicKey(key: CryptoKey): Promise<Uint8Array> {
   return new Uint8Array(spki);
 }
 
+/**
+ * Helper: export first 8 bytes of a CryptoKey as a hex fingerprint for logging.
+ * Returns '(non-extractable)' if the key cannot be exported.
+ */
+export async function getKeyFingerprint(key: CryptoKey): Promise<string> {
+  try {
+    const raw = await crypto.subtle.exportKey("raw", key);
+    const bytes = new Uint8Array(raw);
+    return Array.from(bytes.slice(0, 8))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  } catch {
+    return "(non-extractable)";
+  }
+}
+
 export async function importPublicKey(bytes: Uint8Array): Promise<CryptoKey> {
-  // CRITICAL: Candid-decoded Uint8Array values often have a non-zero byteOffset.
-  // Passing bytes.buffer directly would read from the wrong position in the underlying
-  // ArrayBuffer. We must copy to a fresh Uint8Array first to guarantee byteOffset === 0.
-  const copy = new Uint8Array(bytes);
+  // CRITICAL FIX: bytes.slice(0) ALWAYS allocates a brand-new ArrayBuffer with
+  // byteOffset === 0. new Uint8Array(bytes).buffer can still reference the
+  // original shared backing buffer in some JS engines (V8 included), causing
+  // WebCrypto to read from the wrong offset and silently import a garbage key.
+  // Uint8Array.prototype.slice (not subarray) is the only safe choice here.
+  console.log("[E2EE] importPublicKey byteLength:", bytes.byteLength);
+  const fresh = bytes.slice(0);
   return crypto.subtle.importKey(
     "spki",
-    copy.buffer,
+    fresh,
     { name: "ECDH", namedCurve: "P-256" },
     true,
     [],
   );
 }
 
+/**
+ * Derive a stable AES-GCM-256 shared secret from an ECDH key pair.
+ *
+ * We use deriveBits (→ 32 raw bytes) then importAESKey so the intermediate
+ * key material can be logged for debugging. Both sides performing
+ * ECDH(myPrivate, theirPublic) produce the SAME 32 bytes — this is the
+ * mathematical guarantee of ECDH.
+ */
 export async function deriveSharedSecret(
   myPrivateKey: CryptoKey,
   theirPublicKey: CryptoKey,
 ): Promise<CryptoKey> {
-  return crypto.subtle.deriveKey(
+  const bits = await crypto.subtle.deriveBits(
     { name: "ECDH", public: theirPublicKey },
     myPrivateKey,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt", "decrypt"],
+    256,
   );
+  const rawBytes = new Uint8Array(bits.slice(0)); // own fresh buffer
+  const fingerprint = Array.from(rawBytes.slice(0, 8))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  console.log(
+    `[E2EE ECDH] deriveBits succeeded: 32 bytes, fingerprint=${fingerprint}`,
+  );
+  return importAESKey(rawBytes);
 }
 
 // ── AES-GCM message encryption ───────────────────────────────────────────────
@@ -102,47 +135,84 @@ export async function encryptMessage(
   key: CryptoKey,
   plaintext: string,
 ): Promise<Uint8Array> {
+  // Step 1: fresh random 12-byte IV
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const data = new TextEncoder().encode(plaintext);
-  const ciphertext = await crypto.subtle.encrypt(
+  const ivHex = Array.from(iv)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  // Step 2: encode plaintext
+  const plaintextBytes = new TextEncoder().encode(plaintext);
+
+  // Step 3: AES-GCM encrypt — output is ciphertext + 16-byte auth tag
+  const ciphertextBuffer = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
-    data,
+    plaintextBytes,
   );
-  const result = new Uint8Array(IV_LENGTH + ciphertext.byteLength);
-  result.set(iv, 0);
-  result.set(new Uint8Array(ciphertext), IV_LENGTH);
-  return result;
+
+  // Step 4: concatenate into a brand-new owned buffer: [IV(12)] [ciphertext+tag]
+  const fullBlob = new Uint8Array(IV_LENGTH + ciphertextBuffer.byteLength);
+  fullBlob.set(iv, 0);
+  fullBlob.set(new Uint8Array(ciphertextBuffer), IV_LENGTH);
+
+  const keyFp = await getKeyFingerprint(key);
+  console.log(
+    `[E2EE SEND] Encrypting ${plaintextBytes.byteLength} bytes, IV=${ivHex}, keyFp=${keyFp}, fullBlob=${fullBlob.byteLength} bytes (${IV_LENGTH} IV + ${ciphertextBuffer.byteLength} ciphertext+tag)`,
+  );
+
+  // Return a slice(0) so callers always receive an independent buffer
+  return fullBlob.slice(0);
 }
 
 export async function decryptMessage(
   key: CryptoKey,
-  ciphertext: Uint8Array,
+  rawInput: Uint8Array,
 ): Promise<string> {
-  // FIX: Normalize to a zero-byteOffset copy so that slice() works correctly
-  // on Candid-decoded vec nat8 typed arrays which may have a non-zero byteOffset.
-  const bytes = new Uint8Array(ciphertext);
-  if (bytes.length < IV_LENGTH) {
-    const err = `[E2EE] Ciphertext too short for IV: got ${bytes.length} bytes, need at least ${IV_LENGTH}`;
+  // Step 1: copy ALL bytes into a fresh owned buffer immediately — Candid-decoded
+  // Uint8Arrays have non-zero byteOffset and may alias the transport buffer.
+  const blob = new Uint8Array(
+    rawInput.buffer.slice(
+      rawInput.byteOffset,
+      rawInput.byteOffset + rawInput.byteLength,
+    ),
+  );
+
+  // Step 2: extract IV (first 12 bytes)
+  const iv = blob.slice(0, IV_LENGTH);
+  const ivHex = Array.from(iv)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  // Step 3: remaining bytes = ciphertext + auth tag
+  const ciphertextAndTag = blob.slice(IV_LENGTH);
+
+  const keyFp = await getKeyFingerprint(key);
+  console.log(
+    `[E2EE RECV] blob=${blob.byteLength} bytes, IV=${ivHex}, ciphertext+tag=${ciphertextAndTag.byteLength} bytes, keyFp=${keyFp}`,
+  );
+
+  if (blob.byteLength < IV_LENGTH + 1) {
+    const err = `[E2EE RECV] Blob too short: ${blob.byteLength} bytes (need >${IV_LENGTH})`;
     console.error(err);
     throw new Error(err);
   }
-  const iv = bytes.slice(0, IV_LENGTH);
-  const data = bytes.slice(IV_LENGTH);
+
+  // Step 4: decrypt
   try {
-    const plaintext = await crypto.subtle.decrypt(
+    const plainBuffer = await crypto.subtle.decrypt(
       { name: "AES-GCM", iv },
       key,
-      data,
+      ciphertextAndTag,
     );
-    const result = new TextDecoder().decode(plaintext);
+    const result = new TextDecoder().decode(plainBuffer);
     console.log(
-      `[E2EE] Decryption successful (ciphertext length: ${bytes.length})`,
+      `[E2EE RECV] Decryption successful, plaintext=${result.length} chars`,
     );
     return result;
   } catch (err) {
     console.error(
-      `[E2EE] AES-GCM decryption failed (ciphertext length: ${bytes.length}):`,
+      `[E2EE RECV] AES-GCM decryption FAILED: blob=${blob.byteLength} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.byteLength} bytes, keyFp=${keyFp}`,
       err,
     );
     throw err;
@@ -191,17 +261,17 @@ export async function exportKey(key: CryptoKey): Promise<Uint8Array> {
 }
 
 export async function importAESKey(bytes: Uint8Array): Promise<CryptoKey> {
-  // CRITICAL: Candid-decoded Uint8Array values often have a non-zero byteOffset.
-  // Passing bytes.buffer directly would read from the wrong position in the underlying
-  // ArrayBuffer. We must copy to a fresh Uint8Array first to guarantee byteOffset === 0.
-  const copy = new Uint8Array(bytes);
-  return crypto.subtle.importKey(
-    "raw",
-    copy.buffer,
-    { name: "AES-GCM" },
-    false,
-    ["encrypt", "decrypt"],
-  );
+  // CRITICAL FIX: bytes.slice(0) ALWAYS allocates a brand-new ArrayBuffer with
+  // byteOffset === 0. new Uint8Array(bytes).buffer can still reference the
+  // original shared backing buffer in some JS engines (V8 included), causing
+  // WebCrypto to read from the wrong offset and silently import a garbage key.
+  // Uint8Array.prototype.slice (not subarray) is the only safe choice here.
+  console.log("[E2EE] importAESKey byteLength:", bytes.byteLength);
+  const fresh = bytes.slice(0);
+  return crypto.subtle.importKey("raw", fresh, { name: "AES-GCM" }, true, [
+    "encrypt",
+    "decrypt",
+  ]);
 }
 
 // ── Deterministic group key ──────────────────────────────────────────────────
@@ -264,15 +334,22 @@ interface PersistedKeyPair {
 
 export async function loadOrCreateKeyPair(
   principal: string,
-): Promise<CryptoKeyPair> {
+): Promise<{ keyPair: CryptoKeyPair; isNew: boolean }> {
   const stored = await dbGet<PersistedKeyPair>(`ecdh:${principal}`);
   if (stored?.privateKey && stored?.publicKey) {
-    return { privateKey: stored.privateKey, publicKey: stored.publicKey };
+    console.log(`[E2EE KEYS] Loaded existing ECDH key pair for ${principal}`);
+    return {
+      keyPair: { privateKey: stored.privateKey, publicKey: stored.publicKey },
+      isNew: false,
+    };
   }
+  console.log(
+    `[E2EE KEYS] Generating NEW ECDH key pair for ${principal} — profile update required`,
+  );
   const kp = await generateECDHKeyPair();
   await dbSet(`ecdh:${principal}`, {
     privateKey: kp.privateKey,
     publicKey: kp.publicKey,
   });
-  return kp;
+  return { keyPair: kp, isNew: true };
 }
