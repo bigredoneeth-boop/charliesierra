@@ -65,7 +65,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-4 border-b border-sidebar-border">
         <img
-          src="/assets/logo.png"
+          src="/assets/newshieldlogo.png"
           alt="CharlieSierra"
           className="h-14 w-auto object-contain flex-shrink-0"
         />
@@ -154,7 +154,7 @@ export function Layout({
   // Apply persisted theme on mount
   useEffect(() => {
     const stored = localStorage.getItem("cs_theme");
-    const isDark = stored ? stored === "dark" : true;
+    const isDark = stored ? stored === "dark" : false;
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
 
@@ -195,7 +195,7 @@ export function Layout({
 
           {/* Logo — visible on mobile (desktop uses sidebar), hidden on md+ */}
           <img
-            src="/assets/logo.png"
+            src="/assets/newshieldlogo.png"
             alt="CharlieSierra"
             className="md:hidden h-10 w-auto object-contain"
           />

@@ -1,8 +1,6 @@
 import type { backendInterface } from "../backend";
 import { AuditEventType } from "../types/audit";
 import {
-  CallStatus,
-  CallType,
   CompartmentLabel,
   ConversationKind,
   DataResidency,
@@ -100,23 +98,6 @@ export const mockBackend: backendInterface = {
   approveJoinRequest: async () => ({ __kind__: "ok", ok: null }),
   denyJoinRequest: async () => ({ __kind__: "ok", ok: null }),
   addConversationMember: async () => ({ __kind__: "ok", ok: null }),
-  addIceCandidate: async () => ({ __kind__: "ok", ok: null }),
-  answerCall: async () => ({
-    __kind__: "ok",
-    ok: {
-      id: BigInt(1),
-      status: CallStatus.active,
-      encryptedSdpOffer: sampleEncrypted,
-      callees: [bob],
-      callType: CallType.audio,
-      updatedAt: BigInt(Date.now()) * BigInt(1_000_000),
-      conversationId: BigInt(1),
-      caller: alice,
-      encryptedSdpAnswer: sampleEncrypted,
-      iceCandidates: [],
-      initiatedAt: BigInt(Date.now()) * BigInt(1_000_000),
-    },
-  }),
   clearTypingIndicator: async () => undefined,
   createDirectConversation: async () => ({
     __kind__: "ok",
@@ -126,9 +107,7 @@ export const mockBackend: backendInterface = {
     __kind__: "ok",
     ok: groupConversation,
   }),
-  declineCall: async () => ({ __kind__: "ok", ok: null }),
   deleteAttachment: async () => ({ __kind__: "ok", ok: null }),
-  endCall: async () => ({ __kind__: "ok", ok: null }),
   getAuditLog: async () => ({
     __kind__: "ok",
     ok: [
@@ -142,7 +121,6 @@ export const mockBackend: backendInterface = {
       },
     ],
   }),
-  getCall: async () => null,
   getConversation: async () => directConversation,
   getMessageAttachments: async () => [],
   getMessages: async () => ({
@@ -152,24 +130,7 @@ export const mockBackend: backendInterface = {
   getTypingIndicators: async () => [],
   getUserProfile: async () => aliceProfile,
   getUserProfiles: async () => [aliceProfile, bobProfile],
-  initiateCall: async () => ({
-    __kind__: "ok",
-    ok: {
-      id: BigInt(1),
-      status: CallStatus.ringing,
-      encryptedSdpOffer: sampleEncrypted,
-      callees: [bob],
-      callType: CallType.audio,
-      updatedAt: BigInt(Date.now()) * BigInt(1_000_000),
-      conversationId: BigInt(1),
-      caller: alice,
-      encryptedSdpAnswer: undefined,
-      iceCandidates: [],
-      initiatedAt: BigInt(Date.now()) * BigInt(1_000_000),
-    },
-  }),
   isAdminCheck: async () => true,
-  listActiveCalls: async () => [],
   listConversations: async () => [directConversation, groupConversation],
   markMessageRead: async () => ({ __kind__: "ok", ok: null }),
   registerAttachment: async () => ({

@@ -1,4 +1,3 @@
-import { IncomingCallBanner } from "@/components/IncomingCallBanner";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/context/auth-context";
@@ -8,7 +7,6 @@ const DiscoverPage = lazy(() => import("@/pages/DiscoverPage"));
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { OnboardingGate } from "@/components/OnboardingGate";
 import { AccessibilityProvider } from "@/context/accessibility-context";
-import CallPage from "@/pages/CallPage";
 import ChatPage from "@/pages/ChatPage";
 import ConversationsPage from "@/pages/ConversationsPage";
 import LoginPage from "@/pages/LoginPage";
@@ -45,7 +43,6 @@ const loginRoute = createRoute({
 function ProtectedLayout() {
   return (
     <OnboardingGate>
-      <IncomingCallBanner />
       <Outlet />
     </OnboardingGate>
   );
@@ -82,12 +79,6 @@ const conversationDetailRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/conversations/$id",
   component: () => <ChatPage />,
-});
-
-const callsDetailRoute = createRoute({
-  getParentRoute: () => appRoute,
-  path: "/calls/$id",
-  component: () => <CallPage />,
 });
 
 const settingsRoute = createRoute({
@@ -128,7 +119,6 @@ const routeTree = rootRoute.addChildren([
     appIndexRoute,
     conversationsRoute,
     conversationDetailRoute,
-    callsDetailRoute,
     settingsRoute,
     discoverRoute,
   ]),

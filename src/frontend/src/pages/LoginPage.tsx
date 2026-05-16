@@ -19,7 +19,7 @@ const FEATURES = [
   {
     icon: Zap,
     title: "Real-Time Messaging",
-    desc: "Encrypted group & 1:1 chats, voice notes, file sharing, and WebRTC calls.",
+    desc: "Encrypted group & 1:1 chats, voice notes, and file sharing.",
   },
 ];
 
@@ -34,15 +34,9 @@ export default function LoginPage() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="dark min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header bar */}
-      <header className="flex items-center gap-3 px-6 h-14 border-b border-border bg-card flex-shrink-0">
-        <img
-          src="/assets/logo.png"
-          alt="CharlieSierra"
-          className="h-24 w-auto object-contain"
-        />
-      </header>
+      <header className="flex items-center gap-3 px-6 h-14 border-b border-border bg-card flex-shrink-0" />
 
       {/* Main content */}
       <div className="flex-1 flex items-center justify-center px-4 py-12">
@@ -51,9 +45,9 @@ export default function LoginPage() {
           <div className="text-center space-y-4">
             <div className="flex flex-col items-center gap-2 mb-2">
               <img
-                src="/assets/logo.png"
+                src="/assets/newlogo.png"
                 alt="CharlieSierra"
-                className="h-[28rem] w-auto object-contain"
+                className="h-[22.4rem] w-auto object-contain"
               />
             </div>
             <h1 className="text-3xl font-display font-bold text-foreground tracking-tight">

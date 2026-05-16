@@ -7,9 +7,9 @@ function getInitialDark(): boolean {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return stored === "dark";
-    return true;
+    return false;
   } catch {
-    return true;
+    return false;
   }
 }
 

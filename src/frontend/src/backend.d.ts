@@ -78,16 +78,6 @@ export interface RemoveMemberRequest {
     member: UserId;
     conversationId: ConversationId;
 }
-export interface AnswerCallRequest {
-    callId: CallId;
-    encryptedSdpAnswer: Uint8Array;
-}
-export interface InitiateCallRequest {
-    encryptedSdpOffer: Uint8Array;
-    callees: Array<UserId>;
-    callType: CallType;
-    conversationId?: ConversationId;
-}
 export type Result_6 = {
     __kind__: "ok";
     ok: DeviceRecordPublic;
@@ -105,14 +95,14 @@ export interface CreateGroupRequest {
 }
 export type Result_12 = {
     __kind__: "ok";
-    ok: Array<JoinRequest>;
+    ok: Array<AuditEvent>;
 } | {
     __kind__: "err";
     err: Error_;
 };
 export type Result_9 = {
     __kind__: "ok";
-    ok: Array<RetentionMetadataRecord>;
+    ok: Array<MessagePublic>;
 } | {
     __kind__: "err";
     err: Error_;
@@ -127,6 +117,7 @@ export interface CreateDirectRequest {
     peer: UserId;
 }
 export type UserId = Principal;
+export type AttachmentId = bigint;
 export type Result = {
     __kind__: "ok";
     ok: UserProfilePublic;
@@ -136,21 +127,12 @@ export type Result = {
 };
 export type Result_10 = {
     __kind__: "ok";
-    ok: Array<MessagePublic>;
+    ok: GroupRetentionPolicy;
 } | {
     __kind__: "err";
     err: Error_;
 };
 export type MessageId = bigint;
-export type AttachmentId = bigint;
-export type Result_8 = {
-    __kind__: "ok";
-    ok: CallRecordPublic;
-} | {
-    __kind__: "err";
-    err: Error_;
-};
-export type DenialReason = string;
 export interface Attachment {
     id: AttachmentId;
     messageId: MessageId;
@@ -160,6 +142,14 @@ export interface Attachment {
     uploader: UserId;
     uploadedAt: Timestamp;
 }
+export type Result_8 = {
+    __kind__: "ok";
+    ok: Array<RetentionMetadataRecord>;
+} | {
+    __kind__: "err";
+    err: Error_;
+};
+export type DenialReason = string;
 export interface ReadReceipt {
     userId: UserId;
     readAt: Timestamp;
@@ -178,7 +168,6 @@ export interface AuditExportRequest {
     startDate?: Timestamp;
     format: AuditExportFormat;
 }
-export type CallId = bigint;
 export interface JoinRequest {
     status: JoinRequestStatus;
     requestId: string;
@@ -187,34 +176,17 @@ export interface JoinRequest {
     message?: string;
     requesterId: UserId;
 }
-export interface AddIceCandidateRequest {
-    encryptedIceCandidate: Uint8Array;
-    callId: CallId;
-}
-export interface CallRecordPublic {
-    id: CallId;
-    status: CallStatus;
-    encryptedSdpOffer?: Uint8Array;
-    callees: Array<UserId>;
-    callType: CallType;
-    updatedAt: Timestamp;
-    conversationId?: ConversationId;
-    caller: UserId;
-    encryptedSdpAnswer?: Uint8Array;
-    iceCandidates: Array<Uint8Array>;
-    initiatedAt: Timestamp;
-}
 export type Timestamp = bigint;
 export type Result_17 = {
     __kind__: "ok";
-    ok: EscrowAccessGrant;
+    ok: Array<EscrowAccessGrant>;
 } | {
     __kind__: "err";
     err: Error_;
 };
 export type Result_13 = {
     __kind__: "ok";
-    ok: Array<AuditEvent>;
+    ok: string;
 } | {
     __kind__: "err";
     err: Error_;
@@ -232,7 +204,7 @@ export interface EscrowRecord {
 }
 export type Result_16 = {
     __kind__: "ok";
-    ok: ConversationPublic;
+    ok: EscrowAccessGrant;
 } | {
     __kind__: "err";
     err: Error_;
@@ -259,7 +231,7 @@ export interface PublicGroupSummary {
 }
 export type Result_11 = {
     __kind__: "ok";
-    ok: GroupRetentionPolicy;
+    ok: Array<JoinRequest>;
 } | {
     __kind__: "err";
     err: Error_;
@@ -287,7 +259,7 @@ export interface AddMemberRequest {
 }
 export type Result_14 = {
     __kind__: "ok";
-    ok: string;
+    ok: ConfigExportBundle;
 } | {
     __kind__: "err";
     err: Error_;
@@ -346,13 +318,6 @@ export interface TypingIndicatorPublic {
     conversationId: ConversationId;
 }
 export type EcdhPublicKey = Uint8Array;
-export type Result_18 = {
-    __kind__: "ok";
-    ok: Array<EscrowAccessGrant>;
-} | {
-    __kind__: "err";
-    err: Error_;
-};
 export type Result_3 = {
     __kind__: "ok";
     ok: null;
@@ -362,7 +327,7 @@ export type Result_3 = {
 };
 export type Result_15 = {
     __kind__: "ok";
-    ok: ConfigExportBundle;
+    ok: ConversationPublic;
 } | {
     __kind__: "err";
     err: Error_;
@@ -430,17 +395,6 @@ export enum AuditExportFormat {
     csv = "csv",
     json = "json"
 }
-export enum CallStatus {
-    active = "active",
-    ringing = "ringing",
-    missed = "missed",
-    ended = "ended",
-    declined = "declined"
-}
-export enum CallType {
-    audio = "audio",
-    video = "video"
-}
 export enum CompartmentLabel {
     classified = "classified",
     unclassified = "unclassified"
@@ -482,43 +436,36 @@ export interface backendInterface {
     addAdmin(newAdmin: UserId): Promise<Result_3>;
     addConversationMember(req: AddMemberRequest): Promise<Result_3>;
     addDevice(req: AddDeviceRequest): Promise<Result_6>;
-    addIceCandidate(req: AddIceCandidateRequest): Promise<Result_3>;
-    adminGetEscrowGrants(targetUserId: UserId | null, limit: bigint, afterGrantId: bigint | null): Promise<Result_18>;
-    adminGrantEscrowAccess(targetUserId: UserId, targetDeviceId: string, reason: string): Promise<Result_17>;
-    answerCall(req: AnswerCallRequest): Promise<Result_8>;
+    adminGetEscrowGrants(targetUserId: UserId | null, limit: bigint, afterGrantId: bigint | null): Promise<Result_17>;
+    adminGrantEscrowAccess(targetUserId: UserId, targetDeviceId: string, reason: string): Promise<Result_16>;
     approveJoinRequest(req: JoinRequestActionRequest): Promise<Result_3>;
     clearTypingIndicator(conversationId: ConversationId): Promise<void>;
-    createDirectConversation(req: CreateDirectRequest): Promise<Result_16>;
-    createGroupConversation(req: CreateGroupRequest): Promise<Result_16>;
-    declineCall(callId: CallId): Promise<Result_3>;
+    createDirectConversation(req: CreateDirectRequest): Promise<Result_15>;
+    createGroupConversation(req: CreateGroupRequest): Promise<Result_15>;
     deleteAttachment(attachmentId: AttachmentId): Promise<Result_3>;
     deleteConversation(conversationId: ConversationId): Promise<Result_3>;
     deleteGroupConversation(conversationId: ConversationId): Promise<Result_3>;
     denyJoinRequest(req: JoinRequestActionRequest): Promise<Result_3>;
     disableGroupRetention(convId: ConversationId): Promise<Result_3>;
     enableGroupRetention(convId: ConversationId): Promise<Result_3>;
-    endCall(callId: CallId, reason: CallStatus): Promise<Result_3>;
     enrollKeyEscrow(deviceId: string, deviceLabel: string, devicePublicKeyFingerprint: string, wrappedKey: Uint8Array, consentLanguageVersion: string): Promise<Result_3>;
-    exportAuditLog(req: AuditExportRequest): Promise<Result_14>;
-    exportConfigBundle(): Promise<Result_15>;
-    generateDeviceSyncToken(devicePublicKey: Uint8Array): Promise<Result_14>;
-    getAuditLog(req: GetAuditLogRequest): Promise<Result_13>;
-    getCall(callId: CallId): Promise<CallRecordPublic | null>;
+    exportAuditLog(req: AuditExportRequest): Promise<Result_13>;
+    exportConfigBundle(): Promise<Result_14>;
+    generateDeviceSyncToken(devicePublicKey: Uint8Array): Promise<Result_13>;
+    getAuditLog(req: GetAuditLogRequest): Promise<Result_12>;
     getConversation(id: ConversationId): Promise<ConversationPublic | null>;
     getDeploymentInfo(): Promise<SovereignConfig>;
     getGroupCompartment(convId: ConversationId): Promise<CompartmentLabel | null>;
-    getGroupJoinRequests(conversationId: ConversationId): Promise<Result_12>;
-    getGroupRetentionPolicy(convId: ConversationId): Promise<Result_11>;
+    getGroupJoinRequests(conversationId: ConversationId): Promise<Result_11>;
+    getGroupRetentionPolicy(convId: ConversationId): Promise<Result_10>;
     getMessageAttachments(messageId: MessageId): Promise<Array<Attachment>>;
-    getMessages(req: GetMessagesRequest): Promise<Result_10>;
+    getMessages(req: GetMessagesRequest): Promise<Result_9>;
     getMyEscrowStatus(): Promise<Array<EscrowRecord>>;
-    getRetentionMetadata(req: GetRetentionMetadataRequest): Promise<Result_9>;
+    getRetentionMetadata(req: GetRetentionMetadataRequest): Promise<Result_8>;
     getTypingIndicators(conversationId: ConversationId): Promise<Array<TypingIndicatorPublic>>;
     getUserProfile(userId: UserId): Promise<UserProfilePublic | null>;
     getUserProfiles(userIds: Array<UserId>): Promise<Array<UserProfilePublic>>;
-    initiateCall(req: InitiateCallRequest): Promise<Result_8>;
     isAdminCheck(principal: UserId): Promise<boolean>;
-    listActiveCalls(): Promise<Array<CallRecordPublic>>;
     listAdmins(): Promise<Result_7>;
     listConversations(): Promise<Array<ConversationPublic>>;
     listMyDevices(): Promise<Array<DeviceRecordPublic>>;

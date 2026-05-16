@@ -27526,9332 +27526,6 @@ const __vitePreload = function preload2(baseModule, deps, importerUrl) {
     return baseModule().catch(handlePreloadError);
   });
 };
-const UserId = Principal2;
-const Error$1 = Variant({
-  "forbidden": Null,
-  "alreadyExists": Null,
-  "invalidInput": Null,
-  "notFound": Null,
-  "unauthorized": Null
-});
-const Result_3 = Variant({ "ok": Null, "err": Error$1 });
-const ConversationId = Nat;
-const AddMemberRequest = Record({
-  "member": UserId,
-  "conversationId": ConversationId
-});
-const AddDeviceRequest = Record({
-  "publicKey": Vec(Nat8),
-  "deviceLabel": Text,
-  "deviceId": Text
-});
-const Timestamp = Int;
-const DeviceRecordPublic = Record({
-  "publicKey": Vec(Nat8),
-  "deviceLabel": Text,
-  "deviceId": Text,
-  "registeredAt": Timestamp,
-  "lastSeen": Timestamp
-});
-const Result_6 = Variant({
-  "ok": DeviceRecordPublic,
-  "err": Error$1
-});
-const CallId = Nat;
-const AddIceCandidateRequest = Record({
-  "encryptedIceCandidate": Vec(Nat8),
-  "callId": CallId
-});
-const EscrowAccessGrant = Record({
-  "grantTimestamp": Timestamp,
-  "grantId": Nat,
-  "accessOutcome": Text,
-  "targetDeviceId": Text,
-  "reason": Text,
-  "requestingAdmin": UserId,
-  "targetUserId": UserId
-});
-const Result_18 = Variant({
-  "ok": Vec(EscrowAccessGrant),
-  "err": Error$1
-});
-const Result_17 = Variant({
-  "ok": EscrowAccessGrant,
-  "err": Error$1
-});
-const AnswerCallRequest = Record({
-  "callId": CallId,
-  "encryptedSdpAnswer": Vec(Nat8)
-});
-const CallStatus$1 = Variant({
-  "active": Null,
-  "ringing": Null,
-  "missed": Null,
-  "ended": Null,
-  "declined": Null
-});
-const CallType$1 = Variant({ "audio": Null, "video": Null });
-const CallRecordPublic = Record({
-  "id": CallId,
-  "status": CallStatus$1,
-  "encryptedSdpOffer": Opt(Vec(Nat8)),
-  "callees": Vec(UserId),
-  "callType": CallType$1,
-  "updatedAt": Timestamp,
-  "conversationId": Opt(ConversationId),
-  "caller": UserId,
-  "encryptedSdpAnswer": Opt(Vec(Nat8)),
-  "iceCandidates": Vec(Vec(Nat8)),
-  "initiatedAt": Timestamp
-});
-const Result_8 = Variant({ "ok": CallRecordPublic, "err": Error$1 });
-const DenialReason = Text;
-const JoinRequestActionRequest = Record({
-  "denialReason": Opt(DenialReason),
-  "requestId": Text,
-  "conversationId": ConversationId
-});
-const CreateDirectRequest = Record({ "peer": UserId });
-const ConversationKind$1 = Variant({
-  "group": Null,
-  "direct": Null
-});
-const ConversationPublic = Record({
-  "id": ConversationId,
-  "members": Vec(UserId),
-  "lastMessageAt": Timestamp,
-  "displayName": Opt(Text),
-  "kind": ConversationKind$1,
-  "createdAt": Timestamp,
-  "createdBy": UserId,
-  "description": Opt(Text),
-  "category": Opt(Text),
-  "discoverable": Bool,
-  "encryptedName": Opt(Vec(Nat8))
-});
-const Result_16 = Variant({
-  "ok": ConversationPublic,
-  "err": Error$1
-});
-const CreateGroupRequest = Record({
-  "initialMembers": Vec(UserId),
-  "displayName": Opt(Text),
-  "description": Opt(Text),
-  "category": Opt(Text),
-  "discoverable": Bool,
-  "encryptedName": Vec(Nat8)
-});
-const AttachmentId = Nat;
-const AuditExportEventType$1 = Variant({
-  "retentionEnabled": Null,
-  "memberAdded": Null,
-  "retentionDisabled": Null,
-  "escrowAccessGranted": Null,
-  "callInitiated": Null,
-  "adminAction": Null,
-  "auditLogExported": Null,
-  "escrowEnrolled": Null,
-  "messageSent": Null,
-  "escrowRevoked": Null,
-  "userRegistered": Null,
-  "memberRemoved": Null,
-  "userRemoved": Null
-});
-const AuditExportFormat$1 = Variant({
-  "csv": Null,
-  "json": Null
-});
-const AuditExportRequest = Record({
-  "endDate": Opt(Timestamp),
-  "affectedUser": Opt(UserId),
-  "eventTypes": Opt(Vec(AuditExportEventType$1)),
-  "startDate": Opt(Timestamp),
-  "format": AuditExportFormat$1
-});
-const Result_14 = Variant({ "ok": Text, "err": Error$1 });
-const CompartmentLabel$1 = Variant({
-  "classified": Null,
-  "unclassified": Null
-});
-const GroupRetentionPolicy = Record({
-  "retentionEnabled": Bool,
-  "enabledAt": Opt(Timestamp),
-  "enabledBy": Opt(UserId),
-  "convId": ConversationId
-});
-const DataResidency$1 = Variant({
-  "eu": Null,
-  "us": Null,
-  "apac": Null,
-  "global": Null
-});
-const ConfigExportBundle = Record({
-  "compartmentMappings": Vec(Tuple(ConversationId, CompartmentLabel$1)),
-  "adminPrincipals": Vec(UserId),
-  "exportedAt": Timestamp,
-  "exportedBy": UserId,
-  "subnetPrincipal": Opt(Text),
-  "canisters": Text,
-  "groupRetentionPolicies": Vec(
-    Tuple(ConversationId, GroupRetentionPolicy)
-  ),
-  "residencyLabel": DataResidency$1
-});
-const Result_15 = Variant({
-  "ok": ConfigExportBundle,
-  "err": Error$1
-});
-const AuditEventType$2 = Variant({
-  "retentionEnabled": Null,
-  "memberAdded": Null,
-  "retentionDisabled": Null,
-  "escrowAccessGranted": Null,
-  "callInitiated": Null,
-  "sovereignConfigUpdated": Null,
-  "messageQueueDrained": Null,
-  "adminAction": Null,
-  "auditLogExported": Null,
-  "escrowEnrolled": Null,
-  "messageSent": Null,
-  "escrowRevoked": Null,
-  "compartmentAssigned": Null,
-  "userRegistered": Null,
-  "memberRemoved": Null,
-  "userRemoved": Null,
-  "priorityMessageSent": Null
-});
-const GetAuditLogRequest = Record({
-  "limit": Nat,
-  "filterEventType": Opt(AuditEventType$2),
-  "afterEventId": Opt(Nat)
-});
-const AuditEvent = Record({
-  "id": Nat,
-  "targetPrincipal": Opt(UserId),
-  "encryptedDetails": Opt(Vec(Nat8)),
-  "timestamp": Timestamp,
-  "actorPrincipal": UserId,
-  "eventType": AuditEventType$2
-});
-const Result_13 = Variant({
-  "ok": Vec(AuditEvent),
-  "err": Error$1
-});
-const SovereignConfig = Record({
-  "lastUpdated": Timestamp,
-  "subnetPrincipal": Opt(Principal2),
-  "canisters": Text,
-  "nodeCount": Opt(Nat),
-  "cyclesCostMultiplier": Opt(Float64),
-  "residencyLabel": DataResidency$1
-});
-const JoinRequestStatus$1 = Variant({
-  "pending": Null,
-  "denied": Null,
-  "approved": Null
-});
-const JoinRequest = Record({
-  "status": JoinRequestStatus$1,
-  "requestId": Text,
-  "createdAt": Timestamp,
-  "conversationId": ConversationId,
-  "message": Opt(Text),
-  "requesterId": UserId
-});
-const Result_12 = Variant({
-  "ok": Vec(JoinRequest),
-  "err": Error$1
-});
-const Result_11 = Variant({
-  "ok": GroupRetentionPolicy,
-  "err": Error$1
-});
-const MessageId = Nat;
-const Attachment = Record({
-  "id": AttachmentId,
-  "messageId": MessageId,
-  "mimeType": Text,
-  "encryptedSizeBytes": Nat,
-  "storageKey": Text,
-  "uploader": UserId,
-  "uploadedAt": Timestamp
-});
-const GetMessagesRequest = Record({
-  "beforeMessageId": Opt(MessageId),
-  "limit": Nat,
-  "conversationId": ConversationId
-});
-const MessageType$1 = Variant({
-  "audio": Null,
-  "video": Null,
-  "file": Null,
-  "text": Null,
-  "image": Null
-});
-const MessagePriority$1 = Variant({
-  "normal": Null,
-  "high": Null
-});
-const ReadReceipt = Record({
-  "userId": UserId,
-  "readAt": Timestamp
-});
-const MessagePublic = Record({
-  "id": MessageId,
-  "ttlSeconds": Opt(Nat),
-  "encryptedContent": Vec(Nat8),
-  "isDeleted": Bool,
-  "sender": UserId,
-  "sentAt": Timestamp,
-  "messageType": MessageType$1,
-  "conversationId": ConversationId,
-  "priority": Opt(MessagePriority$1),
-  "readBy": Vec(ReadReceipt)
-});
-const Result_10 = Variant({
-  "ok": Vec(MessagePublic),
-  "err": Error$1
-});
-const EscrowRecord = Record({
-  "devicePublicKeyFingerprint": Text,
-  "userId": UserId,
-  "consentTimestamp": Timestamp,
-  "deviceLabel": Text,
-  "wrappedKey": Vec(Nat8),
-  "deviceId": Text,
-  "consentLanguageVersion": Text,
-  "revokedAt": Opt(Timestamp),
-  "revokedReason": Opt(Text)
-});
-const GetRetentionMetadataRequest = Record({
-  "endDate": Opt(Timestamp),
-  "limit": Nat,
-  "afterMessageId": Opt(MessageId),
-  "convId": Opt(ConversationId),
-  "startDate": Opt(Timestamp)
-});
-const RetentionMetadataRecord = Record({
-  "messageId": MessageId,
-  "sentAt": Timestamp,
-  "senderPrincipal": UserId,
-  "recipientPrincipals": Vec(UserId),
-  "convId": ConversationId
-});
-const Result_9 = Variant({
-  "ok": Vec(RetentionMetadataRecord),
-  "err": Error$1
-});
-const TypingIndicatorPublic = Record({
-  "expiresAt": Timestamp,
-  "userId": UserId,
-  "conversationId": ConversationId
-});
-const EcdhPublicKey = Vec(Nat8);
-const UserProfilePublic = Record({
-  "id": UserId,
-  "ecdhPublicKey": EcdhPublicKey,
-  "encryptedAvatarKey": Opt(Text),
-  "encryptedDisplayName": Vec(Nat8),
-  "registeredAt": Timestamp,
-  "lastSeen": Timestamp
-});
-const InitiateCallRequest = Record({
-  "encryptedSdpOffer": Vec(Nat8),
-  "callees": Vec(UserId),
-  "callType": CallType$1,
-  "conversationId": Opt(ConversationId)
-});
-const Result_7 = Variant({ "ok": Vec(UserId), "err": Error$1 });
-const ListPublicGroupsRequest = Record({
-  "offset": Nat,
-  "limit": Nat,
-  "category": Opt(Text)
-});
-const PublicGroupSummary = Record({
-  "id": ConversationId,
-  "name": Text,
-  "memberCount": Nat,
-  "description": Opt(Text),
-  "category": Opt(Text)
-});
-const RegisterAttachmentRequest = Record({
-  "messageId": MessageId,
-  "mimeType": Text,
-  "encryptedSizeBytes": Nat,
-  "storageKey": Text
-});
-const Result_5 = Variant({ "ok": Attachment, "err": Error$1 });
-const RegisterRequest = Record({
-  "ecdhPublicKey": EcdhPublicKey,
-  "encryptedAvatarKey": Opt(Text),
-  "encryptedDisplayName": Vec(Nat8)
-});
-const Result = Variant({ "ok": UserProfilePublic, "err": Error$1 });
-const RemoveMemberRequest = Record({
-  "member": UserId,
-  "conversationId": ConversationId
-});
-const SendMessageRequest = Record({
-  "ttlSeconds": Opt(Nat),
-  "encryptedContent": Vec(Nat8),
-  "messageType": MessageType$1,
-  "conversationId": ConversationId,
-  "priority": Opt(MessagePriority$1)
-});
-const Result_4 = Variant({ "ok": MessagePublic, "err": Error$1 });
-const Result_2 = Variant({ "ok": SovereignConfig, "err": Error$1 });
-const SubmitJoinRequestRequest = Record({
-  "conversationId": ConversationId,
-  "message": Opt(Text)
-});
-const Result_1 = Variant({ "ok": JoinRequest, "err": Error$1 });
-const UpdateProfileRequest = Record({
-  "ecdhPublicKey": Opt(EcdhPublicKey),
-  "encryptedAvatarKey": Opt(Text),
-  "encryptedDisplayName": Opt(Vec(Nat8))
-});
-Service({
-  "addAdmin": Func([UserId], [Result_3], []),
-  "addConversationMember": Func([AddMemberRequest], [Result_3], []),
-  "addDevice": Func([AddDeviceRequest], [Result_6], []),
-  "addIceCandidate": Func([AddIceCandidateRequest], [Result_3], []),
-  "adminGetEscrowGrants": Func(
-    [Opt(UserId), Nat, Opt(Nat)],
-    [Result_18],
-    ["query"]
-  ),
-  "adminGrantEscrowAccess": Func(
-    [UserId, Text, Text],
-    [Result_17],
-    []
-  ),
-  "answerCall": Func([AnswerCallRequest], [Result_8], []),
-  "approveJoinRequest": Func([JoinRequestActionRequest], [Result_3], []),
-  "clearTypingIndicator": Func([ConversationId], [], []),
-  "createDirectConversation": Func([CreateDirectRequest], [Result_16], []),
-  "createGroupConversation": Func([CreateGroupRequest], [Result_16], []),
-  "declineCall": Func([CallId], [Result_3], []),
-  "deleteAttachment": Func([AttachmentId], [Result_3], []),
-  "deleteConversation": Func([ConversationId], [Result_3], []),
-  "deleteGroupConversation": Func([ConversationId], [Result_3], []),
-  "denyJoinRequest": Func([JoinRequestActionRequest], [Result_3], []),
-  "disableGroupRetention": Func([ConversationId], [Result_3], []),
-  "enableGroupRetention": Func([ConversationId], [Result_3], []),
-  "endCall": Func([CallId, CallStatus$1], [Result_3], []),
-  "enrollKeyEscrow": Func(
-    [Text, Text, Text, Vec(Nat8), Text],
-    [Result_3],
-    []
-  ),
-  "exportAuditLog": Func([AuditExportRequest], [Result_14], []),
-  "exportConfigBundle": Func([], [Result_15], []),
-  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_14], []),
-  "getAuditLog": Func([GetAuditLogRequest], [Result_13], ["query"]),
-  "getCall": Func([CallId], [Opt(CallRecordPublic)], ["query"]),
-  "getConversation": Func(
-    [ConversationId],
-    [Opt(ConversationPublic)],
-    ["query"]
-  ),
-  "getDeploymentInfo": Func([], [SovereignConfig], ["query"]),
-  "getGroupCompartment": Func(
-    [ConversationId],
-    [Opt(CompartmentLabel$1)],
-    ["query"]
-  ),
-  "getGroupJoinRequests": Func([ConversationId], [Result_12], ["query"]),
-  "getGroupRetentionPolicy": Func(
-    [ConversationId],
-    [Result_11],
-    ["query"]
-  ),
-  "getMessageAttachments": Func(
-    [MessageId],
-    [Vec(Attachment)],
-    ["query"]
-  ),
-  "getMessages": Func([GetMessagesRequest], [Result_10], ["query"]),
-  "getMyEscrowStatus": Func([], [Vec(EscrowRecord)], ["query"]),
-  "getRetentionMetadata": Func(
-    [GetRetentionMetadataRequest],
-    [Result_9],
-    ["query"]
-  ),
-  "getTypingIndicators": Func(
-    [ConversationId],
-    [Vec(TypingIndicatorPublic)],
-    ["query"]
-  ),
-  "getUserProfile": Func(
-    [UserId],
-    [Opt(UserProfilePublic)],
-    ["query"]
-  ),
-  "getUserProfiles": Func(
-    [Vec(UserId)],
-    [Vec(UserProfilePublic)],
-    ["query"]
-  ),
-  "initiateCall": Func([InitiateCallRequest], [Result_8], []),
-  "isAdminCheck": Func([UserId], [Bool], ["query"]),
-  "listActiveCalls": Func([], [Vec(CallRecordPublic)], ["query"]),
-  "listAdmins": Func([], [Result_7], ["query"]),
-  "listConversations": Func([], [Vec(ConversationPublic)], ["query"]),
-  "listMyDevices": Func([], [Vec(DeviceRecordPublic)], ["query"]),
-  "listPublicGroups": Func(
-    [ListPublicGroupsRequest],
-    [Vec(PublicGroupSummary)],
-    ["query"]
-  ),
-  "markMessageRead": Func([MessageId], [Result_3], []),
-  "redeemDeviceSyncToken": Func(
-    [Text, Text, Text],
-    [Result_6],
-    []
-  ),
-  "registerAttachment": Func([RegisterAttachmentRequest], [Result_5], []),
-  "registerUser": Func([RegisterRequest], [Result], []),
-  "removeAdmin": Func([UserId], [Result_3], []),
-  "removeConversationMember": Func([RemoveMemberRequest], [Result_3], []),
-  "revokeDevice": Func([Text], [Result_3], []),
-  "revokeKeyEscrow": Func([Text, Text], [Result_3], []),
-  "sendMessage": Func([SendMessageRequest], [Result_4], []),
-  "setGroupCompartment": Func(
-    [ConversationId, CompartmentLabel$1],
-    [Result_3],
-    []
-  ),
-  "setSovereignConfig": Func(
-    [
-      DataResidency$1,
-      Opt(Principal2),
-      Opt(Nat),
-      Opt(Float64)
-    ],
-    [Result_2],
-    []
-  ),
-  "setTypingIndicator": Func([ConversationId, Nat], [], []),
-  "submitJoinRequest": Func([SubmitJoinRequestRequest], [Result_1], []),
-  "touchPresence": Func([], [], []),
-  "updateUserProfile": Func([UpdateProfileRequest], [Result], [])
-});
-const idlFactory = ({ IDL: IDL2 }) => {
-  const UserId2 = IDL2.Principal;
-  const Error2 = IDL2.Variant({
-    "forbidden": IDL2.Null,
-    "alreadyExists": IDL2.Null,
-    "invalidInput": IDL2.Null,
-    "notFound": IDL2.Null,
-    "unauthorized": IDL2.Null
-  });
-  const Result_32 = IDL2.Variant({ "ok": IDL2.Null, "err": Error2 });
-  const ConversationId2 = IDL2.Nat;
-  const AddMemberRequest2 = IDL2.Record({
-    "member": UserId2,
-    "conversationId": ConversationId2
-  });
-  const AddDeviceRequest2 = IDL2.Record({
-    "publicKey": IDL2.Vec(IDL2.Nat8),
-    "deviceLabel": IDL2.Text,
-    "deviceId": IDL2.Text
-  });
-  const Timestamp2 = IDL2.Int;
-  const DeviceRecordPublic2 = IDL2.Record({
-    "publicKey": IDL2.Vec(IDL2.Nat8),
-    "deviceLabel": IDL2.Text,
-    "deviceId": IDL2.Text,
-    "registeredAt": Timestamp2,
-    "lastSeen": Timestamp2
-  });
-  const Result_62 = IDL2.Variant({ "ok": DeviceRecordPublic2, "err": Error2 });
-  const CallId2 = IDL2.Nat;
-  const AddIceCandidateRequest2 = IDL2.Record({
-    "encryptedIceCandidate": IDL2.Vec(IDL2.Nat8),
-    "callId": CallId2
-  });
-  const EscrowAccessGrant2 = IDL2.Record({
-    "grantTimestamp": Timestamp2,
-    "grantId": IDL2.Nat,
-    "accessOutcome": IDL2.Text,
-    "targetDeviceId": IDL2.Text,
-    "reason": IDL2.Text,
-    "requestingAdmin": UserId2,
-    "targetUserId": UserId2
-  });
-  const Result_182 = IDL2.Variant({
-    "ok": IDL2.Vec(EscrowAccessGrant2),
-    "err": Error2
-  });
-  const Result_172 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
-  const AnswerCallRequest2 = IDL2.Record({
-    "callId": CallId2,
-    "encryptedSdpAnswer": IDL2.Vec(IDL2.Nat8)
-  });
-  const CallStatus2 = IDL2.Variant({
-    "active": IDL2.Null,
-    "ringing": IDL2.Null,
-    "missed": IDL2.Null,
-    "ended": IDL2.Null,
-    "declined": IDL2.Null
-  });
-  const CallType2 = IDL2.Variant({ "audio": IDL2.Null, "video": IDL2.Null });
-  const CallRecordPublic2 = IDL2.Record({
-    "id": CallId2,
-    "status": CallStatus2,
-    "encryptedSdpOffer": IDL2.Opt(IDL2.Vec(IDL2.Nat8)),
-    "callees": IDL2.Vec(UserId2),
-    "callType": CallType2,
-    "updatedAt": Timestamp2,
-    "conversationId": IDL2.Opt(ConversationId2),
-    "caller": UserId2,
-    "encryptedSdpAnswer": IDL2.Opt(IDL2.Vec(IDL2.Nat8)),
-    "iceCandidates": IDL2.Vec(IDL2.Vec(IDL2.Nat8)),
-    "initiatedAt": Timestamp2
-  });
-  const Result_82 = IDL2.Variant({ "ok": CallRecordPublic2, "err": Error2 });
-  const DenialReason2 = IDL2.Text;
-  const JoinRequestActionRequest2 = IDL2.Record({
-    "denialReason": IDL2.Opt(DenialReason2),
-    "requestId": IDL2.Text,
-    "conversationId": ConversationId2
-  });
-  const CreateDirectRequest2 = IDL2.Record({ "peer": UserId2 });
-  const ConversationKind2 = IDL2.Variant({
-    "group": IDL2.Null,
-    "direct": IDL2.Null
-  });
-  const ConversationPublic2 = IDL2.Record({
-    "id": ConversationId2,
-    "members": IDL2.Vec(UserId2),
-    "lastMessageAt": Timestamp2,
-    "displayName": IDL2.Opt(IDL2.Text),
-    "kind": ConversationKind2,
-    "createdAt": Timestamp2,
-    "createdBy": UserId2,
-    "description": IDL2.Opt(IDL2.Text),
-    "category": IDL2.Opt(IDL2.Text),
-    "discoverable": IDL2.Bool,
-    "encryptedName": IDL2.Opt(IDL2.Vec(IDL2.Nat8))
-  });
-  const Result_162 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
-  const CreateGroupRequest2 = IDL2.Record({
-    "initialMembers": IDL2.Vec(UserId2),
-    "displayName": IDL2.Opt(IDL2.Text),
-    "description": IDL2.Opt(IDL2.Text),
-    "category": IDL2.Opt(IDL2.Text),
-    "discoverable": IDL2.Bool,
-    "encryptedName": IDL2.Vec(IDL2.Nat8)
-  });
-  const AttachmentId2 = IDL2.Nat;
-  const AuditExportEventType2 = IDL2.Variant({
-    "retentionEnabled": IDL2.Null,
-    "memberAdded": IDL2.Null,
-    "retentionDisabled": IDL2.Null,
-    "escrowAccessGranted": IDL2.Null,
-    "callInitiated": IDL2.Null,
-    "adminAction": IDL2.Null,
-    "auditLogExported": IDL2.Null,
-    "escrowEnrolled": IDL2.Null,
-    "messageSent": IDL2.Null,
-    "escrowRevoked": IDL2.Null,
-    "userRegistered": IDL2.Null,
-    "memberRemoved": IDL2.Null,
-    "userRemoved": IDL2.Null
-  });
-  const AuditExportFormat2 = IDL2.Variant({
-    "csv": IDL2.Null,
-    "json": IDL2.Null
-  });
-  const AuditExportRequest2 = IDL2.Record({
-    "endDate": IDL2.Opt(Timestamp2),
-    "affectedUser": IDL2.Opt(UserId2),
-    "eventTypes": IDL2.Opt(IDL2.Vec(AuditExportEventType2)),
-    "startDate": IDL2.Opt(Timestamp2),
-    "format": AuditExportFormat2
-  });
-  const Result_142 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
-  const CompartmentLabel2 = IDL2.Variant({
-    "classified": IDL2.Null,
-    "unclassified": IDL2.Null
-  });
-  const GroupRetentionPolicy2 = IDL2.Record({
-    "retentionEnabled": IDL2.Bool,
-    "enabledAt": IDL2.Opt(Timestamp2),
-    "enabledBy": IDL2.Opt(UserId2),
-    "convId": ConversationId2
-  });
-  const DataResidency2 = IDL2.Variant({
-    "eu": IDL2.Null,
-    "us": IDL2.Null,
-    "apac": IDL2.Null,
-    "global": IDL2.Null
-  });
-  const ConfigExportBundle2 = IDL2.Record({
-    "compartmentMappings": IDL2.Vec(
-      IDL2.Tuple(ConversationId2, CompartmentLabel2)
-    ),
-    "adminPrincipals": IDL2.Vec(UserId2),
-    "exportedAt": Timestamp2,
-    "exportedBy": UserId2,
-    "subnetPrincipal": IDL2.Opt(IDL2.Text),
-    "canisters": IDL2.Text,
-    "groupRetentionPolicies": IDL2.Vec(
-      IDL2.Tuple(ConversationId2, GroupRetentionPolicy2)
-    ),
-    "residencyLabel": DataResidency2
-  });
-  const Result_152 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
-  const AuditEventType2 = IDL2.Variant({
-    "retentionEnabled": IDL2.Null,
-    "memberAdded": IDL2.Null,
-    "retentionDisabled": IDL2.Null,
-    "escrowAccessGranted": IDL2.Null,
-    "callInitiated": IDL2.Null,
-    "sovereignConfigUpdated": IDL2.Null,
-    "messageQueueDrained": IDL2.Null,
-    "adminAction": IDL2.Null,
-    "auditLogExported": IDL2.Null,
-    "escrowEnrolled": IDL2.Null,
-    "messageSent": IDL2.Null,
-    "escrowRevoked": IDL2.Null,
-    "compartmentAssigned": IDL2.Null,
-    "userRegistered": IDL2.Null,
-    "memberRemoved": IDL2.Null,
-    "userRemoved": IDL2.Null,
-    "priorityMessageSent": IDL2.Null
-  });
-  const GetAuditLogRequest2 = IDL2.Record({
-    "limit": IDL2.Nat,
-    "filterEventType": IDL2.Opt(AuditEventType2),
-    "afterEventId": IDL2.Opt(IDL2.Nat)
-  });
-  const AuditEvent2 = IDL2.Record({
-    "id": IDL2.Nat,
-    "targetPrincipal": IDL2.Opt(UserId2),
-    "encryptedDetails": IDL2.Opt(IDL2.Vec(IDL2.Nat8)),
-    "timestamp": Timestamp2,
-    "actorPrincipal": UserId2,
-    "eventType": AuditEventType2
-  });
-  const Result_132 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
-  const SovereignConfig2 = IDL2.Record({
-    "lastUpdated": Timestamp2,
-    "subnetPrincipal": IDL2.Opt(IDL2.Principal),
-    "canisters": IDL2.Text,
-    "nodeCount": IDL2.Opt(IDL2.Nat),
-    "cyclesCostMultiplier": IDL2.Opt(IDL2.Float64),
-    "residencyLabel": DataResidency2
-  });
-  const JoinRequestStatus2 = IDL2.Variant({
-    "pending": IDL2.Null,
-    "denied": IDL2.Null,
-    "approved": IDL2.Null
-  });
-  const JoinRequest2 = IDL2.Record({
-    "status": JoinRequestStatus2,
-    "requestId": IDL2.Text,
-    "createdAt": Timestamp2,
-    "conversationId": ConversationId2,
-    "message": IDL2.Opt(IDL2.Text),
-    "requesterId": UserId2
-  });
-  const Result_122 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
-  const Result_112 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
-  const MessageId2 = IDL2.Nat;
-  const Attachment2 = IDL2.Record({
-    "id": AttachmentId2,
-    "messageId": MessageId2,
-    "mimeType": IDL2.Text,
-    "encryptedSizeBytes": IDL2.Nat,
-    "storageKey": IDL2.Text,
-    "uploader": UserId2,
-    "uploadedAt": Timestamp2
-  });
-  const GetMessagesRequest2 = IDL2.Record({
-    "beforeMessageId": IDL2.Opt(MessageId2),
-    "limit": IDL2.Nat,
-    "conversationId": ConversationId2
-  });
-  const MessageType2 = IDL2.Variant({
-    "audio": IDL2.Null,
-    "video": IDL2.Null,
-    "file": IDL2.Null,
-    "text": IDL2.Null,
-    "image": IDL2.Null
-  });
-  const MessagePriority2 = IDL2.Variant({
-    "normal": IDL2.Null,
-    "high": IDL2.Null
-  });
-  const ReadReceipt2 = IDL2.Record({ "userId": UserId2, "readAt": Timestamp2 });
-  const MessagePublic2 = IDL2.Record({
-    "id": MessageId2,
-    "ttlSeconds": IDL2.Opt(IDL2.Nat),
-    "encryptedContent": IDL2.Vec(IDL2.Nat8),
-    "isDeleted": IDL2.Bool,
-    "sender": UserId2,
-    "sentAt": Timestamp2,
-    "messageType": MessageType2,
-    "conversationId": ConversationId2,
-    "priority": IDL2.Opt(MessagePriority2),
-    "readBy": IDL2.Vec(ReadReceipt2)
-  });
-  const Result_102 = IDL2.Variant({
-    "ok": IDL2.Vec(MessagePublic2),
-    "err": Error2
-  });
-  const EscrowRecord2 = IDL2.Record({
-    "devicePublicKeyFingerprint": IDL2.Text,
-    "userId": UserId2,
-    "consentTimestamp": Timestamp2,
-    "deviceLabel": IDL2.Text,
-    "wrappedKey": IDL2.Vec(IDL2.Nat8),
-    "deviceId": IDL2.Text,
-    "consentLanguageVersion": IDL2.Text,
-    "revokedAt": IDL2.Opt(Timestamp2),
-    "revokedReason": IDL2.Opt(IDL2.Text)
-  });
-  const GetRetentionMetadataRequest2 = IDL2.Record({
-    "endDate": IDL2.Opt(Timestamp2),
-    "limit": IDL2.Nat,
-    "afterMessageId": IDL2.Opt(MessageId2),
-    "convId": IDL2.Opt(ConversationId2),
-    "startDate": IDL2.Opt(Timestamp2)
-  });
-  const RetentionMetadataRecord2 = IDL2.Record({
-    "messageId": MessageId2,
-    "sentAt": Timestamp2,
-    "senderPrincipal": UserId2,
-    "recipientPrincipals": IDL2.Vec(UserId2),
-    "convId": ConversationId2
-  });
-  const Result_92 = IDL2.Variant({
-    "ok": IDL2.Vec(RetentionMetadataRecord2),
-    "err": Error2
-  });
-  const TypingIndicatorPublic2 = IDL2.Record({
-    "expiresAt": Timestamp2,
-    "userId": UserId2,
-    "conversationId": ConversationId2
-  });
-  const EcdhPublicKey2 = IDL2.Vec(IDL2.Nat8);
-  const UserProfilePublic2 = IDL2.Record({
-    "id": UserId2,
-    "ecdhPublicKey": EcdhPublicKey2,
-    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
-    "encryptedDisplayName": IDL2.Vec(IDL2.Nat8),
-    "registeredAt": Timestamp2,
-    "lastSeen": Timestamp2
-  });
-  const InitiateCallRequest2 = IDL2.Record({
-    "encryptedSdpOffer": IDL2.Vec(IDL2.Nat8),
-    "callees": IDL2.Vec(UserId2),
-    "callType": CallType2,
-    "conversationId": IDL2.Opt(ConversationId2)
-  });
-  const Result_72 = IDL2.Variant({ "ok": IDL2.Vec(UserId2), "err": Error2 });
-  const ListPublicGroupsRequest2 = IDL2.Record({
-    "offset": IDL2.Nat,
-    "limit": IDL2.Nat,
-    "category": IDL2.Opt(IDL2.Text)
-  });
-  const PublicGroupSummary2 = IDL2.Record({
-    "id": ConversationId2,
-    "name": IDL2.Text,
-    "memberCount": IDL2.Nat,
-    "description": IDL2.Opt(IDL2.Text),
-    "category": IDL2.Opt(IDL2.Text)
-  });
-  const RegisterAttachmentRequest2 = IDL2.Record({
-    "messageId": MessageId2,
-    "mimeType": IDL2.Text,
-    "encryptedSizeBytes": IDL2.Nat,
-    "storageKey": IDL2.Text
-  });
-  const Result_52 = IDL2.Variant({ "ok": Attachment2, "err": Error2 });
-  const RegisterRequest2 = IDL2.Record({
-    "ecdhPublicKey": EcdhPublicKey2,
-    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
-    "encryptedDisplayName": IDL2.Vec(IDL2.Nat8)
-  });
-  const Result2 = IDL2.Variant({ "ok": UserProfilePublic2, "err": Error2 });
-  const RemoveMemberRequest2 = IDL2.Record({
-    "member": UserId2,
-    "conversationId": ConversationId2
-  });
-  const SendMessageRequest2 = IDL2.Record({
-    "ttlSeconds": IDL2.Opt(IDL2.Nat),
-    "encryptedContent": IDL2.Vec(IDL2.Nat8),
-    "messageType": MessageType2,
-    "conversationId": ConversationId2,
-    "priority": IDL2.Opt(MessagePriority2)
-  });
-  const Result_42 = IDL2.Variant({ "ok": MessagePublic2, "err": Error2 });
-  const Result_22 = IDL2.Variant({ "ok": SovereignConfig2, "err": Error2 });
-  const SubmitJoinRequestRequest2 = IDL2.Record({
-    "conversationId": ConversationId2,
-    "message": IDL2.Opt(IDL2.Text)
-  });
-  const Result_19 = IDL2.Variant({ "ok": JoinRequest2, "err": Error2 });
-  const UpdateProfileRequest2 = IDL2.Record({
-    "ecdhPublicKey": IDL2.Opt(EcdhPublicKey2),
-    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
-    "encryptedDisplayName": IDL2.Opt(IDL2.Vec(IDL2.Nat8))
-  });
-  return IDL2.Service({
-    "addAdmin": IDL2.Func([UserId2], [Result_32], []),
-    "addConversationMember": IDL2.Func([AddMemberRequest2], [Result_32], []),
-    "addDevice": IDL2.Func([AddDeviceRequest2], [Result_62], []),
-    "addIceCandidate": IDL2.Func([AddIceCandidateRequest2], [Result_32], []),
-    "adminGetEscrowGrants": IDL2.Func(
-      [IDL2.Opt(UserId2), IDL2.Nat, IDL2.Opt(IDL2.Nat)],
-      [Result_182],
-      ["query"]
-    ),
-    "adminGrantEscrowAccess": IDL2.Func(
-      [UserId2, IDL2.Text, IDL2.Text],
-      [Result_172],
-      []
-    ),
-    "answerCall": IDL2.Func([AnswerCallRequest2], [Result_82], []),
-    "approveJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_32], []),
-    "clearTypingIndicator": IDL2.Func([ConversationId2], [], []),
-    "createDirectConversation": IDL2.Func(
-      [CreateDirectRequest2],
-      [Result_162],
-      []
-    ),
-    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_162], []),
-    "declineCall": IDL2.Func([CallId2], [Result_32], []),
-    "deleteAttachment": IDL2.Func([AttachmentId2], [Result_32], []),
-    "deleteConversation": IDL2.Func([ConversationId2], [Result_32], []),
-    "deleteGroupConversation": IDL2.Func([ConversationId2], [Result_32], []),
-    "denyJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_32], []),
-    "disableGroupRetention": IDL2.Func([ConversationId2], [Result_32], []),
-    "enableGroupRetention": IDL2.Func([ConversationId2], [Result_32], []),
-    "endCall": IDL2.Func([CallId2, CallStatus2], [Result_32], []),
-    "enrollKeyEscrow": IDL2.Func(
-      [IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Vec(IDL2.Nat8), IDL2.Text],
-      [Result_32],
-      []
-    ),
-    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_142], []),
-    "exportConfigBundle": IDL2.Func([], [Result_152], []),
-    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_142], []),
-    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_132], ["query"]),
-    "getCall": IDL2.Func([CallId2], [IDL2.Opt(CallRecordPublic2)], ["query"]),
-    "getConversation": IDL2.Func(
-      [ConversationId2],
-      [IDL2.Opt(ConversationPublic2)],
-      ["query"]
-    ),
-    "getDeploymentInfo": IDL2.Func([], [SovereignConfig2], ["query"]),
-    "getGroupCompartment": IDL2.Func(
-      [ConversationId2],
-      [IDL2.Opt(CompartmentLabel2)],
-      ["query"]
-    ),
-    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_122], ["query"]),
-    "getGroupRetentionPolicy": IDL2.Func(
-      [ConversationId2],
-      [Result_112],
-      ["query"]
-    ),
-    "getMessageAttachments": IDL2.Func(
-      [MessageId2],
-      [IDL2.Vec(Attachment2)],
-      ["query"]
-    ),
-    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_102], ["query"]),
-    "getMyEscrowStatus": IDL2.Func([], [IDL2.Vec(EscrowRecord2)], ["query"]),
-    "getRetentionMetadata": IDL2.Func(
-      [GetRetentionMetadataRequest2],
-      [Result_92],
-      ["query"]
-    ),
-    "getTypingIndicators": IDL2.Func(
-      [ConversationId2],
-      [IDL2.Vec(TypingIndicatorPublic2)],
-      ["query"]
-    ),
-    "getUserProfile": IDL2.Func(
-      [UserId2],
-      [IDL2.Opt(UserProfilePublic2)],
-      ["query"]
-    ),
-    "getUserProfiles": IDL2.Func(
-      [IDL2.Vec(UserId2)],
-      [IDL2.Vec(UserProfilePublic2)],
-      ["query"]
-    ),
-    "initiateCall": IDL2.Func([InitiateCallRequest2], [Result_82], []),
-    "isAdminCheck": IDL2.Func([UserId2], [IDL2.Bool], ["query"]),
-    "listActiveCalls": IDL2.Func([], [IDL2.Vec(CallRecordPublic2)], ["query"]),
-    "listAdmins": IDL2.Func([], [Result_72], ["query"]),
-    "listConversations": IDL2.Func(
-      [],
-      [IDL2.Vec(ConversationPublic2)],
-      ["query"]
-    ),
-    "listMyDevices": IDL2.Func([], [IDL2.Vec(DeviceRecordPublic2)], ["query"]),
-    "listPublicGroups": IDL2.Func(
-      [ListPublicGroupsRequest2],
-      [IDL2.Vec(PublicGroupSummary2)],
-      ["query"]
-    ),
-    "markMessageRead": IDL2.Func([MessageId2], [Result_32], []),
-    "redeemDeviceSyncToken": IDL2.Func(
-      [IDL2.Text, IDL2.Text, IDL2.Text],
-      [Result_62],
-      []
-    ),
-    "registerAttachment": IDL2.Func(
-      [RegisterAttachmentRequest2],
-      [Result_52],
-      []
-    ),
-    "registerUser": IDL2.Func([RegisterRequest2], [Result2], []),
-    "removeAdmin": IDL2.Func([UserId2], [Result_32], []),
-    "removeConversationMember": IDL2.Func(
-      [RemoveMemberRequest2],
-      [Result_32],
-      []
-    ),
-    "revokeDevice": IDL2.Func([IDL2.Text], [Result_32], []),
-    "revokeKeyEscrow": IDL2.Func([IDL2.Text, IDL2.Text], [Result_32], []),
-    "sendMessage": IDL2.Func([SendMessageRequest2], [Result_42], []),
-    "setGroupCompartment": IDL2.Func(
-      [ConversationId2, CompartmentLabel2],
-      [Result_32],
-      []
-    ),
-    "setSovereignConfig": IDL2.Func(
-      [
-        DataResidency2,
-        IDL2.Opt(IDL2.Principal),
-        IDL2.Opt(IDL2.Nat),
-        IDL2.Opt(IDL2.Float64)
-      ],
-      [Result_22],
-      []
-    ),
-    "setTypingIndicator": IDL2.Func([ConversationId2, IDL2.Nat], [], []),
-    "submitJoinRequest": IDL2.Func([SubmitJoinRequestRequest2], [Result_19], []),
-    "touchPresence": IDL2.Func([], [], []),
-    "updateUserProfile": IDL2.Func([UpdateProfileRequest2], [Result2], [])
-  });
-};
-function candid_some(value) {
-  return [
-    value
-  ];
-}
-function candid_none() {
-  return [];
-}
-function record_opt_to_undefined(arg) {
-  return arg == null ? void 0 : arg;
-}
-class ExternalBlob2 {
-  constructor(directURL, blob) {
-    __publicField(this, "_blob");
-    __publicField(this, "directURL");
-    __publicField(this, "onProgress");
-    if (blob) {
-      this._blob = blob;
-    }
-    this.directURL = directURL;
-  }
-  static fromURL(url) {
-    return new ExternalBlob2(url, null);
-  }
-  static fromBytes(blob) {
-    const url = URL.createObjectURL(new Blob([
-      new Uint8Array(blob)
-    ], {
-      type: "application/octet-stream"
-    }));
-    return new ExternalBlob2(url, blob);
-  }
-  async getBytes() {
-    if (this._blob) {
-      return this._blob;
-    }
-    const response = await fetch(this.directURL);
-    const blob = await response.blob();
-    this._blob = new Uint8Array(await blob.arrayBuffer());
-    return this._blob;
-  }
-  getDirectURL() {
-    return this.directURL;
-  }
-  withUploadProgress(onProgress) {
-    this.onProgress = onProgress;
-    return this;
-  }
-}
-var AuditEventType$1 = /* @__PURE__ */ ((AuditEventType2) => {
-  AuditEventType2["retentionEnabled"] = "retentionEnabled";
-  AuditEventType2["memberAdded"] = "memberAdded";
-  AuditEventType2["retentionDisabled"] = "retentionDisabled";
-  AuditEventType2["escrowAccessGranted"] = "escrowAccessGranted";
-  AuditEventType2["callInitiated"] = "callInitiated";
-  AuditEventType2["sovereignConfigUpdated"] = "sovereignConfigUpdated";
-  AuditEventType2["messageQueueDrained"] = "messageQueueDrained";
-  AuditEventType2["adminAction"] = "adminAction";
-  AuditEventType2["auditLogExported"] = "auditLogExported";
-  AuditEventType2["escrowEnrolled"] = "escrowEnrolled";
-  AuditEventType2["messageSent"] = "messageSent";
-  AuditEventType2["escrowRevoked"] = "escrowRevoked";
-  AuditEventType2["compartmentAssigned"] = "compartmentAssigned";
-  AuditEventType2["userRegistered"] = "userRegistered";
-  AuditEventType2["memberRemoved"] = "memberRemoved";
-  AuditEventType2["userRemoved"] = "userRemoved";
-  AuditEventType2["priorityMessageSent"] = "priorityMessageSent";
-  return AuditEventType2;
-})(AuditEventType$1 || {});
-var AuditExportEventType = /* @__PURE__ */ ((AuditExportEventType2) => {
-  AuditExportEventType2["retentionEnabled"] = "retentionEnabled";
-  AuditExportEventType2["memberAdded"] = "memberAdded";
-  AuditExportEventType2["retentionDisabled"] = "retentionDisabled";
-  AuditExportEventType2["escrowAccessGranted"] = "escrowAccessGranted";
-  AuditExportEventType2["callInitiated"] = "callInitiated";
-  AuditExportEventType2["adminAction"] = "adminAction";
-  AuditExportEventType2["auditLogExported"] = "auditLogExported";
-  AuditExportEventType2["escrowEnrolled"] = "escrowEnrolled";
-  AuditExportEventType2["messageSent"] = "messageSent";
-  AuditExportEventType2["escrowRevoked"] = "escrowRevoked";
-  AuditExportEventType2["userRegistered"] = "userRegistered";
-  AuditExportEventType2["memberRemoved"] = "memberRemoved";
-  AuditExportEventType2["userRemoved"] = "userRemoved";
-  return AuditExportEventType2;
-})(AuditExportEventType || {});
-var AuditExportFormat = /* @__PURE__ */ ((AuditExportFormat2) => {
-  AuditExportFormat2["csv"] = "csv";
-  AuditExportFormat2["json"] = "json";
-  return AuditExportFormat2;
-})(AuditExportFormat || {});
-var CallStatus = /* @__PURE__ */ ((CallStatus2) => {
-  CallStatus2["active"] = "active";
-  CallStatus2["ringing"] = "ringing";
-  CallStatus2["missed"] = "missed";
-  CallStatus2["ended"] = "ended";
-  CallStatus2["declined"] = "declined";
-  return CallStatus2;
-})(CallStatus || {});
-var CallType = /* @__PURE__ */ ((CallType2) => {
-  CallType2["audio"] = "audio";
-  CallType2["video"] = "video";
-  return CallType2;
-})(CallType || {});
-var CompartmentLabel = /* @__PURE__ */ ((CompartmentLabel2) => {
-  CompartmentLabel2["classified"] = "classified";
-  CompartmentLabel2["unclassified"] = "unclassified";
-  return CompartmentLabel2;
-})(CompartmentLabel || {});
-var ConversationKind = /* @__PURE__ */ ((ConversationKind2) => {
-  ConversationKind2["group"] = "group";
-  ConversationKind2["direct"] = "direct";
-  return ConversationKind2;
-})(ConversationKind || {});
-var DataResidency = /* @__PURE__ */ ((DataResidency2) => {
-  DataResidency2["eu"] = "eu";
-  DataResidency2["us"] = "us";
-  DataResidency2["apac"] = "apac";
-  DataResidency2["global"] = "global";
-  return DataResidency2;
-})(DataResidency || {});
-var Error_ = /* @__PURE__ */ ((Error_2) => {
-  Error_2["forbidden"] = "forbidden";
-  Error_2["alreadyExists"] = "alreadyExists";
-  Error_2["invalidInput"] = "invalidInput";
-  Error_2["notFound"] = "notFound";
-  Error_2["unauthorized"] = "unauthorized";
-  return Error_2;
-})(Error_ || {});
-var JoinRequestStatus = /* @__PURE__ */ ((JoinRequestStatus2) => {
-  JoinRequestStatus2["pending"] = "pending";
-  JoinRequestStatus2["denied"] = "denied";
-  JoinRequestStatus2["approved"] = "approved";
-  return JoinRequestStatus2;
-})(JoinRequestStatus || {});
-var MessagePriority = /* @__PURE__ */ ((MessagePriority2) => {
-  MessagePriority2["normal"] = "normal";
-  MessagePriority2["high"] = "high";
-  return MessagePriority2;
-})(MessagePriority || {});
-var MessageType = /* @__PURE__ */ ((MessageType2) => {
-  MessageType2["audio"] = "audio";
-  MessageType2["video"] = "video";
-  MessageType2["file"] = "file";
-  MessageType2["text"] = "text";
-  MessageType2["image"] = "image";
-  return MessageType2;
-})(MessageType || {});
-class Backend {
-  constructor(actor, _uploadFile, _downloadFile, processError2) {
-    this.actor = actor;
-    this._uploadFile = _uploadFile;
-    this._downloadFile = _downloadFile;
-    this.processError = processError2;
-  }
-  async addAdmin(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.addAdmin(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.addAdmin(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async addConversationMember(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.addConversationMember(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.addConversationMember(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async addDevice(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.addDevice(arg0);
-        return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.addDevice(arg0);
-      return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async addIceCandidate(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.addIceCandidate(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.addIceCandidate(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async adminGetEscrowGrants(arg0, arg1, arg2) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n7(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2));
-        return from_candid_Result_18_n9(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n7(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2));
-      return from_candid_Result_18_n9(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async adminGrantEscrowAccess(arg0, arg1, arg2) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-        return from_candid_Result_17_n11(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-      return from_candid_Result_17_n11(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async answerCall(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.answerCall(arg0);
-        return from_candid_Result_8_n13(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.answerCall(arg0);
-      return from_candid_Result_8_n13(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async approveJoinRequest(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.approveJoinRequest(to_candid_JoinRequestActionRequest_n23(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.approveJoinRequest(to_candid_JoinRequestActionRequest_n23(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async clearTypingIndicator(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.clearTypingIndicator(arg0);
-        return result;
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.clearTypingIndicator(arg0);
-      return result;
-    }
-  }
-  async createDirectConversation(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.createDirectConversation(arg0);
-        return from_candid_Result_16_n25(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.createDirectConversation(arg0);
-      return from_candid_Result_16_n25(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async createGroupConversation(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n32(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_16_n25(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n32(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_16_n25(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async declineCall(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.declineCall(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.declineCall(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async deleteAttachment(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.deleteAttachment(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.deleteAttachment(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async deleteConversation(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.deleteConversation(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.deleteConversation(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async deleteGroupConversation(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.deleteGroupConversation(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.deleteGroupConversation(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async denyJoinRequest(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.denyJoinRequest(to_candid_JoinRequestActionRequest_n23(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.denyJoinRequest(to_candid_JoinRequestActionRequest_n23(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async disableGroupRetention(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.disableGroupRetention(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.disableGroupRetention(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async enableGroupRetention(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.enableGroupRetention(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.enableGroupRetention(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async endCall(arg0, arg1) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.endCall(arg0, to_candid_CallStatus_n34(this._uploadFile, this._downloadFile, arg1));
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.endCall(arg0, to_candid_CallStatus_n34(this._uploadFile, this._downloadFile, arg1));
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async exportAuditLog(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n36(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_14_n43(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n36(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_14_n43(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async exportConfigBundle() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.exportConfigBundle();
-        return from_candid_Result_15_n45(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.exportConfigBundle();
-      return from_candid_Result_15_n45(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async generateDeviceSyncToken(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.generateDeviceSyncToken(arg0);
-        return from_candid_Result_14_n43(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.generateDeviceSyncToken(arg0);
-      return from_candid_Result_14_n43(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getAuditLog(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n61(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_13_n65(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n61(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_13_n65(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getCall(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getCall(arg0);
-        return from_candid_opt_n72(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getCall(arg0);
-      return from_candid_opt_n72(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getConversation(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getConversation(arg0);
-        return from_candid_opt_n73(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getConversation(arg0);
-      return from_candid_opt_n73(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getDeploymentInfo() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getDeploymentInfo();
-        return from_candid_SovereignConfig_n74(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getDeploymentInfo();
-      return from_candid_SovereignConfig_n74(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getGroupCompartment(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getGroupCompartment(arg0);
-        return from_candid_opt_n79(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getGroupCompartment(arg0);
-      return from_candid_opt_n79(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getGroupJoinRequests(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getGroupJoinRequests(arg0);
-        return from_candid_Result_12_n80(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getGroupJoinRequests(arg0);
-      return from_candid_Result_12_n80(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getGroupRetentionPolicy(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getGroupRetentionPolicy(arg0);
-        return from_candid_Result_11_n87(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getGroupRetentionPolicy(arg0);
-      return from_candid_Result_11_n87(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getMessageAttachments(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getMessageAttachments(arg0);
-        return result;
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getMessageAttachments(arg0);
-      return result;
-    }
-  }
-  async getMessages(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n89(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_10_n91(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n89(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_10_n91(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getMyEscrowStatus() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getMyEscrowStatus();
-        return from_candid_vec_n101(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getMyEscrowStatus();
-      return from_candid_vec_n101(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getRetentionMetadata(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n104(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_9_n106(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n104(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_9_n106(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getTypingIndicators(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getTypingIndicators(arg0);
-        return result;
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getTypingIndicators(arg0);
-      return result;
-    }
-  }
-  async getUserProfile(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getUserProfile(arg0);
-        return from_candid_opt_n108(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getUserProfile(arg0);
-      return from_candid_opt_n108(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async getUserProfiles(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.getUserProfiles(arg0);
-        return from_candid_vec_n111(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.getUserProfiles(arg0);
-      return from_candid_vec_n111(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async initiateCall(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.initiateCall(to_candid_InitiateCallRequest_n112(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_8_n13(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.initiateCall(to_candid_InitiateCallRequest_n112(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_8_n13(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async isAdminCheck(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.isAdminCheck(arg0);
-        return result;
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.isAdminCheck(arg0);
-      return result;
-    }
-  }
-  async listActiveCalls() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.listActiveCalls();
-        return from_candid_vec_n116(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.listActiveCalls();
-      return from_candid_vec_n116(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async listAdmins() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.listAdmins();
-        return from_candid_Result_7_n117(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.listAdmins();
-      return from_candid_Result_7_n117(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async listConversations() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.listConversations();
-        return from_candid_vec_n119(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.listConversations();
-      return from_candid_vec_n119(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async listMyDevices() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.listMyDevices();
-        return result;
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.listMyDevices();
-      return result;
-    }
-  }
-  async listPublicGroups(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n120(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_vec_n122(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n120(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_vec_n122(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async markMessageRead(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.markMessageRead(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.markMessageRead(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async redeemDeviceSyncToken(arg0, arg1, arg2) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
-        return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
-      return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async registerAttachment(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.registerAttachment(arg0);
-        return from_candid_Result_5_n125(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.registerAttachment(arg0);
-      return from_candid_Result_5_n125(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async registerUser(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.registerUser(to_candid_RegisterRequest_n127(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n129(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.registerUser(to_candid_RegisterRequest_n127(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n129(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async removeAdmin(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.removeAdmin(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.removeAdmin(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async removeConversationMember(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.removeConversationMember(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.removeConversationMember(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async revokeDevice(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.revokeDevice(arg0);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.revokeDevice(arg0);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async revokeKeyEscrow(arg0, arg1) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.revokeKeyEscrow(arg0, arg1);
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.revokeKeyEscrow(arg0, arg1);
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async sendMessage(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n131(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_4_n137(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n131(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_4_n137(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async setGroupCompartment(arg0, arg1) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n139(this._uploadFile, this._downloadFile, arg1));
-        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n139(this._uploadFile, this._downloadFile, arg1));
-      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async setSovereignConfig(arg0, arg1, arg2, arg3) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n141(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n143(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n144(this._uploadFile, this._downloadFile, arg3));
-        return from_candid_Result_2_n145(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n141(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n143(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n144(this._uploadFile, this._downloadFile, arg3));
-      return from_candid_Result_2_n145(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async setTypingIndicator(arg0, arg1) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.setTypingIndicator(arg0, arg1);
-        return result;
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.setTypingIndicator(arg0, arg1);
-      return result;
-    }
-  }
-  async submitJoinRequest(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n147(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_1_n149(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n147(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_1_n149(this._uploadFile, this._downloadFile, result);
-    }
-  }
-  async touchPresence() {
-    if (this.processError) {
-      try {
-        const result = await this.actor.touchPresence();
-        return result;
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.touchPresence();
-      return result;
-    }
-  }
-  async updateUserProfile(arg0) {
-    if (this.processError) {
-      try {
-        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n151(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n129(this._uploadFile, this._downloadFile, result);
-      } catch (e) {
-        this.processError(e);
-        throw new Error("unreachable");
-      }
-    } else {
-      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n151(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n129(this._uploadFile, this._downloadFile, result);
-    }
-  }
-}
-function from_candid_AuditEventType_n70(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n71(_uploadFile, _downloadFile, value);
-}
-function from_candid_AuditEvent_n68(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n69(_uploadFile, _downloadFile, value);
-}
-function from_candid_CallRecordPublic_n15(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n16(_uploadFile, _downloadFile, value);
-}
-function from_candid_CallStatus_n17(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n18(_uploadFile, _downloadFile, value);
-}
-function from_candid_CallType_n20(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n21(_uploadFile, _downloadFile, value);
-}
-function from_candid_CompartmentLabel_n51(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n52(_uploadFile, _downloadFile, value);
-}
-function from_candid_ConfigExportBundle_n47(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n48(_uploadFile, _downloadFile, value);
-}
-function from_candid_ConversationKind_n30(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n31(_uploadFile, _downloadFile, value);
-}
-function from_candid_ConversationPublic_n27(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n28(_uploadFile, _downloadFile, value);
-}
-function from_candid_DataResidency_n59(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n60(_uploadFile, _downloadFile, value);
-}
-function from_candid_Error_n3(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n4(_uploadFile, _downloadFile, value);
-}
-function from_candid_EscrowRecord_n102(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n103(_uploadFile, _downloadFile, value);
-}
-function from_candid_GroupRetentionPolicy_n55(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n56(_uploadFile, _downloadFile, value);
-}
-function from_candid_JoinRequestStatus_n85(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n86(_uploadFile, _downloadFile, value);
-}
-function from_candid_JoinRequest_n83(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n84(_uploadFile, _downloadFile, value);
-}
-function from_candid_MessagePriority_n99(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n100(_uploadFile, _downloadFile, value);
-}
-function from_candid_MessagePublic_n94(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n95(_uploadFile, _downloadFile, value);
-}
-function from_candid_MessageType_n96(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n97(_uploadFile, _downloadFile, value);
-}
-function from_candid_PublicGroupSummary_n123(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n124(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_10_n91(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n92(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_11_n87(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n88(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_12_n80(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n81(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_13_n65(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n66(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_14_n43(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n44(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_15_n45(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n46(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_16_n25(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n26(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_17_n11(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n12(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_18_n9(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n10(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_1_n149(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n150(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_2_n145(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n146(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_3_n1(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n2(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_4_n137(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n138(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_5_n125(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n126(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_6_n5(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n6(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_7_n117(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n118(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_8_n13(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n14(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_9_n106(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n107(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_n129(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n130(_uploadFile, _downloadFile, value);
-}
-function from_candid_SovereignConfig_n74(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n75(_uploadFile, _downloadFile, value);
-}
-function from_candid_UserProfilePublic_n109(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n110(_uploadFile, _downloadFile, value);
-}
-function from_candid_opt_n108(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_UserProfilePublic_n109(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_opt_n19(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n22(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n29(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n57(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n58(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n72(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_CallRecordPublic_n15(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_opt_n73(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_ConversationPublic_n27(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_opt_n76(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n77(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n78(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n79(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_CompartmentLabel_n51(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_opt_n98(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_MessagePriority_n99(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_record_n103(_uploadFile, _downloadFile, value) {
-  return {
-    devicePublicKeyFingerprint: value.devicePublicKeyFingerprint,
-    userId: value.userId,
-    consentTimestamp: value.consentTimestamp,
-    deviceLabel: value.deviceLabel,
-    wrappedKey: value.wrappedKey,
-    deviceId: value.deviceId,
-    consentLanguageVersion: value.consentLanguageVersion,
-    revokedAt: record_opt_to_undefined(from_candid_opt_n57(_uploadFile, _downloadFile, value.revokedAt)),
-    revokedReason: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.revokedReason))
-  };
-}
-function from_candid_record_n110(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    ecdhPublicKey: value.ecdhPublicKey,
-    encryptedAvatarKey: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.encryptedAvatarKey)),
-    encryptedDisplayName: value.encryptedDisplayName,
-    registeredAt: value.registeredAt,
-    lastSeen: value.lastSeen
-  };
-}
-function from_candid_record_n124(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    name: value.name,
-    memberCount: value.memberCount,
-    description: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.description)),
-    category: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.category))
-  };
-}
-function from_candid_record_n16(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    status: from_candid_CallStatus_n17(_uploadFile, _downloadFile, value.status),
-    encryptedSdpOffer: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.encryptedSdpOffer)),
-    callees: value.callees,
-    callType: from_candid_CallType_n20(_uploadFile, _downloadFile, value.callType),
-    updatedAt: value.updatedAt,
-    conversationId: record_opt_to_undefined(from_candid_opt_n22(_uploadFile, _downloadFile, value.conversationId)),
-    caller: value.caller,
-    encryptedSdpAnswer: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.encryptedSdpAnswer)),
-    iceCandidates: value.iceCandidates,
-    initiatedAt: value.initiatedAt
-  };
-}
-function from_candid_record_n28(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    members: value.members,
-    lastMessageAt: value.lastMessageAt,
-    displayName: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.displayName)),
-    kind: from_candid_ConversationKind_n30(_uploadFile, _downloadFile, value.kind),
-    createdAt: value.createdAt,
-    createdBy: value.createdBy,
-    description: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.description)),
-    category: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.category)),
-    discoverable: value.discoverable,
-    encryptedName: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.encryptedName))
-  };
-}
-function from_candid_record_n48(_uploadFile, _downloadFile, value) {
-  return {
-    compartmentMappings: from_candid_vec_n49(_uploadFile, _downloadFile, value.compartmentMappings),
-    adminPrincipals: value.adminPrincipals,
-    exportedAt: value.exportedAt,
-    exportedBy: value.exportedBy,
-    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.subnetPrincipal)),
-    canisters: value.canisters,
-    groupRetentionPolicies: from_candid_vec_n53(_uploadFile, _downloadFile, value.groupRetentionPolicies),
-    residencyLabel: from_candid_DataResidency_n59(_uploadFile, _downloadFile, value.residencyLabel)
-  };
-}
-function from_candid_record_n56(_uploadFile, _downloadFile, value) {
-  return {
-    retentionEnabled: value.retentionEnabled,
-    enabledAt: record_opt_to_undefined(from_candid_opt_n57(_uploadFile, _downloadFile, value.enabledAt)),
-    enabledBy: record_opt_to_undefined(from_candid_opt_n58(_uploadFile, _downloadFile, value.enabledBy)),
-    convId: value.convId
-  };
-}
-function from_candid_record_n69(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    targetPrincipal: record_opt_to_undefined(from_candid_opt_n58(_uploadFile, _downloadFile, value.targetPrincipal)),
-    encryptedDetails: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.encryptedDetails)),
-    timestamp: value.timestamp,
-    actorPrincipal: value.actorPrincipal,
-    eventType: from_candid_AuditEventType_n70(_uploadFile, _downloadFile, value.eventType)
-  };
-}
-function from_candid_record_n75(_uploadFile, _downloadFile, value) {
-  return {
-    lastUpdated: value.lastUpdated,
-    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n76(_uploadFile, _downloadFile, value.subnetPrincipal)),
-    canisters: value.canisters,
-    nodeCount: record_opt_to_undefined(from_candid_opt_n77(_uploadFile, _downloadFile, value.nodeCount)),
-    cyclesCostMultiplier: record_opt_to_undefined(from_candid_opt_n78(_uploadFile, _downloadFile, value.cyclesCostMultiplier)),
-    residencyLabel: from_candid_DataResidency_n59(_uploadFile, _downloadFile, value.residencyLabel)
-  };
-}
-function from_candid_record_n84(_uploadFile, _downloadFile, value) {
-  return {
-    status: from_candid_JoinRequestStatus_n85(_uploadFile, _downloadFile, value.status),
-    requestId: value.requestId,
-    createdAt: value.createdAt,
-    conversationId: value.conversationId,
-    message: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.message)),
-    requesterId: value.requesterId
-  };
-}
-function from_candid_record_n95(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    ttlSeconds: record_opt_to_undefined(from_candid_opt_n77(_uploadFile, _downloadFile, value.ttlSeconds)),
-    encryptedContent: value.encryptedContent,
-    isDeleted: value.isDeleted,
-    sender: value.sender,
-    sentAt: value.sentAt,
-    messageType: from_candid_MessageType_n96(_uploadFile, _downloadFile, value.messageType),
-    conversationId: value.conversationId,
-    priority: record_opt_to_undefined(from_candid_opt_n98(_uploadFile, _downloadFile, value.priority)),
-    readBy: value.readBy
-  };
-}
-function from_candid_tuple_n50(_uploadFile, _downloadFile, value) {
-  return [
-    value[0],
-    from_candid_CompartmentLabel_n51(_uploadFile, _downloadFile, value[1])
-  ];
-}
-function from_candid_tuple_n54(_uploadFile, _downloadFile, value) {
-  return [
-    value[0],
-    from_candid_GroupRetentionPolicy_n55(_uploadFile, _downloadFile, value[1])
-  ];
-}
-function from_candid_variant_n10(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n100(_uploadFile, _downloadFile, value) {
-  return "normal" in value ? "normal" : "high" in value ? "high" : value;
-}
-function from_candid_variant_n107(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n118(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n12(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n126(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n130(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_UserProfilePublic_n109(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n138(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_MessagePublic_n94(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n14(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_CallRecordPublic_n15(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n146(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_SovereignConfig_n74(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n150(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_JoinRequest_n83(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n18(_uploadFile, _downloadFile, value) {
-  return "active" in value ? "active" : "ringing" in value ? "ringing" : "missed" in value ? "missed" : "ended" in value ? "ended" : "declined" in value ? "declined" : value;
-}
-function from_candid_variant_n2(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n21(_uploadFile, _downloadFile, value) {
-  return "audio" in value ? "audio" : "video" in value ? "video" : value;
-}
-function from_candid_variant_n26(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_ConversationPublic_n27(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n31(_uploadFile, _downloadFile, value) {
-  return "group" in value ? "group" : "direct" in value ? "direct" : value;
-}
-function from_candid_variant_n4(_uploadFile, _downloadFile, value) {
-  return "forbidden" in value ? Error.forbidden : "alreadyExists" in value ? Error.alreadyExists : "invalidInput" in value ? Error.invalidInput : "notFound" in value ? Error.notFound : "unauthorized" in value ? Error.unauthorized : value;
-}
-function from_candid_variant_n44(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n46(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_ConfigExportBundle_n47(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n52(_uploadFile, _downloadFile, value) {
-  return "classified" in value ? "classified" : "unclassified" in value ? "unclassified" : value;
-}
-function from_candid_variant_n6(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n60(_uploadFile, _downloadFile, value) {
-  return "eu" in value ? "eu" : "us" in value ? "us" : "apac" in value ? "apac" : "global" in value ? "global" : value;
-}
-function from_candid_variant_n66(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_vec_n67(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n71(_uploadFile, _downloadFile, value) {
-  return "retentionEnabled" in value ? "retentionEnabled" : "memberAdded" in value ? "memberAdded" : "retentionDisabled" in value ? "retentionDisabled" : "escrowAccessGranted" in value ? "escrowAccessGranted" : "callInitiated" in value ? "callInitiated" : "sovereignConfigUpdated" in value ? "sovereignConfigUpdated" : "messageQueueDrained" in value ? "messageQueueDrained" : "adminAction" in value ? "adminAction" : "auditLogExported" in value ? "auditLogExported" : "escrowEnrolled" in value ? "escrowEnrolled" : "messageSent" in value ? "messageSent" : "escrowRevoked" in value ? "escrowRevoked" : "compartmentAssigned" in value ? "compartmentAssigned" : "userRegistered" in value ? "userRegistered" : "memberRemoved" in value ? "memberRemoved" : "userRemoved" in value ? "userRemoved" : "priorityMessageSent" in value ? "priorityMessageSent" : value;
-}
-function from_candid_variant_n81(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_vec_n82(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n86(_uploadFile, _downloadFile, value) {
-  return "pending" in value ? "pending" : "denied" in value ? "denied" : "approved" in value ? "approved" : value;
-}
-function from_candid_variant_n88(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_GroupRetentionPolicy_n55(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n92(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_vec_n93(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n97(_uploadFile, _downloadFile, value) {
-  return "audio" in value ? "audio" : "video" in value ? "video" : "file" in value ? "file" : "text" in value ? "text" : "image" in value ? "image" : value;
-}
-function from_candid_vec_n101(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_EscrowRecord_n102(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n111(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_UserProfilePublic_n109(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n116(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_CallRecordPublic_n15(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n119(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_ConversationPublic_n27(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n122(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_PublicGroupSummary_n123(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n49(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_tuple_n50(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n53(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_tuple_n54(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n67(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_AuditEvent_n68(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n82(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_JoinRequest_n83(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n93(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_MessagePublic_n94(_uploadFile, _downloadFile, x3));
-}
-function to_candid_AuditEventType_n63(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n64(_uploadFile, _downloadFile, value);
-}
-function to_candid_AuditExportEventType_n39(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n40(_uploadFile, _downloadFile, value);
-}
-function to_candid_AuditExportFormat_n41(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n42(_uploadFile, _downloadFile, value);
-}
-function to_candid_AuditExportRequest_n36(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n37(_uploadFile, _downloadFile, value);
-}
-function to_candid_CallStatus_n34(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n35(_uploadFile, _downloadFile, value);
-}
-function to_candid_CallType_n114(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n115(_uploadFile, _downloadFile, value);
-}
-function to_candid_CompartmentLabel_n139(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n140(_uploadFile, _downloadFile, value);
-}
-function to_candid_CreateGroupRequest_n32(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n33(_uploadFile, _downloadFile, value);
-}
-function to_candid_DataResidency_n141(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n142(_uploadFile, _downloadFile, value);
-}
-function to_candid_GetAuditLogRequest_n61(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n62(_uploadFile, _downloadFile, value);
-}
-function to_candid_GetMessagesRequest_n89(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n90(_uploadFile, _downloadFile, value);
-}
-function to_candid_GetRetentionMetadataRequest_n104(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n105(_uploadFile, _downloadFile, value);
-}
-function to_candid_InitiateCallRequest_n112(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n113(_uploadFile, _downloadFile, value);
-}
-function to_candid_JoinRequestActionRequest_n23(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n24(_uploadFile, _downloadFile, value);
-}
-function to_candid_ListPublicGroupsRequest_n120(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n121(_uploadFile, _downloadFile, value);
-}
-function to_candid_MessagePriority_n135(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n136(_uploadFile, _downloadFile, value);
-}
-function to_candid_MessageType_n133(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n134(_uploadFile, _downloadFile, value);
-}
-function to_candid_RegisterRequest_n127(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n128(_uploadFile, _downloadFile, value);
-}
-function to_candid_SendMessageRequest_n131(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n132(_uploadFile, _downloadFile, value);
-}
-function to_candid_SubmitJoinRequestRequest_n147(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n148(_uploadFile, _downloadFile, value);
-}
-function to_candid_UpdateProfileRequest_n151(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n152(_uploadFile, _downloadFile, value);
-}
-function to_candid_opt_n143(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(value);
-}
-function to_candid_opt_n144(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(value);
-}
-function to_candid_opt_n7(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(value);
-}
-function to_candid_opt_n8(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(value);
-}
-function to_candid_record_n105(_uploadFile, _downloadFile, value) {
-  return {
-    endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
-    limit: value.limit,
-    afterMessageId: value.afterMessageId ? candid_some(value.afterMessageId) : candid_none(),
-    convId: value.convId ? candid_some(value.convId) : candid_none(),
-    startDate: value.startDate ? candid_some(value.startDate) : candid_none()
-  };
-}
-function to_candid_record_n113(_uploadFile, _downloadFile, value) {
-  return {
-    encryptedSdpOffer: value.encryptedSdpOffer,
-    callees: value.callees,
-    callType: to_candid_CallType_n114(_uploadFile, _downloadFile, value.callType),
-    conversationId: value.conversationId ? candid_some(value.conversationId) : candid_none()
-  };
-}
-function to_candid_record_n121(_uploadFile, _downloadFile, value) {
-  return {
-    offset: value.offset,
-    limit: value.limit,
-    category: value.category ? candid_some(value.category) : candid_none()
-  };
-}
-function to_candid_record_n128(_uploadFile, _downloadFile, value) {
-  return {
-    ecdhPublicKey: value.ecdhPublicKey,
-    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
-    encryptedDisplayName: value.encryptedDisplayName
-  };
-}
-function to_candid_record_n132(_uploadFile, _downloadFile, value) {
-  return {
-    ttlSeconds: value.ttlSeconds ? candid_some(value.ttlSeconds) : candid_none(),
-    encryptedContent: value.encryptedContent,
-    messageType: to_candid_MessageType_n133(_uploadFile, _downloadFile, value.messageType),
-    conversationId: value.conversationId,
-    priority: value.priority ? candid_some(to_candid_MessagePriority_n135(_uploadFile, _downloadFile, value.priority)) : candid_none()
-  };
-}
-function to_candid_record_n148(_uploadFile, _downloadFile, value) {
-  return {
-    conversationId: value.conversationId,
-    message: value.message ? candid_some(value.message) : candid_none()
-  };
-}
-function to_candid_record_n152(_uploadFile, _downloadFile, value) {
-  return {
-    ecdhPublicKey: value.ecdhPublicKey ? candid_some(value.ecdhPublicKey) : candid_none(),
-    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
-    encryptedDisplayName: value.encryptedDisplayName ? candid_some(value.encryptedDisplayName) : candid_none()
-  };
-}
-function to_candid_record_n24(_uploadFile, _downloadFile, value) {
-  return {
-    denialReason: value.denialReason ? candid_some(value.denialReason) : candid_none(),
-    requestId: value.requestId,
-    conversationId: value.conversationId
-  };
-}
-function to_candid_record_n33(_uploadFile, _downloadFile, value) {
-  return {
-    initialMembers: value.initialMembers,
-    displayName: value.displayName ? candid_some(value.displayName) : candid_none(),
-    description: value.description ? candid_some(value.description) : candid_none(),
-    category: value.category ? candid_some(value.category) : candid_none(),
-    discoverable: value.discoverable,
-    encryptedName: value.encryptedName
-  };
-}
-function to_candid_record_n37(_uploadFile, _downloadFile, value) {
-  return {
-    endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
-    affectedUser: value.affectedUser ? candid_some(value.affectedUser) : candid_none(),
-    eventTypes: value.eventTypes ? candid_some(to_candid_vec_n38(_uploadFile, _downloadFile, value.eventTypes)) : candid_none(),
-    startDate: value.startDate ? candid_some(value.startDate) : candid_none(),
-    format: to_candid_AuditExportFormat_n41(_uploadFile, _downloadFile, value.format)
-  };
-}
-function to_candid_record_n62(_uploadFile, _downloadFile, value) {
-  return {
-    limit: value.limit,
-    filterEventType: value.filterEventType ? candid_some(to_candid_AuditEventType_n63(_uploadFile, _downloadFile, value.filterEventType)) : candid_none(),
-    afterEventId: value.afterEventId ? candid_some(value.afterEventId) : candid_none()
-  };
-}
-function to_candid_record_n90(_uploadFile, _downloadFile, value) {
-  return {
-    beforeMessageId: value.beforeMessageId ? candid_some(value.beforeMessageId) : candid_none(),
-    limit: value.limit,
-    conversationId: value.conversationId
-  };
-}
-function to_candid_variant_n115(_uploadFile, _downloadFile, value) {
-  return value == "audio" ? {
-    audio: null
-  } : value == "video" ? {
-    video: null
-  } : value;
-}
-function to_candid_variant_n134(_uploadFile, _downloadFile, value) {
-  return value == "audio" ? {
-    audio: null
-  } : value == "video" ? {
-    video: null
-  } : value == "file" ? {
-    file: null
-  } : value == "text" ? {
-    text: null
-  } : value == "image" ? {
-    image: null
-  } : value;
-}
-function to_candid_variant_n136(_uploadFile, _downloadFile, value) {
-  return value == "normal" ? {
-    normal: null
-  } : value == "high" ? {
-    high: null
-  } : value;
-}
-function to_candid_variant_n140(_uploadFile, _downloadFile, value) {
-  return value == "classified" ? {
-    classified: null
-  } : value == "unclassified" ? {
-    unclassified: null
-  } : value;
-}
-function to_candid_variant_n142(_uploadFile, _downloadFile, value) {
-  return value == "eu" ? {
-    eu: null
-  } : value == "us" ? {
-    us: null
-  } : value == "apac" ? {
-    apac: null
-  } : value == "global" ? {
-    global: null
-  } : value;
-}
-function to_candid_variant_n35(_uploadFile, _downloadFile, value) {
-  return value == "active" ? {
-    active: null
-  } : value == "ringing" ? {
-    ringing: null
-  } : value == "missed" ? {
-    missed: null
-  } : value == "ended" ? {
-    ended: null
-  } : value == "declined" ? {
-    declined: null
-  } : value;
-}
-function to_candid_variant_n40(_uploadFile, _downloadFile, value) {
-  return value == "retentionEnabled" ? {
-    retentionEnabled: null
-  } : value == "memberAdded" ? {
-    memberAdded: null
-  } : value == "retentionDisabled" ? {
-    retentionDisabled: null
-  } : value == "escrowAccessGranted" ? {
-    escrowAccessGranted: null
-  } : value == "callInitiated" ? {
-    callInitiated: null
-  } : value == "adminAction" ? {
-    adminAction: null
-  } : value == "auditLogExported" ? {
-    auditLogExported: null
-  } : value == "escrowEnrolled" ? {
-    escrowEnrolled: null
-  } : value == "messageSent" ? {
-    messageSent: null
-  } : value == "escrowRevoked" ? {
-    escrowRevoked: null
-  } : value == "userRegistered" ? {
-    userRegistered: null
-  } : value == "memberRemoved" ? {
-    memberRemoved: null
-  } : value == "userRemoved" ? {
-    userRemoved: null
-  } : value;
-}
-function to_candid_variant_n42(_uploadFile, _downloadFile, value) {
-  return value == "csv" ? {
-    csv: null
-  } : value == "json" ? {
-    json: null
-  } : value;
-}
-function to_candid_variant_n64(_uploadFile, _downloadFile, value) {
-  return value == "retentionEnabled" ? {
-    retentionEnabled: null
-  } : value == "memberAdded" ? {
-    memberAdded: null
-  } : value == "retentionDisabled" ? {
-    retentionDisabled: null
-  } : value == "escrowAccessGranted" ? {
-    escrowAccessGranted: null
-  } : value == "callInitiated" ? {
-    callInitiated: null
-  } : value == "sovereignConfigUpdated" ? {
-    sovereignConfigUpdated: null
-  } : value == "messageQueueDrained" ? {
-    messageQueueDrained: null
-  } : value == "adminAction" ? {
-    adminAction: null
-  } : value == "auditLogExported" ? {
-    auditLogExported: null
-  } : value == "escrowEnrolled" ? {
-    escrowEnrolled: null
-  } : value == "messageSent" ? {
-    messageSent: null
-  } : value == "escrowRevoked" ? {
-    escrowRevoked: null
-  } : value == "compartmentAssigned" ? {
-    compartmentAssigned: null
-  } : value == "userRegistered" ? {
-    userRegistered: null
-  } : value == "memberRemoved" ? {
-    memberRemoved: null
-  } : value == "userRemoved" ? {
-    userRemoved: null
-  } : value == "priorityMessageSent" ? {
-    priorityMessageSent: null
-  } : value;
-}
-function to_candid_vec_n38(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => to_candid_AuditExportEventType_n39(_uploadFile, _downloadFile, x3));
-}
-function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
-  const agent = options.agent || HttpAgent.createSync({
-    ...options.agentOptions
-  });
-  if (options.agent && options.agentOptions) {
-    console.warn("Detected both agent and agentOptions passed to createActor. Ignoring agentOptions and proceeding with the provided agent.");
-  }
-  const actor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId,
-    ...options.actorOptions
-  });
-  return new Backend(actor, _uploadFile, _downloadFile, options.processError);
-}
-const backend = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  AuditEventType: AuditEventType$1,
-  AuditExportEventType,
-  AuditExportFormat,
-  Backend,
-  CallStatus,
-  CallType,
-  CompartmentLabel,
-  ConversationKind,
-  DataResidency,
-  Error_,
-  ExternalBlob: ExternalBlob2,
-  JoinRequestStatus,
-  MessagePriority,
-  MessageType,
-  createActor
-}, Symbol.toStringTag, { value: "Module" }));
-const AuthContext = reactExports.createContext(null);
-function AuthProvider({ children }) {
-  const { identity, login, clear, loginStatus } = useInternetIdentity();
-  const { actor } = useActor(createActor);
-  const [isRegistered, setIsRegistered] = reactExports.useState(null);
-  const registrationAttempted = reactExports.useRef(false);
-  const isAuthenticated = loginStatus === "success" && !!identity;
-  const isLoading = loginStatus === "logging-in" || loginStatus === "initializing";
-  const principal = (identity == null ? void 0 : identity.getPrincipal()) ?? null;
-  reactExports.useEffect(() => {
-    if (!isAuthenticated || !actor || !principal || registrationAttempted.current)
-      return;
-    registrationAttempted.current = true;
-    actor.getUserProfile(principal).then((profile) => setIsRegistered(!!profile)).catch(() => setIsRegistered(false));
-  }, [isAuthenticated, actor, principal]);
-  reactExports.useEffect(() => {
-    if (!isAuthenticated) {
-      setIsRegistered(null);
-      registrationAttempted.current = false;
-    }
-  }, [isAuthenticated]);
-  const logout = reactExports.useCallback(() => {
-    clear();
-  }, [clear]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    AuthContext.Provider,
-    {
-      value: {
-        isAuthenticated,
-        principal,
-        identity: identity ?? null,
-        login,
-        logout,
-        isLoading,
-        isRegistered
-      },
-      children
-    }
-  );
-}
-function useAuth() {
-  const ctx = reactExports.useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
-}
-function useUserProfile(userId) {
-  const { actor } = useActor(createActor);
-  return useQuery({
-    queryKey: ["profile", userId == null ? void 0 : userId.toText()],
-    queryFn: async () => {
-      if (!actor || !userId) return null;
-      return actor.getUserProfile(userId);
-    },
-    enabled: !!actor && !!userId,
-    staleTime: 3e4,
-    retry: 2
-  });
-}
-function useUserProfiles(userIds) {
-  const { actor } = useActor(createActor);
-  return useQuery({
-    queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
-    queryFn: async () => {
-      if (!actor || userIds.length === 0) return [];
-      return actor.getUserProfiles(userIds);
-    },
-    enabled: !!actor && userIds.length > 0,
-    staleTime: 3e4,
-    retry: 2
-  });
-}
-function useUpdateProfile() {
-  const { actor } = useActor(createActor);
-  const { principal } = useAuth();
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      encryptedDisplayName,
-      ecdhPublicKey,
-      encryptedAvatarKey
-    }) => {
-      if (!actor) throw new Error("Not connected");
-      let result = await actor.updateUserProfile({
-        encryptedDisplayName,
-        ecdhPublicKey,
-        encryptedAvatarKey
-      });
-      const isNotFound2 = result.__kind__ === "err" && (!result.err || result.err === "notFound");
-      if (isNotFound2) {
-        if (!encryptedDisplayName || !ecdhPublicKey) {
-          throw new Error(
-            "Profile not found on server. Please reload and try again."
-          );
-        }
-        const regResult = await actor.registerUser({
-          encryptedDisplayName,
-          ecdhPublicKey,
-          encryptedAvatarKey
-        });
-        if (regResult.__kind__ === "err") {
-          result = await actor.updateUserProfile({
-            encryptedDisplayName,
-            ecdhPublicKey,
-            encryptedAvatarKey
-          });
-        } else {
-          return regResult.ok;
-        }
-      }
-      if (result.__kind__ === "err") {
-        const errLabel = result.err || "unknown";
-        const messages = {
-          unauthorized: "You must be logged in to update your profile.",
-          forbidden: "You don't have permission to perform this action.",
-          notFound: "Profile not found. Please reload and try again.",
-          alreadyExists: "A profile with these details already exists.",
-          invalidInput: "Invalid profile data. Please check your input."
-        };
-        throw new Error(messages[errLabel] ?? `Update failed: ${errLabel}`);
-      }
-      return result.ok;
-    },
-    onSuccess: (updatedProfile) => {
-      const userId = principal == null ? void 0 : principal.toText();
-      if (!userId) return;
-      if (updatedProfile) {
-        queryClient2.setQueryData(
-          ["profile", userId],
-          updatedProfile
-        );
-      }
-      queryClient2.invalidateQueries({
-        queryKey: ["profile", userId],
-        exact: true
-      });
-    }
-  });
-}
-const AVATAR_STORAGE_PREFIX = "cs_avatar:";
-function getLocalAvatarKey(principal) {
-  return `${AVATAR_STORAGE_PREFIX}${principal}`;
-}
-function getLocalAvatarDataUrl(principal) {
-  try {
-    return localStorage.getItem(getLocalAvatarKey(principal));
-  } catch {
-    return null;
-  }
-}
-function setLocalAvatarDataUrl(principal, dataUrl) {
-  try {
-    localStorage.setItem(getLocalAvatarKey(principal), dataUrl);
-  } catch {
-  }
-}
-function removeLocalAvatar(principal) {
-  try {
-    localStorage.removeItem(getLocalAvatarKey(principal));
-  } catch {
-  }
-}
-const DISPLAY_NAME_PREFIX = "cs_name:";
-function getLocalDisplayName(principal) {
-  try {
-    return localStorage.getItem(`${DISPLAY_NAME_PREFIX}${principal}`);
-  } catch {
-    return null;
-  }
-}
-function setLocalDisplayName(principal, name) {
-  try {
-    if (name.trim()) {
-      localStorage.setItem(`${DISPLAY_NAME_PREFIX}${principal}`, name.trim());
-    }
-  } catch {
-  }
-}
-function shortPrincipal(principal) {
-  if (principal.length <= 16) return principal;
-  return `${principal.slice(0, 10)}…${principal.slice(-4)}`;
-}
-function getDisplayName(principal) {
-  return getLocalDisplayName(principal) ?? shortPrincipal(principal);
-}
-function useDisplayName(principal) {
-  const [name, setName] = reactExports.useState(
-    principal ? getDisplayName(principal) : ""
-  );
-  reactExports.useEffect(() => {
-    if (!principal) return;
-    setName(getDisplayName(principal));
-    const handler = (e) => {
-      var _a3;
-      if (e.key === `${DISPLAY_NAME_PREFIX}${principal}`) {
-        setName(((_a3 = e.newValue) == null ? void 0 : _a3.trim()) || shortPrincipal(principal));
-      }
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
-  }, [principal]);
-  return name || (principal ? shortPrincipal(principal) : "");
-}
-function useHasDisplayName() {
-  const { principal } = useAuth();
-  const principalText = (principal == null ? void 0 : principal.toText()) ?? null;
-  const {
-    data: profile,
-    isLoading,
-    isFetched
-  } = useUserProfile(principal ?? null);
-  if (!principalText) return null;
-  if (isLoading && !isFetched) return null;
-  const cached = getLocalDisplayName(principalText);
-  if (cached && cached.trim().length >= 2) return true;
-  if (profile && profile.encryptedDisplayName.length > 0) return true;
-  return false;
-}
-const AVATAR_COLORS = [
-  "bg-primary text-primary-foreground",
-  "bg-accent text-accent-foreground",
-  "bg-secondary text-secondary-foreground",
-  "bg-muted text-muted-foreground"
-];
-function hashPrincipal(principal) {
-  let hash = 0;
-  for (let i = 0; i < principal.length; i++) {
-    hash = (hash << 5) - hash + principal.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
-function UserAvatar({
-  principal,
-  displayName,
-  avatarUrl,
-  size: size2 = 36,
-  className = ""
-}) {
-  const hash = hashPrincipal(principal);
-  const colorClass = AVATAR_COLORS[hash % AVATAR_COLORS.length];
-  const letter = displayName ? displayName[0].toUpperCase() : principal[0].toUpperCase();
-  const resolvedUrl = avatarUrl ?? getLocalAvatarDataUrl(principal);
-  const [imgError, setImgError] = reactExports.useState(false);
-  const showImage = !!resolvedUrl && !imgError;
-  if (showImage) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "img",
-      {
-        src: resolvedUrl,
-        alt: displayName ?? principal,
-        onError: () => setImgError(true),
-        className: `inline-block rounded-full object-cover flex-shrink-0 ${className}`,
-        style: { width: size2, height: size2 },
-        "aria-label": displayName ?? principal
-      }
-    );
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
-    {
-      className: `inline-flex items-center justify-center rounded-full font-semibold select-none flex-shrink-0 ${colorClass} ${className}`,
-      style: { width: size2, height: size2, fontSize: size2 * 0.42 },
-      "aria-label": displayName ?? principal,
-      children: letter
-    }
-  );
-}
-function useActiveCalls() {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["active-calls"],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.listActiveCalls();
-    },
-    enabled: !!actor && !isFetching,
-    refetchInterval: 1e3,
-    staleTime: 500
-  });
-}
-function useCall(id) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["call", id == null ? void 0 : id.toString()],
-    queryFn: async () => {
-      if (!actor || id === null) return null;
-      return actor.getCall(id);
-    },
-    enabled: !!actor && !isFetching && id !== null,
-    refetchInterval: 1e3,
-    staleTime: 500
-  });
-}
-function useInitiateCall() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.initiateCall(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: () => {
-      queryClient2.invalidateQueries({ queryKey: ["active-calls"] });
-    }
-  });
-}
-function useAnswerCall() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.answerCall(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: () => {
-      queryClient2.invalidateQueries({ queryKey: ["active-calls"] });
-    }
-  });
-}
-function useEndCall() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      callId,
-      reason
-    }) => {
-      if (!actor) throw new Error("Not connected");
-      return actor.endCall(callId, reason);
-    },
-    onSuccess: () => {
-      queryClient2.invalidateQueries({ queryKey: ["active-calls"] });
-    }
-  });
-}
-var prefix = "Invariant failed";
-function invariant(condition, message) {
-  if (condition) {
-    return;
-  }
-  {
-    throw new Error(prefix);
-  }
-}
-function warning(condition, message) {
-}
-const __storeToDerived = /* @__PURE__ */ new WeakMap();
-const __derivedToStore = /* @__PURE__ */ new WeakMap();
-const __depsThatHaveWrittenThisTick = {
-  current: []
-};
-let __isFlushing = false;
-let __batchDepth = 0;
-const __pendingUpdates = /* @__PURE__ */ new Set();
-const __initialBatchValues = /* @__PURE__ */ new Map();
-function __flush_internals(relatedVals) {
-  const sorted = Array.from(relatedVals).sort((a2, b2) => {
-    if (a2 instanceof Derived && a2.options.deps.includes(b2)) return 1;
-    if (b2 instanceof Derived && b2.options.deps.includes(a2)) return -1;
-    return 0;
-  });
-  for (const derived of sorted) {
-    if (__depsThatHaveWrittenThisTick.current.includes(derived)) {
-      continue;
-    }
-    __depsThatHaveWrittenThisTick.current.push(derived);
-    derived.recompute();
-    const stores = __derivedToStore.get(derived);
-    if (stores) {
-      for (const store of stores) {
-        const relatedLinkedDerivedVals = __storeToDerived.get(store);
-        if (!relatedLinkedDerivedVals) continue;
-        __flush_internals(relatedLinkedDerivedVals);
-      }
-    }
-  }
-}
-function __notifyListeners(store) {
-  const value = {
-    prevVal: store.prevState,
-    currentVal: store.state
-  };
-  for (const listener of store.listeners) {
-    listener(value);
-  }
-}
-function __notifyDerivedListeners(derived) {
-  const value = {
-    prevVal: derived.prevState,
-    currentVal: derived.state
-  };
-  for (const listener of derived.listeners) {
-    listener(value);
-  }
-}
-function __flush(store) {
-  if (__batchDepth > 0 && !__initialBatchValues.has(store)) {
-    __initialBatchValues.set(store, store.prevState);
-  }
-  __pendingUpdates.add(store);
-  if (__batchDepth > 0) return;
-  if (__isFlushing) return;
-  try {
-    __isFlushing = true;
-    while (__pendingUpdates.size > 0) {
-      const stores = Array.from(__pendingUpdates);
-      __pendingUpdates.clear();
-      for (const store2 of stores) {
-        const prevState = __initialBatchValues.get(store2) ?? store2.prevState;
-        store2.prevState = prevState;
-        __notifyListeners(store2);
-      }
-      for (const store2 of stores) {
-        const derivedVals = __storeToDerived.get(store2);
-        if (!derivedVals) continue;
-        __depsThatHaveWrittenThisTick.current.push(store2);
-        __flush_internals(derivedVals);
-      }
-      for (const store2 of stores) {
-        const derivedVals = __storeToDerived.get(store2);
-        if (!derivedVals) continue;
-        for (const derived of derivedVals) {
-          __notifyDerivedListeners(derived);
-        }
-      }
-    }
-  } finally {
-    __isFlushing = false;
-    __depsThatHaveWrittenThisTick.current = [];
-    __initialBatchValues.clear();
-  }
-}
-function batch(fn) {
-  __batchDepth++;
-  try {
-    fn();
-  } finally {
-    __batchDepth--;
-    if (__batchDepth === 0) {
-      const pendingUpdateToFlush = __pendingUpdates.values().next().value;
-      if (pendingUpdateToFlush) {
-        __flush(pendingUpdateToFlush);
-      }
-    }
-  }
-}
-function isUpdaterFunction(updater) {
-  return typeof updater === "function";
-}
-class Store {
-  constructor(initialState, options) {
-    this.listeners = /* @__PURE__ */ new Set();
-    this.subscribe = (listener) => {
-      var _a3, _b3;
-      this.listeners.add(listener);
-      const unsub = (_b3 = (_a3 = this.options) == null ? void 0 : _a3.onSubscribe) == null ? void 0 : _b3.call(_a3, listener, this);
-      return () => {
-        this.listeners.delete(listener);
-        unsub == null ? void 0 : unsub();
-      };
-    };
-    this.prevState = initialState;
-    this.state = initialState;
-    this.options = options;
-  }
-  setState(updater) {
-    var _a3, _b3, _c2;
-    this.prevState = this.state;
-    if ((_a3 = this.options) == null ? void 0 : _a3.updateFn) {
-      this.state = this.options.updateFn(this.prevState)(updater);
-    } else {
-      if (isUpdaterFunction(updater)) {
-        this.state = updater(this.prevState);
-      } else {
-        this.state = updater;
-      }
-    }
-    (_c2 = (_b3 = this.options) == null ? void 0 : _b3.onUpdate) == null ? void 0 : _c2.call(_b3);
-    __flush(this);
-  }
-}
-class Derived {
-  constructor(options) {
-    this.listeners = /* @__PURE__ */ new Set();
-    this._subscriptions = [];
-    this.lastSeenDepValues = [];
-    this.getDepVals = () => {
-      const l = this.options.deps.length;
-      const prevDepVals = new Array(l);
-      const currDepVals = new Array(l);
-      for (let i = 0; i < l; i++) {
-        const dep = this.options.deps[i];
-        prevDepVals[i] = dep.prevState;
-        currDepVals[i] = dep.state;
-      }
-      this.lastSeenDepValues = currDepVals;
-      return {
-        prevDepVals,
-        currDepVals,
-        prevVal: this.prevState ?? void 0
-      };
-    };
-    this.recompute = () => {
-      var _a3, _b3;
-      this.prevState = this.state;
-      const depVals = this.getDepVals();
-      this.state = this.options.fn(depVals);
-      (_b3 = (_a3 = this.options).onUpdate) == null ? void 0 : _b3.call(_a3);
-    };
-    this.checkIfRecalculationNeededDeeply = () => {
-      for (const dep of this.options.deps) {
-        if (dep instanceof Derived) {
-          dep.checkIfRecalculationNeededDeeply();
-        }
-      }
-      let shouldRecompute = false;
-      const lastSeenDepValues = this.lastSeenDepValues;
-      const { currDepVals } = this.getDepVals();
-      for (let i = 0; i < currDepVals.length; i++) {
-        if (currDepVals[i] !== lastSeenDepValues[i]) {
-          shouldRecompute = true;
-          break;
-        }
-      }
-      if (shouldRecompute) {
-        this.recompute();
-      }
-    };
-    this.mount = () => {
-      this.registerOnGraph();
-      this.checkIfRecalculationNeededDeeply();
-      return () => {
-        this.unregisterFromGraph();
-        for (const cleanup of this._subscriptions) {
-          cleanup();
-        }
-      };
-    };
-    this.subscribe = (listener) => {
-      var _a3, _b3;
-      this.listeners.add(listener);
-      const unsub = (_b3 = (_a3 = this.options).onSubscribe) == null ? void 0 : _b3.call(_a3, listener, this);
-      return () => {
-        this.listeners.delete(listener);
-        unsub == null ? void 0 : unsub();
-      };
-    };
-    this.options = options;
-    this.state = options.fn({
-      prevDepVals: void 0,
-      prevVal: void 0,
-      currDepVals: this.getDepVals().currDepVals
-    });
-  }
-  registerOnGraph(deps = this.options.deps) {
-    for (const dep of deps) {
-      if (dep instanceof Derived) {
-        dep.registerOnGraph();
-        this.registerOnGraph(dep.options.deps);
-      } else if (dep instanceof Store) {
-        let relatedLinkedDerivedVals = __storeToDerived.get(dep);
-        if (!relatedLinkedDerivedVals) {
-          relatedLinkedDerivedVals = /* @__PURE__ */ new Set();
-          __storeToDerived.set(dep, relatedLinkedDerivedVals);
-        }
-        relatedLinkedDerivedVals.add(this);
-        let relatedStores = __derivedToStore.get(this);
-        if (!relatedStores) {
-          relatedStores = /* @__PURE__ */ new Set();
-          __derivedToStore.set(this, relatedStores);
-        }
-        relatedStores.add(dep);
-      }
-    }
-  }
-  unregisterFromGraph(deps = this.options.deps) {
-    for (const dep of deps) {
-      if (dep instanceof Derived) {
-        this.unregisterFromGraph(dep.options.deps);
-      } else if (dep instanceof Store) {
-        const relatedLinkedDerivedVals = __storeToDerived.get(dep);
-        if (relatedLinkedDerivedVals) {
-          relatedLinkedDerivedVals.delete(this);
-        }
-        const relatedStores = __derivedToStore.get(this);
-        if (relatedStores) {
-          relatedStores.delete(dep);
-        }
-      }
-    }
-  }
-}
-const stateIndexKey = "__TSR_index";
-const popStateEvent = "popstate";
-const beforeUnloadEvent = "beforeunload";
-function createHistory(opts) {
-  let location2 = opts.getLocation();
-  const subscribers = /* @__PURE__ */ new Set();
-  const notify = (action) => {
-    location2 = opts.getLocation();
-    subscribers.forEach((subscriber) => subscriber({ location: location2, action }));
-  };
-  const handleIndexChange = (action) => {
-    if (opts.notifyOnIndexChange ?? true) notify(action);
-    else location2 = opts.getLocation();
-  };
-  const tryNavigation = async ({
-    task,
-    navigateOpts,
-    ...actionInfo
-  }) => {
-    var _a3, _b3;
-    const ignoreBlocker = (navigateOpts == null ? void 0 : navigateOpts.ignoreBlocker) ?? false;
-    if (ignoreBlocker) {
-      task();
-      return;
-    }
-    const blockers = ((_a3 = opts.getBlockers) == null ? void 0 : _a3.call(opts)) ?? [];
-    const isPushOrReplace = actionInfo.type === "PUSH" || actionInfo.type === "REPLACE";
-    if (typeof document !== "undefined" && blockers.length && isPushOrReplace) {
-      for (const blocker of blockers) {
-        const nextLocation = parseHref(actionInfo.path, actionInfo.state);
-        const isBlocked = await blocker.blockerFn({
-          currentLocation: location2,
-          nextLocation,
-          action: actionInfo.type
-        });
-        if (isBlocked) {
-          (_b3 = opts.onBlocked) == null ? void 0 : _b3.call(opts);
-          return;
-        }
-      }
-    }
-    task();
-  };
-  return {
-    get location() {
-      return location2;
-    },
-    get length() {
-      return opts.getLength();
-    },
-    subscribers,
-    subscribe: (cb) => {
-      subscribers.add(cb);
-      return () => {
-        subscribers.delete(cb);
-      };
-    },
-    push: (path, state, navigateOpts) => {
-      const currentIndex = location2.state[stateIndexKey];
-      state = assignKeyAndIndex(currentIndex + 1, state);
-      tryNavigation({
-        task: () => {
-          opts.pushState(path, state);
-          notify({ type: "PUSH" });
-        },
-        navigateOpts,
-        type: "PUSH",
-        path,
-        state
-      });
-    },
-    replace: (path, state, navigateOpts) => {
-      const currentIndex = location2.state[stateIndexKey];
-      state = assignKeyAndIndex(currentIndex, state);
-      tryNavigation({
-        task: () => {
-          opts.replaceState(path, state);
-          notify({ type: "REPLACE" });
-        },
-        navigateOpts,
-        type: "REPLACE",
-        path,
-        state
-      });
-    },
-    go: (index2, navigateOpts) => {
-      tryNavigation({
-        task: () => {
-          opts.go(index2);
-          handleIndexChange({ type: "GO", index: index2 });
-        },
-        navigateOpts,
-        type: "GO"
-      });
-    },
-    back: (navigateOpts) => {
-      tryNavigation({
-        task: () => {
-          opts.back((navigateOpts == null ? void 0 : navigateOpts.ignoreBlocker) ?? false);
-          handleIndexChange({ type: "BACK" });
-        },
-        navigateOpts,
-        type: "BACK"
-      });
-    },
-    forward: (navigateOpts) => {
-      tryNavigation({
-        task: () => {
-          opts.forward((navigateOpts == null ? void 0 : navigateOpts.ignoreBlocker) ?? false);
-          handleIndexChange({ type: "FORWARD" });
-        },
-        navigateOpts,
-        type: "FORWARD"
-      });
-    },
-    canGoBack: () => location2.state[stateIndexKey] !== 0,
-    createHref: (str) => opts.createHref(str),
-    block: (blocker) => {
-      var _a3;
-      if (!opts.setBlockers) return () => {
-      };
-      const blockers = ((_a3 = opts.getBlockers) == null ? void 0 : _a3.call(opts)) ?? [];
-      opts.setBlockers([...blockers, blocker]);
-      return () => {
-        var _a22, _b3;
-        const blockers2 = ((_a22 = opts.getBlockers) == null ? void 0 : _a22.call(opts)) ?? [];
-        (_b3 = opts.setBlockers) == null ? void 0 : _b3.call(opts, blockers2.filter((b2) => b2 !== blocker));
-      };
-    },
-    flush: () => {
-      var _a3;
-      return (_a3 = opts.flush) == null ? void 0 : _a3.call(opts);
-    },
-    destroy: () => {
-      var _a3;
-      return (_a3 = opts.destroy) == null ? void 0 : _a3.call(opts);
-    },
-    notify
-  };
-}
-function assignKeyAndIndex(index2, state) {
-  if (!state) {
-    state = {};
-  }
-  const key = createRandomKey();
-  return {
-    ...state,
-    key,
-    // TODO: Remove in v2 - use __TSR_key instead
-    __TSR_key: key,
-    [stateIndexKey]: index2
-  };
-}
-function createBrowserHistory(opts) {
-  var _a3, _b3;
-  const win = typeof document !== "undefined" ? window : void 0;
-  const originalPushState = win.history.pushState;
-  const originalReplaceState = win.history.replaceState;
-  let blockers = [];
-  const _getBlockers = () => blockers;
-  const _setBlockers = (newBlockers) => blockers = newBlockers;
-  const createHref = (path) => path;
-  const parseLocation = () => parseHref(
-    `${win.location.pathname}${win.location.search}${win.location.hash}`,
-    win.history.state
-  );
-  if (!((_a3 = win.history.state) == null ? void 0 : _a3.__TSR_key) && !((_b3 = win.history.state) == null ? void 0 : _b3.key)) {
-    const addedKey = createRandomKey();
-    win.history.replaceState(
-      {
-        [stateIndexKey]: 0,
-        key: addedKey,
-        // TODO: Remove in v2 - use __TSR_key instead
-        __TSR_key: addedKey
-      },
-      ""
-    );
-  }
-  let currentLocation = parseLocation();
-  let rollbackLocation;
-  let nextPopIsGo = false;
-  let ignoreNextPop = false;
-  let skipBlockerNextPop = false;
-  let ignoreNextBeforeUnload = false;
-  const getLocation = () => currentLocation;
-  let next;
-  let scheduled;
-  const flush = () => {
-    if (!next) {
-      return;
-    }
-    history._ignoreSubscribers = true;
-    (next.isPush ? win.history.pushState : win.history.replaceState)(
-      next.state,
-      "",
-      next.href
-    );
-    history._ignoreSubscribers = false;
-    next = void 0;
-    scheduled = void 0;
-    rollbackLocation = void 0;
-  };
-  const queueHistoryAction = (type, destHref, state) => {
-    const href = createHref(destHref);
-    if (!scheduled) {
-      rollbackLocation = currentLocation;
-    }
-    currentLocation = parseHref(destHref, state);
-    next = {
-      href,
-      state,
-      isPush: (next == null ? void 0 : next.isPush) || type === "push"
-    };
-    if (!scheduled) {
-      scheduled = Promise.resolve().then(() => flush());
-    }
-  };
-  const onPushPop = (type) => {
-    currentLocation = parseLocation();
-    history.notify({ type });
-  };
-  const onPushPopEvent = async () => {
-    if (ignoreNextPop) {
-      ignoreNextPop = false;
-      return;
-    }
-    const nextLocation = parseLocation();
-    const delta = nextLocation.state[stateIndexKey] - currentLocation.state[stateIndexKey];
-    const isForward = delta === 1;
-    const isBack = delta === -1;
-    const isGo = !isForward && !isBack || nextPopIsGo;
-    nextPopIsGo = false;
-    const action = isGo ? "GO" : isBack ? "BACK" : "FORWARD";
-    const notify = isGo ? {
-      type: "GO",
-      index: delta
-    } : {
-      type: isBack ? "BACK" : "FORWARD"
-    };
-    if (skipBlockerNextPop) {
-      skipBlockerNextPop = false;
-    } else {
-      const blockers2 = _getBlockers();
-      if (typeof document !== "undefined" && blockers2.length) {
-        for (const blocker of blockers2) {
-          const isBlocked = await blocker.blockerFn({
-            currentLocation,
-            nextLocation,
-            action
-          });
-          if (isBlocked) {
-            ignoreNextPop = true;
-            win.history.go(1);
-            history.notify(notify);
-            return;
-          }
-        }
-      }
-    }
-    currentLocation = parseLocation();
-    history.notify(notify);
-  };
-  const onBeforeUnload = (e) => {
-    if (ignoreNextBeforeUnload) {
-      ignoreNextBeforeUnload = false;
-      return;
-    }
-    let shouldBlock = false;
-    const blockers2 = _getBlockers();
-    if (typeof document !== "undefined" && blockers2.length) {
-      for (const blocker of blockers2) {
-        const shouldHaveBeforeUnload = blocker.enableBeforeUnload ?? true;
-        if (shouldHaveBeforeUnload === true) {
-          shouldBlock = true;
-          break;
-        }
-        if (typeof shouldHaveBeforeUnload === "function" && shouldHaveBeforeUnload() === true) {
-          shouldBlock = true;
-          break;
-        }
-      }
-    }
-    if (shouldBlock) {
-      e.preventDefault();
-      return e.returnValue = "";
-    }
-    return;
-  };
-  const history = createHistory({
-    getLocation,
-    getLength: () => win.history.length,
-    pushState: (href, state) => queueHistoryAction("push", href, state),
-    replaceState: (href, state) => queueHistoryAction("replace", href, state),
-    back: (ignoreBlocker) => {
-      if (ignoreBlocker) skipBlockerNextPop = true;
-      ignoreNextBeforeUnload = true;
-      return win.history.back();
-    },
-    forward: (ignoreBlocker) => {
-      if (ignoreBlocker) skipBlockerNextPop = true;
-      ignoreNextBeforeUnload = true;
-      win.history.forward();
-    },
-    go: (n) => {
-      nextPopIsGo = true;
-      win.history.go(n);
-    },
-    createHref: (href) => createHref(href),
-    flush,
-    destroy: () => {
-      win.history.pushState = originalPushState;
-      win.history.replaceState = originalReplaceState;
-      win.removeEventListener(beforeUnloadEvent, onBeforeUnload, {
-        capture: true
-      });
-      win.removeEventListener(popStateEvent, onPushPopEvent);
-    },
-    onBlocked: () => {
-      if (rollbackLocation && currentLocation !== rollbackLocation) {
-        currentLocation = rollbackLocation;
-      }
-    },
-    getBlockers: _getBlockers,
-    setBlockers: _setBlockers,
-    notifyOnIndexChange: false
-  });
-  win.addEventListener(beforeUnloadEvent, onBeforeUnload, { capture: true });
-  win.addEventListener(popStateEvent, onPushPopEvent);
-  win.history.pushState = function(...args) {
-    const res = originalPushState.apply(win.history, args);
-    if (!history._ignoreSubscribers) onPushPop("PUSH");
-    return res;
-  };
-  win.history.replaceState = function(...args) {
-    const res = originalReplaceState.apply(win.history, args);
-    if (!history._ignoreSubscribers) onPushPop("REPLACE");
-    return res;
-  };
-  return history;
-}
-function createMemoryHistory(opts = {
-  initialEntries: ["/"]
-}) {
-  const entries = opts.initialEntries;
-  let index2 = opts.initialIndex ? Math.min(Math.max(opts.initialIndex, 0), entries.length - 1) : entries.length - 1;
-  const states = entries.map(
-    (_entry, index22) => assignKeyAndIndex(index22, void 0)
-  );
-  const getLocation = () => parseHref(entries[index2], states[index2]);
-  return createHistory({
-    getLocation,
-    getLength: () => entries.length,
-    pushState: (path, state) => {
-      if (index2 < entries.length - 1) {
-        entries.splice(index2 + 1);
-        states.splice(index2 + 1);
-      }
-      states.push(state);
-      entries.push(path);
-      index2 = Math.max(entries.length - 1, 0);
-    },
-    replaceState: (path, state) => {
-      states[index2] = state;
-      entries[index2] = path;
-    },
-    back: () => {
-      index2 = Math.max(index2 - 1, 0);
-    },
-    forward: () => {
-      index2 = Math.min(index2 + 1, entries.length - 1);
-    },
-    go: (n) => {
-      index2 = Math.min(Math.max(index2 + n, 0), entries.length - 1);
-    },
-    createHref: (path) => path
-  });
-}
-function parseHref(href, state) {
-  const hashIndex = href.indexOf("#");
-  const searchIndex = href.indexOf("?");
-  const addedKey = createRandomKey();
-  return {
-    href,
-    pathname: href.substring(
-      0,
-      hashIndex > 0 ? searchIndex > 0 ? Math.min(hashIndex, searchIndex) : hashIndex : searchIndex > 0 ? searchIndex : href.length
-    ),
-    hash: hashIndex > -1 ? href.substring(hashIndex) : "",
-    search: searchIndex > -1 ? href.slice(searchIndex, hashIndex === -1 ? void 0 : hashIndex) : "",
-    state: state || { [stateIndexKey]: 0, key: addedKey, __TSR_key: addedKey }
-  };
-}
-function createRandomKey() {
-  return (Math.random() + 1).toString(36).substring(7);
-}
-function last(arr) {
-  return arr[arr.length - 1];
-}
-function isFunction$2(d2) {
-  return typeof d2 === "function";
-}
-function functionalUpdate(updater, previous) {
-  if (isFunction$2(updater)) {
-    return updater(previous);
-  }
-  return updater;
-}
-const hasOwn = Object.prototype.hasOwnProperty;
-function replaceEqualDeep(prev, _next) {
-  if (prev === _next) {
-    return prev;
-  }
-  const next = _next;
-  const array = isPlainArray(prev) && isPlainArray(next);
-  if (!array && !(isPlainObject(prev) && isPlainObject(next))) return next;
-  const prevItems = array ? prev : getEnumerableOwnKeys(prev);
-  if (!prevItems) return next;
-  const nextItems = array ? next : getEnumerableOwnKeys(next);
-  if (!nextItems) return next;
-  const prevSize = prevItems.length;
-  const nextSize = nextItems.length;
-  const copy = array ? new Array(nextSize) : {};
-  let equalItems = 0;
-  for (let i = 0; i < nextSize; i++) {
-    const key = array ? i : nextItems[i];
-    const p2 = prev[key];
-    const n = next[key];
-    if (p2 === n) {
-      copy[key] = p2;
-      if (array ? i < prevSize : hasOwn.call(prev, key)) equalItems++;
-      continue;
-    }
-    if (p2 === null || n === null || typeof p2 !== "object" || typeof n !== "object") {
-      copy[key] = n;
-      continue;
-    }
-    const v2 = replaceEqualDeep(p2, n);
-    copy[key] = v2;
-    if (v2 === p2) equalItems++;
-  }
-  return prevSize === nextSize && equalItems === prevSize ? prev : copy;
-}
-function getEnumerableOwnKeys(o2) {
-  const keys = [];
-  const names = Object.getOwnPropertyNames(o2);
-  for (const name of names) {
-    if (!Object.prototype.propertyIsEnumerable.call(o2, name)) return false;
-    keys.push(name);
-  }
-  const symbols = Object.getOwnPropertySymbols(o2);
-  for (const symbol of symbols) {
-    if (!Object.prototype.propertyIsEnumerable.call(o2, symbol)) return false;
-    keys.push(symbol);
-  }
-  return keys;
-}
-function isPlainObject(o2) {
-  if (!hasObjectPrototype(o2)) {
-    return false;
-  }
-  const ctor = o2.constructor;
-  if (typeof ctor === "undefined") {
-    return true;
-  }
-  const prot = ctor.prototype;
-  if (!hasObjectPrototype(prot)) {
-    return false;
-  }
-  if (!prot.hasOwnProperty("isPrototypeOf")) {
-    return false;
-  }
-  return true;
-}
-function hasObjectPrototype(o2) {
-  return Object.prototype.toString.call(o2) === "[object Object]";
-}
-function isPlainArray(value) {
-  return Array.isArray(value) && value.length === Object.keys(value).length;
-}
-function deepEqual$1(a2, b2, opts) {
-  if (a2 === b2) {
-    return true;
-  }
-  if (typeof a2 !== typeof b2) {
-    return false;
-  }
-  if (Array.isArray(a2) && Array.isArray(b2)) {
-    if (a2.length !== b2.length) return false;
-    for (let i = 0, l = a2.length; i < l; i++) {
-      if (!deepEqual$1(a2[i], b2[i], opts)) return false;
-    }
-    return true;
-  }
-  if (isPlainObject(a2) && isPlainObject(b2)) {
-    const ignoreUndefined = (opts == null ? void 0 : opts.ignoreUndefined) ?? true;
-    if (opts == null ? void 0 : opts.partial) {
-      for (const k2 in b2) {
-        if (!ignoreUndefined || b2[k2] !== void 0) {
-          if (!deepEqual$1(a2[k2], b2[k2], opts)) return false;
-        }
-      }
-      return true;
-    }
-    let aCount = 0;
-    if (!ignoreUndefined) {
-      aCount = Object.keys(a2).length;
-    } else {
-      for (const k2 in a2) {
-        if (a2[k2] !== void 0) aCount++;
-      }
-    }
-    let bCount = 0;
-    for (const k2 in b2) {
-      if (!ignoreUndefined || b2[k2] !== void 0) {
-        bCount++;
-        if (bCount > aCount || !deepEqual$1(a2[k2], b2[k2], opts)) return false;
-      }
-    }
-    return aCount === bCount;
-  }
-  return false;
-}
-function createControlledPromise(onResolve) {
-  let resolveLoadPromise;
-  let rejectLoadPromise;
-  const controlledPromise = new Promise((resolve, reject) => {
-    resolveLoadPromise = resolve;
-    rejectLoadPromise = reject;
-  });
-  controlledPromise.status = "pending";
-  controlledPromise.resolve = (value) => {
-    controlledPromise.status = "resolved";
-    controlledPromise.value = value;
-    resolveLoadPromise(value);
-    onResolve == null ? void 0 : onResolve(value);
-  };
-  controlledPromise.reject = (e) => {
-    controlledPromise.status = "rejected";
-    rejectLoadPromise(e);
-  };
-  return controlledPromise;
-}
-function isPromise(value) {
-  return Boolean(
-    value && typeof value === "object" && typeof value.then === "function"
-  );
-}
-const SEGMENT_TYPE_PATHNAME = 0;
-const SEGMENT_TYPE_PARAM = 1;
-const SEGMENT_TYPE_WILDCARD = 2;
-const SEGMENT_TYPE_OPTIONAL_PARAM = 3;
-function joinPaths(paths) {
-  return cleanPath(
-    paths.filter((val) => {
-      return val !== void 0;
-    }).join("/")
-  );
-}
-function cleanPath(path) {
-  return path.replace(/\/{2,}/g, "/");
-}
-function trimPathLeft(path) {
-  return path === "/" ? path : path.replace(/^\/{1,}/, "");
-}
-function trimPathRight(path) {
-  return path === "/" ? path : path.replace(/\/{1,}$/, "");
-}
-function trimPath(path) {
-  return trimPathRight(trimPathLeft(path));
-}
-function removeTrailingSlash(value, basepath) {
-  if ((value == null ? void 0 : value.endsWith("/")) && value !== "/" && value !== `${basepath}/`) {
-    return value.slice(0, -1);
-  }
-  return value;
-}
-function exactPathTest(pathName1, pathName2, basepath) {
-  return removeTrailingSlash(pathName1, basepath) === removeTrailingSlash(pathName2, basepath);
-}
-function segmentToString(segment) {
-  const { type, value } = segment;
-  if (type === SEGMENT_TYPE_PATHNAME) {
-    return value;
-  }
-  const { prefixSegment, suffixSegment } = segment;
-  if (type === SEGMENT_TYPE_PARAM) {
-    const param = value.substring(1);
-    if (prefixSegment && suffixSegment) {
-      return `${prefixSegment}{$${param}}${suffixSegment}`;
-    } else if (prefixSegment) {
-      return `${prefixSegment}{$${param}}`;
-    } else if (suffixSegment) {
-      return `{$${param}}${suffixSegment}`;
-    }
-  }
-  if (type === SEGMENT_TYPE_OPTIONAL_PARAM) {
-    const param = value.substring(1);
-    if (prefixSegment && suffixSegment) {
-      return `${prefixSegment}{-$${param}}${suffixSegment}`;
-    } else if (prefixSegment) {
-      return `${prefixSegment}{-$${param}}`;
-    } else if (suffixSegment) {
-      return `{-$${param}}${suffixSegment}`;
-    }
-    return `{-$${param}}`;
-  }
-  if (type === SEGMENT_TYPE_WILDCARD) {
-    if (prefixSegment && suffixSegment) {
-      return `${prefixSegment}{$}${suffixSegment}`;
-    } else if (prefixSegment) {
-      return `${prefixSegment}{$}`;
-    } else if (suffixSegment) {
-      return `{$}${suffixSegment}`;
-    }
-  }
-  return value;
-}
-function resolvePath({
-  basepath,
-  base,
-  to,
-  trailingSlash = "never",
-  caseSensitive,
-  parseCache
-}) {
-  var _a3;
-  base = removeBasepath(basepath, base, caseSensitive);
-  to = removeBasepath(basepath, to, caseSensitive);
-  let baseSegments = parseBasePathSegments(base, parseCache).slice();
-  const toSegments = parseRoutePathSegments(to, parseCache);
-  if (baseSegments.length > 1 && ((_a3 = last(baseSegments)) == null ? void 0 : _a3.value) === "/") {
-    baseSegments.pop();
-  }
-  for (let index2 = 0, length = toSegments.length; index2 < length; index2++) {
-    const toSegment = toSegments[index2];
-    const value = toSegment.value;
-    if (value === "/") {
-      if (!index2) {
-        baseSegments = [toSegment];
-      } else if (index2 === length - 1) {
-        baseSegments.push(toSegment);
-      } else ;
-    } else if (value === "..") {
-      baseSegments.pop();
-    } else if (value === ".") ;
-    else {
-      baseSegments.push(toSegment);
-    }
-  }
-  if (baseSegments.length > 1) {
-    if (last(baseSegments).value === "/") {
-      if (trailingSlash === "never") {
-        baseSegments.pop();
-      }
-    } else if (trailingSlash === "always") {
-      baseSegments.push({ type: SEGMENT_TYPE_PATHNAME, value: "/" });
-    }
-  }
-  const segmentValues = baseSegments.map(segmentToString);
-  const joined = joinPaths([basepath, ...segmentValues]);
-  return joined;
-}
-const parseBasePathSegments = (pathname, cache) => parsePathname(pathname, cache, true);
-const parseRoutePathSegments = (pathname, cache) => parsePathname(pathname, cache, false);
-const parsePathname = (pathname, cache, basePathValues) => {
-  if (!pathname) return [];
-  const cached = cache == null ? void 0 : cache.get(pathname);
-  if (cached) return cached;
-  const parsed = baseParsePathname(pathname, basePathValues);
-  cache == null ? void 0 : cache.set(pathname, parsed);
-  return parsed;
-};
-const PARAM_RE = /^\$.{1,}$/;
-const PARAM_W_CURLY_BRACES_RE = /^(.*?)\{(\$[a-zA-Z_$][a-zA-Z0-9_$]*)\}(.*)$/;
-const OPTIONAL_PARAM_W_CURLY_BRACES_RE = /^(.*?)\{-(\$[a-zA-Z_$][a-zA-Z0-9_$]*)\}(.*)$/;
-const WILDCARD_RE = /^\$$/;
-const WILDCARD_W_CURLY_BRACES_RE = /^(.*?)\{\$\}(.*)$/;
-function baseParsePathname(pathname, basePathValues) {
-  pathname = cleanPath(pathname);
-  const segments = [];
-  if (pathname.slice(0, 1) === "/") {
-    pathname = pathname.substring(1);
-    segments.push({
-      type: SEGMENT_TYPE_PATHNAME,
-      value: "/"
-    });
-  }
-  if (!pathname) {
-    return segments;
-  }
-  const split2 = pathname.split("/").filter(Boolean);
-  segments.push(
-    ...split2.map((part) => {
-      const partToMatch = !basePathValues && part.slice(-1) === "_" ? part.slice(0, -1) : part;
-      const wildcardBracesMatch = partToMatch.match(WILDCARD_W_CURLY_BRACES_RE);
-      if (wildcardBracesMatch) {
-        const prefix2 = wildcardBracesMatch[1];
-        const suffix2 = wildcardBracesMatch[2];
-        return {
-          type: SEGMENT_TYPE_WILDCARD,
-          value: "$",
-          prefixSegment: prefix2 || void 0,
-          suffixSegment: suffix2 || void 0
-        };
-      }
-      const optionalParamBracesMatch = partToMatch.match(
-        OPTIONAL_PARAM_W_CURLY_BRACES_RE
-      );
-      if (optionalParamBracesMatch) {
-        const prefix2 = optionalParamBracesMatch[1];
-        const paramName = optionalParamBracesMatch[2];
-        const suffix2 = optionalParamBracesMatch[3];
-        return {
-          type: SEGMENT_TYPE_OPTIONAL_PARAM,
-          value: paramName,
-          // Now just $paramName (no prefix)
-          prefixSegment: prefix2 || void 0,
-          suffixSegment: suffix2 || void 0
-        };
-      }
-      const paramBracesMatch = partToMatch.match(PARAM_W_CURLY_BRACES_RE);
-      if (paramBracesMatch) {
-        const prefix2 = paramBracesMatch[1];
-        const paramName = paramBracesMatch[2];
-        const suffix2 = paramBracesMatch[3];
-        return {
-          type: SEGMENT_TYPE_PARAM,
-          value: "" + paramName,
-          prefixSegment: prefix2 || void 0,
-          suffixSegment: suffix2 || void 0
-        };
-      }
-      if (PARAM_RE.test(partToMatch)) {
-        const paramName = partToMatch.substring(1);
-        return {
-          type: SEGMENT_TYPE_PARAM,
-          value: "$" + paramName,
-          prefixSegment: void 0,
-          suffixSegment: void 0
-        };
-      }
-      if (WILDCARD_RE.test(partToMatch)) {
-        return {
-          type: SEGMENT_TYPE_WILDCARD,
-          value: "$",
-          prefixSegment: void 0,
-          suffixSegment: void 0
-        };
-      }
-      return {
-        type: SEGMENT_TYPE_PATHNAME,
-        value: partToMatch.includes("%25") ? partToMatch.split("%25").map((segment) => decodeURI(segment)).join("%25") : decodeURI(partToMatch)
-      };
-    })
-  );
-  if (pathname.slice(-1) === "/") {
-    pathname = pathname.substring(1);
-    segments.push({
-      type: SEGMENT_TYPE_PATHNAME,
-      value: "/"
-    });
-  }
-  return segments;
-}
-function interpolatePath({
-  path,
-  params,
-  leaveWildcards,
-  leaveParams,
-  decodeCharMap,
-  parseCache
-}) {
-  const interpolatedPathSegments = parseRoutePathSegments(path, parseCache);
-  function encodeParam(key) {
-    const value = params[key];
-    const isValueString = typeof value === "string";
-    if (key === "*" || key === "_splat") {
-      return isValueString ? encodeURI(value) : value;
-    } else {
-      return isValueString ? encodePathParam(value, decodeCharMap) : value;
-    }
-  }
-  let isMissingParams = false;
-  const usedParams = {};
-  const interpolatedPath = joinPaths(
-    interpolatedPathSegments.map((segment) => {
-      if (segment.type === SEGMENT_TYPE_PATHNAME) {
-        return segment.value;
-      }
-      if (segment.type === SEGMENT_TYPE_WILDCARD) {
-        usedParams._splat = params._splat;
-        usedParams["*"] = params._splat;
-        const segmentPrefix = segment.prefixSegment || "";
-        const segmentSuffix = segment.suffixSegment || "";
-        if (!("_splat" in params)) {
-          isMissingParams = true;
-          if (leaveWildcards) {
-            return `${segmentPrefix}${segment.value}${segmentSuffix}`;
-          }
-          if (segmentPrefix || segmentSuffix) {
-            return `${segmentPrefix}${segmentSuffix}`;
-          }
-          return void 0;
-        }
-        const value = encodeParam("_splat");
-        if (leaveWildcards) {
-          return `${segmentPrefix}${segment.value}${value ?? ""}${segmentSuffix}`;
-        }
-        return `${segmentPrefix}${value}${segmentSuffix}`;
-      }
-      if (segment.type === SEGMENT_TYPE_PARAM) {
-        const key = segment.value.substring(1);
-        if (!isMissingParams && !(key in params)) {
-          isMissingParams = true;
-        }
-        usedParams[key] = params[key];
-        const segmentPrefix = segment.prefixSegment || "";
-        const segmentSuffix = segment.suffixSegment || "";
-        if (leaveParams) {
-          const value = encodeParam(segment.value);
-          return `${segmentPrefix}${segment.value}${value ?? ""}${segmentSuffix}`;
-        }
-        return `${segmentPrefix}${encodeParam(key) ?? "undefined"}${segmentSuffix}`;
-      }
-      if (segment.type === SEGMENT_TYPE_OPTIONAL_PARAM) {
-        const key = segment.value.substring(1);
-        const segmentPrefix = segment.prefixSegment || "";
-        const segmentSuffix = segment.suffixSegment || "";
-        if (!(key in params) || params[key] == null) {
-          if (leaveWildcards) {
-            return `${segmentPrefix}${key}${segmentSuffix}`;
-          }
-          if (segmentPrefix || segmentSuffix) {
-            return `${segmentPrefix}${segmentSuffix}`;
-          }
-          return void 0;
-        }
-        usedParams[key] = params[key];
-        if (leaveParams) {
-          const value = encodeParam(segment.value);
-          return `${segmentPrefix}${segment.value}${value ?? ""}${segmentSuffix}`;
-        }
-        if (leaveWildcards) {
-          return `${segmentPrefix}${key}${encodeParam(key) ?? ""}${segmentSuffix}`;
-        }
-        return `${segmentPrefix}${encodeParam(key) ?? ""}${segmentSuffix}`;
-      }
-      return segment.value;
-    })
-  );
-  return { usedParams, interpolatedPath, isMissingParams };
-}
-function encodePathParam(value, decodeCharMap) {
-  let encoded = encodeURIComponent(value);
-  if (decodeCharMap) {
-    for (const [encodedChar, char] of decodeCharMap) {
-      encoded = encoded.replaceAll(encodedChar, char);
-    }
-  }
-  return encoded;
-}
-function matchPathname(basepath, currentPathname, matchLocation, parseCache) {
-  const pathParams = matchByPath(
-    basepath,
-    currentPathname,
-    matchLocation,
-    parseCache
-  );
-  if (matchLocation.to && !pathParams) {
-    return;
-  }
-  return pathParams ?? {};
-}
-function removeBasepath(basepath, pathname, caseSensitive = false) {
-  const normalizedBasepath = caseSensitive ? basepath : basepath.toLowerCase();
-  const normalizedPathname = caseSensitive ? pathname : pathname.toLowerCase();
-  switch (true) {
-    case normalizedBasepath === "/":
-      return pathname;
-    case normalizedPathname === normalizedBasepath:
-      return "";
-    case pathname.length < basepath.length:
-      return pathname;
-    case normalizedPathname[normalizedBasepath.length] !== "/":
-      return pathname;
-    case normalizedPathname.startsWith(normalizedBasepath):
-      return pathname.slice(basepath.length);
-    default:
-      return pathname;
-  }
-}
-function matchByPath(basepath, from, {
-  to,
-  fuzzy,
-  caseSensitive
-}, parseCache) {
-  if (basepath !== "/" && !from.startsWith(basepath)) {
-    return void 0;
-  }
-  from = removeBasepath(basepath, from, caseSensitive);
-  to = removeBasepath(basepath, `${to ?? "$"}`, caseSensitive);
-  const baseSegments = parseBasePathSegments(
-    from.startsWith("/") ? from : `/${from}`,
-    parseCache
-  );
-  const routeSegments = parseRoutePathSegments(
-    to.startsWith("/") ? to : `/${to}`,
-    parseCache
-  );
-  const params = {};
-  const result = isMatch(
-    baseSegments,
-    routeSegments,
-    params,
-    fuzzy,
-    caseSensitive
-  );
-  return result ? params : void 0;
-}
-function isMatch(baseSegments, routeSegments, params, fuzzy, caseSensitive) {
-  var _a3, _b3, _c2;
-  let baseIndex = 0;
-  let routeIndex = 0;
-  while (baseIndex < baseSegments.length || routeIndex < routeSegments.length) {
-    const baseSegment = baseSegments[baseIndex];
-    const routeSegment = routeSegments[routeIndex];
-    if (routeSegment) {
-      if (routeSegment.type === SEGMENT_TYPE_WILDCARD) {
-        const remainingBaseSegments = baseSegments.slice(baseIndex);
-        let _splat;
-        if (routeSegment.prefixSegment || routeSegment.suffixSegment) {
-          if (!baseSegment) return false;
-          const prefix2 = routeSegment.prefixSegment || "";
-          const suffix2 = routeSegment.suffixSegment || "";
-          const baseValue = baseSegment.value;
-          if ("prefixSegment" in routeSegment) {
-            if (!baseValue.startsWith(prefix2)) {
-              return false;
-            }
-          }
-          if ("suffixSegment" in routeSegment) {
-            if (!((_a3 = baseSegments[baseSegments.length - 1]) == null ? void 0 : _a3.value.endsWith(suffix2))) {
-              return false;
-            }
-          }
-          let rejoinedSplat = decodeURI(
-            joinPaths(remainingBaseSegments.map((d2) => d2.value))
-          );
-          if (prefix2 && rejoinedSplat.startsWith(prefix2)) {
-            rejoinedSplat = rejoinedSplat.slice(prefix2.length);
-          }
-          if (suffix2 && rejoinedSplat.endsWith(suffix2)) {
-            rejoinedSplat = rejoinedSplat.slice(
-              0,
-              rejoinedSplat.length - suffix2.length
-            );
-          }
-          _splat = rejoinedSplat;
-        } else {
-          _splat = decodeURI(
-            joinPaths(remainingBaseSegments.map((d2) => d2.value))
-          );
-        }
-        params["*"] = _splat;
-        params["_splat"] = _splat;
-        return true;
-      }
-      if (routeSegment.type === SEGMENT_TYPE_PATHNAME) {
-        if (routeSegment.value === "/" && !(baseSegment == null ? void 0 : baseSegment.value)) {
-          routeIndex++;
-          continue;
-        }
-        if (baseSegment) {
-          if (caseSensitive) {
-            if (routeSegment.value !== baseSegment.value) {
-              return false;
-            }
-          } else if (routeSegment.value.toLowerCase() !== baseSegment.value.toLowerCase()) {
-            return false;
-          }
-          baseIndex++;
-          routeIndex++;
-          continue;
-        } else {
-          return false;
-        }
-      }
-      if (routeSegment.type === SEGMENT_TYPE_PARAM) {
-        if (!baseSegment) {
-          return false;
-        }
-        if (baseSegment.value === "/") {
-          return false;
-        }
-        let _paramValue = "";
-        let matched = false;
-        if (routeSegment.prefixSegment || routeSegment.suffixSegment) {
-          const prefix2 = routeSegment.prefixSegment || "";
-          const suffix2 = routeSegment.suffixSegment || "";
-          const baseValue = baseSegment.value;
-          if (prefix2 && !baseValue.startsWith(prefix2)) {
-            return false;
-          }
-          if (suffix2 && !baseValue.endsWith(suffix2)) {
-            return false;
-          }
-          let paramValue = baseValue;
-          if (prefix2 && paramValue.startsWith(prefix2)) {
-            paramValue = paramValue.slice(prefix2.length);
-          }
-          if (suffix2 && paramValue.endsWith(suffix2)) {
-            paramValue = paramValue.slice(0, paramValue.length - suffix2.length);
-          }
-          _paramValue = decodeURIComponent(paramValue);
-          matched = true;
-        } else {
-          _paramValue = decodeURIComponent(baseSegment.value);
-          matched = true;
-        }
-        if (matched) {
-          params[routeSegment.value.substring(1)] = _paramValue;
-          baseIndex++;
-        }
-        routeIndex++;
-        continue;
-      }
-      if (routeSegment.type === SEGMENT_TYPE_OPTIONAL_PARAM) {
-        if (!baseSegment) {
-          routeIndex++;
-          continue;
-        }
-        if (baseSegment.value === "/") {
-          routeIndex++;
-          continue;
-        }
-        let _paramValue = "";
-        let matched = false;
-        if (routeSegment.prefixSegment || routeSegment.suffixSegment) {
-          const prefix2 = routeSegment.prefixSegment || "";
-          const suffix2 = routeSegment.suffixSegment || "";
-          const baseValue = baseSegment.value;
-          if ((!prefix2 || baseValue.startsWith(prefix2)) && (!suffix2 || baseValue.endsWith(suffix2))) {
-            let paramValue = baseValue;
-            if (prefix2 && paramValue.startsWith(prefix2)) {
-              paramValue = paramValue.slice(prefix2.length);
-            }
-            if (suffix2 && paramValue.endsWith(suffix2)) {
-              paramValue = paramValue.slice(
-                0,
-                paramValue.length - suffix2.length
-              );
-            }
-            _paramValue = decodeURIComponent(paramValue);
-            matched = true;
-          }
-        } else {
-          let shouldMatchOptional = true;
-          for (let lookAhead = routeIndex + 1; lookAhead < routeSegments.length; lookAhead++) {
-            const futureRouteSegment = routeSegments[lookAhead];
-            if ((futureRouteSegment == null ? void 0 : futureRouteSegment.type) === SEGMENT_TYPE_PATHNAME && futureRouteSegment.value === baseSegment.value) {
-              shouldMatchOptional = false;
-              break;
-            }
-            if ((futureRouteSegment == null ? void 0 : futureRouteSegment.type) === SEGMENT_TYPE_PARAM || (futureRouteSegment == null ? void 0 : futureRouteSegment.type) === SEGMENT_TYPE_WILDCARD) {
-              if (baseSegments.length < routeSegments.length) {
-                shouldMatchOptional = false;
-              }
-              break;
-            }
-          }
-          if (shouldMatchOptional) {
-            _paramValue = decodeURIComponent(baseSegment.value);
-            matched = true;
-          }
-        }
-        if (matched) {
-          params[routeSegment.value.substring(1)] = _paramValue;
-          baseIndex++;
-        }
-        routeIndex++;
-        continue;
-      }
-    }
-    if (baseIndex < baseSegments.length && routeIndex >= routeSegments.length) {
-      params["**"] = joinPaths(
-        baseSegments.slice(baseIndex).map((d2) => d2.value)
-      );
-      return !!fuzzy && ((_b3 = routeSegments[routeSegments.length - 1]) == null ? void 0 : _b3.value) !== "/";
-    }
-    if (routeIndex < routeSegments.length && baseIndex >= baseSegments.length) {
-      for (let i = routeIndex; i < routeSegments.length; i++) {
-        if (((_c2 = routeSegments[i]) == null ? void 0 : _c2.type) !== SEGMENT_TYPE_OPTIONAL_PARAM) {
-          return false;
-        }
-      }
-      break;
-    }
-    break;
-  }
-  return true;
-}
-const SLASH_SCORE = 0.75;
-const STATIC_SEGMENT_SCORE = 1;
-const REQUIRED_PARAM_BASE_SCORE = 0.5;
-const OPTIONAL_PARAM_BASE_SCORE = 0.4;
-const WILDCARD_PARAM_BASE_SCORE = 0.25;
-const STATIC_AFTER_DYNAMIC_BONUS_SCORE = 0.2;
-const BOTH_PRESENCE_BASE_SCORE = 0.05;
-const PREFIX_PRESENCE_BASE_SCORE = 0.02;
-const SUFFIX_PRESENCE_BASE_SCORE = 0.01;
-const PREFIX_LENGTH_SCORE_MULTIPLIER = 2e-4;
-const SUFFIX_LENGTH_SCORE_MULTIPLIER = 1e-4;
-function handleParam(segment, baseScore) {
-  if (segment.prefixSegment && segment.suffixSegment) {
-    return baseScore + BOTH_PRESENCE_BASE_SCORE + PREFIX_LENGTH_SCORE_MULTIPLIER * segment.prefixSegment.length + SUFFIX_LENGTH_SCORE_MULTIPLIER * segment.suffixSegment.length;
-  }
-  if (segment.prefixSegment) {
-    return baseScore + PREFIX_PRESENCE_BASE_SCORE + PREFIX_LENGTH_SCORE_MULTIPLIER * segment.prefixSegment.length;
-  }
-  if (segment.suffixSegment) {
-    return baseScore + SUFFIX_PRESENCE_BASE_SCORE + SUFFIX_LENGTH_SCORE_MULTIPLIER * segment.suffixSegment.length;
-  }
-  return baseScore;
-}
-function sortRoutes(routes) {
-  const scoredRoutes = [];
-  routes.forEach((d2, i) => {
-    var _a3;
-    if (d2.isRoot || !d2.path) {
-      return;
-    }
-    const trimmed = trimPathLeft(d2.fullPath);
-    let parsed = parseRoutePathSegments(trimmed);
-    let skip = 0;
-    while (parsed.length > skip + 1 && ((_a3 = parsed[skip]) == null ? void 0 : _a3.value) === "/") {
-      skip++;
-    }
-    if (skip > 0) parsed = parsed.slice(skip);
-    let optionalParamCount = 0;
-    let hasStaticAfter = false;
-    const scores = parsed.map((segment, index2) => {
-      if (segment.value === "/") {
-        return SLASH_SCORE;
-      }
-      if (segment.type === SEGMENT_TYPE_PATHNAME) {
-        return STATIC_SEGMENT_SCORE;
-      }
-      let baseScore = void 0;
-      if (segment.type === SEGMENT_TYPE_PARAM) {
-        baseScore = REQUIRED_PARAM_BASE_SCORE;
-      } else if (segment.type === SEGMENT_TYPE_OPTIONAL_PARAM) {
-        baseScore = OPTIONAL_PARAM_BASE_SCORE;
-        optionalParamCount++;
-      } else {
-        baseScore = WILDCARD_PARAM_BASE_SCORE;
-      }
-      for (let i2 = index2 + 1; i2 < parsed.length; i2++) {
-        const nextSegment = parsed[i2];
-        if (nextSegment.type === SEGMENT_TYPE_PATHNAME && nextSegment.value !== "/") {
-          hasStaticAfter = true;
-          return handleParam(
-            segment,
-            baseScore + STATIC_AFTER_DYNAMIC_BONUS_SCORE
-          );
-        }
-      }
-      return handleParam(segment, baseScore);
-    });
-    scoredRoutes.push({
-      child: d2,
-      trimmed,
-      parsed,
-      index: i,
-      scores,
-      optionalParamCount,
-      hasStaticAfter
-    });
-  });
-  const flatRoutes = scoredRoutes.sort((a2, b2) => {
-    const minLength = Math.min(a2.scores.length, b2.scores.length);
-    for (let i = 0; i < minLength; i++) {
-      if (a2.scores[i] !== b2.scores[i]) {
-        return b2.scores[i] - a2.scores[i];
-      }
-    }
-    if (a2.scores.length !== b2.scores.length) {
-      if (a2.optionalParamCount !== b2.optionalParamCount) {
-        if (a2.hasStaticAfter === b2.hasStaticAfter) {
-          return a2.optionalParamCount - b2.optionalParamCount;
-        } else if (a2.hasStaticAfter && !b2.hasStaticAfter) {
-          return -1;
-        } else if (!a2.hasStaticAfter && b2.hasStaticAfter) {
-          return 1;
-        }
-      }
-      return b2.scores.length - a2.scores.length;
-    }
-    for (let i = 0; i < minLength; i++) {
-      if (a2.parsed[i].value !== b2.parsed[i].value) {
-        return a2.parsed[i].value > b2.parsed[i].value ? 1 : -1;
-      }
-    }
-    return a2.index - b2.index;
-  }).map((d2, i) => {
-    d2.child.rank = i;
-    return d2.child;
-  });
-  return flatRoutes;
-}
-function processRouteTree({
-  routeTree: routeTree2,
-  initRoute
-}) {
-  const routesById = {};
-  const routesByPath = {};
-  const recurseRoutes = (childRoutes) => {
-    childRoutes.forEach((childRoute, i) => {
-      initRoute == null ? void 0 : initRoute(childRoute, i);
-      const existingRoute = routesById[childRoute.id];
-      invariant(
-        !existingRoute,
-        `Duplicate routes found with id: ${String(childRoute.id)}`
-      );
-      routesById[childRoute.id] = childRoute;
-      if (!childRoute.isRoot && childRoute.path) {
-        const trimmedFullPath = trimPathRight(childRoute.fullPath);
-        if (!routesByPath[trimmedFullPath] || childRoute.fullPath.endsWith("/")) {
-          routesByPath[trimmedFullPath] = childRoute;
-        }
-      }
-      const children = childRoute.children;
-      if (children == null ? void 0 : children.length) {
-        recurseRoutes(children);
-      }
-    });
-  };
-  recurseRoutes([routeTree2]);
-  const flatRoutes = sortRoutes(Object.values(routesById));
-  return { routesById, routesByPath, flatRoutes };
-}
-function isNotFound(obj) {
-  return !!(obj == null ? void 0 : obj.isNotFound);
-}
-function getSafeSessionStorage() {
-  try {
-    if (typeof window !== "undefined" && typeof window.sessionStorage === "object") {
-      return window.sessionStorage;
-    }
-  } catch {
-  }
-  return void 0;
-}
-const storageKey = "tsr-scroll-restoration-v1_3";
-const throttle = (fn, wait) => {
-  let timeout2;
-  return (...args) => {
-    if (!timeout2) {
-      timeout2 = setTimeout(() => {
-        fn(...args);
-        timeout2 = null;
-      }, wait);
-    }
-  };
-};
-function createScrollRestorationCache() {
-  const safeSessionStorage = getSafeSessionStorage();
-  if (!safeSessionStorage) {
-    return void 0;
-  }
-  const persistedState = safeSessionStorage.getItem(storageKey);
-  let state = persistedState ? JSON.parse(persistedState) : {};
-  return {
-    state,
-    // This setter is simply to make sure that we set the sessionStorage right
-    // after the state is updated. It doesn't necessarily need to be a functional
-    // update.
-    set: (updater) => (state = functionalUpdate(updater, state) || state, safeSessionStorage.setItem(storageKey, JSON.stringify(state)))
-  };
-}
-const scrollRestorationCache = createScrollRestorationCache();
-const defaultGetScrollRestorationKey = (location2) => {
-  return location2.state.__TSR_key || location2.href;
-};
-function getCssSelector(el) {
-  const path = [];
-  let parent;
-  while (parent = el.parentNode) {
-    path.push(
-      `${el.tagName}:nth-child(${Array.prototype.indexOf.call(parent.children, el) + 1})`
-    );
-    el = parent;
-  }
-  return `${path.reverse().join(" > ")}`.toLowerCase();
-}
-let ignoreScroll = false;
-function restoreScroll({
-  storageKey: storageKey2,
-  key,
-  behavior,
-  shouldScrollRestoration,
-  scrollToTopSelectors,
-  location: location2
-}) {
-  var _a3, _b3;
-  let byKey;
-  try {
-    byKey = JSON.parse(sessionStorage.getItem(storageKey2) || "{}");
-  } catch (error) {
-    console.error(error);
-    return;
-  }
-  const resolvedKey = key || ((_a3 = window.history.state) == null ? void 0 : _a3.key);
-  const elementEntries = byKey[resolvedKey];
-  ignoreScroll = true;
-  scroll: {
-    if (shouldScrollRestoration && elementEntries && Object.keys(elementEntries).length > 0) {
-      for (const elementSelector in elementEntries) {
-        const entry = elementEntries[elementSelector];
-        if (elementSelector === "window") {
-          window.scrollTo({
-            top: entry.scrollY,
-            left: entry.scrollX,
-            behavior
-          });
-        } else if (elementSelector) {
-          const element = document.querySelector(elementSelector);
-          if (element) {
-            element.scrollLeft = entry.scrollX;
-            element.scrollTop = entry.scrollY;
-          }
-        }
-      }
-      break scroll;
-    }
-    const hash = (location2 ?? window.location).hash.split("#", 2)[1];
-    if (hash) {
-      const hashScrollIntoViewOptions = ((_b3 = window.history.state) == null ? void 0 : _b3.__hashScrollIntoViewOptions) ?? true;
-      if (hashScrollIntoViewOptions) {
-        const el = document.getElementById(hash);
-        if (el) {
-          el.scrollIntoView(hashScrollIntoViewOptions);
-        }
-      }
-      break scroll;
-    }
-    const scrollOptions = { top: 0, left: 0, behavior };
-    window.scrollTo(scrollOptions);
-    if (scrollToTopSelectors) {
-      for (const selector of scrollToTopSelectors) {
-        if (selector === "window") continue;
-        const element = typeof selector === "function" ? selector() : document.querySelector(selector);
-        if (element) element.scrollTo(scrollOptions);
-      }
-    }
-  }
-  ignoreScroll = false;
-}
-function setupScrollRestoration(router2, force) {
-  if (scrollRestorationCache === void 0) {
-    return;
-  }
-  const shouldScrollRestoration = router2.options.scrollRestoration ?? false;
-  if (shouldScrollRestoration) {
-    router2.isScrollRestoring = true;
-  }
-  if (typeof document === "undefined" || router2.isScrollRestorationSetup) {
-    return;
-  }
-  router2.isScrollRestorationSetup = true;
-  ignoreScroll = false;
-  const getKey = router2.options.getScrollRestorationKey || defaultGetScrollRestorationKey;
-  window.history.scrollRestoration = "manual";
-  const onScroll = (event) => {
-    if (ignoreScroll || !router2.isScrollRestoring) {
-      return;
-    }
-    let elementSelector = "";
-    if (event.target === document || event.target === window) {
-      elementSelector = "window";
-    } else {
-      const attrId = event.target.getAttribute(
-        "data-scroll-restoration-id"
-      );
-      if (attrId) {
-        elementSelector = `[data-scroll-restoration-id="${attrId}"]`;
-      } else {
-        elementSelector = getCssSelector(event.target);
-      }
-    }
-    const restoreKey = getKey(router2.state.location);
-    scrollRestorationCache.set((state) => {
-      const keyEntry = state[restoreKey] || (state[restoreKey] = {});
-      const elementEntry = keyEntry[elementSelector] || (keyEntry[elementSelector] = {});
-      if (elementSelector === "window") {
-        elementEntry.scrollX = window.scrollX || 0;
-        elementEntry.scrollY = window.scrollY || 0;
-      } else if (elementSelector) {
-        const element = document.querySelector(elementSelector);
-        if (element) {
-          elementEntry.scrollX = element.scrollLeft || 0;
-          elementEntry.scrollY = element.scrollTop || 0;
-        }
-      }
-      return state;
-    });
-  };
-  if (typeof document !== "undefined") {
-    document.addEventListener("scroll", throttle(onScroll, 100), true);
-  }
-  router2.subscribe("onRendered", (event) => {
-    const cacheKey = getKey(event.toLocation);
-    if (!router2.resetNextScroll) {
-      router2.resetNextScroll = true;
-      return;
-    }
-    restoreScroll({
-      storageKey,
-      key: cacheKey,
-      behavior: router2.options.scrollRestorationBehavior,
-      shouldScrollRestoration: router2.isScrollRestoring,
-      scrollToTopSelectors: router2.options.scrollToTopSelectors,
-      location: router2.history.location
-    });
-    if (router2.isScrollRestoring) {
-      scrollRestorationCache.set((state) => {
-        state[cacheKey] || (state[cacheKey] = {});
-        return state;
-      });
-    }
-  });
-}
-function handleHashScroll(router2) {
-  if (typeof document !== "undefined" && document.querySelector) {
-    const hashScrollIntoViewOptions = router2.state.location.state.__hashScrollIntoViewOptions ?? true;
-    if (hashScrollIntoViewOptions && router2.state.location.hash !== "") {
-      const el = document.getElementById(router2.state.location.hash);
-      if (el) {
-        el.scrollIntoView(hashScrollIntoViewOptions);
-      }
-    }
-  }
-}
-function encode(obj, stringify = String) {
-  const result = new URLSearchParams();
-  for (const key in obj) {
-    const val = obj[key];
-    if (val !== void 0) {
-      result.set(key, stringify(val));
-    }
-  }
-  return result.toString();
-}
-function toValue$1(str) {
-  if (!str) return "";
-  if (str === "false") return false;
-  if (str === "true") return true;
-  return +str * 0 === 0 && +str + "" === str ? +str : str;
-}
-function decode(str) {
-  const searchParams = new URLSearchParams(str);
-  const result = {};
-  for (const [key, value] of searchParams.entries()) {
-    const previousValue = result[key];
-    if (previousValue == null) {
-      result[key] = toValue$1(value);
-    } else if (Array.isArray(previousValue)) {
-      previousValue.push(toValue$1(value));
-    } else {
-      result[key] = [previousValue, toValue$1(value)];
-    }
-  }
-  return result;
-}
-const defaultParseSearch = parseSearchWith(JSON.parse);
-const defaultStringifySearch = stringifySearchWith(
-  JSON.stringify,
-  JSON.parse
-);
-function parseSearchWith(parser) {
-  return (searchStr) => {
-    if (searchStr[0] === "?") {
-      searchStr = searchStr.substring(1);
-    }
-    const query = decode(searchStr);
-    for (const key in query) {
-      const value = query[key];
-      if (typeof value === "string") {
-        try {
-          query[key] = parser(value);
-        } catch (_err) {
-        }
-      }
-    }
-    return query;
-  };
-}
-function stringifySearchWith(stringify, parser) {
-  const hasParser = typeof parser === "function";
-  function stringifyValue(val) {
-    if (typeof val === "object" && val !== null) {
-      try {
-        return stringify(val);
-      } catch (_err) {
-      }
-    } else if (hasParser && typeof val === "string") {
-      try {
-        parser(val);
-        return stringify(val);
-      } catch (_err) {
-      }
-    }
-    return val;
-  }
-  return (search) => {
-    const searchStr = encode(search, stringifyValue);
-    return searchStr ? `?${searchStr}` : "";
-  };
-}
-const rootRouteId = "__root__";
-function redirect(opts) {
-  opts.statusCode = opts.statusCode || opts.code || 307;
-  if (!opts.reloadDocument && typeof opts.href === "string") {
-    try {
-      new URL(opts.href);
-      opts.reloadDocument = true;
-    } catch {
-    }
-  }
-  const headers = new Headers(opts.headers);
-  if (opts.href && headers.get("Location") === null) {
-    headers.set("Location", opts.href);
-  }
-  const response = new Response(null, {
-    status: opts.statusCode,
-    headers
-  });
-  response.options = opts;
-  if (opts.throw) {
-    throw response;
-  }
-  return response;
-}
-function isRedirect(obj) {
-  return obj instanceof Response && !!obj.options;
-}
-function createLRUCache(max2) {
-  const cache = /* @__PURE__ */ new Map();
-  let oldest;
-  let newest;
-  const touch = (entry) => {
-    if (!entry.next) return;
-    if (!entry.prev) {
-      entry.next.prev = void 0;
-      oldest = entry.next;
-      entry.next = void 0;
-      if (newest) {
-        entry.prev = newest;
-        newest.next = entry;
-      }
-    } else {
-      entry.prev.next = entry.next;
-      entry.next.prev = entry.prev;
-      entry.next = void 0;
-      if (newest) {
-        newest.next = entry;
-        entry.prev = newest;
-      }
-    }
-    newest = entry;
-  };
-  return {
-    get(key) {
-      const entry = cache.get(key);
-      if (!entry) return void 0;
-      touch(entry);
-      return entry.value;
-    },
-    set(key, value) {
-      if (cache.size >= max2 && oldest) {
-        const toDelete = oldest;
-        cache.delete(toDelete.key);
-        if (toDelete.next) {
-          oldest = toDelete.next;
-          toDelete.next.prev = void 0;
-        }
-        if (toDelete === newest) {
-          newest = void 0;
-        }
-      }
-      const existing = cache.get(key);
-      if (existing) {
-        existing.value = value;
-        touch(existing);
-      } else {
-        const entry = { key, value, prev: newest };
-        if (newest) newest.next = entry;
-        newest = entry;
-        if (!oldest) oldest = entry;
-        cache.set(key, entry);
-      }
-    }
-  };
-}
-const triggerOnReady = (inner) => {
-  var _a3;
-  if (!inner.rendered) {
-    inner.rendered = true;
-    return (_a3 = inner.onReady) == null ? void 0 : _a3.call(inner);
-  }
-};
-const resolvePreload = (inner, matchId) => {
-  return !!(inner.preload && !inner.router.state.matches.some((d2) => d2.id === matchId));
-};
-const _handleNotFound = (inner, err) => {
-  var _a3;
-  const routeCursor = inner.router.routesById[err.routeId ?? ""] ?? inner.router.routeTree;
-  if (!routeCursor.options.notFoundComponent && ((_a3 = inner.router.options) == null ? void 0 : _a3.defaultNotFoundComponent)) {
-    routeCursor.options.notFoundComponent = inner.router.options.defaultNotFoundComponent;
-  }
-  invariant(
-    routeCursor.options.notFoundComponent
-  );
-  const matchForRoute = inner.matches.find((m2) => m2.routeId === routeCursor.id);
-  invariant(matchForRoute, "Could not find match for route: " + routeCursor.id);
-  inner.updateMatch(matchForRoute.id, (prev) => ({
-    ...prev,
-    status: "notFound",
-    error: err,
-    isFetching: false
-  }));
-  if (err.routerCode === "BEFORE_LOAD" && routeCursor.parentRoute) {
-    err.routeId = routeCursor.parentRoute.id;
-    _handleNotFound(inner, err);
-  }
-};
-const handleRedirectAndNotFound = (inner, match, err) => {
-  var _a3, _b3, _c2;
-  if (!isRedirect(err) && !isNotFound(err)) return;
-  if (isRedirect(err) && err.redirectHandled && !err.options.reloadDocument) {
-    throw err;
-  }
-  if (match) {
-    (_a3 = match._nonReactive.beforeLoadPromise) == null ? void 0 : _a3.resolve();
-    (_b3 = match._nonReactive.loaderPromise) == null ? void 0 : _b3.resolve();
-    match._nonReactive.beforeLoadPromise = void 0;
-    match._nonReactive.loaderPromise = void 0;
-    const status = isRedirect(err) ? "redirected" : "notFound";
-    inner.updateMatch(match.id, (prev) => ({
-      ...prev,
-      status,
-      isFetching: false,
-      error: err
-    }));
-    if (isNotFound(err) && !err.routeId) {
-      err.routeId = match.routeId;
-    }
-    (_c2 = match._nonReactive.loadPromise) == null ? void 0 : _c2.resolve();
-  }
-  if (isRedirect(err)) {
-    inner.rendered = true;
-    err.options._fromLocation = inner.location;
-    err.redirectHandled = true;
-    err = inner.router.resolveRedirect(err);
-    throw err;
-  } else {
-    _handleNotFound(inner, err);
-    throw err;
-  }
-};
-const shouldSkipLoader = (inner, matchId) => {
-  const match = inner.router.getMatch(matchId);
-  if (!inner.router.isServer && match._nonReactive.dehydrated) {
-    return true;
-  }
-  if (inner.router.isServer && match.ssr === false) {
-    return true;
-  }
-  return false;
-};
-const handleSerialError = (inner, index2, err, routerCode) => {
-  var _a3, _b3;
-  const { id: matchId, routeId } = inner.matches[index2];
-  const route = inner.router.looseRoutesById[routeId];
-  if (err instanceof Promise) {
-    throw err;
-  }
-  err.routerCode = routerCode;
-  inner.firstBadMatchIndex ?? (inner.firstBadMatchIndex = index2);
-  handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), err);
-  try {
-    (_b3 = (_a3 = route.options).onError) == null ? void 0 : _b3.call(_a3, err);
-  } catch (errorHandlerErr) {
-    err = errorHandlerErr;
-    handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), err);
-  }
-  inner.updateMatch(matchId, (prev) => {
-    var _a22, _b22;
-    (_a22 = prev._nonReactive.beforeLoadPromise) == null ? void 0 : _a22.resolve();
-    prev._nonReactive.beforeLoadPromise = void 0;
-    (_b22 = prev._nonReactive.loadPromise) == null ? void 0 : _b22.resolve();
-    return {
-      ...prev,
-      error: err,
-      status: "error",
-      isFetching: false,
-      updatedAt: Date.now(),
-      abortController: new AbortController()
-    };
-  });
-};
-const isBeforeLoadSsr = (inner, matchId, index2, route) => {
-  var _a3;
-  const existingMatch = inner.router.getMatch(matchId);
-  const parentMatchId = (_a3 = inner.matches[index2 - 1]) == null ? void 0 : _a3.id;
-  const parentMatch = parentMatchId ? inner.router.getMatch(parentMatchId) : void 0;
-  if (inner.router.isShell()) {
-    existingMatch.ssr = matchId === rootRouteId;
-    return;
-  }
-  if ((parentMatch == null ? void 0 : parentMatch.ssr) === false) {
-    existingMatch.ssr = false;
-    return;
-  }
-  const parentOverride = (tempSsr2) => {
-    if (tempSsr2 === true && (parentMatch == null ? void 0 : parentMatch.ssr) === "data-only") {
-      return "data-only";
-    }
-    return tempSsr2;
-  };
-  const defaultSsr = inner.router.options.defaultSsr ?? true;
-  if (route.options.ssr === void 0) {
-    existingMatch.ssr = parentOverride(defaultSsr);
-    return;
-  }
-  if (typeof route.options.ssr !== "function") {
-    existingMatch.ssr = parentOverride(route.options.ssr);
-    return;
-  }
-  const { search, params } = existingMatch;
-  const ssrFnContext = {
-    search: makeMaybe(search, existingMatch.searchError),
-    params: makeMaybe(params, existingMatch.paramsError),
-    location: inner.location,
-    matches: inner.matches.map((match) => ({
-      index: match.index,
-      pathname: match.pathname,
-      fullPath: match.fullPath,
-      staticData: match.staticData,
-      id: match.id,
-      routeId: match.routeId,
-      search: makeMaybe(match.search, match.searchError),
-      params: makeMaybe(match.params, match.paramsError),
-      ssr: match.ssr
-    }))
-  };
-  const tempSsr = route.options.ssr(ssrFnContext);
-  if (isPromise(tempSsr)) {
-    return tempSsr.then((ssr) => {
-      existingMatch.ssr = parentOverride(ssr ?? defaultSsr);
-    });
-  }
-  existingMatch.ssr = parentOverride(tempSsr ?? defaultSsr);
-  return;
-};
-const setupPendingTimeout = (inner, matchId, route, match) => {
-  var _a3;
-  if (match._nonReactive.pendingTimeout !== void 0) return;
-  const pendingMs = route.options.pendingMs ?? inner.router.options.defaultPendingMs;
-  const shouldPending = !!(inner.onReady && !inner.router.isServer && !resolvePreload(inner, matchId) && (route.options.loader || route.options.beforeLoad || routeNeedsPreload(route)) && typeof pendingMs === "number" && pendingMs !== Infinity && (route.options.pendingComponent ?? ((_a3 = inner.router.options) == null ? void 0 : _a3.defaultPendingComponent)));
-  if (shouldPending) {
-    const pendingTimeout = setTimeout(() => {
-      triggerOnReady(inner);
-    }, pendingMs);
-    match._nonReactive.pendingTimeout = pendingTimeout;
-  }
-};
-const preBeforeLoadSetup = (inner, matchId, route) => {
-  const existingMatch = inner.router.getMatch(matchId);
-  if (!existingMatch._nonReactive.beforeLoadPromise && !existingMatch._nonReactive.loaderPromise)
-    return;
-  setupPendingTimeout(inner, matchId, route, existingMatch);
-  const then = () => {
-    const match = inner.router.getMatch(matchId);
-    if (match.preload && (match.status === "redirected" || match.status === "notFound")) {
-      handleRedirectAndNotFound(inner, match, match.error);
-    }
-  };
-  return existingMatch._nonReactive.beforeLoadPromise ? existingMatch._nonReactive.beforeLoadPromise.then(then) : then();
-};
-const executeBeforeLoad = (inner, matchId, index2, route) => {
-  var _a3;
-  const match = inner.router.getMatch(matchId);
-  const prevLoadPromise = match._nonReactive.loadPromise;
-  match._nonReactive.loadPromise = createControlledPromise(() => {
-    prevLoadPromise == null ? void 0 : prevLoadPromise.resolve();
-  });
-  const { paramsError, searchError } = match;
-  if (paramsError) {
-    handleSerialError(inner, index2, paramsError, "PARSE_PARAMS");
-  }
-  if (searchError) {
-    handleSerialError(inner, index2, searchError, "VALIDATE_SEARCH");
-  }
-  setupPendingTimeout(inner, matchId, route, match);
-  const abortController = new AbortController();
-  const parentMatchId = (_a3 = inner.matches[index2 - 1]) == null ? void 0 : _a3.id;
-  const parentMatch = parentMatchId ? inner.router.getMatch(parentMatchId) : void 0;
-  const parentMatchContext = (parentMatch == null ? void 0 : parentMatch.context) ?? inner.router.options.context ?? void 0;
-  const context = { ...parentMatchContext, ...match.__routeContext };
-  let isPending = false;
-  const pending = () => {
-    if (isPending) return;
-    isPending = true;
-    inner.updateMatch(matchId, (prev) => ({
-      ...prev,
-      isFetching: "beforeLoad",
-      fetchCount: prev.fetchCount + 1,
-      abortController,
-      context
-    }));
-  };
-  const resolve = () => {
-    var _a22;
-    (_a22 = match._nonReactive.beforeLoadPromise) == null ? void 0 : _a22.resolve();
-    match._nonReactive.beforeLoadPromise = void 0;
-    inner.updateMatch(matchId, (prev) => ({
-      ...prev,
-      isFetching: false
-    }));
-  };
-  if (!route.options.beforeLoad) {
-    batch(() => {
-      pending();
-      resolve();
-    });
-    return;
-  }
-  match._nonReactive.beforeLoadPromise = createControlledPromise();
-  const { search, params, cause } = match;
-  const preload3 = resolvePreload(inner, matchId);
-  const beforeLoadFnContext = {
-    search,
-    abortController,
-    params,
-    preload: preload3,
-    context,
-    location: inner.location,
-    navigate: (opts) => inner.router.navigate({
-      ...opts,
-      _fromLocation: inner.location
-    }),
-    buildLocation: inner.router.buildLocation,
-    cause: preload3 ? "preload" : cause,
-    matches: inner.matches
-  };
-  const updateContext = (beforeLoadContext2) => {
-    if (beforeLoadContext2 === void 0) {
-      batch(() => {
-        pending();
-        resolve();
-      });
-      return;
-    }
-    if (isRedirect(beforeLoadContext2) || isNotFound(beforeLoadContext2)) {
-      pending();
-      handleSerialError(inner, index2, beforeLoadContext2, "BEFORE_LOAD");
-    }
-    batch(() => {
-      pending();
-      inner.updateMatch(matchId, (prev) => ({
-        ...prev,
-        __beforeLoadContext: beforeLoadContext2,
-        context: {
-          ...prev.context,
-          ...beforeLoadContext2
-        }
-      }));
-      resolve();
-    });
-  };
-  let beforeLoadContext;
-  try {
-    beforeLoadContext = route.options.beforeLoad(beforeLoadFnContext);
-    if (isPromise(beforeLoadContext)) {
-      pending();
-      return beforeLoadContext.catch((err) => {
-        handleSerialError(inner, index2, err, "BEFORE_LOAD");
-      }).then(updateContext);
-    }
-  } catch (err) {
-    pending();
-    handleSerialError(inner, index2, err, "BEFORE_LOAD");
-  }
-  updateContext(beforeLoadContext);
-  return;
-};
-const handleBeforeLoad = (inner, index2) => {
-  const { id: matchId, routeId } = inner.matches[index2];
-  const route = inner.router.looseRoutesById[routeId];
-  const serverSsr = () => {
-    if (inner.router.isServer) {
-      const maybePromise = isBeforeLoadSsr(inner, matchId, index2, route);
-      if (isPromise(maybePromise)) return maybePromise.then(queueExecution);
-    }
-    return queueExecution();
-  };
-  const queueExecution = () => {
-    if (shouldSkipLoader(inner, matchId)) return;
-    const result = preBeforeLoadSetup(inner, matchId, route);
-    return isPromise(result) ? result.then(execute) : execute();
-  };
-  const execute = () => executeBeforeLoad(inner, matchId, index2, route);
-  return serverSsr();
-};
-const executeHead = (inner, matchId, route) => {
-  var _a3, _b3, _c2, _d2, _e2, _f2;
-  const match = inner.router.getMatch(matchId);
-  if (!match) {
-    return;
-  }
-  if (!route.options.head && !route.options.scripts && !route.options.headers) {
-    return;
-  }
-  const assetContext = {
-    matches: inner.matches,
-    match,
-    params: match.params,
-    loaderData: match.loaderData
-  };
-  return Promise.all([
-    (_b3 = (_a3 = route.options).head) == null ? void 0 : _b3.call(_a3, assetContext),
-    (_d2 = (_c2 = route.options).scripts) == null ? void 0 : _d2.call(_c2, assetContext),
-    (_f2 = (_e2 = route.options).headers) == null ? void 0 : _f2.call(_e2, assetContext)
-  ]).then(([headFnContent, scripts, headers]) => {
-    const meta = headFnContent == null ? void 0 : headFnContent.meta;
-    const links = headFnContent == null ? void 0 : headFnContent.links;
-    const headScripts = headFnContent == null ? void 0 : headFnContent.scripts;
-    const styles = headFnContent == null ? void 0 : headFnContent.styles;
-    return {
-      meta,
-      links,
-      headScripts,
-      headers,
-      scripts,
-      styles
-    };
-  });
-};
-const getLoaderContext = (inner, matchId, index2, route) => {
-  const parentMatchPromise = inner.matchPromises[index2 - 1];
-  const { params, loaderDeps, abortController, context, cause } = inner.router.getMatch(matchId);
-  const preload3 = resolvePreload(inner, matchId);
-  return {
-    params,
-    deps: loaderDeps,
-    preload: !!preload3,
-    parentMatchPromise,
-    abortController,
-    context,
-    location: inner.location,
-    navigate: (opts) => inner.router.navigate({
-      ...opts,
-      _fromLocation: inner.location
-    }),
-    cause: preload3 ? "preload" : cause,
-    route
-  };
-};
-const runLoader = async (inner, matchId, index2, route) => {
-  var _a3, _b3, _c2, _d2;
-  try {
-    const match = inner.router.getMatch(matchId);
-    try {
-      if (!inner.router.isServer || match.ssr === true) {
-        loadRouteChunk(route);
-      }
-      const loaderResult = (_b3 = (_a3 = route.options).loader) == null ? void 0 : _b3.call(
-        _a3,
-        getLoaderContext(inner, matchId, index2, route)
-      );
-      const loaderResultIsPromise = route.options.loader && isPromise(loaderResult);
-      const willLoadSomething = !!(loaderResultIsPromise || route._lazyPromise || route._componentsPromise || route.options.head || route.options.scripts || route.options.headers || match._nonReactive.minPendingPromise);
-      if (willLoadSomething) {
-        inner.updateMatch(matchId, (prev) => ({
-          ...prev,
-          isFetching: "loader"
-        }));
-      }
-      if (route.options.loader) {
-        const loaderData = loaderResultIsPromise ? await loaderResult : loaderResult;
-        handleRedirectAndNotFound(
-          inner,
-          inner.router.getMatch(matchId),
-          loaderData
-        );
-        if (loaderData !== void 0) {
-          inner.updateMatch(matchId, (prev) => ({
-            ...prev,
-            loaderData
-          }));
-        }
-      }
-      if (route._lazyPromise) await route._lazyPromise;
-      const headResult = executeHead(inner, matchId, route);
-      const head = headResult ? await headResult : void 0;
-      const pendingPromise = match._nonReactive.minPendingPromise;
-      if (pendingPromise) await pendingPromise;
-      if (route._componentsPromise) await route._componentsPromise;
-      inner.updateMatch(matchId, (prev) => ({
-        ...prev,
-        error: void 0,
-        status: "success",
-        isFetching: false,
-        updatedAt: Date.now(),
-        ...head
-      }));
-    } catch (e) {
-      let error = e;
-      const pendingPromise = match._nonReactive.minPendingPromise;
-      if (pendingPromise) await pendingPromise;
-      handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), e);
-      try {
-        (_d2 = (_c2 = route.options).onError) == null ? void 0 : _d2.call(_c2, e);
-      } catch (onErrorError) {
-        error = onErrorError;
-        handleRedirectAndNotFound(
-          inner,
-          inner.router.getMatch(matchId),
-          onErrorError
-        );
-      }
-      const headResult = executeHead(inner, matchId, route);
-      const head = headResult ? await headResult : void 0;
-      inner.updateMatch(matchId, (prev) => ({
-        ...prev,
-        error,
-        status: "error",
-        isFetching: false,
-        ...head
-      }));
-    }
-  } catch (err) {
-    const match = inner.router.getMatch(matchId);
-    if (match) {
-      const headResult = executeHead(inner, matchId, route);
-      if (headResult) {
-        const head = await headResult;
-        inner.updateMatch(matchId, (prev) => ({
-          ...prev,
-          ...head
-        }));
-      }
-      match._nonReactive.loaderPromise = void 0;
-    }
-    handleRedirectAndNotFound(inner, match, err);
-  }
-};
-const loadRouteMatch = async (inner, index2) => {
-  var _a3, _b3;
-  const { id: matchId, routeId } = inner.matches[index2];
-  let loaderShouldRunAsync = false;
-  let loaderIsRunningAsync = false;
-  const route = inner.router.looseRoutesById[routeId];
-  if (shouldSkipLoader(inner, matchId)) {
-    if (inner.router.isServer) {
-      const headResult = executeHead(inner, matchId, route);
-      if (headResult) {
-        const head = await headResult;
-        inner.updateMatch(matchId, (prev) => ({
-          ...prev,
-          ...head
-        }));
-      }
-      return inner.router.getMatch(matchId);
-    }
-  } else {
-    const prevMatch = inner.router.getMatch(matchId);
-    if (prevMatch._nonReactive.loaderPromise) {
-      if (prevMatch.status === "success" && !inner.sync && !prevMatch.preload) {
-        return prevMatch;
-      }
-      await prevMatch._nonReactive.loaderPromise;
-      const match2 = inner.router.getMatch(matchId);
-      if (match2.error) {
-        handleRedirectAndNotFound(inner, match2, match2.error);
-      }
-    } else {
-      const age = Date.now() - prevMatch.updatedAt;
-      const preload3 = resolvePreload(inner, matchId);
-      const staleAge = preload3 ? route.options.preloadStaleTime ?? inner.router.options.defaultPreloadStaleTime ?? 3e4 : route.options.staleTime ?? inner.router.options.defaultStaleTime ?? 0;
-      const shouldReloadOption = route.options.shouldReload;
-      const shouldReload = typeof shouldReloadOption === "function" ? shouldReloadOption(getLoaderContext(inner, matchId, index2, route)) : shouldReloadOption;
-      const nextPreload = !!preload3 && !inner.router.state.matches.some((d2) => d2.id === matchId);
-      const match2 = inner.router.getMatch(matchId);
-      match2._nonReactive.loaderPromise = createControlledPromise();
-      if (nextPreload !== match2.preload) {
-        inner.updateMatch(matchId, (prev) => ({
-          ...prev,
-          preload: nextPreload
-        }));
-      }
-      const { status, invalid } = match2;
-      loaderShouldRunAsync = status === "success" && (invalid || (shouldReload ?? age > staleAge));
-      if (preload3 && route.options.preload === false) ;
-      else if (loaderShouldRunAsync && !inner.sync) {
-        loaderIsRunningAsync = true;
-        (async () => {
-          var _a22, _b22;
-          try {
-            await runLoader(inner, matchId, index2, route);
-            const match3 = inner.router.getMatch(matchId);
-            (_a22 = match3._nonReactive.loaderPromise) == null ? void 0 : _a22.resolve();
-            (_b22 = match3._nonReactive.loadPromise) == null ? void 0 : _b22.resolve();
-            match3._nonReactive.loaderPromise = void 0;
-          } catch (err) {
-            if (isRedirect(err)) {
-              await inner.router.navigate(err.options);
-            }
-          }
-        })();
-      } else if (status !== "success" || loaderShouldRunAsync && inner.sync) {
-        await runLoader(inner, matchId, index2, route);
-      } else {
-        const headResult = executeHead(inner, matchId, route);
-        if (headResult) {
-          const head = await headResult;
-          inner.updateMatch(matchId, (prev) => ({
-            ...prev,
-            ...head
-          }));
-        }
-      }
-    }
-  }
-  const match = inner.router.getMatch(matchId);
-  if (!loaderIsRunningAsync) {
-    (_a3 = match._nonReactive.loaderPromise) == null ? void 0 : _a3.resolve();
-    (_b3 = match._nonReactive.loadPromise) == null ? void 0 : _b3.resolve();
-  }
-  clearTimeout(match._nonReactive.pendingTimeout);
-  match._nonReactive.pendingTimeout = void 0;
-  if (!loaderIsRunningAsync) match._nonReactive.loaderPromise = void 0;
-  match._nonReactive.dehydrated = void 0;
-  const nextIsFetching = loaderIsRunningAsync ? match.isFetching : false;
-  if (nextIsFetching !== match.isFetching || match.invalid !== false) {
-    inner.updateMatch(matchId, (prev) => ({
-      ...prev,
-      isFetching: nextIsFetching,
-      invalid: false
-    }));
-    return inner.router.getMatch(matchId);
-  } else {
-    return match;
-  }
-};
-async function loadMatches(arg) {
-  const inner = Object.assign(arg, {
-    matchPromises: []
-  });
-  if (!inner.router.isServer && inner.router.state.matches.some((d2) => d2._forcePending)) {
-    triggerOnReady(inner);
-  }
-  try {
-    for (let i = 0; i < inner.matches.length; i++) {
-      const beforeLoad = handleBeforeLoad(inner, i);
-      if (isPromise(beforeLoad)) await beforeLoad;
-    }
-    const max2 = inner.firstBadMatchIndex ?? inner.matches.length;
-    for (let i = 0; i < max2; i++) {
-      inner.matchPromises.push(loadRouteMatch(inner, i));
-    }
-    await Promise.all(inner.matchPromises);
-    const readyPromise = triggerOnReady(inner);
-    if (isPromise(readyPromise)) await readyPromise;
-  } catch (err) {
-    if (isNotFound(err) && !inner.preload) {
-      const readyPromise = triggerOnReady(inner);
-      if (isPromise(readyPromise)) await readyPromise;
-      throw err;
-    }
-    if (isRedirect(err)) {
-      throw err;
-    }
-  }
-  return inner.matches;
-}
-async function loadRouteChunk(route) {
-  if (!route._lazyLoaded && route._lazyPromise === void 0) {
-    if (route.lazyFn) {
-      route._lazyPromise = route.lazyFn().then((lazyRoute) => {
-        const { id: _id, ...options } = lazyRoute.options;
-        Object.assign(route.options, options);
-        route._lazyLoaded = true;
-        route._lazyPromise = void 0;
-      });
-    } else {
-      route._lazyLoaded = true;
-    }
-  }
-  if (!route._componentsLoaded && route._componentsPromise === void 0) {
-    const loadComponents = () => {
-      var _a3;
-      const preloads = [];
-      for (const type of componentTypes) {
-        const preload3 = (_a3 = route.options[type]) == null ? void 0 : _a3.preload;
-        if (preload3) preloads.push(preload3());
-      }
-      if (preloads.length)
-        return Promise.all(preloads).then(() => {
-          route._componentsLoaded = true;
-          route._componentsPromise = void 0;
-        });
-      route._componentsLoaded = true;
-      route._componentsPromise = void 0;
-      return;
-    };
-    route._componentsPromise = route._lazyPromise ? route._lazyPromise.then(loadComponents) : loadComponents();
-  }
-  return route._componentsPromise;
-}
-function makeMaybe(value, error) {
-  if (error) {
-    return { status: "error", error };
-  }
-  return { status: "success", value };
-}
-function routeNeedsPreload(route) {
-  var _a3;
-  for (const componentType of componentTypes) {
-    if ((_a3 = route.options[componentType]) == null ? void 0 : _a3.preload) {
-      return true;
-    }
-  }
-  return false;
-}
-const componentTypes = [
-  "component",
-  "errorComponent",
-  "pendingComponent",
-  "notFoundComponent"
-];
-function getLocationChangeInfo(routerState) {
-  const fromLocation = routerState.resolvedLocation;
-  const toLocation = routerState.location;
-  const pathChanged = (fromLocation == null ? void 0 : fromLocation.pathname) !== toLocation.pathname;
-  const hrefChanged = (fromLocation == null ? void 0 : fromLocation.href) !== toLocation.href;
-  const hashChanged = (fromLocation == null ? void 0 : fromLocation.hash) !== toLocation.hash;
-  return { fromLocation, toLocation, pathChanged, hrefChanged, hashChanged };
-}
-class RouterCore {
-  /**
-   * @deprecated Use the `createRouter` function instead
-   */
-  constructor(options) {
-    this.tempLocationKey = `${Math.round(
-      Math.random() * 1e7
-    )}`;
-    this.resetNextScroll = true;
-    this.shouldViewTransition = void 0;
-    this.isViewTransitionTypesSupported = void 0;
-    this.subscribers = /* @__PURE__ */ new Set();
-    this.isScrollRestoring = false;
-    this.isScrollRestorationSetup = false;
-    this.startTransition = (fn) => fn();
-    this.update = (newOptions) => {
-      var _a3;
-      if (newOptions.notFoundRoute) {
-        console.warn(
-          "The notFoundRoute API is deprecated and will be removed in the next major version. See https://tanstack.com/router/v1/docs/framework/react/guide/not-found-errors#migrating-from-notfoundroute for more info."
-        );
-      }
-      const previousOptions = this.options;
-      this.options = {
-        ...this.options,
-        ...newOptions
-      };
-      this.isServer = this.options.isServer ?? typeof document === "undefined";
-      this.pathParamsDecodeCharMap = this.options.pathParamsAllowedCharacters ? new Map(
-        this.options.pathParamsAllowedCharacters.map((char) => [
-          encodeURIComponent(char),
-          char
-        ])
-      ) : void 0;
-      if (!this.basepath || newOptions.basepath && newOptions.basepath !== previousOptions.basepath) {
-        if (newOptions.basepath === void 0 || newOptions.basepath === "" || newOptions.basepath === "/") {
-          this.basepath = "/";
-        } else {
-          this.basepath = `/${trimPath(newOptions.basepath)}`;
-        }
-      }
-      if (!this.history || this.options.history && this.options.history !== this.history) {
-        this.history = this.options.history ?? (this.isServer ? createMemoryHistory({
-          initialEntries: [this.basepath || "/"]
-        }) : createBrowserHistory());
-        this.updateLatestLocation();
-      }
-      if (this.options.routeTree !== this.routeTree) {
-        this.routeTree = this.options.routeTree;
-        this.buildRouteTree();
-      }
-      if (!this.__store) {
-        this.__store = new Store(getInitialRouterState(this.latestLocation), {
-          onUpdate: () => {
-            this.__store.state = {
-              ...this.state,
-              cachedMatches: this.state.cachedMatches.filter(
-                (d2) => !["redirected"].includes(d2.status)
-              )
-            };
-          }
-        });
-        setupScrollRestoration(this);
-      }
-      if (typeof window !== "undefined" && "CSS" in window && typeof ((_a3 = window.CSS) == null ? void 0 : _a3.supports) === "function") {
-        this.isViewTransitionTypesSupported = window.CSS.supports(
-          "selector(:active-view-transition-type(a)"
-        );
-      }
-    };
-    this.updateLatestLocation = () => {
-      this.latestLocation = this.parseLocation(
-        this.history.location,
-        this.latestLocation
-      );
-    };
-    this.buildRouteTree = () => {
-      const { routesById, routesByPath, flatRoutes } = processRouteTree({
-        routeTree: this.routeTree,
-        initRoute: (route, i) => {
-          route.init({
-            originalIndex: i
-          });
-        }
-      });
-      this.routesById = routesById;
-      this.routesByPath = routesByPath;
-      this.flatRoutes = flatRoutes;
-      const notFoundRoute2 = this.options.notFoundRoute;
-      if (notFoundRoute2) {
-        notFoundRoute2.init({
-          originalIndex: 99999999999
-        });
-        this.routesById[notFoundRoute2.id] = notFoundRoute2;
-      }
-    };
-    this.subscribe = (eventType, fn) => {
-      const listener = {
-        eventType,
-        fn
-      };
-      this.subscribers.add(listener);
-      return () => {
-        this.subscribers.delete(listener);
-      };
-    };
-    this.emit = (routerEvent) => {
-      this.subscribers.forEach((listener) => {
-        if (listener.eventType === routerEvent.type) {
-          listener.fn(routerEvent);
-        }
-      });
-    };
-    this.parseLocation = (locationToParse, previousLocation) => {
-      const parse2 = ({
-        pathname,
-        search,
-        hash,
-        state
-      }) => {
-        const parsedSearch = this.options.parseSearch(search);
-        const searchStr = this.options.stringifySearch(parsedSearch);
-        return {
-          pathname,
-          searchStr,
-          search: replaceEqualDeep(previousLocation == null ? void 0 : previousLocation.search, parsedSearch),
-          hash: hash.split("#").reverse()[0] ?? "",
-          href: `${pathname}${searchStr}${hash}`,
-          state: replaceEqualDeep(previousLocation == null ? void 0 : previousLocation.state, state)
-        };
-      };
-      const location2 = parse2(locationToParse);
-      const { __tempLocation, __tempKey } = location2.state;
-      if (__tempLocation && (!__tempKey || __tempKey === this.tempLocationKey)) {
-        const parsedTempLocation = parse2(__tempLocation);
-        parsedTempLocation.state.key = location2.state.key;
-        parsedTempLocation.state.__TSR_key = location2.state.__TSR_key;
-        delete parsedTempLocation.state.__tempLocation;
-        return {
-          ...parsedTempLocation,
-          maskedLocation: location2
-        };
-      }
-      return location2;
-    };
-    this.resolvePathWithBase = (from, path) => {
-      const resolvedPath = resolvePath({
-        basepath: this.basepath,
-        base: from,
-        to: cleanPath(path),
-        trailingSlash: this.options.trailingSlash,
-        caseSensitive: this.options.caseSensitive,
-        parseCache: this.parsePathnameCache
-      });
-      return resolvedPath;
-    };
-    this.matchRoutes = (pathnameOrNext, locationSearchOrOpts, opts) => {
-      if (typeof pathnameOrNext === "string") {
-        return this.matchRoutesInternal(
-          {
-            pathname: pathnameOrNext,
-            search: locationSearchOrOpts
-          },
-          opts
-        );
-      }
-      return this.matchRoutesInternal(pathnameOrNext, locationSearchOrOpts);
-    };
-    this.parsePathnameCache = createLRUCache(1e3);
-    this.getMatchedRoutes = (pathname, routePathname) => {
-      return getMatchedRoutes({
-        pathname,
-        routePathname,
-        basepath: this.basepath,
-        caseSensitive: this.options.caseSensitive,
-        routesByPath: this.routesByPath,
-        routesById: this.routesById,
-        flatRoutes: this.flatRoutes,
-        parseCache: this.parsePathnameCache
-      });
-    };
-    this.cancelMatch = (id) => {
-      const match = this.getMatch(id);
-      if (!match) return;
-      match.abortController.abort();
-      clearTimeout(match._nonReactive.pendingTimeout);
-      match._nonReactive.pendingTimeout = void 0;
-    };
-    this.cancelMatches = () => {
-      var _a3;
-      (_a3 = this.state.pendingMatches) == null ? void 0 : _a3.forEach((match) => {
-        this.cancelMatch(match.id);
-      });
-    };
-    this.buildLocation = (opts) => {
-      const build = (dest = {}) => {
-        var _a3, _b3;
-        const currentLocation = dest._fromLocation || this.latestLocation;
-        const allCurrentLocationMatches = this.matchRoutes(currentLocation, {
-          _buildLocation: true
-        });
-        const lastMatch = last(allCurrentLocationMatches);
-        if (dest.from && false) ;
-        const defaultedFromPath = dest.unsafeRelative === "path" ? currentLocation.pathname : dest.from ?? lastMatch.fullPath;
-        const fromPath = this.resolvePathWithBase(defaultedFromPath, ".");
-        const fromSearch = lastMatch.search;
-        const fromParams = { ...lastMatch.params };
-        const nextTo = dest.to ? this.resolvePathWithBase(fromPath, `${dest.to}`) : this.resolvePathWithBase(fromPath, ".");
-        const nextParams = dest.params === false || dest.params === null ? {} : (dest.params ?? true) === true ? fromParams : Object.assign(
-          fromParams,
-          functionalUpdate(dest.params, fromParams)
-        );
-        const interpolatedNextTo = interpolatePath({
-          path: nextTo,
-          params: nextParams,
-          parseCache: this.parsePathnameCache
-        }).interpolatedPath;
-        const destRoutes = this.matchRoutes(interpolatedNextTo, void 0, {
-          _buildLocation: true
-        }).map((d2) => this.looseRoutesById[d2.routeId]);
-        if (Object.keys(nextParams).length > 0) {
-          for (const route of destRoutes) {
-            const fn = ((_a3 = route.options.params) == null ? void 0 : _a3.stringify) ?? route.options.stringifyParams;
-            if (fn) {
-              Object.assign(nextParams, fn(nextParams));
-            }
-          }
-        }
-        const nextPathname = interpolatePath({
-          // Use the original template path for interpolation
-          // This preserves the original parameter syntax including optional parameters
-          path: nextTo,
-          params: nextParams,
-          leaveWildcards: false,
-          leaveParams: opts.leaveParams,
-          decodeCharMap: this.pathParamsDecodeCharMap,
-          parseCache: this.parsePathnameCache
-        }).interpolatedPath;
-        let nextSearch = fromSearch;
-        if (opts._includeValidateSearch && ((_b3 = this.options.search) == null ? void 0 : _b3.strict)) {
-          const validatedSearch = {};
-          destRoutes.forEach((route) => {
-            if (route.options.validateSearch) {
-              try {
-                Object.assign(
-                  validatedSearch,
-                  validateSearch(route.options.validateSearch, {
-                    ...validatedSearch,
-                    ...nextSearch
-                  })
-                );
-              } catch {
-              }
-            }
-          });
-          nextSearch = validatedSearch;
-        }
-        nextSearch = applySearchMiddleware({
-          search: nextSearch,
-          dest,
-          destRoutes,
-          _includeValidateSearch: opts._includeValidateSearch
-        });
-        nextSearch = replaceEqualDeep(fromSearch, nextSearch);
-        const searchStr = this.options.stringifySearch(nextSearch);
-        const hash = dest.hash === true ? currentLocation.hash : dest.hash ? functionalUpdate(dest.hash, currentLocation.hash) : void 0;
-        const hashStr = hash ? `#${hash}` : "";
-        let nextState = dest.state === true ? currentLocation.state : dest.state ? functionalUpdate(dest.state, currentLocation.state) : {};
-        nextState = replaceEqualDeep(currentLocation.state, nextState);
-        return {
-          pathname: nextPathname,
-          search: nextSearch,
-          searchStr,
-          state: nextState,
-          hash: hash ?? "",
-          href: `${nextPathname}${searchStr}${hashStr}`,
-          unmaskOnReload: dest.unmaskOnReload
-        };
-      };
-      const buildWithMatches = (dest = {}, maskedDest) => {
-        var _a3;
-        const next = build(dest);
-        let maskedNext = maskedDest ? build(maskedDest) : void 0;
-        if (!maskedNext) {
-          let params = {};
-          const foundMask = (_a3 = this.options.routeMasks) == null ? void 0 : _a3.find((d2) => {
-            const match = matchPathname(
-              this.basepath,
-              next.pathname,
-              {
-                to: d2.from,
-                caseSensitive: false,
-                fuzzy: false
-              },
-              this.parsePathnameCache
-            );
-            if (match) {
-              params = match;
-              return true;
-            }
-            return false;
-          });
-          if (foundMask) {
-            const { from: _from, ...maskProps } = foundMask;
-            maskedDest = {
-              from: opts.from,
-              ...maskProps,
-              params
-            };
-            maskedNext = build(maskedDest);
-          }
-        }
-        if (maskedNext) {
-          next.maskedLocation = maskedNext;
-        }
-        return next;
-      };
-      if (opts.mask) {
-        return buildWithMatches(opts, {
-          from: opts.from,
-          ...opts.mask
-        });
-      }
-      return buildWithMatches(opts);
-    };
-    this.commitLocation = ({
-      viewTransition,
-      ignoreBlocker,
-      ...next
-    }) => {
-      const isSameState = () => {
-        const ignoredProps = [
-          "key",
-          // TODO: Remove in v2 - use __TSR_key instead
-          "__TSR_key",
-          "__TSR_index",
-          "__hashScrollIntoViewOptions"
-        ];
-        ignoredProps.forEach((prop) => {
-          next.state[prop] = this.latestLocation.state[prop];
-        });
-        const isEqual = deepEqual$1(next.state, this.latestLocation.state);
-        ignoredProps.forEach((prop) => {
-          delete next.state[prop];
-        });
-        return isEqual;
-      };
-      const isSameUrl = this.latestLocation.href === next.href;
-      const previousCommitPromise = this.commitLocationPromise;
-      this.commitLocationPromise = createControlledPromise(() => {
-        previousCommitPromise == null ? void 0 : previousCommitPromise.resolve();
-      });
-      if (isSameUrl && isSameState()) {
-        this.load();
-      } else {
-        let { maskedLocation, hashScrollIntoView, ...nextHistory } = next;
-        if (maskedLocation) {
-          nextHistory = {
-            ...maskedLocation,
-            state: {
-              ...maskedLocation.state,
-              __tempKey: void 0,
-              __tempLocation: {
-                ...nextHistory,
-                search: nextHistory.searchStr,
-                state: {
-                  ...nextHistory.state,
-                  __tempKey: void 0,
-                  __tempLocation: void 0,
-                  __TSR_key: void 0,
-                  key: void 0
-                  // TODO: Remove in v2 - use __TSR_key instead
-                }
-              }
-            }
-          };
-          if (nextHistory.unmaskOnReload ?? this.options.unmaskOnReload ?? false) {
-            nextHistory.state.__tempKey = this.tempLocationKey;
-          }
-        }
-        nextHistory.state.__hashScrollIntoViewOptions = hashScrollIntoView ?? this.options.defaultHashScrollIntoView ?? true;
-        this.shouldViewTransition = viewTransition;
-        this.history[next.replace ? "replace" : "push"](
-          nextHistory.href,
-          nextHistory.state,
-          { ignoreBlocker }
-        );
-      }
-      this.resetNextScroll = next.resetScroll ?? true;
-      if (!this.history.subscribers.size) {
-        this.load();
-      }
-      return this.commitLocationPromise;
-    };
-    this.buildAndCommitLocation = ({
-      replace,
-      resetScroll,
-      hashScrollIntoView,
-      viewTransition,
-      ignoreBlocker,
-      href,
-      ...rest
-    } = {}) => {
-      if (href) {
-        const currentIndex = this.history.location.state.__TSR_index;
-        const parsed = parseHref(href, {
-          __TSR_index: replace ? currentIndex : currentIndex + 1
-        });
-        rest.to = parsed.pathname;
-        rest.search = this.options.parseSearch(parsed.search);
-        rest.hash = parsed.hash.slice(1);
-      }
-      const location2 = this.buildLocation({
-        ...rest,
-        _includeValidateSearch: true
-      });
-      return this.commitLocation({
-        ...location2,
-        viewTransition,
-        replace,
-        resetScroll,
-        hashScrollIntoView,
-        ignoreBlocker
-      });
-    };
-    this.navigate = ({ to, reloadDocument, href, ...rest }) => {
-      if (!reloadDocument && href) {
-        try {
-          new URL(`${href}`);
-          reloadDocument = true;
-        } catch {
-        }
-      }
-      if (reloadDocument) {
-        if (!href) {
-          const location2 = this.buildLocation({ to, ...rest });
-          href = this.history.createHref(location2.href);
-        }
-        if (rest.replace) {
-          window.location.replace(href);
-        } else {
-          window.location.href = href;
-        }
-        return Promise.resolve();
-      }
-      return this.buildAndCommitLocation({
-        ...rest,
-        href,
-        to,
-        _isNavigate: true
-      });
-    };
-    this.beforeLoad = () => {
-      this.cancelMatches();
-      this.updateLatestLocation();
-      if (this.isServer) {
-        const nextLocation = this.buildLocation({
-          to: this.latestLocation.pathname,
-          search: true,
-          params: true,
-          hash: true,
-          state: true,
-          _includeValidateSearch: true
-        });
-        const normalizeUrl = (url) => {
-          try {
-            return encodeURI(decodeURI(url));
-          } catch {
-            return url;
-          }
-        };
-        if (trimPath(normalizeUrl(this.latestLocation.href)) !== trimPath(normalizeUrl(nextLocation.href))) {
-          throw redirect({ href: nextLocation.href });
-        }
-      }
-      const pendingMatches = this.matchRoutes(this.latestLocation);
-      this.__store.setState((s2) => ({
-        ...s2,
-        status: "pending",
-        statusCode: 200,
-        isLoading: true,
-        location: this.latestLocation,
-        pendingMatches,
-        // If a cached moved to pendingMatches, remove it from cachedMatches
-        cachedMatches: s2.cachedMatches.filter(
-          (d2) => !pendingMatches.some((e) => e.id === d2.id)
-        )
-      }));
-    };
-    this.load = async (opts) => {
-      let redirect2;
-      let notFound;
-      let loadPromise;
-      loadPromise = new Promise((resolve) => {
-        this.startTransition(async () => {
-          var _a3;
-          try {
-            this.beforeLoad();
-            const next = this.latestLocation;
-            const prevLocation = this.state.resolvedLocation;
-            if (!this.state.redirect) {
-              this.emit({
-                type: "onBeforeNavigate",
-                ...getLocationChangeInfo({
-                  resolvedLocation: prevLocation,
-                  location: next
-                })
-              });
-            }
-            this.emit({
-              type: "onBeforeLoad",
-              ...getLocationChangeInfo({
-                resolvedLocation: prevLocation,
-                location: next
-              })
-            });
-            await loadMatches({
-              router: this,
-              sync: opts == null ? void 0 : opts.sync,
-              matches: this.state.pendingMatches,
-              location: next,
-              updateMatch: this.updateMatch,
-              // eslint-disable-next-line @typescript-eslint/require-await
-              onReady: async () => {
-                this.startViewTransition(async () => {
-                  let exitingMatches;
-                  let enteringMatches;
-                  let stayingMatches;
-                  batch(() => {
-                    this.__store.setState((s2) => {
-                      const previousMatches = s2.matches;
-                      const newMatches = s2.pendingMatches || s2.matches;
-                      exitingMatches = previousMatches.filter(
-                        (match) => !newMatches.some((d2) => d2.id === match.id)
-                      );
-                      enteringMatches = newMatches.filter(
-                        (match) => !previousMatches.some((d2) => d2.id === match.id)
-                      );
-                      stayingMatches = previousMatches.filter(
-                        (match) => newMatches.some((d2) => d2.id === match.id)
-                      );
-                      return {
-                        ...s2,
-                        isLoading: false,
-                        loadedAt: Date.now(),
-                        matches: newMatches,
-                        pendingMatches: void 0,
-                        cachedMatches: [
-                          ...s2.cachedMatches,
-                          ...exitingMatches.filter((d2) => d2.status !== "error")
-                        ]
-                      };
-                    });
-                    this.clearExpiredCache();
-                  });
-                  [
-                    [exitingMatches, "onLeave"],
-                    [enteringMatches, "onEnter"],
-                    [stayingMatches, "onStay"]
-                  ].forEach(([matches, hook]) => {
-                    matches.forEach((match) => {
-                      var _a22, _b3;
-                      (_b3 = (_a22 = this.looseRoutesById[match.routeId].options)[hook]) == null ? void 0 : _b3.call(_a22, match);
-                    });
-                  });
-                });
-              }
-            });
-          } catch (err) {
-            if (isRedirect(err)) {
-              redirect2 = err;
-              if (!this.isServer) {
-                this.navigate({
-                  ...redirect2.options,
-                  replace: true,
-                  ignoreBlocker: true
-                });
-              }
-            } else if (isNotFound(err)) {
-              notFound = err;
-            }
-            this.__store.setState((s2) => ({
-              ...s2,
-              statusCode: redirect2 ? redirect2.status : notFound ? 404 : s2.matches.some((d2) => d2.status === "error") ? 500 : 200,
-              redirect: redirect2
-            }));
-          }
-          if (this.latestLoadPromise === loadPromise) {
-            (_a3 = this.commitLocationPromise) == null ? void 0 : _a3.resolve();
-            this.latestLoadPromise = void 0;
-            this.commitLocationPromise = void 0;
-          }
-          resolve();
-        });
-      });
-      this.latestLoadPromise = loadPromise;
-      await loadPromise;
-      while (this.latestLoadPromise && loadPromise !== this.latestLoadPromise) {
-        await this.latestLoadPromise;
-      }
-      if (this.hasNotFoundMatch()) {
-        this.__store.setState((s2) => ({
-          ...s2,
-          statusCode: 404
-        }));
-      }
-    };
-    this.startViewTransition = (fn) => {
-      const shouldViewTransition = this.shouldViewTransition ?? this.options.defaultViewTransition;
-      delete this.shouldViewTransition;
-      if (shouldViewTransition && typeof document !== "undefined" && "startViewTransition" in document && typeof document.startViewTransition === "function") {
-        let startViewTransitionParams;
-        if (typeof shouldViewTransition === "object" && this.isViewTransitionTypesSupported) {
-          const next = this.latestLocation;
-          const prevLocation = this.state.resolvedLocation;
-          const resolvedViewTransitionTypes = typeof shouldViewTransition.types === "function" ? shouldViewTransition.types(
-            getLocationChangeInfo({
-              resolvedLocation: prevLocation,
-              location: next
-            })
-          ) : shouldViewTransition.types;
-          startViewTransitionParams = {
-            update: fn,
-            types: resolvedViewTransitionTypes
-          };
-        } else {
-          startViewTransitionParams = fn;
-        }
-        document.startViewTransition(startViewTransitionParams);
-      } else {
-        fn();
-      }
-    };
-    this.updateMatch = (id, updater) => {
-      var _a3;
-      const matchesKey = ((_a3 = this.state.pendingMatches) == null ? void 0 : _a3.some((d2) => d2.id === id)) ? "pendingMatches" : this.state.matches.some((d2) => d2.id === id) ? "matches" : this.state.cachedMatches.some((d2) => d2.id === id) ? "cachedMatches" : "";
-      if (matchesKey) {
-        this.__store.setState((s2) => {
-          var _a22;
-          return {
-            ...s2,
-            [matchesKey]: (_a22 = s2[matchesKey]) == null ? void 0 : _a22.map((d2) => d2.id === id ? updater(d2) : d2)
-          };
-        });
-      }
-    };
-    this.getMatch = (matchId) => {
-      var _a3;
-      const findFn = (d2) => d2.id === matchId;
-      return this.state.cachedMatches.find(findFn) ?? ((_a3 = this.state.pendingMatches) == null ? void 0 : _a3.find(findFn)) ?? this.state.matches.find(findFn);
-    };
-    this.invalidate = (opts) => {
-      const invalidate = (d2) => {
-        var _a3;
-        if (((_a3 = opts == null ? void 0 : opts.filter) == null ? void 0 : _a3.call(opts, d2)) ?? true) {
-          return {
-            ...d2,
-            invalid: true,
-            ...(opts == null ? void 0 : opts.forcePending) || d2.status === "error" ? { status: "pending", error: void 0 } : void 0
-          };
-        }
-        return d2;
-      };
-      this.__store.setState((s2) => {
-        var _a3;
-        return {
-          ...s2,
-          matches: s2.matches.map(invalidate),
-          cachedMatches: s2.cachedMatches.map(invalidate),
-          pendingMatches: (_a3 = s2.pendingMatches) == null ? void 0 : _a3.map(invalidate)
-        };
-      });
-      this.shouldViewTransition = false;
-      return this.load({ sync: opts == null ? void 0 : opts.sync });
-    };
-    this.resolveRedirect = (redirect2) => {
-      if (!redirect2.options.href) {
-        redirect2.options.href = this.buildLocation(redirect2.options).href;
-        redirect2.headers.set("Location", redirect2.options.href);
-      }
-      if (!redirect2.headers.get("Location")) {
-        redirect2.headers.set("Location", redirect2.options.href);
-      }
-      return redirect2;
-    };
-    this.clearCache = (opts) => {
-      const filter = opts == null ? void 0 : opts.filter;
-      if (filter !== void 0) {
-        this.__store.setState((s2) => {
-          return {
-            ...s2,
-            cachedMatches: s2.cachedMatches.filter(
-              (m2) => !filter(m2)
-            )
-          };
-        });
-      } else {
-        this.__store.setState((s2) => {
-          return {
-            ...s2,
-            cachedMatches: []
-          };
-        });
-      }
-    };
-    this.clearExpiredCache = () => {
-      const filter = (d2) => {
-        const route = this.looseRoutesById[d2.routeId];
-        if (!route.options.loader) {
-          return true;
-        }
-        const gcTime = (d2.preload ? route.options.preloadGcTime ?? this.options.defaultPreloadGcTime : route.options.gcTime ?? this.options.defaultGcTime) ?? 5 * 60 * 1e3;
-        const isError = d2.status === "error";
-        if (isError) return true;
-        const gcEligible = Date.now() - d2.updatedAt >= gcTime;
-        return gcEligible;
-      };
-      this.clearCache({ filter });
-    };
-    this.loadRouteChunk = loadRouteChunk;
-    this.preloadRoute = async (opts) => {
-      const next = this.buildLocation(opts);
-      let matches = this.matchRoutes(next, {
-        throwOnError: true,
-        preload: true,
-        dest: opts
-      });
-      const activeMatchIds = new Set(
-        [...this.state.matches, ...this.state.pendingMatches ?? []].map(
-          (d2) => d2.id
-        )
-      );
-      const loadedMatchIds = /* @__PURE__ */ new Set([
-        ...activeMatchIds,
-        ...this.state.cachedMatches.map((d2) => d2.id)
-      ]);
-      batch(() => {
-        matches.forEach((match) => {
-          if (!loadedMatchIds.has(match.id)) {
-            this.__store.setState((s2) => ({
-              ...s2,
-              cachedMatches: [...s2.cachedMatches, match]
-            }));
-          }
-        });
-      });
-      try {
-        matches = await loadMatches({
-          router: this,
-          matches,
-          location: next,
-          preload: true,
-          updateMatch: (id, updater) => {
-            if (activeMatchIds.has(id)) {
-              matches = matches.map((d2) => d2.id === id ? updater(d2) : d2);
-            } else {
-              this.updateMatch(id, updater);
-            }
-          }
-        });
-        return matches;
-      } catch (err) {
-        if (isRedirect(err)) {
-          if (err.options.reloadDocument) {
-            return void 0;
-          }
-          return await this.preloadRoute({
-            ...err.options,
-            _fromLocation: next
-          });
-        }
-        if (!isNotFound(err)) {
-          console.error(err);
-        }
-        return void 0;
-      }
-    };
-    this.matchRoute = (location2, opts) => {
-      const matchLocation = {
-        ...location2,
-        to: location2.to ? this.resolvePathWithBase(
-          location2.from || "",
-          location2.to
-        ) : void 0,
-        params: location2.params || {},
-        leaveParams: true
-      };
-      const next = this.buildLocation(matchLocation);
-      if ((opts == null ? void 0 : opts.pending) && this.state.status !== "pending") {
-        return false;
-      }
-      const pending = (opts == null ? void 0 : opts.pending) === void 0 ? !this.state.isLoading : opts.pending;
-      const baseLocation = pending ? this.latestLocation : this.state.resolvedLocation || this.state.location;
-      const match = matchPathname(
-        this.basepath,
-        baseLocation.pathname,
-        {
-          ...opts,
-          to: next.pathname
-        },
-        this.parsePathnameCache
-      );
-      if (!match) {
-        return false;
-      }
-      if (location2.params) {
-        if (!deepEqual$1(match, location2.params, { partial: true })) {
-          return false;
-        }
-      }
-      if (match && ((opts == null ? void 0 : opts.includeSearch) ?? true)) {
-        return deepEqual$1(baseLocation.search, next.search, { partial: true }) ? match : false;
-      }
-      return match;
-    };
-    this.hasNotFoundMatch = () => {
-      return this.__store.state.matches.some(
-        (d2) => d2.status === "notFound" || d2.globalNotFound
-      );
-    };
-    this.update({
-      defaultPreloadDelay: 50,
-      defaultPendingMs: 1e3,
-      defaultPendingMinMs: 500,
-      context: void 0,
-      ...options,
-      caseSensitive: options.caseSensitive ?? false,
-      notFoundMode: options.notFoundMode ?? "fuzzy",
-      stringifySearch: options.stringifySearch ?? defaultStringifySearch,
-      parseSearch: options.parseSearch ?? defaultParseSearch
-    });
-    if (typeof document !== "undefined") {
-      self.__TSR_ROUTER__ = this;
-    }
-  }
-  isShell() {
-    return !!this.options.isShell;
-  }
-  isPrerendering() {
-    return !!this.options.isPrerendering;
-  }
-  get state() {
-    return this.__store.state;
-  }
-  get looseRoutesById() {
-    return this.routesById;
-  }
-  matchRoutesInternal(next, opts) {
-    var _a3;
-    const { foundRoute, matchedRoutes, routeParams } = this.getMatchedRoutes(
-      next.pathname,
-      (_a3 = opts == null ? void 0 : opts.dest) == null ? void 0 : _a3.to
-    );
-    let isGlobalNotFound = false;
-    if (
-      // If we found a route, and it's not an index route and we have left over path
-      foundRoute ? foundRoute.path !== "/" && routeParams["**"] : (
-        // Or if we didn't find a route and we have left over path
-        trimPathRight(next.pathname)
-      )
-    ) {
-      if (this.options.notFoundRoute) {
-        matchedRoutes.push(this.options.notFoundRoute);
-      } else {
-        isGlobalNotFound = true;
-      }
-    }
-    const globalNotFoundRouteId = (() => {
-      if (!isGlobalNotFound) {
-        return void 0;
-      }
-      if (this.options.notFoundMode !== "root") {
-        for (let i = matchedRoutes.length - 1; i >= 0; i--) {
-          const route = matchedRoutes[i];
-          if (route.children) {
-            return route.id;
-          }
-        }
-      }
-      return rootRouteId;
-    })();
-    const matches = [];
-    const getParentContext = (parentMatch) => {
-      const parentMatchId = parentMatch == null ? void 0 : parentMatch.id;
-      const parentContext = !parentMatchId ? this.options.context ?? void 0 : parentMatch.context ?? this.options.context ?? void 0;
-      return parentContext;
-    };
-    matchedRoutes.forEach((route, index2) => {
-      var _a22, _b3, _c2;
-      const parentMatch = matches[index2 - 1];
-      const [preMatchSearch, strictMatchSearch, searchError] = (() => {
-        const parentSearch = (parentMatch == null ? void 0 : parentMatch.search) ?? next.search;
-        const parentStrictSearch = (parentMatch == null ? void 0 : parentMatch._strictSearch) ?? void 0;
-        try {
-          const strictSearch = validateSearch(route.options.validateSearch, { ...parentSearch }) ?? void 0;
-          return [
-            {
-              ...parentSearch,
-              ...strictSearch
-            },
-            { ...parentStrictSearch, ...strictSearch },
-            void 0
-          ];
-        } catch (err) {
-          let searchParamError = err;
-          if (!(err instanceof SearchParamError)) {
-            searchParamError = new SearchParamError(err.message, {
-              cause: err
-            });
-          }
-          if (opts == null ? void 0 : opts.throwOnError) {
-            throw searchParamError;
-          }
-          return [parentSearch, {}, searchParamError];
-        }
-      })();
-      const loaderDeps = ((_b3 = (_a22 = route.options).loaderDeps) == null ? void 0 : _b3.call(_a22, {
-        search: preMatchSearch
-      })) ?? "";
-      const loaderDepsHash = loaderDeps ? JSON.stringify(loaderDeps) : "";
-      const { interpolatedPath, usedParams } = interpolatePath({
-        path: route.fullPath,
-        params: routeParams,
-        decodeCharMap: this.pathParamsDecodeCharMap
-      });
-      const matchId = interpolatePath({
-        path: route.id,
-        params: routeParams,
-        leaveWildcards: true,
-        decodeCharMap: this.pathParamsDecodeCharMap,
-        parseCache: this.parsePathnameCache
-      }).interpolatedPath + loaderDepsHash;
-      const existingMatch = this.getMatch(matchId);
-      const previousMatch = this.state.matches.find(
-        (d2) => d2.routeId === route.id
-      );
-      const strictParams = (existingMatch == null ? void 0 : existingMatch._strictParams) ?? usedParams;
-      let paramsError = void 0;
-      if (!existingMatch) {
-        const strictParseParams = ((_c2 = route.options.params) == null ? void 0 : _c2.parse) ?? route.options.parseParams;
-        if (strictParseParams) {
-          try {
-            Object.assign(
-              strictParams,
-              strictParseParams(strictParams)
-            );
-          } catch (err) {
-            paramsError = new PathParamError(err.message, {
-              cause: err
-            });
-            if (opts == null ? void 0 : opts.throwOnError) {
-              throw paramsError;
-            }
-          }
-        }
-      }
-      Object.assign(routeParams, strictParams);
-      const cause = previousMatch ? "stay" : "enter";
-      let match;
-      if (existingMatch) {
-        match = {
-          ...existingMatch,
-          cause,
-          params: previousMatch ? replaceEqualDeep(previousMatch.params, routeParams) : routeParams,
-          _strictParams: strictParams,
-          search: previousMatch ? replaceEqualDeep(previousMatch.search, preMatchSearch) : replaceEqualDeep(existingMatch.search, preMatchSearch),
-          _strictSearch: strictMatchSearch
-        };
-      } else {
-        const status = route.options.loader || route.options.beforeLoad || route.lazyFn || routeNeedsPreload(route) ? "pending" : "success";
-        match = {
-          id: matchId,
-          index: index2,
-          routeId: route.id,
-          params: previousMatch ? replaceEqualDeep(previousMatch.params, routeParams) : routeParams,
-          _strictParams: strictParams,
-          pathname: joinPaths([this.basepath, interpolatedPath]),
-          updatedAt: Date.now(),
-          search: previousMatch ? replaceEqualDeep(previousMatch.search, preMatchSearch) : preMatchSearch,
-          _strictSearch: strictMatchSearch,
-          searchError: void 0,
-          status,
-          isFetching: false,
-          error: void 0,
-          paramsError,
-          __routeContext: void 0,
-          _nonReactive: {
-            loadPromise: createControlledPromise()
-          },
-          __beforeLoadContext: void 0,
-          context: {},
-          abortController: new AbortController(),
-          fetchCount: 0,
-          cause,
-          loaderDeps: previousMatch ? replaceEqualDeep(previousMatch.loaderDeps, loaderDeps) : loaderDeps,
-          invalid: false,
-          preload: false,
-          links: void 0,
-          scripts: void 0,
-          headScripts: void 0,
-          meta: void 0,
-          staticData: route.options.staticData || {},
-          fullPath: route.fullPath
-        };
-      }
-      if (!(opts == null ? void 0 : opts.preload)) {
-        match.globalNotFound = globalNotFoundRouteId === route.id;
-      }
-      match.searchError = searchError;
-      const parentContext = getParentContext(parentMatch);
-      match.context = {
-        ...parentContext,
-        ...match.__routeContext,
-        ...match.__beforeLoadContext
-      };
-      matches.push(match);
-    });
-    matches.forEach((match, index2) => {
-      const route = this.looseRoutesById[match.routeId];
-      const existingMatch = this.getMatch(match.id);
-      if (!existingMatch && (opts == null ? void 0 : opts._buildLocation) !== true) {
-        const parentMatch = matches[index2 - 1];
-        const parentContext = getParentContext(parentMatch);
-        if (route.options.context) {
-          const contextFnContext = {
-            deps: match.loaderDeps,
-            params: match.params,
-            context: parentContext ?? {},
-            location: next,
-            navigate: (opts2) => this.navigate({ ...opts2, _fromLocation: next }),
-            buildLocation: this.buildLocation,
-            cause: match.cause,
-            abortController: match.abortController,
-            preload: !!match.preload,
-            matches
-          };
-          match.__routeContext = route.options.context(contextFnContext) ?? void 0;
-        }
-        match.context = {
-          ...parentContext,
-          ...match.__routeContext,
-          ...match.__beforeLoadContext
-        };
-      }
-    });
-    return matches;
-  }
-}
-class SearchParamError extends Error {
-}
-class PathParamError extends Error {
-}
-function getInitialRouterState(location2) {
-  return {
-    loadedAt: 0,
-    isLoading: false,
-    isTransitioning: false,
-    status: "idle",
-    resolvedLocation: void 0,
-    location: location2,
-    matches: [],
-    pendingMatches: [],
-    cachedMatches: [],
-    statusCode: 200
-  };
-}
-function validateSearch(validateSearch2, input) {
-  if (validateSearch2 == null) return {};
-  if ("~standard" in validateSearch2) {
-    const result = validateSearch2["~standard"].validate(input);
-    if (result instanceof Promise)
-      throw new SearchParamError("Async validation not supported");
-    if (result.issues)
-      throw new SearchParamError(JSON.stringify(result.issues, void 0, 2), {
-        cause: result
-      });
-    return result.value;
-  }
-  if ("parse" in validateSearch2) {
-    return validateSearch2.parse(input);
-  }
-  if (typeof validateSearch2 === "function") {
-    return validateSearch2(input);
-  }
-  return {};
-}
-function getMatchedRoutes({
-  pathname,
-  routePathname,
-  basepath,
-  caseSensitive,
-  routesByPath,
-  routesById,
-  flatRoutes,
-  parseCache
-}) {
-  let routeParams = {};
-  const trimmedPath = trimPathRight(pathname);
-  const getMatchedParams = (route) => {
-    var _a3;
-    const result = matchPathname(
-      basepath,
-      trimmedPath,
-      {
-        to: route.fullPath,
-        caseSensitive: ((_a3 = route.options) == null ? void 0 : _a3.caseSensitive) ?? caseSensitive,
-        // we need fuzzy matching for `notFoundMode: 'fuzzy'`
-        fuzzy: true
-      },
-      parseCache
-    );
-    return result;
-  };
-  let foundRoute = routePathname !== void 0 ? routesByPath[routePathname] : void 0;
-  if (foundRoute) {
-    routeParams = getMatchedParams(foundRoute);
-  } else {
-    let fuzzyMatch = void 0;
-    for (const route of flatRoutes) {
-      const matchedParams = getMatchedParams(route);
-      if (matchedParams) {
-        if (route.path !== "/" && matchedParams["**"]) {
-          if (!fuzzyMatch) {
-            fuzzyMatch = { foundRoute: route, routeParams: matchedParams };
-          }
-        } else {
-          foundRoute = route;
-          routeParams = matchedParams;
-          break;
-        }
-      }
-    }
-    if (!foundRoute && fuzzyMatch) {
-      foundRoute = fuzzyMatch.foundRoute;
-      routeParams = fuzzyMatch.routeParams;
-    }
-  }
-  let routeCursor = foundRoute || routesById[rootRouteId];
-  const matchedRoutes = [routeCursor];
-  while (routeCursor.parentRoute) {
-    routeCursor = routeCursor.parentRoute;
-    matchedRoutes.push(routeCursor);
-  }
-  matchedRoutes.reverse();
-  return { matchedRoutes, routeParams, foundRoute };
-}
-function applySearchMiddleware({
-  search,
-  dest,
-  destRoutes,
-  _includeValidateSearch
-}) {
-  const allMiddlewares = destRoutes.reduce(
-    (acc, route) => {
-      var _a3;
-      const middlewares = [];
-      if ("search" in route.options) {
-        if ((_a3 = route.options.search) == null ? void 0 : _a3.middlewares) {
-          middlewares.push(...route.options.search.middlewares);
-        }
-      } else if (route.options.preSearchFilters || route.options.postSearchFilters) {
-        const legacyMiddleware = ({
-          search: search2,
-          next
-        }) => {
-          let nextSearch = search2;
-          if ("preSearchFilters" in route.options && route.options.preSearchFilters) {
-            nextSearch = route.options.preSearchFilters.reduce(
-              (prev, next2) => next2(prev),
-              search2
-            );
-          }
-          const result = next(nextSearch);
-          if ("postSearchFilters" in route.options && route.options.postSearchFilters) {
-            return route.options.postSearchFilters.reduce(
-              (prev, next2) => next2(prev),
-              result
-            );
-          }
-          return result;
-        };
-        middlewares.push(legacyMiddleware);
-      }
-      if (_includeValidateSearch && route.options.validateSearch) {
-        const validate = ({ search: search2, next }) => {
-          const result = next(search2);
-          try {
-            const validatedSearch = {
-              ...result,
-              ...validateSearch(route.options.validateSearch, result) ?? void 0
-            };
-            return validatedSearch;
-          } catch {
-            return result;
-          }
-        };
-        middlewares.push(validate);
-      }
-      return acc.concat(middlewares);
-    },
-    []
-  ) ?? [];
-  const final = ({ search: search2 }) => {
-    if (!dest.search) {
-      return {};
-    }
-    if (dest.search === true) {
-      return search2;
-    }
-    return functionalUpdate(dest.search, search2);
-  };
-  allMiddlewares.push(final);
-  const applyNext = (index2, currentSearch) => {
-    if (index2 >= allMiddlewares.length) {
-      return currentSearch;
-    }
-    const middleware = allMiddlewares[index2];
-    const next = (newSearch) => {
-      return applyNext(index2 + 1, newSearch);
-    };
-    return middleware({ search: currentSearch, next });
-  };
-  return applyNext(0, search);
-}
-const preloadWarning = "Error preloading route! ☝️";
-class BaseRoute {
-  constructor(options) {
-    this.init = (opts) => {
-      var _a3, _b3;
-      this.originalIndex = opts.originalIndex;
-      const options2 = this.options;
-      const isRoot = !(options2 == null ? void 0 : options2.path) && !(options2 == null ? void 0 : options2.id);
-      this.parentRoute = (_b3 = (_a3 = this.options).getParentRoute) == null ? void 0 : _b3.call(_a3);
-      if (isRoot) {
-        this._path = rootRouteId;
-      } else if (!this.parentRoute) {
-        invariant(
-          false
-        );
-      }
-      let path = isRoot ? rootRouteId : options2 == null ? void 0 : options2.path;
-      if (path && path !== "/") {
-        path = trimPathLeft(path);
-      }
-      const customId = (options2 == null ? void 0 : options2.id) || path;
-      let id = isRoot ? rootRouteId : joinPaths([
-        this.parentRoute.id === rootRouteId ? "" : this.parentRoute.id,
-        customId
-      ]);
-      if (path === rootRouteId) {
-        path = "/";
-      }
-      if (id !== rootRouteId) {
-        id = joinPaths(["/", id]);
-      }
-      const fullPath = id === rootRouteId ? "/" : joinPaths([this.parentRoute.fullPath, path]);
-      this._path = path;
-      this._id = id;
-      this._fullPath = fullPath;
-      this._to = fullPath;
-    };
-    this.clone = (other) => {
-      this._path = other._path;
-      this._id = other._id;
-      this._fullPath = other._fullPath;
-      this._to = other._to;
-      this.options.getParentRoute = other.options.getParentRoute;
-      this.children = other.children;
-    };
-    this.addChildren = (children) => {
-      return this._addFileChildren(children);
-    };
-    this._addFileChildren = (children) => {
-      if (Array.isArray(children)) {
-        this.children = children;
-      }
-      if (typeof children === "object" && children !== null) {
-        this.children = Object.values(children);
-      }
-      return this;
-    };
-    this._addFileTypes = () => {
-      return this;
-    };
-    this.updateLoader = (options2) => {
-      Object.assign(this.options, options2);
-      return this;
-    };
-    this.update = (options2) => {
-      Object.assign(this.options, options2);
-      return this;
-    };
-    this.lazy = (lazyFn) => {
-      this.lazyFn = lazyFn;
-      return this;
-    };
-    this.options = options || {};
-    this.isRoot = !(options == null ? void 0 : options.getParentRoute);
-    if ((options == null ? void 0 : options.id) && (options == null ? void 0 : options.path)) {
-      throw new Error(`Route cannot have both an 'id' and a 'path' option.`);
-    }
-  }
-  get to() {
-    return this._to;
-  }
-  get id() {
-    return this._id;
-  }
-  get path() {
-    return this._path;
-  }
-  get fullPath() {
-    return this._fullPath;
-  }
-}
-class BaseRootRoute extends BaseRoute {
-  constructor(options) {
-    super(options);
-  }
-}
-function CatchBoundary(props) {
-  const errorComponent = props.errorComponent ?? ErrorComponent;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    CatchBoundaryImpl,
-    {
-      getResetKey: props.getResetKey,
-      onCatch: props.onCatch,
-      children: ({ error, reset }) => {
-        if (error) {
-          return reactExports.createElement(errorComponent, {
-            error,
-            reset
-          });
-        }
-        return props.children;
-      }
-    }
-  );
-}
-class CatchBoundaryImpl extends reactExports.Component {
-  constructor() {
-    super(...arguments);
-    this.state = { error: null };
-  }
-  static getDerivedStateFromProps(props) {
-    return { resetKey: props.getResetKey() };
-  }
-  static getDerivedStateFromError(error) {
-    return { error };
-  }
-  reset() {
-    this.setState({ error: null });
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.error && prevState.resetKey !== this.state.resetKey) {
-      this.reset();
-    }
-  }
-  componentDidCatch(error, errorInfo) {
-    if (this.props.onCatch) {
-      this.props.onCatch(error, errorInfo);
-    }
-  }
-  render() {
-    return this.props.children({
-      error: this.state.resetKey !== this.props.getResetKey() ? null : this.state.error,
-      reset: () => {
-        this.reset();
-      }
-    });
-  }
-}
-function ErrorComponent({ error }) {
-  const [show, setShow] = reactExports.useState(false);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: ".5rem", maxWidth: "100%" }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: ".5rem" }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { style: { fontSize: "1rem" }, children: "Something went wrong!" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          style: {
-            appearance: "none",
-            fontSize: ".6em",
-            border: "1px solid currentColor",
-            padding: ".1rem .2rem",
-            fontWeight: "bold",
-            borderRadius: ".25rem"
-          },
-          onClick: () => setShow((d2) => !d2),
-          children: show ? "Hide Error" : "Show Error"
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { height: ".25rem" } }),
-    show ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "pre",
-      {
-        style: {
-          fontSize: ".7em",
-          border: "1px solid red",
-          borderRadius: ".25rem",
-          padding: ".3rem",
-          color: "red",
-          overflow: "auto"
-        },
-        children: error.message ? /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: error.message }) : null
-      }
-    ) }) : null
-  ] });
-}
-function ClientOnly({ children, fallback = null }) {
-  return useHydrated() ? /* @__PURE__ */ jsxRuntimeExports.jsx(React2.Fragment, { children }) : /* @__PURE__ */ jsxRuntimeExports.jsx(React2.Fragment, { children: fallback });
-}
-function useHydrated() {
-  return React2.useSyncExternalStore(
-    subscribe,
-    () => true,
-    () => false
-  );
-}
-function subscribe() {
-  return () => {
-  };
-}
-var withSelector = { exports: {} };
-var withSelector_production = {};
-var shim$2 = { exports: {} };
-var useSyncExternalStoreShim_production = {};
-/**
- * @license React
- * use-sync-external-store-shim.production.js
- *
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-var React$1 = reactExports;
-function is$1(x3, y2) {
-  return x3 === y2 && (0 !== x3 || 1 / x3 === 1 / y2) || x3 !== x3 && y2 !== y2;
-}
-var objectIs$1 = "function" === typeof Object.is ? Object.is : is$1, useState = React$1.useState, useEffect$1 = React$1.useEffect, useLayoutEffect$1 = React$1.useLayoutEffect, useDebugValue$1 = React$1.useDebugValue;
-function useSyncExternalStore$2(subscribe2, getSnapshot) {
-  var value = getSnapshot(), _useState = useState({ inst: { value, getSnapshot } }), inst = _useState[0].inst, forceUpdate = _useState[1];
-  useLayoutEffect$1(
-    function() {
-      inst.value = value;
-      inst.getSnapshot = getSnapshot;
-      checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-    },
-    [subscribe2, value, getSnapshot]
-  );
-  useEffect$1(
-    function() {
-      checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-      return subscribe2(function() {
-        checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-      });
-    },
-    [subscribe2]
-  );
-  useDebugValue$1(value);
-  return value;
-}
-function checkIfSnapshotChanged(inst) {
-  var latestGetSnapshot = inst.getSnapshot;
-  inst = inst.value;
-  try {
-    var nextValue = latestGetSnapshot();
-    return !objectIs$1(inst, nextValue);
-  } catch (error) {
-    return true;
-  }
-}
-function useSyncExternalStore$1(subscribe2, getSnapshot) {
-  return getSnapshot();
-}
-var shim$1 = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-useSyncExternalStoreShim_production.useSyncExternalStore = void 0 !== React$1.useSyncExternalStore ? React$1.useSyncExternalStore : shim$1;
-{
-  shim$2.exports = useSyncExternalStoreShim_production;
-}
-var shimExports = shim$2.exports;
-/**
- * @license React
- * use-sync-external-store-shim/with-selector.production.js
- *
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-var React = reactExports, shim = shimExports;
-function is(x3, y2) {
-  return x3 === y2 && (0 !== x3 || 1 / x3 === 1 / y2) || x3 !== x3 && y2 !== y2;
-}
-var objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef = React.useRef, useEffect = React.useEffect, useMemo = React.useMemo, useDebugValue = React.useDebugValue;
-withSelector_production.useSyncExternalStoreWithSelector = function(subscribe2, getSnapshot, getServerSnapshot, selector, isEqual) {
-  var instRef = useRef(null);
-  if (null === instRef.current) {
-    var inst = { hasValue: false, value: null };
-    instRef.current = inst;
-  } else inst = instRef.current;
-  instRef = useMemo(
-    function() {
-      function memoizedSelector(nextSnapshot) {
-        if (!hasMemo) {
-          hasMemo = true;
-          memoizedSnapshot = nextSnapshot;
-          nextSnapshot = selector(nextSnapshot);
-          if (void 0 !== isEqual && inst.hasValue) {
-            var currentSelection = inst.value;
-            if (isEqual(currentSelection, nextSnapshot))
-              return memoizedSelection = currentSelection;
-          }
-          return memoizedSelection = nextSnapshot;
-        }
-        currentSelection = memoizedSelection;
-        if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
-        var nextSelection = selector(nextSnapshot);
-        if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
-          return memoizedSnapshot = nextSnapshot, currentSelection;
-        memoizedSnapshot = nextSnapshot;
-        return memoizedSelection = nextSelection;
-      }
-      var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
-      return [
-        function() {
-          return memoizedSelector(getSnapshot());
-        },
-        null === maybeGetServerSnapshot ? void 0 : function() {
-          return memoizedSelector(maybeGetServerSnapshot());
-        }
-      ];
-    },
-    [getSnapshot, getServerSnapshot, selector, isEqual]
-  );
-  var value = useSyncExternalStore(subscribe2, instRef[0], instRef[1]);
-  useEffect(
-    function() {
-      inst.hasValue = true;
-      inst.value = value;
-    },
-    [value]
-  );
-  useDebugValue(value);
-  return value;
-};
-{
-  withSelector.exports = withSelector_production;
-}
-var withSelectorExports = withSelector.exports;
-function useStore(store, selector = (d2) => d2) {
-  const slice = withSelectorExports.useSyncExternalStoreWithSelector(
-    store.subscribe,
-    () => store.state,
-    () => store.state,
-    selector,
-    shallow
-  );
-  return slice;
-}
-function shallow(objA, objB) {
-  if (Object.is(objA, objB)) {
-    return true;
-  }
-  if (typeof objA !== "object" || objA === null || typeof objB !== "object" || objB === null) {
-    return false;
-  }
-  if (objA instanceof Map && objB instanceof Map) {
-    if (objA.size !== objB.size) return false;
-    for (const [k2, v2] of objA) {
-      if (!objB.has(k2) || !Object.is(v2, objB.get(k2))) return false;
-    }
-    return true;
-  }
-  if (objA instanceof Set && objB instanceof Set) {
-    if (objA.size !== objB.size) return false;
-    for (const v2 of objA) {
-      if (!objB.has(v2)) return false;
-    }
-    return true;
-  }
-  if (objA instanceof Date && objB instanceof Date) {
-    if (objA.getTime() !== objB.getTime()) return false;
-    return true;
-  }
-  const keysA = getOwnKeys(objA);
-  if (keysA.length !== getOwnKeys(objB).length) {
-    return false;
-  }
-  for (let i = 0; i < keysA.length; i++) {
-    if (!Object.prototype.hasOwnProperty.call(objB, keysA[i]) || !Object.is(objA[keysA[i]], objB[keysA[i]])) {
-      return false;
-    }
-  }
-  return true;
-}
-function getOwnKeys(obj) {
-  return Object.keys(obj).concat(
-    Object.getOwnPropertySymbols(obj)
-  );
-}
-const routerContext = reactExports.createContext(null);
-function getRouterContext() {
-  if (typeof document === "undefined") {
-    return routerContext;
-  }
-  if (window.__TSR_ROUTER_CONTEXT__) {
-    return window.__TSR_ROUTER_CONTEXT__;
-  }
-  window.__TSR_ROUTER_CONTEXT__ = routerContext;
-  return routerContext;
-}
-function useRouter(opts) {
-  const value = reactExports.useContext(getRouterContext());
-  warning(
-    !(((opts == null ? void 0 : opts.warn) ?? true) && !value)
-  );
-  return value;
-}
-function useRouterState(opts) {
-  const contextRouter = useRouter({
-    warn: (opts == null ? void 0 : opts.router) === void 0
-  });
-  const router2 = (opts == null ? void 0 : opts.router) || contextRouter;
-  const previousResult = reactExports.useRef(void 0);
-  return useStore(router2.__store, (state) => {
-    if (opts == null ? void 0 : opts.select) {
-      if (opts.structuralSharing ?? router2.options.defaultStructuralSharing) {
-        const newSlice = replaceEqualDeep(
-          previousResult.current,
-          opts.select(state)
-        );
-        previousResult.current = newSlice;
-        return newSlice;
-      }
-      return opts.select(state);
-    }
-    return state;
-  });
-}
-const matchContext = reactExports.createContext(void 0);
-const dummyMatchContext = reactExports.createContext(
-  void 0
-);
-function useMatch(opts) {
-  const nearestMatchId = reactExports.useContext(
-    opts.from ? dummyMatchContext : matchContext
-  );
-  const matchSelection = useRouterState({
-    select: (state) => {
-      const match = state.matches.find(
-        (d2) => opts.from ? opts.from === d2.routeId : d2.id === nearestMatchId
-      );
-      invariant(
-        !((opts.shouldThrow ?? true) && !match),
-        `Could not find ${opts.from ? `an active match from "${opts.from}"` : "a nearest match!"}`
-      );
-      if (match === void 0) {
-        return void 0;
-      }
-      return opts.select ? opts.select(match) : match;
-    },
-    structuralSharing: opts.structuralSharing
-  });
-  return matchSelection;
-}
-function useLoaderData(opts) {
-  return useMatch({
-    from: opts.from,
-    strict: opts.strict,
-    structuralSharing: opts.structuralSharing,
-    select: (s2) => {
-      return opts.select ? opts.select(s2.loaderData) : s2.loaderData;
-    }
-  });
-}
-function useLoaderDeps(opts) {
-  const { select, ...rest } = opts;
-  return useMatch({
-    ...rest,
-    select: (s2) => {
-      return select ? select(s2.loaderDeps) : s2.loaderDeps;
-    }
-  });
-}
-function useParams(opts) {
-  return useMatch({
-    from: opts.from,
-    shouldThrow: opts.shouldThrow,
-    structuralSharing: opts.structuralSharing,
-    strict: opts.strict,
-    select: (match) => {
-      const params = opts.strict === false ? match.params : match._strictParams;
-      return opts.select ? opts.select(params) : params;
-    }
-  });
-}
-function useSearch(opts) {
-  return useMatch({
-    from: opts.from,
-    strict: opts.strict,
-    shouldThrow: opts.shouldThrow,
-    structuralSharing: opts.structuralSharing,
-    select: (match) => {
-      return opts.select ? opts.select(match.search) : match.search;
-    }
-  });
-}
-function useNavigate(_defaultOpts) {
-  const router2 = useRouter();
-  return reactExports.useCallback(
-    (options) => {
-      return router2.navigate({
-        ...options,
-        from: options.from ?? (_defaultOpts == null ? void 0 : _defaultOpts.from)
-      });
-    },
-    [_defaultOpts == null ? void 0 : _defaultOpts.from, router2]
-  );
-}
-const useLayoutEffect = typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
-function usePrevious$1(value) {
-  const ref = reactExports.useRef({
-    value,
-    prev: null
-  });
-  const current = ref.current.value;
-  if (value !== current) {
-    ref.current = {
-      value,
-      prev: current
-    };
-  }
-  return ref.current.prev;
-}
-function useIntersectionObserver(ref, callback, intersectionObserverOptions2 = {}, options = {}) {
-  reactExports.useEffect(() => {
-    if (!ref.current || options.disabled || typeof IntersectionObserver !== "function") {
-      return;
-    }
-    const observer = new IntersectionObserver(([entry]) => {
-      callback(entry);
-    }, intersectionObserverOptions2);
-    observer.observe(ref.current);
-    return () => {
-      observer.disconnect();
-    };
-  }, [callback, intersectionObserverOptions2, options.disabled, ref]);
-}
-function useForwardedRef(ref) {
-  const innerRef = reactExports.useRef(null);
-  reactExports.useImperativeHandle(ref, () => innerRef.current, []);
-  return innerRef;
-}
-function useLinkProps(options, forwardedRef) {
-  const router2 = useRouter();
-  const [isTransitioning, setIsTransitioning] = reactExports.useState(false);
-  const hasRenderFetched = reactExports.useRef(false);
-  const innerRef = useForwardedRef(forwardedRef);
-  const {
-    // custom props
-    activeProps,
-    inactiveProps,
-    activeOptions,
-    to,
-    preload: userPreload,
-    preloadDelay: userPreloadDelay,
-    hashScrollIntoView,
-    replace,
-    startTransition: startTransition2,
-    resetScroll,
-    viewTransition,
-    // element props
-    children,
-    target,
-    disabled,
-    style: style2,
-    className,
-    onClick,
-    onFocus,
-    onMouseEnter,
-    onMouseLeave,
-    onTouchStart,
-    ignoreBlocker,
-    // prevent these from being returned
-    params: _params,
-    search: _search,
-    hash: _hash,
-    state: _state,
-    mask: _mask,
-    reloadDocument: _reloadDocument,
-    unsafeRelative: _unsafeRelative,
-    from: _from,
-    _fromLocation,
-    ...propsSafeToSpread
-  } = options;
-  const type = reactExports.useMemo(() => {
-    try {
-      new URL(to);
-      return "external";
-    } catch {
-    }
-    return "internal";
-  }, [to]);
-  const currentSearch = useRouterState({
-    select: (s2) => s2.location.search,
-    structuralSharing: true
-  });
-  const from = options.from;
-  const _options2 = reactExports.useMemo(
-    () => {
-      return { ...options, from };
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      router2,
-      currentSearch,
-      from,
-      options._fromLocation,
-      options.hash,
-      options.to,
-      options.search,
-      options.params,
-      options.state,
-      options.mask,
-      options.unsafeRelative
-    ]
-  );
-  const next = reactExports.useMemo(
-    () => router2.buildLocation({ ..._options2 }),
-    [router2, _options2]
-  );
-  const isExternal = type === "external";
-  const preload3 = options.reloadDocument || isExternal ? false : userPreload ?? router2.options.defaultPreload;
-  const preloadDelay = userPreloadDelay ?? router2.options.defaultPreloadDelay ?? 0;
-  const isActive = useRouterState({
-    select: (s2) => {
-      if (isExternal) return false;
-      if (activeOptions == null ? void 0 : activeOptions.exact) {
-        const testExact = exactPathTest(
-          s2.location.pathname,
-          next.pathname,
-          router2.basepath
-        );
-        if (!testExact) {
-          return false;
-        }
-      } else {
-        const currentPathSplit = removeTrailingSlash(
-          s2.location.pathname,
-          router2.basepath
-        );
-        const nextPathSplit = removeTrailingSlash(
-          next.pathname,
-          router2.basepath
-        );
-        const pathIsFuzzyEqual = currentPathSplit.startsWith(nextPathSplit) && (currentPathSplit.length === nextPathSplit.length || currentPathSplit[nextPathSplit.length] === "/");
-        if (!pathIsFuzzyEqual) {
-          return false;
-        }
-      }
-      if ((activeOptions == null ? void 0 : activeOptions.includeSearch) ?? true) {
-        const searchTest = deepEqual$1(s2.location.search, next.search, {
-          partial: !(activeOptions == null ? void 0 : activeOptions.exact),
-          ignoreUndefined: !(activeOptions == null ? void 0 : activeOptions.explicitUndefined)
-        });
-        if (!searchTest) {
-          return false;
-        }
-      }
-      if (activeOptions == null ? void 0 : activeOptions.includeHash) {
-        return s2.location.hash === next.hash;
-      }
-      return true;
-    }
-  });
-  const doPreload = reactExports.useCallback(() => {
-    router2.preloadRoute({ ..._options2 }).catch((err) => {
-      console.warn(err);
-      console.warn(preloadWarning);
-    });
-  }, [router2, _options2]);
-  const preloadViewportIoCallback = reactExports.useCallback(
-    (entry) => {
-      if (entry == null ? void 0 : entry.isIntersecting) {
-        doPreload();
-      }
-    },
-    [doPreload]
-  );
-  useIntersectionObserver(
-    innerRef,
-    preloadViewportIoCallback,
-    intersectionObserverOptions,
-    { disabled: !!disabled || !(preload3 === "viewport") }
-  );
-  reactExports.useEffect(() => {
-    if (hasRenderFetched.current) {
-      return;
-    }
-    if (!disabled && preload3 === "render") {
-      doPreload();
-      hasRenderFetched.current = true;
-    }
-  }, [disabled, doPreload, preload3]);
-  const handleClick = (e) => {
-    const elementTarget = e.currentTarget.target;
-    const effectiveTarget = target !== void 0 ? target : elementTarget;
-    if (!disabled && !isCtrlEvent(e) && !e.defaultPrevented && (!effectiveTarget || effectiveTarget === "_self") && e.button === 0) {
-      e.preventDefault();
-      reactDomExports.flushSync(() => {
-        setIsTransitioning(true);
-      });
-      const unsub = router2.subscribe("onResolved", () => {
-        unsub();
-        setIsTransitioning(false);
-      });
-      router2.navigate({
-        ..._options2,
-        replace,
-        resetScroll,
-        hashScrollIntoView,
-        startTransition: startTransition2,
-        viewTransition,
-        ignoreBlocker
-      });
-    }
-  };
-  if (isExternal) {
-    return {
-      ...propsSafeToSpread,
-      ref: innerRef,
-      type,
-      href: to,
-      ...children && { children },
-      ...target && { target },
-      ...disabled && { disabled },
-      ...style2 && { style: style2 },
-      ...className && { className },
-      ...onClick && { onClick },
-      ...onFocus && { onFocus },
-      ...onMouseEnter && { onMouseEnter },
-      ...onMouseLeave && { onMouseLeave },
-      ...onTouchStart && { onTouchStart }
-    };
-  }
-  const handleFocus = (_2) => {
-    if (disabled) return;
-    if (preload3) {
-      doPreload();
-    }
-  };
-  const handleTouchStart = handleFocus;
-  const handleEnter = (e) => {
-    if (disabled || !preload3) return;
-    if (!preloadDelay) {
-      doPreload();
-    } else {
-      const eventTarget = e.target;
-      if (timeoutMap.has(eventTarget)) {
-        return;
-      }
-      const id = setTimeout(() => {
-        timeoutMap.delete(eventTarget);
-        doPreload();
-      }, preloadDelay);
-      timeoutMap.set(eventTarget, id);
-    }
-  };
-  const handleLeave = (e) => {
-    if (disabled || !preload3 || !preloadDelay) return;
-    const eventTarget = e.target;
-    const id = timeoutMap.get(eventTarget);
-    if (id) {
-      clearTimeout(id);
-      timeoutMap.delete(eventTarget);
-    }
-  };
-  const resolvedActiveProps = isActive ? functionalUpdate(activeProps, {}) ?? STATIC_ACTIVE_OBJECT : STATIC_EMPTY_OBJECT;
-  const resolvedInactiveProps = isActive ? STATIC_EMPTY_OBJECT : functionalUpdate(inactiveProps, {}) ?? STATIC_EMPTY_OBJECT;
-  const resolvedClassName = [
-    className,
-    resolvedActiveProps.className,
-    resolvedInactiveProps.className
-  ].filter(Boolean).join(" ");
-  const resolvedStyle = (style2 || resolvedActiveProps.style || resolvedInactiveProps.style) && {
-    ...style2,
-    ...resolvedActiveProps.style,
-    ...resolvedInactiveProps.style
-  };
-  return {
-    ...propsSafeToSpread,
-    ...resolvedActiveProps,
-    ...resolvedInactiveProps,
-    href: disabled ? void 0 : next.maskedLocation ? router2.history.createHref(next.maskedLocation.href) : router2.history.createHref(next.href),
-    ref: innerRef,
-    onClick: composeHandlers([onClick, handleClick]),
-    onFocus: composeHandlers([onFocus, handleFocus]),
-    onMouseEnter: composeHandlers([onMouseEnter, handleEnter]),
-    onMouseLeave: composeHandlers([onMouseLeave, handleLeave]),
-    onTouchStart: composeHandlers([onTouchStart, handleTouchStart]),
-    disabled: !!disabled,
-    target,
-    ...resolvedStyle && { style: resolvedStyle },
-    ...resolvedClassName && { className: resolvedClassName },
-    ...disabled && STATIC_DISABLED_PROPS,
-    ...isActive && STATIC_ACTIVE_PROPS,
-    ...isTransitioning && STATIC_TRANSITIONING_PROPS
-  };
-}
-const STATIC_EMPTY_OBJECT = {};
-const STATIC_ACTIVE_OBJECT = { className: "active" };
-const STATIC_DISABLED_PROPS = { role: "link", "aria-disabled": true };
-const STATIC_ACTIVE_PROPS = { "data-status": "active", "aria-current": "page" };
-const STATIC_TRANSITIONING_PROPS = { "data-transitioning": "transitioning" };
-const timeoutMap = /* @__PURE__ */ new WeakMap();
-const intersectionObserverOptions = {
-  rootMargin: "100px"
-};
-const composeHandlers = (handlers) => (e) => {
-  for (const handler of handlers) {
-    if (!handler) continue;
-    if (e.defaultPrevented) return;
-    handler(e);
-  }
-};
-const Link = reactExports.forwardRef(
-  (props, ref) => {
-    const { _asChild, ...rest } = props;
-    const {
-      type: _type,
-      ref: innerRef,
-      ...linkProps
-    } = useLinkProps(rest, ref);
-    const children = typeof rest.children === "function" ? rest.children({
-      isActive: linkProps["data-status"] === "active"
-    }) : rest.children;
-    if (_asChild === void 0) {
-      delete linkProps.disabled;
-    }
-    return reactExports.createElement(
-      _asChild ? _asChild : "a",
-      {
-        ...linkProps,
-        ref: innerRef
-      },
-      children
-    );
-  }
-);
-function isCtrlEvent(e) {
-  return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
-}
-class Route extends BaseRoute {
-  /**
-   * @deprecated Use the `createRoute` function instead.
-   */
-  constructor(options) {
-    super(options);
-    this.useMatch = (opts) => {
-      return useMatch({
-        select: opts == null ? void 0 : opts.select,
-        from: this.id,
-        structuralSharing: opts == null ? void 0 : opts.structuralSharing
-      });
-    };
-    this.useRouteContext = (opts) => {
-      return useMatch({
-        ...opts,
-        from: this.id,
-        select: (d2) => (opts == null ? void 0 : opts.select) ? opts.select(d2.context) : d2.context
-      });
-    };
-    this.useSearch = (opts) => {
-      return useSearch({
-        select: opts == null ? void 0 : opts.select,
-        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
-        from: this.id
-      });
-    };
-    this.useParams = (opts) => {
-      return useParams({
-        select: opts == null ? void 0 : opts.select,
-        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
-        from: this.id
-      });
-    };
-    this.useLoaderDeps = (opts) => {
-      return useLoaderDeps({ ...opts, from: this.id });
-    };
-    this.useLoaderData = (opts) => {
-      return useLoaderData({ ...opts, from: this.id });
-    };
-    this.useNavigate = () => {
-      return useNavigate({ from: this.fullPath });
-    };
-    this.Link = React2.forwardRef(
-      (props, ref) => {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { ref, from: this.fullPath, ...props });
-      }
-    );
-    this.$$typeof = Symbol.for("react.memo");
-  }
-}
-function createRoute(options) {
-  return new Route(options);
-}
-class RootRoute extends BaseRootRoute {
-  /**
-   * @deprecated `RootRoute` is now an internal implementation detail. Use `createRootRoute()` instead.
-   */
-  constructor(options) {
-    super(options);
-    this.useMatch = (opts) => {
-      return useMatch({
-        select: opts == null ? void 0 : opts.select,
-        from: this.id,
-        structuralSharing: opts == null ? void 0 : opts.structuralSharing
-      });
-    };
-    this.useRouteContext = (opts) => {
-      return useMatch({
-        ...opts,
-        from: this.id,
-        select: (d2) => (opts == null ? void 0 : opts.select) ? opts.select(d2.context) : d2.context
-      });
-    };
-    this.useSearch = (opts) => {
-      return useSearch({
-        select: opts == null ? void 0 : opts.select,
-        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
-        from: this.id
-      });
-    };
-    this.useParams = (opts) => {
-      return useParams({
-        select: opts == null ? void 0 : opts.select,
-        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
-        from: this.id
-      });
-    };
-    this.useLoaderDeps = (opts) => {
-      return useLoaderDeps({ ...opts, from: this.id });
-    };
-    this.useLoaderData = (opts) => {
-      return useLoaderData({ ...opts, from: this.id });
-    };
-    this.useNavigate = () => {
-      return useNavigate({ from: this.fullPath });
-    };
-    this.Link = React2.forwardRef(
-      (props, ref) => {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { ref, from: this.fullPath, ...props });
-      }
-    );
-    this.$$typeof = Symbol.for("react.memo");
-  }
-}
-function createRootRoute(options) {
-  return new RootRoute(options);
-}
-function createFileRoute(path) {
-  if (typeof path === "object") {
-    return new FileRoute(path, {
-      silent: true
-    }).createRoute(path);
-  }
-  return new FileRoute(path, {
-    silent: true
-  }).createRoute;
-}
-class FileRoute {
-  constructor(path, _opts) {
-    this.path = path;
-    this.createRoute = (options) => {
-      warning(
-        this.silent
-      );
-      const route = createRoute(options);
-      route.isRoot = false;
-      return route;
-    };
-    this.silent = _opts == null ? void 0 : _opts.silent;
-  }
-}
-class LazyRoute {
-  constructor(opts) {
-    this.useMatch = (opts2) => {
-      return useMatch({
-        select: opts2 == null ? void 0 : opts2.select,
-        from: this.options.id,
-        structuralSharing: opts2 == null ? void 0 : opts2.structuralSharing
-      });
-    };
-    this.useRouteContext = (opts2) => {
-      return useMatch({
-        from: this.options.id,
-        select: (d2) => (opts2 == null ? void 0 : opts2.select) ? opts2.select(d2.context) : d2.context
-      });
-    };
-    this.useSearch = (opts2) => {
-      return useSearch({
-        select: opts2 == null ? void 0 : opts2.select,
-        structuralSharing: opts2 == null ? void 0 : opts2.structuralSharing,
-        from: this.options.id
-      });
-    };
-    this.useParams = (opts2) => {
-      return useParams({
-        select: opts2 == null ? void 0 : opts2.select,
-        structuralSharing: opts2 == null ? void 0 : opts2.structuralSharing,
-        from: this.options.id
-      });
-    };
-    this.useLoaderDeps = (opts2) => {
-      return useLoaderDeps({ ...opts2, from: this.options.id });
-    };
-    this.useLoaderData = (opts2) => {
-      return useLoaderData({ ...opts2, from: this.options.id });
-    };
-    this.useNavigate = () => {
-      const router2 = useRouter();
-      return useNavigate({ from: router2.routesById[this.options.id].fullPath });
-    };
-    this.options = opts;
-    this.$$typeof = Symbol.for("react.memo");
-  }
-}
-function createLazyFileRoute(id) {
-  if (typeof id === "object") {
-    return new LazyRoute(id);
-  }
-  return (opts) => new LazyRoute({ id, ...opts });
-}
-function Transitioner() {
-  const router2 = useRouter();
-  const mountLoadForRouter = reactExports.useRef({ router: router2, mounted: false });
-  const [isTransitioning, setIsTransitioning] = reactExports.useState(false);
-  const { hasPendingMatches, isLoading } = useRouterState({
-    select: (s2) => ({
-      isLoading: s2.isLoading,
-      hasPendingMatches: s2.matches.some((d2) => d2.status === "pending")
-    }),
-    structuralSharing: true
-  });
-  const previousIsLoading = usePrevious$1(isLoading);
-  const isAnyPending = isLoading || isTransitioning || hasPendingMatches;
-  const previousIsAnyPending = usePrevious$1(isAnyPending);
-  const isPagePending = isLoading || hasPendingMatches;
-  const previousIsPagePending = usePrevious$1(isPagePending);
-  router2.startTransition = (fn) => {
-    setIsTransitioning(true);
-    reactExports.startTransition(() => {
-      fn();
-      setIsTransitioning(false);
-    });
-  };
-  reactExports.useEffect(() => {
-    const unsub = router2.history.subscribe(router2.load);
-    const nextLocation = router2.buildLocation({
-      to: router2.latestLocation.pathname,
-      search: true,
-      params: true,
-      hash: true,
-      state: true,
-      _includeValidateSearch: true
-    });
-    if (trimPathRight(router2.latestLocation.href) !== trimPathRight(nextLocation.href)) {
-      router2.commitLocation({ ...nextLocation, replace: true });
-    }
-    return () => {
-      unsub();
-    };
-  }, [router2, router2.history]);
-  useLayoutEffect(() => {
-    if (
-      // if we are hydrating from SSR, loading is triggered in ssr-client
-      typeof window !== "undefined" && router2.ssr || mountLoadForRouter.current.router === router2 && mountLoadForRouter.current.mounted
-    ) {
-      return;
-    }
-    mountLoadForRouter.current = { router: router2, mounted: true };
-    const tryLoad = async () => {
-      try {
-        await router2.load();
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    tryLoad();
-  }, [router2]);
-  useLayoutEffect(() => {
-    if (previousIsLoading && !isLoading) {
-      router2.emit({
-        type: "onLoad",
-        // When the new URL has committed, when the new matches have been loaded into state.matches
-        ...getLocationChangeInfo(router2.state)
-      });
-    }
-  }, [previousIsLoading, router2, isLoading]);
-  useLayoutEffect(() => {
-    if (previousIsPagePending && !isPagePending) {
-      router2.emit({
-        type: "onBeforeRouteMount",
-        ...getLocationChangeInfo(router2.state)
-      });
-    }
-  }, [isPagePending, previousIsPagePending, router2]);
-  useLayoutEffect(() => {
-    if (previousIsAnyPending && !isAnyPending) {
-      router2.emit({
-        type: "onResolved",
-        ...getLocationChangeInfo(router2.state)
-      });
-      router2.__store.setState((s2) => ({
-        ...s2,
-        status: "idle",
-        resolvedLocation: s2.location
-      }));
-      handleHashScroll(router2);
-    }
-  }, [isAnyPending, previousIsAnyPending, router2]);
-  return null;
-}
-function CatchNotFound(props) {
-  const resetKey = useRouterState({
-    select: (s2) => `not-found-${s2.location.pathname}-${s2.status}`
-  });
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    CatchBoundary,
-    {
-      getResetKey: () => resetKey,
-      onCatch: (error, errorInfo) => {
-        var _a3;
-        if (isNotFound(error)) {
-          (_a3 = props.onCatch) == null ? void 0 : _a3.call(props, error, errorInfo);
-        } else {
-          throw error;
-        }
-      },
-      errorComponent: ({ error }) => {
-        var _a3;
-        if (isNotFound(error)) {
-          return (_a3 = props.fallback) == null ? void 0 : _a3.call(props, error);
-        } else {
-          throw error;
-        }
-      },
-      children: props.children
-    }
-  );
-}
-function DefaultGlobalNotFound() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Not Found" });
-}
-function SafeFragment(props) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: props.children });
-}
-function renderRouteNotFound(router2, route, data) {
-  if (!route.options.notFoundComponent) {
-    if (router2.options.defaultNotFoundComponent) {
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.defaultNotFoundComponent, { data });
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(DefaultGlobalNotFound, {});
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(route.options.notFoundComponent, { data });
-}
-function ScriptOnce({
-  children
-}) {
-  if (typeof document !== "undefined") {
-    return null;
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "script",
-    {
-      className: "$tsr",
-      dangerouslySetInnerHTML: {
-        __html: [children].filter(Boolean).join("\n")
-      }
-    }
-  );
-}
-function ScrollRestoration() {
-  const router2 = useRouter();
-  const getKey = router2.options.getScrollRestorationKey || defaultGetScrollRestorationKey;
-  const userKey = getKey(router2.latestLocation);
-  const resolvedKey = userKey !== defaultGetScrollRestorationKey(router2.latestLocation) ? userKey : void 0;
-  if (!router2.isScrollRestoring || !router2.isServer) {
-    return null;
-  }
-  const restoreScrollOptions = {
-    storageKey,
-    shouldScrollRestoration: true
-  };
-  if (resolvedKey) {
-    restoreScrollOptions.key = resolvedKey;
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScriptOnce,
-    {
-      children: `(${restoreScroll.toString()})(${JSON.stringify(restoreScrollOptions)})`
-    }
-  );
-}
-const Match = reactExports.memo(function MatchImpl({
-  matchId
-}) {
-  var _a3, _b3;
-  const router2 = useRouter();
-  const matchState = useRouterState({
-    select: (s2) => {
-      const match = s2.matches.find((d2) => d2.id === matchId);
-      invariant(
-        match
-      );
-      return {
-        routeId: match.routeId,
-        ssr: match.ssr,
-        _displayPending: match._displayPending
-      };
-    },
-    structuralSharing: true
-  });
-  const route = router2.routesById[matchState.routeId];
-  const PendingComponent = route.options.pendingComponent ?? router2.options.defaultPendingComponent;
-  const pendingElement = PendingComponent ? /* @__PURE__ */ jsxRuntimeExports.jsx(PendingComponent, {}) : null;
-  const routeErrorComponent = route.options.errorComponent ?? router2.options.defaultErrorComponent;
-  const routeOnCatch = route.options.onCatch ?? router2.options.defaultOnCatch;
-  const routeNotFoundComponent = route.isRoot ? (
-    // If it's the root route, use the globalNotFound option, with fallback to the notFoundRoute's component
-    route.options.notFoundComponent ?? ((_a3 = router2.options.notFoundRoute) == null ? void 0 : _a3.options.component)
-  ) : route.options.notFoundComponent;
-  const resolvedNoSsr = matchState.ssr === false || matchState.ssr === "data-only";
-  const ResolvedSuspenseBoundary = (
-    // If we're on the root route, allow forcefully wrapping in suspense
-    (!route.isRoot || route.options.wrapInSuspense || resolvedNoSsr) && (route.options.wrapInSuspense ?? PendingComponent ?? (((_b3 = route.options.errorComponent) == null ? void 0 : _b3.preload) || resolvedNoSsr)) ? reactExports.Suspense : SafeFragment
-  );
-  const ResolvedCatchBoundary = routeErrorComponent ? CatchBoundary : SafeFragment;
-  const ResolvedNotFoundBoundary = routeNotFoundComponent ? CatchNotFound : SafeFragment;
-  const resetKey = useRouterState({
-    select: (s2) => s2.loadedAt
-  });
-  const parentRouteId = useRouterState({
-    select: (s2) => {
-      var _a22;
-      const index2 = s2.matches.findIndex((d2) => d2.id === matchId);
-      return (_a22 = s2.matches[index2 - 1]) == null ? void 0 : _a22.routeId;
-    }
-  });
-  const ShellComponent = route.isRoot ? route.options.shellComponent ?? SafeFragment : SafeFragment;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(ShellComponent, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(matchContext.Provider, { value: matchId, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ResolvedSuspenseBoundary, { fallback: pendingElement, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ResolvedCatchBoundary,
-      {
-        getResetKey: () => resetKey,
-        errorComponent: routeErrorComponent || ErrorComponent,
-        onCatch: (error, errorInfo) => {
-          if (isNotFound(error)) throw error;
-          routeOnCatch == null ? void 0 : routeOnCatch(error, errorInfo);
-        },
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          ResolvedNotFoundBoundary,
-          {
-            fallback: (error) => {
-              if (!routeNotFoundComponent || error.routeId && error.routeId !== matchState.routeId || !error.routeId && !route.isRoot)
-                throw error;
-              return reactExports.createElement(routeNotFoundComponent, error);
-            },
-            children: resolvedNoSsr || matchState._displayPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(ClientOnly, { fallback: pendingElement, children: /* @__PURE__ */ jsxRuntimeExports.jsx(MatchInner, { matchId }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(MatchInner, { matchId })
-          }
-        )
-      }
-    ) }) }),
-    parentRouteId === rootRouteId && router2.options.scrollRestoration ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(OnRendered, {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollRestoration, {})
-    ] }) : null
-  ] });
-});
-function OnRendered() {
-  const router2 = useRouter();
-  const prevLocationRef = reactExports.useRef(
-    void 0
-  );
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "script",
-    {
-      suppressHydrationWarning: true,
-      ref: (el) => {
-        if (el && (prevLocationRef.current === void 0 || prevLocationRef.current.href !== router2.latestLocation.href)) {
-          router2.emit({
-            type: "onRendered",
-            ...getLocationChangeInfo(router2.state)
-          });
-          prevLocationRef.current = router2.latestLocation;
-        }
-      }
-    },
-    router2.latestLocation.state.__TSR_key
-  );
-}
-const MatchInner = reactExports.memo(function MatchInnerImpl({
-  matchId
-}) {
-  var _a3, _b3, _c2, _d2;
-  const router2 = useRouter();
-  const { match, key, routeId } = useRouterState({
-    select: (s2) => {
-      const match2 = s2.matches.find((d2) => d2.id === matchId);
-      const routeId2 = match2.routeId;
-      const remountFn = router2.routesById[routeId2].options.remountDeps ?? router2.options.defaultRemountDeps;
-      const remountDeps = remountFn == null ? void 0 : remountFn({
-        routeId: routeId2,
-        loaderDeps: match2.loaderDeps,
-        params: match2._strictParams,
-        search: match2._strictSearch
-      });
-      const key2 = remountDeps ? JSON.stringify(remountDeps) : void 0;
-      return {
-        key: key2,
-        routeId: routeId2,
-        match: {
-          id: match2.id,
-          status: match2.status,
-          error: match2.error,
-          _forcePending: match2._forcePending,
-          _displayPending: match2._displayPending
-        }
-      };
-    },
-    structuralSharing: true
-  });
-  const route = router2.routesById[routeId];
-  const out = reactExports.useMemo(() => {
-    const Comp = route.options.component ?? router2.options.defaultComponent;
-    if (Comp) {
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(Comp, {}, key);
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {});
-  }, [key, route.options.component, router2.options.defaultComponent]);
-  if (match._displayPending) {
-    throw (_a3 = router2.getMatch(match.id)) == null ? void 0 : _a3._nonReactive.displayPendingPromise;
-  }
-  if (match._forcePending) {
-    throw (_b3 = router2.getMatch(match.id)) == null ? void 0 : _b3._nonReactive.minPendingPromise;
-  }
-  if (match.status === "pending") {
-    const pendingMinMs = route.options.pendingMinMs ?? router2.options.defaultPendingMinMs;
-    if (pendingMinMs) {
-      const routerMatch = router2.getMatch(match.id);
-      if (routerMatch && !routerMatch._nonReactive.minPendingPromise) {
-        if (!router2.isServer) {
-          const minPendingPromise = createControlledPromise();
-          routerMatch._nonReactive.minPendingPromise = minPendingPromise;
-          setTimeout(() => {
-            minPendingPromise.resolve();
-            routerMatch._nonReactive.minPendingPromise = void 0;
-          }, pendingMinMs);
-        }
-      }
-    }
-    throw (_c2 = router2.getMatch(match.id)) == null ? void 0 : _c2._nonReactive.loadPromise;
-  }
-  if (match.status === "notFound") {
-    invariant(isNotFound(match.error));
-    return renderRouteNotFound(router2, route, match.error);
-  }
-  if (match.status === "redirected") {
-    invariant(isRedirect(match.error));
-    throw (_d2 = router2.getMatch(match.id)) == null ? void 0 : _d2._nonReactive.loadPromise;
-  }
-  if (match.status === "error") {
-    if (router2.isServer) {
-      const RouteErrorComponent = (route.options.errorComponent ?? router2.options.defaultErrorComponent) || ErrorComponent;
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(
-        RouteErrorComponent,
-        {
-          error: match.error,
-          reset: void 0,
-          info: {
-            componentStack: ""
-          }
-        }
-      );
-    }
-    throw match.error;
-  }
-  return out;
-});
-const Outlet = reactExports.memo(function OutletImpl() {
-  const router2 = useRouter();
-  const matchId = reactExports.useContext(matchContext);
-  const routeId = useRouterState({
-    select: (s2) => {
-      var _a3;
-      return (_a3 = s2.matches.find((d2) => d2.id === matchId)) == null ? void 0 : _a3.routeId;
-    }
-  });
-  const route = router2.routesById[routeId];
-  const parentGlobalNotFound = useRouterState({
-    select: (s2) => {
-      const matches = s2.matches;
-      const parentMatch = matches.find((d2) => d2.id === matchId);
-      invariant(
-        parentMatch
-      );
-      return parentMatch.globalNotFound;
-    }
-  });
-  const childMatchId = useRouterState({
-    select: (s2) => {
-      var _a3;
-      const matches = s2.matches;
-      const index2 = matches.findIndex((d2) => d2.id === matchId);
-      return (_a3 = matches[index2 + 1]) == null ? void 0 : _a3.id;
-    }
-  });
-  const pendingElement = router2.options.defaultPendingComponent ? /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.defaultPendingComponent, {}) : null;
-  if (parentGlobalNotFound) {
-    return renderRouteNotFound(router2, route, void 0);
-  }
-  if (!childMatchId) {
-    return null;
-  }
-  const nextMatch = /* @__PURE__ */ jsxRuntimeExports.jsx(Match, { matchId: childMatchId });
-  if (matchId === rootRouteId) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: pendingElement, children: nextMatch });
-  }
-  return nextMatch;
-});
-function Matches() {
-  const router2 = useRouter();
-  const pendingElement = router2.options.defaultPendingComponent ? /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.defaultPendingComponent, {}) : null;
-  const ResolvedSuspense = router2.isServer || typeof document !== "undefined" && router2.ssr ? SafeFragment : reactExports.Suspense;
-  const inner = /* @__PURE__ */ jsxRuntimeExports.jsxs(ResolvedSuspense, { fallback: pendingElement, children: [
-    !router2.isServer && /* @__PURE__ */ jsxRuntimeExports.jsx(Transitioner, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(MatchesInner, {})
-  ] });
-  return router2.options.InnerWrap ? /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.InnerWrap, { children: inner }) : inner;
-}
-function MatchesInner() {
-  const router2 = useRouter();
-  const matchId = useRouterState({
-    select: (s2) => {
-      var _a3;
-      return (_a3 = s2.matches[0]) == null ? void 0 : _a3.id;
-    }
-  });
-  const resetKey = useRouterState({
-    select: (s2) => s2.loadedAt
-  });
-  const matchComponent = matchId ? /* @__PURE__ */ jsxRuntimeExports.jsx(Match, { matchId }) : null;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(matchContext.Provider, { value: matchId, children: router2.options.disableGlobalCatchBoundary ? matchComponent : /* @__PURE__ */ jsxRuntimeExports.jsx(
-    CatchBoundary,
-    {
-      getResetKey: () => resetKey,
-      errorComponent: ErrorComponent,
-      onCatch: (error) => {
-        warning(false, error.message || error.toString());
-      },
-      children: matchComponent
-    }
-  ) });
-}
-const createRouter = (options) => {
-  return new Router(options);
-};
-class Router extends RouterCore {
-  constructor(options) {
-    super(options);
-  }
-}
-if (typeof globalThis !== "undefined") {
-  globalThis.createFileRoute = createFileRoute;
-  globalThis.createLazyFileRoute = createLazyFileRoute;
-} else if (typeof window !== "undefined") {
-  window.createFileRoute = createFileRoute;
-  window.createLazyFileRoute = createLazyFileRoute;
-}
-function RouterContextProvider({
-  router: router2,
-  children,
-  ...rest
-}) {
-  if (Object.keys(rest).length > 0) {
-    router2.update({
-      ...router2.options,
-      ...rest,
-      context: {
-        ...router2.options.context,
-        ...rest.context
-      }
-    });
-  }
-  const routerContext2 = getRouterContext();
-  const provider = /* @__PURE__ */ jsxRuntimeExports.jsx(routerContext2.Provider, { value: router2, children });
-  if (router2.options.Wrap) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.Wrap, { children: provider });
-  }
-  return provider;
-}
-function RouterProvider({ router: router2, ...rest }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(RouterContextProvider, { router: router2, ...rest, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Matches, {}) });
-}
-function useLocation(opts) {
-  return useRouterState({
-    select: (state) => state.location
-  });
-}
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-const toCamelCase = (string) => string.replace(
-  /^([A-Z])|[\s-_]+(\w)/g,
-  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
-);
-const toPascalCase = (string) => {
-  const camelCase = toCamelCase(string);
-  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
-};
-const mergeClasses = (...classes) => classes.filter((className, index2, array) => {
-  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index2;
-}).join(" ").trim();
-const hasA11yProp = (props) => {
-  for (const prop in props) {
-    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
-      return true;
-    }
-  }
-};
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-var defaultAttributes = {
-  xmlns: "http://www.w3.org/2000/svg",
-  width: 24,
-  height: 24,
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round",
-  strokeLinejoin: "round"
-};
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const Icon$1 = reactExports.forwardRef(
-  ({
-    color = "currentColor",
-    size: size2 = 24,
-    strokeWidth = 2,
-    absoluteStrokeWidth,
-    className = "",
-    children,
-    iconNode,
-    ...rest
-  }, ref) => reactExports.createElement(
-    "svg",
-    {
-      ref,
-      ...defaultAttributes,
-      width: size2,
-      height: size2,
-      stroke: color,
-      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size2) : strokeWidth,
-      className: mergeClasses("lucide", className),
-      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
-      ...rest
-    },
-    [
-      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
-      ...Array.isArray(children) ? children : [children]
-    ]
-  )
-);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const createLucideIcon = (iconName, iconNode) => {
-  const Component2 = reactExports.forwardRef(
-    ({ className, ...props }, ref) => reactExports.createElement(Icon$1, {
-      ref,
-      iconNode,
-      className: mergeClasses(
-        `lucide-${toKebabCase(toPascalCase(iconName))}`,
-        `lucide-${iconName}`,
-        className
-      ),
-      ...props
-    })
-  );
-  Component2.displayName = toPascalCase(iconName);
-  return Component2;
-};
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$R = [
-  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
-  ["path", { d: "M19 12H5", key: "x3x0zl" }]
-];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$R);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$Q = [
-  ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
-  ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
-];
-const CheckCheck = createLucideIcon("check-check", __iconNode$Q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$P = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$P);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$O = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$O);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$N = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$N);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$M = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$M);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$L = [
-  [
-    "path",
-    {
-      d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
-      key: "9ktpf1"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-];
-const Compass = createLucideIcon("compass", __iconNode$L);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$K = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
-];
-const Copy = createLucideIcon("copy", __iconNode$K);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$J = [
-  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
-  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
-  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
-];
-const Database = createLucideIcon("database", __iconNode$J);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$I = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
-];
-const Download = createLucideIcon("download", __iconNode$I);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$H = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
-];
-const FileText = createLucideIcon("file-text", __iconNode$H);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$G = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
-];
-const Globe = createLucideIcon("globe", __iconNode$G);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$F = [
-  ["path", { d: "M16 5h6", key: "1vod17" }],
-  ["path", { d: "M19 2v6", key: "4bpg5p" }],
-  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
-];
-const ImagePlus = createLucideIcon("image-plus", __iconNode$F);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$E = [
-  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
-];
-const Image = createLucideIcon("image", __iconNode$E);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$D = [
-  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
-  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
-  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
-];
-const Key = createLucideIcon("key", __iconNode$D);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$C = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$C);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$B = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
-];
-const Lock = createLucideIcon("lock", __iconNode$B);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$A = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
-];
-const LogOut = createLucideIcon("log-out", __iconNode$A);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$z = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$z);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$y = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
-];
-const MessageSquare = createLucideIcon("message-square", __iconNode$y);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$x = [
-  ["line", { x1: "2", x2: "22", y1: "2", y2: "22", key: "a6p6uj" }],
-  ["path", { d: "M18.89 13.23A7.12 7.12 0 0 0 19 12v-2", key: "80xlxr" }],
-  ["path", { d: "M5 10v2a7 7 0 0 0 12 5", key: "p2k8kg" }],
-  ["path", { d: "M15 9.34V5a3 3 0 0 0-5.68-1.33", key: "1gzdoj" }],
-  ["path", { d: "M9 9v3a3 3 0 0 0 5.12 2.12", key: "r2i35w" }],
-  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
-];
-const MicOff = createLucideIcon("mic-off", __iconNode$x);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$w = [
-  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
-  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
-  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
-];
-const Mic = createLucideIcon("mic", __iconNode$w);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$v = [
-  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
-  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
-  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
-];
-const Monitor = createLucideIcon("monitor", __iconNode$v);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$u = [
-  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
-];
-const Moon = createLucideIcon("moon", __iconNode$u);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$t = [
-  ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
-  [
-    "path",
-    {
-      d: "m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486",
-      key: "1pkts6"
-    }
-  ]
-];
-const Paperclip = createLucideIcon("paperclip", __iconNode$t);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$s = [
-  [
-    "path",
-    {
-      d: "M10.1 13.9a14 14 0 0 0 3.732 2.668 1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2 18 18 0 0 1-12.728-5.272",
-      key: "1wngk7"
-    }
-  ],
-  ["path", { d: "M22 2 2 22", key: "y4kqgn" }],
-  [
-    "path",
-    {
-      d: "M4.76 13.582A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 .244.473",
-      key: "10hv5p"
-    }
-  ]
-];
-const PhoneOff = createLucideIcon("phone-off", __iconNode$s);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$r = [
-  [
-    "path",
-    {
-      d: "M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384",
-      key: "9njp5v"
-    }
-  ]
-];
-const Phone = createLucideIcon("phone", __iconNode$r);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$q = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
-const Play = createLucideIcon("play", __iconNode$q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$p = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$p);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$o = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
-];
-const Search = createLucideIcon("search", __iconNode$o);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$n = [
-  [
-    "path",
-    {
-      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-      key: "1ffxy3"
-    }
-  ],
-  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
-];
-const Send = createLucideIcon("send", __iconNode$n);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$m = [
-  [
-    "path",
-    {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
-];
-const Settings = createLucideIcon("settings", __iconNode$m);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$l = [
-  [
-    "path",
-    {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
-    }
-  ],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
-];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$l);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$k = [
-  ["path", { d: "m2 2 20 20", key: "1ooewy" }],
-  [
-    "path",
-    {
-      d: "M5 5a1 1 0 0 0-1 1v7c0 5 3.5 7.5 7.67 8.94a1 1 0 0 0 .67.01c2.35-.82 4.48-1.97 5.9-3.71",
-      key: "1jlk70"
-    }
-  ],
-  [
-    "path",
-    {
-      d: "M9.309 3.652A12.252 12.252 0 0 0 11.24 2.28a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v7a9.784 9.784 0 0 1-.08 1.264",
-      key: "18rp1v"
-    }
-  ]
-];
-const ShieldOff = createLucideIcon("shield-off", __iconNode$k);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$j = [
-  [
-    "path",
-    {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
-    }
-  ]
-];
-const Shield = createLucideIcon("shield", __iconNode$j);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$i = [
-  ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
-  ["path", { d: "M12 18h.01", key: "mhygvu" }]
-];
-const Smartphone = createLucideIcon("smartphone", __iconNode$i);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$h = [
-  ["path", { d: "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7", key: "1m0v6g" }],
-  [
-    "path",
-    {
-      d: "M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z",
-      key: "ohrbg2"
-    }
-  ]
-];
-const SquarePen = createLucideIcon("square-pen", __iconNode$h);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$g = [
-  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
-];
-const Square = createLucideIcon("square", __iconNode$g);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$f = [
-  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
-  ["path", { d: "M12 2v2", key: "tus03m" }],
-  ["path", { d: "M12 20v2", key: "1lh1kg" }],
-  ["path", { d: "m4.93 4.93 1.41 1.41", key: "149t6j" }],
-  ["path", { d: "m17.66 17.66 1.41 1.41", key: "ptbguv" }],
-  ["path", { d: "M2 12h2", key: "1t8f8n" }],
-  ["path", { d: "M20 12h2", key: "1q8mjw" }],
-  ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
-  ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
-];
-const Sun = createLucideIcon("sun", __iconNode$f);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$e = [
-  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
-  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
-  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
-];
-const Timer = createLucideIcon("timer", __iconNode$e);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$d = [
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
-];
-const Trash2 = createLucideIcon("trash-2", __iconNode$d);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$c = [
-  [
-    "path",
-    {
-      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-      key: "wmoenq"
-    }
-  ],
-  ["path", { d: "M12 9v4", key: "juzpu7" }],
-  ["path", { d: "M12 17h.01", key: "p32p05" }]
-];
-const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$c);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$b = [
-  ["path", { d: "M12 3v12", key: "1x0j5s" }],
-  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
-];
-const Upload = createLucideIcon("upload", __iconNode$b);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$a = [
-  ["path", { d: "m16 11 2 2 4-4", key: "9rsbq5" }],
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
-];
-const UserCheck = createLucideIcon("user-check", __iconNode$a);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$9 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
-  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
-];
-const UserMinus = createLucideIcon("user-minus", __iconNode$9);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$8 = [
-  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
-  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
-];
-const User = createLucideIcon("user", __iconNode$8);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$7 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
-  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
-];
-const Users = createLucideIcon("users", __iconNode$7);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$6 = [
-  [
-    "path",
-    {
-      d: "m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5",
-      key: "ftymec"
-    }
-  ],
-  ["rect", { x: "2", y: "6", width: "14", height: "12", rx: "2", key: "158x01" }]
-];
-const Video = createLucideIcon("video", __iconNode$6);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$5 = [
-  [
-    "path",
-    {
-      d: "M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z",
-      key: "uqj9uw"
-    }
-  ],
-  ["path", { d: "M16 9a5 5 0 0 1 0 6", key: "1q6k2b" }],
-  ["path", { d: "M19.364 18.364a9 9 0 0 0 0-12.728", key: "ijwkga" }]
-];
-const Volume2 = createLucideIcon("volume-2", __iconNode$5);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$4 = [
-  [
-    "path",
-    {
-      d: "M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z",
-      key: "uqj9uw"
-    }
-  ],
-  ["line", { x1: "22", x2: "16", y1: "9", y2: "15", key: "1ewh16" }],
-  ["line", { x1: "16", x2: "22", y1: "9", y2: "15", key: "5ykzw1" }]
-];
-const VolumeX = createLucideIcon("volume-x", __iconNode$4);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$3 = [
-  ["path", { d: "M12 20h.01", key: "zekei9" }],
-  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }],
-  ["path", { d: "M5 12.859a10 10 0 0 1 5.17-2.69", key: "1dl1wf" }],
-  ["path", { d: "M19 12.859a10 10 0 0 0-2.007-1.523", key: "4k23kn" }],
-  ["path", { d: "M2 8.82a15 15 0 0 1 4.177-2.643", key: "1grhjp" }],
-  ["path", { d: "M22 8.82a15 15 0 0 0-11.288-3.764", key: "z3jwby" }],
-  ["path", { d: "m2 2 20 20", key: "1ooewy" }]
-];
-const WifiOff = createLucideIcon("wifi-off", __iconNode$3);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$2 = [
-  ["path", { d: "M12 20h.01", key: "zekei9" }],
-  ["path", { d: "M2 8.82a15 15 0 0 1 20 0", key: "dnpr2z" }],
-  ["path", { d: "M5 12.859a10 10 0 0 1 14 0", key: "1x1e6c" }],
-  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }]
-];
-const Wifi = createLucideIcon("wifi", __iconNode$2);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$1 = [
-  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
-  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
-];
-const X = createLucideIcon("x", __iconNode$1);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode = [
-  [
-    "path",
-    {
-      d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
-      key: "1xq2db"
-    }
-  ]
-];
-const Zap = createLucideIcon("zap", __iconNode);
-function BannerItem({ call }) {
-  const navigate = useNavigate();
-  const endCall = useEndCall();
-  const { data: callerProfile } = useUserProfile(call.caller);
-  const callerStr = call.caller.toText();
-  const displayName = callerProfile ? callerStr.slice(0, 8) : callerStr.slice(0, 8);
-  const handleAccept = reactExports.useCallback(() => {
-    navigate({ to: "/app/calls/$id", params: { id: call.id.toString() } });
-  }, [navigate, call.id]);
-  const handleDecline = reactExports.useCallback(async () => {
-    await endCall.mutateAsync({ callId: call.id, reason: CallStatus.declined });
-  }, [endCall, call.id]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "div",
-    {
-      "data-ocid": "incoming_call.banner",
-      role: "alertdialog",
-      "aria-label": "Incoming call",
-      className: "flex items-center gap-3 rounded-xl bg-card border border-border shadow-elevated px-4 py-3 min-w-[300px] max-w-sm",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: callerStr, size: 40 }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm font-semibold text-foreground truncate", children: [
-            displayName,
-            "…"
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 text-xs text-muted-foreground mt-0.5", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 11 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Voice call" })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 flex-shrink-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              "data-ocid": "incoming_call.decline_button",
-              onClick: handleDecline,
-              "aria-label": "Decline call",
-              className: "w-9 h-9 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:scale-105 active:scale-95 transition-smooth",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneOff, { size: 16 })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              "data-ocid": "incoming_call.accept_button",
-              onClick: handleAccept,
-              "aria-label": "Accept call",
-              className: "w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-105 active:scale-95 transition-smooth",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 16 })
-            }
-          )
-        ] })
-      ]
-    }
-  );
-}
-function IncomingCallBanner() {
-  const { principal } = useAuth();
-  const { data: activeCalls } = useActiveCalls();
-  const myPrincipal = principal == null ? void 0 : principal.toText();
-  const incomingCalls = (activeCalls ?? []).filter(
-    (c2) => c2.status === CallStatus.ringing && c2.caller.toText() !== myPrincipal && c2.callees.some((p2) => p2.toText() === myPrincipal)
-  );
-  if (incomingCalls.length === 0) return null;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "div",
-    {
-      className: "fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2",
-      style: {
-        animation: "slideDown 0.3s cubic-bezier(0.4,0,0.2,1) both"
-      },
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
-        @keyframes slideDown {
-          from { opacity: 0; transform: translate(-50%, -24px); }
-          to   { opacity: 1; transform: translate(-50%, 0); }
-        }
-      ` }),
-        incomingCalls.map((call) => /* @__PURE__ */ jsxRuntimeExports.jsx(BannerItem, { call }, call.id.toString()))
-      ]
-    }
-  );
-}
 var M$1 = (e, i, s2, u, m2, a2, l, h2) => {
   let d2 = document.documentElement, w2 = ["light", "dark"];
   function p2(n) {
@@ -39265,7 +29939,7 @@ var isClient = typeof document !== "undefined";
 var noop = function noop2() {
 };
 var index = isClient ? reactExports.useLayoutEffect : noop;
-function deepEqual(a2, b2) {
+function deepEqual$1(a2, b2) {
   if (a2 === b2) {
     return true;
   }
@@ -39283,7 +29957,7 @@ function deepEqual(a2, b2) {
       length = a2.length;
       if (length !== b2.length) return false;
       for (i = length; i-- !== 0; ) {
-        if (!deepEqual(a2[i], b2[i])) {
+        if (!deepEqual$1(a2[i], b2[i])) {
           return false;
         }
       }
@@ -39304,7 +29978,7 @@ function deepEqual(a2, b2) {
       if (key === "_owner" && a2.$$typeof) {
         continue;
       }
-      if (!deepEqual(a2[key], b2[key])) {
+      if (!deepEqual$1(a2[key], b2[key])) {
         return false;
       }
     }
@@ -39356,7 +30030,7 @@ function useFloating(options) {
     isPositioned: false
   });
   const [latestMiddleware, setLatestMiddleware] = reactExports.useState(middleware);
-  if (!deepEqual(latestMiddleware, middleware)) {
+  if (!deepEqual$1(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
   const [_reference, _setReference] = reactExports.useState(null);
@@ -39403,7 +30077,7 @@ function useFloating(options) {
         // setting it to `true` when `open === false` (must be specified).
         isPositioned: openRef.current !== false
       };
-      if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+      if (isMountedRef.current && !deepEqual$1(dataRef.current, fullData)) {
         dataRef.current = fullData;
         reactDomExports.flushSync(() => {
           setData(fullData);
@@ -40055,7 +30729,7 @@ function useControllableState({
     (nextValue) => {
       var _a3;
       if (isControlled) {
-        const value2 = isFunction$1(nextValue) ? nextValue(prop) : nextValue;
+        const value2 = isFunction$2(nextValue) ? nextValue(prop) : nextValue;
         if (value2 !== prop) {
           (_a3 = onChangeRef.current) == null ? void 0 : _a3.call(onChangeRef, value2);
         }
@@ -40086,7 +30760,7 @@ function useUncontrolledState({
   }, [value, prevValueRef]);
   return [value, setValue, onChangeRef];
 }
-function isFunction$1(value) {
+function isFunction$2(value) {
   return typeof value === "function";
 }
 var VISUALLY_HIDDEN_STYLES = Object.freeze({
@@ -40898,7 +31572,7 @@ function twJoin() {
   let string = "";
   while (index2 < arguments.length) {
     if (argument = arguments[index2++]) {
-      if (resolvedValue = toValue(argument)) {
+      if (resolvedValue = toValue$1(argument)) {
         string && (string += " ");
         string += resolvedValue;
       }
@@ -40906,7 +31580,7 @@ function twJoin() {
   }
   return string;
 }
-const toValue = (mix) => {
+const toValue$1 = (mix) => {
   if (typeof mix === "string") {
     return mix;
   }
@@ -40914,7 +31588,7 @@ const toValue = (mix) => {
   let string = "";
   for (let k2 = 0; k2 < mix.length; k2++) {
     if (mix[k2]) {
-      if (resolvedValue = toValue(mix[k2])) {
+      if (resolvedValue = toValue$1(mix[k2])) {
         string && (string += " ");
         string += resolvedValue;
       }
@@ -43112,6 +33786,2621 @@ function TooltipContent({
     }
   ) });
 }
+const UserId = Principal2;
+const Error$1 = Variant({
+  "forbidden": Null,
+  "alreadyExists": Null,
+  "invalidInput": Null,
+  "notFound": Null,
+  "unauthorized": Null
+});
+const Result_3 = Variant({ "ok": Null, "err": Error$1 });
+const ConversationId = Nat;
+const AddMemberRequest = Record({
+  "member": UserId,
+  "conversationId": ConversationId
+});
+const AddDeviceRequest = Record({
+  "publicKey": Vec(Nat8),
+  "deviceLabel": Text,
+  "deviceId": Text
+});
+const Timestamp = Int;
+const DeviceRecordPublic = Record({
+  "publicKey": Vec(Nat8),
+  "deviceLabel": Text,
+  "deviceId": Text,
+  "registeredAt": Timestamp,
+  "lastSeen": Timestamp
+});
+const Result_6 = Variant({
+  "ok": DeviceRecordPublic,
+  "err": Error$1
+});
+const EscrowAccessGrant = Record({
+  "grantTimestamp": Timestamp,
+  "grantId": Nat,
+  "accessOutcome": Text,
+  "targetDeviceId": Text,
+  "reason": Text,
+  "requestingAdmin": UserId,
+  "targetUserId": UserId
+});
+const Result_17 = Variant({
+  "ok": Vec(EscrowAccessGrant),
+  "err": Error$1
+});
+const Result_16 = Variant({
+  "ok": EscrowAccessGrant,
+  "err": Error$1
+});
+const DenialReason = Text;
+const JoinRequestActionRequest = Record({
+  "denialReason": Opt(DenialReason),
+  "requestId": Text,
+  "conversationId": ConversationId
+});
+const CreateDirectRequest = Record({ "peer": UserId });
+const ConversationKind$1 = Variant({
+  "group": Null,
+  "direct": Null
+});
+const ConversationPublic = Record({
+  "id": ConversationId,
+  "members": Vec(UserId),
+  "lastMessageAt": Timestamp,
+  "displayName": Opt(Text),
+  "kind": ConversationKind$1,
+  "createdAt": Timestamp,
+  "createdBy": UserId,
+  "description": Opt(Text),
+  "category": Opt(Text),
+  "discoverable": Bool,
+  "encryptedName": Opt(Vec(Nat8))
+});
+const Result_15 = Variant({
+  "ok": ConversationPublic,
+  "err": Error$1
+});
+const CreateGroupRequest = Record({
+  "initialMembers": Vec(UserId),
+  "displayName": Opt(Text),
+  "description": Opt(Text),
+  "category": Opt(Text),
+  "discoverable": Bool,
+  "encryptedName": Vec(Nat8)
+});
+const AttachmentId = Nat;
+const AuditExportEventType$1 = Variant({
+  "retentionEnabled": Null,
+  "memberAdded": Null,
+  "retentionDisabled": Null,
+  "escrowAccessGranted": Null,
+  "callInitiated": Null,
+  "adminAction": Null,
+  "auditLogExported": Null,
+  "escrowEnrolled": Null,
+  "messageSent": Null,
+  "escrowRevoked": Null,
+  "userRegistered": Null,
+  "memberRemoved": Null,
+  "userRemoved": Null
+});
+const AuditExportFormat$1 = Variant({
+  "csv": Null,
+  "json": Null
+});
+const AuditExportRequest = Record({
+  "endDate": Opt(Timestamp),
+  "affectedUser": Opt(UserId),
+  "eventTypes": Opt(Vec(AuditExportEventType$1)),
+  "startDate": Opt(Timestamp),
+  "format": AuditExportFormat$1
+});
+const Result_13 = Variant({ "ok": Text, "err": Error$1 });
+const CompartmentLabel$1 = Variant({
+  "classified": Null,
+  "unclassified": Null
+});
+const GroupRetentionPolicy = Record({
+  "retentionEnabled": Bool,
+  "enabledAt": Opt(Timestamp),
+  "enabledBy": Opt(UserId),
+  "convId": ConversationId
+});
+const DataResidency$1 = Variant({
+  "eu": Null,
+  "us": Null,
+  "apac": Null,
+  "global": Null
+});
+const ConfigExportBundle = Record({
+  "compartmentMappings": Vec(Tuple(ConversationId, CompartmentLabel$1)),
+  "adminPrincipals": Vec(UserId),
+  "exportedAt": Timestamp,
+  "exportedBy": UserId,
+  "subnetPrincipal": Opt(Text),
+  "canisters": Text,
+  "groupRetentionPolicies": Vec(
+    Tuple(ConversationId, GroupRetentionPolicy)
+  ),
+  "residencyLabel": DataResidency$1
+});
+const Result_14 = Variant({
+  "ok": ConfigExportBundle,
+  "err": Error$1
+});
+const AuditEventType$2 = Variant({
+  "retentionEnabled": Null,
+  "memberAdded": Null,
+  "retentionDisabled": Null,
+  "escrowAccessGranted": Null,
+  "callInitiated": Null,
+  "sovereignConfigUpdated": Null,
+  "messageQueueDrained": Null,
+  "adminAction": Null,
+  "auditLogExported": Null,
+  "escrowEnrolled": Null,
+  "messageSent": Null,
+  "escrowRevoked": Null,
+  "compartmentAssigned": Null,
+  "userRegistered": Null,
+  "memberRemoved": Null,
+  "userRemoved": Null,
+  "priorityMessageSent": Null
+});
+const GetAuditLogRequest = Record({
+  "limit": Nat,
+  "filterEventType": Opt(AuditEventType$2),
+  "afterEventId": Opt(Nat)
+});
+const AuditEvent = Record({
+  "id": Nat,
+  "targetPrincipal": Opt(UserId),
+  "encryptedDetails": Opt(Vec(Nat8)),
+  "timestamp": Timestamp,
+  "actorPrincipal": UserId,
+  "eventType": AuditEventType$2
+});
+const Result_12 = Variant({
+  "ok": Vec(AuditEvent),
+  "err": Error$1
+});
+const SovereignConfig = Record({
+  "lastUpdated": Timestamp,
+  "subnetPrincipal": Opt(Principal2),
+  "canisters": Text,
+  "nodeCount": Opt(Nat),
+  "cyclesCostMultiplier": Opt(Float64),
+  "residencyLabel": DataResidency$1
+});
+const JoinRequestStatus$1 = Variant({
+  "pending": Null,
+  "denied": Null,
+  "approved": Null
+});
+const JoinRequest = Record({
+  "status": JoinRequestStatus$1,
+  "requestId": Text,
+  "createdAt": Timestamp,
+  "conversationId": ConversationId,
+  "message": Opt(Text),
+  "requesterId": UserId
+});
+const Result_11 = Variant({
+  "ok": Vec(JoinRequest),
+  "err": Error$1
+});
+const Result_10 = Variant({
+  "ok": GroupRetentionPolicy,
+  "err": Error$1
+});
+const MessageId = Nat;
+const Attachment = Record({
+  "id": AttachmentId,
+  "messageId": MessageId,
+  "mimeType": Text,
+  "encryptedSizeBytes": Nat,
+  "storageKey": Text,
+  "uploader": UserId,
+  "uploadedAt": Timestamp
+});
+const GetMessagesRequest = Record({
+  "beforeMessageId": Opt(MessageId),
+  "limit": Nat,
+  "conversationId": ConversationId
+});
+const MessageType$1 = Variant({
+  "audio": Null,
+  "video": Null,
+  "file": Null,
+  "text": Null,
+  "image": Null
+});
+const MessagePriority$1 = Variant({
+  "normal": Null,
+  "high": Null
+});
+const ReadReceipt = Record({
+  "userId": UserId,
+  "readAt": Timestamp
+});
+const MessagePublic = Record({
+  "id": MessageId,
+  "ttlSeconds": Opt(Nat),
+  "encryptedContent": Vec(Nat8),
+  "isDeleted": Bool,
+  "sender": UserId,
+  "sentAt": Timestamp,
+  "messageType": MessageType$1,
+  "conversationId": ConversationId,
+  "priority": Opt(MessagePriority$1),
+  "readBy": Vec(ReadReceipt)
+});
+const Result_9 = Variant({
+  "ok": Vec(MessagePublic),
+  "err": Error$1
+});
+const EscrowRecord = Record({
+  "devicePublicKeyFingerprint": Text,
+  "userId": UserId,
+  "consentTimestamp": Timestamp,
+  "deviceLabel": Text,
+  "wrappedKey": Vec(Nat8),
+  "deviceId": Text,
+  "consentLanguageVersion": Text,
+  "revokedAt": Opt(Timestamp),
+  "revokedReason": Opt(Text)
+});
+const GetRetentionMetadataRequest = Record({
+  "endDate": Opt(Timestamp),
+  "limit": Nat,
+  "afterMessageId": Opt(MessageId),
+  "convId": Opt(ConversationId),
+  "startDate": Opt(Timestamp)
+});
+const RetentionMetadataRecord = Record({
+  "messageId": MessageId,
+  "sentAt": Timestamp,
+  "senderPrincipal": UserId,
+  "recipientPrincipals": Vec(UserId),
+  "convId": ConversationId
+});
+const Result_8 = Variant({
+  "ok": Vec(RetentionMetadataRecord),
+  "err": Error$1
+});
+const TypingIndicatorPublic = Record({
+  "expiresAt": Timestamp,
+  "userId": UserId,
+  "conversationId": ConversationId
+});
+const EcdhPublicKey = Vec(Nat8);
+const UserProfilePublic = Record({
+  "id": UserId,
+  "ecdhPublicKey": EcdhPublicKey,
+  "encryptedAvatarKey": Opt(Text),
+  "encryptedDisplayName": Vec(Nat8),
+  "registeredAt": Timestamp,
+  "lastSeen": Timestamp
+});
+const Result_7 = Variant({ "ok": Vec(UserId), "err": Error$1 });
+const ListPublicGroupsRequest = Record({
+  "offset": Nat,
+  "limit": Nat,
+  "category": Opt(Text)
+});
+const PublicGroupSummary = Record({
+  "id": ConversationId,
+  "name": Text,
+  "memberCount": Nat,
+  "description": Opt(Text),
+  "category": Opt(Text)
+});
+const RegisterAttachmentRequest = Record({
+  "messageId": MessageId,
+  "mimeType": Text,
+  "encryptedSizeBytes": Nat,
+  "storageKey": Text
+});
+const Result_5 = Variant({ "ok": Attachment, "err": Error$1 });
+const RegisterRequest = Record({
+  "ecdhPublicKey": EcdhPublicKey,
+  "encryptedAvatarKey": Opt(Text),
+  "encryptedDisplayName": Vec(Nat8)
+});
+const Result = Variant({ "ok": UserProfilePublic, "err": Error$1 });
+const RemoveMemberRequest = Record({
+  "member": UserId,
+  "conversationId": ConversationId
+});
+const SendMessageRequest = Record({
+  "ttlSeconds": Opt(Nat),
+  "encryptedContent": Vec(Nat8),
+  "messageType": MessageType$1,
+  "conversationId": ConversationId,
+  "priority": Opt(MessagePriority$1)
+});
+const Result_4 = Variant({ "ok": MessagePublic, "err": Error$1 });
+const Result_2 = Variant({ "ok": SovereignConfig, "err": Error$1 });
+const SubmitJoinRequestRequest = Record({
+  "conversationId": ConversationId,
+  "message": Opt(Text)
+});
+const Result_1 = Variant({ "ok": JoinRequest, "err": Error$1 });
+const UpdateProfileRequest = Record({
+  "ecdhPublicKey": Opt(EcdhPublicKey),
+  "encryptedAvatarKey": Opt(Text),
+  "encryptedDisplayName": Opt(Vec(Nat8))
+});
+Service({
+  "addAdmin": Func([UserId], [Result_3], []),
+  "addConversationMember": Func([AddMemberRequest], [Result_3], []),
+  "addDevice": Func([AddDeviceRequest], [Result_6], []),
+  "adminGetEscrowGrants": Func(
+    [Opt(UserId), Nat, Opt(Nat)],
+    [Result_17],
+    ["query"]
+  ),
+  "adminGrantEscrowAccess": Func(
+    [UserId, Text, Text],
+    [Result_16],
+    []
+  ),
+  "approveJoinRequest": Func([JoinRequestActionRequest], [Result_3], []),
+  "clearTypingIndicator": Func([ConversationId], [], []),
+  "createDirectConversation": Func([CreateDirectRequest], [Result_15], []),
+  "createGroupConversation": Func([CreateGroupRequest], [Result_15], []),
+  "deleteAttachment": Func([AttachmentId], [Result_3], []),
+  "deleteConversation": Func([ConversationId], [Result_3], []),
+  "deleteGroupConversation": Func([ConversationId], [Result_3], []),
+  "denyJoinRequest": Func([JoinRequestActionRequest], [Result_3], []),
+  "disableGroupRetention": Func([ConversationId], [Result_3], []),
+  "enableGroupRetention": Func([ConversationId], [Result_3], []),
+  "enrollKeyEscrow": Func(
+    [Text, Text, Text, Vec(Nat8), Text],
+    [Result_3],
+    []
+  ),
+  "exportAuditLog": Func([AuditExportRequest], [Result_13], []),
+  "exportConfigBundle": Func([], [Result_14], []),
+  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_13], []),
+  "getAuditLog": Func([GetAuditLogRequest], [Result_12], ["query"]),
+  "getConversation": Func(
+    [ConversationId],
+    [Opt(ConversationPublic)],
+    ["query"]
+  ),
+  "getDeploymentInfo": Func([], [SovereignConfig], ["query"]),
+  "getGroupCompartment": Func(
+    [ConversationId],
+    [Opt(CompartmentLabel$1)],
+    ["query"]
+  ),
+  "getGroupJoinRequests": Func([ConversationId], [Result_11], ["query"]),
+  "getGroupRetentionPolicy": Func(
+    [ConversationId],
+    [Result_10],
+    ["query"]
+  ),
+  "getMessageAttachments": Func(
+    [MessageId],
+    [Vec(Attachment)],
+    ["query"]
+  ),
+  "getMessages": Func([GetMessagesRequest], [Result_9], ["query"]),
+  "getMyEscrowStatus": Func([], [Vec(EscrowRecord)], ["query"]),
+  "getRetentionMetadata": Func(
+    [GetRetentionMetadataRequest],
+    [Result_8],
+    ["query"]
+  ),
+  "getTypingIndicators": Func(
+    [ConversationId],
+    [Vec(TypingIndicatorPublic)],
+    ["query"]
+  ),
+  "getUserProfile": Func(
+    [UserId],
+    [Opt(UserProfilePublic)],
+    ["query"]
+  ),
+  "getUserProfiles": Func(
+    [Vec(UserId)],
+    [Vec(UserProfilePublic)],
+    ["query"]
+  ),
+  "isAdminCheck": Func([UserId], [Bool], ["query"]),
+  "listAdmins": Func([], [Result_7], ["query"]),
+  "listConversations": Func([], [Vec(ConversationPublic)], ["query"]),
+  "listMyDevices": Func([], [Vec(DeviceRecordPublic)], ["query"]),
+  "listPublicGroups": Func(
+    [ListPublicGroupsRequest],
+    [Vec(PublicGroupSummary)],
+    ["query"]
+  ),
+  "markMessageRead": Func([MessageId], [Result_3], []),
+  "redeemDeviceSyncToken": Func(
+    [Text, Text, Text],
+    [Result_6],
+    []
+  ),
+  "registerAttachment": Func([RegisterAttachmentRequest], [Result_5], []),
+  "registerUser": Func([RegisterRequest], [Result], []),
+  "removeAdmin": Func([UserId], [Result_3], []),
+  "removeConversationMember": Func([RemoveMemberRequest], [Result_3], []),
+  "revokeDevice": Func([Text], [Result_3], []),
+  "revokeKeyEscrow": Func([Text, Text], [Result_3], []),
+  "sendMessage": Func([SendMessageRequest], [Result_4], []),
+  "setGroupCompartment": Func(
+    [ConversationId, CompartmentLabel$1],
+    [Result_3],
+    []
+  ),
+  "setSovereignConfig": Func(
+    [
+      DataResidency$1,
+      Opt(Principal2),
+      Opt(Nat),
+      Opt(Float64)
+    ],
+    [Result_2],
+    []
+  ),
+  "setTypingIndicator": Func([ConversationId, Nat], [], []),
+  "submitJoinRequest": Func([SubmitJoinRequestRequest], [Result_1], []),
+  "touchPresence": Func([], [], []),
+  "updateUserProfile": Func([UpdateProfileRequest], [Result], [])
+});
+const idlFactory = ({ IDL: IDL2 }) => {
+  const UserId2 = IDL2.Principal;
+  const Error2 = IDL2.Variant({
+    "forbidden": IDL2.Null,
+    "alreadyExists": IDL2.Null,
+    "invalidInput": IDL2.Null,
+    "notFound": IDL2.Null,
+    "unauthorized": IDL2.Null
+  });
+  const Result_32 = IDL2.Variant({ "ok": IDL2.Null, "err": Error2 });
+  const ConversationId2 = IDL2.Nat;
+  const AddMemberRequest2 = IDL2.Record({
+    "member": UserId2,
+    "conversationId": ConversationId2
+  });
+  const AddDeviceRequest2 = IDL2.Record({
+    "publicKey": IDL2.Vec(IDL2.Nat8),
+    "deviceLabel": IDL2.Text,
+    "deviceId": IDL2.Text
+  });
+  const Timestamp2 = IDL2.Int;
+  const DeviceRecordPublic2 = IDL2.Record({
+    "publicKey": IDL2.Vec(IDL2.Nat8),
+    "deviceLabel": IDL2.Text,
+    "deviceId": IDL2.Text,
+    "registeredAt": Timestamp2,
+    "lastSeen": Timestamp2
+  });
+  const Result_62 = IDL2.Variant({ "ok": DeviceRecordPublic2, "err": Error2 });
+  const EscrowAccessGrant2 = IDL2.Record({
+    "grantTimestamp": Timestamp2,
+    "grantId": IDL2.Nat,
+    "accessOutcome": IDL2.Text,
+    "targetDeviceId": IDL2.Text,
+    "reason": IDL2.Text,
+    "requestingAdmin": UserId2,
+    "targetUserId": UserId2
+  });
+  const Result_172 = IDL2.Variant({
+    "ok": IDL2.Vec(EscrowAccessGrant2),
+    "err": Error2
+  });
+  const Result_162 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
+  const DenialReason2 = IDL2.Text;
+  const JoinRequestActionRequest2 = IDL2.Record({
+    "denialReason": IDL2.Opt(DenialReason2),
+    "requestId": IDL2.Text,
+    "conversationId": ConversationId2
+  });
+  const CreateDirectRequest2 = IDL2.Record({ "peer": UserId2 });
+  const ConversationKind2 = IDL2.Variant({
+    "group": IDL2.Null,
+    "direct": IDL2.Null
+  });
+  const ConversationPublic2 = IDL2.Record({
+    "id": ConversationId2,
+    "members": IDL2.Vec(UserId2),
+    "lastMessageAt": Timestamp2,
+    "displayName": IDL2.Opt(IDL2.Text),
+    "kind": ConversationKind2,
+    "createdAt": Timestamp2,
+    "createdBy": UserId2,
+    "description": IDL2.Opt(IDL2.Text),
+    "category": IDL2.Opt(IDL2.Text),
+    "discoverable": IDL2.Bool,
+    "encryptedName": IDL2.Opt(IDL2.Vec(IDL2.Nat8))
+  });
+  const Result_152 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
+  const CreateGroupRequest2 = IDL2.Record({
+    "initialMembers": IDL2.Vec(UserId2),
+    "displayName": IDL2.Opt(IDL2.Text),
+    "description": IDL2.Opt(IDL2.Text),
+    "category": IDL2.Opt(IDL2.Text),
+    "discoverable": IDL2.Bool,
+    "encryptedName": IDL2.Vec(IDL2.Nat8)
+  });
+  const AttachmentId2 = IDL2.Nat;
+  const AuditExportEventType2 = IDL2.Variant({
+    "retentionEnabled": IDL2.Null,
+    "memberAdded": IDL2.Null,
+    "retentionDisabled": IDL2.Null,
+    "escrowAccessGranted": IDL2.Null,
+    "callInitiated": IDL2.Null,
+    "adminAction": IDL2.Null,
+    "auditLogExported": IDL2.Null,
+    "escrowEnrolled": IDL2.Null,
+    "messageSent": IDL2.Null,
+    "escrowRevoked": IDL2.Null,
+    "userRegistered": IDL2.Null,
+    "memberRemoved": IDL2.Null,
+    "userRemoved": IDL2.Null
+  });
+  const AuditExportFormat2 = IDL2.Variant({
+    "csv": IDL2.Null,
+    "json": IDL2.Null
+  });
+  const AuditExportRequest2 = IDL2.Record({
+    "endDate": IDL2.Opt(Timestamp2),
+    "affectedUser": IDL2.Opt(UserId2),
+    "eventTypes": IDL2.Opt(IDL2.Vec(AuditExportEventType2)),
+    "startDate": IDL2.Opt(Timestamp2),
+    "format": AuditExportFormat2
+  });
+  const Result_132 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
+  const CompartmentLabel2 = IDL2.Variant({
+    "classified": IDL2.Null,
+    "unclassified": IDL2.Null
+  });
+  const GroupRetentionPolicy2 = IDL2.Record({
+    "retentionEnabled": IDL2.Bool,
+    "enabledAt": IDL2.Opt(Timestamp2),
+    "enabledBy": IDL2.Opt(UserId2),
+    "convId": ConversationId2
+  });
+  const DataResidency2 = IDL2.Variant({
+    "eu": IDL2.Null,
+    "us": IDL2.Null,
+    "apac": IDL2.Null,
+    "global": IDL2.Null
+  });
+  const ConfigExportBundle2 = IDL2.Record({
+    "compartmentMappings": IDL2.Vec(
+      IDL2.Tuple(ConversationId2, CompartmentLabel2)
+    ),
+    "adminPrincipals": IDL2.Vec(UserId2),
+    "exportedAt": Timestamp2,
+    "exportedBy": UserId2,
+    "subnetPrincipal": IDL2.Opt(IDL2.Text),
+    "canisters": IDL2.Text,
+    "groupRetentionPolicies": IDL2.Vec(
+      IDL2.Tuple(ConversationId2, GroupRetentionPolicy2)
+    ),
+    "residencyLabel": DataResidency2
+  });
+  const Result_142 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
+  const AuditEventType2 = IDL2.Variant({
+    "retentionEnabled": IDL2.Null,
+    "memberAdded": IDL2.Null,
+    "retentionDisabled": IDL2.Null,
+    "escrowAccessGranted": IDL2.Null,
+    "callInitiated": IDL2.Null,
+    "sovereignConfigUpdated": IDL2.Null,
+    "messageQueueDrained": IDL2.Null,
+    "adminAction": IDL2.Null,
+    "auditLogExported": IDL2.Null,
+    "escrowEnrolled": IDL2.Null,
+    "messageSent": IDL2.Null,
+    "escrowRevoked": IDL2.Null,
+    "compartmentAssigned": IDL2.Null,
+    "userRegistered": IDL2.Null,
+    "memberRemoved": IDL2.Null,
+    "userRemoved": IDL2.Null,
+    "priorityMessageSent": IDL2.Null
+  });
+  const GetAuditLogRequest2 = IDL2.Record({
+    "limit": IDL2.Nat,
+    "filterEventType": IDL2.Opt(AuditEventType2),
+    "afterEventId": IDL2.Opt(IDL2.Nat)
+  });
+  const AuditEvent2 = IDL2.Record({
+    "id": IDL2.Nat,
+    "targetPrincipal": IDL2.Opt(UserId2),
+    "encryptedDetails": IDL2.Opt(IDL2.Vec(IDL2.Nat8)),
+    "timestamp": Timestamp2,
+    "actorPrincipal": UserId2,
+    "eventType": AuditEventType2
+  });
+  const Result_122 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
+  const SovereignConfig2 = IDL2.Record({
+    "lastUpdated": Timestamp2,
+    "subnetPrincipal": IDL2.Opt(IDL2.Principal),
+    "canisters": IDL2.Text,
+    "nodeCount": IDL2.Opt(IDL2.Nat),
+    "cyclesCostMultiplier": IDL2.Opt(IDL2.Float64),
+    "residencyLabel": DataResidency2
+  });
+  const JoinRequestStatus2 = IDL2.Variant({
+    "pending": IDL2.Null,
+    "denied": IDL2.Null,
+    "approved": IDL2.Null
+  });
+  const JoinRequest2 = IDL2.Record({
+    "status": JoinRequestStatus2,
+    "requestId": IDL2.Text,
+    "createdAt": Timestamp2,
+    "conversationId": ConversationId2,
+    "message": IDL2.Opt(IDL2.Text),
+    "requesterId": UserId2
+  });
+  const Result_112 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
+  const Result_102 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
+  const MessageId2 = IDL2.Nat;
+  const Attachment2 = IDL2.Record({
+    "id": AttachmentId2,
+    "messageId": MessageId2,
+    "mimeType": IDL2.Text,
+    "encryptedSizeBytes": IDL2.Nat,
+    "storageKey": IDL2.Text,
+    "uploader": UserId2,
+    "uploadedAt": Timestamp2
+  });
+  const GetMessagesRequest2 = IDL2.Record({
+    "beforeMessageId": IDL2.Opt(MessageId2),
+    "limit": IDL2.Nat,
+    "conversationId": ConversationId2
+  });
+  const MessageType2 = IDL2.Variant({
+    "audio": IDL2.Null,
+    "video": IDL2.Null,
+    "file": IDL2.Null,
+    "text": IDL2.Null,
+    "image": IDL2.Null
+  });
+  const MessagePriority2 = IDL2.Variant({
+    "normal": IDL2.Null,
+    "high": IDL2.Null
+  });
+  const ReadReceipt2 = IDL2.Record({ "userId": UserId2, "readAt": Timestamp2 });
+  const MessagePublic2 = IDL2.Record({
+    "id": MessageId2,
+    "ttlSeconds": IDL2.Opt(IDL2.Nat),
+    "encryptedContent": IDL2.Vec(IDL2.Nat8),
+    "isDeleted": IDL2.Bool,
+    "sender": UserId2,
+    "sentAt": Timestamp2,
+    "messageType": MessageType2,
+    "conversationId": ConversationId2,
+    "priority": IDL2.Opt(MessagePriority2),
+    "readBy": IDL2.Vec(ReadReceipt2)
+  });
+  const Result_92 = IDL2.Variant({
+    "ok": IDL2.Vec(MessagePublic2),
+    "err": Error2
+  });
+  const EscrowRecord2 = IDL2.Record({
+    "devicePublicKeyFingerprint": IDL2.Text,
+    "userId": UserId2,
+    "consentTimestamp": Timestamp2,
+    "deviceLabel": IDL2.Text,
+    "wrappedKey": IDL2.Vec(IDL2.Nat8),
+    "deviceId": IDL2.Text,
+    "consentLanguageVersion": IDL2.Text,
+    "revokedAt": IDL2.Opt(Timestamp2),
+    "revokedReason": IDL2.Opt(IDL2.Text)
+  });
+  const GetRetentionMetadataRequest2 = IDL2.Record({
+    "endDate": IDL2.Opt(Timestamp2),
+    "limit": IDL2.Nat,
+    "afterMessageId": IDL2.Opt(MessageId2),
+    "convId": IDL2.Opt(ConversationId2),
+    "startDate": IDL2.Opt(Timestamp2)
+  });
+  const RetentionMetadataRecord2 = IDL2.Record({
+    "messageId": MessageId2,
+    "sentAt": Timestamp2,
+    "senderPrincipal": UserId2,
+    "recipientPrincipals": IDL2.Vec(UserId2),
+    "convId": ConversationId2
+  });
+  const Result_82 = IDL2.Variant({
+    "ok": IDL2.Vec(RetentionMetadataRecord2),
+    "err": Error2
+  });
+  const TypingIndicatorPublic2 = IDL2.Record({
+    "expiresAt": Timestamp2,
+    "userId": UserId2,
+    "conversationId": ConversationId2
+  });
+  const EcdhPublicKey2 = IDL2.Vec(IDL2.Nat8);
+  const UserProfilePublic2 = IDL2.Record({
+    "id": UserId2,
+    "ecdhPublicKey": EcdhPublicKey2,
+    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
+    "encryptedDisplayName": IDL2.Vec(IDL2.Nat8),
+    "registeredAt": Timestamp2,
+    "lastSeen": Timestamp2
+  });
+  const Result_72 = IDL2.Variant({ "ok": IDL2.Vec(UserId2), "err": Error2 });
+  const ListPublicGroupsRequest2 = IDL2.Record({
+    "offset": IDL2.Nat,
+    "limit": IDL2.Nat,
+    "category": IDL2.Opt(IDL2.Text)
+  });
+  const PublicGroupSummary2 = IDL2.Record({
+    "id": ConversationId2,
+    "name": IDL2.Text,
+    "memberCount": IDL2.Nat,
+    "description": IDL2.Opt(IDL2.Text),
+    "category": IDL2.Opt(IDL2.Text)
+  });
+  const RegisterAttachmentRequest2 = IDL2.Record({
+    "messageId": MessageId2,
+    "mimeType": IDL2.Text,
+    "encryptedSizeBytes": IDL2.Nat,
+    "storageKey": IDL2.Text
+  });
+  const Result_52 = IDL2.Variant({ "ok": Attachment2, "err": Error2 });
+  const RegisterRequest2 = IDL2.Record({
+    "ecdhPublicKey": EcdhPublicKey2,
+    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
+    "encryptedDisplayName": IDL2.Vec(IDL2.Nat8)
+  });
+  const Result2 = IDL2.Variant({ "ok": UserProfilePublic2, "err": Error2 });
+  const RemoveMemberRequest2 = IDL2.Record({
+    "member": UserId2,
+    "conversationId": ConversationId2
+  });
+  const SendMessageRequest2 = IDL2.Record({
+    "ttlSeconds": IDL2.Opt(IDL2.Nat),
+    "encryptedContent": IDL2.Vec(IDL2.Nat8),
+    "messageType": MessageType2,
+    "conversationId": ConversationId2,
+    "priority": IDL2.Opt(MessagePriority2)
+  });
+  const Result_42 = IDL2.Variant({ "ok": MessagePublic2, "err": Error2 });
+  const Result_22 = IDL2.Variant({ "ok": SovereignConfig2, "err": Error2 });
+  const SubmitJoinRequestRequest2 = IDL2.Record({
+    "conversationId": ConversationId2,
+    "message": IDL2.Opt(IDL2.Text)
+  });
+  const Result_18 = IDL2.Variant({ "ok": JoinRequest2, "err": Error2 });
+  const UpdateProfileRequest2 = IDL2.Record({
+    "ecdhPublicKey": IDL2.Opt(EcdhPublicKey2),
+    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
+    "encryptedDisplayName": IDL2.Opt(IDL2.Vec(IDL2.Nat8))
+  });
+  return IDL2.Service({
+    "addAdmin": IDL2.Func([UserId2], [Result_32], []),
+    "addConversationMember": IDL2.Func([AddMemberRequest2], [Result_32], []),
+    "addDevice": IDL2.Func([AddDeviceRequest2], [Result_62], []),
+    "adminGetEscrowGrants": IDL2.Func(
+      [IDL2.Opt(UserId2), IDL2.Nat, IDL2.Opt(IDL2.Nat)],
+      [Result_172],
+      ["query"]
+    ),
+    "adminGrantEscrowAccess": IDL2.Func(
+      [UserId2, IDL2.Text, IDL2.Text],
+      [Result_162],
+      []
+    ),
+    "approveJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_32], []),
+    "clearTypingIndicator": IDL2.Func([ConversationId2], [], []),
+    "createDirectConversation": IDL2.Func(
+      [CreateDirectRequest2],
+      [Result_152],
+      []
+    ),
+    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_152], []),
+    "deleteAttachment": IDL2.Func([AttachmentId2], [Result_32], []),
+    "deleteConversation": IDL2.Func([ConversationId2], [Result_32], []),
+    "deleteGroupConversation": IDL2.Func([ConversationId2], [Result_32], []),
+    "denyJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_32], []),
+    "disableGroupRetention": IDL2.Func([ConversationId2], [Result_32], []),
+    "enableGroupRetention": IDL2.Func([ConversationId2], [Result_32], []),
+    "enrollKeyEscrow": IDL2.Func(
+      [IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Vec(IDL2.Nat8), IDL2.Text],
+      [Result_32],
+      []
+    ),
+    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_132], []),
+    "exportConfigBundle": IDL2.Func([], [Result_142], []),
+    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_132], []),
+    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_122], ["query"]),
+    "getConversation": IDL2.Func(
+      [ConversationId2],
+      [IDL2.Opt(ConversationPublic2)],
+      ["query"]
+    ),
+    "getDeploymentInfo": IDL2.Func([], [SovereignConfig2], ["query"]),
+    "getGroupCompartment": IDL2.Func(
+      [ConversationId2],
+      [IDL2.Opt(CompartmentLabel2)],
+      ["query"]
+    ),
+    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_112], ["query"]),
+    "getGroupRetentionPolicy": IDL2.Func(
+      [ConversationId2],
+      [Result_102],
+      ["query"]
+    ),
+    "getMessageAttachments": IDL2.Func(
+      [MessageId2],
+      [IDL2.Vec(Attachment2)],
+      ["query"]
+    ),
+    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_92], ["query"]),
+    "getMyEscrowStatus": IDL2.Func([], [IDL2.Vec(EscrowRecord2)], ["query"]),
+    "getRetentionMetadata": IDL2.Func(
+      [GetRetentionMetadataRequest2],
+      [Result_82],
+      ["query"]
+    ),
+    "getTypingIndicators": IDL2.Func(
+      [ConversationId2],
+      [IDL2.Vec(TypingIndicatorPublic2)],
+      ["query"]
+    ),
+    "getUserProfile": IDL2.Func(
+      [UserId2],
+      [IDL2.Opt(UserProfilePublic2)],
+      ["query"]
+    ),
+    "getUserProfiles": IDL2.Func(
+      [IDL2.Vec(UserId2)],
+      [IDL2.Vec(UserProfilePublic2)],
+      ["query"]
+    ),
+    "isAdminCheck": IDL2.Func([UserId2], [IDL2.Bool], ["query"]),
+    "listAdmins": IDL2.Func([], [Result_72], ["query"]),
+    "listConversations": IDL2.Func(
+      [],
+      [IDL2.Vec(ConversationPublic2)],
+      ["query"]
+    ),
+    "listMyDevices": IDL2.Func([], [IDL2.Vec(DeviceRecordPublic2)], ["query"]),
+    "listPublicGroups": IDL2.Func(
+      [ListPublicGroupsRequest2],
+      [IDL2.Vec(PublicGroupSummary2)],
+      ["query"]
+    ),
+    "markMessageRead": IDL2.Func([MessageId2], [Result_32], []),
+    "redeemDeviceSyncToken": IDL2.Func(
+      [IDL2.Text, IDL2.Text, IDL2.Text],
+      [Result_62],
+      []
+    ),
+    "registerAttachment": IDL2.Func(
+      [RegisterAttachmentRequest2],
+      [Result_52],
+      []
+    ),
+    "registerUser": IDL2.Func([RegisterRequest2], [Result2], []),
+    "removeAdmin": IDL2.Func([UserId2], [Result_32], []),
+    "removeConversationMember": IDL2.Func(
+      [RemoveMemberRequest2],
+      [Result_32],
+      []
+    ),
+    "revokeDevice": IDL2.Func([IDL2.Text], [Result_32], []),
+    "revokeKeyEscrow": IDL2.Func([IDL2.Text, IDL2.Text], [Result_32], []),
+    "sendMessage": IDL2.Func([SendMessageRequest2], [Result_42], []),
+    "setGroupCompartment": IDL2.Func(
+      [ConversationId2, CompartmentLabel2],
+      [Result_32],
+      []
+    ),
+    "setSovereignConfig": IDL2.Func(
+      [
+        DataResidency2,
+        IDL2.Opt(IDL2.Principal),
+        IDL2.Opt(IDL2.Nat),
+        IDL2.Opt(IDL2.Float64)
+      ],
+      [Result_22],
+      []
+    ),
+    "setTypingIndicator": IDL2.Func([ConversationId2, IDL2.Nat], [], []),
+    "submitJoinRequest": IDL2.Func([SubmitJoinRequestRequest2], [Result_18], []),
+    "touchPresence": IDL2.Func([], [], []),
+    "updateUserProfile": IDL2.Func([UpdateProfileRequest2], [Result2], [])
+  });
+};
+function candid_some(value) {
+  return [
+    value
+  ];
+}
+function candid_none() {
+  return [];
+}
+function record_opt_to_undefined(arg) {
+  return arg == null ? void 0 : arg;
+}
+class ExternalBlob2 {
+  constructor(directURL, blob) {
+    __publicField(this, "_blob");
+    __publicField(this, "directURL");
+    __publicField(this, "onProgress");
+    if (blob) {
+      this._blob = blob;
+    }
+    this.directURL = directURL;
+  }
+  static fromURL(url) {
+    return new ExternalBlob2(url, null);
+  }
+  static fromBytes(blob) {
+    const url = URL.createObjectURL(new Blob([
+      new Uint8Array(blob)
+    ], {
+      type: "application/octet-stream"
+    }));
+    return new ExternalBlob2(url, blob);
+  }
+  async getBytes() {
+    if (this._blob) {
+      return this._blob;
+    }
+    const response = await fetch(this.directURL);
+    const blob = await response.blob();
+    this._blob = new Uint8Array(await blob.arrayBuffer());
+    return this._blob;
+  }
+  getDirectURL() {
+    return this.directURL;
+  }
+  withUploadProgress(onProgress) {
+    this.onProgress = onProgress;
+    return this;
+  }
+}
+var AuditEventType$1 = /* @__PURE__ */ ((AuditEventType2) => {
+  AuditEventType2["retentionEnabled"] = "retentionEnabled";
+  AuditEventType2["memberAdded"] = "memberAdded";
+  AuditEventType2["retentionDisabled"] = "retentionDisabled";
+  AuditEventType2["escrowAccessGranted"] = "escrowAccessGranted";
+  AuditEventType2["callInitiated"] = "callInitiated";
+  AuditEventType2["sovereignConfigUpdated"] = "sovereignConfigUpdated";
+  AuditEventType2["messageQueueDrained"] = "messageQueueDrained";
+  AuditEventType2["adminAction"] = "adminAction";
+  AuditEventType2["auditLogExported"] = "auditLogExported";
+  AuditEventType2["escrowEnrolled"] = "escrowEnrolled";
+  AuditEventType2["messageSent"] = "messageSent";
+  AuditEventType2["escrowRevoked"] = "escrowRevoked";
+  AuditEventType2["compartmentAssigned"] = "compartmentAssigned";
+  AuditEventType2["userRegistered"] = "userRegistered";
+  AuditEventType2["memberRemoved"] = "memberRemoved";
+  AuditEventType2["userRemoved"] = "userRemoved";
+  AuditEventType2["priorityMessageSent"] = "priorityMessageSent";
+  return AuditEventType2;
+})(AuditEventType$1 || {});
+var AuditExportEventType = /* @__PURE__ */ ((AuditExportEventType2) => {
+  AuditExportEventType2["retentionEnabled"] = "retentionEnabled";
+  AuditExportEventType2["memberAdded"] = "memberAdded";
+  AuditExportEventType2["retentionDisabled"] = "retentionDisabled";
+  AuditExportEventType2["escrowAccessGranted"] = "escrowAccessGranted";
+  AuditExportEventType2["callInitiated"] = "callInitiated";
+  AuditExportEventType2["adminAction"] = "adminAction";
+  AuditExportEventType2["auditLogExported"] = "auditLogExported";
+  AuditExportEventType2["escrowEnrolled"] = "escrowEnrolled";
+  AuditExportEventType2["messageSent"] = "messageSent";
+  AuditExportEventType2["escrowRevoked"] = "escrowRevoked";
+  AuditExportEventType2["userRegistered"] = "userRegistered";
+  AuditExportEventType2["memberRemoved"] = "memberRemoved";
+  AuditExportEventType2["userRemoved"] = "userRemoved";
+  return AuditExportEventType2;
+})(AuditExportEventType || {});
+var AuditExportFormat = /* @__PURE__ */ ((AuditExportFormat2) => {
+  AuditExportFormat2["csv"] = "csv";
+  AuditExportFormat2["json"] = "json";
+  return AuditExportFormat2;
+})(AuditExportFormat || {});
+var CompartmentLabel = /* @__PURE__ */ ((CompartmentLabel2) => {
+  CompartmentLabel2["classified"] = "classified";
+  CompartmentLabel2["unclassified"] = "unclassified";
+  return CompartmentLabel2;
+})(CompartmentLabel || {});
+var ConversationKind = /* @__PURE__ */ ((ConversationKind2) => {
+  ConversationKind2["group"] = "group";
+  ConversationKind2["direct"] = "direct";
+  return ConversationKind2;
+})(ConversationKind || {});
+var DataResidency = /* @__PURE__ */ ((DataResidency2) => {
+  DataResidency2["eu"] = "eu";
+  DataResidency2["us"] = "us";
+  DataResidency2["apac"] = "apac";
+  DataResidency2["global"] = "global";
+  return DataResidency2;
+})(DataResidency || {});
+var Error_ = /* @__PURE__ */ ((Error_2) => {
+  Error_2["forbidden"] = "forbidden";
+  Error_2["alreadyExists"] = "alreadyExists";
+  Error_2["invalidInput"] = "invalidInput";
+  Error_2["notFound"] = "notFound";
+  Error_2["unauthorized"] = "unauthorized";
+  return Error_2;
+})(Error_ || {});
+var JoinRequestStatus = /* @__PURE__ */ ((JoinRequestStatus2) => {
+  JoinRequestStatus2["pending"] = "pending";
+  JoinRequestStatus2["denied"] = "denied";
+  JoinRequestStatus2["approved"] = "approved";
+  return JoinRequestStatus2;
+})(JoinRequestStatus || {});
+var MessagePriority = /* @__PURE__ */ ((MessagePriority2) => {
+  MessagePriority2["normal"] = "normal";
+  MessagePriority2["high"] = "high";
+  return MessagePriority2;
+})(MessagePriority || {});
+var MessageType = /* @__PURE__ */ ((MessageType2) => {
+  MessageType2["audio"] = "audio";
+  MessageType2["video"] = "video";
+  MessageType2["file"] = "file";
+  MessageType2["text"] = "text";
+  MessageType2["image"] = "image";
+  return MessageType2;
+})(MessageType || {});
+class Backend {
+  constructor(actor, _uploadFile, _downloadFile, processError2) {
+    this.actor = actor;
+    this._uploadFile = _uploadFile;
+    this._downloadFile = _downloadFile;
+    this.processError = processError2;
+  }
+  async addAdmin(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.addAdmin(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.addAdmin(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async addConversationMember(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.addConversationMember(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.addConversationMember(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async addDevice(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.addDevice(arg0);
+        return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.addDevice(arg0);
+      return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async adminGetEscrowGrants(arg0, arg1, arg2) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n7(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2));
+        return from_candid_Result_17_n9(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n7(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2));
+      return from_candid_Result_17_n9(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async adminGrantEscrowAccess(arg0, arg1, arg2) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
+        return from_candid_Result_16_n11(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
+      return from_candid_Result_16_n11(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async approveJoinRequest(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.approveJoinRequest(to_candid_JoinRequestActionRequest_n13(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.approveJoinRequest(to_candid_JoinRequestActionRequest_n13(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async clearTypingIndicator(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.clearTypingIndicator(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.clearTypingIndicator(arg0);
+      return result;
+    }
+  }
+  async createDirectConversation(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.createDirectConversation(arg0);
+        return from_candid_Result_15_n15(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.createDirectConversation(arg0);
+      return from_candid_Result_15_n15(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async createGroupConversation(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n23(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_15_n15(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n23(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_15_n15(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async deleteAttachment(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteAttachment(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteAttachment(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async deleteConversation(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteConversation(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteConversation(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async deleteGroupConversation(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteGroupConversation(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteGroupConversation(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async denyJoinRequest(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.denyJoinRequest(to_candid_JoinRequestActionRequest_n13(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.denyJoinRequest(to_candid_JoinRequestActionRequest_n13(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async disableGroupRetention(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.disableGroupRetention(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.disableGroupRetention(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async enableGroupRetention(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.enableGroupRetention(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.enableGroupRetention(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async exportAuditLog(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n25(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_13_n32(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n25(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_13_n32(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async exportConfigBundle() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.exportConfigBundle();
+        return from_candid_Result_14_n34(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.exportConfigBundle();
+      return from_candid_Result_14_n34(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async generateDeviceSyncToken(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.generateDeviceSyncToken(arg0);
+        return from_candid_Result_13_n32(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.generateDeviceSyncToken(arg0);
+      return from_candid_Result_13_n32(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getAuditLog(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n50(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_12_n54(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n50(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_12_n54(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getConversation(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getConversation(arg0);
+        return from_candid_opt_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getConversation(arg0);
+      return from_candid_opt_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getDeploymentInfo() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getDeploymentInfo();
+        return from_candid_SovereignConfig_n62(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getDeploymentInfo();
+      return from_candid_SovereignConfig_n62(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getGroupCompartment(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getGroupCompartment(arg0);
+        return from_candid_opt_n67(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getGroupCompartment(arg0);
+      return from_candid_opt_n67(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getGroupJoinRequests(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getGroupJoinRequests(arg0);
+        return from_candid_Result_11_n68(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getGroupJoinRequests(arg0);
+      return from_candid_Result_11_n68(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getGroupRetentionPolicy(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getGroupRetentionPolicy(arg0);
+        return from_candid_Result_10_n75(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getGroupRetentionPolicy(arg0);
+      return from_candid_Result_10_n75(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getMessageAttachments(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getMessageAttachments(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getMessageAttachments(arg0);
+      return result;
+    }
+  }
+  async getMessages(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n77(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_9_n79(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n77(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_9_n79(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getMyEscrowStatus() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getMyEscrowStatus();
+        return from_candid_vec_n89(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getMyEscrowStatus();
+      return from_candid_vec_n89(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getRetentionMetadata(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n92(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_8_n94(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n92(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_8_n94(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getTypingIndicators(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getTypingIndicators(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getTypingIndicators(arg0);
+      return result;
+    }
+  }
+  async getUserProfile(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getUserProfile(arg0);
+        return from_candid_opt_n96(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getUserProfile(arg0);
+      return from_candid_opt_n96(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getUserProfiles(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getUserProfiles(arg0);
+        return from_candid_vec_n99(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getUserProfiles(arg0);
+      return from_candid_vec_n99(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async isAdminCheck(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.isAdminCheck(arg0);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.isAdminCheck(arg0);
+      return result;
+    }
+  }
+  async listAdmins() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.listAdmins();
+        return from_candid_Result_7_n100(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.listAdmins();
+      return from_candid_Result_7_n100(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async listConversations() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.listConversations();
+        return from_candid_vec_n102(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.listConversations();
+      return from_candid_vec_n102(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async listMyDevices() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.listMyDevices();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.listMyDevices();
+      return result;
+    }
+  }
+  async listPublicGroups(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n103(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_vec_n105(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n103(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_vec_n105(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async markMessageRead(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.markMessageRead(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.markMessageRead(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async redeemDeviceSyncToken(arg0, arg1, arg2) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
+        return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
+      return from_candid_Result_6_n5(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async registerAttachment(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.registerAttachment(arg0);
+        return from_candid_Result_5_n108(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.registerAttachment(arg0);
+      return from_candid_Result_5_n108(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async registerUser(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.registerUser(to_candid_RegisterRequest_n110(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n112(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.registerUser(to_candid_RegisterRequest_n110(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n112(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async removeAdmin(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.removeAdmin(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.removeAdmin(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async removeConversationMember(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.removeConversationMember(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.removeConversationMember(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async revokeDevice(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.revokeDevice(arg0);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.revokeDevice(arg0);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async revokeKeyEscrow(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.revokeKeyEscrow(arg0, arg1);
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.revokeKeyEscrow(arg0, arg1);
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async sendMessage(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n114(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_4_n120(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n114(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_4_n120(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async setGroupCompartment(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n122(this._uploadFile, this._downloadFile, arg1));
+        return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n122(this._uploadFile, this._downloadFile, arg1));
+      return from_candid_Result_3_n1(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async setSovereignConfig(arg0, arg1, arg2, arg3) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n124(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n126(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n127(this._uploadFile, this._downloadFile, arg3));
+        return from_candid_Result_2_n128(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n124(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n126(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n127(this._uploadFile, this._downloadFile, arg3));
+      return from_candid_Result_2_n128(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async setTypingIndicator(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.setTypingIndicator(arg0, arg1);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.setTypingIndicator(arg0, arg1);
+      return result;
+    }
+  }
+  async submitJoinRequest(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n130(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_1_n132(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n130(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_1_n132(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async touchPresence() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.touchPresence();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.touchPresence();
+      return result;
+    }
+  }
+  async updateUserProfile(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n134(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n112(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n134(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n112(this._uploadFile, this._downloadFile, result);
+    }
+  }
+}
+function from_candid_AuditEventType_n59(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n60(_uploadFile, _downloadFile, value);
+}
+function from_candid_AuditEvent_n57(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n58(_uploadFile, _downloadFile, value);
+}
+function from_candid_CompartmentLabel_n40(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n41(_uploadFile, _downloadFile, value);
+}
+function from_candid_ConfigExportBundle_n36(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n37(_uploadFile, _downloadFile, value);
+}
+function from_candid_ConversationKind_n20(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n21(_uploadFile, _downloadFile, value);
+}
+function from_candid_ConversationPublic_n17(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n18(_uploadFile, _downloadFile, value);
+}
+function from_candid_DataResidency_n48(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n49(_uploadFile, _downloadFile, value);
+}
+function from_candid_Error_n3(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n4(_uploadFile, _downloadFile, value);
+}
+function from_candid_EscrowRecord_n90(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n91(_uploadFile, _downloadFile, value);
+}
+function from_candid_GroupRetentionPolicy_n44(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n45(_uploadFile, _downloadFile, value);
+}
+function from_candid_JoinRequestStatus_n73(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n74(_uploadFile, _downloadFile, value);
+}
+function from_candid_JoinRequest_n71(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n72(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessagePriority_n87(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n88(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessagePublic_n82(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n83(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessageType_n84(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n85(_uploadFile, _downloadFile, value);
+}
+function from_candid_PublicGroupSummary_n106(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n107(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_10_n75(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n76(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_11_n68(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n69(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_12_n54(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n55(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_13_n32(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n33(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_14_n34(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n35(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_15_n15(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n16(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_16_n11(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n12(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_17_n9(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n10(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_1_n132(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n133(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_2_n128(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n129(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_3_n1(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_4_n120(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n121(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_5_n108(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n109(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_6_n5(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n6(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_7_n100(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n101(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_8_n94(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n95(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_9_n79(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n80(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_n112(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n113(_uploadFile, _downloadFile, value);
+}
+function from_candid_SovereignConfig_n62(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n63(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserProfilePublic_n97(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n98(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n19(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n22(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n46(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n47(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n61(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_ConversationPublic_n17(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n64(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n65(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n66(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n67(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_CompartmentLabel_n40(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n86(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_MessagePriority_n87(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n96(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_UserProfilePublic_n97(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_record_n107(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    name: value.name,
+    memberCount: value.memberCount,
+    description: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.description)),
+    category: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.category))
+  };
+}
+function from_candid_record_n18(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    members: value.members,
+    lastMessageAt: value.lastMessageAt,
+    displayName: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.displayName)),
+    kind: from_candid_ConversationKind_n20(_uploadFile, _downloadFile, value.kind),
+    createdAt: value.createdAt,
+    createdBy: value.createdBy,
+    description: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.description)),
+    category: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.category)),
+    discoverable: value.discoverable,
+    encryptedName: record_opt_to_undefined(from_candid_opt_n22(_uploadFile, _downloadFile, value.encryptedName))
+  };
+}
+function from_candid_record_n37(_uploadFile, _downloadFile, value) {
+  return {
+    compartmentMappings: from_candid_vec_n38(_uploadFile, _downloadFile, value.compartmentMappings),
+    adminPrincipals: value.adminPrincipals,
+    exportedAt: value.exportedAt,
+    exportedBy: value.exportedBy,
+    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.subnetPrincipal)),
+    canisters: value.canisters,
+    groupRetentionPolicies: from_candid_vec_n42(_uploadFile, _downloadFile, value.groupRetentionPolicies),
+    residencyLabel: from_candid_DataResidency_n48(_uploadFile, _downloadFile, value.residencyLabel)
+  };
+}
+function from_candid_record_n45(_uploadFile, _downloadFile, value) {
+  return {
+    retentionEnabled: value.retentionEnabled,
+    enabledAt: record_opt_to_undefined(from_candid_opt_n46(_uploadFile, _downloadFile, value.enabledAt)),
+    enabledBy: record_opt_to_undefined(from_candid_opt_n47(_uploadFile, _downloadFile, value.enabledBy)),
+    convId: value.convId
+  };
+}
+function from_candid_record_n58(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    targetPrincipal: record_opt_to_undefined(from_candid_opt_n47(_uploadFile, _downloadFile, value.targetPrincipal)),
+    encryptedDetails: record_opt_to_undefined(from_candid_opt_n22(_uploadFile, _downloadFile, value.encryptedDetails)),
+    timestamp: value.timestamp,
+    actorPrincipal: value.actorPrincipal,
+    eventType: from_candid_AuditEventType_n59(_uploadFile, _downloadFile, value.eventType)
+  };
+}
+function from_candid_record_n63(_uploadFile, _downloadFile, value) {
+  return {
+    lastUpdated: value.lastUpdated,
+    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n64(_uploadFile, _downloadFile, value.subnetPrincipal)),
+    canisters: value.canisters,
+    nodeCount: record_opt_to_undefined(from_candid_opt_n65(_uploadFile, _downloadFile, value.nodeCount)),
+    cyclesCostMultiplier: record_opt_to_undefined(from_candid_opt_n66(_uploadFile, _downloadFile, value.cyclesCostMultiplier)),
+    residencyLabel: from_candid_DataResidency_n48(_uploadFile, _downloadFile, value.residencyLabel)
+  };
+}
+function from_candid_record_n72(_uploadFile, _downloadFile, value) {
+  return {
+    status: from_candid_JoinRequestStatus_n73(_uploadFile, _downloadFile, value.status),
+    requestId: value.requestId,
+    createdAt: value.createdAt,
+    conversationId: value.conversationId,
+    message: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.message)),
+    requesterId: value.requesterId
+  };
+}
+function from_candid_record_n83(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    ttlSeconds: record_opt_to_undefined(from_candid_opt_n65(_uploadFile, _downloadFile, value.ttlSeconds)),
+    encryptedContent: value.encryptedContent,
+    isDeleted: value.isDeleted,
+    sender: value.sender,
+    sentAt: value.sentAt,
+    messageType: from_candid_MessageType_n84(_uploadFile, _downloadFile, value.messageType),
+    conversationId: value.conversationId,
+    priority: record_opt_to_undefined(from_candid_opt_n86(_uploadFile, _downloadFile, value.priority)),
+    readBy: value.readBy
+  };
+}
+function from_candid_record_n91(_uploadFile, _downloadFile, value) {
+  return {
+    devicePublicKeyFingerprint: value.devicePublicKeyFingerprint,
+    userId: value.userId,
+    consentTimestamp: value.consentTimestamp,
+    deviceLabel: value.deviceLabel,
+    wrappedKey: value.wrappedKey,
+    deviceId: value.deviceId,
+    consentLanguageVersion: value.consentLanguageVersion,
+    revokedAt: record_opt_to_undefined(from_candid_opt_n46(_uploadFile, _downloadFile, value.revokedAt)),
+    revokedReason: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.revokedReason))
+  };
+}
+function from_candid_record_n98(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    ecdhPublicKey: value.ecdhPublicKey,
+    encryptedAvatarKey: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.encryptedAvatarKey)),
+    encryptedDisplayName: value.encryptedDisplayName,
+    registeredAt: value.registeredAt,
+    lastSeen: value.lastSeen
+  };
+}
+function from_candid_tuple_n39(_uploadFile, _downloadFile, value) {
+  return [
+    value[0],
+    from_candid_CompartmentLabel_n40(_uploadFile, _downloadFile, value[1])
+  ];
+}
+function from_candid_tuple_n43(_uploadFile, _downloadFile, value) {
+  return [
+    value[0],
+    from_candid_GroupRetentionPolicy_n44(_uploadFile, _downloadFile, value[1])
+  ];
+}
+function from_candid_variant_n10(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n101(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n109(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n113(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_UserProfilePublic_n97(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n12(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n121(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_MessagePublic_n82(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n129(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_SovereignConfig_n62(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n133(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_JoinRequest_n71(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n16(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_ConversationPublic_n17(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n2(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n21(_uploadFile, _downloadFile, value) {
+  return "group" in value ? "group" : "direct" in value ? "direct" : value;
+}
+function from_candid_variant_n33(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n35(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_ConfigExportBundle_n36(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n4(_uploadFile, _downloadFile, value) {
+  return "forbidden" in value ? Error.forbidden : "alreadyExists" in value ? Error.alreadyExists : "invalidInput" in value ? Error.invalidInput : "notFound" in value ? Error.notFound : "unauthorized" in value ? Error.unauthorized : value;
+}
+function from_candid_variant_n41(_uploadFile, _downloadFile, value) {
+  return "classified" in value ? "classified" : "unclassified" in value ? "unclassified" : value;
+}
+function from_candid_variant_n49(_uploadFile, _downloadFile, value) {
+  return "eu" in value ? "eu" : "us" in value ? "us" : "apac" in value ? "apac" : "global" in value ? "global" : value;
+}
+function from_candid_variant_n55(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n56(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n6(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n60(_uploadFile, _downloadFile, value) {
+  return "retentionEnabled" in value ? "retentionEnabled" : "memberAdded" in value ? "memberAdded" : "retentionDisabled" in value ? "retentionDisabled" : "escrowAccessGranted" in value ? "escrowAccessGranted" : "callInitiated" in value ? "callInitiated" : "sovereignConfigUpdated" in value ? "sovereignConfigUpdated" : "messageQueueDrained" in value ? "messageQueueDrained" : "adminAction" in value ? "adminAction" : "auditLogExported" in value ? "auditLogExported" : "escrowEnrolled" in value ? "escrowEnrolled" : "messageSent" in value ? "messageSent" : "escrowRevoked" in value ? "escrowRevoked" : "compartmentAssigned" in value ? "compartmentAssigned" : "userRegistered" in value ? "userRegistered" : "memberRemoved" in value ? "memberRemoved" : "userRemoved" in value ? "userRemoved" : "priorityMessageSent" in value ? "priorityMessageSent" : value;
+}
+function from_candid_variant_n69(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n70(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n74(_uploadFile, _downloadFile, value) {
+  return "pending" in value ? "pending" : "denied" in value ? "denied" : "approved" in value ? "approved" : value;
+}
+function from_candid_variant_n76(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_GroupRetentionPolicy_n44(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n80(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n81(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n85(_uploadFile, _downloadFile, value) {
+  return "audio" in value ? "audio" : "video" in value ? "video" : "file" in value ? "file" : "text" in value ? "text" : "image" in value ? "image" : value;
+}
+function from_candid_variant_n88(_uploadFile, _downloadFile, value) {
+  return "normal" in value ? "normal" : "high" in value ? "high" : value;
+}
+function from_candid_variant_n95(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n3(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_vec_n102(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_ConversationPublic_n17(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n105(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_PublicGroupSummary_n106(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n38(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_tuple_n39(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n42(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_tuple_n43(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n56(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_AuditEvent_n57(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n70(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_JoinRequest_n71(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n81(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_MessagePublic_n82(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n89(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_EscrowRecord_n90(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n99(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_UserProfilePublic_n97(_uploadFile, _downloadFile, x3));
+}
+function to_candid_AuditEventType_n52(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n53(_uploadFile, _downloadFile, value);
+}
+function to_candid_AuditExportEventType_n28(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n29(_uploadFile, _downloadFile, value);
+}
+function to_candid_AuditExportFormat_n30(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n31(_uploadFile, _downloadFile, value);
+}
+function to_candid_AuditExportRequest_n25(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n26(_uploadFile, _downloadFile, value);
+}
+function to_candid_CompartmentLabel_n122(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n123(_uploadFile, _downloadFile, value);
+}
+function to_candid_CreateGroupRequest_n23(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n24(_uploadFile, _downloadFile, value);
+}
+function to_candid_DataResidency_n124(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n125(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetAuditLogRequest_n50(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n51(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetMessagesRequest_n77(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n78(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetRetentionMetadataRequest_n92(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n93(_uploadFile, _downloadFile, value);
+}
+function to_candid_JoinRequestActionRequest_n13(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n14(_uploadFile, _downloadFile, value);
+}
+function to_candid_ListPublicGroupsRequest_n103(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n104(_uploadFile, _downloadFile, value);
+}
+function to_candid_MessagePriority_n118(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n119(_uploadFile, _downloadFile, value);
+}
+function to_candid_MessageType_n116(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n117(_uploadFile, _downloadFile, value);
+}
+function to_candid_RegisterRequest_n110(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n111(_uploadFile, _downloadFile, value);
+}
+function to_candid_SendMessageRequest_n114(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n115(_uploadFile, _downloadFile, value);
+}
+function to_candid_SubmitJoinRequestRequest_n130(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n131(_uploadFile, _downloadFile, value);
+}
+function to_candid_UpdateProfileRequest_n134(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n135(_uploadFile, _downloadFile, value);
+}
+function to_candid_opt_n126(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_opt_n127(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_opt_n7(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_opt_n8(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_record_n104(_uploadFile, _downloadFile, value) {
+  return {
+    offset: value.offset,
+    limit: value.limit,
+    category: value.category ? candid_some(value.category) : candid_none()
+  };
+}
+function to_candid_record_n111(_uploadFile, _downloadFile, value) {
+  return {
+    ecdhPublicKey: value.ecdhPublicKey,
+    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
+    encryptedDisplayName: value.encryptedDisplayName
+  };
+}
+function to_candid_record_n115(_uploadFile, _downloadFile, value) {
+  return {
+    ttlSeconds: value.ttlSeconds ? candid_some(value.ttlSeconds) : candid_none(),
+    encryptedContent: value.encryptedContent,
+    messageType: to_candid_MessageType_n116(_uploadFile, _downloadFile, value.messageType),
+    conversationId: value.conversationId,
+    priority: value.priority ? candid_some(to_candid_MessagePriority_n118(_uploadFile, _downloadFile, value.priority)) : candid_none()
+  };
+}
+function to_candid_record_n131(_uploadFile, _downloadFile, value) {
+  return {
+    conversationId: value.conversationId,
+    message: value.message ? candid_some(value.message) : candid_none()
+  };
+}
+function to_candid_record_n135(_uploadFile, _downloadFile, value) {
+  return {
+    ecdhPublicKey: value.ecdhPublicKey ? candid_some(value.ecdhPublicKey) : candid_none(),
+    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
+    encryptedDisplayName: value.encryptedDisplayName ? candid_some(value.encryptedDisplayName) : candid_none()
+  };
+}
+function to_candid_record_n14(_uploadFile, _downloadFile, value) {
+  return {
+    denialReason: value.denialReason ? candid_some(value.denialReason) : candid_none(),
+    requestId: value.requestId,
+    conversationId: value.conversationId
+  };
+}
+function to_candid_record_n24(_uploadFile, _downloadFile, value) {
+  return {
+    initialMembers: value.initialMembers,
+    displayName: value.displayName ? candid_some(value.displayName) : candid_none(),
+    description: value.description ? candid_some(value.description) : candid_none(),
+    category: value.category ? candid_some(value.category) : candid_none(),
+    discoverable: value.discoverable,
+    encryptedName: value.encryptedName
+  };
+}
+function to_candid_record_n26(_uploadFile, _downloadFile, value) {
+  return {
+    endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
+    affectedUser: value.affectedUser ? candid_some(value.affectedUser) : candid_none(),
+    eventTypes: value.eventTypes ? candid_some(to_candid_vec_n27(_uploadFile, _downloadFile, value.eventTypes)) : candid_none(),
+    startDate: value.startDate ? candid_some(value.startDate) : candid_none(),
+    format: to_candid_AuditExportFormat_n30(_uploadFile, _downloadFile, value.format)
+  };
+}
+function to_candid_record_n51(_uploadFile, _downloadFile, value) {
+  return {
+    limit: value.limit,
+    filterEventType: value.filterEventType ? candid_some(to_candid_AuditEventType_n52(_uploadFile, _downloadFile, value.filterEventType)) : candid_none(),
+    afterEventId: value.afterEventId ? candid_some(value.afterEventId) : candid_none()
+  };
+}
+function to_candid_record_n78(_uploadFile, _downloadFile, value) {
+  return {
+    beforeMessageId: value.beforeMessageId ? candid_some(value.beforeMessageId) : candid_none(),
+    limit: value.limit,
+    conversationId: value.conversationId
+  };
+}
+function to_candid_record_n93(_uploadFile, _downloadFile, value) {
+  return {
+    endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
+    limit: value.limit,
+    afterMessageId: value.afterMessageId ? candid_some(value.afterMessageId) : candid_none(),
+    convId: value.convId ? candid_some(value.convId) : candid_none(),
+    startDate: value.startDate ? candid_some(value.startDate) : candid_none()
+  };
+}
+function to_candid_variant_n117(_uploadFile, _downloadFile, value) {
+  return value == "audio" ? {
+    audio: null
+  } : value == "video" ? {
+    video: null
+  } : value == "file" ? {
+    file: null
+  } : value == "text" ? {
+    text: null
+  } : value == "image" ? {
+    image: null
+  } : value;
+}
+function to_candid_variant_n119(_uploadFile, _downloadFile, value) {
+  return value == "normal" ? {
+    normal: null
+  } : value == "high" ? {
+    high: null
+  } : value;
+}
+function to_candid_variant_n123(_uploadFile, _downloadFile, value) {
+  return value == "classified" ? {
+    classified: null
+  } : value == "unclassified" ? {
+    unclassified: null
+  } : value;
+}
+function to_candid_variant_n125(_uploadFile, _downloadFile, value) {
+  return value == "eu" ? {
+    eu: null
+  } : value == "us" ? {
+    us: null
+  } : value == "apac" ? {
+    apac: null
+  } : value == "global" ? {
+    global: null
+  } : value;
+}
+function to_candid_variant_n29(_uploadFile, _downloadFile, value) {
+  return value == "retentionEnabled" ? {
+    retentionEnabled: null
+  } : value == "memberAdded" ? {
+    memberAdded: null
+  } : value == "retentionDisabled" ? {
+    retentionDisabled: null
+  } : value == "escrowAccessGranted" ? {
+    escrowAccessGranted: null
+  } : value == "callInitiated" ? {
+    callInitiated: null
+  } : value == "adminAction" ? {
+    adminAction: null
+  } : value == "auditLogExported" ? {
+    auditLogExported: null
+  } : value == "escrowEnrolled" ? {
+    escrowEnrolled: null
+  } : value == "messageSent" ? {
+    messageSent: null
+  } : value == "escrowRevoked" ? {
+    escrowRevoked: null
+  } : value == "userRegistered" ? {
+    userRegistered: null
+  } : value == "memberRemoved" ? {
+    memberRemoved: null
+  } : value == "userRemoved" ? {
+    userRemoved: null
+  } : value;
+}
+function to_candid_variant_n31(_uploadFile, _downloadFile, value) {
+  return value == "csv" ? {
+    csv: null
+  } : value == "json" ? {
+    json: null
+  } : value;
+}
+function to_candid_variant_n53(_uploadFile, _downloadFile, value) {
+  return value == "retentionEnabled" ? {
+    retentionEnabled: null
+  } : value == "memberAdded" ? {
+    memberAdded: null
+  } : value == "retentionDisabled" ? {
+    retentionDisabled: null
+  } : value == "escrowAccessGranted" ? {
+    escrowAccessGranted: null
+  } : value == "callInitiated" ? {
+    callInitiated: null
+  } : value == "sovereignConfigUpdated" ? {
+    sovereignConfigUpdated: null
+  } : value == "messageQueueDrained" ? {
+    messageQueueDrained: null
+  } : value == "adminAction" ? {
+    adminAction: null
+  } : value == "auditLogExported" ? {
+    auditLogExported: null
+  } : value == "escrowEnrolled" ? {
+    escrowEnrolled: null
+  } : value == "messageSent" ? {
+    messageSent: null
+  } : value == "escrowRevoked" ? {
+    escrowRevoked: null
+  } : value == "compartmentAssigned" ? {
+    compartmentAssigned: null
+  } : value == "userRegistered" ? {
+    userRegistered: null
+  } : value == "memberRemoved" ? {
+    memberRemoved: null
+  } : value == "userRemoved" ? {
+    userRemoved: null
+  } : value == "priorityMessageSent" ? {
+    priorityMessageSent: null
+  } : value;
+}
+function to_candid_vec_n27(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => to_candid_AuditExportEventType_n28(_uploadFile, _downloadFile, x3));
+}
+function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
+  const agent = options.agent || HttpAgent.createSync({
+    ...options.agentOptions
+  });
+  if (options.agent && options.agentOptions) {
+    console.warn("Detected both agent and agentOptions passed to createActor. Ignoring agentOptions and proceeding with the provided agent.");
+  }
+  const actor = Actor.createActor(idlFactory, {
+    agent,
+    canisterId,
+    ...options.actorOptions
+  });
+  return new Backend(actor, _uploadFile, _downloadFile, options.processError);
+}
+const backend = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  AuditEventType: AuditEventType$1,
+  AuditExportEventType,
+  AuditExportFormat,
+  Backend,
+  CompartmentLabel,
+  ConversationKind,
+  DataResidency,
+  Error_,
+  ExternalBlob: ExternalBlob2,
+  JoinRequestStatus,
+  MessagePriority,
+  MessageType,
+  createActor
+}, Symbol.toStringTag, { value: "Module" }));
+const AuthContext = reactExports.createContext(null);
+function AuthProvider({ children }) {
+  const { identity, login, clear, loginStatus } = useInternetIdentity();
+  const { actor } = useActor(createActor);
+  const [isRegistered, setIsRegistered] = reactExports.useState(null);
+  const registrationAttempted = reactExports.useRef(false);
+  const isAuthenticated = loginStatus === "success" && !!identity;
+  const isLoading = loginStatus === "logging-in" || loginStatus === "initializing";
+  const principal = (identity == null ? void 0 : identity.getPrincipal()) ?? null;
+  reactExports.useEffect(() => {
+    if (!isAuthenticated || !actor || !principal || registrationAttempted.current)
+      return;
+    registrationAttempted.current = true;
+    actor.getUserProfile(principal).then((profile) => setIsRegistered(!!profile)).catch(() => setIsRegistered(false));
+  }, [isAuthenticated, actor, principal]);
+  reactExports.useEffect(() => {
+    if (!isAuthenticated) {
+      setIsRegistered(null);
+      registrationAttempted.current = false;
+    }
+  }, [isAuthenticated]);
+  const logout = reactExports.useCallback(() => {
+    clear();
+  }, [clear]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    AuthContext.Provider,
+    {
+      value: {
+        isAuthenticated,
+        principal,
+        identity: identity ?? null,
+        login,
+        logout,
+        isLoading,
+        isRegistered
+      },
+      children
+    }
+  );
+}
+function useAuth() {
+  const ctx = reactExports.useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
+}
 const DB_NAME$1 = "cs_keystore";
 const DB_VERSION$1 = 1;
 const KEY_STORE = "keypairs";
@@ -43893,6 +37182,926 @@ function Label({
     }
   );
 }
+function useUserProfile(userId) {
+  const { actor } = useActor(createActor);
+  return useQuery({
+    queryKey: ["profile", userId == null ? void 0 : userId.toText()],
+    queryFn: async () => {
+      if (!actor || !userId) return null;
+      return actor.getUserProfile(userId);
+    },
+    enabled: !!actor && !!userId,
+    staleTime: 3e4,
+    retry: 2
+  });
+}
+function useUserProfiles(userIds) {
+  const { actor } = useActor(createActor);
+  return useQuery({
+    queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
+    queryFn: async () => {
+      if (!actor || userIds.length === 0) return [];
+      return actor.getUserProfiles(userIds);
+    },
+    enabled: !!actor && userIds.length > 0,
+    staleTime: 3e4,
+    retry: 2
+  });
+}
+function useUpdateProfile() {
+  const { actor } = useActor(createActor);
+  const { principal } = useAuth();
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      encryptedDisplayName,
+      ecdhPublicKey,
+      encryptedAvatarKey
+    }) => {
+      if (!actor) throw new Error("Not connected");
+      let result = await actor.updateUserProfile({
+        encryptedDisplayName,
+        ecdhPublicKey,
+        encryptedAvatarKey
+      });
+      const isNotFound2 = result.__kind__ === "err" && (!result.err || result.err === "notFound");
+      if (isNotFound2) {
+        if (!encryptedDisplayName || !ecdhPublicKey) {
+          throw new Error(
+            "Profile not found on server. Please reload and try again."
+          );
+        }
+        const regResult = await actor.registerUser({
+          encryptedDisplayName,
+          ecdhPublicKey,
+          encryptedAvatarKey
+        });
+        if (regResult.__kind__ === "err") {
+          result = await actor.updateUserProfile({
+            encryptedDisplayName,
+            ecdhPublicKey,
+            encryptedAvatarKey
+          });
+        } else {
+          return regResult.ok;
+        }
+      }
+      if (result.__kind__ === "err") {
+        const errLabel = result.err || "unknown";
+        const messages = {
+          unauthorized: "You must be logged in to update your profile.",
+          forbidden: "You don't have permission to perform this action.",
+          notFound: "Profile not found. Please reload and try again.",
+          alreadyExists: "A profile with these details already exists.",
+          invalidInput: "Invalid profile data. Please check your input."
+        };
+        throw new Error(messages[errLabel] ?? `Update failed: ${errLabel}`);
+      }
+      return result.ok;
+    },
+    onSuccess: (updatedProfile) => {
+      const userId = principal == null ? void 0 : principal.toText();
+      if (!userId) return;
+      if (updatedProfile) {
+        queryClient2.setQueryData(
+          ["profile", userId],
+          updatedProfile
+        );
+      }
+      queryClient2.invalidateQueries({
+        queryKey: ["profile", userId],
+        exact: true
+      });
+    }
+  });
+}
+const AVATAR_STORAGE_PREFIX = "cs_avatar:";
+function getLocalAvatarKey(principal) {
+  return `${AVATAR_STORAGE_PREFIX}${principal}`;
+}
+function getLocalAvatarDataUrl(principal) {
+  try {
+    return localStorage.getItem(getLocalAvatarKey(principal));
+  } catch {
+    return null;
+  }
+}
+function setLocalAvatarDataUrl(principal, dataUrl) {
+  try {
+    localStorage.setItem(getLocalAvatarKey(principal), dataUrl);
+  } catch {
+  }
+}
+function removeLocalAvatar(principal) {
+  try {
+    localStorage.removeItem(getLocalAvatarKey(principal));
+  } catch {
+  }
+}
+const DISPLAY_NAME_PREFIX = "cs_name:";
+function getLocalDisplayName(principal) {
+  try {
+    return localStorage.getItem(`${DISPLAY_NAME_PREFIX}${principal}`);
+  } catch {
+    return null;
+  }
+}
+function setLocalDisplayName(principal, name) {
+  try {
+    if (name.trim()) {
+      localStorage.setItem(`${DISPLAY_NAME_PREFIX}${principal}`, name.trim());
+    }
+  } catch {
+  }
+}
+function shortPrincipal(principal) {
+  if (principal.length <= 16) return principal;
+  return `${principal.slice(0, 10)}…${principal.slice(-4)}`;
+}
+function getDisplayName(principal) {
+  return getLocalDisplayName(principal) ?? shortPrincipal(principal);
+}
+function useDisplayName(principal) {
+  const [name, setName] = reactExports.useState(
+    principal ? getDisplayName(principal) : ""
+  );
+  reactExports.useEffect(() => {
+    if (!principal) return;
+    setName(getDisplayName(principal));
+    const handler = (e) => {
+      var _a3;
+      if (e.key === `${DISPLAY_NAME_PREFIX}${principal}`) {
+        setName(((_a3 = e.newValue) == null ? void 0 : _a3.trim()) || shortPrincipal(principal));
+      }
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, [principal]);
+  return name || (principal ? shortPrincipal(principal) : "");
+}
+function useHasDisplayName() {
+  const { principal } = useAuth();
+  const principalText = (principal == null ? void 0 : principal.toText()) ?? null;
+  const {
+    data: profile,
+    isLoading,
+    isFetched
+  } = useUserProfile(principal ?? null);
+  if (!principalText) return null;
+  if (isLoading && !isFetched) return null;
+  const cached = getLocalDisplayName(principalText);
+  if (cached && cached.trim().length >= 2) return true;
+  if (profile && profile.encryptedDisplayName.length > 0) return true;
+  return false;
+}
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const toCamelCase = (string) => string.replace(
+  /^([A-Z])|[\s-_]+(\w)/g,
+  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+);
+const toPascalCase = (string) => {
+  const camelCase = toCamelCase(string);
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+};
+const mergeClasses = (...classes) => classes.filter((className, index2, array) => {
+  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index2;
+}).join(" ").trim();
+const hasA11yProp = (props) => {
+  for (const prop in props) {
+    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+      return true;
+    }
+  }
+};
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Icon$1 = reactExports.forwardRef(
+  ({
+    color = "currentColor",
+    size: size2 = 24,
+    strokeWidth = 2,
+    absoluteStrokeWidth,
+    className = "",
+    children,
+    iconNode,
+    ...rest
+  }, ref) => reactExports.createElement(
+    "svg",
+    {
+      ref,
+      ...defaultAttributes,
+      width: size2,
+      height: size2,
+      stroke: color,
+      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size2) : strokeWidth,
+      className: mergeClasses("lucide", className),
+      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
+      ...rest
+    },
+    [
+      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
+      ...Array.isArray(children) ? children : [children]
+    ]
+  )
+);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const createLucideIcon = (iconName, iconNode) => {
+  const Component2 = reactExports.forwardRef(
+    ({ className, ...props }, ref) => reactExports.createElement(Icon$1, {
+      ref,
+      iconNode,
+      className: mergeClasses(
+        `lucide-${toKebabCase(toPascalCase(iconName))}`,
+        `lucide-${iconName}`,
+        className
+      ),
+      ...props
+    })
+  );
+  Component2.displayName = toPascalCase(iconName);
+  return Component2;
+};
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$N = [
+  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
+  ["path", { d: "M19 12H5", key: "x3x0zl" }]
+];
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$N);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$M = [
+  ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
+  ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
+];
+const CheckCheck = createLucideIcon("check-check", __iconNode$M);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$L = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$L);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$K = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$K);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$J = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$J);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$I = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$I);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$H = [
+  [
+    "path",
+    {
+      d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
+      key: "9ktpf1"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const Compass = createLucideIcon("compass", __iconNode$H);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$G = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$G);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$F = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$F);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$E = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$E);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$D = [
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
+];
+const FileText = createLucideIcon("file-text", __iconNode$D);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$C = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
+];
+const Globe = createLucideIcon("globe", __iconNode$C);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$B = [
+  ["path", { d: "M16 5h6", key: "1vod17" }],
+  ["path", { d: "M19 2v6", key: "4bpg5p" }],
+  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
+];
+const ImagePlus = createLucideIcon("image-plus", __iconNode$B);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$A = [
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+];
+const Image = createLucideIcon("image", __iconNode$A);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$z = [
+  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
+  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
+  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
+];
+const Key = createLucideIcon("key", __iconNode$z);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$y = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$y);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$x = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+];
+const Lock = createLucideIcon("lock", __iconNode$x);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$w = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$w);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$v = [
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
+];
+const Menu = createLucideIcon("menu", __iconNode$v);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$u = [
+  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
+];
+const MessageSquare = createLucideIcon("message-square", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [
+  ["line", { x1: "2", x2: "22", y1: "2", y2: "22", key: "a6p6uj" }],
+  ["path", { d: "M18.89 13.23A7.12 7.12 0 0 0 19 12v-2", key: "80xlxr" }],
+  ["path", { d: "M5 10v2a7 7 0 0 0 12 5", key: "p2k8kg" }],
+  ["path", { d: "M15 9.34V5a3 3 0 0 0-5.68-1.33", key: "1gzdoj" }],
+  ["path", { d: "M9 9v3a3 3 0 0 0 5.12 2.12", key: "r2i35w" }],
+  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+];
+const MicOff = createLucideIcon("mic-off", __iconNode$t);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$s = [
+  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
+  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
+  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+];
+const Mic = createLucideIcon("mic", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [
+  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
+  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
+  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
+];
+const Monitor = createLucideIcon("monitor", __iconNode$r);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [
+  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
+];
+const Moon = createLucideIcon("moon", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
+  [
+    "path",
+    {
+      d: "m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486",
+      key: "1pkts6"
+    }
+  ]
+];
+const Paperclip = createLucideIcon("paperclip", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
+const Play = createLucideIcon("play", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$n);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$m = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$m);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$l = [
+  [
+    "path",
+    {
+      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+      key: "1ffxy3"
+    }
+  ],
+  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+];
+const Send = createLucideIcon("send", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Settings = createLucideIcon("settings", __iconNode$k);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$j = [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+];
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$j);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$i = [
+  ["path", { d: "m2 2 20 20", key: "1ooewy" }],
+  [
+    "path",
+    {
+      d: "M5 5a1 1 0 0 0-1 1v7c0 5 3.5 7.5 7.67 8.94a1 1 0 0 0 .67.01c2.35-.82 4.48-1.97 5.9-3.71",
+      key: "1jlk70"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M9.309 3.652A12.252 12.252 0 0 0 11.24 2.28a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v7a9.784 9.784 0 0 1-.08 1.264",
+      key: "18rp1v"
+    }
+  ]
+];
+const ShieldOff = createLucideIcon("shield-off", __iconNode$i);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$h = [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ]
+];
+const Shield = createLucideIcon("shield", __iconNode$h);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$g = [
+  ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+  ["path", { d: "M12 18h.01", key: "mhygvu" }]
+];
+const Smartphone = createLucideIcon("smartphone", __iconNode$g);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$f = [
+  ["path", { d: "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7", key: "1m0v6g" }],
+  [
+    "path",
+    {
+      d: "M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z",
+      key: "ohrbg2"
+    }
+  ]
+];
+const SquarePen = createLucideIcon("square-pen", __iconNode$f);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$e = [
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
+];
+const Square = createLucideIcon("square", __iconNode$e);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$d = [
+  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+  ["path", { d: "M12 2v2", key: "tus03m" }],
+  ["path", { d: "M12 20v2", key: "1lh1kg" }],
+  ["path", { d: "m4.93 4.93 1.41 1.41", key: "149t6j" }],
+  ["path", { d: "m17.66 17.66 1.41 1.41", key: "ptbguv" }],
+  ["path", { d: "M2 12h2", key: "1t8f8n" }],
+  ["path", { d: "M20 12h2", key: "1q8mjw" }],
+  ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
+  ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
+];
+const Sun = createLucideIcon("sun", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
+  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
+  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
+];
+const Timer = createLucideIcon("timer", __iconNode$c);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$b = [
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+];
+const Trash2 = createLucideIcon("trash-2", __iconNode$b);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$a = [
+  [
+    "path",
+    {
+      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
+      key: "wmoenq"
+    }
+  ],
+  ["path", { d: "M12 9v4", key: "juzpu7" }],
+  ["path", { d: "M12 17h.01", key: "p32p05" }]
+];
+const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$a);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$9 = [
+  ["path", { d: "M12 3v12", key: "1x0j5s" }],
+  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
+];
+const Upload = createLucideIcon("upload", __iconNode$9);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$8 = [
+  ["path", { d: "m16 11 2 2 4-4", key: "9rsbq5" }],
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+];
+const UserCheck = createLucideIcon("user-check", __iconNode$8);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$7 = [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
+  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
+];
+const UserMinus = createLucideIcon("user-minus", __iconNode$7);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$6 = [
+  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
+  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
+];
+const User = createLucideIcon("user", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
+  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+];
+const Users = createLucideIcon("users", __iconNode$5);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$4 = [
+  [
+    "path",
+    {
+      d: "m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5",
+      key: "ftymec"
+    }
+  ],
+  ["rect", { x: "2", y: "6", width: "14", height: "12", rx: "2", key: "158x01" }]
+];
+const Video = createLucideIcon("video", __iconNode$4);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$3 = [
+  ["path", { d: "M12 20h.01", key: "zekei9" }],
+  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }],
+  ["path", { d: "M5 12.859a10 10 0 0 1 5.17-2.69", key: "1dl1wf" }],
+  ["path", { d: "M19 12.859a10 10 0 0 0-2.007-1.523", key: "4k23kn" }],
+  ["path", { d: "M2 8.82a15 15 0 0 1 4.177-2.643", key: "1grhjp" }],
+  ["path", { d: "M22 8.82a15 15 0 0 0-11.288-3.764", key: "z3jwby" }],
+  ["path", { d: "m2 2 20 20", key: "1ooewy" }]
+];
+const WifiOff = createLucideIcon("wifi-off", __iconNode$3);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$2 = [
+  ["path", { d: "M12 20h.01", key: "zekei9" }],
+  ["path", { d: "M2 8.82a15 15 0 0 1 20 0", key: "dnpr2z" }],
+  ["path", { d: "M5 12.859a10 10 0 0 1 14 0", key: "1x1e6c" }],
+  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }]
+];
+const Wifi = createLucideIcon("wifi", __iconNode$2);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$1 = [
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+];
+const X = createLucideIcon("x", __iconNode$1);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode = [
+  [
+    "path",
+    {
+      d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
+      key: "1xq2db"
+    }
+  ]
+];
+const Zap = createLucideIcon("zap", __iconNode);
 function OnboardingGate({ children }) {
   const { principal } = useAuth();
   const { keyPair, isReady, isNewKeyPair } = useCrypto();
@@ -44008,7 +38217,7 @@ function OnboardingGate({ children }) {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "img",
             {
-              src: "/assets/images/logo.png",
+              src: "/assets/newshieldlogo.png",
               alt: "CharlieSierra",
               className: "h-16 w-auto object-contain",
               onError: (e) => {
@@ -44184,448 +38393,6 @@ function useAccessibility() {
       "useAccessibility must be used within AccessibilityProvider"
     );
   return ctx;
-}
-function ControlButton({
-  onClick,
-  active,
-  activeIcon,
-  inactiveIcon,
-  label,
-  ocid,
-  danger = false
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "button",
-    {
-      type: "button",
-      "data-ocid": ocid,
-      onClick,
-      "aria-label": label,
-      "aria-pressed": active,
-      className: [
-        "w-14 h-14 rounded-full flex items-center justify-center transition-smooth",
-        "hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        danger ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : active ? "bg-card text-foreground border border-border" : "bg-muted text-muted-foreground border border-border"
-      ].join(" "),
-      children: active ? activeIcon : inactiveIcon
-    }
-  );
-}
-function CallControls({ localStream, onEnd }) {
-  const navigate = useNavigate();
-  useEndCall();
-  const [isMuted, setIsMuted] = reactExports.useState(false);
-  const [isSpeakerOff, setIsSpeakerOff] = reactExports.useState(false);
-  const toggleMute = reactExports.useCallback(() => {
-    if (!localStream) return;
-    const newMuted = !isMuted;
-    for (const track2 of localStream.getAudioTracks()) {
-      track2.enabled = !newMuted;
-    }
-    setIsMuted(newMuted);
-  }, [localStream, isMuted]);
-  const toggleSpeaker = reactExports.useCallback(() => {
-    setIsSpeakerOff((v2) => !v2);
-  }, []);
-  const handleEnd = reactExports.useCallback(async () => {
-    await onEnd();
-    navigate({ to: "/app/conversations" });
-  }, [onEnd, navigate]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "div",
-    {
-      "data-ocid": "call.controls",
-      className: "flex items-center gap-4 rounded-2xl bg-card/80 backdrop-blur-md px-6 py-4 shadow-elevated border border-border/40",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          ControlButton,
-          {
-            onClick: toggleMute,
-            active: !isMuted,
-            activeIcon: /* @__PURE__ */ jsxRuntimeExports.jsx(Mic, { size: 22 }),
-            inactiveIcon: /* @__PURE__ */ jsxRuntimeExports.jsx(MicOff, { size: 22 }),
-            label: isMuted ? "Unmute microphone" : "Mute microphone",
-            ocid: "call.mute_toggle"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          ControlButton,
-          {
-            onClick: toggleSpeaker,
-            active: !isSpeakerOff,
-            activeIcon: /* @__PURE__ */ jsxRuntimeExports.jsx(Volume2, { size: 22 }),
-            inactiveIcon: /* @__PURE__ */ jsxRuntimeExports.jsx(VolumeX, { size: 22 }),
-            label: isSpeakerOff ? "Unmute speaker" : "Mute speaker",
-            ocid: "call.speaker_toggle"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            type: "button",
-            "data-ocid": "call.end_button",
-            onClick: handleEnd,
-            "aria-label": "End call",
-            className: "w-14 h-14 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:scale-105 active:scale-95 transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-elevated",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneOff, { size: 22 })
-          }
-        )
-      ]
-    }
-  );
-}
-const STUN_CONFIG = {
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-};
-function AudioWaves() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-end gap-1 h-8", "aria-hidden": "true", children: [0.4, 0.7, 1, 0.7, 0.4, 0.6, 0.9, 0.6].map((scale, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "span",
-    {
-      className: "w-1.5 rounded-full bg-primary/70 animate-pulse",
-      style: {
-        height: `${scale * 28}px`,
-        animationDelay: `${i * 0.12}s`,
-        animationDuration: "1.1s"
-      }
-    },
-    i
-  )) });
-}
-function RingingOutgoing({
-  peer
-}) {
-  const { data: profile } = useUserProfile(peer);
-  const principalStr = (peer == null ? void 0 : peer.toText()) ?? "";
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-6", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: principalStr, size: 96 }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xl font-semibold text-foreground", children: (profile == null ? void 0 : profile.encryptedDisplayName) ? "Calling…" : `Calling ${principalStr.slice(0, 8)}…` }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground mt-1", children: "Waiting for answer" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 28, label: "Ringing" })
-  ] });
-}
-function RingingIncoming({
-  call,
-  onAccept,
-  onDecline
-}) {
-  const { data: profile } = useUserProfile(call.caller);
-  const principalStr = call.caller.toText();
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-6", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: principalStr, size: 96 }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xl font-semibold text-foreground", children: profile ? "Incoming call" : `${principalStr.slice(0, 8)}…` }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center gap-1.5 mt-1 text-muted-foreground text-sm", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 14 }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Voice call" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          type: "button",
-          "data-ocid": "call.decline_button",
-          onClick: onDecline,
-          className: "w-16 h-16 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-elevated transition-smooth hover:scale-105 active:scale-95",
-          "aria-label": "Decline call",
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneOff, { size: 24 })
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          type: "button",
-          "data-ocid": "call.accept_button",
-          onClick: onAccept,
-          className: "w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-elevated transition-smooth hover:scale-105 active:scale-95",
-          "aria-label": "Accept call",
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 24 })
-        }
-      )
-    ] })
-  ] });
-}
-function CallPage() {
-  const { id } = useParams({ from: "/app/calls/$id" });
-  const callId = BigInt(id);
-  const navigate = useNavigate();
-  const { principal } = useAuth();
-  const { data: call, isLoading } = useCall(callId);
-  const initiateCall = useInitiateCall();
-  const answerCall = useAnswerCall();
-  const endCall = useEndCall();
-  const { getConversationKey, deriveAndStoreKey, setConversationKey } = useCrypto();
-  const peerConnectionRef = reactExports.useRef(null);
-  const localStreamRef = reactExports.useRef(null);
-  const seenCandidateCount = reactExports.useRef(0);
-  const callerSetupDone = reactExports.useRef(false);
-  const calleeSetupDone = reactExports.useRef(false);
-  const [localStream, setLocalStream] = reactExports.useState(null);
-  const [callActive, setCallActive] = reactExports.useState(false);
-  const [setupError, setSetupError] = reactExports.useState(null);
-  const isCaller = principal && call ? call.caller.toText() === principal.toText() : null;
-  const getSessionKey = reactExports.useCallback(async () => {
-    var _a3;
-    const convIdStr = (_a3 = call == null ? void 0 : call.conversationId) == null ? void 0 : _a3.toString();
-    if (convIdStr) {
-      const existing = getConversationKey(convIdStr);
-      if (existing) return existing;
-      if (call && call.callees.length > 0) {
-        const derived = await deriveAndStoreKey(convIdStr, new Uint8Array(0));
-        if (derived) return derived;
-      }
-    }
-    const fallbackKey = await generateGroupKey();
-    if (convIdStr) setConversationKey(convIdStr, fallbackKey);
-    return fallbackKey;
-  }, [call, getConversationKey, deriveAndStoreKey, setConversationKey]);
-  const encryptSdp = reactExports.useCallback(
-    async (sdp) => {
-      const key = await getSessionKey();
-      return encryptMessage(key, sdp);
-    },
-    [getSessionKey]
-  );
-  const decryptSdp = reactExports.useCallback(
-    async (data) => {
-      const key = await getSessionKey();
-      return decryptMessage(key, data);
-    },
-    [getSessionKey]
-  );
-  reactExports.useEffect(() => {
-    if (!call || isCaller !== true || call.status !== CallStatus.ringing)
-      return;
-    if (callerSetupDone.current) return;
-    callerSetupDone.current = true;
-    (async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: false
-        });
-        localStreamRef.current = stream;
-        setLocalStream(stream);
-        const pc = new RTCPeerConnection(STUN_CONFIG);
-        peerConnectionRef.current = pc;
-        for (const track2 of stream.getTracks()) pc.addTrack(track2, stream);
-        pc.onconnectionstatechange = () => {
-          if (pc.connectionState === "connected") setCallActive(true);
-        };
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
-        const encryptedOffer = await encryptSdp(JSON.stringify(offer));
-        const callee = call.callees[0] ?? null;
-        await initiateCall.mutateAsync({
-          encryptedSdpOffer: encryptedOffer,
-          callees: callee ? [callee] : [],
-          callType: call.callType,
-          conversationId: Array.isArray(call.conversationId) ? call.conversationId[0] : call.conversationId
-        });
-      } catch (err) {
-        setSetupError(err instanceof Error ? err.message : "Setup failed");
-      }
-    })();
-  }, [call, isCaller, encryptSdp, initiateCall]);
-  const handleAccept = reactExports.useCallback(async () => {
-    if (!call || !call.encryptedSdpOffer) return;
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: false
-      });
-      localStreamRef.current = stream;
-      setLocalStream(stream);
-      const pc = new RTCPeerConnection(STUN_CONFIG);
-      peerConnectionRef.current = pc;
-      for (const track2 of stream.getTracks()) pc.addTrack(track2, stream);
-      pc.onconnectionstatechange = () => {
-        if (pc.connectionState === "connected") setCallActive(true);
-      };
-      const offerSdp = await decryptSdp(call.encryptedSdpOffer);
-      const offer = JSON.parse(offerSdp);
-      await pc.setRemoteDescription(offer);
-      const answer = await pc.createAnswer();
-      await pc.setLocalDescription(answer);
-      const encryptedAnswer = await encryptSdp(JSON.stringify(answer));
-      await answerCall.mutateAsync({
-        callId: call.id,
-        encryptedSdpAnswer: encryptedAnswer
-      });
-      calleeSetupDone.current = true;
-    } catch (err) {
-      setSetupError(err instanceof Error ? err.message : "Accept failed");
-    }
-  }, [call, decryptSdp, encryptSdp, answerCall]);
-  reactExports.useEffect(() => {
-    if (!call || isCaller !== true || !call.encryptedSdpAnswer) return;
-    const pc = peerConnectionRef.current;
-    if (!pc || pc.remoteDescription) return;
-    (async () => {
-      try {
-        const answerSdp = await decryptSdp(
-          call.encryptedSdpAnswer
-        );
-        const answer = JSON.parse(answerSdp);
-        await pc.setRemoteDescription(answer);
-      } catch {
-      }
-    })();
-  }, [call, isCaller, decryptSdp]);
-  reactExports.useEffect(() => {
-    if (!call) return;
-    const pc = peerConnectionRef.current;
-    if (!pc) return;
-    const candidates = call.iceCandidates;
-    if (candidates.length <= seenCandidateCount.current) return;
-    const newCandidates = candidates.slice(seenCandidateCount.current);
-    seenCandidateCount.current = candidates.length;
-    for (const enc of newCandidates) {
-      (async () => {
-        try {
-          const raw = await decryptSdp(enc);
-          const candidate = JSON.parse(raw);
-          await pc.addIceCandidate(new RTCIceCandidate(candidate));
-        } catch {
-        }
-      })();
-    }
-  }, [call, decryptSdp]);
-  reactExports.useEffect(() => {
-    if ((call == null ? void 0 : call.status) === CallStatus.active) setCallActive(true);
-  }, [call == null ? void 0 : call.status]);
-  reactExports.useEffect(() => {
-    return () => {
-      var _a3, _b3;
-      (_a3 = peerConnectionRef.current) == null ? void 0 : _a3.close();
-      for (const t of ((_b3 = localStreamRef.current) == null ? void 0 : _b3.getTracks()) ?? []) t.stop();
-    };
-  }, []);
-  const handleEnd = reactExports.useCallback(async () => {
-    var _a3, _b3;
-    if (!call) return;
-    (_a3 = peerConnectionRef.current) == null ? void 0 : _a3.close();
-    for (const t of ((_b3 = localStreamRef.current) == null ? void 0 : _b3.getTracks()) ?? []) t.stop();
-    await endCall.mutateAsync({ callId: call.id, reason: CallStatus.ended });
-    navigate({ to: "/app/conversations" });
-  }, [call, endCall, navigate]);
-  const handleDecline = reactExports.useCallback(async () => {
-    if (!call) return;
-    await endCall.mutateAsync({ callId: call.id, reason: CallStatus.declined });
-    navigate({ to: "/app/conversations" });
-  }, [call, endCall, navigate]);
-  if (isLoading || !call) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-screen items-center justify-center bg-background", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36, label: "Loading call…", fullScreen: true }) });
-  }
-  const isTerminated = call.status === CallStatus.ended || call.status === CallStatus.declined || call.status === CallStatus.missed;
-  if (isTerminated) {
-    const statusLabel = call.status === CallStatus.declined ? "Call declined" : call.status === CallStatus.missed ? "Missed call" : "Call ended";
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        "data-ocid": "call.page",
-        className: "flex h-screen flex-col items-center justify-center gap-6 bg-background",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 rounded-full bg-muted flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneOff, { size: 28, className: "text-muted-foreground" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg font-semibold text-foreground", children: statusLabel }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground mt-1", children: "Voice call" })
-          ] }),
-          call.conversationId && /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              "data-ocid": "call.back_button",
-              variant: "outline",
-              onClick: () => navigate({
-                to: "/app/conversations/$id",
-                params: { id: call.conversationId.toString() }
-              }),
-              children: "Back to chat"
-            }
-          ),
-          !call.conversationId && /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              "data-ocid": "call.back_button",
-              variant: "outline",
-              onClick: () => navigate({ to: "/app/conversations" }),
-              children: "Back to conversations"
-            }
-          )
-        ]
-      }
-    );
-  }
-  if (callActive) {
-    const callee = call.callees[0] ?? null;
-    const peerPrincipal = isCaller ? callee : call.caller;
-    const peerStr = (peerPrincipal == null ? void 0 : peerPrincipal.toText()) ?? "";
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        "data-ocid": "call.page",
-        className: "flex h-screen flex-col items-center justify-center gap-6 bg-background",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: peerStr, size: 96 }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-lg font-semibold text-foreground", children: [
-              peerStr.slice(0, 8),
-              "…"
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground mt-1", children: "Call in progress" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(AudioWaves, {}),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CallControls, { localStream, onEnd: handleEnd })
-        ]
-      }
-    );
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "div",
-    {
-      "data-ocid": "call.page",
-      className: "flex h-screen flex-col items-center justify-center gap-6 bg-background",
-      children: [
-        isCaller ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(RingingOutgoing, { peer: call.callees[0] ?? null }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              "data-ocid": "call.hangup_button",
-              variant: "destructive",
-              size: "lg",
-              className: "rounded-full w-14 h-14 p-0",
-              onClick: handleEnd,
-              "aria-label": "Hang up",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneOff, { size: 22 })
-            }
-          )
-        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-          RingingIncoming,
-          {
-            call,
-            onAccept: handleAccept,
-            onDecline: handleDecline
-          }
-        ),
-        setupError && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-destructive mt-2", role: "alert", children: setupError }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("footer", { className: "absolute bottom-2 left-0 right-0 text-center pointer-events-none", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[10px] text-muted-foreground/60", children: [
-          "To report a bug, email",
-          " ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "a",
-            {
-              href: "mailto:support@charliesierra.io",
-              className: "underline pointer-events-auto hover:text-muted-foreground transition-colors duration-200",
-              children: "support@charliesierra.io"
-            }
-          )
-        ] }) })
-      ]
-    }
-  );
 }
 function EncryptedBadge({
   compact = false,
@@ -47342,6 +41109,5274 @@ function useDenyJoinRequest() {
       queryClient2.invalidateQueries({ queryKey: ["publicGroups"] });
     }
   });
+}
+var prefix = "Invariant failed";
+function invariant(condition, message) {
+  if (condition) {
+    return;
+  }
+  {
+    throw new Error(prefix);
+  }
+}
+function warning(condition, message) {
+}
+const __storeToDerived = /* @__PURE__ */ new WeakMap();
+const __derivedToStore = /* @__PURE__ */ new WeakMap();
+const __depsThatHaveWrittenThisTick = {
+  current: []
+};
+let __isFlushing = false;
+let __batchDepth = 0;
+const __pendingUpdates = /* @__PURE__ */ new Set();
+const __initialBatchValues = /* @__PURE__ */ new Map();
+function __flush_internals(relatedVals) {
+  const sorted = Array.from(relatedVals).sort((a2, b2) => {
+    if (a2 instanceof Derived && a2.options.deps.includes(b2)) return 1;
+    if (b2 instanceof Derived && b2.options.deps.includes(a2)) return -1;
+    return 0;
+  });
+  for (const derived of sorted) {
+    if (__depsThatHaveWrittenThisTick.current.includes(derived)) {
+      continue;
+    }
+    __depsThatHaveWrittenThisTick.current.push(derived);
+    derived.recompute();
+    const stores = __derivedToStore.get(derived);
+    if (stores) {
+      for (const store of stores) {
+        const relatedLinkedDerivedVals = __storeToDerived.get(store);
+        if (!relatedLinkedDerivedVals) continue;
+        __flush_internals(relatedLinkedDerivedVals);
+      }
+    }
+  }
+}
+function __notifyListeners(store) {
+  const value = {
+    prevVal: store.prevState,
+    currentVal: store.state
+  };
+  for (const listener of store.listeners) {
+    listener(value);
+  }
+}
+function __notifyDerivedListeners(derived) {
+  const value = {
+    prevVal: derived.prevState,
+    currentVal: derived.state
+  };
+  for (const listener of derived.listeners) {
+    listener(value);
+  }
+}
+function __flush(store) {
+  if (__batchDepth > 0 && !__initialBatchValues.has(store)) {
+    __initialBatchValues.set(store, store.prevState);
+  }
+  __pendingUpdates.add(store);
+  if (__batchDepth > 0) return;
+  if (__isFlushing) return;
+  try {
+    __isFlushing = true;
+    while (__pendingUpdates.size > 0) {
+      const stores = Array.from(__pendingUpdates);
+      __pendingUpdates.clear();
+      for (const store2 of stores) {
+        const prevState = __initialBatchValues.get(store2) ?? store2.prevState;
+        store2.prevState = prevState;
+        __notifyListeners(store2);
+      }
+      for (const store2 of stores) {
+        const derivedVals = __storeToDerived.get(store2);
+        if (!derivedVals) continue;
+        __depsThatHaveWrittenThisTick.current.push(store2);
+        __flush_internals(derivedVals);
+      }
+      for (const store2 of stores) {
+        const derivedVals = __storeToDerived.get(store2);
+        if (!derivedVals) continue;
+        for (const derived of derivedVals) {
+          __notifyDerivedListeners(derived);
+        }
+      }
+    }
+  } finally {
+    __isFlushing = false;
+    __depsThatHaveWrittenThisTick.current = [];
+    __initialBatchValues.clear();
+  }
+}
+function batch(fn) {
+  __batchDepth++;
+  try {
+    fn();
+  } finally {
+    __batchDepth--;
+    if (__batchDepth === 0) {
+      const pendingUpdateToFlush = __pendingUpdates.values().next().value;
+      if (pendingUpdateToFlush) {
+        __flush(pendingUpdateToFlush);
+      }
+    }
+  }
+}
+function isUpdaterFunction(updater) {
+  return typeof updater === "function";
+}
+class Store {
+  constructor(initialState, options) {
+    this.listeners = /* @__PURE__ */ new Set();
+    this.subscribe = (listener) => {
+      var _a3, _b3;
+      this.listeners.add(listener);
+      const unsub = (_b3 = (_a3 = this.options) == null ? void 0 : _a3.onSubscribe) == null ? void 0 : _b3.call(_a3, listener, this);
+      return () => {
+        this.listeners.delete(listener);
+        unsub == null ? void 0 : unsub();
+      };
+    };
+    this.prevState = initialState;
+    this.state = initialState;
+    this.options = options;
+  }
+  setState(updater) {
+    var _a3, _b3, _c2;
+    this.prevState = this.state;
+    if ((_a3 = this.options) == null ? void 0 : _a3.updateFn) {
+      this.state = this.options.updateFn(this.prevState)(updater);
+    } else {
+      if (isUpdaterFunction(updater)) {
+        this.state = updater(this.prevState);
+      } else {
+        this.state = updater;
+      }
+    }
+    (_c2 = (_b3 = this.options) == null ? void 0 : _b3.onUpdate) == null ? void 0 : _c2.call(_b3);
+    __flush(this);
+  }
+}
+class Derived {
+  constructor(options) {
+    this.listeners = /* @__PURE__ */ new Set();
+    this._subscriptions = [];
+    this.lastSeenDepValues = [];
+    this.getDepVals = () => {
+      const l = this.options.deps.length;
+      const prevDepVals = new Array(l);
+      const currDepVals = new Array(l);
+      for (let i = 0; i < l; i++) {
+        const dep = this.options.deps[i];
+        prevDepVals[i] = dep.prevState;
+        currDepVals[i] = dep.state;
+      }
+      this.lastSeenDepValues = currDepVals;
+      return {
+        prevDepVals,
+        currDepVals,
+        prevVal: this.prevState ?? void 0
+      };
+    };
+    this.recompute = () => {
+      var _a3, _b3;
+      this.prevState = this.state;
+      const depVals = this.getDepVals();
+      this.state = this.options.fn(depVals);
+      (_b3 = (_a3 = this.options).onUpdate) == null ? void 0 : _b3.call(_a3);
+    };
+    this.checkIfRecalculationNeededDeeply = () => {
+      for (const dep of this.options.deps) {
+        if (dep instanceof Derived) {
+          dep.checkIfRecalculationNeededDeeply();
+        }
+      }
+      let shouldRecompute = false;
+      const lastSeenDepValues = this.lastSeenDepValues;
+      const { currDepVals } = this.getDepVals();
+      for (let i = 0; i < currDepVals.length; i++) {
+        if (currDepVals[i] !== lastSeenDepValues[i]) {
+          shouldRecompute = true;
+          break;
+        }
+      }
+      if (shouldRecompute) {
+        this.recompute();
+      }
+    };
+    this.mount = () => {
+      this.registerOnGraph();
+      this.checkIfRecalculationNeededDeeply();
+      return () => {
+        this.unregisterFromGraph();
+        for (const cleanup of this._subscriptions) {
+          cleanup();
+        }
+      };
+    };
+    this.subscribe = (listener) => {
+      var _a3, _b3;
+      this.listeners.add(listener);
+      const unsub = (_b3 = (_a3 = this.options).onSubscribe) == null ? void 0 : _b3.call(_a3, listener, this);
+      return () => {
+        this.listeners.delete(listener);
+        unsub == null ? void 0 : unsub();
+      };
+    };
+    this.options = options;
+    this.state = options.fn({
+      prevDepVals: void 0,
+      prevVal: void 0,
+      currDepVals: this.getDepVals().currDepVals
+    });
+  }
+  registerOnGraph(deps = this.options.deps) {
+    for (const dep of deps) {
+      if (dep instanceof Derived) {
+        dep.registerOnGraph();
+        this.registerOnGraph(dep.options.deps);
+      } else if (dep instanceof Store) {
+        let relatedLinkedDerivedVals = __storeToDerived.get(dep);
+        if (!relatedLinkedDerivedVals) {
+          relatedLinkedDerivedVals = /* @__PURE__ */ new Set();
+          __storeToDerived.set(dep, relatedLinkedDerivedVals);
+        }
+        relatedLinkedDerivedVals.add(this);
+        let relatedStores = __derivedToStore.get(this);
+        if (!relatedStores) {
+          relatedStores = /* @__PURE__ */ new Set();
+          __derivedToStore.set(this, relatedStores);
+        }
+        relatedStores.add(dep);
+      }
+    }
+  }
+  unregisterFromGraph(deps = this.options.deps) {
+    for (const dep of deps) {
+      if (dep instanceof Derived) {
+        this.unregisterFromGraph(dep.options.deps);
+      } else if (dep instanceof Store) {
+        const relatedLinkedDerivedVals = __storeToDerived.get(dep);
+        if (relatedLinkedDerivedVals) {
+          relatedLinkedDerivedVals.delete(this);
+        }
+        const relatedStores = __derivedToStore.get(this);
+        if (relatedStores) {
+          relatedStores.delete(dep);
+        }
+      }
+    }
+  }
+}
+const stateIndexKey = "__TSR_index";
+const popStateEvent = "popstate";
+const beforeUnloadEvent = "beforeunload";
+function createHistory(opts) {
+  let location2 = opts.getLocation();
+  const subscribers = /* @__PURE__ */ new Set();
+  const notify = (action) => {
+    location2 = opts.getLocation();
+    subscribers.forEach((subscriber) => subscriber({ location: location2, action }));
+  };
+  const handleIndexChange = (action) => {
+    if (opts.notifyOnIndexChange ?? true) notify(action);
+    else location2 = opts.getLocation();
+  };
+  const tryNavigation = async ({
+    task,
+    navigateOpts,
+    ...actionInfo
+  }) => {
+    var _a3, _b3;
+    const ignoreBlocker = (navigateOpts == null ? void 0 : navigateOpts.ignoreBlocker) ?? false;
+    if (ignoreBlocker) {
+      task();
+      return;
+    }
+    const blockers = ((_a3 = opts.getBlockers) == null ? void 0 : _a3.call(opts)) ?? [];
+    const isPushOrReplace = actionInfo.type === "PUSH" || actionInfo.type === "REPLACE";
+    if (typeof document !== "undefined" && blockers.length && isPushOrReplace) {
+      for (const blocker of blockers) {
+        const nextLocation = parseHref(actionInfo.path, actionInfo.state);
+        const isBlocked = await blocker.blockerFn({
+          currentLocation: location2,
+          nextLocation,
+          action: actionInfo.type
+        });
+        if (isBlocked) {
+          (_b3 = opts.onBlocked) == null ? void 0 : _b3.call(opts);
+          return;
+        }
+      }
+    }
+    task();
+  };
+  return {
+    get location() {
+      return location2;
+    },
+    get length() {
+      return opts.getLength();
+    },
+    subscribers,
+    subscribe: (cb) => {
+      subscribers.add(cb);
+      return () => {
+        subscribers.delete(cb);
+      };
+    },
+    push: (path, state, navigateOpts) => {
+      const currentIndex = location2.state[stateIndexKey];
+      state = assignKeyAndIndex(currentIndex + 1, state);
+      tryNavigation({
+        task: () => {
+          opts.pushState(path, state);
+          notify({ type: "PUSH" });
+        },
+        navigateOpts,
+        type: "PUSH",
+        path,
+        state
+      });
+    },
+    replace: (path, state, navigateOpts) => {
+      const currentIndex = location2.state[stateIndexKey];
+      state = assignKeyAndIndex(currentIndex, state);
+      tryNavigation({
+        task: () => {
+          opts.replaceState(path, state);
+          notify({ type: "REPLACE" });
+        },
+        navigateOpts,
+        type: "REPLACE",
+        path,
+        state
+      });
+    },
+    go: (index2, navigateOpts) => {
+      tryNavigation({
+        task: () => {
+          opts.go(index2);
+          handleIndexChange({ type: "GO", index: index2 });
+        },
+        navigateOpts,
+        type: "GO"
+      });
+    },
+    back: (navigateOpts) => {
+      tryNavigation({
+        task: () => {
+          opts.back((navigateOpts == null ? void 0 : navigateOpts.ignoreBlocker) ?? false);
+          handleIndexChange({ type: "BACK" });
+        },
+        navigateOpts,
+        type: "BACK"
+      });
+    },
+    forward: (navigateOpts) => {
+      tryNavigation({
+        task: () => {
+          opts.forward((navigateOpts == null ? void 0 : navigateOpts.ignoreBlocker) ?? false);
+          handleIndexChange({ type: "FORWARD" });
+        },
+        navigateOpts,
+        type: "FORWARD"
+      });
+    },
+    canGoBack: () => location2.state[stateIndexKey] !== 0,
+    createHref: (str) => opts.createHref(str),
+    block: (blocker) => {
+      var _a3;
+      if (!opts.setBlockers) return () => {
+      };
+      const blockers = ((_a3 = opts.getBlockers) == null ? void 0 : _a3.call(opts)) ?? [];
+      opts.setBlockers([...blockers, blocker]);
+      return () => {
+        var _a22, _b3;
+        const blockers2 = ((_a22 = opts.getBlockers) == null ? void 0 : _a22.call(opts)) ?? [];
+        (_b3 = opts.setBlockers) == null ? void 0 : _b3.call(opts, blockers2.filter((b2) => b2 !== blocker));
+      };
+    },
+    flush: () => {
+      var _a3;
+      return (_a3 = opts.flush) == null ? void 0 : _a3.call(opts);
+    },
+    destroy: () => {
+      var _a3;
+      return (_a3 = opts.destroy) == null ? void 0 : _a3.call(opts);
+    },
+    notify
+  };
+}
+function assignKeyAndIndex(index2, state) {
+  if (!state) {
+    state = {};
+  }
+  const key = createRandomKey();
+  return {
+    ...state,
+    key,
+    // TODO: Remove in v2 - use __TSR_key instead
+    __TSR_key: key,
+    [stateIndexKey]: index2
+  };
+}
+function createBrowserHistory(opts) {
+  var _a3, _b3;
+  const win = typeof document !== "undefined" ? window : void 0;
+  const originalPushState = win.history.pushState;
+  const originalReplaceState = win.history.replaceState;
+  let blockers = [];
+  const _getBlockers = () => blockers;
+  const _setBlockers = (newBlockers) => blockers = newBlockers;
+  const createHref = (path) => path;
+  const parseLocation = () => parseHref(
+    `${win.location.pathname}${win.location.search}${win.location.hash}`,
+    win.history.state
+  );
+  if (!((_a3 = win.history.state) == null ? void 0 : _a3.__TSR_key) && !((_b3 = win.history.state) == null ? void 0 : _b3.key)) {
+    const addedKey = createRandomKey();
+    win.history.replaceState(
+      {
+        [stateIndexKey]: 0,
+        key: addedKey,
+        // TODO: Remove in v2 - use __TSR_key instead
+        __TSR_key: addedKey
+      },
+      ""
+    );
+  }
+  let currentLocation = parseLocation();
+  let rollbackLocation;
+  let nextPopIsGo = false;
+  let ignoreNextPop = false;
+  let skipBlockerNextPop = false;
+  let ignoreNextBeforeUnload = false;
+  const getLocation = () => currentLocation;
+  let next;
+  let scheduled;
+  const flush = () => {
+    if (!next) {
+      return;
+    }
+    history._ignoreSubscribers = true;
+    (next.isPush ? win.history.pushState : win.history.replaceState)(
+      next.state,
+      "",
+      next.href
+    );
+    history._ignoreSubscribers = false;
+    next = void 0;
+    scheduled = void 0;
+    rollbackLocation = void 0;
+  };
+  const queueHistoryAction = (type, destHref, state) => {
+    const href = createHref(destHref);
+    if (!scheduled) {
+      rollbackLocation = currentLocation;
+    }
+    currentLocation = parseHref(destHref, state);
+    next = {
+      href,
+      state,
+      isPush: (next == null ? void 0 : next.isPush) || type === "push"
+    };
+    if (!scheduled) {
+      scheduled = Promise.resolve().then(() => flush());
+    }
+  };
+  const onPushPop = (type) => {
+    currentLocation = parseLocation();
+    history.notify({ type });
+  };
+  const onPushPopEvent = async () => {
+    if (ignoreNextPop) {
+      ignoreNextPop = false;
+      return;
+    }
+    const nextLocation = parseLocation();
+    const delta = nextLocation.state[stateIndexKey] - currentLocation.state[stateIndexKey];
+    const isForward = delta === 1;
+    const isBack = delta === -1;
+    const isGo = !isForward && !isBack || nextPopIsGo;
+    nextPopIsGo = false;
+    const action = isGo ? "GO" : isBack ? "BACK" : "FORWARD";
+    const notify = isGo ? {
+      type: "GO",
+      index: delta
+    } : {
+      type: isBack ? "BACK" : "FORWARD"
+    };
+    if (skipBlockerNextPop) {
+      skipBlockerNextPop = false;
+    } else {
+      const blockers2 = _getBlockers();
+      if (typeof document !== "undefined" && blockers2.length) {
+        for (const blocker of blockers2) {
+          const isBlocked = await blocker.blockerFn({
+            currentLocation,
+            nextLocation,
+            action
+          });
+          if (isBlocked) {
+            ignoreNextPop = true;
+            win.history.go(1);
+            history.notify(notify);
+            return;
+          }
+        }
+      }
+    }
+    currentLocation = parseLocation();
+    history.notify(notify);
+  };
+  const onBeforeUnload = (e) => {
+    if (ignoreNextBeforeUnload) {
+      ignoreNextBeforeUnload = false;
+      return;
+    }
+    let shouldBlock = false;
+    const blockers2 = _getBlockers();
+    if (typeof document !== "undefined" && blockers2.length) {
+      for (const blocker of blockers2) {
+        const shouldHaveBeforeUnload = blocker.enableBeforeUnload ?? true;
+        if (shouldHaveBeforeUnload === true) {
+          shouldBlock = true;
+          break;
+        }
+        if (typeof shouldHaveBeforeUnload === "function" && shouldHaveBeforeUnload() === true) {
+          shouldBlock = true;
+          break;
+        }
+      }
+    }
+    if (shouldBlock) {
+      e.preventDefault();
+      return e.returnValue = "";
+    }
+    return;
+  };
+  const history = createHistory({
+    getLocation,
+    getLength: () => win.history.length,
+    pushState: (href, state) => queueHistoryAction("push", href, state),
+    replaceState: (href, state) => queueHistoryAction("replace", href, state),
+    back: (ignoreBlocker) => {
+      if (ignoreBlocker) skipBlockerNextPop = true;
+      ignoreNextBeforeUnload = true;
+      return win.history.back();
+    },
+    forward: (ignoreBlocker) => {
+      if (ignoreBlocker) skipBlockerNextPop = true;
+      ignoreNextBeforeUnload = true;
+      win.history.forward();
+    },
+    go: (n) => {
+      nextPopIsGo = true;
+      win.history.go(n);
+    },
+    createHref: (href) => createHref(href),
+    flush,
+    destroy: () => {
+      win.history.pushState = originalPushState;
+      win.history.replaceState = originalReplaceState;
+      win.removeEventListener(beforeUnloadEvent, onBeforeUnload, {
+        capture: true
+      });
+      win.removeEventListener(popStateEvent, onPushPopEvent);
+    },
+    onBlocked: () => {
+      if (rollbackLocation && currentLocation !== rollbackLocation) {
+        currentLocation = rollbackLocation;
+      }
+    },
+    getBlockers: _getBlockers,
+    setBlockers: _setBlockers,
+    notifyOnIndexChange: false
+  });
+  win.addEventListener(beforeUnloadEvent, onBeforeUnload, { capture: true });
+  win.addEventListener(popStateEvent, onPushPopEvent);
+  win.history.pushState = function(...args) {
+    const res = originalPushState.apply(win.history, args);
+    if (!history._ignoreSubscribers) onPushPop("PUSH");
+    return res;
+  };
+  win.history.replaceState = function(...args) {
+    const res = originalReplaceState.apply(win.history, args);
+    if (!history._ignoreSubscribers) onPushPop("REPLACE");
+    return res;
+  };
+  return history;
+}
+function createMemoryHistory(opts = {
+  initialEntries: ["/"]
+}) {
+  const entries = opts.initialEntries;
+  let index2 = opts.initialIndex ? Math.min(Math.max(opts.initialIndex, 0), entries.length - 1) : entries.length - 1;
+  const states = entries.map(
+    (_entry, index22) => assignKeyAndIndex(index22, void 0)
+  );
+  const getLocation = () => parseHref(entries[index2], states[index2]);
+  return createHistory({
+    getLocation,
+    getLength: () => entries.length,
+    pushState: (path, state) => {
+      if (index2 < entries.length - 1) {
+        entries.splice(index2 + 1);
+        states.splice(index2 + 1);
+      }
+      states.push(state);
+      entries.push(path);
+      index2 = Math.max(entries.length - 1, 0);
+    },
+    replaceState: (path, state) => {
+      states[index2] = state;
+      entries[index2] = path;
+    },
+    back: () => {
+      index2 = Math.max(index2 - 1, 0);
+    },
+    forward: () => {
+      index2 = Math.min(index2 + 1, entries.length - 1);
+    },
+    go: (n) => {
+      index2 = Math.min(Math.max(index2 + n, 0), entries.length - 1);
+    },
+    createHref: (path) => path
+  });
+}
+function parseHref(href, state) {
+  const hashIndex = href.indexOf("#");
+  const searchIndex = href.indexOf("?");
+  const addedKey = createRandomKey();
+  return {
+    href,
+    pathname: href.substring(
+      0,
+      hashIndex > 0 ? searchIndex > 0 ? Math.min(hashIndex, searchIndex) : hashIndex : searchIndex > 0 ? searchIndex : href.length
+    ),
+    hash: hashIndex > -1 ? href.substring(hashIndex) : "",
+    search: searchIndex > -1 ? href.slice(searchIndex, hashIndex === -1 ? void 0 : hashIndex) : "",
+    state: state || { [stateIndexKey]: 0, key: addedKey, __TSR_key: addedKey }
+  };
+}
+function createRandomKey() {
+  return (Math.random() + 1).toString(36).substring(7);
+}
+function last(arr) {
+  return arr[arr.length - 1];
+}
+function isFunction$1(d2) {
+  return typeof d2 === "function";
+}
+function functionalUpdate(updater, previous) {
+  if (isFunction$1(updater)) {
+    return updater(previous);
+  }
+  return updater;
+}
+const hasOwn = Object.prototype.hasOwnProperty;
+function replaceEqualDeep(prev, _next) {
+  if (prev === _next) {
+    return prev;
+  }
+  const next = _next;
+  const array = isPlainArray(prev) && isPlainArray(next);
+  if (!array && !(isPlainObject(prev) && isPlainObject(next))) return next;
+  const prevItems = array ? prev : getEnumerableOwnKeys(prev);
+  if (!prevItems) return next;
+  const nextItems = array ? next : getEnumerableOwnKeys(next);
+  if (!nextItems) return next;
+  const prevSize = prevItems.length;
+  const nextSize = nextItems.length;
+  const copy = array ? new Array(nextSize) : {};
+  let equalItems = 0;
+  for (let i = 0; i < nextSize; i++) {
+    const key = array ? i : nextItems[i];
+    const p2 = prev[key];
+    const n = next[key];
+    if (p2 === n) {
+      copy[key] = p2;
+      if (array ? i < prevSize : hasOwn.call(prev, key)) equalItems++;
+      continue;
+    }
+    if (p2 === null || n === null || typeof p2 !== "object" || typeof n !== "object") {
+      copy[key] = n;
+      continue;
+    }
+    const v2 = replaceEqualDeep(p2, n);
+    copy[key] = v2;
+    if (v2 === p2) equalItems++;
+  }
+  return prevSize === nextSize && equalItems === prevSize ? prev : copy;
+}
+function getEnumerableOwnKeys(o2) {
+  const keys = [];
+  const names = Object.getOwnPropertyNames(o2);
+  for (const name of names) {
+    if (!Object.prototype.propertyIsEnumerable.call(o2, name)) return false;
+    keys.push(name);
+  }
+  const symbols = Object.getOwnPropertySymbols(o2);
+  for (const symbol of symbols) {
+    if (!Object.prototype.propertyIsEnumerable.call(o2, symbol)) return false;
+    keys.push(symbol);
+  }
+  return keys;
+}
+function isPlainObject(o2) {
+  if (!hasObjectPrototype(o2)) {
+    return false;
+  }
+  const ctor = o2.constructor;
+  if (typeof ctor === "undefined") {
+    return true;
+  }
+  const prot = ctor.prototype;
+  if (!hasObjectPrototype(prot)) {
+    return false;
+  }
+  if (!prot.hasOwnProperty("isPrototypeOf")) {
+    return false;
+  }
+  return true;
+}
+function hasObjectPrototype(o2) {
+  return Object.prototype.toString.call(o2) === "[object Object]";
+}
+function isPlainArray(value) {
+  return Array.isArray(value) && value.length === Object.keys(value).length;
+}
+function deepEqual(a2, b2, opts) {
+  if (a2 === b2) {
+    return true;
+  }
+  if (typeof a2 !== typeof b2) {
+    return false;
+  }
+  if (Array.isArray(a2) && Array.isArray(b2)) {
+    if (a2.length !== b2.length) return false;
+    for (let i = 0, l = a2.length; i < l; i++) {
+      if (!deepEqual(a2[i], b2[i], opts)) return false;
+    }
+    return true;
+  }
+  if (isPlainObject(a2) && isPlainObject(b2)) {
+    const ignoreUndefined = (opts == null ? void 0 : opts.ignoreUndefined) ?? true;
+    if (opts == null ? void 0 : opts.partial) {
+      for (const k2 in b2) {
+        if (!ignoreUndefined || b2[k2] !== void 0) {
+          if (!deepEqual(a2[k2], b2[k2], opts)) return false;
+        }
+      }
+      return true;
+    }
+    let aCount = 0;
+    if (!ignoreUndefined) {
+      aCount = Object.keys(a2).length;
+    } else {
+      for (const k2 in a2) {
+        if (a2[k2] !== void 0) aCount++;
+      }
+    }
+    let bCount = 0;
+    for (const k2 in b2) {
+      if (!ignoreUndefined || b2[k2] !== void 0) {
+        bCount++;
+        if (bCount > aCount || !deepEqual(a2[k2], b2[k2], opts)) return false;
+      }
+    }
+    return aCount === bCount;
+  }
+  return false;
+}
+function createControlledPromise(onResolve) {
+  let resolveLoadPromise;
+  let rejectLoadPromise;
+  const controlledPromise = new Promise((resolve, reject) => {
+    resolveLoadPromise = resolve;
+    rejectLoadPromise = reject;
+  });
+  controlledPromise.status = "pending";
+  controlledPromise.resolve = (value) => {
+    controlledPromise.status = "resolved";
+    controlledPromise.value = value;
+    resolveLoadPromise(value);
+    onResolve == null ? void 0 : onResolve(value);
+  };
+  controlledPromise.reject = (e) => {
+    controlledPromise.status = "rejected";
+    rejectLoadPromise(e);
+  };
+  return controlledPromise;
+}
+function isPromise(value) {
+  return Boolean(
+    value && typeof value === "object" && typeof value.then === "function"
+  );
+}
+const SEGMENT_TYPE_PATHNAME = 0;
+const SEGMENT_TYPE_PARAM = 1;
+const SEGMENT_TYPE_WILDCARD = 2;
+const SEGMENT_TYPE_OPTIONAL_PARAM = 3;
+function joinPaths(paths) {
+  return cleanPath(
+    paths.filter((val) => {
+      return val !== void 0;
+    }).join("/")
+  );
+}
+function cleanPath(path) {
+  return path.replace(/\/{2,}/g, "/");
+}
+function trimPathLeft(path) {
+  return path === "/" ? path : path.replace(/^\/{1,}/, "");
+}
+function trimPathRight(path) {
+  return path === "/" ? path : path.replace(/\/{1,}$/, "");
+}
+function trimPath(path) {
+  return trimPathRight(trimPathLeft(path));
+}
+function removeTrailingSlash(value, basepath) {
+  if ((value == null ? void 0 : value.endsWith("/")) && value !== "/" && value !== `${basepath}/`) {
+    return value.slice(0, -1);
+  }
+  return value;
+}
+function exactPathTest(pathName1, pathName2, basepath) {
+  return removeTrailingSlash(pathName1, basepath) === removeTrailingSlash(pathName2, basepath);
+}
+function segmentToString(segment) {
+  const { type, value } = segment;
+  if (type === SEGMENT_TYPE_PATHNAME) {
+    return value;
+  }
+  const { prefixSegment, suffixSegment } = segment;
+  if (type === SEGMENT_TYPE_PARAM) {
+    const param = value.substring(1);
+    if (prefixSegment && suffixSegment) {
+      return `${prefixSegment}{$${param}}${suffixSegment}`;
+    } else if (prefixSegment) {
+      return `${prefixSegment}{$${param}}`;
+    } else if (suffixSegment) {
+      return `{$${param}}${suffixSegment}`;
+    }
+  }
+  if (type === SEGMENT_TYPE_OPTIONAL_PARAM) {
+    const param = value.substring(1);
+    if (prefixSegment && suffixSegment) {
+      return `${prefixSegment}{-$${param}}${suffixSegment}`;
+    } else if (prefixSegment) {
+      return `${prefixSegment}{-$${param}}`;
+    } else if (suffixSegment) {
+      return `{-$${param}}${suffixSegment}`;
+    }
+    return `{-$${param}}`;
+  }
+  if (type === SEGMENT_TYPE_WILDCARD) {
+    if (prefixSegment && suffixSegment) {
+      return `${prefixSegment}{$}${suffixSegment}`;
+    } else if (prefixSegment) {
+      return `${prefixSegment}{$}`;
+    } else if (suffixSegment) {
+      return `{$}${suffixSegment}`;
+    }
+  }
+  return value;
+}
+function resolvePath({
+  basepath,
+  base,
+  to,
+  trailingSlash = "never",
+  caseSensitive,
+  parseCache
+}) {
+  var _a3;
+  base = removeBasepath(basepath, base, caseSensitive);
+  to = removeBasepath(basepath, to, caseSensitive);
+  let baseSegments = parseBasePathSegments(base, parseCache).slice();
+  const toSegments = parseRoutePathSegments(to, parseCache);
+  if (baseSegments.length > 1 && ((_a3 = last(baseSegments)) == null ? void 0 : _a3.value) === "/") {
+    baseSegments.pop();
+  }
+  for (let index2 = 0, length = toSegments.length; index2 < length; index2++) {
+    const toSegment = toSegments[index2];
+    const value = toSegment.value;
+    if (value === "/") {
+      if (!index2) {
+        baseSegments = [toSegment];
+      } else if (index2 === length - 1) {
+        baseSegments.push(toSegment);
+      } else ;
+    } else if (value === "..") {
+      baseSegments.pop();
+    } else if (value === ".") ;
+    else {
+      baseSegments.push(toSegment);
+    }
+  }
+  if (baseSegments.length > 1) {
+    if (last(baseSegments).value === "/") {
+      if (trailingSlash === "never") {
+        baseSegments.pop();
+      }
+    } else if (trailingSlash === "always") {
+      baseSegments.push({ type: SEGMENT_TYPE_PATHNAME, value: "/" });
+    }
+  }
+  const segmentValues = baseSegments.map(segmentToString);
+  const joined = joinPaths([basepath, ...segmentValues]);
+  return joined;
+}
+const parseBasePathSegments = (pathname, cache) => parsePathname(pathname, cache, true);
+const parseRoutePathSegments = (pathname, cache) => parsePathname(pathname, cache, false);
+const parsePathname = (pathname, cache, basePathValues) => {
+  if (!pathname) return [];
+  const cached = cache == null ? void 0 : cache.get(pathname);
+  if (cached) return cached;
+  const parsed = baseParsePathname(pathname, basePathValues);
+  cache == null ? void 0 : cache.set(pathname, parsed);
+  return parsed;
+};
+const PARAM_RE = /^\$.{1,}$/;
+const PARAM_W_CURLY_BRACES_RE = /^(.*?)\{(\$[a-zA-Z_$][a-zA-Z0-9_$]*)\}(.*)$/;
+const OPTIONAL_PARAM_W_CURLY_BRACES_RE = /^(.*?)\{-(\$[a-zA-Z_$][a-zA-Z0-9_$]*)\}(.*)$/;
+const WILDCARD_RE = /^\$$/;
+const WILDCARD_W_CURLY_BRACES_RE = /^(.*?)\{\$\}(.*)$/;
+function baseParsePathname(pathname, basePathValues) {
+  pathname = cleanPath(pathname);
+  const segments = [];
+  if (pathname.slice(0, 1) === "/") {
+    pathname = pathname.substring(1);
+    segments.push({
+      type: SEGMENT_TYPE_PATHNAME,
+      value: "/"
+    });
+  }
+  if (!pathname) {
+    return segments;
+  }
+  const split2 = pathname.split("/").filter(Boolean);
+  segments.push(
+    ...split2.map((part) => {
+      const partToMatch = !basePathValues && part.slice(-1) === "_" ? part.slice(0, -1) : part;
+      const wildcardBracesMatch = partToMatch.match(WILDCARD_W_CURLY_BRACES_RE);
+      if (wildcardBracesMatch) {
+        const prefix2 = wildcardBracesMatch[1];
+        const suffix2 = wildcardBracesMatch[2];
+        return {
+          type: SEGMENT_TYPE_WILDCARD,
+          value: "$",
+          prefixSegment: prefix2 || void 0,
+          suffixSegment: suffix2 || void 0
+        };
+      }
+      const optionalParamBracesMatch = partToMatch.match(
+        OPTIONAL_PARAM_W_CURLY_BRACES_RE
+      );
+      if (optionalParamBracesMatch) {
+        const prefix2 = optionalParamBracesMatch[1];
+        const paramName = optionalParamBracesMatch[2];
+        const suffix2 = optionalParamBracesMatch[3];
+        return {
+          type: SEGMENT_TYPE_OPTIONAL_PARAM,
+          value: paramName,
+          // Now just $paramName (no prefix)
+          prefixSegment: prefix2 || void 0,
+          suffixSegment: suffix2 || void 0
+        };
+      }
+      const paramBracesMatch = partToMatch.match(PARAM_W_CURLY_BRACES_RE);
+      if (paramBracesMatch) {
+        const prefix2 = paramBracesMatch[1];
+        const paramName = paramBracesMatch[2];
+        const suffix2 = paramBracesMatch[3];
+        return {
+          type: SEGMENT_TYPE_PARAM,
+          value: "" + paramName,
+          prefixSegment: prefix2 || void 0,
+          suffixSegment: suffix2 || void 0
+        };
+      }
+      if (PARAM_RE.test(partToMatch)) {
+        const paramName = partToMatch.substring(1);
+        return {
+          type: SEGMENT_TYPE_PARAM,
+          value: "$" + paramName,
+          prefixSegment: void 0,
+          suffixSegment: void 0
+        };
+      }
+      if (WILDCARD_RE.test(partToMatch)) {
+        return {
+          type: SEGMENT_TYPE_WILDCARD,
+          value: "$",
+          prefixSegment: void 0,
+          suffixSegment: void 0
+        };
+      }
+      return {
+        type: SEGMENT_TYPE_PATHNAME,
+        value: partToMatch.includes("%25") ? partToMatch.split("%25").map((segment) => decodeURI(segment)).join("%25") : decodeURI(partToMatch)
+      };
+    })
+  );
+  if (pathname.slice(-1) === "/") {
+    pathname = pathname.substring(1);
+    segments.push({
+      type: SEGMENT_TYPE_PATHNAME,
+      value: "/"
+    });
+  }
+  return segments;
+}
+function interpolatePath({
+  path,
+  params,
+  leaveWildcards,
+  leaveParams,
+  decodeCharMap,
+  parseCache
+}) {
+  const interpolatedPathSegments = parseRoutePathSegments(path, parseCache);
+  function encodeParam(key) {
+    const value = params[key];
+    const isValueString = typeof value === "string";
+    if (key === "*" || key === "_splat") {
+      return isValueString ? encodeURI(value) : value;
+    } else {
+      return isValueString ? encodePathParam(value, decodeCharMap) : value;
+    }
+  }
+  let isMissingParams = false;
+  const usedParams = {};
+  const interpolatedPath = joinPaths(
+    interpolatedPathSegments.map((segment) => {
+      if (segment.type === SEGMENT_TYPE_PATHNAME) {
+        return segment.value;
+      }
+      if (segment.type === SEGMENT_TYPE_WILDCARD) {
+        usedParams._splat = params._splat;
+        usedParams["*"] = params._splat;
+        const segmentPrefix = segment.prefixSegment || "";
+        const segmentSuffix = segment.suffixSegment || "";
+        if (!("_splat" in params)) {
+          isMissingParams = true;
+          if (leaveWildcards) {
+            return `${segmentPrefix}${segment.value}${segmentSuffix}`;
+          }
+          if (segmentPrefix || segmentSuffix) {
+            return `${segmentPrefix}${segmentSuffix}`;
+          }
+          return void 0;
+        }
+        const value = encodeParam("_splat");
+        if (leaveWildcards) {
+          return `${segmentPrefix}${segment.value}${value ?? ""}${segmentSuffix}`;
+        }
+        return `${segmentPrefix}${value}${segmentSuffix}`;
+      }
+      if (segment.type === SEGMENT_TYPE_PARAM) {
+        const key = segment.value.substring(1);
+        if (!isMissingParams && !(key in params)) {
+          isMissingParams = true;
+        }
+        usedParams[key] = params[key];
+        const segmentPrefix = segment.prefixSegment || "";
+        const segmentSuffix = segment.suffixSegment || "";
+        if (leaveParams) {
+          const value = encodeParam(segment.value);
+          return `${segmentPrefix}${segment.value}${value ?? ""}${segmentSuffix}`;
+        }
+        return `${segmentPrefix}${encodeParam(key) ?? "undefined"}${segmentSuffix}`;
+      }
+      if (segment.type === SEGMENT_TYPE_OPTIONAL_PARAM) {
+        const key = segment.value.substring(1);
+        const segmentPrefix = segment.prefixSegment || "";
+        const segmentSuffix = segment.suffixSegment || "";
+        if (!(key in params) || params[key] == null) {
+          if (leaveWildcards) {
+            return `${segmentPrefix}${key}${segmentSuffix}`;
+          }
+          if (segmentPrefix || segmentSuffix) {
+            return `${segmentPrefix}${segmentSuffix}`;
+          }
+          return void 0;
+        }
+        usedParams[key] = params[key];
+        if (leaveParams) {
+          const value = encodeParam(segment.value);
+          return `${segmentPrefix}${segment.value}${value ?? ""}${segmentSuffix}`;
+        }
+        if (leaveWildcards) {
+          return `${segmentPrefix}${key}${encodeParam(key) ?? ""}${segmentSuffix}`;
+        }
+        return `${segmentPrefix}${encodeParam(key) ?? ""}${segmentSuffix}`;
+      }
+      return segment.value;
+    })
+  );
+  return { usedParams, interpolatedPath, isMissingParams };
+}
+function encodePathParam(value, decodeCharMap) {
+  let encoded = encodeURIComponent(value);
+  if (decodeCharMap) {
+    for (const [encodedChar, char] of decodeCharMap) {
+      encoded = encoded.replaceAll(encodedChar, char);
+    }
+  }
+  return encoded;
+}
+function matchPathname(basepath, currentPathname, matchLocation, parseCache) {
+  const pathParams = matchByPath(
+    basepath,
+    currentPathname,
+    matchLocation,
+    parseCache
+  );
+  if (matchLocation.to && !pathParams) {
+    return;
+  }
+  return pathParams ?? {};
+}
+function removeBasepath(basepath, pathname, caseSensitive = false) {
+  const normalizedBasepath = caseSensitive ? basepath : basepath.toLowerCase();
+  const normalizedPathname = caseSensitive ? pathname : pathname.toLowerCase();
+  switch (true) {
+    case normalizedBasepath === "/":
+      return pathname;
+    case normalizedPathname === normalizedBasepath:
+      return "";
+    case pathname.length < basepath.length:
+      return pathname;
+    case normalizedPathname[normalizedBasepath.length] !== "/":
+      return pathname;
+    case normalizedPathname.startsWith(normalizedBasepath):
+      return pathname.slice(basepath.length);
+    default:
+      return pathname;
+  }
+}
+function matchByPath(basepath, from, {
+  to,
+  fuzzy,
+  caseSensitive
+}, parseCache) {
+  if (basepath !== "/" && !from.startsWith(basepath)) {
+    return void 0;
+  }
+  from = removeBasepath(basepath, from, caseSensitive);
+  to = removeBasepath(basepath, `${to ?? "$"}`, caseSensitive);
+  const baseSegments = parseBasePathSegments(
+    from.startsWith("/") ? from : `/${from}`,
+    parseCache
+  );
+  const routeSegments = parseRoutePathSegments(
+    to.startsWith("/") ? to : `/${to}`,
+    parseCache
+  );
+  const params = {};
+  const result = isMatch(
+    baseSegments,
+    routeSegments,
+    params,
+    fuzzy,
+    caseSensitive
+  );
+  return result ? params : void 0;
+}
+function isMatch(baseSegments, routeSegments, params, fuzzy, caseSensitive) {
+  var _a3, _b3, _c2;
+  let baseIndex = 0;
+  let routeIndex = 0;
+  while (baseIndex < baseSegments.length || routeIndex < routeSegments.length) {
+    const baseSegment = baseSegments[baseIndex];
+    const routeSegment = routeSegments[routeIndex];
+    if (routeSegment) {
+      if (routeSegment.type === SEGMENT_TYPE_WILDCARD) {
+        const remainingBaseSegments = baseSegments.slice(baseIndex);
+        let _splat;
+        if (routeSegment.prefixSegment || routeSegment.suffixSegment) {
+          if (!baseSegment) return false;
+          const prefix2 = routeSegment.prefixSegment || "";
+          const suffix2 = routeSegment.suffixSegment || "";
+          const baseValue = baseSegment.value;
+          if ("prefixSegment" in routeSegment) {
+            if (!baseValue.startsWith(prefix2)) {
+              return false;
+            }
+          }
+          if ("suffixSegment" in routeSegment) {
+            if (!((_a3 = baseSegments[baseSegments.length - 1]) == null ? void 0 : _a3.value.endsWith(suffix2))) {
+              return false;
+            }
+          }
+          let rejoinedSplat = decodeURI(
+            joinPaths(remainingBaseSegments.map((d2) => d2.value))
+          );
+          if (prefix2 && rejoinedSplat.startsWith(prefix2)) {
+            rejoinedSplat = rejoinedSplat.slice(prefix2.length);
+          }
+          if (suffix2 && rejoinedSplat.endsWith(suffix2)) {
+            rejoinedSplat = rejoinedSplat.slice(
+              0,
+              rejoinedSplat.length - suffix2.length
+            );
+          }
+          _splat = rejoinedSplat;
+        } else {
+          _splat = decodeURI(
+            joinPaths(remainingBaseSegments.map((d2) => d2.value))
+          );
+        }
+        params["*"] = _splat;
+        params["_splat"] = _splat;
+        return true;
+      }
+      if (routeSegment.type === SEGMENT_TYPE_PATHNAME) {
+        if (routeSegment.value === "/" && !(baseSegment == null ? void 0 : baseSegment.value)) {
+          routeIndex++;
+          continue;
+        }
+        if (baseSegment) {
+          if (caseSensitive) {
+            if (routeSegment.value !== baseSegment.value) {
+              return false;
+            }
+          } else if (routeSegment.value.toLowerCase() !== baseSegment.value.toLowerCase()) {
+            return false;
+          }
+          baseIndex++;
+          routeIndex++;
+          continue;
+        } else {
+          return false;
+        }
+      }
+      if (routeSegment.type === SEGMENT_TYPE_PARAM) {
+        if (!baseSegment) {
+          return false;
+        }
+        if (baseSegment.value === "/") {
+          return false;
+        }
+        let _paramValue = "";
+        let matched = false;
+        if (routeSegment.prefixSegment || routeSegment.suffixSegment) {
+          const prefix2 = routeSegment.prefixSegment || "";
+          const suffix2 = routeSegment.suffixSegment || "";
+          const baseValue = baseSegment.value;
+          if (prefix2 && !baseValue.startsWith(prefix2)) {
+            return false;
+          }
+          if (suffix2 && !baseValue.endsWith(suffix2)) {
+            return false;
+          }
+          let paramValue = baseValue;
+          if (prefix2 && paramValue.startsWith(prefix2)) {
+            paramValue = paramValue.slice(prefix2.length);
+          }
+          if (suffix2 && paramValue.endsWith(suffix2)) {
+            paramValue = paramValue.slice(0, paramValue.length - suffix2.length);
+          }
+          _paramValue = decodeURIComponent(paramValue);
+          matched = true;
+        } else {
+          _paramValue = decodeURIComponent(baseSegment.value);
+          matched = true;
+        }
+        if (matched) {
+          params[routeSegment.value.substring(1)] = _paramValue;
+          baseIndex++;
+        }
+        routeIndex++;
+        continue;
+      }
+      if (routeSegment.type === SEGMENT_TYPE_OPTIONAL_PARAM) {
+        if (!baseSegment) {
+          routeIndex++;
+          continue;
+        }
+        if (baseSegment.value === "/") {
+          routeIndex++;
+          continue;
+        }
+        let _paramValue = "";
+        let matched = false;
+        if (routeSegment.prefixSegment || routeSegment.suffixSegment) {
+          const prefix2 = routeSegment.prefixSegment || "";
+          const suffix2 = routeSegment.suffixSegment || "";
+          const baseValue = baseSegment.value;
+          if ((!prefix2 || baseValue.startsWith(prefix2)) && (!suffix2 || baseValue.endsWith(suffix2))) {
+            let paramValue = baseValue;
+            if (prefix2 && paramValue.startsWith(prefix2)) {
+              paramValue = paramValue.slice(prefix2.length);
+            }
+            if (suffix2 && paramValue.endsWith(suffix2)) {
+              paramValue = paramValue.slice(
+                0,
+                paramValue.length - suffix2.length
+              );
+            }
+            _paramValue = decodeURIComponent(paramValue);
+            matched = true;
+          }
+        } else {
+          let shouldMatchOptional = true;
+          for (let lookAhead = routeIndex + 1; lookAhead < routeSegments.length; lookAhead++) {
+            const futureRouteSegment = routeSegments[lookAhead];
+            if ((futureRouteSegment == null ? void 0 : futureRouteSegment.type) === SEGMENT_TYPE_PATHNAME && futureRouteSegment.value === baseSegment.value) {
+              shouldMatchOptional = false;
+              break;
+            }
+            if ((futureRouteSegment == null ? void 0 : futureRouteSegment.type) === SEGMENT_TYPE_PARAM || (futureRouteSegment == null ? void 0 : futureRouteSegment.type) === SEGMENT_TYPE_WILDCARD) {
+              if (baseSegments.length < routeSegments.length) {
+                shouldMatchOptional = false;
+              }
+              break;
+            }
+          }
+          if (shouldMatchOptional) {
+            _paramValue = decodeURIComponent(baseSegment.value);
+            matched = true;
+          }
+        }
+        if (matched) {
+          params[routeSegment.value.substring(1)] = _paramValue;
+          baseIndex++;
+        }
+        routeIndex++;
+        continue;
+      }
+    }
+    if (baseIndex < baseSegments.length && routeIndex >= routeSegments.length) {
+      params["**"] = joinPaths(
+        baseSegments.slice(baseIndex).map((d2) => d2.value)
+      );
+      return !!fuzzy && ((_b3 = routeSegments[routeSegments.length - 1]) == null ? void 0 : _b3.value) !== "/";
+    }
+    if (routeIndex < routeSegments.length && baseIndex >= baseSegments.length) {
+      for (let i = routeIndex; i < routeSegments.length; i++) {
+        if (((_c2 = routeSegments[i]) == null ? void 0 : _c2.type) !== SEGMENT_TYPE_OPTIONAL_PARAM) {
+          return false;
+        }
+      }
+      break;
+    }
+    break;
+  }
+  return true;
+}
+const SLASH_SCORE = 0.75;
+const STATIC_SEGMENT_SCORE = 1;
+const REQUIRED_PARAM_BASE_SCORE = 0.5;
+const OPTIONAL_PARAM_BASE_SCORE = 0.4;
+const WILDCARD_PARAM_BASE_SCORE = 0.25;
+const STATIC_AFTER_DYNAMIC_BONUS_SCORE = 0.2;
+const BOTH_PRESENCE_BASE_SCORE = 0.05;
+const PREFIX_PRESENCE_BASE_SCORE = 0.02;
+const SUFFIX_PRESENCE_BASE_SCORE = 0.01;
+const PREFIX_LENGTH_SCORE_MULTIPLIER = 2e-4;
+const SUFFIX_LENGTH_SCORE_MULTIPLIER = 1e-4;
+function handleParam(segment, baseScore) {
+  if (segment.prefixSegment && segment.suffixSegment) {
+    return baseScore + BOTH_PRESENCE_BASE_SCORE + PREFIX_LENGTH_SCORE_MULTIPLIER * segment.prefixSegment.length + SUFFIX_LENGTH_SCORE_MULTIPLIER * segment.suffixSegment.length;
+  }
+  if (segment.prefixSegment) {
+    return baseScore + PREFIX_PRESENCE_BASE_SCORE + PREFIX_LENGTH_SCORE_MULTIPLIER * segment.prefixSegment.length;
+  }
+  if (segment.suffixSegment) {
+    return baseScore + SUFFIX_PRESENCE_BASE_SCORE + SUFFIX_LENGTH_SCORE_MULTIPLIER * segment.suffixSegment.length;
+  }
+  return baseScore;
+}
+function sortRoutes(routes) {
+  const scoredRoutes = [];
+  routes.forEach((d2, i) => {
+    var _a3;
+    if (d2.isRoot || !d2.path) {
+      return;
+    }
+    const trimmed = trimPathLeft(d2.fullPath);
+    let parsed = parseRoutePathSegments(trimmed);
+    let skip = 0;
+    while (parsed.length > skip + 1 && ((_a3 = parsed[skip]) == null ? void 0 : _a3.value) === "/") {
+      skip++;
+    }
+    if (skip > 0) parsed = parsed.slice(skip);
+    let optionalParamCount = 0;
+    let hasStaticAfter = false;
+    const scores = parsed.map((segment, index2) => {
+      if (segment.value === "/") {
+        return SLASH_SCORE;
+      }
+      if (segment.type === SEGMENT_TYPE_PATHNAME) {
+        return STATIC_SEGMENT_SCORE;
+      }
+      let baseScore = void 0;
+      if (segment.type === SEGMENT_TYPE_PARAM) {
+        baseScore = REQUIRED_PARAM_BASE_SCORE;
+      } else if (segment.type === SEGMENT_TYPE_OPTIONAL_PARAM) {
+        baseScore = OPTIONAL_PARAM_BASE_SCORE;
+        optionalParamCount++;
+      } else {
+        baseScore = WILDCARD_PARAM_BASE_SCORE;
+      }
+      for (let i2 = index2 + 1; i2 < parsed.length; i2++) {
+        const nextSegment = parsed[i2];
+        if (nextSegment.type === SEGMENT_TYPE_PATHNAME && nextSegment.value !== "/") {
+          hasStaticAfter = true;
+          return handleParam(
+            segment,
+            baseScore + STATIC_AFTER_DYNAMIC_BONUS_SCORE
+          );
+        }
+      }
+      return handleParam(segment, baseScore);
+    });
+    scoredRoutes.push({
+      child: d2,
+      trimmed,
+      parsed,
+      index: i,
+      scores,
+      optionalParamCount,
+      hasStaticAfter
+    });
+  });
+  const flatRoutes = scoredRoutes.sort((a2, b2) => {
+    const minLength = Math.min(a2.scores.length, b2.scores.length);
+    for (let i = 0; i < minLength; i++) {
+      if (a2.scores[i] !== b2.scores[i]) {
+        return b2.scores[i] - a2.scores[i];
+      }
+    }
+    if (a2.scores.length !== b2.scores.length) {
+      if (a2.optionalParamCount !== b2.optionalParamCount) {
+        if (a2.hasStaticAfter === b2.hasStaticAfter) {
+          return a2.optionalParamCount - b2.optionalParamCount;
+        } else if (a2.hasStaticAfter && !b2.hasStaticAfter) {
+          return -1;
+        } else if (!a2.hasStaticAfter && b2.hasStaticAfter) {
+          return 1;
+        }
+      }
+      return b2.scores.length - a2.scores.length;
+    }
+    for (let i = 0; i < minLength; i++) {
+      if (a2.parsed[i].value !== b2.parsed[i].value) {
+        return a2.parsed[i].value > b2.parsed[i].value ? 1 : -1;
+      }
+    }
+    return a2.index - b2.index;
+  }).map((d2, i) => {
+    d2.child.rank = i;
+    return d2.child;
+  });
+  return flatRoutes;
+}
+function processRouteTree({
+  routeTree: routeTree2,
+  initRoute
+}) {
+  const routesById = {};
+  const routesByPath = {};
+  const recurseRoutes = (childRoutes) => {
+    childRoutes.forEach((childRoute, i) => {
+      initRoute == null ? void 0 : initRoute(childRoute, i);
+      const existingRoute = routesById[childRoute.id];
+      invariant(
+        !existingRoute,
+        `Duplicate routes found with id: ${String(childRoute.id)}`
+      );
+      routesById[childRoute.id] = childRoute;
+      if (!childRoute.isRoot && childRoute.path) {
+        const trimmedFullPath = trimPathRight(childRoute.fullPath);
+        if (!routesByPath[trimmedFullPath] || childRoute.fullPath.endsWith("/")) {
+          routesByPath[trimmedFullPath] = childRoute;
+        }
+      }
+      const children = childRoute.children;
+      if (children == null ? void 0 : children.length) {
+        recurseRoutes(children);
+      }
+    });
+  };
+  recurseRoutes([routeTree2]);
+  const flatRoutes = sortRoutes(Object.values(routesById));
+  return { routesById, routesByPath, flatRoutes };
+}
+function isNotFound(obj) {
+  return !!(obj == null ? void 0 : obj.isNotFound);
+}
+function getSafeSessionStorage() {
+  try {
+    if (typeof window !== "undefined" && typeof window.sessionStorage === "object") {
+      return window.sessionStorage;
+    }
+  } catch {
+  }
+  return void 0;
+}
+const storageKey = "tsr-scroll-restoration-v1_3";
+const throttle = (fn, wait) => {
+  let timeout2;
+  return (...args) => {
+    if (!timeout2) {
+      timeout2 = setTimeout(() => {
+        fn(...args);
+        timeout2 = null;
+      }, wait);
+    }
+  };
+};
+function createScrollRestorationCache() {
+  const safeSessionStorage = getSafeSessionStorage();
+  if (!safeSessionStorage) {
+    return void 0;
+  }
+  const persistedState = safeSessionStorage.getItem(storageKey);
+  let state = persistedState ? JSON.parse(persistedState) : {};
+  return {
+    state,
+    // This setter is simply to make sure that we set the sessionStorage right
+    // after the state is updated. It doesn't necessarily need to be a functional
+    // update.
+    set: (updater) => (state = functionalUpdate(updater, state) || state, safeSessionStorage.setItem(storageKey, JSON.stringify(state)))
+  };
+}
+const scrollRestorationCache = createScrollRestorationCache();
+const defaultGetScrollRestorationKey = (location2) => {
+  return location2.state.__TSR_key || location2.href;
+};
+function getCssSelector(el) {
+  const path = [];
+  let parent;
+  while (parent = el.parentNode) {
+    path.push(
+      `${el.tagName}:nth-child(${Array.prototype.indexOf.call(parent.children, el) + 1})`
+    );
+    el = parent;
+  }
+  return `${path.reverse().join(" > ")}`.toLowerCase();
+}
+let ignoreScroll = false;
+function restoreScroll({
+  storageKey: storageKey2,
+  key,
+  behavior,
+  shouldScrollRestoration,
+  scrollToTopSelectors,
+  location: location2
+}) {
+  var _a3, _b3;
+  let byKey;
+  try {
+    byKey = JSON.parse(sessionStorage.getItem(storageKey2) || "{}");
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+  const resolvedKey = key || ((_a3 = window.history.state) == null ? void 0 : _a3.key);
+  const elementEntries = byKey[resolvedKey];
+  ignoreScroll = true;
+  scroll: {
+    if (shouldScrollRestoration && elementEntries && Object.keys(elementEntries).length > 0) {
+      for (const elementSelector in elementEntries) {
+        const entry = elementEntries[elementSelector];
+        if (elementSelector === "window") {
+          window.scrollTo({
+            top: entry.scrollY,
+            left: entry.scrollX,
+            behavior
+          });
+        } else if (elementSelector) {
+          const element = document.querySelector(elementSelector);
+          if (element) {
+            element.scrollLeft = entry.scrollX;
+            element.scrollTop = entry.scrollY;
+          }
+        }
+      }
+      break scroll;
+    }
+    const hash = (location2 ?? window.location).hash.split("#", 2)[1];
+    if (hash) {
+      const hashScrollIntoViewOptions = ((_b3 = window.history.state) == null ? void 0 : _b3.__hashScrollIntoViewOptions) ?? true;
+      if (hashScrollIntoViewOptions) {
+        const el = document.getElementById(hash);
+        if (el) {
+          el.scrollIntoView(hashScrollIntoViewOptions);
+        }
+      }
+      break scroll;
+    }
+    const scrollOptions = { top: 0, left: 0, behavior };
+    window.scrollTo(scrollOptions);
+    if (scrollToTopSelectors) {
+      for (const selector of scrollToTopSelectors) {
+        if (selector === "window") continue;
+        const element = typeof selector === "function" ? selector() : document.querySelector(selector);
+        if (element) element.scrollTo(scrollOptions);
+      }
+    }
+  }
+  ignoreScroll = false;
+}
+function setupScrollRestoration(router2, force) {
+  if (scrollRestorationCache === void 0) {
+    return;
+  }
+  const shouldScrollRestoration = router2.options.scrollRestoration ?? false;
+  if (shouldScrollRestoration) {
+    router2.isScrollRestoring = true;
+  }
+  if (typeof document === "undefined" || router2.isScrollRestorationSetup) {
+    return;
+  }
+  router2.isScrollRestorationSetup = true;
+  ignoreScroll = false;
+  const getKey = router2.options.getScrollRestorationKey || defaultGetScrollRestorationKey;
+  window.history.scrollRestoration = "manual";
+  const onScroll = (event) => {
+    if (ignoreScroll || !router2.isScrollRestoring) {
+      return;
+    }
+    let elementSelector = "";
+    if (event.target === document || event.target === window) {
+      elementSelector = "window";
+    } else {
+      const attrId = event.target.getAttribute(
+        "data-scroll-restoration-id"
+      );
+      if (attrId) {
+        elementSelector = `[data-scroll-restoration-id="${attrId}"]`;
+      } else {
+        elementSelector = getCssSelector(event.target);
+      }
+    }
+    const restoreKey = getKey(router2.state.location);
+    scrollRestorationCache.set((state) => {
+      const keyEntry = state[restoreKey] || (state[restoreKey] = {});
+      const elementEntry = keyEntry[elementSelector] || (keyEntry[elementSelector] = {});
+      if (elementSelector === "window") {
+        elementEntry.scrollX = window.scrollX || 0;
+        elementEntry.scrollY = window.scrollY || 0;
+      } else if (elementSelector) {
+        const element = document.querySelector(elementSelector);
+        if (element) {
+          elementEntry.scrollX = element.scrollLeft || 0;
+          elementEntry.scrollY = element.scrollTop || 0;
+        }
+      }
+      return state;
+    });
+  };
+  if (typeof document !== "undefined") {
+    document.addEventListener("scroll", throttle(onScroll, 100), true);
+  }
+  router2.subscribe("onRendered", (event) => {
+    const cacheKey = getKey(event.toLocation);
+    if (!router2.resetNextScroll) {
+      router2.resetNextScroll = true;
+      return;
+    }
+    restoreScroll({
+      storageKey,
+      key: cacheKey,
+      behavior: router2.options.scrollRestorationBehavior,
+      shouldScrollRestoration: router2.isScrollRestoring,
+      scrollToTopSelectors: router2.options.scrollToTopSelectors,
+      location: router2.history.location
+    });
+    if (router2.isScrollRestoring) {
+      scrollRestorationCache.set((state) => {
+        state[cacheKey] || (state[cacheKey] = {});
+        return state;
+      });
+    }
+  });
+}
+function handleHashScroll(router2) {
+  if (typeof document !== "undefined" && document.querySelector) {
+    const hashScrollIntoViewOptions = router2.state.location.state.__hashScrollIntoViewOptions ?? true;
+    if (hashScrollIntoViewOptions && router2.state.location.hash !== "") {
+      const el = document.getElementById(router2.state.location.hash);
+      if (el) {
+        el.scrollIntoView(hashScrollIntoViewOptions);
+      }
+    }
+  }
+}
+function encode(obj, stringify = String) {
+  const result = new URLSearchParams();
+  for (const key in obj) {
+    const val = obj[key];
+    if (val !== void 0) {
+      result.set(key, stringify(val));
+    }
+  }
+  return result.toString();
+}
+function toValue(str) {
+  if (!str) return "";
+  if (str === "false") return false;
+  if (str === "true") return true;
+  return +str * 0 === 0 && +str + "" === str ? +str : str;
+}
+function decode(str) {
+  const searchParams = new URLSearchParams(str);
+  const result = {};
+  for (const [key, value] of searchParams.entries()) {
+    const previousValue = result[key];
+    if (previousValue == null) {
+      result[key] = toValue(value);
+    } else if (Array.isArray(previousValue)) {
+      previousValue.push(toValue(value));
+    } else {
+      result[key] = [previousValue, toValue(value)];
+    }
+  }
+  return result;
+}
+const defaultParseSearch = parseSearchWith(JSON.parse);
+const defaultStringifySearch = stringifySearchWith(
+  JSON.stringify,
+  JSON.parse
+);
+function parseSearchWith(parser) {
+  return (searchStr) => {
+    if (searchStr[0] === "?") {
+      searchStr = searchStr.substring(1);
+    }
+    const query = decode(searchStr);
+    for (const key in query) {
+      const value = query[key];
+      if (typeof value === "string") {
+        try {
+          query[key] = parser(value);
+        } catch (_err) {
+        }
+      }
+    }
+    return query;
+  };
+}
+function stringifySearchWith(stringify, parser) {
+  const hasParser = typeof parser === "function";
+  function stringifyValue(val) {
+    if (typeof val === "object" && val !== null) {
+      try {
+        return stringify(val);
+      } catch (_err) {
+      }
+    } else if (hasParser && typeof val === "string") {
+      try {
+        parser(val);
+        return stringify(val);
+      } catch (_err) {
+      }
+    }
+    return val;
+  }
+  return (search) => {
+    const searchStr = encode(search, stringifyValue);
+    return searchStr ? `?${searchStr}` : "";
+  };
+}
+const rootRouteId = "__root__";
+function redirect(opts) {
+  opts.statusCode = opts.statusCode || opts.code || 307;
+  if (!opts.reloadDocument && typeof opts.href === "string") {
+    try {
+      new URL(opts.href);
+      opts.reloadDocument = true;
+    } catch {
+    }
+  }
+  const headers = new Headers(opts.headers);
+  if (opts.href && headers.get("Location") === null) {
+    headers.set("Location", opts.href);
+  }
+  const response = new Response(null, {
+    status: opts.statusCode,
+    headers
+  });
+  response.options = opts;
+  if (opts.throw) {
+    throw response;
+  }
+  return response;
+}
+function isRedirect(obj) {
+  return obj instanceof Response && !!obj.options;
+}
+function createLRUCache(max2) {
+  const cache = /* @__PURE__ */ new Map();
+  let oldest;
+  let newest;
+  const touch = (entry) => {
+    if (!entry.next) return;
+    if (!entry.prev) {
+      entry.next.prev = void 0;
+      oldest = entry.next;
+      entry.next = void 0;
+      if (newest) {
+        entry.prev = newest;
+        newest.next = entry;
+      }
+    } else {
+      entry.prev.next = entry.next;
+      entry.next.prev = entry.prev;
+      entry.next = void 0;
+      if (newest) {
+        newest.next = entry;
+        entry.prev = newest;
+      }
+    }
+    newest = entry;
+  };
+  return {
+    get(key) {
+      const entry = cache.get(key);
+      if (!entry) return void 0;
+      touch(entry);
+      return entry.value;
+    },
+    set(key, value) {
+      if (cache.size >= max2 && oldest) {
+        const toDelete = oldest;
+        cache.delete(toDelete.key);
+        if (toDelete.next) {
+          oldest = toDelete.next;
+          toDelete.next.prev = void 0;
+        }
+        if (toDelete === newest) {
+          newest = void 0;
+        }
+      }
+      const existing = cache.get(key);
+      if (existing) {
+        existing.value = value;
+        touch(existing);
+      } else {
+        const entry = { key, value, prev: newest };
+        if (newest) newest.next = entry;
+        newest = entry;
+        if (!oldest) oldest = entry;
+        cache.set(key, entry);
+      }
+    }
+  };
+}
+const triggerOnReady = (inner) => {
+  var _a3;
+  if (!inner.rendered) {
+    inner.rendered = true;
+    return (_a3 = inner.onReady) == null ? void 0 : _a3.call(inner);
+  }
+};
+const resolvePreload = (inner, matchId) => {
+  return !!(inner.preload && !inner.router.state.matches.some((d2) => d2.id === matchId));
+};
+const _handleNotFound = (inner, err) => {
+  var _a3;
+  const routeCursor = inner.router.routesById[err.routeId ?? ""] ?? inner.router.routeTree;
+  if (!routeCursor.options.notFoundComponent && ((_a3 = inner.router.options) == null ? void 0 : _a3.defaultNotFoundComponent)) {
+    routeCursor.options.notFoundComponent = inner.router.options.defaultNotFoundComponent;
+  }
+  invariant(
+    routeCursor.options.notFoundComponent
+  );
+  const matchForRoute = inner.matches.find((m2) => m2.routeId === routeCursor.id);
+  invariant(matchForRoute, "Could not find match for route: " + routeCursor.id);
+  inner.updateMatch(matchForRoute.id, (prev) => ({
+    ...prev,
+    status: "notFound",
+    error: err,
+    isFetching: false
+  }));
+  if (err.routerCode === "BEFORE_LOAD" && routeCursor.parentRoute) {
+    err.routeId = routeCursor.parentRoute.id;
+    _handleNotFound(inner, err);
+  }
+};
+const handleRedirectAndNotFound = (inner, match, err) => {
+  var _a3, _b3, _c2;
+  if (!isRedirect(err) && !isNotFound(err)) return;
+  if (isRedirect(err) && err.redirectHandled && !err.options.reloadDocument) {
+    throw err;
+  }
+  if (match) {
+    (_a3 = match._nonReactive.beforeLoadPromise) == null ? void 0 : _a3.resolve();
+    (_b3 = match._nonReactive.loaderPromise) == null ? void 0 : _b3.resolve();
+    match._nonReactive.beforeLoadPromise = void 0;
+    match._nonReactive.loaderPromise = void 0;
+    const status = isRedirect(err) ? "redirected" : "notFound";
+    inner.updateMatch(match.id, (prev) => ({
+      ...prev,
+      status,
+      isFetching: false,
+      error: err
+    }));
+    if (isNotFound(err) && !err.routeId) {
+      err.routeId = match.routeId;
+    }
+    (_c2 = match._nonReactive.loadPromise) == null ? void 0 : _c2.resolve();
+  }
+  if (isRedirect(err)) {
+    inner.rendered = true;
+    err.options._fromLocation = inner.location;
+    err.redirectHandled = true;
+    err = inner.router.resolveRedirect(err);
+    throw err;
+  } else {
+    _handleNotFound(inner, err);
+    throw err;
+  }
+};
+const shouldSkipLoader = (inner, matchId) => {
+  const match = inner.router.getMatch(matchId);
+  if (!inner.router.isServer && match._nonReactive.dehydrated) {
+    return true;
+  }
+  if (inner.router.isServer && match.ssr === false) {
+    return true;
+  }
+  return false;
+};
+const handleSerialError = (inner, index2, err, routerCode) => {
+  var _a3, _b3;
+  const { id: matchId, routeId } = inner.matches[index2];
+  const route = inner.router.looseRoutesById[routeId];
+  if (err instanceof Promise) {
+    throw err;
+  }
+  err.routerCode = routerCode;
+  inner.firstBadMatchIndex ?? (inner.firstBadMatchIndex = index2);
+  handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), err);
+  try {
+    (_b3 = (_a3 = route.options).onError) == null ? void 0 : _b3.call(_a3, err);
+  } catch (errorHandlerErr) {
+    err = errorHandlerErr;
+    handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), err);
+  }
+  inner.updateMatch(matchId, (prev) => {
+    var _a22, _b22;
+    (_a22 = prev._nonReactive.beforeLoadPromise) == null ? void 0 : _a22.resolve();
+    prev._nonReactive.beforeLoadPromise = void 0;
+    (_b22 = prev._nonReactive.loadPromise) == null ? void 0 : _b22.resolve();
+    return {
+      ...prev,
+      error: err,
+      status: "error",
+      isFetching: false,
+      updatedAt: Date.now(),
+      abortController: new AbortController()
+    };
+  });
+};
+const isBeforeLoadSsr = (inner, matchId, index2, route) => {
+  var _a3;
+  const existingMatch = inner.router.getMatch(matchId);
+  const parentMatchId = (_a3 = inner.matches[index2 - 1]) == null ? void 0 : _a3.id;
+  const parentMatch = parentMatchId ? inner.router.getMatch(parentMatchId) : void 0;
+  if (inner.router.isShell()) {
+    existingMatch.ssr = matchId === rootRouteId;
+    return;
+  }
+  if ((parentMatch == null ? void 0 : parentMatch.ssr) === false) {
+    existingMatch.ssr = false;
+    return;
+  }
+  const parentOverride = (tempSsr2) => {
+    if (tempSsr2 === true && (parentMatch == null ? void 0 : parentMatch.ssr) === "data-only") {
+      return "data-only";
+    }
+    return tempSsr2;
+  };
+  const defaultSsr = inner.router.options.defaultSsr ?? true;
+  if (route.options.ssr === void 0) {
+    existingMatch.ssr = parentOverride(defaultSsr);
+    return;
+  }
+  if (typeof route.options.ssr !== "function") {
+    existingMatch.ssr = parentOverride(route.options.ssr);
+    return;
+  }
+  const { search, params } = existingMatch;
+  const ssrFnContext = {
+    search: makeMaybe(search, existingMatch.searchError),
+    params: makeMaybe(params, existingMatch.paramsError),
+    location: inner.location,
+    matches: inner.matches.map((match) => ({
+      index: match.index,
+      pathname: match.pathname,
+      fullPath: match.fullPath,
+      staticData: match.staticData,
+      id: match.id,
+      routeId: match.routeId,
+      search: makeMaybe(match.search, match.searchError),
+      params: makeMaybe(match.params, match.paramsError),
+      ssr: match.ssr
+    }))
+  };
+  const tempSsr = route.options.ssr(ssrFnContext);
+  if (isPromise(tempSsr)) {
+    return tempSsr.then((ssr) => {
+      existingMatch.ssr = parentOverride(ssr ?? defaultSsr);
+    });
+  }
+  existingMatch.ssr = parentOverride(tempSsr ?? defaultSsr);
+  return;
+};
+const setupPendingTimeout = (inner, matchId, route, match) => {
+  var _a3;
+  if (match._nonReactive.pendingTimeout !== void 0) return;
+  const pendingMs = route.options.pendingMs ?? inner.router.options.defaultPendingMs;
+  const shouldPending = !!(inner.onReady && !inner.router.isServer && !resolvePreload(inner, matchId) && (route.options.loader || route.options.beforeLoad || routeNeedsPreload(route)) && typeof pendingMs === "number" && pendingMs !== Infinity && (route.options.pendingComponent ?? ((_a3 = inner.router.options) == null ? void 0 : _a3.defaultPendingComponent)));
+  if (shouldPending) {
+    const pendingTimeout = setTimeout(() => {
+      triggerOnReady(inner);
+    }, pendingMs);
+    match._nonReactive.pendingTimeout = pendingTimeout;
+  }
+};
+const preBeforeLoadSetup = (inner, matchId, route) => {
+  const existingMatch = inner.router.getMatch(matchId);
+  if (!existingMatch._nonReactive.beforeLoadPromise && !existingMatch._nonReactive.loaderPromise)
+    return;
+  setupPendingTimeout(inner, matchId, route, existingMatch);
+  const then = () => {
+    const match = inner.router.getMatch(matchId);
+    if (match.preload && (match.status === "redirected" || match.status === "notFound")) {
+      handleRedirectAndNotFound(inner, match, match.error);
+    }
+  };
+  return existingMatch._nonReactive.beforeLoadPromise ? existingMatch._nonReactive.beforeLoadPromise.then(then) : then();
+};
+const executeBeforeLoad = (inner, matchId, index2, route) => {
+  var _a3;
+  const match = inner.router.getMatch(matchId);
+  const prevLoadPromise = match._nonReactive.loadPromise;
+  match._nonReactive.loadPromise = createControlledPromise(() => {
+    prevLoadPromise == null ? void 0 : prevLoadPromise.resolve();
+  });
+  const { paramsError, searchError } = match;
+  if (paramsError) {
+    handleSerialError(inner, index2, paramsError, "PARSE_PARAMS");
+  }
+  if (searchError) {
+    handleSerialError(inner, index2, searchError, "VALIDATE_SEARCH");
+  }
+  setupPendingTimeout(inner, matchId, route, match);
+  const abortController = new AbortController();
+  const parentMatchId = (_a3 = inner.matches[index2 - 1]) == null ? void 0 : _a3.id;
+  const parentMatch = parentMatchId ? inner.router.getMatch(parentMatchId) : void 0;
+  const parentMatchContext = (parentMatch == null ? void 0 : parentMatch.context) ?? inner.router.options.context ?? void 0;
+  const context = { ...parentMatchContext, ...match.__routeContext };
+  let isPending = false;
+  const pending = () => {
+    if (isPending) return;
+    isPending = true;
+    inner.updateMatch(matchId, (prev) => ({
+      ...prev,
+      isFetching: "beforeLoad",
+      fetchCount: prev.fetchCount + 1,
+      abortController,
+      context
+    }));
+  };
+  const resolve = () => {
+    var _a22;
+    (_a22 = match._nonReactive.beforeLoadPromise) == null ? void 0 : _a22.resolve();
+    match._nonReactive.beforeLoadPromise = void 0;
+    inner.updateMatch(matchId, (prev) => ({
+      ...prev,
+      isFetching: false
+    }));
+  };
+  if (!route.options.beforeLoad) {
+    batch(() => {
+      pending();
+      resolve();
+    });
+    return;
+  }
+  match._nonReactive.beforeLoadPromise = createControlledPromise();
+  const { search, params, cause } = match;
+  const preload3 = resolvePreload(inner, matchId);
+  const beforeLoadFnContext = {
+    search,
+    abortController,
+    params,
+    preload: preload3,
+    context,
+    location: inner.location,
+    navigate: (opts) => inner.router.navigate({
+      ...opts,
+      _fromLocation: inner.location
+    }),
+    buildLocation: inner.router.buildLocation,
+    cause: preload3 ? "preload" : cause,
+    matches: inner.matches
+  };
+  const updateContext = (beforeLoadContext2) => {
+    if (beforeLoadContext2 === void 0) {
+      batch(() => {
+        pending();
+        resolve();
+      });
+      return;
+    }
+    if (isRedirect(beforeLoadContext2) || isNotFound(beforeLoadContext2)) {
+      pending();
+      handleSerialError(inner, index2, beforeLoadContext2, "BEFORE_LOAD");
+    }
+    batch(() => {
+      pending();
+      inner.updateMatch(matchId, (prev) => ({
+        ...prev,
+        __beforeLoadContext: beforeLoadContext2,
+        context: {
+          ...prev.context,
+          ...beforeLoadContext2
+        }
+      }));
+      resolve();
+    });
+  };
+  let beforeLoadContext;
+  try {
+    beforeLoadContext = route.options.beforeLoad(beforeLoadFnContext);
+    if (isPromise(beforeLoadContext)) {
+      pending();
+      return beforeLoadContext.catch((err) => {
+        handleSerialError(inner, index2, err, "BEFORE_LOAD");
+      }).then(updateContext);
+    }
+  } catch (err) {
+    pending();
+    handleSerialError(inner, index2, err, "BEFORE_LOAD");
+  }
+  updateContext(beforeLoadContext);
+  return;
+};
+const handleBeforeLoad = (inner, index2) => {
+  const { id: matchId, routeId } = inner.matches[index2];
+  const route = inner.router.looseRoutesById[routeId];
+  const serverSsr = () => {
+    if (inner.router.isServer) {
+      const maybePromise = isBeforeLoadSsr(inner, matchId, index2, route);
+      if (isPromise(maybePromise)) return maybePromise.then(queueExecution);
+    }
+    return queueExecution();
+  };
+  const queueExecution = () => {
+    if (shouldSkipLoader(inner, matchId)) return;
+    const result = preBeforeLoadSetup(inner, matchId, route);
+    return isPromise(result) ? result.then(execute) : execute();
+  };
+  const execute = () => executeBeforeLoad(inner, matchId, index2, route);
+  return serverSsr();
+};
+const executeHead = (inner, matchId, route) => {
+  var _a3, _b3, _c2, _d2, _e2, _f2;
+  const match = inner.router.getMatch(matchId);
+  if (!match) {
+    return;
+  }
+  if (!route.options.head && !route.options.scripts && !route.options.headers) {
+    return;
+  }
+  const assetContext = {
+    matches: inner.matches,
+    match,
+    params: match.params,
+    loaderData: match.loaderData
+  };
+  return Promise.all([
+    (_b3 = (_a3 = route.options).head) == null ? void 0 : _b3.call(_a3, assetContext),
+    (_d2 = (_c2 = route.options).scripts) == null ? void 0 : _d2.call(_c2, assetContext),
+    (_f2 = (_e2 = route.options).headers) == null ? void 0 : _f2.call(_e2, assetContext)
+  ]).then(([headFnContent, scripts, headers]) => {
+    const meta = headFnContent == null ? void 0 : headFnContent.meta;
+    const links = headFnContent == null ? void 0 : headFnContent.links;
+    const headScripts = headFnContent == null ? void 0 : headFnContent.scripts;
+    const styles = headFnContent == null ? void 0 : headFnContent.styles;
+    return {
+      meta,
+      links,
+      headScripts,
+      headers,
+      scripts,
+      styles
+    };
+  });
+};
+const getLoaderContext = (inner, matchId, index2, route) => {
+  const parentMatchPromise = inner.matchPromises[index2 - 1];
+  const { params, loaderDeps, abortController, context, cause } = inner.router.getMatch(matchId);
+  const preload3 = resolvePreload(inner, matchId);
+  return {
+    params,
+    deps: loaderDeps,
+    preload: !!preload3,
+    parentMatchPromise,
+    abortController,
+    context,
+    location: inner.location,
+    navigate: (opts) => inner.router.navigate({
+      ...opts,
+      _fromLocation: inner.location
+    }),
+    cause: preload3 ? "preload" : cause,
+    route
+  };
+};
+const runLoader = async (inner, matchId, index2, route) => {
+  var _a3, _b3, _c2, _d2;
+  try {
+    const match = inner.router.getMatch(matchId);
+    try {
+      if (!inner.router.isServer || match.ssr === true) {
+        loadRouteChunk(route);
+      }
+      const loaderResult = (_b3 = (_a3 = route.options).loader) == null ? void 0 : _b3.call(
+        _a3,
+        getLoaderContext(inner, matchId, index2, route)
+      );
+      const loaderResultIsPromise = route.options.loader && isPromise(loaderResult);
+      const willLoadSomething = !!(loaderResultIsPromise || route._lazyPromise || route._componentsPromise || route.options.head || route.options.scripts || route.options.headers || match._nonReactive.minPendingPromise);
+      if (willLoadSomething) {
+        inner.updateMatch(matchId, (prev) => ({
+          ...prev,
+          isFetching: "loader"
+        }));
+      }
+      if (route.options.loader) {
+        const loaderData = loaderResultIsPromise ? await loaderResult : loaderResult;
+        handleRedirectAndNotFound(
+          inner,
+          inner.router.getMatch(matchId),
+          loaderData
+        );
+        if (loaderData !== void 0) {
+          inner.updateMatch(matchId, (prev) => ({
+            ...prev,
+            loaderData
+          }));
+        }
+      }
+      if (route._lazyPromise) await route._lazyPromise;
+      const headResult = executeHead(inner, matchId, route);
+      const head = headResult ? await headResult : void 0;
+      const pendingPromise = match._nonReactive.minPendingPromise;
+      if (pendingPromise) await pendingPromise;
+      if (route._componentsPromise) await route._componentsPromise;
+      inner.updateMatch(matchId, (prev) => ({
+        ...prev,
+        error: void 0,
+        status: "success",
+        isFetching: false,
+        updatedAt: Date.now(),
+        ...head
+      }));
+    } catch (e) {
+      let error = e;
+      const pendingPromise = match._nonReactive.minPendingPromise;
+      if (pendingPromise) await pendingPromise;
+      handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), e);
+      try {
+        (_d2 = (_c2 = route.options).onError) == null ? void 0 : _d2.call(_c2, e);
+      } catch (onErrorError) {
+        error = onErrorError;
+        handleRedirectAndNotFound(
+          inner,
+          inner.router.getMatch(matchId),
+          onErrorError
+        );
+      }
+      const headResult = executeHead(inner, matchId, route);
+      const head = headResult ? await headResult : void 0;
+      inner.updateMatch(matchId, (prev) => ({
+        ...prev,
+        error,
+        status: "error",
+        isFetching: false,
+        ...head
+      }));
+    }
+  } catch (err) {
+    const match = inner.router.getMatch(matchId);
+    if (match) {
+      const headResult = executeHead(inner, matchId, route);
+      if (headResult) {
+        const head = await headResult;
+        inner.updateMatch(matchId, (prev) => ({
+          ...prev,
+          ...head
+        }));
+      }
+      match._nonReactive.loaderPromise = void 0;
+    }
+    handleRedirectAndNotFound(inner, match, err);
+  }
+};
+const loadRouteMatch = async (inner, index2) => {
+  var _a3, _b3;
+  const { id: matchId, routeId } = inner.matches[index2];
+  let loaderShouldRunAsync = false;
+  let loaderIsRunningAsync = false;
+  const route = inner.router.looseRoutesById[routeId];
+  if (shouldSkipLoader(inner, matchId)) {
+    if (inner.router.isServer) {
+      const headResult = executeHead(inner, matchId, route);
+      if (headResult) {
+        const head = await headResult;
+        inner.updateMatch(matchId, (prev) => ({
+          ...prev,
+          ...head
+        }));
+      }
+      return inner.router.getMatch(matchId);
+    }
+  } else {
+    const prevMatch = inner.router.getMatch(matchId);
+    if (prevMatch._nonReactive.loaderPromise) {
+      if (prevMatch.status === "success" && !inner.sync && !prevMatch.preload) {
+        return prevMatch;
+      }
+      await prevMatch._nonReactive.loaderPromise;
+      const match2 = inner.router.getMatch(matchId);
+      if (match2.error) {
+        handleRedirectAndNotFound(inner, match2, match2.error);
+      }
+    } else {
+      const age = Date.now() - prevMatch.updatedAt;
+      const preload3 = resolvePreload(inner, matchId);
+      const staleAge = preload3 ? route.options.preloadStaleTime ?? inner.router.options.defaultPreloadStaleTime ?? 3e4 : route.options.staleTime ?? inner.router.options.defaultStaleTime ?? 0;
+      const shouldReloadOption = route.options.shouldReload;
+      const shouldReload = typeof shouldReloadOption === "function" ? shouldReloadOption(getLoaderContext(inner, matchId, index2, route)) : shouldReloadOption;
+      const nextPreload = !!preload3 && !inner.router.state.matches.some((d2) => d2.id === matchId);
+      const match2 = inner.router.getMatch(matchId);
+      match2._nonReactive.loaderPromise = createControlledPromise();
+      if (nextPreload !== match2.preload) {
+        inner.updateMatch(matchId, (prev) => ({
+          ...prev,
+          preload: nextPreload
+        }));
+      }
+      const { status, invalid } = match2;
+      loaderShouldRunAsync = status === "success" && (invalid || (shouldReload ?? age > staleAge));
+      if (preload3 && route.options.preload === false) ;
+      else if (loaderShouldRunAsync && !inner.sync) {
+        loaderIsRunningAsync = true;
+        (async () => {
+          var _a22, _b22;
+          try {
+            await runLoader(inner, matchId, index2, route);
+            const match3 = inner.router.getMatch(matchId);
+            (_a22 = match3._nonReactive.loaderPromise) == null ? void 0 : _a22.resolve();
+            (_b22 = match3._nonReactive.loadPromise) == null ? void 0 : _b22.resolve();
+            match3._nonReactive.loaderPromise = void 0;
+          } catch (err) {
+            if (isRedirect(err)) {
+              await inner.router.navigate(err.options);
+            }
+          }
+        })();
+      } else if (status !== "success" || loaderShouldRunAsync && inner.sync) {
+        await runLoader(inner, matchId, index2, route);
+      } else {
+        const headResult = executeHead(inner, matchId, route);
+        if (headResult) {
+          const head = await headResult;
+          inner.updateMatch(matchId, (prev) => ({
+            ...prev,
+            ...head
+          }));
+        }
+      }
+    }
+  }
+  const match = inner.router.getMatch(matchId);
+  if (!loaderIsRunningAsync) {
+    (_a3 = match._nonReactive.loaderPromise) == null ? void 0 : _a3.resolve();
+    (_b3 = match._nonReactive.loadPromise) == null ? void 0 : _b3.resolve();
+  }
+  clearTimeout(match._nonReactive.pendingTimeout);
+  match._nonReactive.pendingTimeout = void 0;
+  if (!loaderIsRunningAsync) match._nonReactive.loaderPromise = void 0;
+  match._nonReactive.dehydrated = void 0;
+  const nextIsFetching = loaderIsRunningAsync ? match.isFetching : false;
+  if (nextIsFetching !== match.isFetching || match.invalid !== false) {
+    inner.updateMatch(matchId, (prev) => ({
+      ...prev,
+      isFetching: nextIsFetching,
+      invalid: false
+    }));
+    return inner.router.getMatch(matchId);
+  } else {
+    return match;
+  }
+};
+async function loadMatches(arg) {
+  const inner = Object.assign(arg, {
+    matchPromises: []
+  });
+  if (!inner.router.isServer && inner.router.state.matches.some((d2) => d2._forcePending)) {
+    triggerOnReady(inner);
+  }
+  try {
+    for (let i = 0; i < inner.matches.length; i++) {
+      const beforeLoad = handleBeforeLoad(inner, i);
+      if (isPromise(beforeLoad)) await beforeLoad;
+    }
+    const max2 = inner.firstBadMatchIndex ?? inner.matches.length;
+    for (let i = 0; i < max2; i++) {
+      inner.matchPromises.push(loadRouteMatch(inner, i));
+    }
+    await Promise.all(inner.matchPromises);
+    const readyPromise = triggerOnReady(inner);
+    if (isPromise(readyPromise)) await readyPromise;
+  } catch (err) {
+    if (isNotFound(err) && !inner.preload) {
+      const readyPromise = triggerOnReady(inner);
+      if (isPromise(readyPromise)) await readyPromise;
+      throw err;
+    }
+    if (isRedirect(err)) {
+      throw err;
+    }
+  }
+  return inner.matches;
+}
+async function loadRouteChunk(route) {
+  if (!route._lazyLoaded && route._lazyPromise === void 0) {
+    if (route.lazyFn) {
+      route._lazyPromise = route.lazyFn().then((lazyRoute) => {
+        const { id: _id, ...options } = lazyRoute.options;
+        Object.assign(route.options, options);
+        route._lazyLoaded = true;
+        route._lazyPromise = void 0;
+      });
+    } else {
+      route._lazyLoaded = true;
+    }
+  }
+  if (!route._componentsLoaded && route._componentsPromise === void 0) {
+    const loadComponents = () => {
+      var _a3;
+      const preloads = [];
+      for (const type of componentTypes) {
+        const preload3 = (_a3 = route.options[type]) == null ? void 0 : _a3.preload;
+        if (preload3) preloads.push(preload3());
+      }
+      if (preloads.length)
+        return Promise.all(preloads).then(() => {
+          route._componentsLoaded = true;
+          route._componentsPromise = void 0;
+        });
+      route._componentsLoaded = true;
+      route._componentsPromise = void 0;
+      return;
+    };
+    route._componentsPromise = route._lazyPromise ? route._lazyPromise.then(loadComponents) : loadComponents();
+  }
+  return route._componentsPromise;
+}
+function makeMaybe(value, error) {
+  if (error) {
+    return { status: "error", error };
+  }
+  return { status: "success", value };
+}
+function routeNeedsPreload(route) {
+  var _a3;
+  for (const componentType of componentTypes) {
+    if ((_a3 = route.options[componentType]) == null ? void 0 : _a3.preload) {
+      return true;
+    }
+  }
+  return false;
+}
+const componentTypes = [
+  "component",
+  "errorComponent",
+  "pendingComponent",
+  "notFoundComponent"
+];
+function getLocationChangeInfo(routerState) {
+  const fromLocation = routerState.resolvedLocation;
+  const toLocation = routerState.location;
+  const pathChanged = (fromLocation == null ? void 0 : fromLocation.pathname) !== toLocation.pathname;
+  const hrefChanged = (fromLocation == null ? void 0 : fromLocation.href) !== toLocation.href;
+  const hashChanged = (fromLocation == null ? void 0 : fromLocation.hash) !== toLocation.hash;
+  return { fromLocation, toLocation, pathChanged, hrefChanged, hashChanged };
+}
+class RouterCore {
+  /**
+   * @deprecated Use the `createRouter` function instead
+   */
+  constructor(options) {
+    this.tempLocationKey = `${Math.round(
+      Math.random() * 1e7
+    )}`;
+    this.resetNextScroll = true;
+    this.shouldViewTransition = void 0;
+    this.isViewTransitionTypesSupported = void 0;
+    this.subscribers = /* @__PURE__ */ new Set();
+    this.isScrollRestoring = false;
+    this.isScrollRestorationSetup = false;
+    this.startTransition = (fn) => fn();
+    this.update = (newOptions) => {
+      var _a3;
+      if (newOptions.notFoundRoute) {
+        console.warn(
+          "The notFoundRoute API is deprecated and will be removed in the next major version. See https://tanstack.com/router/v1/docs/framework/react/guide/not-found-errors#migrating-from-notfoundroute for more info."
+        );
+      }
+      const previousOptions = this.options;
+      this.options = {
+        ...this.options,
+        ...newOptions
+      };
+      this.isServer = this.options.isServer ?? typeof document === "undefined";
+      this.pathParamsDecodeCharMap = this.options.pathParamsAllowedCharacters ? new Map(
+        this.options.pathParamsAllowedCharacters.map((char) => [
+          encodeURIComponent(char),
+          char
+        ])
+      ) : void 0;
+      if (!this.basepath || newOptions.basepath && newOptions.basepath !== previousOptions.basepath) {
+        if (newOptions.basepath === void 0 || newOptions.basepath === "" || newOptions.basepath === "/") {
+          this.basepath = "/";
+        } else {
+          this.basepath = `/${trimPath(newOptions.basepath)}`;
+        }
+      }
+      if (!this.history || this.options.history && this.options.history !== this.history) {
+        this.history = this.options.history ?? (this.isServer ? createMemoryHistory({
+          initialEntries: [this.basepath || "/"]
+        }) : createBrowserHistory());
+        this.updateLatestLocation();
+      }
+      if (this.options.routeTree !== this.routeTree) {
+        this.routeTree = this.options.routeTree;
+        this.buildRouteTree();
+      }
+      if (!this.__store) {
+        this.__store = new Store(getInitialRouterState(this.latestLocation), {
+          onUpdate: () => {
+            this.__store.state = {
+              ...this.state,
+              cachedMatches: this.state.cachedMatches.filter(
+                (d2) => !["redirected"].includes(d2.status)
+              )
+            };
+          }
+        });
+        setupScrollRestoration(this);
+      }
+      if (typeof window !== "undefined" && "CSS" in window && typeof ((_a3 = window.CSS) == null ? void 0 : _a3.supports) === "function") {
+        this.isViewTransitionTypesSupported = window.CSS.supports(
+          "selector(:active-view-transition-type(a)"
+        );
+      }
+    };
+    this.updateLatestLocation = () => {
+      this.latestLocation = this.parseLocation(
+        this.history.location,
+        this.latestLocation
+      );
+    };
+    this.buildRouteTree = () => {
+      const { routesById, routesByPath, flatRoutes } = processRouteTree({
+        routeTree: this.routeTree,
+        initRoute: (route, i) => {
+          route.init({
+            originalIndex: i
+          });
+        }
+      });
+      this.routesById = routesById;
+      this.routesByPath = routesByPath;
+      this.flatRoutes = flatRoutes;
+      const notFoundRoute2 = this.options.notFoundRoute;
+      if (notFoundRoute2) {
+        notFoundRoute2.init({
+          originalIndex: 99999999999
+        });
+        this.routesById[notFoundRoute2.id] = notFoundRoute2;
+      }
+    };
+    this.subscribe = (eventType, fn) => {
+      const listener = {
+        eventType,
+        fn
+      };
+      this.subscribers.add(listener);
+      return () => {
+        this.subscribers.delete(listener);
+      };
+    };
+    this.emit = (routerEvent) => {
+      this.subscribers.forEach((listener) => {
+        if (listener.eventType === routerEvent.type) {
+          listener.fn(routerEvent);
+        }
+      });
+    };
+    this.parseLocation = (locationToParse, previousLocation) => {
+      const parse2 = ({
+        pathname,
+        search,
+        hash,
+        state
+      }) => {
+        const parsedSearch = this.options.parseSearch(search);
+        const searchStr = this.options.stringifySearch(parsedSearch);
+        return {
+          pathname,
+          searchStr,
+          search: replaceEqualDeep(previousLocation == null ? void 0 : previousLocation.search, parsedSearch),
+          hash: hash.split("#").reverse()[0] ?? "",
+          href: `${pathname}${searchStr}${hash}`,
+          state: replaceEqualDeep(previousLocation == null ? void 0 : previousLocation.state, state)
+        };
+      };
+      const location2 = parse2(locationToParse);
+      const { __tempLocation, __tempKey } = location2.state;
+      if (__tempLocation && (!__tempKey || __tempKey === this.tempLocationKey)) {
+        const parsedTempLocation = parse2(__tempLocation);
+        parsedTempLocation.state.key = location2.state.key;
+        parsedTempLocation.state.__TSR_key = location2.state.__TSR_key;
+        delete parsedTempLocation.state.__tempLocation;
+        return {
+          ...parsedTempLocation,
+          maskedLocation: location2
+        };
+      }
+      return location2;
+    };
+    this.resolvePathWithBase = (from, path) => {
+      const resolvedPath = resolvePath({
+        basepath: this.basepath,
+        base: from,
+        to: cleanPath(path),
+        trailingSlash: this.options.trailingSlash,
+        caseSensitive: this.options.caseSensitive,
+        parseCache: this.parsePathnameCache
+      });
+      return resolvedPath;
+    };
+    this.matchRoutes = (pathnameOrNext, locationSearchOrOpts, opts) => {
+      if (typeof pathnameOrNext === "string") {
+        return this.matchRoutesInternal(
+          {
+            pathname: pathnameOrNext,
+            search: locationSearchOrOpts
+          },
+          opts
+        );
+      }
+      return this.matchRoutesInternal(pathnameOrNext, locationSearchOrOpts);
+    };
+    this.parsePathnameCache = createLRUCache(1e3);
+    this.getMatchedRoutes = (pathname, routePathname) => {
+      return getMatchedRoutes({
+        pathname,
+        routePathname,
+        basepath: this.basepath,
+        caseSensitive: this.options.caseSensitive,
+        routesByPath: this.routesByPath,
+        routesById: this.routesById,
+        flatRoutes: this.flatRoutes,
+        parseCache: this.parsePathnameCache
+      });
+    };
+    this.cancelMatch = (id) => {
+      const match = this.getMatch(id);
+      if (!match) return;
+      match.abortController.abort();
+      clearTimeout(match._nonReactive.pendingTimeout);
+      match._nonReactive.pendingTimeout = void 0;
+    };
+    this.cancelMatches = () => {
+      var _a3;
+      (_a3 = this.state.pendingMatches) == null ? void 0 : _a3.forEach((match) => {
+        this.cancelMatch(match.id);
+      });
+    };
+    this.buildLocation = (opts) => {
+      const build = (dest = {}) => {
+        var _a3, _b3;
+        const currentLocation = dest._fromLocation || this.latestLocation;
+        const allCurrentLocationMatches = this.matchRoutes(currentLocation, {
+          _buildLocation: true
+        });
+        const lastMatch = last(allCurrentLocationMatches);
+        if (dest.from && false) ;
+        const defaultedFromPath = dest.unsafeRelative === "path" ? currentLocation.pathname : dest.from ?? lastMatch.fullPath;
+        const fromPath = this.resolvePathWithBase(defaultedFromPath, ".");
+        const fromSearch = lastMatch.search;
+        const fromParams = { ...lastMatch.params };
+        const nextTo = dest.to ? this.resolvePathWithBase(fromPath, `${dest.to}`) : this.resolvePathWithBase(fromPath, ".");
+        const nextParams = dest.params === false || dest.params === null ? {} : (dest.params ?? true) === true ? fromParams : Object.assign(
+          fromParams,
+          functionalUpdate(dest.params, fromParams)
+        );
+        const interpolatedNextTo = interpolatePath({
+          path: nextTo,
+          params: nextParams,
+          parseCache: this.parsePathnameCache
+        }).interpolatedPath;
+        const destRoutes = this.matchRoutes(interpolatedNextTo, void 0, {
+          _buildLocation: true
+        }).map((d2) => this.looseRoutesById[d2.routeId]);
+        if (Object.keys(nextParams).length > 0) {
+          for (const route of destRoutes) {
+            const fn = ((_a3 = route.options.params) == null ? void 0 : _a3.stringify) ?? route.options.stringifyParams;
+            if (fn) {
+              Object.assign(nextParams, fn(nextParams));
+            }
+          }
+        }
+        const nextPathname = interpolatePath({
+          // Use the original template path for interpolation
+          // This preserves the original parameter syntax including optional parameters
+          path: nextTo,
+          params: nextParams,
+          leaveWildcards: false,
+          leaveParams: opts.leaveParams,
+          decodeCharMap: this.pathParamsDecodeCharMap,
+          parseCache: this.parsePathnameCache
+        }).interpolatedPath;
+        let nextSearch = fromSearch;
+        if (opts._includeValidateSearch && ((_b3 = this.options.search) == null ? void 0 : _b3.strict)) {
+          const validatedSearch = {};
+          destRoutes.forEach((route) => {
+            if (route.options.validateSearch) {
+              try {
+                Object.assign(
+                  validatedSearch,
+                  validateSearch(route.options.validateSearch, {
+                    ...validatedSearch,
+                    ...nextSearch
+                  })
+                );
+              } catch {
+              }
+            }
+          });
+          nextSearch = validatedSearch;
+        }
+        nextSearch = applySearchMiddleware({
+          search: nextSearch,
+          dest,
+          destRoutes,
+          _includeValidateSearch: opts._includeValidateSearch
+        });
+        nextSearch = replaceEqualDeep(fromSearch, nextSearch);
+        const searchStr = this.options.stringifySearch(nextSearch);
+        const hash = dest.hash === true ? currentLocation.hash : dest.hash ? functionalUpdate(dest.hash, currentLocation.hash) : void 0;
+        const hashStr = hash ? `#${hash}` : "";
+        let nextState = dest.state === true ? currentLocation.state : dest.state ? functionalUpdate(dest.state, currentLocation.state) : {};
+        nextState = replaceEqualDeep(currentLocation.state, nextState);
+        return {
+          pathname: nextPathname,
+          search: nextSearch,
+          searchStr,
+          state: nextState,
+          hash: hash ?? "",
+          href: `${nextPathname}${searchStr}${hashStr}`,
+          unmaskOnReload: dest.unmaskOnReload
+        };
+      };
+      const buildWithMatches = (dest = {}, maskedDest) => {
+        var _a3;
+        const next = build(dest);
+        let maskedNext = maskedDest ? build(maskedDest) : void 0;
+        if (!maskedNext) {
+          let params = {};
+          const foundMask = (_a3 = this.options.routeMasks) == null ? void 0 : _a3.find((d2) => {
+            const match = matchPathname(
+              this.basepath,
+              next.pathname,
+              {
+                to: d2.from,
+                caseSensitive: false,
+                fuzzy: false
+              },
+              this.parsePathnameCache
+            );
+            if (match) {
+              params = match;
+              return true;
+            }
+            return false;
+          });
+          if (foundMask) {
+            const { from: _from, ...maskProps } = foundMask;
+            maskedDest = {
+              from: opts.from,
+              ...maskProps,
+              params
+            };
+            maskedNext = build(maskedDest);
+          }
+        }
+        if (maskedNext) {
+          next.maskedLocation = maskedNext;
+        }
+        return next;
+      };
+      if (opts.mask) {
+        return buildWithMatches(opts, {
+          from: opts.from,
+          ...opts.mask
+        });
+      }
+      return buildWithMatches(opts);
+    };
+    this.commitLocation = ({
+      viewTransition,
+      ignoreBlocker,
+      ...next
+    }) => {
+      const isSameState = () => {
+        const ignoredProps = [
+          "key",
+          // TODO: Remove in v2 - use __TSR_key instead
+          "__TSR_key",
+          "__TSR_index",
+          "__hashScrollIntoViewOptions"
+        ];
+        ignoredProps.forEach((prop) => {
+          next.state[prop] = this.latestLocation.state[prop];
+        });
+        const isEqual = deepEqual(next.state, this.latestLocation.state);
+        ignoredProps.forEach((prop) => {
+          delete next.state[prop];
+        });
+        return isEqual;
+      };
+      const isSameUrl = this.latestLocation.href === next.href;
+      const previousCommitPromise = this.commitLocationPromise;
+      this.commitLocationPromise = createControlledPromise(() => {
+        previousCommitPromise == null ? void 0 : previousCommitPromise.resolve();
+      });
+      if (isSameUrl && isSameState()) {
+        this.load();
+      } else {
+        let { maskedLocation, hashScrollIntoView, ...nextHistory } = next;
+        if (maskedLocation) {
+          nextHistory = {
+            ...maskedLocation,
+            state: {
+              ...maskedLocation.state,
+              __tempKey: void 0,
+              __tempLocation: {
+                ...nextHistory,
+                search: nextHistory.searchStr,
+                state: {
+                  ...nextHistory.state,
+                  __tempKey: void 0,
+                  __tempLocation: void 0,
+                  __TSR_key: void 0,
+                  key: void 0
+                  // TODO: Remove in v2 - use __TSR_key instead
+                }
+              }
+            }
+          };
+          if (nextHistory.unmaskOnReload ?? this.options.unmaskOnReload ?? false) {
+            nextHistory.state.__tempKey = this.tempLocationKey;
+          }
+        }
+        nextHistory.state.__hashScrollIntoViewOptions = hashScrollIntoView ?? this.options.defaultHashScrollIntoView ?? true;
+        this.shouldViewTransition = viewTransition;
+        this.history[next.replace ? "replace" : "push"](
+          nextHistory.href,
+          nextHistory.state,
+          { ignoreBlocker }
+        );
+      }
+      this.resetNextScroll = next.resetScroll ?? true;
+      if (!this.history.subscribers.size) {
+        this.load();
+      }
+      return this.commitLocationPromise;
+    };
+    this.buildAndCommitLocation = ({
+      replace,
+      resetScroll,
+      hashScrollIntoView,
+      viewTransition,
+      ignoreBlocker,
+      href,
+      ...rest
+    } = {}) => {
+      if (href) {
+        const currentIndex = this.history.location.state.__TSR_index;
+        const parsed = parseHref(href, {
+          __TSR_index: replace ? currentIndex : currentIndex + 1
+        });
+        rest.to = parsed.pathname;
+        rest.search = this.options.parseSearch(parsed.search);
+        rest.hash = parsed.hash.slice(1);
+      }
+      const location2 = this.buildLocation({
+        ...rest,
+        _includeValidateSearch: true
+      });
+      return this.commitLocation({
+        ...location2,
+        viewTransition,
+        replace,
+        resetScroll,
+        hashScrollIntoView,
+        ignoreBlocker
+      });
+    };
+    this.navigate = ({ to, reloadDocument, href, ...rest }) => {
+      if (!reloadDocument && href) {
+        try {
+          new URL(`${href}`);
+          reloadDocument = true;
+        } catch {
+        }
+      }
+      if (reloadDocument) {
+        if (!href) {
+          const location2 = this.buildLocation({ to, ...rest });
+          href = this.history.createHref(location2.href);
+        }
+        if (rest.replace) {
+          window.location.replace(href);
+        } else {
+          window.location.href = href;
+        }
+        return Promise.resolve();
+      }
+      return this.buildAndCommitLocation({
+        ...rest,
+        href,
+        to,
+        _isNavigate: true
+      });
+    };
+    this.beforeLoad = () => {
+      this.cancelMatches();
+      this.updateLatestLocation();
+      if (this.isServer) {
+        const nextLocation = this.buildLocation({
+          to: this.latestLocation.pathname,
+          search: true,
+          params: true,
+          hash: true,
+          state: true,
+          _includeValidateSearch: true
+        });
+        const normalizeUrl = (url) => {
+          try {
+            return encodeURI(decodeURI(url));
+          } catch {
+            return url;
+          }
+        };
+        if (trimPath(normalizeUrl(this.latestLocation.href)) !== trimPath(normalizeUrl(nextLocation.href))) {
+          throw redirect({ href: nextLocation.href });
+        }
+      }
+      const pendingMatches = this.matchRoutes(this.latestLocation);
+      this.__store.setState((s2) => ({
+        ...s2,
+        status: "pending",
+        statusCode: 200,
+        isLoading: true,
+        location: this.latestLocation,
+        pendingMatches,
+        // If a cached moved to pendingMatches, remove it from cachedMatches
+        cachedMatches: s2.cachedMatches.filter(
+          (d2) => !pendingMatches.some((e) => e.id === d2.id)
+        )
+      }));
+    };
+    this.load = async (opts) => {
+      let redirect2;
+      let notFound;
+      let loadPromise;
+      loadPromise = new Promise((resolve) => {
+        this.startTransition(async () => {
+          var _a3;
+          try {
+            this.beforeLoad();
+            const next = this.latestLocation;
+            const prevLocation = this.state.resolvedLocation;
+            if (!this.state.redirect) {
+              this.emit({
+                type: "onBeforeNavigate",
+                ...getLocationChangeInfo({
+                  resolvedLocation: prevLocation,
+                  location: next
+                })
+              });
+            }
+            this.emit({
+              type: "onBeforeLoad",
+              ...getLocationChangeInfo({
+                resolvedLocation: prevLocation,
+                location: next
+              })
+            });
+            await loadMatches({
+              router: this,
+              sync: opts == null ? void 0 : opts.sync,
+              matches: this.state.pendingMatches,
+              location: next,
+              updateMatch: this.updateMatch,
+              // eslint-disable-next-line @typescript-eslint/require-await
+              onReady: async () => {
+                this.startViewTransition(async () => {
+                  let exitingMatches;
+                  let enteringMatches;
+                  let stayingMatches;
+                  batch(() => {
+                    this.__store.setState((s2) => {
+                      const previousMatches = s2.matches;
+                      const newMatches = s2.pendingMatches || s2.matches;
+                      exitingMatches = previousMatches.filter(
+                        (match) => !newMatches.some((d2) => d2.id === match.id)
+                      );
+                      enteringMatches = newMatches.filter(
+                        (match) => !previousMatches.some((d2) => d2.id === match.id)
+                      );
+                      stayingMatches = previousMatches.filter(
+                        (match) => newMatches.some((d2) => d2.id === match.id)
+                      );
+                      return {
+                        ...s2,
+                        isLoading: false,
+                        loadedAt: Date.now(),
+                        matches: newMatches,
+                        pendingMatches: void 0,
+                        cachedMatches: [
+                          ...s2.cachedMatches,
+                          ...exitingMatches.filter((d2) => d2.status !== "error")
+                        ]
+                      };
+                    });
+                    this.clearExpiredCache();
+                  });
+                  [
+                    [exitingMatches, "onLeave"],
+                    [enteringMatches, "onEnter"],
+                    [stayingMatches, "onStay"]
+                  ].forEach(([matches, hook]) => {
+                    matches.forEach((match) => {
+                      var _a22, _b3;
+                      (_b3 = (_a22 = this.looseRoutesById[match.routeId].options)[hook]) == null ? void 0 : _b3.call(_a22, match);
+                    });
+                  });
+                });
+              }
+            });
+          } catch (err) {
+            if (isRedirect(err)) {
+              redirect2 = err;
+              if (!this.isServer) {
+                this.navigate({
+                  ...redirect2.options,
+                  replace: true,
+                  ignoreBlocker: true
+                });
+              }
+            } else if (isNotFound(err)) {
+              notFound = err;
+            }
+            this.__store.setState((s2) => ({
+              ...s2,
+              statusCode: redirect2 ? redirect2.status : notFound ? 404 : s2.matches.some((d2) => d2.status === "error") ? 500 : 200,
+              redirect: redirect2
+            }));
+          }
+          if (this.latestLoadPromise === loadPromise) {
+            (_a3 = this.commitLocationPromise) == null ? void 0 : _a3.resolve();
+            this.latestLoadPromise = void 0;
+            this.commitLocationPromise = void 0;
+          }
+          resolve();
+        });
+      });
+      this.latestLoadPromise = loadPromise;
+      await loadPromise;
+      while (this.latestLoadPromise && loadPromise !== this.latestLoadPromise) {
+        await this.latestLoadPromise;
+      }
+      if (this.hasNotFoundMatch()) {
+        this.__store.setState((s2) => ({
+          ...s2,
+          statusCode: 404
+        }));
+      }
+    };
+    this.startViewTransition = (fn) => {
+      const shouldViewTransition = this.shouldViewTransition ?? this.options.defaultViewTransition;
+      delete this.shouldViewTransition;
+      if (shouldViewTransition && typeof document !== "undefined" && "startViewTransition" in document && typeof document.startViewTransition === "function") {
+        let startViewTransitionParams;
+        if (typeof shouldViewTransition === "object" && this.isViewTransitionTypesSupported) {
+          const next = this.latestLocation;
+          const prevLocation = this.state.resolvedLocation;
+          const resolvedViewTransitionTypes = typeof shouldViewTransition.types === "function" ? shouldViewTransition.types(
+            getLocationChangeInfo({
+              resolvedLocation: prevLocation,
+              location: next
+            })
+          ) : shouldViewTransition.types;
+          startViewTransitionParams = {
+            update: fn,
+            types: resolvedViewTransitionTypes
+          };
+        } else {
+          startViewTransitionParams = fn;
+        }
+        document.startViewTransition(startViewTransitionParams);
+      } else {
+        fn();
+      }
+    };
+    this.updateMatch = (id, updater) => {
+      var _a3;
+      const matchesKey = ((_a3 = this.state.pendingMatches) == null ? void 0 : _a3.some((d2) => d2.id === id)) ? "pendingMatches" : this.state.matches.some((d2) => d2.id === id) ? "matches" : this.state.cachedMatches.some((d2) => d2.id === id) ? "cachedMatches" : "";
+      if (matchesKey) {
+        this.__store.setState((s2) => {
+          var _a22;
+          return {
+            ...s2,
+            [matchesKey]: (_a22 = s2[matchesKey]) == null ? void 0 : _a22.map((d2) => d2.id === id ? updater(d2) : d2)
+          };
+        });
+      }
+    };
+    this.getMatch = (matchId) => {
+      var _a3;
+      const findFn = (d2) => d2.id === matchId;
+      return this.state.cachedMatches.find(findFn) ?? ((_a3 = this.state.pendingMatches) == null ? void 0 : _a3.find(findFn)) ?? this.state.matches.find(findFn);
+    };
+    this.invalidate = (opts) => {
+      const invalidate = (d2) => {
+        var _a3;
+        if (((_a3 = opts == null ? void 0 : opts.filter) == null ? void 0 : _a3.call(opts, d2)) ?? true) {
+          return {
+            ...d2,
+            invalid: true,
+            ...(opts == null ? void 0 : opts.forcePending) || d2.status === "error" ? { status: "pending", error: void 0 } : void 0
+          };
+        }
+        return d2;
+      };
+      this.__store.setState((s2) => {
+        var _a3;
+        return {
+          ...s2,
+          matches: s2.matches.map(invalidate),
+          cachedMatches: s2.cachedMatches.map(invalidate),
+          pendingMatches: (_a3 = s2.pendingMatches) == null ? void 0 : _a3.map(invalidate)
+        };
+      });
+      this.shouldViewTransition = false;
+      return this.load({ sync: opts == null ? void 0 : opts.sync });
+    };
+    this.resolveRedirect = (redirect2) => {
+      if (!redirect2.options.href) {
+        redirect2.options.href = this.buildLocation(redirect2.options).href;
+        redirect2.headers.set("Location", redirect2.options.href);
+      }
+      if (!redirect2.headers.get("Location")) {
+        redirect2.headers.set("Location", redirect2.options.href);
+      }
+      return redirect2;
+    };
+    this.clearCache = (opts) => {
+      const filter = opts == null ? void 0 : opts.filter;
+      if (filter !== void 0) {
+        this.__store.setState((s2) => {
+          return {
+            ...s2,
+            cachedMatches: s2.cachedMatches.filter(
+              (m2) => !filter(m2)
+            )
+          };
+        });
+      } else {
+        this.__store.setState((s2) => {
+          return {
+            ...s2,
+            cachedMatches: []
+          };
+        });
+      }
+    };
+    this.clearExpiredCache = () => {
+      const filter = (d2) => {
+        const route = this.looseRoutesById[d2.routeId];
+        if (!route.options.loader) {
+          return true;
+        }
+        const gcTime = (d2.preload ? route.options.preloadGcTime ?? this.options.defaultPreloadGcTime : route.options.gcTime ?? this.options.defaultGcTime) ?? 5 * 60 * 1e3;
+        const isError = d2.status === "error";
+        if (isError) return true;
+        const gcEligible = Date.now() - d2.updatedAt >= gcTime;
+        return gcEligible;
+      };
+      this.clearCache({ filter });
+    };
+    this.loadRouteChunk = loadRouteChunk;
+    this.preloadRoute = async (opts) => {
+      const next = this.buildLocation(opts);
+      let matches = this.matchRoutes(next, {
+        throwOnError: true,
+        preload: true,
+        dest: opts
+      });
+      const activeMatchIds = new Set(
+        [...this.state.matches, ...this.state.pendingMatches ?? []].map(
+          (d2) => d2.id
+        )
+      );
+      const loadedMatchIds = /* @__PURE__ */ new Set([
+        ...activeMatchIds,
+        ...this.state.cachedMatches.map((d2) => d2.id)
+      ]);
+      batch(() => {
+        matches.forEach((match) => {
+          if (!loadedMatchIds.has(match.id)) {
+            this.__store.setState((s2) => ({
+              ...s2,
+              cachedMatches: [...s2.cachedMatches, match]
+            }));
+          }
+        });
+      });
+      try {
+        matches = await loadMatches({
+          router: this,
+          matches,
+          location: next,
+          preload: true,
+          updateMatch: (id, updater) => {
+            if (activeMatchIds.has(id)) {
+              matches = matches.map((d2) => d2.id === id ? updater(d2) : d2);
+            } else {
+              this.updateMatch(id, updater);
+            }
+          }
+        });
+        return matches;
+      } catch (err) {
+        if (isRedirect(err)) {
+          if (err.options.reloadDocument) {
+            return void 0;
+          }
+          return await this.preloadRoute({
+            ...err.options,
+            _fromLocation: next
+          });
+        }
+        if (!isNotFound(err)) {
+          console.error(err);
+        }
+        return void 0;
+      }
+    };
+    this.matchRoute = (location2, opts) => {
+      const matchLocation = {
+        ...location2,
+        to: location2.to ? this.resolvePathWithBase(
+          location2.from || "",
+          location2.to
+        ) : void 0,
+        params: location2.params || {},
+        leaveParams: true
+      };
+      const next = this.buildLocation(matchLocation);
+      if ((opts == null ? void 0 : opts.pending) && this.state.status !== "pending") {
+        return false;
+      }
+      const pending = (opts == null ? void 0 : opts.pending) === void 0 ? !this.state.isLoading : opts.pending;
+      const baseLocation = pending ? this.latestLocation : this.state.resolvedLocation || this.state.location;
+      const match = matchPathname(
+        this.basepath,
+        baseLocation.pathname,
+        {
+          ...opts,
+          to: next.pathname
+        },
+        this.parsePathnameCache
+      );
+      if (!match) {
+        return false;
+      }
+      if (location2.params) {
+        if (!deepEqual(match, location2.params, { partial: true })) {
+          return false;
+        }
+      }
+      if (match && ((opts == null ? void 0 : opts.includeSearch) ?? true)) {
+        return deepEqual(baseLocation.search, next.search, { partial: true }) ? match : false;
+      }
+      return match;
+    };
+    this.hasNotFoundMatch = () => {
+      return this.__store.state.matches.some(
+        (d2) => d2.status === "notFound" || d2.globalNotFound
+      );
+    };
+    this.update({
+      defaultPreloadDelay: 50,
+      defaultPendingMs: 1e3,
+      defaultPendingMinMs: 500,
+      context: void 0,
+      ...options,
+      caseSensitive: options.caseSensitive ?? false,
+      notFoundMode: options.notFoundMode ?? "fuzzy",
+      stringifySearch: options.stringifySearch ?? defaultStringifySearch,
+      parseSearch: options.parseSearch ?? defaultParseSearch
+    });
+    if (typeof document !== "undefined") {
+      self.__TSR_ROUTER__ = this;
+    }
+  }
+  isShell() {
+    return !!this.options.isShell;
+  }
+  isPrerendering() {
+    return !!this.options.isPrerendering;
+  }
+  get state() {
+    return this.__store.state;
+  }
+  get looseRoutesById() {
+    return this.routesById;
+  }
+  matchRoutesInternal(next, opts) {
+    var _a3;
+    const { foundRoute, matchedRoutes, routeParams } = this.getMatchedRoutes(
+      next.pathname,
+      (_a3 = opts == null ? void 0 : opts.dest) == null ? void 0 : _a3.to
+    );
+    let isGlobalNotFound = false;
+    if (
+      // If we found a route, and it's not an index route and we have left over path
+      foundRoute ? foundRoute.path !== "/" && routeParams["**"] : (
+        // Or if we didn't find a route and we have left over path
+        trimPathRight(next.pathname)
+      )
+    ) {
+      if (this.options.notFoundRoute) {
+        matchedRoutes.push(this.options.notFoundRoute);
+      } else {
+        isGlobalNotFound = true;
+      }
+    }
+    const globalNotFoundRouteId = (() => {
+      if (!isGlobalNotFound) {
+        return void 0;
+      }
+      if (this.options.notFoundMode !== "root") {
+        for (let i = matchedRoutes.length - 1; i >= 0; i--) {
+          const route = matchedRoutes[i];
+          if (route.children) {
+            return route.id;
+          }
+        }
+      }
+      return rootRouteId;
+    })();
+    const matches = [];
+    const getParentContext = (parentMatch) => {
+      const parentMatchId = parentMatch == null ? void 0 : parentMatch.id;
+      const parentContext = !parentMatchId ? this.options.context ?? void 0 : parentMatch.context ?? this.options.context ?? void 0;
+      return parentContext;
+    };
+    matchedRoutes.forEach((route, index2) => {
+      var _a22, _b3, _c2;
+      const parentMatch = matches[index2 - 1];
+      const [preMatchSearch, strictMatchSearch, searchError] = (() => {
+        const parentSearch = (parentMatch == null ? void 0 : parentMatch.search) ?? next.search;
+        const parentStrictSearch = (parentMatch == null ? void 0 : parentMatch._strictSearch) ?? void 0;
+        try {
+          const strictSearch = validateSearch(route.options.validateSearch, { ...parentSearch }) ?? void 0;
+          return [
+            {
+              ...parentSearch,
+              ...strictSearch
+            },
+            { ...parentStrictSearch, ...strictSearch },
+            void 0
+          ];
+        } catch (err) {
+          let searchParamError = err;
+          if (!(err instanceof SearchParamError)) {
+            searchParamError = new SearchParamError(err.message, {
+              cause: err
+            });
+          }
+          if (opts == null ? void 0 : opts.throwOnError) {
+            throw searchParamError;
+          }
+          return [parentSearch, {}, searchParamError];
+        }
+      })();
+      const loaderDeps = ((_b3 = (_a22 = route.options).loaderDeps) == null ? void 0 : _b3.call(_a22, {
+        search: preMatchSearch
+      })) ?? "";
+      const loaderDepsHash = loaderDeps ? JSON.stringify(loaderDeps) : "";
+      const { interpolatedPath, usedParams } = interpolatePath({
+        path: route.fullPath,
+        params: routeParams,
+        decodeCharMap: this.pathParamsDecodeCharMap
+      });
+      const matchId = interpolatePath({
+        path: route.id,
+        params: routeParams,
+        leaveWildcards: true,
+        decodeCharMap: this.pathParamsDecodeCharMap,
+        parseCache: this.parsePathnameCache
+      }).interpolatedPath + loaderDepsHash;
+      const existingMatch = this.getMatch(matchId);
+      const previousMatch = this.state.matches.find(
+        (d2) => d2.routeId === route.id
+      );
+      const strictParams = (existingMatch == null ? void 0 : existingMatch._strictParams) ?? usedParams;
+      let paramsError = void 0;
+      if (!existingMatch) {
+        const strictParseParams = ((_c2 = route.options.params) == null ? void 0 : _c2.parse) ?? route.options.parseParams;
+        if (strictParseParams) {
+          try {
+            Object.assign(
+              strictParams,
+              strictParseParams(strictParams)
+            );
+          } catch (err) {
+            paramsError = new PathParamError(err.message, {
+              cause: err
+            });
+            if (opts == null ? void 0 : opts.throwOnError) {
+              throw paramsError;
+            }
+          }
+        }
+      }
+      Object.assign(routeParams, strictParams);
+      const cause = previousMatch ? "stay" : "enter";
+      let match;
+      if (existingMatch) {
+        match = {
+          ...existingMatch,
+          cause,
+          params: previousMatch ? replaceEqualDeep(previousMatch.params, routeParams) : routeParams,
+          _strictParams: strictParams,
+          search: previousMatch ? replaceEqualDeep(previousMatch.search, preMatchSearch) : replaceEqualDeep(existingMatch.search, preMatchSearch),
+          _strictSearch: strictMatchSearch
+        };
+      } else {
+        const status = route.options.loader || route.options.beforeLoad || route.lazyFn || routeNeedsPreload(route) ? "pending" : "success";
+        match = {
+          id: matchId,
+          index: index2,
+          routeId: route.id,
+          params: previousMatch ? replaceEqualDeep(previousMatch.params, routeParams) : routeParams,
+          _strictParams: strictParams,
+          pathname: joinPaths([this.basepath, interpolatedPath]),
+          updatedAt: Date.now(),
+          search: previousMatch ? replaceEqualDeep(previousMatch.search, preMatchSearch) : preMatchSearch,
+          _strictSearch: strictMatchSearch,
+          searchError: void 0,
+          status,
+          isFetching: false,
+          error: void 0,
+          paramsError,
+          __routeContext: void 0,
+          _nonReactive: {
+            loadPromise: createControlledPromise()
+          },
+          __beforeLoadContext: void 0,
+          context: {},
+          abortController: new AbortController(),
+          fetchCount: 0,
+          cause,
+          loaderDeps: previousMatch ? replaceEqualDeep(previousMatch.loaderDeps, loaderDeps) : loaderDeps,
+          invalid: false,
+          preload: false,
+          links: void 0,
+          scripts: void 0,
+          headScripts: void 0,
+          meta: void 0,
+          staticData: route.options.staticData || {},
+          fullPath: route.fullPath
+        };
+      }
+      if (!(opts == null ? void 0 : opts.preload)) {
+        match.globalNotFound = globalNotFoundRouteId === route.id;
+      }
+      match.searchError = searchError;
+      const parentContext = getParentContext(parentMatch);
+      match.context = {
+        ...parentContext,
+        ...match.__routeContext,
+        ...match.__beforeLoadContext
+      };
+      matches.push(match);
+    });
+    matches.forEach((match, index2) => {
+      const route = this.looseRoutesById[match.routeId];
+      const existingMatch = this.getMatch(match.id);
+      if (!existingMatch && (opts == null ? void 0 : opts._buildLocation) !== true) {
+        const parentMatch = matches[index2 - 1];
+        const parentContext = getParentContext(parentMatch);
+        if (route.options.context) {
+          const contextFnContext = {
+            deps: match.loaderDeps,
+            params: match.params,
+            context: parentContext ?? {},
+            location: next,
+            navigate: (opts2) => this.navigate({ ...opts2, _fromLocation: next }),
+            buildLocation: this.buildLocation,
+            cause: match.cause,
+            abortController: match.abortController,
+            preload: !!match.preload,
+            matches
+          };
+          match.__routeContext = route.options.context(contextFnContext) ?? void 0;
+        }
+        match.context = {
+          ...parentContext,
+          ...match.__routeContext,
+          ...match.__beforeLoadContext
+        };
+      }
+    });
+    return matches;
+  }
+}
+class SearchParamError extends Error {
+}
+class PathParamError extends Error {
+}
+function getInitialRouterState(location2) {
+  return {
+    loadedAt: 0,
+    isLoading: false,
+    isTransitioning: false,
+    status: "idle",
+    resolvedLocation: void 0,
+    location: location2,
+    matches: [],
+    pendingMatches: [],
+    cachedMatches: [],
+    statusCode: 200
+  };
+}
+function validateSearch(validateSearch2, input) {
+  if (validateSearch2 == null) return {};
+  if ("~standard" in validateSearch2) {
+    const result = validateSearch2["~standard"].validate(input);
+    if (result instanceof Promise)
+      throw new SearchParamError("Async validation not supported");
+    if (result.issues)
+      throw new SearchParamError(JSON.stringify(result.issues, void 0, 2), {
+        cause: result
+      });
+    return result.value;
+  }
+  if ("parse" in validateSearch2) {
+    return validateSearch2.parse(input);
+  }
+  if (typeof validateSearch2 === "function") {
+    return validateSearch2(input);
+  }
+  return {};
+}
+function getMatchedRoutes({
+  pathname,
+  routePathname,
+  basepath,
+  caseSensitive,
+  routesByPath,
+  routesById,
+  flatRoutes,
+  parseCache
+}) {
+  let routeParams = {};
+  const trimmedPath = trimPathRight(pathname);
+  const getMatchedParams = (route) => {
+    var _a3;
+    const result = matchPathname(
+      basepath,
+      trimmedPath,
+      {
+        to: route.fullPath,
+        caseSensitive: ((_a3 = route.options) == null ? void 0 : _a3.caseSensitive) ?? caseSensitive,
+        // we need fuzzy matching for `notFoundMode: 'fuzzy'`
+        fuzzy: true
+      },
+      parseCache
+    );
+    return result;
+  };
+  let foundRoute = routePathname !== void 0 ? routesByPath[routePathname] : void 0;
+  if (foundRoute) {
+    routeParams = getMatchedParams(foundRoute);
+  } else {
+    let fuzzyMatch = void 0;
+    for (const route of flatRoutes) {
+      const matchedParams = getMatchedParams(route);
+      if (matchedParams) {
+        if (route.path !== "/" && matchedParams["**"]) {
+          if (!fuzzyMatch) {
+            fuzzyMatch = { foundRoute: route, routeParams: matchedParams };
+          }
+        } else {
+          foundRoute = route;
+          routeParams = matchedParams;
+          break;
+        }
+      }
+    }
+    if (!foundRoute && fuzzyMatch) {
+      foundRoute = fuzzyMatch.foundRoute;
+      routeParams = fuzzyMatch.routeParams;
+    }
+  }
+  let routeCursor = foundRoute || routesById[rootRouteId];
+  const matchedRoutes = [routeCursor];
+  while (routeCursor.parentRoute) {
+    routeCursor = routeCursor.parentRoute;
+    matchedRoutes.push(routeCursor);
+  }
+  matchedRoutes.reverse();
+  return { matchedRoutes, routeParams, foundRoute };
+}
+function applySearchMiddleware({
+  search,
+  dest,
+  destRoutes,
+  _includeValidateSearch
+}) {
+  const allMiddlewares = destRoutes.reduce(
+    (acc, route) => {
+      var _a3;
+      const middlewares = [];
+      if ("search" in route.options) {
+        if ((_a3 = route.options.search) == null ? void 0 : _a3.middlewares) {
+          middlewares.push(...route.options.search.middlewares);
+        }
+      } else if (route.options.preSearchFilters || route.options.postSearchFilters) {
+        const legacyMiddleware = ({
+          search: search2,
+          next
+        }) => {
+          let nextSearch = search2;
+          if ("preSearchFilters" in route.options && route.options.preSearchFilters) {
+            nextSearch = route.options.preSearchFilters.reduce(
+              (prev, next2) => next2(prev),
+              search2
+            );
+          }
+          const result = next(nextSearch);
+          if ("postSearchFilters" in route.options && route.options.postSearchFilters) {
+            return route.options.postSearchFilters.reduce(
+              (prev, next2) => next2(prev),
+              result
+            );
+          }
+          return result;
+        };
+        middlewares.push(legacyMiddleware);
+      }
+      if (_includeValidateSearch && route.options.validateSearch) {
+        const validate = ({ search: search2, next }) => {
+          const result = next(search2);
+          try {
+            const validatedSearch = {
+              ...result,
+              ...validateSearch(route.options.validateSearch, result) ?? void 0
+            };
+            return validatedSearch;
+          } catch {
+            return result;
+          }
+        };
+        middlewares.push(validate);
+      }
+      return acc.concat(middlewares);
+    },
+    []
+  ) ?? [];
+  const final = ({ search: search2 }) => {
+    if (!dest.search) {
+      return {};
+    }
+    if (dest.search === true) {
+      return search2;
+    }
+    return functionalUpdate(dest.search, search2);
+  };
+  allMiddlewares.push(final);
+  const applyNext = (index2, currentSearch) => {
+    if (index2 >= allMiddlewares.length) {
+      return currentSearch;
+    }
+    const middleware = allMiddlewares[index2];
+    const next = (newSearch) => {
+      return applyNext(index2 + 1, newSearch);
+    };
+    return middleware({ search: currentSearch, next });
+  };
+  return applyNext(0, search);
+}
+const preloadWarning = "Error preloading route! ☝️";
+class BaseRoute {
+  constructor(options) {
+    this.init = (opts) => {
+      var _a3, _b3;
+      this.originalIndex = opts.originalIndex;
+      const options2 = this.options;
+      const isRoot = !(options2 == null ? void 0 : options2.path) && !(options2 == null ? void 0 : options2.id);
+      this.parentRoute = (_b3 = (_a3 = this.options).getParentRoute) == null ? void 0 : _b3.call(_a3);
+      if (isRoot) {
+        this._path = rootRouteId;
+      } else if (!this.parentRoute) {
+        invariant(
+          false
+        );
+      }
+      let path = isRoot ? rootRouteId : options2 == null ? void 0 : options2.path;
+      if (path && path !== "/") {
+        path = trimPathLeft(path);
+      }
+      const customId = (options2 == null ? void 0 : options2.id) || path;
+      let id = isRoot ? rootRouteId : joinPaths([
+        this.parentRoute.id === rootRouteId ? "" : this.parentRoute.id,
+        customId
+      ]);
+      if (path === rootRouteId) {
+        path = "/";
+      }
+      if (id !== rootRouteId) {
+        id = joinPaths(["/", id]);
+      }
+      const fullPath = id === rootRouteId ? "/" : joinPaths([this.parentRoute.fullPath, path]);
+      this._path = path;
+      this._id = id;
+      this._fullPath = fullPath;
+      this._to = fullPath;
+    };
+    this.clone = (other) => {
+      this._path = other._path;
+      this._id = other._id;
+      this._fullPath = other._fullPath;
+      this._to = other._to;
+      this.options.getParentRoute = other.options.getParentRoute;
+      this.children = other.children;
+    };
+    this.addChildren = (children) => {
+      return this._addFileChildren(children);
+    };
+    this._addFileChildren = (children) => {
+      if (Array.isArray(children)) {
+        this.children = children;
+      }
+      if (typeof children === "object" && children !== null) {
+        this.children = Object.values(children);
+      }
+      return this;
+    };
+    this._addFileTypes = () => {
+      return this;
+    };
+    this.updateLoader = (options2) => {
+      Object.assign(this.options, options2);
+      return this;
+    };
+    this.update = (options2) => {
+      Object.assign(this.options, options2);
+      return this;
+    };
+    this.lazy = (lazyFn) => {
+      this.lazyFn = lazyFn;
+      return this;
+    };
+    this.options = options || {};
+    this.isRoot = !(options == null ? void 0 : options.getParentRoute);
+    if ((options == null ? void 0 : options.id) && (options == null ? void 0 : options.path)) {
+      throw new Error(`Route cannot have both an 'id' and a 'path' option.`);
+    }
+  }
+  get to() {
+    return this._to;
+  }
+  get id() {
+    return this._id;
+  }
+  get path() {
+    return this._path;
+  }
+  get fullPath() {
+    return this._fullPath;
+  }
+}
+class BaseRootRoute extends BaseRoute {
+  constructor(options) {
+    super(options);
+  }
+}
+function CatchBoundary(props) {
+  const errorComponent = props.errorComponent ?? ErrorComponent;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    CatchBoundaryImpl,
+    {
+      getResetKey: props.getResetKey,
+      onCatch: props.onCatch,
+      children: ({ error, reset }) => {
+        if (error) {
+          return reactExports.createElement(errorComponent, {
+            error,
+            reset
+          });
+        }
+        return props.children;
+      }
+    }
+  );
+}
+class CatchBoundaryImpl extends reactExports.Component {
+  constructor() {
+    super(...arguments);
+    this.state = { error: null };
+  }
+  static getDerivedStateFromProps(props) {
+    return { resetKey: props.getResetKey() };
+  }
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  reset() {
+    this.setState({ error: null });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.error && prevState.resetKey !== this.state.resetKey) {
+      this.reset();
+    }
+  }
+  componentDidCatch(error, errorInfo) {
+    if (this.props.onCatch) {
+      this.props.onCatch(error, errorInfo);
+    }
+  }
+  render() {
+    return this.props.children({
+      error: this.state.resetKey !== this.props.getResetKey() ? null : this.state.error,
+      reset: () => {
+        this.reset();
+      }
+    });
+  }
+}
+function ErrorComponent({ error }) {
+  const [show, setShow] = reactExports.useState(false);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: ".5rem", maxWidth: "100%" }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: ".5rem" }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { style: { fontSize: "1rem" }, children: "Something went wrong!" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          style: {
+            appearance: "none",
+            fontSize: ".6em",
+            border: "1px solid currentColor",
+            padding: ".1rem .2rem",
+            fontWeight: "bold",
+            borderRadius: ".25rem"
+          },
+          onClick: () => setShow((d2) => !d2),
+          children: show ? "Hide Error" : "Show Error"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { height: ".25rem" } }),
+    show ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "pre",
+      {
+        style: {
+          fontSize: ".7em",
+          border: "1px solid red",
+          borderRadius: ".25rem",
+          padding: ".3rem",
+          color: "red",
+          overflow: "auto"
+        },
+        children: error.message ? /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: error.message }) : null
+      }
+    ) }) : null
+  ] });
+}
+function ClientOnly({ children, fallback = null }) {
+  return useHydrated() ? /* @__PURE__ */ jsxRuntimeExports.jsx(React2.Fragment, { children }) : /* @__PURE__ */ jsxRuntimeExports.jsx(React2.Fragment, { children: fallback });
+}
+function useHydrated() {
+  return React2.useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false
+  );
+}
+function subscribe() {
+  return () => {
+  };
+}
+var withSelector = { exports: {} };
+var withSelector_production = {};
+var shim$2 = { exports: {} };
+var useSyncExternalStoreShim_production = {};
+/**
+ * @license React
+ * use-sync-external-store-shim.production.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+var React$1 = reactExports;
+function is$1(x3, y2) {
+  return x3 === y2 && (0 !== x3 || 1 / x3 === 1 / y2) || x3 !== x3 && y2 !== y2;
+}
+var objectIs$1 = "function" === typeof Object.is ? Object.is : is$1, useState = React$1.useState, useEffect$1 = React$1.useEffect, useLayoutEffect$1 = React$1.useLayoutEffect, useDebugValue$1 = React$1.useDebugValue;
+function useSyncExternalStore$2(subscribe2, getSnapshot) {
+  var value = getSnapshot(), _useState = useState({ inst: { value, getSnapshot } }), inst = _useState[0].inst, forceUpdate = _useState[1];
+  useLayoutEffect$1(
+    function() {
+      inst.value = value;
+      inst.getSnapshot = getSnapshot;
+      checkIfSnapshotChanged(inst) && forceUpdate({ inst });
+    },
+    [subscribe2, value, getSnapshot]
+  );
+  useEffect$1(
+    function() {
+      checkIfSnapshotChanged(inst) && forceUpdate({ inst });
+      return subscribe2(function() {
+        checkIfSnapshotChanged(inst) && forceUpdate({ inst });
+      });
+    },
+    [subscribe2]
+  );
+  useDebugValue$1(value);
+  return value;
+}
+function checkIfSnapshotChanged(inst) {
+  var latestGetSnapshot = inst.getSnapshot;
+  inst = inst.value;
+  try {
+    var nextValue = latestGetSnapshot();
+    return !objectIs$1(inst, nextValue);
+  } catch (error) {
+    return true;
+  }
+}
+function useSyncExternalStore$1(subscribe2, getSnapshot) {
+  return getSnapshot();
+}
+var shim$1 = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+useSyncExternalStoreShim_production.useSyncExternalStore = void 0 !== React$1.useSyncExternalStore ? React$1.useSyncExternalStore : shim$1;
+{
+  shim$2.exports = useSyncExternalStoreShim_production;
+}
+var shimExports = shim$2.exports;
+/**
+ * @license React
+ * use-sync-external-store-shim/with-selector.production.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+var React = reactExports, shim = shimExports;
+function is(x3, y2) {
+  return x3 === y2 && (0 !== x3 || 1 / x3 === 1 / y2) || x3 !== x3 && y2 !== y2;
+}
+var objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef = React.useRef, useEffect = React.useEffect, useMemo = React.useMemo, useDebugValue = React.useDebugValue;
+withSelector_production.useSyncExternalStoreWithSelector = function(subscribe2, getSnapshot, getServerSnapshot, selector, isEqual) {
+  var instRef = useRef(null);
+  if (null === instRef.current) {
+    var inst = { hasValue: false, value: null };
+    instRef.current = inst;
+  } else inst = instRef.current;
+  instRef = useMemo(
+    function() {
+      function memoizedSelector(nextSnapshot) {
+        if (!hasMemo) {
+          hasMemo = true;
+          memoizedSnapshot = nextSnapshot;
+          nextSnapshot = selector(nextSnapshot);
+          if (void 0 !== isEqual && inst.hasValue) {
+            var currentSelection = inst.value;
+            if (isEqual(currentSelection, nextSnapshot))
+              return memoizedSelection = currentSelection;
+          }
+          return memoizedSelection = nextSnapshot;
+        }
+        currentSelection = memoizedSelection;
+        if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
+        var nextSelection = selector(nextSnapshot);
+        if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
+          return memoizedSnapshot = nextSnapshot, currentSelection;
+        memoizedSnapshot = nextSnapshot;
+        return memoizedSelection = nextSelection;
+      }
+      var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
+      return [
+        function() {
+          return memoizedSelector(getSnapshot());
+        },
+        null === maybeGetServerSnapshot ? void 0 : function() {
+          return memoizedSelector(maybeGetServerSnapshot());
+        }
+      ];
+    },
+    [getSnapshot, getServerSnapshot, selector, isEqual]
+  );
+  var value = useSyncExternalStore(subscribe2, instRef[0], instRef[1]);
+  useEffect(
+    function() {
+      inst.hasValue = true;
+      inst.value = value;
+    },
+    [value]
+  );
+  useDebugValue(value);
+  return value;
+};
+{
+  withSelector.exports = withSelector_production;
+}
+var withSelectorExports = withSelector.exports;
+function useStore(store, selector = (d2) => d2) {
+  const slice = withSelectorExports.useSyncExternalStoreWithSelector(
+    store.subscribe,
+    () => store.state,
+    () => store.state,
+    selector,
+    shallow
+  );
+  return slice;
+}
+function shallow(objA, objB) {
+  if (Object.is(objA, objB)) {
+    return true;
+  }
+  if (typeof objA !== "object" || objA === null || typeof objB !== "object" || objB === null) {
+    return false;
+  }
+  if (objA instanceof Map && objB instanceof Map) {
+    if (objA.size !== objB.size) return false;
+    for (const [k2, v2] of objA) {
+      if (!objB.has(k2) || !Object.is(v2, objB.get(k2))) return false;
+    }
+    return true;
+  }
+  if (objA instanceof Set && objB instanceof Set) {
+    if (objA.size !== objB.size) return false;
+    for (const v2 of objA) {
+      if (!objB.has(v2)) return false;
+    }
+    return true;
+  }
+  if (objA instanceof Date && objB instanceof Date) {
+    if (objA.getTime() !== objB.getTime()) return false;
+    return true;
+  }
+  const keysA = getOwnKeys(objA);
+  if (keysA.length !== getOwnKeys(objB).length) {
+    return false;
+  }
+  for (let i = 0; i < keysA.length; i++) {
+    if (!Object.prototype.hasOwnProperty.call(objB, keysA[i]) || !Object.is(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
+    }
+  }
+  return true;
+}
+function getOwnKeys(obj) {
+  return Object.keys(obj).concat(
+    Object.getOwnPropertySymbols(obj)
+  );
+}
+const routerContext = reactExports.createContext(null);
+function getRouterContext() {
+  if (typeof document === "undefined") {
+    return routerContext;
+  }
+  if (window.__TSR_ROUTER_CONTEXT__) {
+    return window.__TSR_ROUTER_CONTEXT__;
+  }
+  window.__TSR_ROUTER_CONTEXT__ = routerContext;
+  return routerContext;
+}
+function useRouter(opts) {
+  const value = reactExports.useContext(getRouterContext());
+  warning(
+    !(((opts == null ? void 0 : opts.warn) ?? true) && !value)
+  );
+  return value;
+}
+function useRouterState(opts) {
+  const contextRouter = useRouter({
+    warn: (opts == null ? void 0 : opts.router) === void 0
+  });
+  const router2 = (opts == null ? void 0 : opts.router) || contextRouter;
+  const previousResult = reactExports.useRef(void 0);
+  return useStore(router2.__store, (state) => {
+    if (opts == null ? void 0 : opts.select) {
+      if (opts.structuralSharing ?? router2.options.defaultStructuralSharing) {
+        const newSlice = replaceEqualDeep(
+          previousResult.current,
+          opts.select(state)
+        );
+        previousResult.current = newSlice;
+        return newSlice;
+      }
+      return opts.select(state);
+    }
+    return state;
+  });
+}
+const matchContext = reactExports.createContext(void 0);
+const dummyMatchContext = reactExports.createContext(
+  void 0
+);
+function useMatch(opts) {
+  const nearestMatchId = reactExports.useContext(
+    opts.from ? dummyMatchContext : matchContext
+  );
+  const matchSelection = useRouterState({
+    select: (state) => {
+      const match = state.matches.find(
+        (d2) => opts.from ? opts.from === d2.routeId : d2.id === nearestMatchId
+      );
+      invariant(
+        !((opts.shouldThrow ?? true) && !match),
+        `Could not find ${opts.from ? `an active match from "${opts.from}"` : "a nearest match!"}`
+      );
+      if (match === void 0) {
+        return void 0;
+      }
+      return opts.select ? opts.select(match) : match;
+    },
+    structuralSharing: opts.structuralSharing
+  });
+  return matchSelection;
+}
+function useLoaderData(opts) {
+  return useMatch({
+    from: opts.from,
+    strict: opts.strict,
+    structuralSharing: opts.structuralSharing,
+    select: (s2) => {
+      return opts.select ? opts.select(s2.loaderData) : s2.loaderData;
+    }
+  });
+}
+function useLoaderDeps(opts) {
+  const { select, ...rest } = opts;
+  return useMatch({
+    ...rest,
+    select: (s2) => {
+      return select ? select(s2.loaderDeps) : s2.loaderDeps;
+    }
+  });
+}
+function useParams(opts) {
+  return useMatch({
+    from: opts.from,
+    shouldThrow: opts.shouldThrow,
+    structuralSharing: opts.structuralSharing,
+    strict: opts.strict,
+    select: (match) => {
+      const params = opts.strict === false ? match.params : match._strictParams;
+      return opts.select ? opts.select(params) : params;
+    }
+  });
+}
+function useSearch(opts) {
+  return useMatch({
+    from: opts.from,
+    strict: opts.strict,
+    shouldThrow: opts.shouldThrow,
+    structuralSharing: opts.structuralSharing,
+    select: (match) => {
+      return opts.select ? opts.select(match.search) : match.search;
+    }
+  });
+}
+function useNavigate(_defaultOpts) {
+  const router2 = useRouter();
+  return reactExports.useCallback(
+    (options) => {
+      return router2.navigate({
+        ...options,
+        from: options.from ?? (_defaultOpts == null ? void 0 : _defaultOpts.from)
+      });
+    },
+    [_defaultOpts == null ? void 0 : _defaultOpts.from, router2]
+  );
+}
+const useLayoutEffect = typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
+function usePrevious$1(value) {
+  const ref = reactExports.useRef({
+    value,
+    prev: null
+  });
+  const current = ref.current.value;
+  if (value !== current) {
+    ref.current = {
+      value,
+      prev: current
+    };
+  }
+  return ref.current.prev;
+}
+function useIntersectionObserver(ref, callback, intersectionObserverOptions2 = {}, options = {}) {
+  reactExports.useEffect(() => {
+    if (!ref.current || options.disabled || typeof IntersectionObserver !== "function") {
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      callback(entry);
+    }, intersectionObserverOptions2);
+    observer.observe(ref.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [callback, intersectionObserverOptions2, options.disabled, ref]);
+}
+function useForwardedRef(ref) {
+  const innerRef = reactExports.useRef(null);
+  reactExports.useImperativeHandle(ref, () => innerRef.current, []);
+  return innerRef;
+}
+function useLinkProps(options, forwardedRef) {
+  const router2 = useRouter();
+  const [isTransitioning, setIsTransitioning] = reactExports.useState(false);
+  const hasRenderFetched = reactExports.useRef(false);
+  const innerRef = useForwardedRef(forwardedRef);
+  const {
+    // custom props
+    activeProps,
+    inactiveProps,
+    activeOptions,
+    to,
+    preload: userPreload,
+    preloadDelay: userPreloadDelay,
+    hashScrollIntoView,
+    replace,
+    startTransition: startTransition2,
+    resetScroll,
+    viewTransition,
+    // element props
+    children,
+    target,
+    disabled,
+    style: style2,
+    className,
+    onClick,
+    onFocus,
+    onMouseEnter,
+    onMouseLeave,
+    onTouchStart,
+    ignoreBlocker,
+    // prevent these from being returned
+    params: _params,
+    search: _search,
+    hash: _hash,
+    state: _state,
+    mask: _mask,
+    reloadDocument: _reloadDocument,
+    unsafeRelative: _unsafeRelative,
+    from: _from,
+    _fromLocation,
+    ...propsSafeToSpread
+  } = options;
+  const type = reactExports.useMemo(() => {
+    try {
+      new URL(to);
+      return "external";
+    } catch {
+    }
+    return "internal";
+  }, [to]);
+  const currentSearch = useRouterState({
+    select: (s2) => s2.location.search,
+    structuralSharing: true
+  });
+  const from = options.from;
+  const _options2 = reactExports.useMemo(
+    () => {
+      return { ...options, from };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      router2,
+      currentSearch,
+      from,
+      options._fromLocation,
+      options.hash,
+      options.to,
+      options.search,
+      options.params,
+      options.state,
+      options.mask,
+      options.unsafeRelative
+    ]
+  );
+  const next = reactExports.useMemo(
+    () => router2.buildLocation({ ..._options2 }),
+    [router2, _options2]
+  );
+  const isExternal = type === "external";
+  const preload3 = options.reloadDocument || isExternal ? false : userPreload ?? router2.options.defaultPreload;
+  const preloadDelay = userPreloadDelay ?? router2.options.defaultPreloadDelay ?? 0;
+  const isActive = useRouterState({
+    select: (s2) => {
+      if (isExternal) return false;
+      if (activeOptions == null ? void 0 : activeOptions.exact) {
+        const testExact = exactPathTest(
+          s2.location.pathname,
+          next.pathname,
+          router2.basepath
+        );
+        if (!testExact) {
+          return false;
+        }
+      } else {
+        const currentPathSplit = removeTrailingSlash(
+          s2.location.pathname,
+          router2.basepath
+        );
+        const nextPathSplit = removeTrailingSlash(
+          next.pathname,
+          router2.basepath
+        );
+        const pathIsFuzzyEqual = currentPathSplit.startsWith(nextPathSplit) && (currentPathSplit.length === nextPathSplit.length || currentPathSplit[nextPathSplit.length] === "/");
+        if (!pathIsFuzzyEqual) {
+          return false;
+        }
+      }
+      if ((activeOptions == null ? void 0 : activeOptions.includeSearch) ?? true) {
+        const searchTest = deepEqual(s2.location.search, next.search, {
+          partial: !(activeOptions == null ? void 0 : activeOptions.exact),
+          ignoreUndefined: !(activeOptions == null ? void 0 : activeOptions.explicitUndefined)
+        });
+        if (!searchTest) {
+          return false;
+        }
+      }
+      if (activeOptions == null ? void 0 : activeOptions.includeHash) {
+        return s2.location.hash === next.hash;
+      }
+      return true;
+    }
+  });
+  const doPreload = reactExports.useCallback(() => {
+    router2.preloadRoute({ ..._options2 }).catch((err) => {
+      console.warn(err);
+      console.warn(preloadWarning);
+    });
+  }, [router2, _options2]);
+  const preloadViewportIoCallback = reactExports.useCallback(
+    (entry) => {
+      if (entry == null ? void 0 : entry.isIntersecting) {
+        doPreload();
+      }
+    },
+    [doPreload]
+  );
+  useIntersectionObserver(
+    innerRef,
+    preloadViewportIoCallback,
+    intersectionObserverOptions,
+    { disabled: !!disabled || !(preload3 === "viewport") }
+  );
+  reactExports.useEffect(() => {
+    if (hasRenderFetched.current) {
+      return;
+    }
+    if (!disabled && preload3 === "render") {
+      doPreload();
+      hasRenderFetched.current = true;
+    }
+  }, [disabled, doPreload, preload3]);
+  const handleClick = (e) => {
+    const elementTarget = e.currentTarget.target;
+    const effectiveTarget = target !== void 0 ? target : elementTarget;
+    if (!disabled && !isCtrlEvent(e) && !e.defaultPrevented && (!effectiveTarget || effectiveTarget === "_self") && e.button === 0) {
+      e.preventDefault();
+      reactDomExports.flushSync(() => {
+        setIsTransitioning(true);
+      });
+      const unsub = router2.subscribe("onResolved", () => {
+        unsub();
+        setIsTransitioning(false);
+      });
+      router2.navigate({
+        ..._options2,
+        replace,
+        resetScroll,
+        hashScrollIntoView,
+        startTransition: startTransition2,
+        viewTransition,
+        ignoreBlocker
+      });
+    }
+  };
+  if (isExternal) {
+    return {
+      ...propsSafeToSpread,
+      ref: innerRef,
+      type,
+      href: to,
+      ...children && { children },
+      ...target && { target },
+      ...disabled && { disabled },
+      ...style2 && { style: style2 },
+      ...className && { className },
+      ...onClick && { onClick },
+      ...onFocus && { onFocus },
+      ...onMouseEnter && { onMouseEnter },
+      ...onMouseLeave && { onMouseLeave },
+      ...onTouchStart && { onTouchStart }
+    };
+  }
+  const handleFocus = (_2) => {
+    if (disabled) return;
+    if (preload3) {
+      doPreload();
+    }
+  };
+  const handleTouchStart = handleFocus;
+  const handleEnter = (e) => {
+    if (disabled || !preload3) return;
+    if (!preloadDelay) {
+      doPreload();
+    } else {
+      const eventTarget = e.target;
+      if (timeoutMap.has(eventTarget)) {
+        return;
+      }
+      const id = setTimeout(() => {
+        timeoutMap.delete(eventTarget);
+        doPreload();
+      }, preloadDelay);
+      timeoutMap.set(eventTarget, id);
+    }
+  };
+  const handleLeave = (e) => {
+    if (disabled || !preload3 || !preloadDelay) return;
+    const eventTarget = e.target;
+    const id = timeoutMap.get(eventTarget);
+    if (id) {
+      clearTimeout(id);
+      timeoutMap.delete(eventTarget);
+    }
+  };
+  const resolvedActiveProps = isActive ? functionalUpdate(activeProps, {}) ?? STATIC_ACTIVE_OBJECT : STATIC_EMPTY_OBJECT;
+  const resolvedInactiveProps = isActive ? STATIC_EMPTY_OBJECT : functionalUpdate(inactiveProps, {}) ?? STATIC_EMPTY_OBJECT;
+  const resolvedClassName = [
+    className,
+    resolvedActiveProps.className,
+    resolvedInactiveProps.className
+  ].filter(Boolean).join(" ");
+  const resolvedStyle = (style2 || resolvedActiveProps.style || resolvedInactiveProps.style) && {
+    ...style2,
+    ...resolvedActiveProps.style,
+    ...resolvedInactiveProps.style
+  };
+  return {
+    ...propsSafeToSpread,
+    ...resolvedActiveProps,
+    ...resolvedInactiveProps,
+    href: disabled ? void 0 : next.maskedLocation ? router2.history.createHref(next.maskedLocation.href) : router2.history.createHref(next.href),
+    ref: innerRef,
+    onClick: composeHandlers([onClick, handleClick]),
+    onFocus: composeHandlers([onFocus, handleFocus]),
+    onMouseEnter: composeHandlers([onMouseEnter, handleEnter]),
+    onMouseLeave: composeHandlers([onMouseLeave, handleLeave]),
+    onTouchStart: composeHandlers([onTouchStart, handleTouchStart]),
+    disabled: !!disabled,
+    target,
+    ...resolvedStyle && { style: resolvedStyle },
+    ...resolvedClassName && { className: resolvedClassName },
+    ...disabled && STATIC_DISABLED_PROPS,
+    ...isActive && STATIC_ACTIVE_PROPS,
+    ...isTransitioning && STATIC_TRANSITIONING_PROPS
+  };
+}
+const STATIC_EMPTY_OBJECT = {};
+const STATIC_ACTIVE_OBJECT = { className: "active" };
+const STATIC_DISABLED_PROPS = { role: "link", "aria-disabled": true };
+const STATIC_ACTIVE_PROPS = { "data-status": "active", "aria-current": "page" };
+const STATIC_TRANSITIONING_PROPS = { "data-transitioning": "transitioning" };
+const timeoutMap = /* @__PURE__ */ new WeakMap();
+const intersectionObserverOptions = {
+  rootMargin: "100px"
+};
+const composeHandlers = (handlers) => (e) => {
+  for (const handler of handlers) {
+    if (!handler) continue;
+    if (e.defaultPrevented) return;
+    handler(e);
+  }
+};
+const Link = reactExports.forwardRef(
+  (props, ref) => {
+    const { _asChild, ...rest } = props;
+    const {
+      type: _type,
+      ref: innerRef,
+      ...linkProps
+    } = useLinkProps(rest, ref);
+    const children = typeof rest.children === "function" ? rest.children({
+      isActive: linkProps["data-status"] === "active"
+    }) : rest.children;
+    if (_asChild === void 0) {
+      delete linkProps.disabled;
+    }
+    return reactExports.createElement(
+      _asChild ? _asChild : "a",
+      {
+        ...linkProps,
+        ref: innerRef
+      },
+      children
+    );
+  }
+);
+function isCtrlEvent(e) {
+  return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+}
+class Route extends BaseRoute {
+  /**
+   * @deprecated Use the `createRoute` function instead.
+   */
+  constructor(options) {
+    super(options);
+    this.useMatch = (opts) => {
+      return useMatch({
+        select: opts == null ? void 0 : opts.select,
+        from: this.id,
+        structuralSharing: opts == null ? void 0 : opts.structuralSharing
+      });
+    };
+    this.useRouteContext = (opts) => {
+      return useMatch({
+        ...opts,
+        from: this.id,
+        select: (d2) => (opts == null ? void 0 : opts.select) ? opts.select(d2.context) : d2.context
+      });
+    };
+    this.useSearch = (opts) => {
+      return useSearch({
+        select: opts == null ? void 0 : opts.select,
+        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
+        from: this.id
+      });
+    };
+    this.useParams = (opts) => {
+      return useParams({
+        select: opts == null ? void 0 : opts.select,
+        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
+        from: this.id
+      });
+    };
+    this.useLoaderDeps = (opts) => {
+      return useLoaderDeps({ ...opts, from: this.id });
+    };
+    this.useLoaderData = (opts) => {
+      return useLoaderData({ ...opts, from: this.id });
+    };
+    this.useNavigate = () => {
+      return useNavigate({ from: this.fullPath });
+    };
+    this.Link = React2.forwardRef(
+      (props, ref) => {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { ref, from: this.fullPath, ...props });
+      }
+    );
+    this.$$typeof = Symbol.for("react.memo");
+  }
+}
+function createRoute(options) {
+  return new Route(options);
+}
+class RootRoute extends BaseRootRoute {
+  /**
+   * @deprecated `RootRoute` is now an internal implementation detail. Use `createRootRoute()` instead.
+   */
+  constructor(options) {
+    super(options);
+    this.useMatch = (opts) => {
+      return useMatch({
+        select: opts == null ? void 0 : opts.select,
+        from: this.id,
+        structuralSharing: opts == null ? void 0 : opts.structuralSharing
+      });
+    };
+    this.useRouteContext = (opts) => {
+      return useMatch({
+        ...opts,
+        from: this.id,
+        select: (d2) => (opts == null ? void 0 : opts.select) ? opts.select(d2.context) : d2.context
+      });
+    };
+    this.useSearch = (opts) => {
+      return useSearch({
+        select: opts == null ? void 0 : opts.select,
+        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
+        from: this.id
+      });
+    };
+    this.useParams = (opts) => {
+      return useParams({
+        select: opts == null ? void 0 : opts.select,
+        structuralSharing: opts == null ? void 0 : opts.structuralSharing,
+        from: this.id
+      });
+    };
+    this.useLoaderDeps = (opts) => {
+      return useLoaderDeps({ ...opts, from: this.id });
+    };
+    this.useLoaderData = (opts) => {
+      return useLoaderData({ ...opts, from: this.id });
+    };
+    this.useNavigate = () => {
+      return useNavigate({ from: this.fullPath });
+    };
+    this.Link = React2.forwardRef(
+      (props, ref) => {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { ref, from: this.fullPath, ...props });
+      }
+    );
+    this.$$typeof = Symbol.for("react.memo");
+  }
+}
+function createRootRoute(options) {
+  return new RootRoute(options);
+}
+function createFileRoute(path) {
+  if (typeof path === "object") {
+    return new FileRoute(path, {
+      silent: true
+    }).createRoute(path);
+  }
+  return new FileRoute(path, {
+    silent: true
+  }).createRoute;
+}
+class FileRoute {
+  constructor(path, _opts) {
+    this.path = path;
+    this.createRoute = (options) => {
+      warning(
+        this.silent
+      );
+      const route = createRoute(options);
+      route.isRoot = false;
+      return route;
+    };
+    this.silent = _opts == null ? void 0 : _opts.silent;
+  }
+}
+class LazyRoute {
+  constructor(opts) {
+    this.useMatch = (opts2) => {
+      return useMatch({
+        select: opts2 == null ? void 0 : opts2.select,
+        from: this.options.id,
+        structuralSharing: opts2 == null ? void 0 : opts2.structuralSharing
+      });
+    };
+    this.useRouteContext = (opts2) => {
+      return useMatch({
+        from: this.options.id,
+        select: (d2) => (opts2 == null ? void 0 : opts2.select) ? opts2.select(d2.context) : d2.context
+      });
+    };
+    this.useSearch = (opts2) => {
+      return useSearch({
+        select: opts2 == null ? void 0 : opts2.select,
+        structuralSharing: opts2 == null ? void 0 : opts2.structuralSharing,
+        from: this.options.id
+      });
+    };
+    this.useParams = (opts2) => {
+      return useParams({
+        select: opts2 == null ? void 0 : opts2.select,
+        structuralSharing: opts2 == null ? void 0 : opts2.structuralSharing,
+        from: this.options.id
+      });
+    };
+    this.useLoaderDeps = (opts2) => {
+      return useLoaderDeps({ ...opts2, from: this.options.id });
+    };
+    this.useLoaderData = (opts2) => {
+      return useLoaderData({ ...opts2, from: this.options.id });
+    };
+    this.useNavigate = () => {
+      const router2 = useRouter();
+      return useNavigate({ from: router2.routesById[this.options.id].fullPath });
+    };
+    this.options = opts;
+    this.$$typeof = Symbol.for("react.memo");
+  }
+}
+function createLazyFileRoute(id) {
+  if (typeof id === "object") {
+    return new LazyRoute(id);
+  }
+  return (opts) => new LazyRoute({ id, ...opts });
+}
+function Transitioner() {
+  const router2 = useRouter();
+  const mountLoadForRouter = reactExports.useRef({ router: router2, mounted: false });
+  const [isTransitioning, setIsTransitioning] = reactExports.useState(false);
+  const { hasPendingMatches, isLoading } = useRouterState({
+    select: (s2) => ({
+      isLoading: s2.isLoading,
+      hasPendingMatches: s2.matches.some((d2) => d2.status === "pending")
+    }),
+    structuralSharing: true
+  });
+  const previousIsLoading = usePrevious$1(isLoading);
+  const isAnyPending = isLoading || isTransitioning || hasPendingMatches;
+  const previousIsAnyPending = usePrevious$1(isAnyPending);
+  const isPagePending = isLoading || hasPendingMatches;
+  const previousIsPagePending = usePrevious$1(isPagePending);
+  router2.startTransition = (fn) => {
+    setIsTransitioning(true);
+    reactExports.startTransition(() => {
+      fn();
+      setIsTransitioning(false);
+    });
+  };
+  reactExports.useEffect(() => {
+    const unsub = router2.history.subscribe(router2.load);
+    const nextLocation = router2.buildLocation({
+      to: router2.latestLocation.pathname,
+      search: true,
+      params: true,
+      hash: true,
+      state: true,
+      _includeValidateSearch: true
+    });
+    if (trimPathRight(router2.latestLocation.href) !== trimPathRight(nextLocation.href)) {
+      router2.commitLocation({ ...nextLocation, replace: true });
+    }
+    return () => {
+      unsub();
+    };
+  }, [router2, router2.history]);
+  useLayoutEffect(() => {
+    if (
+      // if we are hydrating from SSR, loading is triggered in ssr-client
+      typeof window !== "undefined" && router2.ssr || mountLoadForRouter.current.router === router2 && mountLoadForRouter.current.mounted
+    ) {
+      return;
+    }
+    mountLoadForRouter.current = { router: router2, mounted: true };
+    const tryLoad = async () => {
+      try {
+        await router2.load();
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    tryLoad();
+  }, [router2]);
+  useLayoutEffect(() => {
+    if (previousIsLoading && !isLoading) {
+      router2.emit({
+        type: "onLoad",
+        // When the new URL has committed, when the new matches have been loaded into state.matches
+        ...getLocationChangeInfo(router2.state)
+      });
+    }
+  }, [previousIsLoading, router2, isLoading]);
+  useLayoutEffect(() => {
+    if (previousIsPagePending && !isPagePending) {
+      router2.emit({
+        type: "onBeforeRouteMount",
+        ...getLocationChangeInfo(router2.state)
+      });
+    }
+  }, [isPagePending, previousIsPagePending, router2]);
+  useLayoutEffect(() => {
+    if (previousIsAnyPending && !isAnyPending) {
+      router2.emit({
+        type: "onResolved",
+        ...getLocationChangeInfo(router2.state)
+      });
+      router2.__store.setState((s2) => ({
+        ...s2,
+        status: "idle",
+        resolvedLocation: s2.location
+      }));
+      handleHashScroll(router2);
+    }
+  }, [isAnyPending, previousIsAnyPending, router2]);
+  return null;
+}
+function CatchNotFound(props) {
+  const resetKey = useRouterState({
+    select: (s2) => `not-found-${s2.location.pathname}-${s2.status}`
+  });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    CatchBoundary,
+    {
+      getResetKey: () => resetKey,
+      onCatch: (error, errorInfo) => {
+        var _a3;
+        if (isNotFound(error)) {
+          (_a3 = props.onCatch) == null ? void 0 : _a3.call(props, error, errorInfo);
+        } else {
+          throw error;
+        }
+      },
+      errorComponent: ({ error }) => {
+        var _a3;
+        if (isNotFound(error)) {
+          return (_a3 = props.fallback) == null ? void 0 : _a3.call(props, error);
+        } else {
+          throw error;
+        }
+      },
+      children: props.children
+    }
+  );
+}
+function DefaultGlobalNotFound() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Not Found" });
+}
+function SafeFragment(props) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: props.children });
+}
+function renderRouteNotFound(router2, route, data) {
+  if (!route.options.notFoundComponent) {
+    if (router2.options.defaultNotFoundComponent) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.defaultNotFoundComponent, { data });
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(DefaultGlobalNotFound, {});
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(route.options.notFoundComponent, { data });
+}
+function ScriptOnce({
+  children
+}) {
+  if (typeof document !== "undefined") {
+    return null;
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "script",
+    {
+      className: "$tsr",
+      dangerouslySetInnerHTML: {
+        __html: [children].filter(Boolean).join("\n")
+      }
+    }
+  );
+}
+function ScrollRestoration() {
+  const router2 = useRouter();
+  const getKey = router2.options.getScrollRestorationKey || defaultGetScrollRestorationKey;
+  const userKey = getKey(router2.latestLocation);
+  const resolvedKey = userKey !== defaultGetScrollRestorationKey(router2.latestLocation) ? userKey : void 0;
+  if (!router2.isScrollRestoring || !router2.isServer) {
+    return null;
+  }
+  const restoreScrollOptions = {
+    storageKey,
+    shouldScrollRestoration: true
+  };
+  if (resolvedKey) {
+    restoreScrollOptions.key = resolvedKey;
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScriptOnce,
+    {
+      children: `(${restoreScroll.toString()})(${JSON.stringify(restoreScrollOptions)})`
+    }
+  );
+}
+const Match = reactExports.memo(function MatchImpl({
+  matchId
+}) {
+  var _a3, _b3;
+  const router2 = useRouter();
+  const matchState = useRouterState({
+    select: (s2) => {
+      const match = s2.matches.find((d2) => d2.id === matchId);
+      invariant(
+        match
+      );
+      return {
+        routeId: match.routeId,
+        ssr: match.ssr,
+        _displayPending: match._displayPending
+      };
+    },
+    structuralSharing: true
+  });
+  const route = router2.routesById[matchState.routeId];
+  const PendingComponent = route.options.pendingComponent ?? router2.options.defaultPendingComponent;
+  const pendingElement = PendingComponent ? /* @__PURE__ */ jsxRuntimeExports.jsx(PendingComponent, {}) : null;
+  const routeErrorComponent = route.options.errorComponent ?? router2.options.defaultErrorComponent;
+  const routeOnCatch = route.options.onCatch ?? router2.options.defaultOnCatch;
+  const routeNotFoundComponent = route.isRoot ? (
+    // If it's the root route, use the globalNotFound option, with fallback to the notFoundRoute's component
+    route.options.notFoundComponent ?? ((_a3 = router2.options.notFoundRoute) == null ? void 0 : _a3.options.component)
+  ) : route.options.notFoundComponent;
+  const resolvedNoSsr = matchState.ssr === false || matchState.ssr === "data-only";
+  const ResolvedSuspenseBoundary = (
+    // If we're on the root route, allow forcefully wrapping in suspense
+    (!route.isRoot || route.options.wrapInSuspense || resolvedNoSsr) && (route.options.wrapInSuspense ?? PendingComponent ?? (((_b3 = route.options.errorComponent) == null ? void 0 : _b3.preload) || resolvedNoSsr)) ? reactExports.Suspense : SafeFragment
+  );
+  const ResolvedCatchBoundary = routeErrorComponent ? CatchBoundary : SafeFragment;
+  const ResolvedNotFoundBoundary = routeNotFoundComponent ? CatchNotFound : SafeFragment;
+  const resetKey = useRouterState({
+    select: (s2) => s2.loadedAt
+  });
+  const parentRouteId = useRouterState({
+    select: (s2) => {
+      var _a22;
+      const index2 = s2.matches.findIndex((d2) => d2.id === matchId);
+      return (_a22 = s2.matches[index2 - 1]) == null ? void 0 : _a22.routeId;
+    }
+  });
+  const ShellComponent = route.isRoot ? route.options.shellComponent ?? SafeFragment : SafeFragment;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(ShellComponent, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(matchContext.Provider, { value: matchId, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ResolvedSuspenseBoundary, { fallback: pendingElement, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ResolvedCatchBoundary,
+      {
+        getResetKey: () => resetKey,
+        errorComponent: routeErrorComponent || ErrorComponent,
+        onCatch: (error, errorInfo) => {
+          if (isNotFound(error)) throw error;
+          routeOnCatch == null ? void 0 : routeOnCatch(error, errorInfo);
+        },
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          ResolvedNotFoundBoundary,
+          {
+            fallback: (error) => {
+              if (!routeNotFoundComponent || error.routeId && error.routeId !== matchState.routeId || !error.routeId && !route.isRoot)
+                throw error;
+              return reactExports.createElement(routeNotFoundComponent, error);
+            },
+            children: resolvedNoSsr || matchState._displayPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(ClientOnly, { fallback: pendingElement, children: /* @__PURE__ */ jsxRuntimeExports.jsx(MatchInner, { matchId }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(MatchInner, { matchId })
+          }
+        )
+      }
+    ) }) }),
+    parentRouteId === rootRouteId && router2.options.scrollRestoration ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(OnRendered, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollRestoration, {})
+    ] }) : null
+  ] });
+});
+function OnRendered() {
+  const router2 = useRouter();
+  const prevLocationRef = reactExports.useRef(
+    void 0
+  );
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "script",
+    {
+      suppressHydrationWarning: true,
+      ref: (el) => {
+        if (el && (prevLocationRef.current === void 0 || prevLocationRef.current.href !== router2.latestLocation.href)) {
+          router2.emit({
+            type: "onRendered",
+            ...getLocationChangeInfo(router2.state)
+          });
+          prevLocationRef.current = router2.latestLocation;
+        }
+      }
+    },
+    router2.latestLocation.state.__TSR_key
+  );
+}
+const MatchInner = reactExports.memo(function MatchInnerImpl({
+  matchId
+}) {
+  var _a3, _b3, _c2, _d2;
+  const router2 = useRouter();
+  const { match, key, routeId } = useRouterState({
+    select: (s2) => {
+      const match2 = s2.matches.find((d2) => d2.id === matchId);
+      const routeId2 = match2.routeId;
+      const remountFn = router2.routesById[routeId2].options.remountDeps ?? router2.options.defaultRemountDeps;
+      const remountDeps = remountFn == null ? void 0 : remountFn({
+        routeId: routeId2,
+        loaderDeps: match2.loaderDeps,
+        params: match2._strictParams,
+        search: match2._strictSearch
+      });
+      const key2 = remountDeps ? JSON.stringify(remountDeps) : void 0;
+      return {
+        key: key2,
+        routeId: routeId2,
+        match: {
+          id: match2.id,
+          status: match2.status,
+          error: match2.error,
+          _forcePending: match2._forcePending,
+          _displayPending: match2._displayPending
+        }
+      };
+    },
+    structuralSharing: true
+  });
+  const route = router2.routesById[routeId];
+  const out = reactExports.useMemo(() => {
+    const Comp = route.options.component ?? router2.options.defaultComponent;
+    if (Comp) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(Comp, {}, key);
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {});
+  }, [key, route.options.component, router2.options.defaultComponent]);
+  if (match._displayPending) {
+    throw (_a3 = router2.getMatch(match.id)) == null ? void 0 : _a3._nonReactive.displayPendingPromise;
+  }
+  if (match._forcePending) {
+    throw (_b3 = router2.getMatch(match.id)) == null ? void 0 : _b3._nonReactive.minPendingPromise;
+  }
+  if (match.status === "pending") {
+    const pendingMinMs = route.options.pendingMinMs ?? router2.options.defaultPendingMinMs;
+    if (pendingMinMs) {
+      const routerMatch = router2.getMatch(match.id);
+      if (routerMatch && !routerMatch._nonReactive.minPendingPromise) {
+        if (!router2.isServer) {
+          const minPendingPromise = createControlledPromise();
+          routerMatch._nonReactive.minPendingPromise = minPendingPromise;
+          setTimeout(() => {
+            minPendingPromise.resolve();
+            routerMatch._nonReactive.minPendingPromise = void 0;
+          }, pendingMinMs);
+        }
+      }
+    }
+    throw (_c2 = router2.getMatch(match.id)) == null ? void 0 : _c2._nonReactive.loadPromise;
+  }
+  if (match.status === "notFound") {
+    invariant(isNotFound(match.error));
+    return renderRouteNotFound(router2, route, match.error);
+  }
+  if (match.status === "redirected") {
+    invariant(isRedirect(match.error));
+    throw (_d2 = router2.getMatch(match.id)) == null ? void 0 : _d2._nonReactive.loadPromise;
+  }
+  if (match.status === "error") {
+    if (router2.isServer) {
+      const RouteErrorComponent = (route.options.errorComponent ?? router2.options.defaultErrorComponent) || ErrorComponent;
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(
+        RouteErrorComponent,
+        {
+          error: match.error,
+          reset: void 0,
+          info: {
+            componentStack: ""
+          }
+        }
+      );
+    }
+    throw match.error;
+  }
+  return out;
+});
+const Outlet = reactExports.memo(function OutletImpl() {
+  const router2 = useRouter();
+  const matchId = reactExports.useContext(matchContext);
+  const routeId = useRouterState({
+    select: (s2) => {
+      var _a3;
+      return (_a3 = s2.matches.find((d2) => d2.id === matchId)) == null ? void 0 : _a3.routeId;
+    }
+  });
+  const route = router2.routesById[routeId];
+  const parentGlobalNotFound = useRouterState({
+    select: (s2) => {
+      const matches = s2.matches;
+      const parentMatch = matches.find((d2) => d2.id === matchId);
+      invariant(
+        parentMatch
+      );
+      return parentMatch.globalNotFound;
+    }
+  });
+  const childMatchId = useRouterState({
+    select: (s2) => {
+      var _a3;
+      const matches = s2.matches;
+      const index2 = matches.findIndex((d2) => d2.id === matchId);
+      return (_a3 = matches[index2 + 1]) == null ? void 0 : _a3.id;
+    }
+  });
+  const pendingElement = router2.options.defaultPendingComponent ? /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.defaultPendingComponent, {}) : null;
+  if (parentGlobalNotFound) {
+    return renderRouteNotFound(router2, route, void 0);
+  }
+  if (!childMatchId) {
+    return null;
+  }
+  const nextMatch = /* @__PURE__ */ jsxRuntimeExports.jsx(Match, { matchId: childMatchId });
+  if (matchId === rootRouteId) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: pendingElement, children: nextMatch });
+  }
+  return nextMatch;
+});
+function Matches() {
+  const router2 = useRouter();
+  const pendingElement = router2.options.defaultPendingComponent ? /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.defaultPendingComponent, {}) : null;
+  const ResolvedSuspense = router2.isServer || typeof document !== "undefined" && router2.ssr ? SafeFragment : reactExports.Suspense;
+  const inner = /* @__PURE__ */ jsxRuntimeExports.jsxs(ResolvedSuspense, { fallback: pendingElement, children: [
+    !router2.isServer && /* @__PURE__ */ jsxRuntimeExports.jsx(Transitioner, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(MatchesInner, {})
+  ] });
+  return router2.options.InnerWrap ? /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.InnerWrap, { children: inner }) : inner;
+}
+function MatchesInner() {
+  const router2 = useRouter();
+  const matchId = useRouterState({
+    select: (s2) => {
+      var _a3;
+      return (_a3 = s2.matches[0]) == null ? void 0 : _a3.id;
+    }
+  });
+  const resetKey = useRouterState({
+    select: (s2) => s2.loadedAt
+  });
+  const matchComponent = matchId ? /* @__PURE__ */ jsxRuntimeExports.jsx(Match, { matchId }) : null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(matchContext.Provider, { value: matchId, children: router2.options.disableGlobalCatchBoundary ? matchComponent : /* @__PURE__ */ jsxRuntimeExports.jsx(
+    CatchBoundary,
+    {
+      getResetKey: () => resetKey,
+      errorComponent: ErrorComponent,
+      onCatch: (error) => {
+        warning(false, error.message || error.toString());
+      },
+      children: matchComponent
+    }
+  ) });
+}
+const createRouter = (options) => {
+  return new Router(options);
+};
+class Router extends RouterCore {
+  constructor(options) {
+    super(options);
+  }
+}
+if (typeof globalThis !== "undefined") {
+  globalThis.createFileRoute = createFileRoute;
+  globalThis.createLazyFileRoute = createLazyFileRoute;
+} else if (typeof window !== "undefined") {
+  window.createFileRoute = createFileRoute;
+  window.createLazyFileRoute = createLazyFileRoute;
+}
+function RouterContextProvider({
+  router: router2,
+  children,
+  ...rest
+}) {
+  if (Object.keys(rest).length > 0) {
+    router2.update({
+      ...router2.options,
+      ...rest,
+      context: {
+        ...router2.options.context,
+        ...rest.context
+      }
+    });
+  }
+  const routerContext2 = getRouterContext();
+  const provider = /* @__PURE__ */ jsxRuntimeExports.jsx(routerContext2.Provider, { value: router2, children });
+  if (router2.options.Wrap) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(router2.options.Wrap, { children: provider });
+  }
+  return provider;
+}
+function RouterProvider({ router: router2, ...rest }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(RouterContextProvider, { router: router2, ...rest, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Matches, {}) });
+}
+function useLocation(opts) {
+  return useRouterState({
+    select: (state) => state.location
+  });
+}
+const AVATAR_COLORS = [
+  "bg-primary text-primary-foreground",
+  "bg-accent text-accent-foreground",
+  "bg-secondary text-secondary-foreground",
+  "bg-muted text-muted-foreground"
+];
+function hashPrincipal(principal) {
+  let hash = 0;
+  for (let i = 0; i < principal.length; i++) {
+    hash = (hash << 5) - hash + principal.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+function UserAvatar({
+  principal,
+  displayName,
+  avatarUrl,
+  size: size2 = 36,
+  className = ""
+}) {
+  const hash = hashPrincipal(principal);
+  const colorClass = AVATAR_COLORS[hash % AVATAR_COLORS.length];
+  const letter = displayName ? displayName[0].toUpperCase() : principal[0].toUpperCase();
+  const resolvedUrl = avatarUrl ?? getLocalAvatarDataUrl(principal);
+  const [imgError, setImgError] = reactExports.useState(false);
+  const showImage = !!resolvedUrl && !imgError;
+  if (showImage) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "img",
+      {
+        src: resolvedUrl,
+        alt: displayName ?? principal,
+        onError: () => setImgError(true),
+        className: `inline-block rounded-full object-cover flex-shrink-0 ${className}`,
+        style: { width: size2, height: size2 },
+        "aria-label": displayName ?? principal
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      className: `inline-flex items-center justify-center rounded-full font-semibold select-none flex-shrink-0 ${colorClass} ${className}`,
+      style: { width: size2, height: size2, fontSize: size2 * 0.42 },
+      "aria-label": displayName ?? principal,
+      children: letter
+    }
+  );
 }
 function parseIcError(err) {
   const raw = err instanceof Error ? err.message : typeof err === "string" ? err : JSON.stringify(err);
@@ -52008,7 +51043,6 @@ function ChatHeader({
   conv,
   myPrincipal,
   onBack,
-  onVoiceCall,
   onSearchOpen,
   isSearchOpen,
   isCreator,
@@ -52058,17 +51092,6 @@ function ChatHeader({
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 flex-shrink-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              onClick: onVoiceCall,
-              className: "p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-smooth",
-              "aria-label": "Start voice call",
-              "data-ocid": "chat.voice_call_button",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 18 })
-            }
-          ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "button",
             {
@@ -52346,7 +51369,6 @@ function ChatPage() {
       }
     );
   }
-  const handleVoiceCall = () => navigate({ to: "/app/calls/$id", params: { id } });
   const handleBack = () => navigate({ to: "/app/conversations" });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full bg-background", "data-ocid": "chat.page", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -52355,7 +51377,6 @@ function ChatPage() {
         conv,
         myPrincipal,
         onBack: handleBack,
-        onVoiceCall: handleVoiceCall,
         onSearchOpen: () => setSearchOpen((p2) => !p2),
         isSearchOpen: searchOpen,
         isCreator,
@@ -52602,9 +51623,9 @@ function getInitialDark() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return stored === "dark";
-    return true;
+    return false;
   } catch {
-    return true;
+    return false;
   }
 }
 function ThemeToggle({ size: size2 = "md", className = "" }) {
@@ -52663,7 +51684,7 @@ function SidebarContent({ onNavigate }) {
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3 px-5 py-4 border-b border-sidebar-border", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "img",
       {
-        src: "/assets/logo.png",
+        src: "/assets/newshieldlogo.png",
         alt: "CharlieSierra",
         className: "h-14 w-auto object-contain flex-shrink-0"
       }
@@ -52746,7 +51767,7 @@ function Layout({
   const [mobileOpen, setMobileOpen] = reactExports.useState(false);
   reactExports.useEffect(() => {
     const stored = localStorage.getItem("cs_theme");
-    const isDark = stored ? stored === "dark" : true;
+    const isDark = stored ? stored === "dark" : false;
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-screen overflow-hidden bg-background", children: [
@@ -52774,7 +51795,7 @@ function Layout({
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "img",
           {
-            src: "/assets/logo.png",
+            src: "/assets/newshieldlogo.png",
             alt: "CharlieSierra",
             className: "md:hidden h-10 w-auto object-contain"
           }
@@ -54075,7 +53096,7 @@ const FEATURES = [
   {
     icon: Zap,
     title: "Real-Time Messaging",
-    desc: "Encrypted group & 1:1 chats, voice notes, file sharing, and WebRTC calls."
+    desc: "Encrypted group & 1:1 chats, voice notes, and file sharing."
   }
 ];
 function LoginPage() {
@@ -54086,23 +53107,16 @@ function LoginPage() {
       navigate({ to: "/app/conversations" });
     }
   }, [isAuthenticated, navigate]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "dark min-h-screen bg-background flex flex-col", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("header", { className: "flex items-center gap-3 px-6 h-14 border-b border-border bg-card flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "img",
-      {
-        src: "/assets/logo.png",
-        alt: "CharlieSierra",
-        className: "h-24 w-auto object-contain"
-      }
-    ) }),
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background flex flex-col", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("header", { className: "flex items-center gap-3 px-6 h-14 border-b border-border bg-card flex-shrink-0" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-center px-4 py-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-md space-y-10", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col items-center gap-2 mb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           "img",
           {
-            src: "/assets/logo.png",
+            src: "/assets/newlogo.png",
             alt: "CharlieSierra",
-            className: "h-[28rem] w-auto object-contain"
+            className: "h-[22.4rem] w-auto object-contain"
           }
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl font-display font-bold text-foreground tracking-tight", children: "Secure by Default" }),
@@ -55640,7 +54654,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DQ5uFrQy.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-WTw8W9gs.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });
@@ -55655,10 +54669,7 @@ const loginRoute = createRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(LoginPage, {})
 });
 function ProtectedLayout() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(OnboardingGate, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(IncomingCallBanner, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
-  ] });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(OnboardingGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) });
 }
 const appRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -55691,11 +54702,6 @@ const conversationDetailRoute = createRoute({
   path: "/conversations/$id",
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(ChatPage, {})
 });
-const callsDetailRoute = createRoute({
-  getParentRoute: () => appRoute,
-  path: "/calls/$id",
-  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(CallPage, {})
-});
 const settingsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/settings",
@@ -55724,7 +54730,6 @@ const routeTree = rootRoute.addChildren([
     appIndexRoute,
     conversationsRoute,
     conversationDetailRoute,
-    callsDetailRoute,
     settingsRoute,
     discoverRoute
   ]),

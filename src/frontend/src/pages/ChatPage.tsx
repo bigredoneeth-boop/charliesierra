@@ -53,7 +53,6 @@ import {
   ChevronDown,
   ChevronUp,
   Database,
-  Phone,
   Search,
   Settings,
   Timer,
@@ -346,7 +345,6 @@ interface HeaderProps {
   conv: ConversationPublic;
   myPrincipal: string;
   onBack: () => void;
-  onVoiceCall: () => void;
   onSearchOpen: () => void;
   isSearchOpen: boolean;
   isCreator: boolean;
@@ -358,7 +356,6 @@ function ChatHeader({
   conv,
   myPrincipal,
   onBack,
-  onVoiceCall,
   onSearchOpen,
   isSearchOpen,
   isCreator,
@@ -425,15 +422,6 @@ function ChatHeader({
 
       {/* Actions */}
       <div className="flex items-center gap-1 flex-shrink-0">
-        <button
-          type="button"
-          onClick={onVoiceCall}
-          className="p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-smooth"
-          aria-label="Start voice call"
-          data-ocid="chat.voice_call_button"
-        >
-          <Phone size={18} />
-        </button>
         <button
           type="button"
           onClick={onSearchOpen}
@@ -789,8 +777,6 @@ export default function ChatPage() {
     );
   }
 
-  const handleVoiceCall = () =>
-    navigate({ to: "/app/calls/$id", params: { id } });
   const handleBack = () => navigate({ to: "/app/conversations" });
 
   return (
@@ -799,7 +785,6 @@ export default function ChatPage() {
         conv={conv}
         myPrincipal={myPrincipal}
         onBack={handleBack}
-        onVoiceCall={handleVoiceCall}
         onSearchOpen={() => setSearchOpen((p) => !p)}
         isSearchOpen={searchOpen}
         isCreator={isCreator}

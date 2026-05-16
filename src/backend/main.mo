@@ -6,7 +6,6 @@ import UsersLib "lib/users";
 import ConvsLib "lib/conversations";
 import MsgsLib "lib/messages";
 import AttLib "lib/attachments";
-import CallsLib "lib/calls";
 import AdminLib "lib/admin";
 import EnterpriseLib "lib/enterprise";
 import DevicesLib "lib/devices";
@@ -15,7 +14,6 @@ import UsersMixin "mixins/users-api";
 import ConvsMixin "mixins/conversations-api";
 import MsgsMixin "mixins/messages-api";
 import AttMixin "mixins/attachments-api";
-import CallsMixin "mixins/calls-api";
 import AdminMixin "mixins/admin-api";
 import EnterpriseMixin "mixins/enterprise-api";
 import DevicesMixin "mixins/devices-api";
@@ -23,6 +21,8 @@ import DiscoveryMixin "mixins/discovery-api";
 
 import SovereignLib "lib/sovereign";
 import SovereignMixin "mixins/sovereign-api";
+
+
 
 
 actor self {
@@ -54,13 +54,6 @@ actor self {
   let attState : AttLib.State = {
     attachments = Map.empty();
     messageAttachments = Map.empty();
-    state = { var nextId = 0 };
-  };
-
-  // Calls
-  let callsState : CallsLib.State = {
-    calls = Map.empty();
-    userActiveCalls = Map.empty();
     state = { var nextId = 0 };
   };
 
@@ -120,7 +113,6 @@ actor self {
   include ConvsMixin(convsState, msgsState);
   include MsgsMixin(msgsState, convsState, enterpriseState);
   include AttMixin(attState);
-  include CallsMixin(callsState);
   include AdminMixin(adminState);
   include EnterpriseMixin(adminState, enterpriseState, convsState);
   include SovereignMixin(adminState, enterpriseState, sovereignState);

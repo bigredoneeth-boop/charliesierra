@@ -39,23 +39,6 @@ type AuditEvent__699314008 =
     targetPrincipal : ?UserId__158757552;
     timestamp : Timestamp__301639476
   };
-type CallId__642369320 = Nat;
-type CallRecord__52248411 =
-  {
-    callType : CallType__447539110;
-    callees : [UserId__158757552];
-    caller : UserId__158757552;
-    conversationId : ?ConversationId__966455625;
-    var encryptedSdpAnswer : ?Blob;
-    encryptedSdpOffer : ?Blob;
-    var iceCandiates : [Blob];
-    id : CallId__642369320;
-    initiatedAt : Timestamp__301639476;
-    var status : CallStatus__25797007;
-    var updatedAt : Timestamp__301639476
-  };
-type CallStatus__25797007 = {#active; #declined; #ended; #missed; #ringing};
-type CallType__447539110 = {#audio; #video};
 type CompartmentLabel__761974401 = {#classified; #unclassified};
 type ConversationId__966455625 = Nat;
 type ConversationKind__373380977 = {#direct; #group};
@@ -226,13 +209,6 @@ actor {
       messageAttachments :
         Map__605269027<MessageId__291319400, [AttachmentId__640090544]>;
       state : {var nextId : AttachmentId__640090544}
-    };
-  stable callsState :
-    {
-      calls : Map__605269027<CallId__642369320, CallRecord__52248411>;
-      state : {var nextId : CallId__642369320};
-      userActiveCalls :
-        Map__605269027<UserId__158757552, [CallId__642369320]>
     };
   stable convsState :
     {

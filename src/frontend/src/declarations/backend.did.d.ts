@@ -15,17 +15,9 @@ export interface AddDeviceRequest {
   'deviceLabel' : string,
   'deviceId' : string,
 }
-export interface AddIceCandidateRequest {
-  'encryptedIceCandidate' : Uint8Array,
-  'callId' : CallId,
-}
 export interface AddMemberRequest {
   'member' : UserId,
   'conversationId' : ConversationId,
-}
-export interface AnswerCallRequest {
-  'callId' : CallId,
-  'encryptedSdpAnswer' : Uint8Array,
 }
 export interface Attachment {
   'id' : AttachmentId,
@@ -84,27 +76,6 @@ export interface AuditExportRequest {
   'startDate' : [] | [Timestamp],
   'format' : AuditExportFormat,
 }
-export type CallId = bigint;
-export interface CallRecordPublic {
-  'id' : CallId,
-  'status' : CallStatus,
-  'encryptedSdpOffer' : [] | [Uint8Array],
-  'callees' : Array<UserId>,
-  'callType' : CallType,
-  'updatedAt' : Timestamp,
-  'conversationId' : [] | [ConversationId],
-  'caller' : UserId,
-  'encryptedSdpAnswer' : [] | [Uint8Array],
-  'iceCandidates' : Array<Uint8Array>,
-  'initiatedAt' : Timestamp,
-}
-export type CallStatus = { 'active' : null } |
-  { 'ringing' : null } |
-  { 'missed' : null } |
-  { 'ended' : null } |
-  { 'declined' : null };
-export type CallType = { 'audio' : null } |
-  { 'video' : null };
 export type CompartmentLabel = { 'classified' : null } |
   { 'unclassified' : null };
 export interface ConfigExportBundle {
@@ -203,12 +174,6 @@ export interface GroupRetentionPolicy {
   'enabledBy' : [] | [UserId],
   'convId' : ConversationId,
 }
-export interface InitiateCallRequest {
-  'encryptedSdpOffer' : Uint8Array,
-  'callees' : Array<UserId>,
-  'callType' : CallType,
-  'conversationId' : [] | [ConversationId],
-}
 export interface JoinRequest {
   'status' : JoinRequestStatus,
   'requestId' : string,
@@ -277,23 +242,21 @@ export type Result = { 'ok' : UserProfilePublic } |
   { 'err' : Error };
 export type Result_1 = { 'ok' : JoinRequest } |
   { 'err' : Error };
-export type Result_10 = { 'ok' : Array<MessagePublic> } |
+export type Result_10 = { 'ok' : GroupRetentionPolicy } |
   { 'err' : Error };
-export type Result_11 = { 'ok' : GroupRetentionPolicy } |
+export type Result_11 = { 'ok' : Array<JoinRequest> } |
   { 'err' : Error };
-export type Result_12 = { 'ok' : Array<JoinRequest> } |
+export type Result_12 = { 'ok' : Array<AuditEvent> } |
   { 'err' : Error };
-export type Result_13 = { 'ok' : Array<AuditEvent> } |
+export type Result_13 = { 'ok' : string } |
   { 'err' : Error };
-export type Result_14 = { 'ok' : string } |
+export type Result_14 = { 'ok' : ConfigExportBundle } |
   { 'err' : Error };
-export type Result_15 = { 'ok' : ConfigExportBundle } |
+export type Result_15 = { 'ok' : ConversationPublic } |
   { 'err' : Error };
-export type Result_16 = { 'ok' : ConversationPublic } |
+export type Result_16 = { 'ok' : EscrowAccessGrant } |
   { 'err' : Error };
-export type Result_17 = { 'ok' : EscrowAccessGrant } |
-  { 'err' : Error };
-export type Result_18 = { 'ok' : Array<EscrowAccessGrant> } |
+export type Result_17 = { 'ok' : Array<EscrowAccessGrant> } |
   { 'err' : Error };
 export type Result_2 = { 'ok' : SovereignConfig } |
   { 'err' : Error };
@@ -307,9 +270,9 @@ export type Result_6 = { 'ok' : DeviceRecordPublic } |
   { 'err' : Error };
 export type Result_7 = { 'ok' : Array<UserId> } |
   { 'err' : Error };
-export type Result_8 = { 'ok' : CallRecordPublic } |
+export type Result_8 = { 'ok' : Array<RetentionMetadataRecord> } |
   { 'err' : Error };
-export type Result_9 = { 'ok' : Array<RetentionMetadataRecord> } |
+export type Result_9 = { 'ok' : Array<MessagePublic> } |
   { 'err' : Error };
 export interface RetentionMetadataRecord {
   'messageId' : MessageId,
@@ -361,55 +324,48 @@ export interface _SERVICE {
   'addAdmin' : ActorMethod<[UserId], Result_3>,
   'addConversationMember' : ActorMethod<[AddMemberRequest], Result_3>,
   'addDevice' : ActorMethod<[AddDeviceRequest], Result_6>,
-  'addIceCandidate' : ActorMethod<[AddIceCandidateRequest], Result_3>,
   'adminGetEscrowGrants' : ActorMethod<
     [[] | [UserId], bigint, [] | [bigint]],
-    Result_18
+    Result_17
   >,
-  'adminGrantEscrowAccess' : ActorMethod<[UserId, string, string], Result_17>,
-  'answerCall' : ActorMethod<[AnswerCallRequest], Result_8>,
+  'adminGrantEscrowAccess' : ActorMethod<[UserId, string, string], Result_16>,
   'approveJoinRequest' : ActorMethod<[JoinRequestActionRequest], Result_3>,
   'clearTypingIndicator' : ActorMethod<[ConversationId], undefined>,
-  'createDirectConversation' : ActorMethod<[CreateDirectRequest], Result_16>,
-  'createGroupConversation' : ActorMethod<[CreateGroupRequest], Result_16>,
-  'declineCall' : ActorMethod<[CallId], Result_3>,
+  'createDirectConversation' : ActorMethod<[CreateDirectRequest], Result_15>,
+  'createGroupConversation' : ActorMethod<[CreateGroupRequest], Result_15>,
   'deleteAttachment' : ActorMethod<[AttachmentId], Result_3>,
   'deleteConversation' : ActorMethod<[ConversationId], Result_3>,
   'deleteGroupConversation' : ActorMethod<[ConversationId], Result_3>,
   'denyJoinRequest' : ActorMethod<[JoinRequestActionRequest], Result_3>,
   'disableGroupRetention' : ActorMethod<[ConversationId], Result_3>,
   'enableGroupRetention' : ActorMethod<[ConversationId], Result_3>,
-  'endCall' : ActorMethod<[CallId, CallStatus], Result_3>,
   'enrollKeyEscrow' : ActorMethod<
     [string, string, string, Uint8Array, string],
     Result_3
   >,
-  'exportAuditLog' : ActorMethod<[AuditExportRequest], Result_14>,
-  'exportConfigBundle' : ActorMethod<[], Result_15>,
-  'generateDeviceSyncToken' : ActorMethod<[Uint8Array], Result_14>,
-  'getAuditLog' : ActorMethod<[GetAuditLogRequest], Result_13>,
-  'getCall' : ActorMethod<[CallId], [] | [CallRecordPublic]>,
+  'exportAuditLog' : ActorMethod<[AuditExportRequest], Result_13>,
+  'exportConfigBundle' : ActorMethod<[], Result_14>,
+  'generateDeviceSyncToken' : ActorMethod<[Uint8Array], Result_13>,
+  'getAuditLog' : ActorMethod<[GetAuditLogRequest], Result_12>,
   'getConversation' : ActorMethod<[ConversationId], [] | [ConversationPublic]>,
   'getDeploymentInfo' : ActorMethod<[], SovereignConfig>,
   'getGroupCompartment' : ActorMethod<
     [ConversationId],
     [] | [CompartmentLabel]
   >,
-  'getGroupJoinRequests' : ActorMethod<[ConversationId], Result_12>,
-  'getGroupRetentionPolicy' : ActorMethod<[ConversationId], Result_11>,
+  'getGroupJoinRequests' : ActorMethod<[ConversationId], Result_11>,
+  'getGroupRetentionPolicy' : ActorMethod<[ConversationId], Result_10>,
   'getMessageAttachments' : ActorMethod<[MessageId], Array<Attachment>>,
-  'getMessages' : ActorMethod<[GetMessagesRequest], Result_10>,
+  'getMessages' : ActorMethod<[GetMessagesRequest], Result_9>,
   'getMyEscrowStatus' : ActorMethod<[], Array<EscrowRecord>>,
-  'getRetentionMetadata' : ActorMethod<[GetRetentionMetadataRequest], Result_9>,
+  'getRetentionMetadata' : ActorMethod<[GetRetentionMetadataRequest], Result_8>,
   'getTypingIndicators' : ActorMethod<
     [ConversationId],
     Array<TypingIndicatorPublic>
   >,
   'getUserProfile' : ActorMethod<[UserId], [] | [UserProfilePublic]>,
   'getUserProfiles' : ActorMethod<[Array<UserId>], Array<UserProfilePublic>>,
-  'initiateCall' : ActorMethod<[InitiateCallRequest], Result_8>,
   'isAdminCheck' : ActorMethod<[UserId], boolean>,
-  'listActiveCalls' : ActorMethod<[], Array<CallRecordPublic>>,
   'listAdmins' : ActorMethod<[], Result_7>,
   'listConversations' : ActorMethod<[], Array<ConversationPublic>>,
   'listMyDevices' : ActorMethod<[], Array<DeviceRecordPublic>>,

@@ -1,17 +1,5 @@
-import Common "../types/common";
-import T "../types/calls";
-import Map "mo:core/Map";
-import Time "mo:core/Time";
-import Array "mo:core/Array";
-import Principal "mo:core/Principal";
-
 module {
-  public type State = {
-    calls : Map.Map<Common.CallId, T.CallRecord>;
-    // index: userId → active call ids
-    userActiveCalls : Map.Map<Common.UserId, [Common.CallId]>;
-    state : { var nextId : Common.CallId };
-  };
+
 
   /// Initiate a new call (stores encrypted SDP offer).
   public func initiateCall(
@@ -35,7 +23,7 @@ module {
       var status = #ringing;
       encryptedSdpOffer = ?req.encryptedSdpOffer;
       var encryptedSdpAnswer = null;
-      var iceCandiates = [];
+      var iceCandidates = [];
       initiatedAt = now;
       var updatedAt = now;
     };
@@ -92,7 +80,7 @@ module {
         if (record.status != #ringing and record.status != #active) {
           return #err(#forbidden);
         };
-        record.iceCandiates := record.iceCandiates.concat([req.encryptedIceCandidate]);
+        record.iceCandidates := record.iceCandidates.concat([req.encryptedIceCandidate]);
         record.updatedAt := Time.now();
         #ok(())
       };
@@ -178,7 +166,7 @@ module {
       status = c.status;
       encryptedSdpOffer = c.encryptedSdpOffer;
       encryptedSdpAnswer = c.encryptedSdpAnswer;
-      iceCandidates = c.iceCandiates;  // typo is in the mutable record field name
+      iceCandidates = c.iceCandidates;
       initiatedAt = c.initiatedAt;
       updatedAt = c.updatedAt;
     }

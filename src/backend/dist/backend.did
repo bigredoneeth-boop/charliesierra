@@ -54,12 +54,12 @@ type RetentionMetadataRecord =
 type Result_9 = 
  variant {
    err: Error;
-   ok: vec RetentionMetadataRecord;
+   ok: vec MessagePublic;
  };
 type Result_8 = 
  variant {
    err: Error;
-   ok: CallRecordPublic;
+   ok: vec RetentionMetadataRecord;
  };
 type Result_7 = 
  variant {
@@ -91,50 +91,45 @@ type Result_2 =
    err: Error;
    ok: SovereignConfig;
  };
-type Result_18 = 
+type Result_17 = 
  variant {
    err: Error;
    ok: vec EscrowAccessGrant;
  };
-type Result_17 = 
+type Result_16 = 
  variant {
    err: Error;
    ok: EscrowAccessGrant;
  };
-type Result_16 = 
+type Result_15 = 
  variant {
    err: Error;
    ok: ConversationPublic;
  };
-type Result_15 = 
+type Result_14 = 
  variant {
    err: Error;
    ok: ConfigExportBundle;
  };
-type Result_14 = 
+type Result_13 = 
  variant {
    err: Error;
    ok: text;
  };
-type Result_13 = 
+type Result_12 = 
  variant {
    err: Error;
    ok: vec AuditEvent;
  };
-type Result_12 = 
+type Result_11 = 
  variant {
    err: Error;
    ok: vec JoinRequest;
  };
-type Result_11 = 
- variant {
-   err: Error;
-   ok: GroupRetentionPolicy;
- };
 type Result_10 = 
  variant {
    err: Error;
-   ok: vec MessagePublic;
+   ok: GroupRetentionPolicy;
  };
 type Result_1 = 
  variant {
@@ -230,13 +225,6 @@ type JoinRequest =
    requestId: text;
    requesterId: UserId;
    status: JoinRequestStatus;
- };
-type InitiateCallRequest = 
- record {
-   callType: CallType;
-   callees: vec UserId;
-   conversationId: opt ConversationId;
-   encryptedSdpOffer: blob;
  };
 type GroupRetentionPolicy = 
  record {
@@ -364,34 +352,6 @@ type CompartmentLabel =
    classified;
    unclassified;
  };
-type CallType = 
- variant {
-   audio;
-   video;
- };
-type CallStatus = 
- variant {
-   active;
-   declined;
-   ended;
-   missed;
-   ringing;
- };
-type CallRecordPublic = 
- record {
-   callType: CallType;
-   callees: vec UserId;
-   caller: UserId;
-   conversationId: opt ConversationId;
-   encryptedSdpAnswer: opt blob;
-   encryptedSdpOffer: opt blob;
-   iceCandidates: vec blob;
-   id: CallId;
-   initiatedAt: Timestamp;
-   status: CallStatus;
-   updatedAt: Timestamp;
- };
-type CallId = nat;
 type AuditExportRequest = 
  record {
    affectedUser: opt UserId;
@@ -461,20 +421,10 @@ type Attachment =
    uploadedAt: Timestamp;
    uploader: UserId;
  };
-type AnswerCallRequest = 
- record {
-   callId: CallId;
-   encryptedSdpAnswer: blob;
- };
 type AddMemberRequest = 
  record {
    conversationId: ConversationId;
    member: UserId;
- };
-type AddIceCandidateRequest = 
- record {
-   callId: CallId;
-   encryptedIceCandidate: blob;
  };
 type AddDeviceRequest = 
  record {
@@ -486,50 +436,43 @@ service : {
   addAdmin: (newAdmin: UserId) -> (Result_3);
   addConversationMember: (req: AddMemberRequest) -> (Result_3);
   addDevice: (req: AddDeviceRequest) -> (Result_6);
-  addIceCandidate: (req: AddIceCandidateRequest) -> (Result_3);
   adminGetEscrowGrants: (targetUserId: opt UserId, limit: nat, afterGrantId:
-   opt nat) -> (Result_18) query;
+   opt nat) -> (Result_17) query;
   adminGrantEscrowAccess: (targetUserId: UserId, targetDeviceId: text,
-   reason: text) -> (Result_17);
-  answerCall: (req: AnswerCallRequest) -> (Result_8);
+   reason: text) -> (Result_16);
   approveJoinRequest: (req: JoinRequestActionRequest) -> (Result_3);
   clearTypingIndicator: (conversationId: ConversationId) -> ();
-  createDirectConversation: (req: CreateDirectRequest) -> (Result_16);
-  createGroupConversation: (req: CreateGroupRequest) -> (Result_16);
-  declineCall: (callId: CallId) -> (Result_3);
+  createDirectConversation: (req: CreateDirectRequest) -> (Result_15);
+  createGroupConversation: (req: CreateGroupRequest) -> (Result_15);
   deleteAttachment: (attachmentId: AttachmentId) -> (Result_3);
   deleteConversation: (conversationId: ConversationId) -> (Result_3);
   deleteGroupConversation: (conversationId: ConversationId) -> (Result_3);
   denyJoinRequest: (req: JoinRequestActionRequest) -> (Result_3);
   disableGroupRetention: (convId: ConversationId) -> (Result_3);
   enableGroupRetention: (convId: ConversationId) -> (Result_3);
-  endCall: (callId: CallId, reason: CallStatus) -> (Result_3);
   enrollKeyEscrow: (deviceId: text, deviceLabel: text,
    devicePublicKeyFingerprint: text, wrappedKey: blob,
    consentLanguageVersion: text) -> (Result_3);
-  exportAuditLog: (req: AuditExportRequest) -> (Result_14);
-  exportConfigBundle: () -> (Result_15);
-  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_14);
-  getAuditLog: (req: GetAuditLogRequest) -> (Result_13) query;
-  getCall: (callId: CallId) -> (opt CallRecordPublic) query;
+  exportAuditLog: (req: AuditExportRequest) -> (Result_13);
+  exportConfigBundle: () -> (Result_14);
+  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_13);
+  getAuditLog: (req: GetAuditLogRequest) -> (Result_12) query;
   getConversation: (id: ConversationId) -> (opt ConversationPublic) query;
   getDeploymentInfo: () -> (SovereignConfig) query;
   getGroupCompartment: (convId: ConversationId) ->
    (opt CompartmentLabel) query;
-  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_12) query;
-  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_11) query;
+  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_11) query;
+  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_10) query;
   getMessageAttachments: (messageId: MessageId) -> (vec Attachment) query;
-  getMessages: (req: GetMessagesRequest) -> (Result_10) query;
+  getMessages: (req: GetMessagesRequest) -> (Result_9) query;
   getMyEscrowStatus: () -> (vec EscrowRecord) query;
   getRetentionMetadata: (req: GetRetentionMetadataRequest) ->
-   (Result_9) query;
+   (Result_8) query;
   getTypingIndicators: (conversationId: ConversationId) ->
    (vec TypingIndicatorPublic) query;
   getUserProfile: (userId: UserId) -> (opt UserProfilePublic) query;
   getUserProfiles: (userIds: vec UserId) -> (vec UserProfilePublic) query;
-  initiateCall: (req: InitiateCallRequest) -> (Result_8);
   isAdminCheck: ("principal": UserId) -> (bool) query;
-  listActiveCalls: () -> (vec CallRecordPublic) query;
   listAdmins: () -> (Result_7) query;
   listConversations: () -> (vec ConversationPublic) query;
   listMyDevices: () -> (vec DeviceRecordPublic) query;

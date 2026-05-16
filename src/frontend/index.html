@@ -9,14 +9,16 @@
     <meta property="og:description" content="Secure, encrypted messaging powered by the Internet Computer" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" href="/assets/newshieldlogo.png" type="image/png" />
     <script>
       (function () {
         var path = window.location.pathname;
         var isLoginRoute = path === '/' || path === '/login';
-        var stored = localStorage.getItem('cs_theme');
-        if (isLoginRoute || stored !== 'light') {
-          document.documentElement.classList.add('dark');
+        if (!isLoginRoute) {
+          var stored = localStorage.getItem('cs_theme');
+          if (stored !== 'light') {
+            document.documentElement.classList.add('dark');
+          }
         }
       })();
     </script>

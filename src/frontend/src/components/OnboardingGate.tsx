@@ -184,7 +184,7 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
         {/* Logo / brand mark */}
         <div className="flex flex-col items-center gap-3">
           <img
-            src="/assets/images/logo.png"
+            src="/assets/newshieldlogo.png"
             alt="CharlieSierra"
             className="h-16 w-auto object-contain"
             onError={(e) => {
