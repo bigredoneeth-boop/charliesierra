@@ -1,4 +1,4 @@
-import { ExternalBlob, MessageType } from "@/backend";
+import { MessageType } from "@/backend";
 import type { ConversationId } from "@/backend";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +9,11 @@ import {
 } from "@/components/ui/dialog";
 import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
+import {
+  processEncryptedBlobForUpload,
+  uploadBlobTreeDirect,
+} from "@/lib/encrypted-blob-upload";
+import { useInternetIdentity } from "@caffeineai/core-infrastructure";
 import { FileText, ImageIcon, Loader2, Upload, Video, X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
@@ -65,7 +70,8 @@ export function AttachmentUpload({
   onMessageSent,
 }: AttachmentUploadProps) {
   const { encryptForConv, getConversationKey } = useCrypto();
-  const { backend, uploadBlob } = useBackend();
+  const { backend } = useBackend();
+  const { identity } = useInternetIdentity();
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>(0);
@@ -90,7 +96,7 @@ export function AttachmentUpload({
   );
 
   const handleUpload = useCallback(async () => {
-    if (!selectedFile || !backend || !uploadBlob) return;
+    if (!selectedFile || !backend) return;
     const convKey = getConversationKey(conversationId.toString());
     if (!convKey) {
       setError("Encryption key not available. Cannot upload securely.");
@@ -131,41 +137,34 @@ export function AttachmentUpload({
         encryptedBlob.size,
       );
 
-      // Step 4: Create a Blob URL from the encrypted Blob and pass it via
-      //         ExternalBlob.fromURL() so the platform uploader fetches it
-      //         directly — guaranteeing num_blob_bytes and chunk hashes are
-      //         computed from the encrypted data, not the original file.
-      const encryptedBlobUrl = URL.createObjectURL(encryptedBlob);
+      // Step 4: Upload using direct blob_tree method with encrypted data
+      const { chunks, chunkHashes, blobHashTree } =
+        await processEncryptedBlobForUpload(encryptedBlob);
 
-      const originalSize = arrayBuf.byteLength;
-      const encryptedSize = encryptedBlob.size;
       console.log(
-        `[EncryptedFile] Original size: ${originalSize} | Encrypted size: ${encryptedSize} | Building blob_tree with encrypted data`,
+        "[EncryptedFile] Built blob_tree with num_blob_bytes =",
+        encryptedBlob.size,
+        "chunk count =",
+        chunks.length,
       );
 
-      const externalBlob = ExternalBlob.fromURL(
-        encryptedBlobUrl,
-      ).withUploadProgress(
-        (pct) => setProgress(25 + Math.round(pct * 0.4)), // 25–65%
+      const storageKeyBytes = await uploadBlobTreeDirect(
+        blobHashTree,
+        encryptedBlob,
+        chunks,
+        chunkHashes,
+        {
+          identity: identity ?? undefined,
+          onProgress: (pct) => setProgress(25 + Math.round(pct * 0.4)),
+        },
       );
 
-      // Step 5: We need to log what the platform will PUT — extract chunk info
-      //         for logging before the upload call triggers the blob_tree build.
-      //         The platform reads from encryptedBlobUrl, so num_blob_bytes = encryptedSize.
-      //         Compute chunk count for logging only (platform does actual hashing).
-      const CHUNK_SIZE = 1024 * 1024; // 1 MB (platform default)
-      const chunkCount = Math.ceil(encryptedSize / CHUNK_SIZE) || 1;
-      console.log(
-        "[EncryptedFile] Sending blob_tree with num_blob_bytes =",
-        encryptedSize,
-        ", chunk count =",
-        chunkCount,
-      );
-
-      const storageKeyBytes = await uploadBlob(externalBlob);
-      // Revoke the temporary Blob URL to free memory.
-      URL.revokeObjectURL(encryptedBlobUrl);
       const storageKey = keyToString(storageKeyBytes);
+
+      console.log(
+        "[EncryptedFile] Successfully uploaded encrypted file, storageKey =",
+        storageKey,
+      );
       setProgress(65);
 
       // Step 3: Encrypt file metadata as message content (used as fallback display)
@@ -196,7 +195,7 @@ export function AttachmentUpload({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(encryptedSize),
+        encryptedSizeBytes: BigInt(encryptedBlob.size),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
@@ -214,10 +213,10 @@ export function AttachmentUpload({
   }, [
     selectedFile,
     backend,
-    uploadBlob,
     conversationId,
     encryptForConv,
     getConversationKey,
+    identity,
     onClose,
     onMessageSent,
   ]);
