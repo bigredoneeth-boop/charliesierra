@@ -153,6 +153,7 @@ export const mockBackend: backendInterface = {
   sendMessage: async () => ({ __kind__: "ok", ok: sampleMessage }),
   setTypingIndicator: async () => undefined,
   touchPresence: async () => undefined,
+  uploadFile: async () => new TextEncoder().encode("!caf!mock-storage-hash"),
   updateUserProfile: async () => ({ __kind__: "ok", ok: aliceProfile }),
   adminGetEscrowGrants: async () => ({ __kind__: "ok", ok: [] }),
   adminGrantEscrowAccess: async () => ({

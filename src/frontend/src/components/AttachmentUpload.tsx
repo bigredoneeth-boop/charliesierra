@@ -1,4 +1,4 @@
-import { ExternalBlob, MessageType } from "@/backend";
+import { MessageType } from "@/backend";
 import type { ConversationId } from "@/backend";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,7 +65,7 @@ export function AttachmentUpload({
   onMessageSent,
 }: AttachmentUploadProps) {
   const { encryptForConv, getConversationKey } = useCrypto();
-  const { backend, uploadBlob } = useBackend();
+  const { backend } = useBackend();
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>(0);
@@ -90,7 +90,7 @@ export function AttachmentUpload({
   );
 
   const handleUpload = useCallback(async () => {
-    if (!selectedFile || !backend || !uploadBlob) return;
+    if (!selectedFile || !backend) return;
     const convKey = getConversationKey(conversationId.toString());
     if (!convKey) {
       setError("Encryption key not available. Cannot upload securely.");
@@ -101,17 +101,19 @@ export function AttachmentUpload({
     try {
       setProgress(10);
 
-      // === TEMPORARY Non-encrypted file upload (working version) ===
+      // === ULTRA-SIMPLE FILE UPLOAD (bypass all complex helpers) ===
       const fileBytes = new Uint8Array(await selectedFile.arrayBuffer());
 
-      const storageKeyBytes = await uploadBlob(
-        ExternalBlob.fromBytes(fileBytes),
+      // Use the lowest-level upload method
+      const storageKeyBytes = await backend.uploadFile(
+        fileBytes,
+        selectedFile.type,
       );
 
       const storageKey = keyToString(storageKeyBytes);
 
       console.log(
-        "[FileUpload] Uploaded non-encrypted file. StorageKey:",
+        "[FileUpload] Uploaded using backend.uploadFile. StorageKey:",
         storageKey,
         "| Size:",
         fileBytes.length,
@@ -167,7 +169,6 @@ export function AttachmentUpload({
   }, [
     selectedFile,
     backend,
-    uploadBlob,
     conversationId,
     encryptForConv,
     getConversationKey,

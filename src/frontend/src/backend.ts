@@ -571,6 +571,7 @@ export interface backendInterface {
     submitJoinRequest(req: SubmitJoinRequestRequest): Promise<Result_1>;
     touchPresence(): Promise<void>;
     updateUserProfile(req: UpdateProfileRequest): Promise<Result>;
+    uploadFile(fileBytes: Uint8Array, mimeType: string): Promise<Uint8Array>;
 }
 import type { Attachment as _Attachment, AuditEvent as _AuditEvent, AuditEventType as _AuditEventType, AuditExportEventType as _AuditExportEventType, AuditExportFormat as _AuditExportFormat, AuditExportRequest as _AuditExportRequest, CompartmentLabel as _CompartmentLabel, ConfigExportBundle as _ConfigExportBundle, ConversationId as _ConversationId, ConversationKind as _ConversationKind, ConversationPublic as _ConversationPublic, CreateGroupRequest as _CreateGroupRequest, DataResidency as _DataResidency, DenialReason as _DenialReason, DeviceRecordPublic as _DeviceRecordPublic, EcdhPublicKey as _EcdhPublicKey, Error as _Error, EscrowAccessGrant as _EscrowAccessGrant, EscrowRecord as _EscrowRecord, GetAuditLogRequest as _GetAuditLogRequest, GetMessagesRequest as _GetMessagesRequest, GetRetentionMetadataRequest as _GetRetentionMetadataRequest, GroupRetentionPolicy as _GroupRetentionPolicy, JoinRequest as _JoinRequest, JoinRequestActionRequest as _JoinRequestActionRequest, JoinRequestStatus as _JoinRequestStatus, ListPublicGroupsRequest as _ListPublicGroupsRequest, MessageId as _MessageId, MessagePriority as _MessagePriority, MessagePublic as _MessagePublic, MessageType as _MessageType, PublicGroupSummary as _PublicGroupSummary, ReadReceipt as _ReadReceipt, RegisterRequest as _RegisterRequest, Result as _Result, Result_1 as _Result_1, Result_10 as _Result_10, Result_11 as _Result_11, Result_12 as _Result_12, Result_13 as _Result_13, Result_14 as _Result_14, Result_15 as _Result_15, Result_16 as _Result_16, Result_17 as _Result_17, Result_2 as _Result_2, Result_3 as _Result_3, Result_4 as _Result_4, Result_5 as _Result_5, Result_6 as _Result_6, Result_7 as _Result_7, Result_8 as _Result_8, Result_9 as _Result_9, RetentionMetadataRecord as _RetentionMetadataRecord, SendMessageRequest as _SendMessageRequest, SovereignConfig as _SovereignConfig, SubmitJoinRequestRequest as _SubmitJoinRequestRequest, Timestamp as _Timestamp, UpdateProfileRequest as _UpdateProfileRequest, UserId as _UserId, UserProfilePublic as _UserProfilePublic } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
@@ -1287,6 +1288,18 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.touchPresence();
             return result;
+        }
+    }
+    async uploadFile(fileBytes: Uint8Array, mimeType: string): Promise<Uint8Array> {
+        const payload = new Uint8Array(fileBytes);
+        const file = new Blob([payload], {
+            type: mimeType || "application/octet-stream",
+        });
+        const url = URL.createObjectURL(file);
+        try {
+            return await this._uploadFile(ExternalBlob.fromURL(url));
+        } finally {
+            URL.revokeObjectURL(url);
         }
     }
     async updateUserProfile(arg0: UpdateProfileRequest): Promise<Result> {
