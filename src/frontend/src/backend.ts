@@ -72,6 +72,10 @@ export class ExternalBlob {
         }));
         return new ExternalBlob(url, blob);
     }
+    static fromFile(file: File): ExternalBlob {
+        const url = URL.createObjectURL(file);
+        return new ExternalBlob(url, null);
+    }
     public async getBytes(): Promise<Uint8Array<ArrayBuffer>> {
         if (this._blob) {
             return this._blob;

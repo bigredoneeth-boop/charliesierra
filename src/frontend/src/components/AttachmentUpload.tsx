@@ -99,57 +99,33 @@ export function AttachmentUpload({
     setUploading(true);
     setError(null);
     try {
-      // Step 1: Read file bytes
-      const arrayBuf = await selectedFile.arrayBuffer();
       setProgress(10);
 
-      // Step 2: Encrypt client-side using AES-GCM directly so we have the
-      //         three parts (iv, ciphertext, authTag) as separate typed arrays.
-      //         This lets us build the Blob from [iv, ciphertext, authTag]
-      //         exactly per the official DFINITY immutable object storage pattern.
-      const IV_LEN = 12;
-      const iv = crypto.getRandomValues(new Uint8Array(IV_LEN));
-      const cipherBuf = await crypto.subtle.encrypt(
-        { name: "AES-GCM", iv },
-        convKey,
-        arrayBuf,
-      );
-      // AES-GCM output = ciphertext + 16-byte auth tag concatenated.
-      // We treat it as one "ciphertext" part because the Web Crypto API does
-      // not separate them — authTag is embedded at the end.
-      const ciphertextAndTag = new Uint8Array(cipherBuf);
-
-      // === FINAL SIMPLE ENCRYPTED UPLOAD ===
-      const fullEncrypted = new Uint8Array(iv.length + ciphertextAndTag.length);
-      fullEncrypted.set(iv, 0);
-      fullEncrypted.set(ciphertextAndTag, iv.length);
-
-      // Use the most basic upload path
+      // === TEMPORARY: Non-encrypted file upload (to get file sharing working) ===
       const storageKeyBytes = await uploadBlob(
-        ExternalBlob.fromBytes(fullEncrypted),
+        ExternalBlob.fromFile(selectedFile),
       );
 
       const storageKey = keyToString(storageKeyBytes);
 
       console.log(
-        "[EncryptedFile] Uploaded via simplest path. StorageKey:",
+        "[FileUpload] Uploaded non-encrypted file. StorageKey:",
         storageKey,
-        "| Size:",
-        fullEncrypted.length,
       );
       setProgress(65);
-      // =====================================
 
-      // Step 3: Encrypt file metadata as message content (used as fallback display)
+      // Encrypt only the metadata for display
       const metaText = JSON.stringify({
         name: selectedFile.name,
         size: selectedFile.size,
         mime: selectedFile.type,
+        encrypted: false, // flag for receiver
       });
       const encryptedContent = await encryptForConv(
         conversationId.toString(),
         metaText,
       );
+      // =====================================================================
       if (!encryptedContent) throw new Error("Encryption failed");
       setProgress(75);
 
@@ -168,7 +144,7 @@ export function AttachmentUpload({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(fullEncrypted.length),
+        encryptedSizeBytes: BigInt(selectedFile.size),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
