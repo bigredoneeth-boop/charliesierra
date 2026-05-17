@@ -101,9 +101,11 @@ export function AttachmentUpload({
     try {
       setProgress(10);
 
-      // === TEMPORARY: Non-encrypted file upload (to get file sharing working) ===
+      // === TEMPORARY Non-encrypted file upload (working version) ===
+      const fileBytes = new Uint8Array(await selectedFile.arrayBuffer());
+
       const storageKeyBytes = await uploadBlob(
-        ExternalBlob.fromFile(selectedFile),
+        ExternalBlob.fromBytes(fileBytes),
       );
 
       const storageKey = keyToString(storageKeyBytes);
@@ -111,8 +113,11 @@ export function AttachmentUpload({
       console.log(
         "[FileUpload] Uploaded non-encrypted file. StorageKey:",
         storageKey,
+        "| Size:",
+        fileBytes.length,
       );
       setProgress(65);
+      // ========================================================
 
       // Encrypt only the metadata for display
       const metaText = JSON.stringify({
@@ -144,7 +149,7 @@ export function AttachmentUpload({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(selectedFile.size),
+        encryptedSizeBytes: BigInt(fileBytes.length),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
