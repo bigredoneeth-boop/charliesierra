@@ -6,6 +6,7 @@ import {
   decryptMessage,
   deriveDisplayNameKey,
   deriveSharedSecret,
+  deriveStorageWrapKey,
   encryptMessage,
   exportKey,
   exportPublicKey,
@@ -13,6 +14,8 @@ import {
   importAESKey,
   importPublicKey,
   loadOrCreateKeyPair,
+  unwrapKeyBytes,
+  wrapKeyBytes,
 } from "@/lib/crypto";
 import type React from "react";
 import {
@@ -73,7 +76,39 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   // Stores member fingerprints for group keys so stale-member detection survives page reloads.
   const groupKeyFingerprints = useRef<Map<string, string>>(new Map());
 
-  // Load ECDH keypair + restore any persisted conversation keys from IndexedDB
+  // ── helpers to persist / restore individual keys ─────────────────────────
+
+  const persistConvKey = useCallback(
+    async (
+      principalText: string,
+      convId: string,
+      key: CryptoKey,
+      fingerprint?: string,
+    ) => {
+      try {
+        const rawBytes = await exportKey(key);
+        const wrapKey = await deriveStorageWrapKey(principalText);
+        const wrapped = await wrapKeyBytes(wrapKey, rawBytes);
+        const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
+        if (fingerprint !== undefined) {
+          // Store group key with fingerprint: wrap the raw bytes, store as { wrapped, fingerprint }
+          await dbSet(dbKey, { wrapped: Array.from(wrapped), fingerprint });
+        } else {
+          // Store direct key: just the wrapped bytes array
+          await dbSet(dbKey, { wrapped: Array.from(wrapped) });
+        }
+        console.log(`[E2EE KEYSTORE] Persisted key for convId=${convId}`);
+      } catch (err) {
+        console.warn(
+          `[E2EE KEYSTORE] Failed to persist key for convId=${convId}:`,
+          err,
+        );
+      }
+    },
+    [],
+  );
+
+  // Load ECDH keypair + restore all persisted conversation keys from IndexedDB
   useEffect(() => {
     if (!principal) {
       setKeyPair(null);
@@ -89,8 +124,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         setKeyPair(kp);
         setIsNewKeyPair(isNew);
         if (isNew) {
-          // A brand-new key pair was generated. Log a fingerprint so we can
-          // verify the profile update went through with the matching public key.
           exportPublicKey(kp.publicKey).then((pubBytes) => {
             const fp = Array.from(pubBytes.slice(0, 8))
               .map((b) => b.toString(16).padStart(2, "0"))
@@ -100,48 +133,95 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
             );
           });
         }
-        // Restore persisted group conversation keys from IndexedDB.
-        // NOTE: ECDH-derived direct-chat keys are non-extractable and cannot be
-        // persisted — they are always re-derived from the peer's profile on load.
-        // Only group keys (AES, extractable) are persisted here.
+
+        // ── Restore ALL persisted conversation keys from IndexedDB ──────────
+        let restoredCount = 0;
         try {
           const prefix = `${CONV_KEY_PREFIX}${principalText}:`;
-          const allKeys = await dbGetKeysWithPrefix(prefix);
+          const allDbKeys = await dbGetKeysWithPrefix(prefix);
+          const wrapKey =
+            allDbKeys.length > 0
+              ? await deriveStorageWrapKey(principalText)
+              : null;
+
           await Promise.all(
-            allKeys.map(async (dbKey) => {
+            allDbKeys.map(async (dbKey) => {
               const convId = dbKey.slice(prefix.length);
-              const stored = await dbGet<
-                Uint8Array | { raw: Uint8Array; fingerprint: string } | null
-              >(dbKey);
-              if (!stored) return;
-              const rawBytes =
-                stored instanceof Uint8Array
-                  ? stored
-                  : (stored as { raw: Uint8Array }).raw;
-              if (!rawBytes) return;
-              const cryptoKey = await importAESKey(rawBytes);
-              convKeys.current.set(convId, cryptoKey);
-              // Restore group key fingerprint if present
-              if (
-                !(stored instanceof Uint8Array) &&
-                (stored as { fingerprint?: string }).fingerprint
-              ) {
-                groupKeyFingerprints.current.set(
-                  convId,
-                  (stored as { raw: Uint8Array; fingerprint: string })
-                    .fingerprint,
+              try {
+                const stored = await dbGet<
+                  | { wrapped: number[]; fingerprint?: string }
+                  | Uint8Array
+                  | { raw: Uint8Array; fingerprint?: string }
+                  | null
+                >(dbKey);
+                if (!stored) return;
+
+                let rawBytes: Uint8Array | null = null;
+                let fingerprint: string | undefined;
+
+                if (stored instanceof Uint8Array) {
+                  // Legacy format: unencrypted raw bytes
+                  rawBytes = stored.slice(0);
+                } else if (
+                  Array.isArray((stored as { wrapped?: number[] }).wrapped)
+                ) {
+                  // New format: wrapped bytes stored as number array
+                  const wrappedArr = new Uint8Array(
+                    (stored as { wrapped: number[]; fingerprint?: string })
+                      .wrapped,
+                  );
+                  if (wrapKey) {
+                    rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+                  }
+                  fingerprint = (
+                    stored as { wrapped: number[]; fingerprint?: string }
+                  ).fingerprint;
+                } else if ((stored as { raw?: Uint8Array }).raw) {
+                  // Legacy format: { raw: Uint8Array, fingerprint? }
+                  const legacy = stored as {
+                    raw: Uint8Array;
+                    fingerprint?: string;
+                  };
+                  rawBytes =
+                    legacy.raw instanceof Uint8Array
+                      ? legacy.raw.slice(0)
+                      : new Uint8Array(
+                          Object.values(
+                            legacy.raw as unknown as Record<string, number>,
+                          ),
+                        );
+                  fingerprint = legacy.fingerprint;
+                }
+
+                if (!rawBytes || rawBytes.length === 0) return;
+
+                const cryptoKey = await importAESKey(rawBytes);
+                convKeys.current.set(convId, cryptoKey);
+                if (fingerprint) {
+                  groupKeyFingerprints.current.set(convId, fingerprint);
+                }
+                restoredCount++;
+                console.log(
+                  `[E2EE KEYSTORE] Restored key for convId=${convId}`,
+                );
+              } catch (err) {
+                console.warn(
+                  `[E2EE KEYSTORE] Failed to restore key for convId=${convId}:`,
+                  err,
                 );
               }
             }),
           );
-        } catch {
-          // Best-effort — missing persisted keys will be re-derived when chat is opened
+          console.log(
+            `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from storage`,
+          );
+        } catch (err) {
+          console.warn("[E2EE KEYSTORE] Error during key restore:", err);
         }
+
         setIsReady(true);
       })
       .catch(() => {
-        // Key load failed — still mark ready so the app isn't stuck forever.
-        // The keypair will be null, which crypto operations gracefully handle.
         setIsReady(true);
       });
   }, [principal]);
@@ -154,17 +234,13 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   const setConversationKey = useCallback(
     (convId: string, key: CryptoKey) => {
       convKeys.current.set(convId, key);
-      // Persist the key to IndexedDB so it survives page reloads
       if (principal) {
-        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-        exportKey(key)
-          .then((raw) => dbSet(dbKey, raw))
-          .catch(() => {
-            /* best effort */
-          });
+        persistConvKey(principal.toText(), convId, key).catch(() => {
+          /* best effort */
+        });
       }
     },
-    [principal],
+    [principal, persistConvKey],
   );
 
   const setGroupConversationKey = useCallback(
@@ -172,15 +248,17 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       convKeys.current.set(convId, key);
       groupKeyFingerprints.current.set(convId, memberFingerprint);
       if (principal) {
-        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-        exportKey(key)
-          .then((raw) => dbSet(dbKey, { raw, fingerprint: memberFingerprint }))
-          .catch(() => {
-            /* best effort */
-          });
+        persistConvKey(
+          principal.toText(),
+          convId,
+          key,
+          memberFingerprint,
+        ).catch(() => {
+          /* best effort */
+        });
       }
     },
-    [principal],
+    [principal, persistConvKey],
   );
 
   const getGroupKeyFingerprint = useCallback(
@@ -192,7 +270,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
     (convId: string) => {
       convKeys.current.delete(convId);
       groupKeyFingerprints.current.delete(convId);
-      // Also evict from IndexedDB so a page reload doesn't restore the stale key
       if (principal) {
         const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
         dbSet(dbKey, null).catch(() => {
@@ -215,12 +292,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
       try {
-        // CRITICAL FIX: element-by-element copy is the ONLY guaranteed way to
-        // produce a Uint8Array with byteOffset===0. ArrayBuffer.slice() (even when
-        // called with correct start/end offsets) can still return a view backed by
-        // the original Candid transport buffer in some V8 builds, causing WebCrypto
-        // to import bytes starting at the wrong position and derive a completely
-        // different ECDH shared secret on sender vs receiver.
         const freshKeyBytes = new Uint8Array(theirPublicKeyBytes.length);
         for (let i = 0; i < theirPublicKeyBytes.length; i++) {
           freshKeyBytes[i] = theirPublicKeyBytes[i];
@@ -232,7 +303,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           `[E2EE] deriveAndStoreKey: importing peer public key, byteLength=${freshKeyBytes.byteLength}, fingerprint(first8)=${peerPubFp}, convId=${convId}`,
         );
         const theirKey = await importPublicKey(freshKeyBytes);
-        // Validate the imported key is an ECDH P-256 public key before deriving.
         if (
           theirKey.type !== "public" ||
           (theirKey.algorithm as { name: string }).name !== "ECDH"
@@ -245,7 +315,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           );
           return null;
         }
-        // Log our own public key fingerprint so we can compare with what's in the profile
         const myPubBytes = await exportPublicKey(keyPair.publicKey);
         const myPubFp = Array.from(myPubBytes.slice(0, 8))
           .map((b) => b.toString(16).padStart(2, "0"))
@@ -253,8 +322,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         console.log(
           `[E2EE] deriveAndStoreKey: my public key fingerprint(first8)=${myPubFp}, peer fingerprint(first8)=${peerPubFp}, convId=${convId}`,
         );
-        // deriveSharedSecret now uses deriveBits(32 bytes) → importAESKey so
-        // both sides produce the same extractable AES-GCM key.
         const sharedKey = await deriveSharedSecret(
           keyPair.privateKey,
           theirKey,
@@ -264,16 +331,11 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           `[E2EE] deriveAndStoreKey: ECDH shared key derived, fingerprint=${sharedFp}, convId=${convId}`,
         );
         convKeys.current.set(convId, sharedKey);
-        // Persist the shared key to IndexedDB so it survives page reloads.
-        // The key is now extractable (importAESKey uses extractable:false by default
-        // but we need extractable:true for persistence — update importAESKey).
+        // Persist to IndexedDB immediately
         if (principal) {
-          const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-          exportKey(sharedKey)
-            .then((raw) => dbSet(dbKey, raw))
-            .catch(() => {
-              /* best effort */
-            });
+          persistConvKey(principal.toText(), convId, sharedKey).catch(() => {
+            /* best effort */
+          });
         }
         return sharedKey;
       } catch (err) {
@@ -286,7 +348,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
     },
-    [keyPair, principal],
+    [keyPair, principal, persistConvKey],
   );
 
   const encryptForConv = useCallback(
@@ -304,16 +366,65 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
 
   const decryptFromConv = useCallback(
     async (convId: string, blob: Uint8Array): Promise<string | null> => {
-      const key = convKeys.current.get(convId);
+      let key = convKeys.current.get(convId);
+
+      // If not in memory, try to load from IndexedDB before giving up
+      if (!key && principal) {
+        const principalText = principal.toText();
+        const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
+        try {
+          const stored = await dbGet<
+            | { wrapped: number[]; fingerprint?: string }
+            | Uint8Array
+            | { raw: Uint8Array; fingerprint?: string }
+            | null
+          >(dbKey);
+          if (stored) {
+            let rawBytes: Uint8Array | null = null;
+            if (stored instanceof Uint8Array) {
+              rawBytes = stored.slice(0);
+            } else if (
+              Array.isArray((stored as { wrapped?: number[] }).wrapped)
+            ) {
+              const wrapKey = await deriveStorageWrapKey(principalText);
+              const wrappedArr = new Uint8Array(
+                (stored as { wrapped: number[]; fingerprint?: string }).wrapped,
+              );
+              rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+            } else if ((stored as { raw?: Uint8Array }).raw) {
+              const legacy = stored as { raw: Uint8Array };
+              rawBytes =
+                legacy.raw instanceof Uint8Array
+                  ? legacy.raw.slice(0)
+                  : new Uint8Array(
+                      Object.values(
+                        legacy.raw as unknown as Record<string, number>,
+                      ),
+                    );
+            }
+            if (rawBytes && rawBytes.length > 0) {
+              key = await importAESKey(rawBytes);
+              convKeys.current.set(convId, key);
+              console.log(
+                `[E2EE KEYSTORE] Restored key for convId=${convId} (lazy load)`,
+              );
+            }
+          }
+        } catch (err) {
+          console.warn(
+            `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
+            err,
+          );
+        }
+      }
+
       if (!key) {
         console.error(
-          `[E2EE] decryptFromConv: no conversation key in cache for convId=${convId}`,
+          `[E2EE KEYSTORE] Key missing for convId=${convId}, falling back to key exchange`,
         );
         return null;
       }
-      // CRITICAL: copy ALL bytes element-by-element into a fully-owned fresh
-      // Uint8Array. This is the ONLY safe pattern — .buffer.slice() can still
-      // produce a view with a non-zero byteOffset in some JS engines.
+
       const fresh = new Uint8Array(blob.length);
       for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
       console.log(
@@ -330,7 +441,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
     },
-    [],
+    [principal],
   );
 
   const decryptOwnDisplayName = useCallback(

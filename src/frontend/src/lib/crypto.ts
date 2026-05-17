@@ -330,6 +330,68 @@ interface PersistedKeyPair {
   publicKey: CryptoKey;
 }
 
+// ── Conversation key persistence helpers ───────────────────────────────────
+
+/**
+ * Derive a wrapping key from the user's principal for encrypting stored
+ * conversation key bytes at rest. Uses SHA-256 of "keystore:" + principalText.
+ * This is the same derivation pattern used for display-name encryption.
+ */
+export async function deriveStorageWrapKey(
+  principalText: string,
+): Promise<CryptoKey> {
+  const seed = new TextEncoder().encode(`keystore:${principalText}`);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", seed);
+  return crypto.subtle.importKey(
+    "raw",
+    hashBuffer,
+    { name: "AES-GCM" },
+    false,
+    ["encrypt", "decrypt"],
+  );
+}
+
+/**
+ * Encrypt raw key bytes using the storage wrap key before writing to IndexedDB.
+ * Format: IV(12) + ciphertext+authTag.
+ */
+export async function wrapKeyBytes(
+  wrapKey: CryptoKey,
+  rawBytes: Uint8Array,
+): Promise<Uint8Array> {
+  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+  // Use a definite ArrayBuffer for the WebCrypto call to satisfy strict TypeScript
+  const inputBuf: ArrayBuffer = rawBytes.slice(0).buffer as ArrayBuffer;
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    wrapKey,
+    inputBuf,
+  );
+  const ct = new Uint8Array(ciphertext);
+  const result = new Uint8Array(IV_LENGTH + ct.length);
+  for (let i = 0; i < IV_LENGTH; i++) result[i] = iv[i];
+  for (let i = 0; i < ct.length; i++) result[IV_LENGTH + i] = ct[i];
+  return result;
+}
+
+/**
+ * Decrypt wrapped key bytes from IndexedDB.
+ */
+export async function unwrapKeyBytes(
+  wrapKey: CryptoKey,
+  wrapped: Uint8Array,
+): Promise<Uint8Array> {
+  if (wrapped.length < IV_LENGTH + 1) throw new Error("wrapped blob too small");
+  const iv = wrapped.slice(0, IV_LENGTH);
+  const ct = wrapped.slice(IV_LENGTH);
+  const plain = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv },
+    wrapKey,
+    ct,
+  );
+  return new Uint8Array(plain);
+}
+
 export async function loadOrCreateKeyPair(
   principal: string,
 ): Promise<{ keyPair: CryptoKeyPair; isNew: boolean }> {

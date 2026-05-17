@@ -36594,6 +36594,42 @@ async function deriveDisplayNameKey(principal) {
     ["encrypt", "decrypt"]
   );
 }
+async function deriveStorageWrapKey(principalText) {
+  const seed = new TextEncoder().encode(`keystore:${principalText}`);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", seed);
+  return crypto.subtle.importKey(
+    "raw",
+    hashBuffer,
+    { name: "AES-GCM" },
+    false,
+    ["encrypt", "decrypt"]
+  );
+}
+async function wrapKeyBytes(wrapKey, rawBytes) {
+  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+  const inputBuf = rawBytes.slice(0).buffer;
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    wrapKey,
+    inputBuf
+  );
+  const ct2 = new Uint8Array(ciphertext);
+  const result = new Uint8Array(IV_LENGTH + ct2.length);
+  for (let i = 0; i < IV_LENGTH; i++) result[i] = iv[i];
+  for (let i = 0; i < ct2.length; i++) result[IV_LENGTH + i] = ct2[i];
+  return result;
+}
+async function unwrapKeyBytes(wrapKey, wrapped) {
+  if (wrapped.length < IV_LENGTH + 1) throw new Error("wrapped blob too small");
+  const iv = wrapped.slice(0, IV_LENGTH);
+  const ct2 = wrapped.slice(IV_LENGTH);
+  const plain = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv },
+    wrapKey,
+    ct2
+  );
+  return new Uint8Array(plain);
+}
 async function loadOrCreateKeyPair(principal) {
   const stored = await dbGet(`ecdh:${principal}`);
   if ((stored == null ? void 0 : stored.privateKey) && (stored == null ? void 0 : stored.publicKey)) {
@@ -36624,6 +36660,7 @@ const crypto$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProp
   deriveDisplayNameKey,
   deriveGroupKey,
   deriveSharedSecret,
+  deriveStorageWrapKey,
   encryptBlob,
   encryptMessage,
   exportKey,
@@ -36633,7 +36670,9 @@ const crypto$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProp
   getKeyFingerprint,
   importAESKey,
   importPublicKey,
-  loadOrCreateKeyPair
+  loadOrCreateKeyPair,
+  unwrapKeyBytes,
+  wrapKeyBytes
 }, Symbol.toStringTag, { value: "Module" }));
 const CryptoContext = reactExports.createContext(null);
 function CryptoProvider({ children }) {
@@ -36643,6 +36682,28 @@ function CryptoProvider({ children }) {
   const [isNewKeyPair, setIsNewKeyPair] = reactExports.useState(false);
   const convKeys = reactExports.useRef(/* @__PURE__ */ new Map());
   const groupKeyFingerprints = reactExports.useRef(/* @__PURE__ */ new Map());
+  const persistConvKey = reactExports.useCallback(
+    async (principalText, convId, key, fingerprint) => {
+      try {
+        const rawBytes = await exportKey(key);
+        const wrapKey = await deriveStorageWrapKey(principalText);
+        const wrapped = await wrapKeyBytes(wrapKey, rawBytes);
+        const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
+        if (fingerprint !== void 0) {
+          await dbSet(dbKey, { wrapped: Array.from(wrapped), fingerprint });
+        } else {
+          await dbSet(dbKey, { wrapped: Array.from(wrapped) });
+        }
+        console.log(`[E2EE KEYSTORE] Persisted key for convId=${convId}`);
+      } catch (err) {
+        console.warn(
+          `[E2EE KEYSTORE] Failed to persist key for convId=${convId}:`,
+          err
+        );
+      }
+    },
+    []
+  );
   reactExports.useEffect(() => {
     if (!principal) {
       setKeyPair(null);
@@ -36664,27 +36725,61 @@ function CryptoProvider({ children }) {
           );
         });
       }
+      let restoredCount = 0;
       try {
         const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
-        const allKeys = await dbGetKeysWithPrefix(prefix2);
+        const allDbKeys = await dbGetKeysWithPrefix(prefix2);
+        const wrapKey = allDbKeys.length > 0 ? await deriveStorageWrapKey(principalText) : null;
         await Promise.all(
-          allKeys.map(async (dbKey) => {
+          allDbKeys.map(async (dbKey) => {
             const convId = dbKey.slice(prefix2.length);
-            const stored = await dbGet(dbKey);
-            if (!stored) return;
-            const rawBytes = stored instanceof Uint8Array ? stored : stored.raw;
-            if (!rawBytes) return;
-            const cryptoKey = await importAESKey(rawBytes);
-            convKeys.current.set(convId, cryptoKey);
-            if (!(stored instanceof Uint8Array) && stored.fingerprint) {
-              groupKeyFingerprints.current.set(
-                convId,
-                stored.fingerprint
+            try {
+              const stored = await dbGet(dbKey);
+              if (!stored) return;
+              let rawBytes = null;
+              let fingerprint;
+              if (stored instanceof Uint8Array) {
+                rawBytes = stored.slice(0);
+              } else if (Array.isArray(stored.wrapped)) {
+                const wrappedArr = new Uint8Array(
+                  stored.wrapped
+                );
+                if (wrapKey) {
+                  rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+                }
+                fingerprint = stored.fingerprint;
+              } else if (stored.raw) {
+                const legacy = stored;
+                rawBytes = legacy.raw instanceof Uint8Array ? legacy.raw.slice(0) : new Uint8Array(
+                  Object.values(
+                    legacy.raw
+                  )
+                );
+                fingerprint = legacy.fingerprint;
+              }
+              if (!rawBytes || rawBytes.length === 0) return;
+              const cryptoKey = await importAESKey(rawBytes);
+              convKeys.current.set(convId, cryptoKey);
+              if (fingerprint) {
+                groupKeyFingerprints.current.set(convId, fingerprint);
+              }
+              restoredCount++;
+              console.log(
+                `[E2EE KEYSTORE] Restored key for convId=${convId}`
+              );
+            } catch (err) {
+              console.warn(
+                `[E2EE KEYSTORE] Failed to restore key for convId=${convId}:`,
+                err
               );
             }
           })
         );
-      } catch {
+        console.log(
+          `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from storage`
+        );
+      } catch (err) {
+        console.warn("[E2EE KEYSTORE] Error during key restore:", err);
       }
       setIsReady(true);
     }).catch(() => {
@@ -36699,24 +36794,27 @@ function CryptoProvider({ children }) {
     (convId, key) => {
       convKeys.current.set(convId, key);
       if (principal) {
-        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-        exportKey(key).then((raw) => dbSet(dbKey, raw)).catch(() => {
+        persistConvKey(principal.toText(), convId, key).catch(() => {
         });
       }
     },
-    [principal]
+    [principal, persistConvKey]
   );
   const setGroupConversationKey = reactExports.useCallback(
     (convId, key, memberFingerprint) => {
       convKeys.current.set(convId, key);
       groupKeyFingerprints.current.set(convId, memberFingerprint);
       if (principal) {
-        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-        exportKey(key).then((raw) => dbSet(dbKey, { raw, fingerprint: memberFingerprint })).catch(() => {
+        persistConvKey(
+          principal.toText(),
+          convId,
+          key,
+          memberFingerprint
+        ).catch(() => {
         });
       }
     },
-    [principal]
+    [principal, persistConvKey]
   );
   const getGroupKeyFingerprint = reactExports.useCallback(
     (convId) => groupKeyFingerprints.current.get(convId),
@@ -36776,8 +36874,7 @@ function CryptoProvider({ children }) {
         );
         convKeys.current.set(convId, sharedKey);
         if (principal) {
-          const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-          exportKey(sharedKey).then((raw) => dbSet(dbKey, raw)).catch(() => {
+          persistConvKey(principal.toText(), convId, sharedKey).catch(() => {
           });
         }
         return sharedKey;
@@ -36791,7 +36888,7 @@ function CryptoProvider({ children }) {
         return null;
       }
     },
-    [keyPair, principal]
+    [keyPair, principal, persistConvKey]
   );
   const encryptForConv = reactExports.useCallback(
     async (convId, text) => {
@@ -36807,10 +36904,48 @@ function CryptoProvider({ children }) {
   );
   const decryptFromConv = reactExports.useCallback(
     async (convId, blob) => {
-      const key = convKeys.current.get(convId);
+      let key = convKeys.current.get(convId);
+      if (!key && principal) {
+        const principalText = principal.toText();
+        const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
+        try {
+          const stored = await dbGet(dbKey);
+          if (stored) {
+            let rawBytes = null;
+            if (stored instanceof Uint8Array) {
+              rawBytes = stored.slice(0);
+            } else if (Array.isArray(stored.wrapped)) {
+              const wrapKey = await deriveStorageWrapKey(principalText);
+              const wrappedArr = new Uint8Array(
+                stored.wrapped
+              );
+              rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+            } else if (stored.raw) {
+              const legacy = stored;
+              rawBytes = legacy.raw instanceof Uint8Array ? legacy.raw.slice(0) : new Uint8Array(
+                Object.values(
+                  legacy.raw
+                )
+              );
+            }
+            if (rawBytes && rawBytes.length > 0) {
+              key = await importAESKey(rawBytes);
+              convKeys.current.set(convId, key);
+              console.log(
+                `[E2EE KEYSTORE] Restored key for convId=${convId} (lazy load)`
+              );
+            }
+          }
+        } catch (err) {
+          console.warn(
+            `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
+            err
+          );
+        }
+      }
       if (!key) {
         console.error(
-          `[E2EE] decryptFromConv: no conversation key in cache for convId=${convId}`
+          `[E2EE KEYSTORE] Key missing for convId=${convId}, falling back to key exchange`
         );
         return null;
       }
@@ -36830,7 +36965,7 @@ function CryptoProvider({ children }) {
         return null;
       }
     },
-    []
+    [principal]
   );
   const decryptOwnDisplayName = reactExports.useCallback(
     async (encryptedBlob) => {
@@ -54697,7 +54832,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-By_D3dC6.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DrVmBQuf.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });
