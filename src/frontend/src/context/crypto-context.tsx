@@ -30,6 +30,8 @@ interface CryptoContextValue {
   isReady: boolean;
   /** True if the key pair was freshly generated this session (not loaded from IndexedDB). */
   isNewKeyPair: boolean;
+  /** Reset isNewKeyPair to false after the public key has been published to the backend. */
+  setIsNewKeyPair: (value: boolean) => void;
   getConversationKey: (convId: string) => CryptoKey | undefined;
   setConversationKey: (convId: string, key: CryptoKey) => void;
   /**
@@ -213,14 +215,16 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
       try {
-        // Copy peer key bytes into a fresh owned buffer — Candid-decoded arrays
-        // have non-zero byteOffset which corrupts WebCrypto key imports.
-        const freshKeyBytes = new Uint8Array(
-          theirPublicKeyBytes.buffer.slice(
-            theirPublicKeyBytes.byteOffset,
-            theirPublicKeyBytes.byteOffset + theirPublicKeyBytes.byteLength,
-          ),
-        );
+        // CRITICAL FIX: element-by-element copy is the ONLY guaranteed way to
+        // produce a Uint8Array with byteOffset===0. ArrayBuffer.slice() (even when
+        // called with correct start/end offsets) can still return a view backed by
+        // the original Candid transport buffer in some V8 builds, causing WebCrypto
+        // to import bytes starting at the wrong position and derive a completely
+        // different ECDH shared secret on sender vs receiver.
+        const freshKeyBytes = new Uint8Array(theirPublicKeyBytes.length);
+        for (let i = 0; i < theirPublicKeyBytes.length; i++) {
+          freshKeyBytes[i] = theirPublicKeyBytes[i];
+        }
         const peerPubFp = Array.from(freshKeyBytes.slice(0, 8))
           .map((b) => b.toString(16).padStart(2, "0"))
           .join("");
@@ -348,6 +352,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         keyPair,
         isReady,
         isNewKeyPair,
+        setIsNewKeyPair,
         getConversationKey,
         setConversationKey,
         setGroupConversationKey,

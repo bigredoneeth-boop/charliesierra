@@ -24,19 +24,36 @@ import {
 } from "@/lib/crypto";
 import { ShieldCheck } from "lucide-react";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 interface OnboardingGateProps {
   children: React.ReactNode;
 }
 
+// Module-level cooldown timestamp — persists across re-renders and prevents
+// publishing more than once every 5 seconds regardless of React re-render cycles.
+let lastPublishTime = 0;
+
 export function OnboardingGate({ children }: OnboardingGateProps) {
   const { principal } = useAuth();
-  const { keyPair, isReady, isNewKeyPair } = useCrypto();
+  const { keyPair, isReady, isNewKeyPair, setIsNewKeyPair } = useCrypto();
+  // Session-scoped guard: once we publish the key once, never publish again this session.
+  const hasPublishedRef = useRef(false);
   const hasDisplayName = useHasDisplayName();
   const updateProfile = useUpdateProfile();
   const { data: profile } = useUserProfile(principal ?? null);
+
+  // Stable refs holding the latest profile + mutateAsync so the key-sync effect
+  // can read them without listing them as reactive deps (which caused the loop).
+  const profileRef = useRef(profile);
+  const mutateAsyncRef = useRef(updateProfile.mutateAsync);
+  useEffect(() => {
+    profileRef.current = profile;
+  });
+  useEffect(() => {
+    mutateAsyncRef.current = updateProfile.mutateAsync;
+  });
 
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
@@ -58,44 +75,110 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
   // Auto-publish ECDH public key to backend profile whenever a brand-new key pair is generated.
   // This ensures the backend profile always has the current public key so peers can derive the shared secret.
   // IMPORTANT: preserve any existing encryptedDisplayName — only overwrite ecdhPublicKey.
+  //
+  // Loop-breaker guards (applied in order):
+  //   1. hasPublishedRef  — session-scoped ref; skips if we already published this session.
+  //   2. cooldown         — module-level timestamp; skips if < 5 s since last publish.
+  //   3. fingerprint      — byte-level comparison; skips if profile already has this public key.
+  // After a successful publish, setIsNewKeyPair(false) prevents this effect from re-running.
+  // `profile` and `updateProfile` are intentionally NOT in the dependency array — they change
+  // after every successful publish (query invalidation) which is exactly what caused the loop.
   useEffect(() => {
     if (!isNewKeyPair || !keyPair || !isReady || !principal) return;
+
+    // Guard 1: already published this session
+    if (hasPublishedRef.current) {
+      console.log(
+        "[E2EE KEYSYNC] Skipping publish - already published this session",
+      );
+      return;
+    }
+
+    // Guard 2: cooldown — don't publish more than once every 5 seconds
+    const now = Date.now();
+    if (now - lastPublishTime < 5_000) {
+      console.log("[E2EE KEYSYNC] Skipping publish - cooldown active");
+      return;
+    }
+
     console.log(
       "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile",
     );
+
     (async () => {
       try {
         const pubBytes = await exportPublicKey(keyPair.publicKey);
         const fp = Array.from(pubBytes.slice(0, 8))
           .map((b) => b.toString(16).padStart(2, "0"))
           .join("");
-        console.log(
-          `[E2EE KEYSYNC] Exporting public key fingerprint=${fp}, publishing to profile`,
-        );
+
+        // Guard 3: fingerprint comparison — skip if the profile already stores this exact key.
+        // Read from ref so this comparison uses the latest loaded profile without
+        // making profile a reactive dep (adding profile would re-trigger the effect
+        // every time the query re-fetches after the publish, causing the loop).
+        const latestProfile = profileRef.current;
+        const storedKey = latestProfile?.ecdhPublicKey;
+        if (storedKey && storedKey.length === pubBytes.length) {
+          const storedBytes = new Uint8Array(
+            storedKey instanceof Uint8Array
+              ? storedKey.buffer.slice(
+                  storedKey.byteOffset,
+                  storedKey.byteOffset + storedKey.byteLength,
+                )
+              : (storedKey as unknown as ArrayBuffer),
+          );
+          const identical = pubBytes.every((b, i) => b === storedBytes[i]);
+          if (identical) {
+            console.log(
+              "[E2EE KEYSYNC] Public key unchanged - skipping publish",
+            );
+            hasPublishedRef.current = true;
+            setIsNewKeyPair(false);
+            return;
+          }
+        }
+
+        // Mark as published BEFORE the async call so concurrent effect invocations
+        // (e.g. StrictMode double-invoke) don't slip through the guard.
+        hasPublishedRef.current = true;
+        lastPublishTime = Date.now();
+
         // Preserve existing encryptedDisplayName bytes — never replace them with an empty array.
-        // If the profile has not loaded yet, pass empty bytes as a safe default for a brand-new account.
+        // Read via ref — not a reactive dep to avoid re-triggering after publish.
         const existingDisplayName =
-          profile?.encryptedDisplayName &&
-          profile.encryptedDisplayName.length > 0
+          latestProfile?.encryptedDisplayName &&
+          latestProfile.encryptedDisplayName.length > 0
             ? new Uint8Array(
-                profile.encryptedDisplayName as unknown as ArrayBuffer,
+                latestProfile.encryptedDisplayName instanceof Uint8Array
+                  ? latestProfile.encryptedDisplayName.buffer.slice(
+                      latestProfile.encryptedDisplayName.byteOffset,
+                      latestProfile.encryptedDisplayName.byteOffset +
+                        latestProfile.encryptedDisplayName.byteLength,
+                    )
+                  : (latestProfile.encryptedDisplayName as unknown as ArrayBuffer),
               )
             : new Uint8Array(0);
-        await updateProfile.mutateAsync({
+
+        await mutateAsyncRef.current({
           encryptedDisplayName: existingDisplayName,
           ecdhPublicKey: pubBytes,
         });
+
+        // Reset the flag AFTER successful publish so this effect never re-triggers.
+        setIsNewKeyPair(false);
         console.log(
-          "[E2EE KEYSYNC] Public key published to backend profile successfully",
+          `[E2EE KEYSYNC] Published new public key (fingerprint=${fp})`,
         );
       } catch (err) {
+        // On failure, reset hasPublishedRef so a manual retry is possible on next login.
+        hasPublishedRef.current = false;
         console.warn(
           "[E2EE KEYSYNC] Failed to publish public key to profile:",
           err,
         );
       }
     })();
-  }, [isNewKeyPair, keyPair, isReady, principal, profile, updateProfile]);
+  }, [isNewKeyPair, keyPair, isReady, principal, setIsNewKeyPair]);
 
   // Decrypt and cache own display name once profile + keyPair are ready
   const { decryptOwnDisplayName } = useCrypto();

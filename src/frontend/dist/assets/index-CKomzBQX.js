@@ -36743,12 +36743,10 @@ function CryptoProvider({ children }) {
         return null;
       }
       try {
-        const freshKeyBytes = new Uint8Array(
-          theirPublicKeyBytes.buffer.slice(
-            theirPublicKeyBytes.byteOffset,
-            theirPublicKeyBytes.byteOffset + theirPublicKeyBytes.byteLength
-          )
-        );
+        const freshKeyBytes = new Uint8Array(theirPublicKeyBytes.length);
+        for (let i = 0; i < theirPublicKeyBytes.length; i++) {
+          freshKeyBytes[i] = theirPublicKeyBytes[i];
+        }
         const peerPubFp = Array.from(freshKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
         console.log(
           `[E2EE] deriveAndStoreKey: importing peer public key, byteLength=${freshKeyBytes.byteLength}, fingerprint(first8)=${peerPubFp}, convId=${convId}`
@@ -36853,6 +36851,7 @@ function CryptoProvider({ children }) {
         keyPair,
         isReady,
         isNewKeyPair,
+        setIsNewKeyPair,
         getConversationKey,
         setConversationKey,
         setGroupConversationKey,
@@ -38102,12 +38101,22 @@ const __iconNode = [
   ]
 ];
 const Zap = createLucideIcon("zap", __iconNode);
+let lastPublishTime = 0;
 function OnboardingGate({ children }) {
   const { principal } = useAuth();
-  const { keyPair, isReady, isNewKeyPair } = useCrypto();
+  const { keyPair, isReady, isNewKeyPair, setIsNewKeyPair } = useCrypto();
+  const hasPublishedRef = reactExports.useRef(false);
   const hasDisplayName = useHasDisplayName();
   const updateProfile = useUpdateProfile();
   const { data: profile } = useUserProfile(principal ?? null);
+  const profileRef = reactExports.useRef(profile);
+  const mutateAsyncRef = reactExports.useRef(updateProfile.mutateAsync);
+  reactExports.useEffect(() => {
+    profileRef.current = profile;
+  });
+  reactExports.useEffect(() => {
+    mutateAsyncRef.current = updateProfile.mutateAsync;
+  });
   const [name, setName] = reactExports.useState("");
   const [saving, setSaving] = reactExports.useState(false);
   const [localReady, setLocalReady] = reactExports.useState(false);
@@ -38124,6 +38133,17 @@ function OnboardingGate({ children }) {
   }, [hasDisplayName]);
   reactExports.useEffect(() => {
     if (!isNewKeyPair || !keyPair || !isReady || !principal) return;
+    if (hasPublishedRef.current) {
+      console.log(
+        "[E2EE KEYSYNC] Skipping publish - already published this session"
+      );
+      return;
+    }
+    const now2 = Date.now();
+    if (now2 - lastPublishTime < 5e3) {
+      console.log("[E2EE KEYSYNC] Skipping publish - cooldown active");
+      return;
+    }
     console.log(
       "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile"
     );
@@ -38131,27 +38151,50 @@ function OnboardingGate({ children }) {
       try {
         const pubBytes = await exportPublicKey(keyPair.publicKey);
         const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-        console.log(
-          `[E2EE KEYSYNC] Exporting public key fingerprint=${fp}, publishing to profile`
-        );
-        const existingDisplayName = (profile == null ? void 0 : profile.encryptedDisplayName) && profile.encryptedDisplayName.length > 0 ? new Uint8Array(
-          profile.encryptedDisplayName
+        const latestProfile = profileRef.current;
+        const storedKey = latestProfile == null ? void 0 : latestProfile.ecdhPublicKey;
+        if (storedKey && storedKey.length === pubBytes.length) {
+          const storedBytes = new Uint8Array(
+            storedKey instanceof Uint8Array ? storedKey.buffer.slice(
+              storedKey.byteOffset,
+              storedKey.byteOffset + storedKey.byteLength
+            ) : storedKey
+          );
+          const identical = pubBytes.every((b2, i) => b2 === storedBytes[i]);
+          if (identical) {
+            console.log(
+              "[E2EE KEYSYNC] Public key unchanged - skipping publish"
+            );
+            hasPublishedRef.current = true;
+            setIsNewKeyPair(false);
+            return;
+          }
+        }
+        hasPublishedRef.current = true;
+        lastPublishTime = Date.now();
+        const existingDisplayName = (latestProfile == null ? void 0 : latestProfile.encryptedDisplayName) && latestProfile.encryptedDisplayName.length > 0 ? new Uint8Array(
+          latestProfile.encryptedDisplayName instanceof Uint8Array ? latestProfile.encryptedDisplayName.buffer.slice(
+            latestProfile.encryptedDisplayName.byteOffset,
+            latestProfile.encryptedDisplayName.byteOffset + latestProfile.encryptedDisplayName.byteLength
+          ) : latestProfile.encryptedDisplayName
         ) : new Uint8Array(0);
-        await updateProfile.mutateAsync({
+        await mutateAsyncRef.current({
           encryptedDisplayName: existingDisplayName,
           ecdhPublicKey: pubBytes
         });
+        setIsNewKeyPair(false);
         console.log(
-          "[E2EE KEYSYNC] Public key published to backend profile successfully"
+          `[E2EE KEYSYNC] Published new public key (fingerprint=${fp})`
         );
       } catch (err) {
+        hasPublishedRef.current = false;
         console.warn(
           "[E2EE KEYSYNC] Failed to publish public key to profile:",
           err
         );
       }
     })();
-  }, [isNewKeyPair, keyPair, isReady, principal, profile, updateProfile]);
+  }, [isNewKeyPair, keyPair, isReady, principal, setIsNewKeyPair]);
   const { decryptOwnDisplayName } = useCrypto();
   reactExports.useEffect(() => {
     if (!principal || !isReady || !keyPair || !profile) return;
@@ -54654,7 +54697,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-WTw8W9gs.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-By_D3dC6.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });
