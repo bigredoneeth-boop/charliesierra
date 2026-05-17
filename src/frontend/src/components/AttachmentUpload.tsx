@@ -119,11 +119,12 @@ export function AttachmentUpload({
       // not separate them — authTag is embedded at the end.
       const ciphertextAndTag = new Uint8Array(cipherBuf);
 
-      // Step 4: Simple encrypted upload - bypass complex blob_tree handling
+      // === FINAL SIMPLE ENCRYPTED UPLOAD ===
       const fullEncrypted = new Uint8Array(iv.length + ciphertextAndTag.length);
       fullEncrypted.set(iv, 0);
       fullEncrypted.set(ciphertextAndTag, iv.length);
 
+      // Use the most basic upload path
       const storageKeyBytes = await uploadBlob(
         ExternalBlob.fromBytes(fullEncrypted),
       );
@@ -131,10 +132,13 @@ export function AttachmentUpload({
       const storageKey = keyToString(storageKeyBytes);
 
       console.log(
-        "[EncryptedFile] Uploaded via simple ExternalBlob.fromBytes. StorageKey:",
+        "[EncryptedFile] Uploaded via simplest path. StorageKey:",
         storageKey,
+        "| Size:",
+        fullEncrypted.length,
       );
       setProgress(65);
+      // =====================================
 
       // Step 3: Encrypt file metadata as message content (used as fallback display)
       const metaText = JSON.stringify({
