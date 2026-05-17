@@ -119,22 +119,20 @@ export function AttachmentUpload({
       // not separate them — authTag is embedded at the end.
       const ciphertextAndTag = new Uint8Array(cipherBuf);
 
-      // Step 4: Upload encrypted file using the platform's uploadBlob helper
+      // Step 4: Simple encrypted upload - bypass complex blob_tree handling
       const fullEncrypted = new Uint8Array(iv.length + ciphertextAndTag.length);
       fullEncrypted.set(iv, 0);
       fullEncrypted.set(ciphertextAndTag, iv.length);
 
       const storageKeyBytes = await uploadBlob(
-        ExternalBlob.fromBytes(fullEncrypted as Uint8Array<ArrayBuffer>),
+        ExternalBlob.fromBytes(fullEncrypted),
       );
 
       const storageKey = keyToString(storageKeyBytes);
 
       console.log(
-        "[EncryptedFile] Successfully uploaded encrypted file. StorageKey:",
+        "[EncryptedFile] Uploaded via simple ExternalBlob.fromBytes. StorageKey:",
         storageKey,
-        "| Size:",
-        fullEncrypted.length,
       );
       setProgress(65);
 
