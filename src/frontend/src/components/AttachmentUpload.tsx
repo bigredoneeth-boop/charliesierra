@@ -1,4 +1,4 @@
-import { MessageType } from "@/backend";
+import { ExternalBlob, MessageType } from "@/backend";
 import type { ConversationId } from "@/backend";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,11 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
-import {
-  processEncryptedBlobForUpload,
-  uploadBlobTreeDirect,
-} from "@/lib/encrypted-blob-upload";
-import { useInternetIdentity } from "@caffeineai/core-infrastructure";
 import { FileText, ImageIcon, Loader2, Upload, Video, X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
@@ -70,8 +65,7 @@ export function AttachmentUpload({
   onMessageSent,
 }: AttachmentUploadProps) {
   const { encryptForConv, getConversationKey } = useCrypto();
-  const { backend } = useBackend();
-  const { identity } = useInternetIdentity();
+  const { backend, uploadBlob } = useBackend();
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>(0);
@@ -96,7 +90,7 @@ export function AttachmentUpload({
   );
 
   const handleUpload = useCallback(async () => {
-    if (!selectedFile || !backend) return;
+    if (!selectedFile || !backend || !uploadBlob) return;
     const convKey = getConversationKey(conversationId.toString());
     if (!convKey) {
       setError("Encryption key not available. Cannot upload securely.");
@@ -125,44 +119,23 @@ export function AttachmentUpload({
       // not separate them — authTag is embedded at the end.
       const ciphertextAndTag = new Uint8Array(cipherBuf);
 
-      // Step 3: Build the final encrypted Blob from the three logical parts.
-      //         new Blob([iv, ciphertext, authTag]) is the official DFINITY pattern.
-      //         Blob internally concatenates them — no shared ArrayBuffer issues.
+      // Step 4: Upload the encrypted blob directly
       const encryptedBlob = new Blob([iv, ciphertextAndTag], {
         type: "application/octet-stream",
       });
-
-      console.log(
-        "[EncryptedFile] Final encrypted blob size:",
-        encryptedBlob.size,
-      );
-
-      // Step 4: Upload using direct blob_tree method with encrypted data
-      const { chunks, chunkHashes, blobHashTree } =
-        await processEncryptedBlobForUpload(encryptedBlob);
-
-      console.log(
-        "[EncryptedFile] Built blob_tree with num_blob_bytes =",
-        encryptedBlob.size,
-        "chunk count =",
-        chunks.length,
-      );
-
-      const storageKeyBytes = await uploadBlobTreeDirect(
-        blobHashTree,
-        encryptedBlob,
-        chunks,
-        chunkHashes,
-        {
-          identity: identity ?? undefined,
-          onProgress: (pct) => setProgress(25 + Math.round(pct * 0.4)),
-        },
+      const payloadBytes = new Uint8Array(await encryptedBlob.arrayBuffer());
+      const isolatedBuffer = new ArrayBuffer(payloadBytes.byteLength);
+      new Uint8Array(isolatedBuffer).set(payloadBytes);
+      const storageKeyBytes = await uploadBlob(
+        ExternalBlob.fromBytes(
+          new Uint8Array(isolatedBuffer) as Uint8Array<ArrayBuffer>,
+        ),
       );
 
       const storageKey = keyToString(storageKeyBytes);
 
       console.log(
-        "[EncryptedFile] Successfully uploaded encrypted file, storageKey =",
+        "[EncryptedFile] Successfully uploaded encrypted file. StorageKey:",
         storageKey,
       );
       setProgress(65);
@@ -213,10 +186,10 @@ export function AttachmentUpload({
   }, [
     selectedFile,
     backend,
+    uploadBlob,
     conversationId,
     encryptForConv,
     getConversationKey,
-    identity,
     onClose,
     onMessageSent,
   ]);
