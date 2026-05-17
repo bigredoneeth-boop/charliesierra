@@ -119,17 +119,13 @@ export function AttachmentUpload({
       // not separate them — authTag is embedded at the end.
       const ciphertextAndTag = new Uint8Array(cipherBuf);
 
-      // Step 4: Upload the encrypted blob directly
-      const encryptedBlob = new Blob([iv, ciphertextAndTag], {
-        type: "application/octet-stream",
-      });
-      const payloadBytes = new Uint8Array(await encryptedBlob.arrayBuffer());
-      const isolatedBuffer = new ArrayBuffer(payloadBytes.byteLength);
-      new Uint8Array(isolatedBuffer).set(payloadBytes);
+      // Step 4: Upload encrypted file using the platform's uploadBlob helper
+      const fullEncrypted = new Uint8Array(iv.length + ciphertextAndTag.length);
+      fullEncrypted.set(iv, 0);
+      fullEncrypted.set(ciphertextAndTag, iv.length);
+
       const storageKeyBytes = await uploadBlob(
-        ExternalBlob.fromBytes(
-          new Uint8Array(isolatedBuffer) as Uint8Array<ArrayBuffer>,
-        ),
+        ExternalBlob.fromBytes(fullEncrypted as Uint8Array<ArrayBuffer>),
       );
 
       const storageKey = keyToString(storageKeyBytes);
@@ -137,6 +133,8 @@ export function AttachmentUpload({
       console.log(
         "[EncryptedFile] Successfully uploaded encrypted file. StorageKey:",
         storageKey,
+        "| Size:",
+        fullEncrypted.length,
       );
       setProgress(65);
 
@@ -168,7 +166,7 @@ export function AttachmentUpload({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(encryptedBlob.size),
+        encryptedSizeBytes: BigInt(fullEncrypted.length),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
