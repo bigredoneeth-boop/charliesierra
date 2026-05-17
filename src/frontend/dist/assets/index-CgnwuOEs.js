@@ -36546,15 +36546,43 @@ async function encryptBlob(key, data) {
     key,
     data
   );
-  const result = new Uint8Array(IV_LENGTH + ciphertext.byteLength);
-  result.set(iv, 0);
-  result.set(new Uint8Array(ciphertext), IV_LENGTH);
+  const ciphertextBytes = new Uint8Array(ciphertext);
+  const result = new Uint8Array(IV_LENGTH + ciphertextBytes.length);
+  for (let i = 0; i < IV_LENGTH; i++) result[i] = iv[i];
+  for (let i = 0; i < ciphertextBytes.length; i++)
+    result[IV_LENGTH + i] = ciphertextBytes[i];
   return result;
 }
 async function decryptBlob(key, data) {
-  const iv = data.slice(0, IV_LENGTH);
-  const ciphertext = data.slice(IV_LENGTH);
-  return crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+  const fresh = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
+  if (fresh.length < IV_LENGTH + 17) {
+    const err = `[EncryptedFile] Blob too small for decryption: ${fresh.length} bytes (minimum ${IV_LENGTH + 17} = ${IV_LENGTH} IV + 1 plaintext + 16 tag)`;
+    console.error(err);
+    throw new Error(err);
+  }
+  const iv = fresh.slice(0, IV_LENGTH);
+  const ciphertextAndTag = fresh.slice(IV_LENGTH);
+  console.log(
+    `[EncryptedFile] Decrypting blob: total=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`
+  );
+  try {
+    const plainBuffer = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      key,
+      ciphertextAndTag
+    );
+    const decrypted = new Uint8Array(plainBuffer);
+    const safeResult = new Uint8Array(decrypted.length);
+    for (let i = 0; i < decrypted.length; i++) safeResult[i] = decrypted[i];
+    return safeResult.buffer;
+  } catch (err) {
+    console.error(
+      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+      err
+    );
+    throw err;
+  }
 }
 async function generateGroupKey() {
   return crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, [
@@ -47367,22 +47395,43 @@ function AttachmentUpload({
     try {
       const arrayBuf = await selectedFile.arrayBuffer();
       setProgress(10);
-      const { encryptBlob: encryptBlob2 } = await __vitePreload(async () => {
-        const { encryptBlob: encryptBlob3 } = await Promise.resolve().then(() => crypto$1);
-        return { encryptBlob: encryptBlob3 };
-      }, true ? void 0 : void 0);
-      const encrypted = await encryptBlob2(convKey, arrayBuf);
-      setProgress(25);
-      const isolatedBuffer = new ArrayBuffer(encrypted.byteLength);
-      new Uint8Array(isolatedBuffer).set(encrypted);
-      const safeBytes = new Uint8Array(
-        isolatedBuffer
+      const IV_LEN = 12;
+      const iv = crypto.getRandomValues(new Uint8Array(IV_LEN));
+      const cipherBuf = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        convKey,
+        arrayBuf
       );
-      const externalBlob = ExternalBlob2.fromBytes(safeBytes).withUploadProgress(
+      const ciphertextAndTag = new Uint8Array(cipherBuf);
+      const encryptedBlob = new Blob([iv, ciphertextAndTag], {
+        type: "application/octet-stream"
+      });
+      console.log(
+        "[EncryptedFile] Final encrypted blob size:",
+        encryptedBlob.size
+      );
+      const encryptedBlobUrl = URL.createObjectURL(encryptedBlob);
+      const originalSize = arrayBuf.byteLength;
+      const encryptedSize = encryptedBlob.size;
+      console.log(
+        `[EncryptedFile] Original size: ${originalSize} | Encrypted size: ${encryptedSize} | Building blob_tree with encrypted data`
+      );
+      const externalBlob = ExternalBlob2.fromURL(
+        encryptedBlobUrl
+      ).withUploadProgress(
         (pct) => setProgress(25 + Math.round(pct * 0.4))
         // 25–65%
       );
+      const CHUNK_SIZE = 1024 * 1024;
+      const chunkCount = Math.ceil(encryptedSize / CHUNK_SIZE) || 1;
+      console.log(
+        "[EncryptedFile] Sending blob_tree with num_blob_bytes =",
+        encryptedSize,
+        ", chunk count =",
+        chunkCount
+      );
       const storageKeyBytes = await uploadBlob(externalBlob);
+      URL.revokeObjectURL(encryptedBlobUrl);
       const storageKey2 = keyToString(storageKeyBytes);
       setProgress(65);
       const metaText = JSON.stringify({
@@ -47408,7 +47457,7 @@ function AttachmentUpload({
       const attachResult = await backend2.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(encrypted.byteLength),
+        encryptedSizeBytes: BigInt(encryptedSize),
         storageKey: storageKey2
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
@@ -50055,12 +50104,21 @@ function useAttachmentBlob(message, conversationId, enabled) {
         const attachment = attachments[0];
         const keyBytes = hexToBytes(attachment.storageKey);
         const externalBlob = await downloadBlob(keyBytes);
-        const encryptedBytes = await externalBlob.getBytes();
+        const rawBytes = await externalBlob.getBytes();
+        console.log(
+          `[EncryptedFile] Received encrypted blob: size = ${rawBytes.length} bytes`
+        );
+        const encryptedBytes = new Uint8Array(rawBytes.length);
+        for (let i = 0; i < rawBytes.length; i++)
+          encryptedBytes[i] = rawBytes[i];
         const { decryptBlob: decryptBlob2 } = await __vitePreload(async () => {
           const { decryptBlob: decryptBlob3 } = await Promise.resolve().then(() => crypto$1);
           return { decryptBlob: decryptBlob3 };
         }, true ? void 0 : void 0);
         const decrypted = await decryptBlob2(convKey, encryptedBytes);
+        console.log(
+          `[EncryptedFile] Decrypted file: size = ${decrypted.byteLength} bytes`
+        );
         if (cancelled) return;
         const blob = new Blob([decrypted], { type: attachment.mimeType });
         const url = URL.createObjectURL(blob);
@@ -54832,7 +54890,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DrVmBQuf.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-D62xOPG4.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

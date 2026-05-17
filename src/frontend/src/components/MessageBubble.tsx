@@ -229,11 +229,24 @@ function useAttachmentBlob(
         // 2. Download encrypted blob from object-storage
         const keyBytes = hexToBytes(attachment.storageKey);
         const externalBlob = await downloadBlob(keyBytes);
-        const encryptedBytes = await externalBlob.getBytes();
+        const rawBytes = await externalBlob.getBytes();
+        console.log(
+          `[EncryptedFile] Received encrypted blob: size = ${rawBytes.length} bytes`,
+        );
+
+        // CRITICAL: Element-by-element copy into a fresh zero-offset buffer.
+        // Bytes from object-storage/Candid decoding carry a hidden internal
+        // byteOffset that causes WebCrypto to read the wrong IV and ciphertext.
+        const encryptedBytes = new Uint8Array(rawBytes.length);
+        for (let i = 0; i < rawBytes.length; i++)
+          encryptedBytes[i] = rawBytes[i];
 
         // 3. Decrypt blob client-side
         const { decryptBlob } = await import("@/lib/crypto");
         const decrypted = await decryptBlob(convKey, encryptedBytes);
+        console.log(
+          `[EncryptedFile] Decrypted file: size = ${decrypted.byteLength} bytes`,
+        );
 
         if (cancelled) return;
 

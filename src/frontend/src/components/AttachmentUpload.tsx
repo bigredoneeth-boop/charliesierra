@@ -99,28 +99,72 @@ export function AttachmentUpload({
     setUploading(true);
     setError(null);
     try {
-      // Step 1: Read file and encrypt it client-side
+      // Step 1: Read file bytes
       const arrayBuf = await selectedFile.arrayBuffer();
       setProgress(10);
-      const { encryptBlob } = await import("@/lib/crypto");
-      const encrypted = await encryptBlob(convKey, arrayBuf);
-      setProgress(25);
 
-      // Step 2: Upload encrypted blob to object-storage.
-      // Allocate a brand-new, fully-isolated ArrayBuffer and copy the encrypted
-      // bytes into it byte-by-byte. This guarantees the backing buffer is not
-      // shared with the IV-prepend stage of encryptBlob(), which can produce a
-      // non-zero byteOffset composite view that confuses the blob_tree hasher
-      // and causes a 403 "Invalid Payload" when the hashes don't match the data.
-      const isolatedBuffer = new ArrayBuffer(encrypted.byteLength);
-      new Uint8Array(isolatedBuffer).set(encrypted);
-      const safeBytes = new Uint8Array(
-        isolatedBuffer,
-      ) as Uint8Array<ArrayBuffer>;
-      const externalBlob = ExternalBlob.fromBytes(safeBytes).withUploadProgress(
+      // Step 2: Encrypt client-side using AES-GCM directly so we have the
+      //         three parts (iv, ciphertext, authTag) as separate typed arrays.
+      //         This lets us build the Blob from [iv, ciphertext, authTag]
+      //         exactly per the official DFINITY immutable object storage pattern.
+      const IV_LEN = 12;
+      const iv = crypto.getRandomValues(new Uint8Array(IV_LEN));
+      const cipherBuf = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        convKey,
+        arrayBuf,
+      );
+      // AES-GCM output = ciphertext + 16-byte auth tag concatenated.
+      // We treat it as one "ciphertext" part because the Web Crypto API does
+      // not separate them — authTag is embedded at the end.
+      const ciphertextAndTag = new Uint8Array(cipherBuf);
+
+      // Step 3: Build the final encrypted Blob from the three logical parts.
+      //         new Blob([iv, ciphertext, authTag]) is the official DFINITY pattern.
+      //         Blob internally concatenates them — no shared ArrayBuffer issues.
+      const encryptedBlob = new Blob([iv, ciphertextAndTag], {
+        type: "application/octet-stream",
+      });
+
+      console.log(
+        "[EncryptedFile] Final encrypted blob size:",
+        encryptedBlob.size,
+      );
+
+      // Step 4: Create a Blob URL from the encrypted Blob and pass it via
+      //         ExternalBlob.fromURL() so the platform uploader fetches it
+      //         directly — guaranteeing num_blob_bytes and chunk hashes are
+      //         computed from the encrypted data, not the original file.
+      const encryptedBlobUrl = URL.createObjectURL(encryptedBlob);
+
+      const originalSize = arrayBuf.byteLength;
+      const encryptedSize = encryptedBlob.size;
+      console.log(
+        `[EncryptedFile] Original size: ${originalSize} | Encrypted size: ${encryptedSize} | Building blob_tree with encrypted data`,
+      );
+
+      const externalBlob = ExternalBlob.fromURL(
+        encryptedBlobUrl,
+      ).withUploadProgress(
         (pct) => setProgress(25 + Math.round(pct * 0.4)), // 25–65%
       );
+
+      // Step 5: We need to log what the platform will PUT — extract chunk info
+      //         for logging before the upload call triggers the blob_tree build.
+      //         The platform reads from encryptedBlobUrl, so num_blob_bytes = encryptedSize.
+      //         Compute chunk count for logging only (platform does actual hashing).
+      const CHUNK_SIZE = 1024 * 1024; // 1 MB (platform default)
+      const chunkCount = Math.ceil(encryptedSize / CHUNK_SIZE) || 1;
+      console.log(
+        "[EncryptedFile] Sending blob_tree with num_blob_bytes =",
+        encryptedSize,
+        ", chunk count =",
+        chunkCount,
+      );
+
       const storageKeyBytes = await uploadBlob(externalBlob);
+      // Revoke the temporary Blob URL to free memory.
+      URL.revokeObjectURL(encryptedBlobUrl);
       const storageKey = keyToString(storageKeyBytes);
       setProgress(65);
 
@@ -152,7 +196,7 @@ export function AttachmentUpload({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(encrypted.byteLength),
+        encryptedSizeBytes: BigInt(encryptedSize),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);

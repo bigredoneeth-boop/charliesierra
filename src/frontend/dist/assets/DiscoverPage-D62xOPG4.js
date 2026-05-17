@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, c as cn, r as reactExports, u as usePublicGroups, L as Layout, S as Search, I as Input, C as Compass, B as Button, a as Skeleton, b as useSubmitJoinRequest, d as Badge, U as Users, e as ue } from "./index-CejCDl72.js";
+import { j as jsxRuntimeExports, c as cn, r as reactExports, u as usePublicGroups, L as Layout, S as Search, I as Input, C as Compass, B as Button, a as Skeleton, b as useSubmitJoinRequest, d as Badge, U as Users, e as ue } from "./index-CgnwuOEs.js";
 function Card({ className, ...props }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",

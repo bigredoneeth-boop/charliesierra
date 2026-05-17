@@ -223,15 +223,25 @@ export async function encryptBlob(
   key: CryptoKey,
   data: ArrayBuffer,
 ): Promise<Uint8Array> {
+  // Step 1: fresh random 12-byte IV
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+
+  // Step 2: AES-GCM encrypt — output is ciphertext + 16-byte auth tag
   const ciphertext = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
     data,
   );
-  const result = new Uint8Array(IV_LENGTH + ciphertext.byteLength);
-  result.set(iv, 0);
-  result.set(new Uint8Array(ciphertext), IV_LENGTH);
+
+  // Step 3: Concatenate into a brand-new fully-owned buffer: IV(12) + ciphertext+authTag
+  // Element-by-element copy guarantees byteOffset=0 in the result — never use .set()
+  // with a Uint8Array view that may carry a hidden internal offset.
+  const ciphertextBytes = new Uint8Array(ciphertext);
+  const result = new Uint8Array(IV_LENGTH + ciphertextBytes.length);
+  for (let i = 0; i < IV_LENGTH; i++) result[i] = iv[i];
+  for (let i = 0; i < ciphertextBytes.length; i++)
+    result[IV_LENGTH + i] = ciphertextBytes[i];
+
   return result;
 }
 
@@ -239,9 +249,45 @@ export async function decryptBlob(
   key: CryptoKey,
   data: Uint8Array,
 ): Promise<ArrayBuffer> {
-  const iv = data.slice(0, IV_LENGTH);
-  const ciphertext = data.slice(IV_LENGTH);
-  return crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+  // CRITICAL: Element-by-element copy into a fresh zero-offset buffer FIRST.
+  // data may come from network/Candid decoding with a hidden internal byteOffset
+  // that would cause WebCrypto to read wrong bytes for the IV or ciphertext.
+  const fresh = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
+
+  if (fresh.length < IV_LENGTH + 17) {
+    const err = `[EncryptedFile] Blob too small for decryption: ${fresh.length} bytes (minimum ${IV_LENGTH + 17} = ${IV_LENGTH} IV + 1 plaintext + 16 tag)`;
+    console.error(err);
+    throw new Error(err);
+  }
+
+  // Extract IV (first 12 bytes) and ciphertext+tag (remaining bytes) using slice
+  // which allocates new owned buffers from the already-safe `fresh` array.
+  const iv = fresh.slice(0, IV_LENGTH);
+  const ciphertextAndTag = fresh.slice(IV_LENGTH);
+
+  console.log(
+    `[EncryptedFile] Decrypting blob: total=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+  );
+
+  try {
+    const plainBuffer = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      key,
+      ciphertextAndTag,
+    );
+    // Return a fresh copy of the decrypted buffer to ensure zero-offset guarantee
+    const decrypted = new Uint8Array(plainBuffer);
+    const safeResult = new Uint8Array(decrypted.length);
+    for (let i = 0; i < decrypted.length; i++) safeResult[i] = decrypted[i];
+    return safeResult.buffer;
+  } catch (err) {
+    console.error(
+      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+      err,
+    );
+    throw err;
+  }
 }
 
 // ── Group / symmetric key helpers ─────────────────────────────────────────────
