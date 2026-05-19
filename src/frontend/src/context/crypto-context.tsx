@@ -366,7 +366,13 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       const key = convKeys.current.get(convId);
       if (!key) return null;
       try {
-        return await encryptMessage(key, text);
+        // encryptMessage returns a fresh zero-offset Uint8Array: IV(12) + ciphertext + tag(16)
+        // Return it as-is — do NOT slice, trim, or re-encode.
+        const blob = await encryptMessage(key, text);
+        console.log(
+          `[E2EE SEND] encryptForConv: full blob size = ${blob.length} bytes (byteOffset=${blob.byteOffset}), convId=${convId}`,
+        );
+        return blob;
       } catch {
         return null;
       }
@@ -433,10 +439,12 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
 
+      // CRITICAL: copy into a fresh zero-offset buffer BEFORE calling decryptMessage.
+      // Bytes decoded by Candid carry a hidden byteOffset that corrupts IV extraction.
       const fresh = new Uint8Array(blob.length);
       for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
       console.log(
-        `[E2EE RECV] Received blob length=${fresh.length} bytes (original byteOffset=${(blob as Uint8Array & { byteOffset?: number }).byteOffset ?? 0}), copied to fresh buffer, convId=${convId}`,
+        `[E2EE RECV] decryptFromConv: blob=${fresh.length} bytes (original byteOffset=${(blob as Uint8Array & { byteOffset?: number }).byteOffset ?? 0}), convId=${convId}`,
       );
       try {
         return await decryptMessage(key, fresh);

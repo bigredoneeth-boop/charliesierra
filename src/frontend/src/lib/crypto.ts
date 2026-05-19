@@ -137,9 +137,6 @@ export async function encryptMessage(
 ): Promise<Uint8Array> {
   // Step 1: fresh random 12-byte IV
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const ivHex = Array.from(iv)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
 
   // Step 2: encode plaintext
   const plaintextBytes = new TextEncoder().encode(plaintext);
@@ -152,16 +149,16 @@ export async function encryptMessage(
   );
 
   // Step 4: concatenate into a brand-new owned buffer: [IV(12)] [ciphertext+tag]
-  // Use element-by-element copy to guarantee byteOffset=0 in the result.
+  // Use set() with fresh allocations — both iv and ciphertextAndTag are already
+  // zero-offset arrays from getRandomValues / SubtleCrypto output respectively.
   const ciphertextAndTag = new Uint8Array(ciphertextBuffer);
-  const fullBlob = new Uint8Array(IV_LENGTH + ciphertextAndTag.length);
-  for (let i = 0; i < IV_LENGTH; i++) fullBlob[i] = iv[i];
-  for (let i = 0; i < ciphertextAndTag.length; i++)
-    fullBlob[IV_LENGTH + i] = ciphertextAndTag[i];
+  const total = IV_LENGTH + ciphertextAndTag.length;
+  const fullBlob = new Uint8Array(total);
+  fullBlob.set(iv, 0);
+  fullBlob.set(new Uint8Array(ciphertextBuffer), IV_LENGTH);
 
-  const keyFp = await getKeyFingerprint(key);
   console.log(
-    `[E2EE SEND] Encrypting ${plaintextBytes.byteLength} bytes, IV=${ivHex}, keyFp=${keyFp}, fullBlob=${fullBlob.length} bytes (${IV_LENGTH} IV + ${ciphertextAndTag.length} ciphertext+tag)`,
+    `[E2EE SEND] Encrypted message \u2192 full blob size = ${fullBlob.length} bytes (IV=12, tag=16)`,
   );
 
   return fullBlob;
@@ -171,50 +168,29 @@ export async function decryptMessage(
   key: CryptoKey,
   rawInput: Uint8Array,
 ): Promise<string> {
-  // Step 1: ALWAYS copy ALL bytes into a fresh, fully-owned Uint8Array using
-  // element-by-element copy. This is the ONLY safe way to guarantee byteOffset=0
-  // regardless of how the input was allocated (Candid transport buffer, slice, etc.).
-  const data = new Uint8Array(rawInput.length);
-  for (let i = 0; i < rawInput.length; i++) data[i] = rawInput[i];
+  // Copy into fresh zero-offset buffer first (keep existing pattern)
+  const encryptedBlob = new Uint8Array(rawInput.length);
+  for (let i = 0; i < rawInput.length; i++) encryptedBlob[i] = rawInput[i];
 
-  // Step 2: validate minimum size: 12 (IV) + 1 (plaintext) + 16 (auth tag) = 29
-  if (data.length < 29) {
-    const err = `[E2EE RECV] Blob too small: ${data.length} bytes (minimum 29 = 12 IV + 1 plaintext + 16 tag)`;
-    console.error(err);
-    throw new Error(err);
+  if (encryptedBlob.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+    throw new Error("Blob too small");
   }
 
-  // Step 3: extract IV (first 12 bytes) and ciphertext+tag (remaining bytes)
-  const iv = data.slice(0, IV_LENGTH);
-  const ciphertextAndTag = data.slice(IV_LENGTH);
+  const iv = encryptedBlob.slice(0, 12);
+  const ciphertextAndTag = encryptedBlob.slice(12); // Everything after IV
 
-  const ivHex = Array.from(iv)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  const keyFp = await getKeyFingerprint(key);
   console.log(
-    `[E2EE RECV] blob=${data.length} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.length} bytes, keyFp=${keyFp}`,
+    `[E2EE RECV] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`,
   );
 
-  // Step 4: decrypt
-  try {
-    const plainBuffer = await crypto.subtle.decrypt(
-      { name: "AES-GCM", iv },
-      key,
-      ciphertextAndTag,
-    );
-    const result = new TextDecoder().decode(plainBuffer);
-    console.log(
-      `[E2EE RECV] Decryption successful, plaintext=${result.length} chars`,
-    );
-    return result;
-  } catch (err) {
-    console.error(
-      `[E2EE RECV] AES-GCM decryption FAILED: blob=${data.length} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.length} bytes, keyFp=${keyFp}`,
-      err,
-    );
-    throw err;
-  }
+  const decrypted = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv },
+    key,
+    ciphertextAndTag,
+  );
+
+  return new TextDecoder().decode(decrypted);
 }
 
 // ── Blob (file) encryption ────────────────────────────────────────────────────
@@ -252,22 +228,19 @@ export async function decryptBlob(
   // CRITICAL: Element-by-element copy into a fresh zero-offset buffer FIRST.
   // data may come from network/Candid decoding with a hidden internal byteOffset
   // that would cause WebCrypto to read wrong bytes for the IV or ciphertext.
-  const fresh = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
+  const encryptedBlob = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i++) encryptedBlob[i] = data[i];
 
-  if (fresh.length < IV_LENGTH + 17) {
-    const err = `[EncryptedFile] Blob too small for decryption: ${fresh.length} bytes (minimum ${IV_LENGTH + 17} = ${IV_LENGTH} IV + 1 plaintext + 16 tag)`;
-    console.error(err);
-    throw new Error(err);
+  if (encryptedBlob.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+    throw new Error("Blob too small");
   }
 
-  // Extract IV (first 12 bytes) and ciphertext+tag (remaining bytes) using slice
-  // which allocates new owned buffers from the already-safe `fresh` array.
-  const iv = fresh.slice(0, IV_LENGTH);
-  const ciphertextAndTag = fresh.slice(IV_LENGTH);
+  const iv = encryptedBlob.slice(0, 12);
+  const ciphertextAndTag = encryptedBlob.slice(12); // Everything after IV
 
   console.log(
-    `[EncryptedFile] Decrypting blob: total=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+    `[EncryptedFile] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`,
   );
 
   try {
@@ -283,7 +256,7 @@ export async function decryptBlob(
     return safeResult.buffer;
   } catch (err) {
     console.error(
-      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${encryptedBlob.length} bytes, IV=12 bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
       err,
     );
     throw err;

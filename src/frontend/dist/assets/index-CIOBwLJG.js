@@ -36511,7 +36511,6 @@ async function deriveSharedSecret(myPrivateKey, theirPublicKey) {
 }
 async function encryptMessage(key, plaintext) {
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const ivHex = Array.from(iv).map((b2) => b2.toString(16).padStart(2, "0")).join("");
   const plaintextBytes = new TextEncoder().encode(plaintext);
   const ciphertextBuffer = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
@@ -36519,49 +36518,33 @@ async function encryptMessage(key, plaintext) {
     plaintextBytes
   );
   const ciphertextAndTag = new Uint8Array(ciphertextBuffer);
-  const fullBlob = new Uint8Array(IV_LENGTH + ciphertextAndTag.length);
-  for (let i = 0; i < IV_LENGTH; i++) fullBlob[i] = iv[i];
-  for (let i = 0; i < ciphertextAndTag.length; i++)
-    fullBlob[IV_LENGTH + i] = ciphertextAndTag[i];
-  const keyFp = await getKeyFingerprint(key);
+  const total = IV_LENGTH + ciphertextAndTag.length;
+  const fullBlob = new Uint8Array(total);
+  fullBlob.set(iv, 0);
+  fullBlob.set(new Uint8Array(ciphertextBuffer), IV_LENGTH);
   console.log(
-    `[E2EE SEND] Encrypting ${plaintextBytes.byteLength} bytes, IV=${ivHex}, keyFp=${keyFp}, fullBlob=${fullBlob.length} bytes (${IV_LENGTH} IV + ${ciphertextAndTag.length} ciphertext+tag)`
+    `[E2EE SEND] Encrypted message → full blob size = ${fullBlob.length} bytes (IV=12, tag=16)`
   );
   return fullBlob;
 }
 async function decryptMessage(key, rawInput) {
-  const data = new Uint8Array(rawInput.length);
-  for (let i = 0; i < rawInput.length; i++) data[i] = rawInput[i];
-  if (data.length < 29) {
-    const err = `[E2EE RECV] Blob too small: ${data.length} bytes (minimum 29 = 12 IV + 1 plaintext + 16 tag)`;
-    console.error(err);
-    throw new Error(err);
+  const encryptedBlob = new Uint8Array(rawInput.length);
+  for (let i = 0; i < rawInput.length; i++) encryptedBlob[i] = rawInput[i];
+  if (encryptedBlob.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+    throw new Error("Blob too small");
   }
-  const iv = data.slice(0, IV_LENGTH);
-  const ciphertextAndTag = data.slice(IV_LENGTH);
-  const ivHex = Array.from(iv).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-  const keyFp = await getKeyFingerprint(key);
+  const iv = encryptedBlob.slice(0, 12);
+  const ciphertextAndTag = encryptedBlob.slice(12);
   console.log(
-    `[E2EE RECV] blob=${data.length} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.length} bytes, keyFp=${keyFp}`
+    `[E2EE RECV] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`
   );
-  try {
-    const plainBuffer = await crypto.subtle.decrypt(
-      { name: "AES-GCM", iv },
-      key,
-      ciphertextAndTag
-    );
-    const result = new TextDecoder().decode(plainBuffer);
-    console.log(
-      `[E2EE RECV] Decryption successful, plaintext=${result.length} chars`
-    );
-    return result;
-  } catch (err) {
-    console.error(
-      `[E2EE RECV] AES-GCM decryption FAILED: blob=${data.length} bytes, IV(hex)=${ivHex}, ciphertext+tag=${ciphertextAndTag.length} bytes, keyFp=${keyFp}`,
-      err
-    );
-    throw err;
-  }
+  const decrypted = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv },
+    key,
+    ciphertextAndTag
+  );
+  return new TextDecoder().decode(decrypted);
 }
 async function encryptBlob(key, data) {
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
@@ -36578,17 +36561,16 @@ async function encryptBlob(key, data) {
   return result;
 }
 async function decryptBlob(key, data) {
-  const fresh = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
-  if (fresh.length < IV_LENGTH + 17) {
-    const err = `[EncryptedFile] Blob too small for decryption: ${fresh.length} bytes (minimum ${IV_LENGTH + 17} = ${IV_LENGTH} IV + 1 plaintext + 16 tag)`;
-    console.error(err);
-    throw new Error(err);
+  const encryptedBlob = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i++) encryptedBlob[i] = data[i];
+  if (encryptedBlob.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+    throw new Error("Blob too small");
   }
-  const iv = fresh.slice(0, IV_LENGTH);
-  const ciphertextAndTag = fresh.slice(IV_LENGTH);
+  const iv = encryptedBlob.slice(0, 12);
+  const ciphertextAndTag = encryptedBlob.slice(12);
   console.log(
-    `[EncryptedFile] Decrypting blob: total=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`
+    `[EncryptedFile] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`
   );
   try {
     const plainBuffer = await crypto.subtle.decrypt(
@@ -36602,7 +36584,7 @@ async function decryptBlob(key, data) {
     return safeResult.buffer;
   } catch (err) {
     console.error(
-      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${fresh.length} bytes, IV=${iv.length} bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${encryptedBlob.length} bytes, IV=12 bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
       err
     );
     throw err;
@@ -36960,7 +36942,11 @@ function CryptoProvider({ children }) {
       const key = convKeys.current.get(convId);
       if (!key) return null;
       try {
-        return await encryptMessage(key, text);
+        const blob = await encryptMessage(key, text);
+        console.log(
+          `[E2EE SEND] encryptForConv: full blob size = ${blob.length} bytes (byteOffset=${blob.byteOffset}), convId=${convId}`
+        );
+        return blob;
       } catch {
         return null;
       }
@@ -37015,7 +37001,7 @@ function CryptoProvider({ children }) {
       const fresh = new Uint8Array(blob.length);
       for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
       console.log(
-        `[E2EE RECV] Received blob length=${fresh.length} bytes (original byteOffset=${blob.byteOffset ?? 0}), copied to fresh buffer, convId=${convId}`
+        `[E2EE RECV] decryptFromConv: blob=${fresh.length} bytes (original byteOffset=${blob.byteOffset ?? 0}), convId=${convId}`
       );
       try {
         return await decryptMessage(key, fresh);
@@ -49833,10 +49819,15 @@ function MessageInput({
         `[E2EE INPUT] plaintext=${plaintextBytes} bytes, encrypted blob=${encrypted.byteLength} bytes`
       );
       const ttlValue = readConversationTtl(conversationId.toString());
+      const encryptedClean = new Uint8Array(encrypted.length);
+      encryptedClean.set(encrypted);
+      console.log(
+        `[E2EE SEND] Encrypted message → full blob size = ${encryptedClean.length} bytes (IV=12, tag=16)`
+      );
       if (!connection.isOnline) {
         await queueMessage({
           conversationId: conversationId.toString(),
-          encryptedContent: encrypted,
+          encryptedContent: encryptedClean,
           messageType: MessageType.text,
           ttlSeconds: ttlValue > 0 ? ttlValue : void 0,
           priority
@@ -49847,12 +49838,6 @@ function MessageInput({
         return;
       }
       if (!backend2) throw new Error("Not connected");
-      const encryptedClean = new Uint8Array(encrypted.length);
-      for (let i = 0; i < encrypted.length; i++)
-        encryptedClean[i] = encrypted[i];
-      console.log(
-        `[E2EE SEND] Sending encrypted message: fullBlob length=${encryptedClean.length} bytes (byteOffset=${encryptedClean.byteOffset}, complete buffer, no offset truncation)`
-      );
       const result = await backend2.sendMessage({
         conversationId,
         encryptedContent: encryptedClean,
@@ -50079,10 +50064,12 @@ function useDecryptedContent(message, conversationId, _isMine) {
           `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`
         );
         const raw = message.encryptedContent;
-        const fresh = new Uint8Array(raw.length);
-        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+        const rawLen = raw.length ?? Object.keys(raw).length;
+        const fresh = new Uint8Array(rawLen);
+        const rawU8 = raw;
+        for (let i = 0; i < rawLen; i++) fresh[i] = rawU8[i];
         console.log(
-          `[E2EE RECV] useDecryptedContent: blob length=${fresh.length} bytes (attempt ${attempt}/${attempts.length}), convId=${conversationId}`
+          `[E2EE RECV] Received blob = ${fresh.length} bytes, extracted IV=12, ciphertext+tag=${fresh.length - 12} bytes (attempt ${attempt}/${attempts.length}), convId=${conversationId}`
         );
         const result = await decryptFromConv(conversationId, fresh);
         if (cancelled) return;
@@ -55029,7 +55016,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DpItIgR8.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-B59o8Tjp.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

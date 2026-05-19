@@ -114,11 +114,20 @@ export function useDecryptedContent(
         // CRITICAL: Element-by-element copy — the ONLY safe way to produce a
         // Uint8Array with byteOffset=0 regardless of how the Candid decoder
         // allocated the source buffer.
-        const raw = message.encryptedContent as unknown as Uint8Array;
-        const fresh = new Uint8Array(raw.length);
-        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+        // CRITICAL: element-by-element copy into a fresh zero-offset buffer.
+        // encryptedContent from Candid decoding may carry a hidden byteOffset
+        // that causes IV extraction to read the wrong bytes.
+        const raw = message.encryptedContent as unknown as {
+          length: number;
+          [i: number]: number;
+        };
+        const rawLen =
+          (raw as unknown as Uint8Array).length ?? Object.keys(raw).length;
+        const fresh = new Uint8Array(rawLen);
+        const rawU8 = raw as unknown as Uint8Array;
+        for (let i = 0; i < rawLen; i++) fresh[i] = rawU8[i];
         console.log(
-          `[E2EE RECV] useDecryptedContent: blob length=${fresh.length} bytes (attempt ${attempt}/${attempts.length}), convId=${conversationId}`,
+          `[E2EE RECV] Received blob = ${fresh.length} bytes, extracted IV=12, ciphertext+tag=${fresh.length - 12} bytes (attempt ${attempt}/${attempts.length}), convId=${conversationId}`,
         );
         const result = await decryptFromConv(conversationId, fresh);
         if (cancelled) return;
