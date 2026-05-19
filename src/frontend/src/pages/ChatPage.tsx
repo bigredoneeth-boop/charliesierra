@@ -32,6 +32,7 @@ import {
   useGroupRetentionPolicy,
 } from "@/hooks/use-enterprise";
 import { useOfflineQueue } from "@/hooks/use-offline-queue";
+import { formatLastSeen, isOnline, usePresence } from "@/hooks/use-presence";
 import {
   getDisplayName,
   setLocalDisplayName,
@@ -362,14 +363,20 @@ function ChatHeader({
   pendingRequestCount,
   onManageOpen,
 }: HeaderProps) {
-  const {
-    peerId,
-    displayName,
-    profile: _profile,
-  } = usePeerName(conv, myPrincipal);
+  const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
   const isGroup = conv.kind === ConversationKind.group;
   const avatarPrincipal = peerId?.toText() ?? myPrincipal;
   const ttlSeconds = undefined; // TTL would come from conversation settings
+
+  // Presence — derive online state from peer's lastSeen (1:1 only)
+  const peerLastSeen: bigint | undefined =
+    !isGroup && profile?.lastSeen !== undefined
+      ? (profile.lastSeen as bigint)
+      : undefined;
+  const peerIsOnline =
+    peerLastSeen !== undefined ? isOnline(peerLastSeen) : undefined;
+  const peerLastSeenLabel =
+    peerLastSeen !== undefined ? formatLastSeen(peerLastSeen) : undefined;
 
   return (
     <div
@@ -392,6 +399,7 @@ function ChatHeader({
         principal={avatarPrincipal}
         displayName={isGroup ? "G" : displayName}
         size={38}
+        isOnline={peerIsOnline}
       />
 
       {/* Name + badge */}
@@ -403,10 +411,15 @@ function ChatHeader({
           <EncryptedBadge compact />
         </div>
         <div className="flex items-center gap-2 mt-0.5">
-          <p className="text-xs text-muted-foreground">
+          <p
+            className="text-xs text-muted-foreground"
+            title={
+              !isGroup && peerLastSeenLabel ? peerLastSeenLabel : undefined
+            }
+          >
             {isGroup
               ? `${conv.members.length} members`
-              : "End-to-end encrypted"}
+              : (peerLastSeenLabel ?? "End-to-end encrypted")}
           </p>
           {ttlSeconds && (
             <div
@@ -477,6 +490,8 @@ export default function ChatPage() {
   } = useCrypto();
   const myPrincipal = principal?.toText() ?? "";
   const connection = useConnection();
+  // Keep current user's presence timestamp fresh (fires touchPresence every 30s)
+  usePresence();
   const { queueDepth, drainQueue, retryMessage, deleteQueuedMessage } =
     useOfflineQueue();
   const queryClient = useQueryClient();
@@ -626,10 +641,15 @@ export default function ChatPage() {
           const keyFingerprint = Array.from(
             peer.ecdhPublicKey.slice(0, 8),
           ).join(",");
+          const existingKey = getConversationKey(convIdStr);
           const needsDerivation =
-            !getConversationKey(convIdStr) ||
-            lastDerivedPeerKey.current !== keyFingerprint;
+            !existingKey || lastDerivedPeerKey.current !== keyFingerprint;
           if (needsDerivation) {
+            if (!existingKey) {
+              console.log(
+                `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`,
+              );
+            }
             lastDerivedPeerKey.current = keyFingerprint;
             // Always use a fresh buffer copy of the peer's ecdhPublicKey so Candid
             // buffer offsets don't corrupt the WebCrypto key import.
@@ -692,7 +712,15 @@ export default function ChatPage() {
       }
 
       // Skip derivation if the key is current and no membership change detected.
-      if (existingKey && !fingerprintChanged) return;
+      if (existingKey && !fingerprintChanged) {
+        console.log(`[E2EE KEYSTORE] Restored key for convId=${convIdStr}`);
+        return;
+      }
+      if (!existingKey || fingerprintChanged) {
+        console.log(
+          `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`,
+        );
+      }
 
       // Avoid duplicate concurrent derivations for the same fingerprint.
       if (derivingGroupKey.current === fingerprint) return;

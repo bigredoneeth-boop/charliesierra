@@ -1,4 +1,4 @@
-import type { ConversationPublic } from "@/backend";
+import type { ConversationPublic, MessagePublic } from "@/backend";
 import { UserAvatar } from "@/components/UserAvatar";
 import {
   AlertDialog,
@@ -12,7 +12,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/context/auth-context";
 import { useDeleteConversation } from "@/hooks/use-conversations";
+import { isOnline } from "@/hooks/use-presence";
 import { getLocalAvatarDataUrl, useDisplayName } from "@/hooks/use-profiles";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Trash2, Users } from "lucide-react";
 import { useState } from "react";
@@ -52,6 +54,7 @@ export function ConversationListItem({
   const navigate = useNavigate();
   const { principal } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const queryClient = useQueryClient();
   const deleteConversation = useDeleteConversation();
 
   // Get current route params to detect if we're viewing this thread
@@ -63,6 +66,20 @@ export function ConversationListItem({
       conversation.members[0])
     : null;
 
+  // Derive peer online status from cached profile data
+  const peerProfile = peer
+    ? queryClient.getQueryData<{ lastSeen: bigint } | null>([
+        "profile",
+        peer.toText(),
+      ])
+    : null;
+  const peerIsOnline =
+    isDirect && peer
+      ? peerProfile
+        ? isOnline(peerProfile.lastSeen)
+        : undefined
+      : undefined;
+
   const peerPrincipalText = peer?.toText() ?? null;
   const cachedName = useDisplayName(peerPrincipalText);
 
@@ -73,7 +90,16 @@ export function ConversationListItem({
         : "Direct Message")
     : "Encrypted Group";
 
-  const unreadCount = 0; // read receipts resolved in message view
+  const cachedMessages =
+    queryClient.getQueryData<MessagePublic[]>([
+      "messages",
+      conversation.id.toString(),
+    ]) ?? [];
+  const unreadCount = principal
+    ? cachedMessages.filter(
+        (m) => !m.readBy.some((r) => r.userId.toText() === principal.toText()),
+      ).length
+    : 0;
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();
@@ -115,8 +141,10 @@ export function ConversationListItem({
           {isDirect && peer ? (
             <UserAvatar
               principal={peer.toText()}
+              displayName={cachedName || undefined}
               avatarUrl={getLocalAvatarDataUrl(peer.toText()) ?? undefined}
               size={40}
+              isOnline={peerIsOnline}
             />
           ) : (
             <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">

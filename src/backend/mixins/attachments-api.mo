@@ -23,4 +23,11 @@ mixin (attState : AttLib.State) {
   ) : async Common.Result<(), Common.Error> {
     AttLib.deleteAttachment(attState, caller, attachmentId);
   };
+
+  /// Passthrough for file bytes — satisfies the frontend TypeScript interface
+  /// contract. The real upload goes through object storage separately; this
+  /// method exists so pnpm bindgen includes `uploadFile` in backendInterface.
+  public shared func uploadFile(fileBytes : Blob, _mimeType : Text) : async Blob {
+    fileBytes;
+  };
 };

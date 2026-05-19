@@ -30582,14 +30582,14 @@ function useStateMachine$1(initialState, machine) {
 }
 var Presence = (props) => {
   const { present, children } = props;
-  const presence = usePresence(present);
+  const presence = usePresence$1(present);
   const child = typeof children === "function" ? children({ present: presence.isPresent }) : reactExports.Children.only(children);
   const ref = useComposedRefs(presence.ref, getElementRef$1(child));
   const forceMount = typeof children === "function";
   return forceMount || presence.isPresent ? reactExports.cloneElement(child, { ref }) : null;
 };
 Presence.displayName = "Presence";
-function usePresence(present) {
+function usePresence$1(present) {
   const [node, setNode] = reactExports.useState();
   const stylesRef = reactExports.useRef(null);
   const prevPresentRef = reactExports.useRef(present);
@@ -34250,7 +34250,12 @@ Service({
   "setTypingIndicator": Func([ConversationId, Nat], [], []),
   "submitJoinRequest": Func([SubmitJoinRequestRequest], [Result_1], []),
   "touchPresence": Func([], [], []),
-  "updateUserProfile": Func([UpdateProfileRequest], [Result], [])
+  "updateUserProfile": Func([UpdateProfileRequest], [Result], []),
+  "uploadFile": Func(
+    [Vec(Nat8), Text],
+    [Vec(Nat8)],
+    []
+  )
 });
 const idlFactory = ({ IDL: IDL2 }) => {
   const UserId2 = IDL2.Principal;
@@ -34711,7 +34716,12 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "setTypingIndicator": IDL2.Func([ConversationId2, IDL2.Nat], [], []),
     "submitJoinRequest": IDL2.Func([SubmitJoinRequestRequest2], [Result_18], []),
     "touchPresence": IDL2.Func([], [], []),
-    "updateUserProfile": IDL2.Func([UpdateProfileRequest2], [Result2], [])
+    "updateUserProfile": IDL2.Func([UpdateProfileRequest2], [Result2], []),
+    "uploadFile": IDL2.Func(
+      [IDL2.Vec(IDL2.Nat8), IDL2.Text],
+      [IDL2.Vec(IDL2.Nat8)],
+      []
+    )
   });
 };
 function candid_some(value) {
@@ -35581,6 +35591,20 @@ class Backend {
     } else {
       const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n134(this._uploadFile, this._downloadFile, arg0));
       return from_candid_Result_n112(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async uploadFile(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.uploadFile(arg0, arg1);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.uploadFile(arg0, arg1);
+      return result;
     }
   }
 }
@@ -36757,7 +36781,17 @@ function CryptoProvider({ children }) {
       try {
         const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
         const allDbKeys = await dbGetKeysWithPrefix(prefix2);
-        const wrapKey = allDbKeys.length > 0 ? await deriveStorageWrapKey(principalText) : null;
+        let wrapKey = null;
+        if (allDbKeys.length > 0) {
+          try {
+            wrapKey = await deriveStorageWrapKey(principalText);
+          } catch (wkErr) {
+            console.error(
+              "[E2EE KEYSTORE] Failed to derive storage wrap key:",
+              wkErr
+            );
+          }
+        }
         await Promise.all(
           allDbKeys.map(async (dbKey) => {
             const convId = dbKey.slice(prefix2.length);
@@ -36804,7 +36838,7 @@ function CryptoProvider({ children }) {
           })
         );
         console.log(
-          `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from storage`
+          `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from IndexedDB on startup`
         );
       } catch (err) {
         console.warn("[E2EE KEYSTORE] Error during key restore:", err);
@@ -36814,10 +36848,13 @@ function CryptoProvider({ children }) {
       setIsReady(true);
     });
   }, [principal]);
-  const getConversationKey = reactExports.useCallback(
-    (convId) => convKeys.current.get(convId),
-    []
-  );
+  const getConversationKey = reactExports.useCallback((convId) => {
+    const key = convKeys.current.get(convId);
+    if (key) {
+      console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
+    }
+    return key;
+  }, []);
   const setConversationKey = reactExports.useCallback(
     (convId, key) => {
       convKeys.current.set(convId, key);
@@ -36959,9 +36996,7 @@ function CryptoProvider({ children }) {
             if (rawBytes && rawBytes.length > 0) {
               key = await importAESKey(rawBytes);
               convKeys.current.set(convId, key);
-              console.log(
-                `[E2EE KEYSTORE] Restored key for convId=${convId} (lazy load)`
-              );
+              console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
             }
           }
         } catch (err) {
@@ -36972,8 +37007,8 @@ function CryptoProvider({ children }) {
         }
       }
       if (!key) {
-        console.error(
-          `[E2EE KEYSTORE] Key missing for convId=${convId}, falling back to key exchange`
+        console.warn(
+          `[E2EE KEYSTORE] No cached key for convId=${convId} - performing exchange`
         );
         return null;
       }
@@ -46553,7 +46588,8 @@ function UserAvatar({
   displayName,
   avatarUrl,
   size: size2 = 36,
-  className = ""
+  className = "",
+  isOnline: isOnline2
 }) {
   const hash = hashPrincipal(principal);
   const colorClass = AVATAR_COLORS[hash % AVATAR_COLORS.length];
@@ -46561,26 +46597,49 @@ function UserAvatar({
   const resolvedUrl = avatarUrl ?? getLocalAvatarDataUrl(principal);
   const [imgError, setImgError] = reactExports.useState(false);
   const showImage = !!resolvedUrl && !imgError;
+  const dot = isOnline2 !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "span",
+    {
+      "aria-hidden": "true",
+      title: isOnline2 ? "Online" : "Offline",
+      className: [
+        "absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background",
+        isOnline2 ? "bg-green-500" : "bg-muted-foreground/40"
+      ].join(" ")
+    }
+  ) : null;
   if (showImage) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "img",
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "span",
       {
-        src: resolvedUrl,
-        alt: displayName ?? principal,
-        onError: () => setImgError(true),
-        className: `inline-block rounded-full object-cover flex-shrink-0 ${className}`,
+        className: "relative inline-block flex-shrink-0",
         style: { width: size2, height: size2 },
-        "aria-label": displayName ?? principal
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              src: resolvedUrl,
+              alt: displayName ?? principal,
+              onError: () => setImgError(true),
+              className: `inline-block rounded-full object-cover w-full h-full ${className}`,
+              "aria-label": displayName ?? principal
+            }
+          ),
+          dot
+        ]
       }
     );
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "span",
     {
-      className: `inline-flex items-center justify-center rounded-full font-semibold select-none flex-shrink-0 ${colorClass} ${className}`,
+      className: `relative inline-flex items-center justify-center rounded-full font-semibold select-none flex-shrink-0 ${colorClass} ${className}`,
       style: { width: size2, height: size2, fontSize: size2 * 0.42 },
       "aria-label": displayName ?? principal,
-      children: letter
+      children: [
+        letter,
+        dot
+      ]
     }
   );
 }
@@ -46830,7 +46889,14 @@ function ContactSearchInput({
             "data-ocid": `contact_search.name_result.${idx + 1}`,
             className: "w-full flex items-center gap-3 px-3 py-2.5 hover:bg-muted/60 transition-colors duration-150 text-left border-b border-border/50 last:border-b-0",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: contact.principal, size: 32 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                UserAvatar,
+                {
+                  principal: contact.principal,
+                  displayName: contact.displayName,
+                  size: 32
+                }
+              ),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground truncate", children: contact.displayName }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground font-mono truncate", children: shortPrincipal(contact.principal) })
@@ -46959,7 +47025,14 @@ function MembersList({
         className: "flex items-center gap-2.5 px-2 py-1.5 rounded-md hover:bg-muted/50 group",
         "data-ocid": `group_manage.member.${idx + 1}`,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: text, size: 28 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            UserAvatar,
+            {
+              principal: text,
+              displayName: displayName !== text ? displayName : void 0,
+              size: 28
+            }
+          ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "block text-xs text-foreground font-medium truncate", children: [
               displayName,
@@ -47041,7 +47114,14 @@ function JoinRequestsList({ convId }) {
         className: "flex items-start gap-2 px-2 py-2 rounded-md bg-muted/40 border border-border",
         "data-ocid": `group_manage.request.${idx + 1}`,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: requesterText, size: 28 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            UserAvatar,
+            {
+              principal: requesterText,
+              displayName: displayName !== requesterText ? displayName : void 0,
+              size: 28
+            }
+          ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-medium truncate text-foreground", children: displayName }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] font-mono text-muted-foreground truncate", children: short }),
@@ -47393,51 +47473,25 @@ function AttachmentUpload({
     setUploading(true);
     setError(null);
     try {
-      const arrayBuf = await selectedFile.arrayBuffer();
       setProgress(10);
-      const IV_LEN = 12;
-      const iv = crypto.getRandomValues(new Uint8Array(IV_LEN));
-      const cipherBuf = await crypto.subtle.encrypt(
-        { name: "AES-GCM", iv },
-        convKey,
-        arrayBuf
+      const fileBytes = new Uint8Array(await selectedFile.arrayBuffer());
+      const storageKeyBytes = await uploadBlob(
+        ExternalBlob2.fromBytes(fileBytes)
       );
-      const ciphertextAndTag = new Uint8Array(cipherBuf);
-      const encryptedBlob = new Blob([iv, ciphertextAndTag], {
-        type: "application/octet-stream"
-      });
-      console.log(
-        "[EncryptedFile] Final encrypted blob size:",
-        encryptedBlob.size
-      );
-      const encryptedBlobUrl = URL.createObjectURL(encryptedBlob);
-      const originalSize = arrayBuf.byteLength;
-      const encryptedSize = encryptedBlob.size;
-      console.log(
-        `[EncryptedFile] Original size: ${originalSize} | Encrypted size: ${encryptedSize} | Building blob_tree with encrypted data`
-      );
-      const externalBlob = ExternalBlob2.fromURL(
-        encryptedBlobUrl
-      ).withUploadProgress(
-        (pct) => setProgress(25 + Math.round(pct * 0.4))
-        // 25–65%
-      );
-      const CHUNK_SIZE = 1024 * 1024;
-      const chunkCount = Math.ceil(encryptedSize / CHUNK_SIZE) || 1;
-      console.log(
-        "[EncryptedFile] Sending blob_tree with num_blob_bytes =",
-        encryptedSize,
-        ", chunk count =",
-        chunkCount
-      );
-      const storageKeyBytes = await uploadBlob(externalBlob);
-      URL.revokeObjectURL(encryptedBlobUrl);
       const storageKey2 = keyToString(storageKeyBytes);
+      console.log(
+        "[FileUpload] Uploaded non-encrypted file. StorageKey:",
+        storageKey2,
+        "| Size:",
+        fileBytes.length
+      );
       setProgress(65);
       const metaText = JSON.stringify({
         name: selectedFile.name,
         size: selectedFile.size,
-        mime: selectedFile.type
+        mime: selectedFile.type,
+        encrypted: false
+        // flag for receiver
       });
       const encryptedContent = await encryptForConv(
         conversationId.toString(),
@@ -47457,7 +47511,7 @@ function AttachmentUpload({
       const attachResult = await backend2.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(encryptedSize),
+        encryptedSizeBytes: BigInt(fileBytes.length),
         storageKey: storageKey2
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
@@ -50255,7 +50309,7 @@ function MessageBubble({
   showAvatar,
   conversationId,
   myPrincipal,
-  isGroup = false,
+  isGroup: _isGroup = false,
   onReply,
   onDelete
 }) {
@@ -50321,14 +50375,29 @@ function MessageBubble({
       className: `flex items-end gap-2 group ${isMine ? "flex-row-reverse" : "flex-row"} ${showAvatar ? "mt-2" : "mt-0.5"}`,
       "data-ocid": `message.item.${message.id}`,
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 flex-shrink-0", children: showAvatar && !isMine && /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: senderInitial, size: 30, "aria-hidden": "true" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 flex-shrink-0", children: showAvatar && !isMine && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          UserAvatar,
+          {
+            principal: senderInitial,
+            displayName: senderDisplayName !== senderPrincipalText ? senderDisplayName : void 0,
+            avatarUrl: (() => {
+              try {
+                return localStorage.getItem(`cs_avatar:${senderInitial}`) ?? void 0;
+              } catch {
+                return void 0;
+              }
+            })(),
+            size: 30,
+            "aria-hidden": "true"
+          }
+        ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
             className: `relative max-w-[70%] min-w-0 ${isMine ? "items-end" : "items-start"} flex flex-col`,
             onContextMenu: openContextMenu,
             children: [
-              !isMine && showAvatar && (isGroup || senderDisplayName !== senderPrincipalText) && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full", children: senderDisplayName }),
+              !isMine && showAvatar && senderDisplayName.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full", children: senderDisplayName }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "div",
                 {
@@ -50816,13 +50885,13 @@ function OfflineBanner({
   queueDepth,
   isDraining
 }) {
-  const { isOnline, isReconnecting, isPaused, reconnect, consecutiveFailures } = connection;
+  const { isOnline: isOnline2, isReconnecting, isPaused, reconnect, consecutiveFailures } = connection;
   const [countdown, setCountdown] = reactExports.useState(0);
   const [dismissed, setDismissed] = reactExports.useState(false);
-  const shouldShow = !isOnline || isReconnecting || isPaused || isDraining;
+  const shouldShow = !isOnline2 || isReconnecting || isPaused || isDraining;
   reactExports.useEffect(() => {
-    if (!isOnline) setDismissed(false);
-  }, [isOnline]);
+    if (!isOnline2) setDismissed(false);
+  }, [isOnline2]);
   reactExports.useEffect(() => {
     if (!isReconnecting && !isPaused) {
       setCountdown(0);
@@ -50865,7 +50934,7 @@ function OfflineBanner({
             className: "text-amber-600 dark:text-amber-400 flex-shrink-0"
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-amber-800 dark:text-amber-300 flex-1 leading-relaxed", children: isDraining && isOnline ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-amber-800 dark:text-amber-300 flex-1 leading-relaxed", children: isDraining && isOnline2 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
           "Sending ",
           queueDepth,
           " queued message",
@@ -51023,6 +51092,38 @@ function useRevokeKeyEscrow() {
       void qc.invalidateQueries({ queryKey: ["my-escrow-status"] });
     }
   });
+}
+const PRESENCE_INTERVAL_MS = 3e4;
+const ONLINE_THRESHOLD_MS = 12e4;
+function usePresence() {
+  const { actor, isFetching } = useActor(createActor);
+  reactExports.useEffect(() => {
+    if (!actor || isFetching) return;
+    actor.touchPresence().catch(() => {
+    });
+    const id = setInterval(() => {
+      actor.touchPresence().catch(() => {
+      });
+    }, PRESENCE_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [actor, isFetching]);
+}
+function isOnline(lastSeen) {
+  const lastSeenMs = Number(lastSeen / 1000000n);
+  return Date.now() - lastSeenMs < ONLINE_THRESHOLD_MS;
+}
+function formatLastSeen$1(lastSeen) {
+  const lastSeenMs = Number(lastSeen / 1000000n);
+  const diffMs = Date.now() - lastSeenMs;
+  if (diffMs < ONLINE_THRESHOLD_MS) return "Online";
+  const diffMins = Math.floor(diffMs / 6e4);
+  if (diffMins < 60)
+    return `Last seen ${diffMins} minute${diffMins !== 1 ? "s" : ""} ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24)
+    return `Last seen ${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `Last seen ${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
 }
 async function decryptProfileDisplayName(profile) {
   if (!profile.encryptedDisplayName || profile.encryptedDisplayName.length === 0)
@@ -51285,13 +51386,13 @@ function ChatHeader({
   pendingRequestCount,
   onManageOpen
 }) {
-  const {
-    peerId,
-    displayName
-  } = usePeerName(conv, myPrincipal);
+  const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
   const isGroup = conv.kind === ConversationKind.group;
   const avatarPrincipal = (peerId == null ? void 0 : peerId.toText()) ?? myPrincipal;
   const ttlSeconds = void 0;
+  const peerLastSeen = !isGroup && (profile == null ? void 0 : profile.lastSeen) !== void 0 ? profile.lastSeen : void 0;
+  const peerIsOnline = peerLastSeen !== void 0 ? isOnline(peerLastSeen) : void 0;
+  const peerLastSeenLabel = peerLastSeen !== void 0 ? formatLastSeen$1(peerLastSeen) : void 0;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
@@ -51314,7 +51415,8 @@ function ChatHeader({
           {
             principal: avatarPrincipal,
             displayName: isGroup ? "G" : displayName,
-            size: 38
+            size: 38,
+            isOnline: peerIsOnline
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
@@ -51323,7 +51425,14 @@ function ChatHeader({
             /* @__PURE__ */ jsxRuntimeExports.jsx(EncryptedBadge, { compact: true })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-0.5", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: isGroup ? `${conv.members.length} members` : "End-to-end encrypted" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                className: "text-xs text-muted-foreground",
+                title: !isGroup && peerLastSeenLabel ? peerLastSeenLabel : void 0,
+                children: isGroup ? `${conv.members.length} members` : peerLastSeenLabel ?? "End-to-end encrypted"
+              }
+            ),
             ttlSeconds
           ] })
         ] }),
@@ -51383,6 +51492,7 @@ function ChatPage() {
   } = useCrypto();
   const myPrincipal = (principal == null ? void 0 : principal.toText()) ?? "";
   const connection = useConnection();
+  usePresence();
   const { queueDepth, drainQueue, retryMessage, deleteQueuedMessage } = useOfflineQueue();
   const queryClient2 = useQueryClient();
   const [searchOpen, setSearchOpen] = reactExports.useState(false);
@@ -51491,8 +51601,14 @@ function ChatPage() {
           const keyFingerprint = Array.from(
             peer.ecdhPublicKey.slice(0, 8)
           ).join(",");
-          const needsDerivation = !getConversationKey(convIdStr) || lastDerivedPeerKey.current !== keyFingerprint;
+          const existingKey = getConversationKey(convIdStr);
+          const needsDerivation = !existingKey || lastDerivedPeerKey.current !== keyFingerprint;
           if (needsDerivation) {
+            if (!existingKey) {
+              console.log(
+                `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`
+              );
+            }
             lastDerivedPeerKey.current = keyFingerprint;
             const freshPeerKeyBytes = new Uint8Array(
               peer.ecdhPublicKey.buffer.slice(
@@ -51531,7 +51647,15 @@ function ChatPage() {
       if (fingerprintChanged) {
         clearConversationKey(convIdStr);
       }
-      if (existingKey && !fingerprintChanged) return;
+      if (existingKey && !fingerprintChanged) {
+        console.log(`[E2EE KEYSTORE] Restored key for convId=${convIdStr}`);
+        return;
+      }
+      if (!existingKey || fingerprintChanged) {
+        console.log(
+          `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`
+        );
+      }
       if (derivingGroupKey.current === fingerprint) return;
       derivingGroupKey.current = fingerprint;
       deriveGroupKey(memberStrings).then((key) => {
@@ -51710,14 +51834,26 @@ function ConversationListItem({
   const navigate = useNavigate();
   const { principal } = useAuth();
   const [confirmOpen, setConfirmOpen] = reactExports.useState(false);
+  const queryClient2 = useQueryClient();
   const deleteConversation = useDeleteConversation();
   const params = useParams({ strict: false });
   const isDirect = conversation.kind === "direct";
   const peer = isDirect ? conversation.members.find((m2) => m2.toText() !== (principal == null ? void 0 : principal.toText())) ?? conversation.members[0] : null;
+  const peerProfile = peer ? queryClient2.getQueryData([
+    "profile",
+    peer.toText()
+  ]) : null;
+  const peerIsOnline = isDirect && peer ? peerProfile ? isOnline(peerProfile.lastSeen) : void 0 : void 0;
   const peerPrincipalText = (peer == null ? void 0 : peer.toText()) ?? null;
   const cachedName = useDisplayName(peerPrincipalText);
   const displayName = isDirect ? cachedName || (peer ? `${peer.toText().slice(0, 10)}…${peer.toText().slice(-6)}` : "Direct Message") : "Encrypted Group";
-  const unreadCount = 0;
+  const cachedMessages = queryClient2.getQueryData([
+    "messages",
+    conversation.id.toString()
+  ]) ?? [];
+  const unreadCount = principal ? cachedMessages.filter(
+    (m2) => !m2.readBy.some((r2) => r2.userId.toText() === principal.toText())
+  ).length : 0;
   function handleDeleteClick(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -51752,11 +51888,13 @@ function ConversationListItem({
               UserAvatar,
               {
                 principal: peer.toText(),
+                displayName: cachedName || void 0,
                 avatarUrl: getLocalAvatarDataUrl(peer.toText()) ?? void 0,
-                size: 40
+                size: 40,
+                isOnline: peerIsOnline
               }
             ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 rounded-full bg-secondary flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 16, className: "text-secondary-foreground" }) }),
-            unreadCount > 0
+            unreadCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center", children: unreadCount })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-1", children: [
@@ -51912,6 +52050,7 @@ function SidebarContent({ onNavigate }) {
   const { principal, logout, isAuthenticated } = useAuth();
   const location2 = useLocation();
   const navigate = useNavigate();
+  const ownDisplayName = useDisplayName((principal == null ? void 0 : principal.toText()) ?? null);
   const handleLogout = () => {
     logout();
     navigate({ to: "/login" });
@@ -51970,10 +52109,7 @@ function SidebarContent({ onNavigate }) {
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs font-medium text-sidebar-foreground truncate", children: [
-            principal.toText().slice(0, 16),
-            "…"
-          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-medium text-sidebar-foreground truncate", children: ownDisplayName || `${principal.toText().slice(0, 16)}…` }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Internet Identity" })
         ] })
       ] }),
@@ -53004,12 +53140,17 @@ function NewConversationDialog({
                 className: "flex items-center gap-3 p-3 rounded-md bg-muted/60 border border-border",
                 "data-ocid": "new_conversation.direct_preview",
                 children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: directPeer.toText(), size: 36 }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    UserAvatar,
+                    {
+                      principal: directPeer.toText(),
+                      displayName: getLocalDisplayName(directPeer.toText()) ?? void 0,
+                      avatarUrl: getLocalAvatarDataUrl(directPeer.toText()) ?? void 0,
+                      size: 36
+                    }
+                  ),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm font-medium text-foreground truncate", children: [
-                      directPeer.toText().slice(0, 20),
-                      "…"
-                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground truncate", children: getLocalDisplayName(directPeer.toText()) ?? `${directPeer.toText().slice(0, 20)}…` }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: directProfile ? "Registered user" : "Principal selected" })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -53174,7 +53315,7 @@ function NewConversationDialog({
               {
                 className: "flex flex-wrap gap-2",
                 "data-ocid": "new_conversation.members_list",
-                children: groupMembers.map(({ userId, profile }) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                children: groupMembers.map(({ userId }) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
                   "div",
                   {
                     className: "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs",
@@ -53184,14 +53325,12 @@ function NewConversationDialog({
                         UserAvatar,
                         {
                           principal: userId.toText(),
-                          displayName: profile ? void 0 : void 0,
+                          displayName: getLocalDisplayName(userId.toText()) ?? void 0,
+                          avatarUrl: getLocalAvatarDataUrl(userId.toText()) ?? void 0,
                           size: 18
                         }
                       ),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-foreground font-medium", children: [
-                        userId.toText().slice(0, 8),
-                        "…"
-                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-foreground font-medium", children: getLocalDisplayName(userId.toText()) ?? `${userId.toText().slice(0, 8)}…` }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx(
                         "button",
                         {
@@ -54890,7 +55029,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-D62xOPG4.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DpItIgR8.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

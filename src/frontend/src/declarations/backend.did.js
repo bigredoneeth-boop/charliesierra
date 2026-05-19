@@ -474,6 +474,11 @@ export const idlService = IDL.Service({
   'submitJoinRequest' : IDL.Func([SubmitJoinRequestRequest], [Result_1], []),
   'touchPresence' : IDL.Func([], [], []),
   'updateUserProfile' : IDL.Func([UpdateProfileRequest], [Result], []),
+  'uploadFile' : IDL.Func(
+      [IDL.Vec(IDL.Nat8), IDL.Text],
+      [IDL.Vec(IDL.Nat8)],
+      [],
+    ),
 });
 
 export const idlInitArgs = [];
@@ -939,6 +944,11 @@ export const idlFactory = ({ IDL }) => {
     'submitJoinRequest' : IDL.Func([SubmitJoinRequestRequest], [Result_1], []),
     'touchPresence' : IDL.Func([], [], []),
     'updateUserProfile' : IDL.Func([UpdateProfileRequest], [Result], []),
+    'uploadFile' : IDL.Func(
+        [IDL.Vec(IDL.Nat8), IDL.Text],
+        [IDL.Vec(IDL.Nat8)],
+        [],
+      ),
   });
 };
 

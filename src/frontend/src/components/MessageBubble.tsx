@@ -432,7 +432,7 @@ export function MessageBubble({
   showAvatar,
   conversationId,
   myPrincipal,
-  isGroup = false,
+  isGroup: _isGroup = false,
   onReply,
   onDelete,
 }: MessageBubbleProps) {
@@ -520,7 +520,26 @@ export function MessageBubble({
       {/* Avatar */}
       <div className="w-8 flex-shrink-0">
         {showAvatar && !isMine && (
-          <UserAvatar principal={senderInitial} size={30} aria-hidden="true" />
+          <UserAvatar
+            principal={senderInitial}
+            displayName={
+              senderDisplayName !== senderPrincipalText
+                ? senderDisplayName
+                : undefined
+            }
+            avatarUrl={(() => {
+              try {
+                return (
+                  localStorage.getItem(`cs_avatar:${senderInitial}`) ??
+                  undefined
+                );
+              } catch {
+                return undefined;
+              }
+            })()}
+            size={30}
+            aria-hidden="true"
+          />
         )}
       </div>
 
@@ -531,14 +550,12 @@ export function MessageBubble({
         } flex flex-col`}
         onContextMenu={openContextMenu}
       >
-        {/* Sender name label — shown in group chats and direct chats when name is known */}
-        {!isMine &&
-          showAvatar &&
-          (isGroup || senderDisplayName !== senderPrincipalText) && (
-            <span className="text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full">
-              {senderDisplayName}
-            </span>
-          )}
+        {/* Sender name label — shown whenever a display name is known (group or direct) */}
+        {!isMine && showAvatar && senderDisplayName.length > 0 && (
+          <span className="text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full">
+            {senderDisplayName}
+          </span>
+        )}
         <div
           className={`rounded-2xl px-3.5 py-2.5 shadow-message break-words ${
             isMine ? "rounded-br-sm" : "rounded-bl-sm"

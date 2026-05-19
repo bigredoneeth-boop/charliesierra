@@ -394,6 +394,7 @@ export interface _SERVICE {
   'submitJoinRequest' : ActorMethod<[SubmitJoinRequestRequest], Result_1>,
   'touchPresence' : ActorMethod<[], undefined>,
   'updateUserProfile' : ActorMethod<[UpdateProfileRequest], Result>,
+  'uploadFile' : ActorMethod<[Uint8Array, string], Uint8Array>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

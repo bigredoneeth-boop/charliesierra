@@ -8,6 +8,9 @@ interface UserAvatarProps {
   avatarUrl?: string;
   size?: number;
   className?: string;
+  /** When defined, renders an online/offline dot on the bottom-right of the avatar.
+   *  true = green (online), false = gray (offline). Omit to show no dot. */
+  isOnline?: boolean;
 }
 
 const AVATAR_COLORS = [
@@ -32,6 +35,7 @@ export function UserAvatar({
   avatarUrl,
   size = 36,
   className = "",
+  isOnline,
 }: UserAvatarProps) {
   const hash = hashPrincipal(principal);
   const colorClass = AVATAR_COLORS[hash % AVATAR_COLORS.length];
@@ -45,26 +49,44 @@ export function UserAvatar({
   const [imgError, setImgError] = useState(false);
   const showImage = !!resolvedUrl && !imgError;
 
+  const dot =
+    isOnline !== undefined ? (
+      <span
+        aria-hidden="true"
+        title={isOnline ? "Online" : "Offline"}
+        className={[
+          "absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background",
+          isOnline ? "bg-green-500" : "bg-muted-foreground/40",
+        ].join(" ")}
+      />
+    ) : null;
+
   if (showImage) {
     return (
-      <img
-        src={resolvedUrl}
-        alt={displayName ?? principal}
-        onError={() => setImgError(true)}
-        className={`inline-block rounded-full object-cover flex-shrink-0 ${className}`}
+      <span
+        className="relative inline-block flex-shrink-0"
         style={{ width: size, height: size }}
-        aria-label={displayName ?? principal}
-      />
+      >
+        <img
+          src={resolvedUrl}
+          alt={displayName ?? principal}
+          onError={() => setImgError(true)}
+          className={`inline-block rounded-full object-cover w-full h-full ${className}`}
+          aria-label={displayName ?? principal}
+        />
+        {dot}
+      </span>
     );
   }
 
   return (
-    <div
-      className={`inline-flex items-center justify-center rounded-full font-semibold select-none flex-shrink-0 ${colorClass} ${className}`}
+    <span
+      className={`relative inline-flex items-center justify-center rounded-full font-semibold select-none flex-shrink-0 ${colorClass} ${className}`}
       style={{ width: size, height: size, fontSize: size * 0.42 }}
       aria-label={displayName ?? principal}
     >
       {letter}
-    </div>
+      {dot}
+    </span>
   );
 }

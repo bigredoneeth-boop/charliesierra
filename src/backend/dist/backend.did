@@ -496,4 +496,5 @@ service : {
   submitJoinRequest: (req: SubmitJoinRequestRequest) -> (Result_1);
   touchPresence: () -> ();
   updateUserProfile: (req: UpdateProfileRequest) -> (Result);
+  uploadFile: (fileBytes: blob, _mimeType: text) -> (blob);
 }

@@ -99,7 +99,11 @@ function MembersList({
             className="flex items-center gap-2.5 px-2 py-1.5 rounded-md hover:bg-muted/50 group"
             data-ocid={`group_manage.member.${idx + 1}`}
           >
-            <UserAvatar principal={text} size={28} />
+            <UserAvatar
+              principal={text}
+              displayName={displayName !== text ? displayName : undefined}
+              size={28}
+            />
             <div className="flex-1 min-w-0">
               <span className="block text-xs text-foreground font-medium truncate">
                 {displayName}
@@ -204,7 +208,13 @@ function JoinRequestsList({ convId }: { convId: bigint }) {
             className="flex items-start gap-2 px-2 py-2 rounded-md bg-muted/40 border border-border"
             data-ocid={`group_manage.request.${idx + 1}`}
           >
-            <UserAvatar principal={requesterText} size={28} />
+            <UserAvatar
+              principal={requesterText}
+              displayName={
+                displayName !== requesterText ? displayName : undefined
+              }
+              size={28}
+            />
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium truncate text-foreground">
                 {displayName}

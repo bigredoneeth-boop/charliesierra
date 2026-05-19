@@ -139,10 +139,17 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         try {
           const prefix = `${CONV_KEY_PREFIX}${principalText}:`;
           const allDbKeys = await dbGetKeysWithPrefix(prefix);
-          const wrapKey =
-            allDbKeys.length > 0
-              ? await deriveStorageWrapKey(principalText)
-              : null;
+          let wrapKey: CryptoKey | null = null;
+          if (allDbKeys.length > 0) {
+            try {
+              wrapKey = await deriveStorageWrapKey(principalText);
+            } catch (wkErr) {
+              console.error(
+                "[E2EE KEYSTORE] Failed to derive storage wrap key:",
+                wkErr,
+              );
+            }
+          }
 
           await Promise.all(
             allDbKeys.map(async (dbKey) => {
@@ -213,7 +220,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
             }),
           );
           console.log(
-            `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from storage`,
+            `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from IndexedDB on startup`,
           );
         } catch (err) {
           console.warn("[E2EE KEYSTORE] Error during key restore:", err);
@@ -226,10 +233,13 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       });
   }, [principal]);
 
-  const getConversationKey = useCallback(
-    (convId: string) => convKeys.current.get(convId),
-    [],
-  );
+  const getConversationKey = useCallback((convId: string) => {
+    const key = convKeys.current.get(convId);
+    if (key) {
+      console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
+    }
+    return key;
+  }, []);
 
   const setConversationKey = useCallback(
     (convId: string, key: CryptoKey) => {
@@ -405,9 +415,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
             if (rawBytes && rawBytes.length > 0) {
               key = await importAESKey(rawBytes);
               convKeys.current.set(convId, key);
-              console.log(
-                `[E2EE KEYSTORE] Restored key for convId=${convId} (lazy load)`,
-              );
+              console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
             }
           }
         } catch (err) {
@@ -419,8 +427,8 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (!key) {
-        console.error(
-          `[E2EE KEYSTORE] Key missing for convId=${convId}, falling back to key exchange`,
+        console.warn(
+          `[E2EE KEYSTORE] No cached key for convId=${convId} - performing exchange`,
         );
         return null;
       }

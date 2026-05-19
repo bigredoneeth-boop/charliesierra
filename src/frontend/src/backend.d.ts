@@ -485,4 +485,5 @@ export interface backendInterface {
     submitJoinRequest(req: SubmitJoinRequestRequest): Promise<Result_1>;
     touchPresence(): Promise<void>;
     updateUserProfile(req: UpdateProfileRequest): Promise<Result>;
+    uploadFile(fileBytes: Uint8Array, _mimeType: string): Promise<Uint8Array>;
 }

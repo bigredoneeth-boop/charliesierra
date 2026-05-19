@@ -304,7 +304,11 @@ export function ContactSearchInput({
               data-ocid={`contact_search.name_result.${idx + 1}`}
               className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-muted/60 transition-colors duration-150 text-left border-b border-border/50 last:border-b-0"
             >
-              <UserAvatar principal={contact.principal} size={32} />
+              <UserAvatar
+                principal={contact.principal}
+                displayName={contact.displayName}
+                size={32}
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground truncate">
                   {contact.displayName}

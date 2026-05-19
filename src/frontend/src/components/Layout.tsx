@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/context/auth-context";
-import { getLocalAvatarDataUrl } from "@/hooks/use-profiles";
+import { getLocalAvatarDataUrl, useDisplayName } from "@/hooks/use-profiles";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   Compass,
@@ -54,6 +54,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const { principal, logout, isAuthenticated } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const ownDisplayName = useDisplayName(principal?.toText() ?? null);
 
   const handleLogout = () => {
     logout();
@@ -120,7 +121,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             />
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-sidebar-foreground truncate">
-                {principal.toText().slice(0, 16)}…
+                {ownDisplayName || `${principal.toText().slice(0, 16)}…`}
               </p>
               <p className="text-xs text-muted-foreground">Internet Identity</p>
             </div>

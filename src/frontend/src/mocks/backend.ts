@@ -153,7 +153,6 @@ export const mockBackend: backendInterface = {
   sendMessage: async () => ({ __kind__: "ok", ok: sampleMessage }),
   setTypingIndicator: async () => undefined,
   touchPresence: async () => undefined,
-  uploadFile: async () => new TextEncoder().encode("!caf!mock-storage-hash"),
   updateUserProfile: async () => ({ __kind__: "ok", ok: aliceProfile }),
   adminGetEscrowGrants: async () => ({ __kind__: "ok", ok: [] }),
   adminGrantEscrowAccess: async () => ({
@@ -219,4 +218,7 @@ export const mockBackend: backendInterface = {
   }),
   deleteGroupConversation: async () => ({ __kind__: "ok", ok: null }),
   deleteConversation: async () => ({ __kind__: "ok", ok: null }),
+  uploadFile: async (_fileBytes: Uint8Array, _mimeType: string): Promise<Uint8Array> => {
+    return new Uint8Array();
+  },
 };

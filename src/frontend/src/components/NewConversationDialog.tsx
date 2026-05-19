@@ -15,6 +15,10 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/auth-context";
+import {
+  getLocalAvatarDataUrl,
+  getLocalDisplayName,
+} from "@/hooks/use-profiles";
 import { deriveGroupKey, encryptMessage } from "@/lib/crypto";
 import { parseIcError } from "@/utils/ic-errors";
 import { useActor } from "@caffeineai/core-infrastructure";
@@ -290,10 +294,20 @@ export function NewConversationDialog({
                 className="flex items-center gap-3 p-3 rounded-md bg-muted/60 border border-border"
                 data-ocid="new_conversation.direct_preview"
               >
-                <UserAvatar principal={directPeer.toText()} size={36} />
+                <UserAvatar
+                  principal={directPeer.toText()}
+                  displayName={
+                    getLocalDisplayName(directPeer.toText()) ?? undefined
+                  }
+                  avatarUrl={
+                    getLocalAvatarDataUrl(directPeer.toText()) ?? undefined
+                  }
+                  size={36}
+                />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
-                    {directPeer.toText().slice(0, 20)}…
+                    {getLocalDisplayName(directPeer.toText()) ??
+                      `${directPeer.toText().slice(0, 20)}…`}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {directProfile ? "Registered user" : "Principal selected"}
@@ -443,7 +457,7 @@ export function NewConversationDialog({
                 className="flex flex-wrap gap-2"
                 data-ocid="new_conversation.members_list"
               >
-                {groupMembers.map(({ userId, profile }) => (
+                {groupMembers.map(({ userId }) => (
                   <div
                     key={userId.toText()}
                     className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs"
@@ -451,11 +465,17 @@ export function NewConversationDialog({
                   >
                     <UserAvatar
                       principal={userId.toText()}
-                      displayName={profile ? undefined : undefined}
+                      displayName={
+                        getLocalDisplayName(userId.toText()) ?? undefined
+                      }
+                      avatarUrl={
+                        getLocalAvatarDataUrl(userId.toText()) ?? undefined
+                      }
                       size={18}
                     />
                     <span className="text-foreground font-medium">
-                      {userId.toText().slice(0, 8)}…
+                      {getLocalDisplayName(userId.toText()) ??
+                        `${userId.toText().slice(0, 8)}…`}
                     </span>
                     <button
                       type="button"
