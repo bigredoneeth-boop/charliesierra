@@ -192,7 +192,10 @@ export function NewConversationDialog({
       let encryptedName: Uint8Array;
       try {
         const groupKey = await deriveGroupKey(allPrincipals);
-        encryptedName = await encryptMessage(groupKey, groupName.trim());
+        encryptedName = await encryptMessage(
+          groupKey,
+          new TextEncoder().encode(groupName.trim()),
+        );
       } catch (cryptoErr) {
         console.warn(
           "[CharlieSierra] Group name encryption failed, falling back to plain bytes:",

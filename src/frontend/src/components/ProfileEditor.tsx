@@ -129,7 +129,10 @@ export function ProfileEditor() {
       let encryptedDisplayName: Uint8Array | undefined;
       if (name) {
         const aesKey = await deriveDisplayNameKey(principal!);
-        encryptedDisplayName = await encryptMessage(aesKey, name);
+        encryptedDisplayName = await encryptMessage(
+          aesKey,
+          new TextEncoder().encode(name),
+        );
       }
 
       // ── Handle avatar

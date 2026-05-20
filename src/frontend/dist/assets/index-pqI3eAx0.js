@@ -36460,9 +36460,22 @@ async function dbGetKeysWithPrefix(prefix2) {
   const db = await openDB$1();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(KEY_STORE, "readonly");
-    const req = tx.objectStore(KEY_STORE).getAllKeys();
-    req.onsuccess = () => resolve(req.result.filter((k2) => k2.startsWith(prefix2)));
-    req.onerror = () => reject(req.error);
+    const store = tx.objectStore(KEY_STORE);
+    const results = [];
+    const cursor = store.openCursor();
+    cursor.onsuccess = (e) => {
+      const result = e.target.result;
+      if (result) {
+        const key = result.key;
+        if (key.startsWith(prefix2)) {
+          results.push({ key, value: result.value });
+        }
+        result.continue();
+      } else {
+        resolve(results);
+      }
+    };
+    cursor.onerror = () => reject(cursor.error);
   });
 }
 async function generateECDHKeyPair() {
@@ -36510,34 +36523,32 @@ async function deriveSharedSecret(myPrivateKey, theirPublicKey) {
   return importAESKey(rawBytes);
 }
 async function encryptMessage(key, plaintext) {
-  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const plaintextBytes = new TextEncoder().encode(plaintext);
-  const ciphertextBuffer = await crypto.subtle.encrypt(
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encrypted = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
-    plaintextBytes
+    plaintext
   );
-  const ciphertextAndTag = new Uint8Array(ciphertextBuffer);
-  const total = IV_LENGTH + ciphertextAndTag.length;
-  const fullBlob = new Uint8Array(total);
-  fullBlob.set(iv, 0);
-  fullBlob.set(new Uint8Array(ciphertextBuffer), IV_LENGTH);
+  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  fullPayload.set(iv, 0);
+  fullPayload.set(new Uint8Array(encrypted), 12);
   console.log(
-    `[E2EE SEND] Encrypted message → full blob size = ${fullBlob.length} bytes (IV=12, tag=16)`
+    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`
   );
-  return fullBlob;
+  return fullPayload;
 }
-async function decryptMessage(key, rawInput) {
-  const encryptedBlob = new Uint8Array(rawInput.length);
-  for (let i = 0; i < rawInput.length; i++) encryptedBlob[i] = rawInput[i];
-  if (encryptedBlob.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+async function decryptMessage(key, input) {
+  const blob = input instanceof Uint8Array ? input : new Uint8Array(input);
+  const fresh = new Uint8Array(blob.length);
+  for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
+  if (fresh.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", fresh.length);
     throw new Error("Blob too small");
   }
-  const iv = encryptedBlob.slice(0, 12);
-  const ciphertextAndTag = encryptedBlob.slice(12);
+  const iv = fresh.slice(0, 12);
+  const ciphertextAndTag = fresh.slice(12);
   console.log(
-    `[E2EE RECV] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`
+    `[E2EE RECV] Decrypting: total=${fresh.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`
   );
   const decrypted = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv },
@@ -36547,30 +36558,31 @@ async function decryptMessage(key, rawInput) {
   return new TextDecoder().decode(decrypted);
 }
 async function encryptBlob(key, data) {
-  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const ciphertext = await crypto.subtle.encrypt(
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encrypted = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
     data
   );
-  const ciphertextBytes = new Uint8Array(ciphertext);
-  const result = new Uint8Array(IV_LENGTH + ciphertextBytes.length);
-  for (let i = 0; i < IV_LENGTH; i++) result[i] = iv[i];
-  for (let i = 0; i < ciphertextBytes.length; i++)
-    result[IV_LENGTH + i] = ciphertextBytes[i];
-  return result;
+  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  fullPayload.set(iv, 0);
+  fullPayload.set(new Uint8Array(encrypted), 12);
+  console.log(
+    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`
+  );
+  return fullPayload;
 }
 async function decryptBlob(key, data) {
-  const encryptedBlob = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) encryptedBlob[i] = data[i];
-  if (encryptedBlob.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+  const fresh = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
+  if (fresh.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", fresh.length);
     throw new Error("Blob too small");
   }
-  const iv = encryptedBlob.slice(0, 12);
-  const ciphertextAndTag = encryptedBlob.slice(12);
+  const iv = fresh.slice(0, 12);
+  const ciphertextAndTag = fresh.slice(12);
   console.log(
-    `[EncryptedFile] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`
+    `[E2EE RECV] Decrypting: total=${fresh.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`
   );
   try {
     const plainBuffer = await crypto.subtle.decrypt(
@@ -36584,7 +36596,7 @@ async function decryptBlob(key, data) {
     return safeResult.buffer;
   } catch (err) {
     console.error(
-      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${encryptedBlob.length} bytes, IV=12 bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${fresh.length} bytes, IV=12 bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
       err
     );
     throw err;
@@ -36723,11 +36735,10 @@ function CryptoProvider({ children }) {
         const wrapKey = await deriveStorageWrapKey(principalText);
         const wrapped = await wrapKeyBytes(wrapKey, rawBytes);
         const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
-        if (fingerprint !== void 0) {
-          await dbSet(dbKey, { wrapped: Array.from(wrapped), fingerprint });
-        } else {
-          await dbSet(dbKey, { wrapped: Array.from(wrapped) });
-        }
+        await dbSet(dbKey, {
+          wrapped: Array.from(wrapped),
+          fingerprint: fingerprint || ""
+        });
         console.log(`[E2EE KEYSTORE] Persisted key for convId=${convId}`);
       } catch (err) {
         console.warn(
@@ -36762,9 +36773,9 @@ function CryptoProvider({ children }) {
       let restoredCount = 0;
       try {
         const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
-        const allDbKeys = await dbGetKeysWithPrefix(prefix2);
+        const allEntries = await dbGetKeysWithPrefix(prefix2);
         let wrapKey = null;
-        if (allDbKeys.length > 0) {
+        if (allEntries.length > 0) {
           try {
             wrapKey = await deriveStorageWrapKey(principalText);
           } catch (wkErr) {
@@ -36775,10 +36786,10 @@ function CryptoProvider({ children }) {
           }
         }
         await Promise.all(
-          allDbKeys.map(async (dbKey) => {
-            const convId = dbKey.slice(prefix2.length);
+          allEntries.map(async (entry) => {
+            const convId = entry.key.slice(prefix2.length);
             try {
-              const stored = await dbGet(dbKey);
+              const stored = entry.value;
               if (!stored) return;
               let rawBytes = null;
               let fingerprint;
@@ -36808,8 +36819,9 @@ function CryptoProvider({ children }) {
                 groupKeyFingerprints.current.set(convId, fingerprint);
               }
               restoredCount++;
+              const fpLog = fingerprint || "none";
               console.log(
-                `[E2EE KEYSTORE] Restored key for convId=${convId}`
+                `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`
               );
             } catch (err) {
               console.warn(
@@ -36820,7 +36832,7 @@ function CryptoProvider({ children }) {
           })
         );
         console.log(
-          `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from IndexedDB on startup`
+          `[E2EE KEYSTORE] Restored ${restoredCount} conversation keys from storage on startup`
         );
       } catch (err) {
         console.warn("[E2EE KEYSTORE] Error during key restore:", err);
@@ -36831,11 +36843,7 @@ function CryptoProvider({ children }) {
     });
   }, [principal]);
   const getConversationKey = reactExports.useCallback((convId) => {
-    const key = convKeys.current.get(convId);
-    if (key) {
-      console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
-    }
-    return key;
+    return convKeys.current.get(convId);
   }, []);
   const setConversationKey = reactExports.useCallback(
     (convId, key) => {
@@ -36942,7 +36950,8 @@ function CryptoProvider({ children }) {
       const key = convKeys.current.get(convId);
       if (!key) return null;
       try {
-        const blob = await encryptMessage(key, text);
+        const plaintextBytes = new TextEncoder().encode(text);
+        const blob = await encryptMessage(key, plaintextBytes);
         console.log(
           `[E2EE SEND] encryptForConv: full blob size = ${blob.length} bytes (byteOffset=${blob.byteOffset}), convId=${convId}`
         );
@@ -36963,6 +36972,7 @@ function CryptoProvider({ children }) {
           const stored = await dbGet(dbKey);
           if (stored) {
             let rawBytes = null;
+            let fingerprint;
             if (stored instanceof Uint8Array) {
               rawBytes = stored.slice(0);
             } else if (Array.isArray(stored.wrapped)) {
@@ -36971,6 +36981,7 @@ function CryptoProvider({ children }) {
                 stored.wrapped
               );
               rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+              fingerprint = stored.fingerprint;
             } else if (stored.raw) {
               const legacy = stored;
               rawBytes = legacy.raw instanceof Uint8Array ? legacy.raw.slice(0) : new Uint8Array(
@@ -36978,11 +36989,18 @@ function CryptoProvider({ children }) {
                   legacy.raw
                 )
               );
+              fingerprint = legacy.fingerprint;
             }
             if (rawBytes && rawBytes.length > 0) {
               key = await importAESKey(rawBytes);
               convKeys.current.set(convId, key);
-              console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
+              if (fingerprint) {
+                groupKeyFingerprints.current.set(convId, fingerprint);
+              }
+              const fpLog = fingerprint || "none";
+              console.log(
+                `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`
+              );
             }
           }
         } catch (err) {
@@ -36994,21 +37012,19 @@ function CryptoProvider({ children }) {
       }
       if (!key) {
         console.warn(
-          `[E2EE KEYSTORE] No cached key for convId=${convId} - performing exchange`
+          `[E2EE KEYSTORE] No stored key for convId=${convId} - performing exchange`
         );
         return null;
       }
-      const fresh = new Uint8Array(blob.length);
-      for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
       console.log(
-        `[E2EE RECV] decryptFromConv: blob=${fresh.length} bytes (original byteOffset=${blob.byteOffset ?? 0}), convId=${convId}`
+        `[E2EE RECV] decryptFromConv: blob=${blob.length} bytes (original byteOffset=${blob.byteOffset ?? 0}), convId=${convId}`
       );
       try {
-        return await decryptMessage(key, fresh);
+        return await decryptMessage(key, blob);
       } catch (err) {
         const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
         console.error(
-          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${fresh.length} bytes, keyFp=${keyFp}`,
+          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.length} bytes, keyFp=${keyFp}`,
           err
         );
         return null;
@@ -37642,46 +37658,58 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$N = [
+const __iconNode$O = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$N);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$O);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$M = [
+const __iconNode$N = [
   ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
   ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
 ];
-const CheckCheck = createLucideIcon("check-check", __iconNode$M);
+const CheckCheck = createLucideIcon("check-check", __iconNode$N);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$L = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$L);
+const __iconNode$M = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$M);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$K = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$K);
+const __iconNode$L = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$L);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$J = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$J);
+const __iconNode$K = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$K);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$J = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$J);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -37689,18 +37717,6 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$J);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$I = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$I);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$H = [
   [
     "path",
     {
@@ -37710,7 +37726,18 @@ const __iconNode$H = [
   ],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Compass = createLucideIcon("compass", __iconNode$H);
+const Compass = createLucideIcon("compass", __iconNode$I);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$H = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$H);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -37718,10 +37745,11 @@ const Compass = createLucideIcon("compass", __iconNode$H);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$G = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$G);
+const Database = createLucideIcon("database", __iconNode$G);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -37729,11 +37757,11 @@ const Copy = createLucideIcon("copy", __iconNode$G);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$F = [
-  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
-  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
-  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
 ];
-const Database = createLucideIcon("database", __iconNode$F);
+const Download = createLucideIcon("download", __iconNode$F);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -37741,11 +37769,13 @@ const Database = createLucideIcon("database", __iconNode$F);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$E = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const Download = createLucideIcon("download", __iconNode$E);
+const FileText = createLucideIcon("file-text", __iconNode$E);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -37753,13 +37783,11 @@ const Download = createLucideIcon("download", __iconNode$E);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$D = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
 ];
-const FileText = createLucideIcon("file-text", __iconNode$D);
+const Globe = createLucideIcon("globe", __iconNode$D);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -37767,11 +37795,16 @@ const FileText = createLucideIcon("file-text", __iconNode$D);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$C = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
+  ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
+  [
+    "path",
+    {
+      d: "M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
+      key: "1d0kgt"
+    }
+  ]
 ];
-const Globe = createLucideIcon("globe", __iconNode$C);
+const House = createLucideIcon("house", __iconNode$C);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -38405,7 +38438,10 @@ function OnboardingGate({ children }) {
     try {
       const pubBytes = await exportPublicKey(keyPair.publicKey);
       const aesKey = await deriveDisplayNameKey(principal);
-      const encryptedDisplayName = await encryptMessage(aesKey, trimmed);
+      const encryptedDisplayName = await encryptMessage(
+        aesKey,
+        new TextEncoder().encode(trimmed)
+      );
       await updateProfile.mutateAsync({
         encryptedDisplayName,
         ecdhPublicKey: pubBytes
@@ -46986,6 +47022,46 @@ function MembersList({
   myPrincipal
 }) {
   const removeMember = useRemoveConversationMember();
+  const memberIds = reactExports.useMemo(() => conv.members, [conv.members]);
+  const { data: memberProfiles = [] } = useUserProfiles(memberIds);
+  const [resolvedNames, setResolvedNames] = reactExports.useState(
+    {}
+  );
+  reactExports.useEffect(() => {
+    if (memberProfiles.length === 0) return;
+    for (const profile of memberProfiles) {
+      if (profile.encryptedDisplayName.length === 0) continue;
+      const principalText = profile.id.toText();
+      const cached = getDisplayName(principalText);
+      const alreadyResolved = cached !== `${principalText.slice(0, 10)}…${principalText.slice(-4)}`;
+      if (alreadyResolved) {
+        setResolvedNames((prev) => ({ ...prev, [principalText]: cached }));
+        continue;
+      }
+      (async () => {
+        try {
+          const key = await deriveDisplayNameKey(profile.id);
+          const decrypted = await decryptMessage(
+            key,
+            new Uint8Array(profile.encryptedDisplayName).slice(0)
+          );
+          if (decrypted == null ? void 0 : decrypted.trim()) {
+            setLocalDisplayName(principalText, decrypted);
+            setResolvedNames((prev) => ({
+              ...prev,
+              [principalText]: decrypted
+            }));
+          }
+        } catch (err) {
+          console.error(
+            "[DisplayName] GroupManagePanel member decrypt failed for",
+            principalText,
+            err
+          );
+        }
+      })();
+    }
+  }, [memberProfiles]);
   const handleRemove = reactExports.useCallback(
     (memberText) => {
       const member = conv.members.find((m2) => m2.toText() === memberText);
@@ -47003,8 +47079,9 @@ function MembersList({
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-1", children: conv.members.map((m2, idx) => {
     const text = m2.toText();
     const isSelf = text === myPrincipal;
-    const displayName = getDisplayName(text);
-    const hasCustomName = displayName !== text && !displayName.includes("…") || displayName !== `${text.slice(0, 10)}…${text.slice(-4)}`;
+    const displayName = resolvedNames[text] ?? getDisplayName(text);
+    const shortPrincipal2 = `${text.slice(0, 10)}…${text.slice(-4)}`;
+    const hasCustomName = displayName !== shortPrincipal2;
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
@@ -47015,7 +47092,7 @@ function MembersList({
             UserAvatar,
             {
               principal: text,
-              displayName: displayName !== text ? displayName : void 0,
+              displayName: hasCustomName ? displayName : void 0,
               size: 28
             }
           ),
@@ -47077,6 +47154,49 @@ function JoinRequestsList({ convId }) {
   const pending = requests.filter(
     (r2) => r2.status === JoinRequestStatus.pending
   );
+  const requesterIds = reactExports.useMemo(
+    () => pending.map((r2) => r2.requesterId),
+    [pending]
+  );
+  const { data: requesterProfiles = [] } = useUserProfiles(requesterIds);
+  const [resolvedNames, setResolvedNames] = reactExports.useState(
+    {}
+  );
+  reactExports.useEffect(() => {
+    if (requesterProfiles.length === 0) return;
+    for (const profile of requesterProfiles) {
+      if (profile.encryptedDisplayName.length === 0) continue;
+      const principalText = profile.id.toText();
+      const cached = getDisplayName(principalText);
+      const shortFallback = `${principalText.slice(0, 10)}…${principalText.slice(-4)}`;
+      if (cached !== shortFallback) {
+        setResolvedNames((prev) => ({ ...prev, [principalText]: cached }));
+        continue;
+      }
+      (async () => {
+        try {
+          const key = await deriveDisplayNameKey(profile.id);
+          const decrypted = await decryptMessage(
+            key,
+            new Uint8Array(profile.encryptedDisplayName).slice(0)
+          );
+          if (decrypted == null ? void 0 : decrypted.trim()) {
+            setLocalDisplayName(principalText, decrypted);
+            setResolvedNames((prev) => ({
+              ...prev,
+              [principalText]: decrypted
+            }));
+          }
+        } catch (err) {
+          console.error(
+            "[DisplayName] JoinRequestsList decrypt failed for",
+            principalText,
+            err
+          );
+        }
+      })();
+    }
+  }, [requesterProfiles]);
   if (isLoading) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: [1, 2].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-10 w-full rounded-md" }, i)) });
   }
@@ -47092,7 +47212,7 @@ function JoinRequestsList({ convId }) {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: pending.map((req, idx) => {
     const requesterText = req.requesterId.toText();
-    const displayName = getDisplayName(requesterText);
+    const displayName = resolvedNames[requesterText] ?? getDisplayName(requesterText);
     const short = `${requesterText.slice(0, 14)}…`;
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
@@ -50312,7 +50432,6 @@ function MessageBubble({
     minute: "2-digit"
   });
   const senderPrincipalText = message.sender.toText();
-  const senderInitial = senderProfile ? senderProfile.id.toText() : senderPrincipalText;
   const [senderDisplayName, setSenderDisplayName] = reactExports.useState(
     () => getDisplayName(senderPrincipalText)
   );
@@ -50330,7 +50449,12 @@ function MessageBubble({
         if (cancelled || !(decrypted == null ? void 0 : decrypted.trim())) return;
         setLocalDisplayName(senderPrincipalText, decrypted);
         setSenderDisplayName(decrypted);
-      } catch {
+      } catch (err) {
+        console.error(
+          "[DisplayName] Failed to decrypt sender display name for",
+          senderPrincipalText,
+          err
+        );
       }
     })();
     return () => {
@@ -50365,11 +50489,11 @@ function MessageBubble({
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 flex-shrink-0", children: showAvatar && !isMine && /* @__PURE__ */ jsxRuntimeExports.jsx(
           UserAvatar,
           {
-            principal: senderInitial,
+            principal: senderPrincipalText,
             displayName: senderDisplayName !== senderPrincipalText ? senderDisplayName : void 0,
             avatarUrl: (() => {
               try {
-                return localStorage.getItem(`cs_avatar:${senderInitial}`) ?? void 0;
+                return localStorage.getItem(`cs_avatar:${senderPrincipalText}`) ?? void 0;
               } catch {
                 return void 0;
               }
@@ -50783,7 +50907,25 @@ function MessageList({
     for (const node of nodes) observer.observe(node);
     return () => observer.disconnect();
   }, [markRead]);
-  const profileMap = new Map(profiles.map((p2) => [p2.id.toText(), p2]));
+  const uniqueSenderIds = reactExports.useMemo(() => {
+    const seen2 = /* @__PURE__ */ new Set();
+    const ids = [];
+    for (const msg of allMessages) {
+      const text = msg.sender.toText();
+      if (!seen2.has(text)) {
+        seen2.add(text);
+        ids.push(msg.sender);
+      }
+    }
+    return ids;
+  }, [allMessages]);
+  const { data: senderProfiles = [] } = useUserProfiles(uniqueSenderIds);
+  const profileMap = reactExports.useMemo(() => {
+    const map = new Map(
+      [...profiles, ...senderProfiles].map((p2) => [p2.id.toText(), p2])
+    );
+    return map;
+  }, [profiles, senderProfiles]);
   if (isLoading && allMessages.length === 0) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
@@ -51122,7 +51264,8 @@ async function decryptProfileDisplayName(profile) {
       key,
       new Uint8Array(profile.encryptedDisplayName)
     );
-  } catch {
+  } catch (err) {
+    console.error("[DisplayName] decryptProfileDisplayName failed:", err);
     return null;
   }
 }
@@ -51373,6 +51516,7 @@ function ChatHeader({
   pendingRequestCount,
   onManageOpen
 }) {
+  const navigate = useNavigate();
   const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
   const isGroup = conv.kind === ConversationKind.group;
   const avatarPrincipal = (peerId == null ? void 0 : peerId.toText()) ?? myPrincipal;
@@ -51424,6 +51568,17 @@ function ChatHeader({
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 flex-shrink-0", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => navigate({ to: "/app/conversations" }),
+              className: "p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth",
+              "aria-label": "Go to conversations",
+              "data-ocid": "chat.home_button",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(House, { size: 18 })
+            }
+          ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "button",
             {
@@ -51833,6 +51988,32 @@ function ConversationListItem({
   const peerIsOnline = isDirect && peer ? peerProfile ? isOnline(peerProfile.lastSeen) : void 0 : void 0;
   const peerPrincipalText = (peer == null ? void 0 : peer.toText()) ?? null;
   const cachedName = useDisplayName(peerPrincipalText);
+  const { data: peerProfileData } = useUserProfile(peer ?? null);
+  reactExports.useEffect(() => {
+    if (!peerProfileData || !peerPrincipalText) return;
+    if (peerProfileData.encryptedDisplayName.length === 0) return;
+    const cached = cachedName;
+    const shortFallback = `${peerPrincipalText.slice(0, 10)}…${peerPrincipalText.slice(-4)}`;
+    if (cached && cached !== shortFallback) return;
+    (async () => {
+      try {
+        const key = await deriveDisplayNameKey(peerProfileData.id);
+        const decrypted = await decryptMessage(
+          key,
+          new Uint8Array(peerProfileData.encryptedDisplayName).slice(0)
+        );
+        if (decrypted == null ? void 0 : decrypted.trim()) {
+          setLocalDisplayName(peerPrincipalText, decrypted);
+        }
+      } catch (err) {
+        console.error(
+          "[DisplayName] ConversationListItem decrypt failed for",
+          peerPrincipalText,
+          err
+        );
+      }
+    })();
+  }, [peerProfileData, peerPrincipalText, cachedName]);
   const displayName = isDirect ? cachedName || (peer ? `${peer.toText().slice(0, 10)}…${peer.toText().slice(-6)}` : "Direct Message") : "Encrypted Group";
   const cachedMessages = queryClient2.getQueryData([
     "messages",
@@ -53036,7 +53217,10 @@ function NewConversationDialog({
       let encryptedName;
       try {
         const groupKey = await deriveGroupKey(allPrincipals);
-        encryptedName = await encryptMessage(groupKey, groupName.trim());
+        encryptedName = await encryptMessage(
+          groupKey,
+          new TextEncoder().encode(groupName.trim())
+        );
       } catch (cryptoErr) {
         console.warn(
           "[CharlieSierra] Group name encryption failed, falling back to plain bytes:",
@@ -53684,7 +53868,10 @@ function ProfileEditor() {
       let encryptedDisplayName;
       if (name) {
         const aesKey = await deriveDisplayNameKey(principal);
-        encryptedDisplayName = await encryptMessage(aesKey, name);
+        encryptedDisplayName = await encryptMessage(
+          aesKey,
+          new TextEncoder().encode(name)
+        );
       }
       let encryptedAvatarKey;
       if (pendingFile && pendingPreview) {
@@ -55016,7 +55203,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-B59o8Tjp.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Bmr9biy4.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

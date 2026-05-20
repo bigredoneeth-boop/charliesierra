@@ -90,13 +90,10 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         const wrapKey = await deriveStorageWrapKey(principalText);
         const wrapped = await wrapKeyBytes(wrapKey, rawBytes);
         const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
-        if (fingerprint !== undefined) {
-          // Store group key with fingerprint: wrap the raw bytes, store as { wrapped, fingerprint }
-          await dbSet(dbKey, { wrapped: Array.from(wrapped), fingerprint });
-        } else {
-          // Store direct key: just the wrapped bytes array
-          await dbSet(dbKey, { wrapped: Array.from(wrapped) });
-        }
+        await dbSet(dbKey, {
+          wrapped: Array.from(wrapped),
+          fingerprint: fingerprint || "",
+        });
         console.log(`[E2EE KEYSTORE] Persisted key for convId=${convId}`);
       } catch (err) {
         console.warn(
@@ -138,9 +135,9 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         let restoredCount = 0;
         try {
           const prefix = `${CONV_KEY_PREFIX}${principalText}:`;
-          const allDbKeys = await dbGetKeysWithPrefix(prefix);
+          const allEntries = await dbGetKeysWithPrefix(prefix);
           let wrapKey: CryptoKey | null = null;
-          if (allDbKeys.length > 0) {
+          if (allEntries.length > 0) {
             try {
               wrapKey = await deriveStorageWrapKey(principalText);
             } catch (wkErr) {
@@ -152,15 +149,14 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           }
 
           await Promise.all(
-            allDbKeys.map(async (dbKey) => {
-              const convId = dbKey.slice(prefix.length);
+            allEntries.map(async (entry) => {
+              const convId = entry.key.slice(prefix.length);
               try {
-                const stored = await dbGet<
+                const stored = entry.value as
                   | { wrapped: number[]; fingerprint?: string }
                   | Uint8Array
                   | { raw: Uint8Array; fingerprint?: string }
-                  | null
-                >(dbKey);
+                  | null;
                 if (!stored) return;
 
                 let rawBytes: Uint8Array | null = null;
@@ -208,8 +204,9 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
                   groupKeyFingerprints.current.set(convId, fingerprint);
                 }
                 restoredCount++;
+                const fpLog = fingerprint || "none";
                 console.log(
-                  `[E2EE KEYSTORE] Restored key for convId=${convId}`,
+                  `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`,
                 );
               } catch (err) {
                 console.warn(
@@ -220,7 +217,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
             }),
           );
           console.log(
-            `[E2EE KEYSTORE] Loaded ${restoredCount} conversation keys from IndexedDB on startup`,
+            `[E2EE KEYSTORE] Restored ${restoredCount} conversation keys from storage on startup`,
           );
         } catch (err) {
           console.warn("[E2EE KEYSTORE] Error during key restore:", err);
@@ -234,11 +231,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   }, [principal]);
 
   const getConversationKey = useCallback((convId: string) => {
-    const key = convKeys.current.get(convId);
-    if (key) {
-      console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
-    }
-    return key;
+    return convKeys.current.get(convId);
   }, []);
 
   const setConversationKey = useCallback(
@@ -366,9 +359,9 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       const key = convKeys.current.get(convId);
       if (!key) return null;
       try {
-        // encryptMessage returns a fresh zero-offset Uint8Array: IV(12) + ciphertext + tag(16)
-        // Return it as-is — do NOT slice, trim, or re-encode.
-        const blob = await encryptMessage(key, text);
+        // Encode plaintext to bytes, then delegate entirely to encryptMessage
+        const plaintextBytes = new TextEncoder().encode(text);
+        const blob = await encryptMessage(key, plaintextBytes);
         console.log(
           `[E2EE SEND] encryptForConv: full blob size = ${blob.length} bytes (byteOffset=${blob.byteOffset}), convId=${convId}`,
         );
@@ -397,6 +390,8 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           >(dbKey);
           if (stored) {
             let rawBytes: Uint8Array | null = null;
+            let fingerprint: string | undefined;
+
             if (stored instanceof Uint8Array) {
               rawBytes = stored.slice(0);
             } else if (
@@ -407,8 +402,14 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
                 (stored as { wrapped: number[]; fingerprint?: string }).wrapped,
               );
               rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+              fingerprint = (
+                stored as { wrapped: number[]; fingerprint?: string }
+              ).fingerprint;
             } else if ((stored as { raw?: Uint8Array }).raw) {
-              const legacy = stored as { raw: Uint8Array };
+              const legacy = stored as {
+                raw: Uint8Array;
+                fingerprint?: string;
+              };
               rawBytes =
                 legacy.raw instanceof Uint8Array
                   ? legacy.raw.slice(0)
@@ -417,11 +418,19 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
                         legacy.raw as unknown as Record<string, number>,
                       ),
                     );
+              fingerprint = legacy.fingerprint;
             }
+
             if (rawBytes && rawBytes.length > 0) {
               key = await importAESKey(rawBytes);
               convKeys.current.set(convId, key);
-              console.log(`[E2EE KEYSTORE] Restored key for convId=${convId}`);
+              if (fingerprint) {
+                groupKeyFingerprints.current.set(convId, fingerprint);
+              }
+              const fpLog = fingerprint || "none";
+              console.log(
+                `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`,
+              );
             }
           }
         } catch (err) {
@@ -434,24 +443,21 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
 
       if (!key) {
         console.warn(
-          `[E2EE KEYSTORE] No cached key for convId=${convId} - performing exchange`,
+          `[E2EE KEYSTORE] No stored key for convId=${convId} - performing exchange`,
         );
         return null;
       }
 
-      // CRITICAL: copy into a fresh zero-offset buffer BEFORE calling decryptMessage.
-      // Bytes decoded by Candid carry a hidden byteOffset that corrupts IV extraction.
-      const fresh = new Uint8Array(blob.length);
-      for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
+      // Delegate entirely to decryptMessage — it handles the fresh-copy internally
       console.log(
-        `[E2EE RECV] decryptFromConv: blob=${fresh.length} bytes (original byteOffset=${(blob as Uint8Array & { byteOffset?: number }).byteOffset ?? 0}), convId=${convId}`,
+        `[E2EE RECV] decryptFromConv: blob=${blob.length} bytes (original byteOffset=${(blob as Uint8Array & { byteOffset?: number }).byteOffset ?? 0}), convId=${convId}`,
       );
       try {
-        return await decryptMessage(key, fresh);
+        return await decryptMessage(key, blob);
       } catch (err) {
         const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
         console.error(
-          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${fresh.length} bytes, keyFp=${keyFp}`,
+          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.length} bytes, keyFp=${keyFp}`,
           err,
         );
         return null;

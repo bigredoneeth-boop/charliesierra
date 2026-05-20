@@ -38,11 +38,16 @@ import {
   useDenyJoinRequest,
   useGroupJoinRequests,
 } from "@/hooks/use-discovery";
-import { getDisplayName } from "@/hooks/use-profiles";
+import {
+  getDisplayName,
+  setLocalDisplayName,
+  useUserProfiles,
+} from "@/hooks/use-profiles";
+import { decryptMessage, deriveDisplayNameKey } from "@/lib/crypto";
 import type { Principal } from "@icp-sdk/core/principal";
 import { useNavigate } from "@tanstack/react-router";
 import { Check, Trash2, UserMinus, UserPlus, X } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ContactSearchInput } from "./ContactSearchInput";
 import { UserAvatar } from "./UserAvatar";
@@ -66,9 +71,57 @@ function MembersList({
 }) {
   const removeMember = useRemoveConversationMember();
 
+  // Collect member IDs and fetch their profiles to trigger decryption
+  const memberIds = useMemo(() => conv.members, [conv.members]);
+  const { data: memberProfiles = [] } = useUserProfiles(memberIds);
+
+  // State to hold resolved display names keyed by principal text
+  const [resolvedNames, setResolvedNames] = useState<Record<string, string>>(
+    {},
+  );
+
+  // Decrypt display names whenever profiles arrive
+  useEffect(() => {
+    if (memberProfiles.length === 0) return;
+    for (const profile of memberProfiles) {
+      if (profile.encryptedDisplayName.length === 0) continue;
+      const principalText = profile.id.toText();
+      // Only decrypt if not already cached
+      const cached = getDisplayName(principalText);
+      const alreadyResolved =
+        cached !==
+        `${principalText.slice(0, 10)}\u2026${principalText.slice(-4)}`;
+      if (alreadyResolved) {
+        setResolvedNames((prev) => ({ ...prev, [principalText]: cached }));
+        continue;
+      }
+      (async () => {
+        try {
+          const key = await deriveDisplayNameKey(profile.id);
+          const decrypted = await decryptMessage(
+            key,
+            new Uint8Array(profile.encryptedDisplayName).slice(0),
+          );
+          if (decrypted?.trim()) {
+            setLocalDisplayName(principalText, decrypted);
+            setResolvedNames((prev) => ({
+              ...prev,
+              [principalText]: decrypted,
+            }));
+          }
+        } catch (err) {
+          console.error(
+            "[DisplayName] GroupManagePanel member decrypt failed for",
+            principalText,
+            err,
+          );
+        }
+      })();
+    }
+  }, [memberProfiles]);
+
   const handleRemove = useCallback(
     (memberText: string) => {
-      // find the Principal object
       const member = conv.members.find((m) => m.toText() === memberText);
       if (!member) return;
       removeMember.mutate(
@@ -89,10 +142,9 @@ function MembersList({
       {conv.members.map((m, idx) => {
         const text = m.toText();
         const isSelf = text === myPrincipal;
-        const displayName = getDisplayName(text);
-        const hasCustomName =
-          (displayName !== text && !displayName.includes("\u2026")) ||
-          displayName !== `${text.slice(0, 10)}\u2026${text.slice(-4)}`;
+        const displayName = resolvedNames[text] ?? getDisplayName(text);
+        const shortPrincipal = `${text.slice(0, 10)}\u2026${text.slice(-4)}`;
+        const hasCustomName = displayName !== shortPrincipal;
         return (
           <div
             key={text}
@@ -101,7 +153,7 @@ function MembersList({
           >
             <UserAvatar
               principal={text}
-              displayName={displayName !== text ? displayName : undefined}
+              displayName={hasCustomName ? displayName : undefined}
               size={28}
             />
             <div className="flex-1 min-w-0">
@@ -175,6 +227,53 @@ function JoinRequestsList({ convId }: { convId: bigint }) {
     (r) => r.status === JoinRequestStatus.pending,
   );
 
+  // Fetch requester profiles to trigger display name decryption
+  const requesterIds = useMemo(
+    () => pending.map((r) => r.requesterId),
+    [pending],
+  );
+  const { data: requesterProfiles = [] } = useUserProfiles(requesterIds);
+
+  const [resolvedNames, setResolvedNames] = useState<Record<string, string>>(
+    {},
+  );
+
+  useEffect(() => {
+    if (requesterProfiles.length === 0) return;
+    for (const profile of requesterProfiles) {
+      if (profile.encryptedDisplayName.length === 0) continue;
+      const principalText = profile.id.toText();
+      const cached = getDisplayName(principalText);
+      const shortFallback = `${principalText.slice(0, 10)}\u2026${principalText.slice(-4)}`;
+      if (cached !== shortFallback) {
+        setResolvedNames((prev) => ({ ...prev, [principalText]: cached }));
+        continue;
+      }
+      (async () => {
+        try {
+          const key = await deriveDisplayNameKey(profile.id);
+          const decrypted = await decryptMessage(
+            key,
+            new Uint8Array(profile.encryptedDisplayName).slice(0),
+          );
+          if (decrypted?.trim()) {
+            setLocalDisplayName(principalText, decrypted);
+            setResolvedNames((prev) => ({
+              ...prev,
+              [principalText]: decrypted,
+            }));
+          }
+        } catch (err) {
+          console.error(
+            "[DisplayName] JoinRequestsList decrypt failed for",
+            principalText,
+            err,
+          );
+        }
+      })();
+    }
+  }, [requesterProfiles]);
+
   if (isLoading) {
     return (
       <div className="space-y-2">
@@ -200,7 +299,8 @@ function JoinRequestsList({ convId }: { convId: bigint }) {
     <div className="space-y-2">
       {pending.map((req: JoinRequest, idx: number) => {
         const requesterText = req.requesterId.toText();
-        const displayName = getDisplayName(requesterText);
+        const displayName =
+          resolvedNames[requesterText] ?? getDisplayName(requesterText);
         const short = `${requesterText.slice(0, 14)}\u2026`;
         return (
           <div

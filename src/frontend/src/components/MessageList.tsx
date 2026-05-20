@@ -245,7 +245,30 @@ export function MessageList({
     return () => observer.disconnect();
   }, [markRead]);
 
-  const profileMap = new Map(profiles.map((p) => [p.id.toText(), p]));
+  // Collect all unique sender principal IDs from all messages
+  const uniqueSenderIds = useMemo(() => {
+    const seen = new Set<string>();
+    const ids: import("@/backend").UserId[] = [];
+    for (const msg of allMessages) {
+      const text = msg.sender.toText();
+      if (!seen.has(text)) {
+        seen.add(text);
+        ids.push(msg.sender);
+      }
+    }
+    return ids;
+  }, [allMessages]);
+
+  // Fetch profiles for ALL senders (not just the peer passed from ChatPage)
+  const { data: senderProfiles = [] } = useUserProfiles(uniqueSenderIds);
+
+  // Merge peer profiles (from ChatPage) with fetched sender profiles
+  const profileMap = useMemo(() => {
+    const map = new Map(
+      [...profiles, ...senderProfiles].map((p) => [p.id.toText(), p]),
+    );
+    return map;
+  }, [profiles, senderProfiles]);
 
   if (isLoading && allMessages.length === 0) {
     return (

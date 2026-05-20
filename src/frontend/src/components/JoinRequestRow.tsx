@@ -1,6 +1,8 @@
 import type { JoinRequest } from "@/backend";
+import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { getLocalAvatarDataUrl, useDisplayName } from "@/hooks/use-profiles";
 import { Check, X } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -34,7 +36,11 @@ export function JoinRequestRow({
   const [denyReason, setDenyReason] = useState("");
   const denyRef = useRef<HTMLTextAreaElement>(null);
 
-  const requesterShort = `${request.requesterId.toText().slice(0, 12)}\u2026`;
+  const requesterIdText = request.requesterId.toText();
+  const resolvedName = useDisplayName(requesterIdText);
+  const requesterShort =
+    resolvedName || `${requesterIdText.slice(0, 12)}\u2026`;
+  const avatarUrl = getLocalAvatarDataUrl(requesterIdText) ?? undefined;
 
   const handleOpenDeny = () => {
     setShowDenyDialog(true);
@@ -65,12 +71,22 @@ export function JoinRequestRow({
         {groupName}
       </td>
       <td className="px-4 py-3">
-        <span
-          className="font-mono text-xs text-muted-foreground"
-          title={request.requesterId.toText()}
-        >
-          {requesterShort}
-        </span>
+        <div className="flex items-center gap-2">
+          <UserAvatar
+            principal={requesterIdText}
+            displayName={
+              resolvedName !== requesterIdText ? resolvedName : undefined
+            }
+            avatarUrl={avatarUrl}
+            size={24}
+          />
+          <span
+            className="text-xs font-medium text-foreground truncate"
+            title={requesterIdText}
+          >
+            {requesterShort}
+          </span>
+        </div>
       </td>
       <td className="px-4 py-3 max-w-[200px]">
         {request.message ? (

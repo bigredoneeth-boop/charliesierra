@@ -211,7 +211,10 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
     try {
       const pubBytes = await exportPublicKey(keyPair.publicKey);
       const aesKey = await deriveDisplayNameKey(principal);
-      const encryptedDisplayName = await encryptMessage(aesKey, trimmed);
+      const encryptedDisplayName = await encryptMessage(
+        aesKey,
+        new TextEncoder().encode(trimmed),
+      );
 
       await updateProfile.mutateAsync({
         encryptedDisplayName,

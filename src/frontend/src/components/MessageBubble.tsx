@@ -459,9 +459,6 @@ export function MessageBubble({
   });
 
   const senderPrincipalText = message.sender.toText();
-  const senderInitial = senderProfile
-    ? senderProfile.id.toText()
-    : senderPrincipalText;
   // Resolve sender display name: use localStorage cache, fall back to short principal
   const [senderDisplayName, setSenderDisplayName] = useState<string>(() =>
     getDisplayName(senderPrincipalText),
@@ -483,8 +480,12 @@ export function MessageBubble({
         if (cancelled || !decrypted?.trim()) return;
         setLocalDisplayName(senderPrincipalText, decrypted);
         setSenderDisplayName(decrypted);
-      } catch {
-        // Ignore — name stays as short principal fallback
+      } catch (err) {
+        console.error(
+          "[DisplayName] Failed to decrypt sender display name for",
+          senderPrincipalText,
+          err,
+        );
       }
     })();
     return () => {
@@ -530,7 +531,7 @@ export function MessageBubble({
       <div className="w-8 flex-shrink-0">
         {showAvatar && !isMine && (
           <UserAvatar
-            principal={senderInitial}
+            principal={senderPrincipalText}
             displayName={
               senderDisplayName !== senderPrincipalText
                 ? senderDisplayName
@@ -539,7 +540,7 @@ export function MessageBubble({
             avatarUrl={(() => {
               try {
                 return (
-                  localStorage.getItem(`cs_avatar:${senderInitial}`) ??
+                  localStorage.getItem(`cs_avatar:${senderPrincipalText}`) ??
                   undefined
                 );
               } catch {

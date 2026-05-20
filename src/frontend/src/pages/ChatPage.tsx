@@ -54,6 +54,7 @@ import {
   ChevronDown,
   ChevronUp,
   Database,
+  Home,
   Search,
   Settings,
   Timer,
@@ -77,7 +78,8 @@ async function decryptProfileDisplayName(
       key,
       new Uint8Array(profile.encryptedDisplayName),
     );
-  } catch {
+  } catch (err) {
+    console.error("[DisplayName] decryptProfileDisplayName failed:", err);
     return null;
   }
 }
@@ -363,6 +365,7 @@ function ChatHeader({
   pendingRequestCount,
   onManageOpen,
 }: HeaderProps) {
+  const navigate = useNavigate();
   const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
   const isGroup = conv.kind === ConversationKind.group;
   const avatarPrincipal = peerId?.toText() ?? myPrincipal;
@@ -435,6 +438,15 @@ function ChatHeader({
 
       {/* Actions */}
       <div className="flex items-center gap-1 flex-shrink-0">
+        <button
+          type="button"
+          onClick={() => navigate({ to: "/app/conversations" })}
+          className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth"
+          aria-label="Go to conversations"
+          data-ocid="chat.home_button"
+        >
+          <Home size={18} />
+        </button>
         <button
           type="button"
           onClick={onSearchOpen}

@@ -42,15 +42,30 @@ export async function dbSet(key: string, value: unknown): Promise<void> {
   });
 }
 
-/** Return all keys in the KEY_STORE that match the given prefix. */
-export async function dbGetKeysWithPrefix(prefix: string): Promise<string[]> {
+/** Return all key-value pairs in the KEY_STORE whose keys match the given prefix. */
+export async function dbGetKeysWithPrefix(
+  prefix: string,
+): Promise<{ key: string; value: unknown }[]> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(KEY_STORE, "readonly");
-    const req = tx.objectStore(KEY_STORE).getAllKeys();
-    req.onsuccess = () =>
-      resolve((req.result as string[]).filter((k) => k.startsWith(prefix)));
-    req.onerror = () => reject(req.error);
+    const store = tx.objectStore(KEY_STORE);
+    const results: { key: string; value: unknown }[] = [];
+    const cursor = store.openCursor();
+    cursor.onsuccess = (e) => {
+      const result = (e.target as IDBRequest)
+        .result as IDBCursorWithValue | null;
+      if (result) {
+        const key = result.key as string;
+        if (key.startsWith(prefix)) {
+          results.push({ key, value: result.value });
+        }
+        result.continue();
+      } else {
+        resolve(results);
+      }
+    };
+    cursor.onerror = () => reject(cursor.error);
   });
 }
 
@@ -133,63 +148,45 @@ export async function deriveSharedSecret(
 
 export async function encryptMessage(
   key: CryptoKey,
-  plaintext: string,
+  plaintext: BufferSource,
 ): Promise<Uint8Array> {
-  // Step 1: fresh random 12-byte IV
-  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-
-  // Step 2: encode plaintext
-  const plaintextBytes = new TextEncoder().encode(plaintext);
-
-  // Step 3: AES-GCM encrypt — output is ciphertext + 16-byte auth tag
-  const ciphertextBuffer = await crypto.subtle.encrypt(
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encrypted = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
-    plaintextBytes,
+    plaintext,
   );
-
-  // Step 4: concatenate into a brand-new owned buffer: [IV(12)] [ciphertext+tag]
-  // Use set() with fresh allocations — both iv and ciphertextAndTag are already
-  // zero-offset arrays from getRandomValues / SubtleCrypto output respectively.
-  const ciphertextAndTag = new Uint8Array(ciphertextBuffer);
-  const total = IV_LENGTH + ciphertextAndTag.length;
-  const fullBlob = new Uint8Array(total);
-  fullBlob.set(iv, 0);
-  fullBlob.set(new Uint8Array(ciphertextBuffer), IV_LENGTH);
-
+  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  fullPayload.set(iv, 0);
+  fullPayload.set(new Uint8Array(encrypted), 12);
   console.log(
-    `[E2EE SEND] Encrypted message \u2192 full blob size = ${fullBlob.length} bytes (IV=12, tag=16)`,
+    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`,
   );
-
-  return fullBlob;
+  return fullPayload;
 }
 
 export async function decryptMessage(
   key: CryptoKey,
-  rawInput: Uint8Array,
+  input: Uint8Array | ArrayBuffer,
 ): Promise<string> {
-  // Copy into fresh zero-offset buffer first (keep existing pattern)
-  const encryptedBlob = new Uint8Array(rawInput.length);
-  for (let i = 0; i < rawInput.length; i++) encryptedBlob[i] = rawInput[i];
-
-  if (encryptedBlob.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+  const blob = input instanceof Uint8Array ? input : new Uint8Array(input);
+  // IMPORTANT: always copy into a fresh zero-offset buffer first (Candid byteOffset fix)
+  const fresh = new Uint8Array(blob.length);
+  for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
+  if (fresh.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", fresh.length);
     throw new Error("Blob too small");
   }
-
-  const iv = encryptedBlob.slice(0, 12);
-  const ciphertextAndTag = encryptedBlob.slice(12); // Everything after IV
-
+  const iv = fresh.slice(0, 12);
+  const ciphertextAndTag = fresh.slice(12);
   console.log(
-    `[E2EE RECV] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`,
+    `[E2EE RECV] Decrypting: total=${fresh.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`,
   );
-
   const decrypted = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv },
     key,
     ciphertextAndTag,
   );
-
   return new TextDecoder().decode(decrypted);
 }
 
@@ -199,26 +196,19 @@ export async function encryptBlob(
   key: CryptoKey,
   data: ArrayBuffer,
 ): Promise<Uint8Array> {
-  // Step 1: fresh random 12-byte IV
-  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-
-  // Step 2: AES-GCM encrypt — output is ciphertext + 16-byte auth tag
-  const ciphertext = await crypto.subtle.encrypt(
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encrypted = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
     data,
   );
-
-  // Step 3: Concatenate into a brand-new fully-owned buffer: IV(12) + ciphertext+authTag
-  // Element-by-element copy guarantees byteOffset=0 in the result — never use .set()
-  // with a Uint8Array view that may carry a hidden internal offset.
-  const ciphertextBytes = new Uint8Array(ciphertext);
-  const result = new Uint8Array(IV_LENGTH + ciphertextBytes.length);
-  for (let i = 0; i < IV_LENGTH; i++) result[i] = iv[i];
-  for (let i = 0; i < ciphertextBytes.length; i++)
-    result[IV_LENGTH + i] = ciphertextBytes[i];
-
-  return result;
+  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  fullPayload.set(iv, 0);
+  fullPayload.set(new Uint8Array(encrypted), 12);
+  console.log(
+    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`,
+  );
+  return fullPayload;
 }
 
 export async function decryptBlob(
@@ -226,37 +216,31 @@ export async function decryptBlob(
   data: Uint8Array,
 ): Promise<ArrayBuffer> {
   // CRITICAL: Element-by-element copy into a fresh zero-offset buffer FIRST.
-  // data may come from network/Candid decoding with a hidden internal byteOffset
-  // that would cause WebCrypto to read wrong bytes for the IV or ciphertext.
-  const encryptedBlob = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) encryptedBlob[i] = data[i];
-
-  if (encryptedBlob.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", encryptedBlob.length);
+  // data may come from network/Candid decoding with a hidden internal byteOffset.
+  const fresh = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
+  if (fresh.length < 28) {
+    console.error("[E2EE RECV] Blob too small:", fresh.length);
     throw new Error("Blob too small");
   }
-
-  const iv = encryptedBlob.slice(0, 12);
-  const ciphertextAndTag = encryptedBlob.slice(12); // Everything after IV
-
+  const iv = fresh.slice(0, 12);
+  const ciphertextAndTag = fresh.slice(12);
   console.log(
-    `[EncryptedFile] Decrypting: total=${encryptedBlob.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`,
+    `[E2EE RECV] Decrypting: total=${fresh.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`,
   );
-
   try {
     const plainBuffer = await crypto.subtle.decrypt(
       { name: "AES-GCM", iv },
       key,
       ciphertextAndTag,
     );
-    // Return a fresh copy of the decrypted buffer to ensure zero-offset guarantee
     const decrypted = new Uint8Array(plainBuffer);
     const safeResult = new Uint8Array(decrypted.length);
     for (let i = 0; i < decrypted.length; i++) safeResult[i] = decrypted[i];
     return safeResult.buffer;
   } catch (err) {
     console.error(
-      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${encryptedBlob.length} bytes, IV=12 bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
+      `[EncryptedFile] AES-GCM decryptBlob FAILED: blob=${fresh.length} bytes, IV=12 bytes, ciphertext+tag=${ciphertextAndTag.length} bytes`,
       err,
     );
     throw err;

@@ -13,11 +13,17 @@ import {
 import { useAuth } from "@/context/auth-context";
 import { useDeleteConversation } from "@/hooks/use-conversations";
 import { isOnline } from "@/hooks/use-presence";
-import { getLocalAvatarDataUrl, useDisplayName } from "@/hooks/use-profiles";
+import {
+  getLocalAvatarDataUrl,
+  setLocalDisplayName,
+  useDisplayName,
+  useUserProfile,
+} from "@/hooks/use-profiles";
+import { decryptMessage, deriveDisplayNameKey } from "@/lib/crypto";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Trash2, Users } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ConversationListItemProps {
   conversation: ConversationPublic;
@@ -82,6 +88,35 @@ export function ConversationListItem({
 
   const peerPrincipalText = peer?.toText() ?? null;
   const cachedName = useDisplayName(peerPrincipalText);
+
+  // Fetch peer profile to populate display name cache when it's missing
+  const { data: peerProfileData } = useUserProfile(peer ?? null);
+  useEffect(() => {
+    if (!peerProfileData || !peerPrincipalText) return;
+    if (peerProfileData.encryptedDisplayName.length === 0) return;
+    // Only decrypt if the localStorage cache doesn't have a resolved name yet
+    const cached = cachedName;
+    const shortFallback = `${peerPrincipalText.slice(0, 10)}\u2026${peerPrincipalText.slice(-4)}`;
+    if (cached && cached !== shortFallback) return; // already resolved
+    (async () => {
+      try {
+        const key = await deriveDisplayNameKey(peerProfileData.id);
+        const decrypted = await decryptMessage(
+          key,
+          new Uint8Array(peerProfileData.encryptedDisplayName).slice(0),
+        );
+        if (decrypted?.trim()) {
+          setLocalDisplayName(peerPrincipalText, decrypted);
+        }
+      } catch (err) {
+        console.error(
+          "[DisplayName] ConversationListItem decrypt failed for",
+          peerPrincipalText,
+          err,
+        );
+      }
+    })();
+  }, [peerProfileData, peerPrincipalText, cachedName]);
 
   const displayName = isDirect
     ? cachedName ||
