@@ -41156,13 +41156,35 @@ function Skeleton({ className, ...props }) {
     }
   );
 }
+const HIDDEN_CONVS_KEY = "cs_hidden_convs";
+function getHiddenConvIds() {
+  try {
+    const raw = localStorage.getItem(HIDDEN_CONVS_KEY);
+    if (!raw) return /* @__PURE__ */ new Set();
+    const arr = JSON.parse(raw);
+    return new Set(arr);
+  } catch {
+    return /* @__PURE__ */ new Set();
+  }
+}
+function addHiddenConvId(convIdStr) {
+  try {
+    const current = getHiddenConvIds();
+    current.add(convIdStr);
+    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
+  } catch {
+  }
+}
 function useConversations() {
   const { actor, isFetching } = useActor(createActor);
   return useQuery({
     queryKey: ["conversations"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.listConversations();
+      const all = await actor.listConversations();
+      const hidden = getHiddenConvIds();
+      if (hidden.size === 0) return all;
+      return all.filter((c2) => !hidden.has(c2.id.toString()));
     },
     enabled: !!actor && !isFetching,
     staleTime: 6e4,
@@ -41261,14 +41283,14 @@ function useRemoveConversationMember() {
   });
 }
 function useDeleteConversation() {
-  const { actor } = useActor(createActor);
   const queryClient2 = useQueryClient();
   return useMutation({
     mutationFn: async (conversationId) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.deleteConversation(conversationId);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
+      const convIdStr = conversationId.toString();
+      addHiddenConvId(convIdStr);
+      console.log(
+        `[ChatDelete] User deleted chat locally only - convId=${convIdStr} (other user still has full history)`
+      );
     },
     onSuccess: (_2, conversationId) => {
       queryClient2.removeQueries({
@@ -52099,7 +52121,7 @@ function ConversationListItem({
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogHeader, { children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogTitle, { className: "text-foreground", children: "Delete Thread" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogDescription, { className: "text-muted-foreground", children: "Are you sure you want to permanently delete thread?" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogDescription, { className: "text-muted-foreground", children: "Are you sure you want to delete this chat? This will only remove it from your view." })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogFooter, { children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -55203,7 +55225,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Bmr9biy4.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-ChxPz-xy.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

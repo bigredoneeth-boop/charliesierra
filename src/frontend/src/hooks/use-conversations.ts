@@ -13,13 +13,43 @@ import type {
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+// ---------------------------------------------------------------------------
+// localStorage helpers for "Delete for me" hidden conversation IDs
+// ---------------------------------------------------------------------------
+const HIDDEN_CONVS_KEY = "cs_hidden_convs";
+
+function getHiddenConvIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(HIDDEN_CONVS_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw) as string[];
+    return new Set(arr);
+  } catch {
+    return new Set();
+  }
+}
+
+function addHiddenConvId(convIdStr: string): void {
+  try {
+    const current = getHiddenConvIds();
+    current.add(convIdStr);
+    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
+  } catch {
+    // localStorage unavailable — deletion will still clear the in-memory cache
+  }
+}
+
 export function useConversations() {
   const { actor, isFetching } = useActor(createActor);
   return useQuery<ConversationPublic[]>({
     queryKey: ["conversations"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.listConversations();
+      const all = await actor.listConversations();
+      // Filter out locally-hidden conversations ("Delete for me" only)
+      const hidden = getHiddenConvIds();
+      if (hidden.size === 0) return all;
+      return all.filter((c) => !hidden.has(c.id.toString()));
     },
     enabled: !!actor && !isFetching,
     staleTime: 60_000,
@@ -148,15 +178,16 @@ export function useRemoveConversationMember() {
 export type { ConversationPublic, MessagePublic, MessageType };
 
 /** Delete any conversation — group (creator only) or direct (any member). */
+/** Delete chat for the current user only — does NOT touch the backend. */
 export function useDeleteConversation() {
-  const { actor } = useActor(createActor);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (conversationId: bigint) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.deleteConversation(conversationId);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
+      const convIdStr = conversationId.toString();
+      addHiddenConvId(convIdStr);
+      console.log(
+        `[ChatDelete] User deleted chat locally only - convId=${convIdStr} (other user still has full history)`,
+      );
     },
     onSuccess: (_, conversationId) => {
       queryClient.removeQueries({

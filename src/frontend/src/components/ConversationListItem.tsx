@@ -241,7 +241,8 @@ export function ConversationListItem({
               Delete Thread
             </AlertDialogTitle>
             <AlertDialogDescription className="text-muted-foreground">
-              Are you sure you want to permanently delete thread?
+              Are you sure you want to delete this chat? This will only remove
+              it from your view.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
