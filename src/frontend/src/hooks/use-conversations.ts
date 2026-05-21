@@ -12,6 +12,7 @@ import type {
 } from "@/backend";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 // ---------------------------------------------------------------------------
 // localStorage helpers for "Delete for me" hidden conversation IDs
@@ -36,6 +37,16 @@ function addHiddenConvId(convIdStr: string): void {
     localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
   } catch {
     // localStorage unavailable — deletion will still clear the in-memory cache
+  }
+}
+function removeHiddenConvId(convIdStr: string): void {
+  try {
+    const current = getHiddenConvIds();
+    if (!current.has(convIdStr)) return;
+    current.delete(convIdStr);
+    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
+  } catch {
+    // localStorage unavailable — no-op
   }
 }
 
@@ -79,7 +90,8 @@ export function useConversation(id: bigint | null) {
 
 export function useMessages(conversationId: bigint | null, limit = 50n) {
   const { actor, isFetching } = useActor(createActor);
-  return useQuery<MessagePublic[]>({
+  const queryClient = useQueryClient();
+  const query = useQuery<MessagePublic[]>({
     queryKey: ["messages", conversationId?.toString()],
     queryFn: async () => {
       if (!actor || conversationId === null) return [];
@@ -99,6 +111,23 @@ export function useMessages(conversationId: bigint | null, limit = 50n) {
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
   });
+
+  // Auto-unhide: if a new message arrives in a hidden conversation, restore it
+  // to the conversation list so the user can see the incoming message.
+  useEffect(() => {
+    if (conversationId === null || !query.data || query.data.length === 0)
+      return;
+    const convIdStr = conversationId.toString();
+    const hidden = getHiddenConvIds();
+    if (!hidden.has(convIdStr)) return;
+    console.log(
+      `[ChatUnhide] Auto-unhiding convId=${convIdStr} because a new message arrived`,
+    );
+    removeHiddenConvId(convIdStr);
+    queryClient.invalidateQueries({ queryKey: ["conversations"] });
+  }, [conversationId, query.data, queryClient]);
+
+  return query;
 }
 
 export function useSendMessage() {

@@ -41175,6 +41175,15 @@ function addHiddenConvId(convIdStr) {
   } catch {
   }
 }
+function removeHiddenConvId(convIdStr) {
+  try {
+    const current = getHiddenConvIds();
+    if (!current.has(convIdStr)) return;
+    current.delete(convIdStr);
+    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
+  } catch {
+  }
+}
 function useConversations() {
   const { actor, isFetching } = useActor(createActor);
   return useQuery({
@@ -41212,7 +41221,8 @@ function useConversation(id) {
 }
 function useMessages(conversationId, limit = 50n) {
   const { actor, isFetching } = useActor(createActor);
-  return useQuery({
+  const queryClient2 = useQueryClient();
+  const query = useQuery({
     queryKey: ["messages", conversationId == null ? void 0 : conversationId.toString()],
     queryFn: async () => {
       if (!actor || conversationId === null) return [];
@@ -41232,6 +41242,19 @@ function useMessages(conversationId, limit = 50n) {
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false
   });
+  reactExports.useEffect(() => {
+    if (conversationId === null || !query.data || query.data.length === 0)
+      return;
+    const convIdStr = conversationId.toString();
+    const hidden = getHiddenConvIds();
+    if (!hidden.has(convIdStr)) return;
+    console.log(
+      `[ChatUnhide] Auto-unhiding convId=${convIdStr} because a new message arrived`
+    );
+    removeHiddenConvId(convIdStr);
+    queryClient2.invalidateQueries({ queryKey: ["conversations"] });
+  }, [conversationId, query.data, queryClient2]);
+  return query;
 }
 function useMarkRead() {
   const { actor } = useActor(createActor);
@@ -55225,7 +55248,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-ChxPz-xy.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DU_1adqG.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });
