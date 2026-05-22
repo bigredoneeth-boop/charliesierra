@@ -116,19 +116,25 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     const principalText = principal.toText();
-    loadOrCreateKeyPair(principalText)
-      .then(async ({ keyPair: kp, isNew }) => {
+
+    (async () => {
+      try {
+        const { keyPair: kp, isNew } = await loadOrCreateKeyPair(principalText);
         setKeyPair(kp);
         setIsNewKeyPair(isNew);
         if (isNew) {
-          exportPublicKey(kp.publicKey).then((pubBytes) => {
-            const fp = Array.from(pubBytes.slice(0, 8))
-              .map((b) => b.toString(16).padStart(2, "0"))
-              .join("");
-            console.log(
-              `[E2EE KEYS] NEW key pair generated for ${principalText}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`,
-            );
-          });
+          exportPublicKey(kp.publicKey)
+            .then((pubBytes) => {
+              const fp = Array.from(pubBytes.slice(0, 8))
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("");
+              console.log(
+                `[E2EE KEYS] NEW key pair generated for ${principalText}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`,
+              );
+            })
+            .catch(() => {
+              /* best effort */
+            });
         }
 
         // ── Restore ALL persisted conversation keys from IndexedDB ──────────
@@ -136,20 +142,25 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         try {
           const prefix = `${CONV_KEY_PREFIX}${principalText}:`;
           const allEntries = await dbGetKeysWithPrefix(prefix);
+
+          // Derive the wrap key ONCE for the entire batch — fail fast and visibly
           let wrapKey: CryptoKey | null = null;
           if (allEntries.length > 0) {
             try {
               wrapKey = await deriveStorageWrapKey(principalText);
             } catch (wkErr) {
+              // deriveStorageWrapKey already logs; re-log here for startup context
               console.error(
-                "[E2EE KEYSTORE] Failed to derive storage wrap key:",
+                "[E2EE KEYSTORE] Cannot restore keys — wrap key derivation failed:",
                 wkErr,
               );
+              // Fall through: wrapKey stays null, wrapped entries will be skipped
             }
           }
 
           await Promise.all(
             allEntries.map(async (entry) => {
+              // entry.key is the full DB key, e.g. "convkey_{principal}:{convId}"
               const convId = entry.key.slice(prefix.length);
               try {
                 const stored = entry.value as
@@ -168,13 +179,23 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
                 } else if (
                   Array.isArray((stored as { wrapped?: number[] }).wrapped)
                 ) {
-                  // New format: wrapped bytes stored as number array
+                  // Current format: wrapped bytes stored as number array
                   const wrappedArr = new Uint8Array(
                     (stored as { wrapped: number[]; fingerprint?: string })
                       .wrapped,
                   );
                   if (wrapKey) {
-                    rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+                    // Pass storage key name so failures are identifiable in logs
+                    rawBytes = await unwrapKeyBytes(
+                      wrapKey,
+                      wrappedArr,
+                      entry.key,
+                    );
+                  } else {
+                    console.warn(
+                      `[E2EE KEYSTORE] Skipping wrapped key for convId=${convId} — wrap key unavailable`,
+                    );
+                    return;
                   }
                   fingerprint = (
                     stored as { wrapped: number[]; fingerprint?: string }
@@ -209,7 +230,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
                   `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`,
                 );
               } catch (err) {
-                console.warn(
+                console.error(
                   `[E2EE KEYSTORE] Failed to restore key for convId=${convId}:`,
                   err,
                 );
@@ -220,14 +241,15 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
             `[E2EE KEYSTORE] Restored ${restoredCount} conversation keys from storage on startup`,
           );
         } catch (err) {
-          console.warn("[E2EE KEYSTORE] Error during key restore:", err);
+          console.error("[E2EE KEYSTORE] Startup restoration failed:", err);
         }
-
+      } catch (err) {
+        console.error("[E2EE KEYSTORE] Startup restoration failed:", err);
+      } finally {
+        // CRITICAL: always mark ready so the app never hangs on partial failure
         setIsReady(true);
-      })
-      .catch(() => {
-        setIsReady(true);
-      });
+      }
+    })();
   }, [principal]);
 
   const getConversationKey = useCallback((convId: string) => {
@@ -442,7 +464,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (!key) {
-        console.warn(
+        console.log(
           `[E2EE KEYSTORE] No stored key for convId=${convId} - performing exchange`,
         );
         return null;

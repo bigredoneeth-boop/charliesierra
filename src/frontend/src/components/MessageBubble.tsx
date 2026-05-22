@@ -93,9 +93,8 @@ export function useDecryptedContent(
 
     let cancelled = false;
 
-    // Retry loop: attempt up to 5 times (0.5s apart) then a final 6th attempt
-    // after 2s — handles the race where the peer profile/key arrives after the message.
-    const RETRY_DELAYS = [0, 500, 500, 500, 500, 2000]; // ms before each attempt
+    // Retry loop: 2 total attempts (initial + 1 retry after 500ms).
+    const RETRY_DELAYS = [0, 500]; // ms before each attempt
     let cumulativeDelay = 0;
 
     const attempts = RETRY_DELAYS.map((delay, index) => {
@@ -157,37 +156,69 @@ export function useDecryptedContent(
 }
 
 /** Parse encrypted metadata JSON from a non-text message's encryptedContent */
+/** Parse encrypted metadata JSON from a non-text message's encryptedContent */
 function useAttachmentMeta(
   message: MessagePublic,
   conversationId: string,
-): { name?: string; size?: number; mime?: string } {
+): { name?: string; size?: number; mime?: string; storageKey?: string } {
   const { decryptFromConv } = useCrypto();
   const [meta, setMeta] = useState<{
     name?: string;
     size?: number;
     mime?: string;
+    storageKey?: string;
   }>({});
 
   useEffect(() => {
     if (message.messageType === MessageType.text) return;
-    // Element-by-element copy to guarantee byteOffset=0 on the fresh buffer
-    const raw = message.encryptedContent as unknown as Uint8Array;
-    const fresh = new Uint8Array(raw.length);
-    for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
-    decryptFromConv(conversationId, fresh).then((result) => {
-      if (!result) return;
-      try {
-        const parsed = JSON.parse(result) as {
-          name?: string;
-          size?: number;
-          mime?: string;
-        };
-        setMeta(parsed);
-      } catch {
-        // not JSON — ignore
-      }
-    });
-  }, [message, conversationId, decryptFromConv]);
+    if (meta.name || meta.mime) return; // already resolved
+
+    let cancelled = false;
+    // Retry loop — key may not be ready yet when the message first renders.
+    // Mirror the same pattern used by useDecryptedContent.
+    const RETRY_DELAYS = [0, 500, 500, 1000, 2000];
+    let cumulative = 0;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    for (const delay of RETRY_DELAYS) {
+      cumulative += delay;
+      const t = setTimeout(async () => {
+        if (cancelled) return;
+        const raw = message.encryptedContent as unknown as Uint8Array;
+        const fresh = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+        const result = await decryptFromConv(conversationId, fresh);
+        if (cancelled || !result) return;
+        try {
+          const parsed = JSON.parse(result) as {
+            name?: string;
+            size?: number;
+            mime?: string;
+            storageKey?: string;
+          };
+          setMeta(parsed);
+          cancelled = true; // success — stop retrying
+          if (parsed.storageKey) {
+            console.log(
+              `[E2EE FILE RECV] Metadata decoded: name=${parsed.name}, mime=${parsed.mime}, storageKey=${parsed.storageKey.slice(0, 12)}...`,
+            );
+          } else {
+            console.log(
+              `[E2EE FILE RECV] Metadata decoded (no inline storageKey — will use attachment record): name=${parsed.name}, mime=${parsed.mime}`,
+            );
+          }
+        } catch {
+          // not JSON — ignore
+        }
+      }, cumulative);
+      timers.push(t);
+    }
+
+    return () => {
+      cancelled = true;
+      for (const t of timers) clearTimeout(t);
+    };
+  }, [message, conversationId, decryptFromConv, meta.name, meta.mime]);
 
   return meta;
 }
@@ -203,10 +234,13 @@ function hexToBytes(hex: string): Uint8Array {
 }
 
 /** Fetch, download from object-storage, and decrypt an attachment blob */
+/** Fetch, download from object-storage, and decrypt an attachment blob */
 function useAttachmentBlob(
   message: MessagePublic,
   conversationId: string,
   enabled: boolean,
+  mimeType: string,
+  metaStorageKey?: string,
 ) {
   const { backend, downloadBlob } = useBackend();
   const { getConversationKey } = useCrypto();
@@ -214,66 +248,170 @@ function useAttachmentBlob(
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const blobUrlRef = useRef<string | null>(null);
+  // Tracks whether a fetch is already in-flight.
+  const fetchingRef = useRef(false);
+  // Tracks whether we have already successfully produced a URL (survives re-renders).
+  const doneRef = useRef(false);
+
+  // When metaStorageKey arrives (async — it comes from decrypted metadata),
+  // reset the in-flight lock so the main effect can start a fresh download.
+  useEffect(() => {
+    if (metaStorageKey && !doneRef.current) {
+      fetchingRef.current = false;
+    }
+  }, [metaStorageKey]);
 
   useEffect(() => {
     if (!enabled || !backend || !downloadBlob) return;
     if (message.messageType === MessageType.text) return;
-    const convKey = getConversationKey(conversationId);
-    if (!convKey) return;
+    if (doneRef.current) return; // already succeeded — do not re-fetch
 
     let cancelled = false;
     setLoading(true);
     setFetchError(false);
 
-    (async () => {
-      try {
-        // 1. Get attachment record from backend
-        const attachments = await backend.getMessageAttachments(message.id);
-        if (cancelled || attachments.length === 0) {
-          if (!cancelled) setLoading(false);
+    // Retry loop: poll for the conversation key becoming available.
+    const KEY_POLL_DELAYS = [0, 500, 1000, 2000, 3000];
+    let cumulative = 0;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    for (
+      let attemptIndex = 0;
+      attemptIndex < KEY_POLL_DELAYS.length;
+      attemptIndex++
+    ) {
+      const delay = KEY_POLL_DELAYS[attemptIndex];
+      cumulative += delay;
+      const t = setTimeout(async () => {
+        if (cancelled || doneRef.current) return;
+
+        const convKey = getConversationKey(conversationId);
+        if (!convKey) {
+          console.log(
+            `[E2EE FILE RECV] Key not ready for convId=${conversationId}, will retry...`,
+          );
+          if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
+            // Last attempt — give up
+            if (!cancelled) {
+              setFetchError(true);
+              setLoading(false);
+            }
+          }
           return;
         }
-        const attachment: Attachment = attachments[0];
 
-        // 2. Download encrypted blob from object-storage
-        const keyBytes = hexToBytes(attachment.storageKey);
-        const externalBlob = await downloadBlob(keyBytes);
-        const rawBytes = await externalBlob.getBytes();
-        console.log(
-          `[EncryptedFile] Received encrypted blob: size = ${rawBytes.length} bytes`,
-        );
+        if (fetchingRef.current) {
+          console.log("[E2EE FILE RECV] fetchingRef already locked, skipping");
+          return; // another timer already started the fetch
+        }
+        fetchingRef.current = true;
 
-        // CRITICAL: Element-by-element copy into a fresh zero-offset buffer.
-        // Bytes from object-storage/Candid decoding carry a hidden internal
-        // byteOffset that causes WebCrypto to read the wrong IV and ciphertext.
-        const encryptedBytes = new Uint8Array(rawBytes.length);
-        for (let i = 0; i < rawBytes.length; i++)
-          encryptedBytes[i] = rawBytes[i];
+        try {
+          // 1. Get attachment record from backend
+          const attachments = await backend.getMessageAttachments(message.id);
+          if (cancelled) return;
 
-        // 3. Decrypt blob client-side
-        const { decryptBlob } = await import("@/lib/crypto");
-        const decrypted = await decryptBlob(convKey, encryptedBytes);
-        console.log(
-          `[EncryptedFile] Decrypted file: size = ${decrypted.byteLength} bytes`,
-        );
+          let resolvedStorageKeyHex: string | null = null;
 
-        if (cancelled) return;
+          if (attachments.length === 0) {
+            // Attachment record not registered yet — try inline storageKey from metadata
+            if (metaStorageKey) {
+              console.log(
+                "[E2EE FILE RECV] Using inline storageKey from metadata as fallback",
+              );
+              resolvedStorageKeyHex = metaStorageKey;
+            } else {
+              // Release the lock so a later retry timer can try again
+              fetchingRef.current = false;
+              console.log(
+                `[E2EE FILE RECV] No attachment record yet (attempt ${attemptIndex + 1}/5), will retry`,
+              );
+              if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
+                console.warn(
+                  `[E2EE FILE RECV] No attachment record found for msgId=${message.id} after all retries`,
+                );
+                if (!cancelled) setLoading(false);
+              }
+              return;
+            }
+          } else {
+            const attachment: Attachment = attachments[0];
+            resolvedStorageKeyHex = attachment.storageKey;
+          }
 
-        // 4. Create an object URL for display/download
-        const blob = new Blob([decrypted], { type: attachment.mimeType });
-        const url = URL.createObjectURL(blob);
-        if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
-        blobUrlRef.current = url;
-        setBlobUrl(url);
-      } catch {
-        if (!cancelled) setFetchError(true);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
+          console.log(
+            `[E2EE FILE RECV] Starting download attempt, storageKey from backend=${attachments.length > 0 ? `${resolvedStorageKeyHex?.slice(0, 12)}...` : "none"}, metaStorageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 12)}...` : "none"}`,
+          );
+
+          // 2. Download encrypted blob from object-storage
+          const keyBytes = hexToBytes(resolvedStorageKeyHex!);
+          const externalBlob = await downloadBlob(keyBytes);
+          if (cancelled) return;
+          const rawBytes = await externalBlob.getBytes();
+          console.log(
+            `[E2EE FILE RECV] Downloaded encrypted blob: ${rawBytes.length} bytes`,
+          );
+
+          // CRITICAL: Element-by-element copy into a fresh zero-offset buffer
+          // so IV slicing always starts at byte 0.
+          const encryptedBytes = new Uint8Array(rawBytes.length);
+          for (let i = 0; i < rawBytes.length; i++)
+            encryptedBytes[i] = rawBytes[i];
+
+          // 3. Decrypt using IV(12) + ciphertext+tag format
+          const { decryptBlob } = await import("@/lib/crypto");
+          const decryptedArrayBuffer = await decryptBlob(
+            convKey,
+            encryptedBytes,
+          );
+          if (cancelled) return;
+
+          console.log(
+            `[E2EE FILE RECV] Decrypted file: ${decryptedArrayBuffer.byteLength} bytes, mime=${mimeType}`,
+          );
+
+          // 4. Create Blob and object URL
+          const blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
+            type: mimeType || "application/octet-stream",
+          });
+          const url = URL.createObjectURL(blob);
+          console.log("[E2EE FILE RECV] Created object URL for display");
+
+          // Revoke any previous URL
+          if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
+          blobUrlRef.current = url;
+
+          // Mark done BEFORE setting state so a cleanup that fires synchronously
+          // after setState does not accidentally skip the update.
+          doneRef.current = true;
+
+          // Update state — this must not be guarded by `cancelled` because we
+          // already checked it above and the work is complete.
+          setBlobUrl(url);
+          setLoading(false);
+          setFetchError(false);
+
+          // Cancel any remaining retry timers now that we succeeded.
+          cancelled = true;
+          for (const t2 of timers) clearTimeout(t2);
+        } catch (err) {
+          console.error("[E2EE FILE RECV] Error during download/decrypt:", err);
+          // Release the lock so a later retry timer can attempt again.
+          fetchingRef.current = false;
+          if (!cancelled && attemptIndex === KEY_POLL_DELAYS.length - 1) {
+            setFetchError(true);
+            setLoading(false);
+          }
+        }
+      }, cumulative);
+      timers.push(t);
+    }
 
     return () => {
       cancelled = true;
+      for (const t of timers) clearTimeout(t);
+      // Do NOT reset fetchingRef or doneRef here — we want them to persist
+      // across fast re-mounts so we do not re-download an already-fetched file.
     };
   }, [
     enabled,
@@ -283,6 +421,8 @@ function useAttachmentBlob(
     message.messageType,
     conversationId,
     getConversationKey,
+    mimeType,
+    metaStorageKey,
   ]);
 
   // Revoke blob URL on unmount
@@ -303,16 +443,36 @@ function ImageAttachment({
 }: {
   message: MessagePublic;
   conversationId: string;
-  meta: { name?: string; size?: number };
+  meta: { name?: string; size?: number; mime?: string; storageKey?: string };
 }) {
   const [expanded, setExpanded] = useState(false);
+  const prevBlobUrlRef = useRef<string | null>(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
     conversationId,
     true,
+    meta.mime ?? "application/octet-stream",
+    meta.storageKey,
   );
 
-  if (loading) {
+  // Log when blobUrl transitions from null to a value (spinner replaced)
+  useEffect(() => {
+    if (blobUrl && !prevBlobUrlRef.current) {
+      console.log("[FileUI] Replaced loading spinner with actual content");
+    }
+    prevBlobUrlRef.current = blobUrl;
+  }, [blobUrl]);
+
+  if (fetchError) {
+    return (
+      <div className="flex items-center gap-2 text-sm opacity-70">
+        <ImageIcon size={16} />
+        <span>Failed to decrypt file</span>
+      </div>
+    );
+  }
+
+  if (loading || (!blobUrl && !fetchError)) {
     return (
       <div className="flex items-center gap-2 text-sm opacity-70">
         <Loader2 size={14} className="animate-spin" />
@@ -321,7 +481,7 @@ function ImageAttachment({
     );
   }
 
-  if (fetchError || !blobUrl) {
+  if (!blobUrl) {
     return (
       <div className="flex items-center gap-2 text-sm opacity-70">
         <ImageIcon size={16} />
@@ -379,13 +539,24 @@ function FileAttachment({
 }: {
   message: MessagePublic;
   conversationId: string;
-  meta: { name?: string; size?: number; mime?: string };
+  meta: { name?: string; size?: number; mime?: string; storageKey?: string };
 }) {
+  const prevBlobUrlRef = useRef<string | null>(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
     conversationId,
     true,
+    meta.mime ?? "application/octet-stream",
+    meta.storageKey,
   );
+
+  // Log when blobUrl transitions from null to a value (spinner replaced)
+  useEffect(() => {
+    if (blobUrl && !prevBlobUrlRef.current) {
+      console.log("[FileUI] Replaced loading spinner with actual content");
+    }
+    prevBlobUrlRef.current = blobUrl;
+  }, [blobUrl]);
 
   const icon =
     message.messageType === MessageType.video ? (
@@ -404,7 +575,17 @@ function FileAttachment({
         ? "Voice note"
         : "File");
 
-  if (loading) {
+  if (fetchError) {
+    return (
+      <div className="flex items-center gap-2 text-sm opacity-70">
+        {icon}
+        <span className="truncate max-w-[140px] opacity-90">{label}</span>
+        <span className="text-xs opacity-50">Failed to decrypt file</span>
+      </div>
+    );
+  }
+
+  if (loading || (!blobUrl && !fetchError)) {
     return (
       <div className="flex items-center gap-2 text-sm opacity-70">
         <Loader2 size={14} className="animate-spin" />
@@ -417,7 +598,7 @@ function FileAttachment({
     <div className="flex items-center gap-2 text-sm">
       {icon}
       <span className="truncate max-w-[140px] opacity-90">{label}</span>
-      {blobUrl && !fetchError ? (
+      {blobUrl ? (
         <a
           href={blobUrl}
           download={meta.name ?? label}
@@ -427,8 +608,6 @@ function FileAttachment({
         >
           <Download size={14} />
         </a>
-      ) : fetchError ? (
-        <span className="text-xs opacity-50">Unavailable</span>
       ) : null}
     </div>
   );

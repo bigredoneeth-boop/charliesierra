@@ -1,38 +1,36 @@
-import { type ExternalBlob, createActor } from "@/backend";
+import { ExternalBlob, createActor } from "@/backend";
 import type { backendInterface } from "@/backend";
 import { useActor } from "@caffeineai/core-infrastructure";
 
 interface UseBackendResult {
   backend: backendInterface | null;
   isLoading: boolean;
-  uploadBlob: ((blob: ExternalBlob) => Promise<Uint8Array>) | null;
+  uploadBlob:
+    | ((bytes: Uint8Array, mimeType: string) => Promise<Uint8Array>)
+    | null;
   downloadBlob: ((key: Uint8Array) => Promise<ExternalBlob>) | null;
 }
 
 export function useBackend(): UseBackendResult {
   const { actor, isFetching } = useActor(createActor);
 
-  // Expose object-storage upload/download by accessing the platform-injected
-  // private handlers on the Backend class instance (safe: backend.ts is @ts-nocheck).
+  // Upload via the public actor.uploadFile API declared in backendInterface.
   const uploadBlob = actor
-    ? async (blob: ExternalBlob): Promise<Uint8Array> => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (
-          actor as unknown as {
-            _uploadFile: (b: ExternalBlob) => Promise<Uint8Array>;
-          }
-        )._uploadFile(blob);
+    ? async (bytes: Uint8Array, mimeType: string): Promise<Uint8Array> => {
+        return actor.uploadFile(bytes, mimeType);
       }
     : null;
 
   const downloadBlob = actor
     ? async (key: Uint8Array): Promise<ExternalBlob> => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (
-          actor as unknown as {
-            _downloadFile: (k: Uint8Array) => Promise<ExternalBlob>;
-          }
-        )._downloadFile(key);
+        const hexKey = Array.from(key)
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+        const url = `https://blob.caffeine.ai/v1/blob/${hexKey}`;
+        console.log(
+          `[E2EE FILE RECV] Fetching blob using storageKey: ${hexKey}`,
+        );
+        return ExternalBlob.fromURL(url);
       }
     : null;
 

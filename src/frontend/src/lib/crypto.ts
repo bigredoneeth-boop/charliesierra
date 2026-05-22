@@ -160,7 +160,7 @@ export async function encryptMessage(
   fullPayload.set(iv, 0);
   fullPayload.set(new Uint8Array(encrypted), 12);
   console.log(
-    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`,
+    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV12 + data+tag)`,
   );
   return fullPayload;
 }
@@ -343,15 +343,20 @@ interface PersistedKeyPair {
 export async function deriveStorageWrapKey(
   principalText: string,
 ): Promise<CryptoKey> {
-  const seed = new TextEncoder().encode(`keystore:${principalText}`);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", seed);
-  return crypto.subtle.importKey(
-    "raw",
-    hashBuffer,
-    { name: "AES-GCM" },
-    false,
-    ["encrypt", "decrypt"],
-  );
+  try {
+    const seed = new TextEncoder().encode(`keystore:${principalText}`);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", seed);
+    return crypto.subtle.importKey(
+      "raw",
+      hashBuffer,
+      { name: "AES-GCM" },
+      false,
+      ["encrypt", "decrypt"],
+    );
+  } catch (err) {
+    console.error("[E2EE KEYSTORE] Failed to derive storage wrap key:", err);
+    throw err;
+  }
 }
 
 /**
@@ -383,16 +388,27 @@ export async function wrapKeyBytes(
 export async function unwrapKeyBytes(
   wrapKey: CryptoKey,
   wrapped: Uint8Array,
+  name?: string,
 ): Promise<Uint8Array> {
-  if (wrapped.length < IV_LENGTH + 1) throw new Error("wrapped blob too small");
-  const iv = wrapped.slice(0, IV_LENGTH);
-  const ct = wrapped.slice(IV_LENGTH);
-  const plain = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
-    wrapKey,
-    ct,
-  );
-  return new Uint8Array(plain);
+  try {
+    if (wrapped.length < IV_LENGTH + 1)
+      throw new Error("wrapped blob too small");
+    const iv = wrapped.slice(0, IV_LENGTH);
+    const ct = wrapped.slice(IV_LENGTH);
+    const plain = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      wrapKey,
+      ct,
+    );
+    return new Uint8Array(plain);
+  } catch (err) {
+    console.error(
+      "[E2EE KEYSTORE] Failed to unwrap key for storage key=",
+      name ?? "(unknown)",
+      err,
+    );
+    throw err;
+  }
 }
 
 export async function loadOrCreateKeyPair(

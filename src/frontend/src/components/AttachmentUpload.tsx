@@ -1,4 +1,4 @@
-import { ExternalBlob, MessageType } from "@/backend";
+import { MessageType } from "@/backend";
 import type { ConversationId } from "@/backend";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
+import { createExternalBlob } from "@/lib/blob-helpers";
 import { FileText, ImageIcon, Loader2, Upload, Video, X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
@@ -101,36 +102,49 @@ export function AttachmentUpload({
     try {
       setProgress(10);
 
-      // === TEMPORARY Non-encrypted file upload (working version) ===
-      const fileBytes = new Uint8Array(await selectedFile.arrayBuffer());
+      // Step 1: Read raw file bytes
+      const fileBuf = await selectedFile.arrayBuffer();
+      const fileBytes = new Uint8Array(fileBuf);
 
-      const storageKeyBytes = await uploadBlob(
-        ExternalBlob.fromBytes(fileBytes),
-      );
-
-      const storageKey = keyToString(storageKeyBytes);
-
+      // Step 2: Encrypt the file with the conversation key
+      const { encryptBlob } = await import("@/lib/crypto");
       console.log(
-        "[FileUpload] Uploaded non-encrypted file. StorageKey:",
-        storageKey,
-        "| Size:",
-        fileBytes.length,
+        `[E2EE FILE] Encrypting file before upload: name=${selectedFile.name}, plaintext=${fileBytes.byteLength} bytes`,
       );
-      setProgress(65);
-      // ========================================================
+      const encrypted = await encryptBlob(convKey, fileBuf);
 
-      // Encrypt only the metadata for display
+      // Step 3: Upload the encrypted bytes — createExternalBlob now owns the
+      // isolation guarantee via ArrayBuffer.slice(), so no manual copy needed.
+      console.log(
+        `[E2EE FILE] Encrypted blob ready: ${encrypted.byteLength} bytes (IV=12 + data+tag)`,
+      );
+      console.log(
+        `[E2EE FILE] Uploading encrypted blob: byteLength=${encrypted.byteLength}, byteOffset=${encrypted.byteOffset}`,
+      );
+
+      // Step 4: Upload the encrypted bytes via the public uploadFile API
+      const storageKeyBytes = await uploadBlob(encrypted, selectedFile.type);
+      const storageKey = keyToString(storageKeyBytes);
+      console.log("[E2EE FILE] Storage key from upload API:", storageKey);
+      setProgress(65);
+
+      // Step 5: Encrypt metadata for the message body
+      // IMPORTANT: include the storageKey in the metadata so receivers always
+      // have it available even if getMessageAttachments is slow to propagate.
       const metaText = JSON.stringify({
         name: selectedFile.name,
         size: selectedFile.size,
         mime: selectedFile.type,
-        encrypted: false, // flag for receiver
+        storageKey,
+        encrypted: true,
       });
+      console.log(
+        `[E2EE FILE] Metadata JSON (${metaText.length} chars) includes storageKey=${storageKey.slice(0, 12)}...`,
+      );
       const encryptedContent = await encryptForConv(
         conversationId.toString(),
         metaText,
       );
-      // =====================================================================
       if (!encryptedContent) throw new Error("Encryption failed");
       setProgress(75);
 
@@ -149,7 +163,7 @@ export function AttachmentUpload({
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(fileBytes.length),
+        encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey,
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);

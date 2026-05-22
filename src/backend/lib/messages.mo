@@ -4,6 +4,7 @@ import Map "mo:core/Map";
 import Array "mo:core/Array";
 import Iter "mo:core/Iter";
 import Time "mo:core/Time";
+import List "mo:core/List";
 
 module {
   public type State = {
@@ -11,6 +12,8 @@ module {
     // index: conversationId → ordered list of messageIds (append-ordered)
     conversationMessages : Map.Map<Common.ConversationId, [Common.MessageId]>;
     readReceipts : Map.Map<(Common.MessageId, Common.UserId), T.ReadReceiptRecord>;
+    // index: messageId → list of receipts for O(1) lookup in toPublic()
+    receiptsByMessage : Map.Map<Common.MessageId, List.List<T.ReadReceiptRecord>>;
     typingIndicators : Map.Map<(Common.ConversationId, Common.UserId), T.TypingIndicator>;
     state : { var nextId : Common.MessageId };
   };
@@ -39,15 +42,14 @@ module {
     s : State,
     msg : T.Message,
   ) : T.MessagePublic {
-    // Collect all read receipts for this message
-    let receipts = s.readReceipts.entries()
-      |> _.filter(func(entry : ((Common.MessageId, Common.UserId), T.ReadReceiptRecord)) : Bool {
-        entry.0.0 == msg.id
-      })
-      |> _.map(func(entry : ((Common.MessageId, Common.UserId), T.ReadReceiptRecord)) : T.ReadReceipt {
-        { userId = entry.1.userId; readAt = entry.1.readAt }
-      })
-      |> _.toArray();
+    // O(1) indexed lookup: fetch only receipts for this message directly.
+    let receipts = switch (s.receiptsByMessage.get(msg.id)) {
+      case null [];
+      case (?list) list.toArray()
+        |> _.map(func(rr : T.ReadReceiptRecord) : T.ReadReceipt {
+            { userId = rr.userId; readAt = rr.readAt }
+           });
+    };
     {
       id = msg.id;
       conversationId = msg.conversationId;
@@ -152,6 +154,8 @@ module {
         let key = (messageId, caller);
         switch (s.readReceipts.get(cmpMsgUser, key)) {
           case (?rr) {
+            // Update timestamp in place — the receiptsByMessage list holds
+            // the same mutable record, so no index update needed.
             rr.readAt := Time.now();
           };
           case null {
@@ -161,6 +165,13 @@ module {
               var readAt = Time.now();
             };
             s.readReceipts.add(cmpMsgUser, key, rr);
+            // Maintain per-message index for O(1) lookup in toPublic().
+            let existing = switch (s.receiptsByMessage.get(messageId)) {
+              case (?lst) lst;
+              case null List.empty<T.ReadReceiptRecord>();
+            };
+            existing.add(rr);
+            s.receiptsByMessage.add(messageId, existing);
           };
         };
         #ok(());

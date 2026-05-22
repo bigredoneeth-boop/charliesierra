@@ -140,6 +140,13 @@ export function MessageList({
     useOfflineQueue();
   const { decryptFromConv } = useCrypto();
   const markRead = useMarkRead();
+  // Stable ref to the mutate function — avoids re-creating the IntersectionObserver
+  // on every mutation state change (which was causing canister overload).
+  const markReadMutateRef = useRef(markRead.mutate);
+  markReadMutateRef.current = markRead.mutate;
+  // Tracks which message IDs have already been marked read in this component
+  // lifetime. useRef so it does NOT trigger re-renders.
+  const markedMessageIdsRef = useRef<Set<string>>(new Set());
   const bottomRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -225,8 +232,14 @@ export function MessageList({
     });
   }, [olderMessages]);
 
-  // IntersectionObserver to mark visible messages read
+  // IntersectionObserver to mark visible messages read.
+  // Dependencies deliberately exclude `markRead` — we use a stable ref instead
+  // so the observer is NOT torn down and re-created on every mutation state change.
+  // We read `allMessagesCount` inside the effect (via the void reference below) so
+  // Biome useExhaustiveDependencies recognises it as a genuine dep; the value tells
+  // the effect to re-attach when the message list grows so new DOM nodes get observed.
   useEffect(() => {
+    void allMessagesCount; // declare dep: re-run when message count changes
     const el = scrollRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
@@ -234,7 +247,10 @@ export function MessageList({
         for (const entry of entries) {
           if (entry.isIntersecting) {
             const id = (entry.target as HTMLElement).dataset.messageId;
-            if (id) markRead.mutate(BigInt(id));
+            if (id && !markedMessageIdsRef.current.has(id)) {
+              markedMessageIdsRef.current.add(id);
+              markReadMutateRef.current(BigInt(id));
+            }
           }
         }
       },
@@ -243,7 +259,7 @@ export function MessageList({
     const nodes = el.querySelectorAll<HTMLElement>("[data-message-id]");
     for (const node of nodes) observer.observe(node);
     return () => observer.disconnect();
-  }, [markRead]);
+  }, [allMessagesCount]); // Re-attach when count changes so new nodes are observed
 
   // Collect all unique sender principal IDs from all messages
   const uniqueSenderIds = useMemo(() => {

@@ -83,7 +83,7 @@ module {
   /// Remove an admin principal. Prevents removing the last admin.
   public func removeAdmin(
     s : State,
-    caller : Common.UserId,
+    _caller : Common.UserId,
     target : Common.UserId,
   ) : Common.Result<(), Common.Error> {
     // Prevent lockout: block removal if it would leave zero admins

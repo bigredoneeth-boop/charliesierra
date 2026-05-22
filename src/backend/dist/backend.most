@@ -249,6 +249,9 @@ actor {
       readReceipts :
         Map__605269027<(MessageId__291319400, UserId__158757552),
                         ReadReceiptRecord__853033662>;
+      receiptsByMessage :
+        Map__605269027<MessageId__291319400,
+                        List__415060402<ReadReceiptRecord__853033662>>;
       state : {var nextId : MessageId__291319400};
       typingIndicators :
         Map__605269027<(ConversationId__966455625, UserId__158757552),

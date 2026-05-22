@@ -33871,7 +33871,7 @@ const CreateGroupRequest = Record({
   "encryptedName": Vec(Nat8)
 });
 const AttachmentId = Nat;
-const AuditExportEventType$1 = Variant({
+const AuditExportEventType = Variant({
   "retentionEnabled": Null,
   "memberAdded": Null,
   "retentionDisabled": Null,
@@ -33886,19 +33886,19 @@ const AuditExportEventType$1 = Variant({
   "memberRemoved": Null,
   "userRemoved": Null
 });
-const AuditExportFormat$1 = Variant({
+const AuditExportFormat = Variant({
   "csv": Null,
   "json": Null
 });
 const AuditExportRequest = Record({
   "endDate": Opt(Timestamp),
   "affectedUser": Opt(UserId),
-  "eventTypes": Opt(Vec(AuditExportEventType$1)),
+  "eventTypes": Opt(Vec(AuditExportEventType)),
   "startDate": Opt(Timestamp),
-  "format": AuditExportFormat$1
+  "format": AuditExportFormat
 });
 const Result_13 = Variant({ "ok": Text, "err": Error$1 });
-const CompartmentLabel$1 = Variant({
+const CompartmentLabel = Variant({
   "classified": Null,
   "unclassified": Null
 });
@@ -33908,14 +33908,14 @@ const GroupRetentionPolicy = Record({
   "enabledBy": Opt(UserId),
   "convId": ConversationId
 });
-const DataResidency$1 = Variant({
+const DataResidency = Variant({
   "eu": Null,
   "us": Null,
   "apac": Null,
   "global": Null
 });
 const ConfigExportBundle = Record({
-  "compartmentMappings": Vec(Tuple(ConversationId, CompartmentLabel$1)),
+  "compartmentMappings": Vec(Tuple(ConversationId, CompartmentLabel)),
   "adminPrincipals": Vec(UserId),
   "exportedAt": Timestamp,
   "exportedBy": UserId,
@@ -33924,13 +33924,13 @@ const ConfigExportBundle = Record({
   "groupRetentionPolicies": Vec(
     Tuple(ConversationId, GroupRetentionPolicy)
   ),
-  "residencyLabel": DataResidency$1
+  "residencyLabel": DataResidency
 });
 const Result_14 = Variant({
   "ok": ConfigExportBundle,
   "err": Error$1
 });
-const AuditEventType$2 = Variant({
+const AuditEventType$1 = Variant({
   "retentionEnabled": Null,
   "memberAdded": Null,
   "retentionDisabled": Null,
@@ -33951,7 +33951,7 @@ const AuditEventType$2 = Variant({
 });
 const GetAuditLogRequest = Record({
   "limit": Nat,
-  "filterEventType": Opt(AuditEventType$2),
+  "filterEventType": Opt(AuditEventType$1),
   "afterEventId": Opt(Nat)
 });
 const AuditEvent = Record({
@@ -33960,7 +33960,7 @@ const AuditEvent = Record({
   "encryptedDetails": Opt(Vec(Nat8)),
   "timestamp": Timestamp,
   "actorPrincipal": UserId,
-  "eventType": AuditEventType$2
+  "eventType": AuditEventType$1
 });
 const Result_12 = Variant({
   "ok": Vec(AuditEvent),
@@ -33972,7 +33972,7 @@ const SovereignConfig = Record({
   "canisters": Text,
   "nodeCount": Opt(Nat),
   "cyclesCostMultiplier": Opt(Float64),
-  "residencyLabel": DataResidency$1
+  "residencyLabel": DataResidency
 });
 const JoinRequestStatus$1 = Variant({
   "pending": Null,
@@ -34174,7 +34174,7 @@ Service({
   "getDeploymentInfo": Func([], [SovereignConfig], ["query"]),
   "getGroupCompartment": Func(
     [ConversationId],
-    [Opt(CompartmentLabel$1)],
+    [Opt(CompartmentLabel)],
     ["query"]
   ),
   "getGroupJoinRequests": Func([ConversationId], [Result_11], ["query"]),
@@ -34233,13 +34233,13 @@ Service({
   "revokeKeyEscrow": Func([Text, Text], [Result_3], []),
   "sendMessage": Func([SendMessageRequest], [Result_4], []),
   "setGroupCompartment": Func(
-    [ConversationId, CompartmentLabel$1],
+    [ConversationId, CompartmentLabel],
     [Result_3],
     []
   ),
   "setSovereignConfig": Func(
     [
-      DataResidency$1,
+      DataResidency,
       Opt(Principal2),
       Opt(Nat),
       Opt(Float64)
@@ -34773,72 +34773,11 @@ class ExternalBlob2 {
     return this;
   }
 }
-var AuditEventType$1 = /* @__PURE__ */ ((AuditEventType2) => {
-  AuditEventType2["retentionEnabled"] = "retentionEnabled";
-  AuditEventType2["memberAdded"] = "memberAdded";
-  AuditEventType2["retentionDisabled"] = "retentionDisabled";
-  AuditEventType2["escrowAccessGranted"] = "escrowAccessGranted";
-  AuditEventType2["callInitiated"] = "callInitiated";
-  AuditEventType2["sovereignConfigUpdated"] = "sovereignConfigUpdated";
-  AuditEventType2["messageQueueDrained"] = "messageQueueDrained";
-  AuditEventType2["adminAction"] = "adminAction";
-  AuditEventType2["auditLogExported"] = "auditLogExported";
-  AuditEventType2["escrowEnrolled"] = "escrowEnrolled";
-  AuditEventType2["messageSent"] = "messageSent";
-  AuditEventType2["escrowRevoked"] = "escrowRevoked";
-  AuditEventType2["compartmentAssigned"] = "compartmentAssigned";
-  AuditEventType2["userRegistered"] = "userRegistered";
-  AuditEventType2["memberRemoved"] = "memberRemoved";
-  AuditEventType2["userRemoved"] = "userRemoved";
-  AuditEventType2["priorityMessageSent"] = "priorityMessageSent";
-  return AuditEventType2;
-})(AuditEventType$1 || {});
-var AuditExportEventType = /* @__PURE__ */ ((AuditExportEventType2) => {
-  AuditExportEventType2["retentionEnabled"] = "retentionEnabled";
-  AuditExportEventType2["memberAdded"] = "memberAdded";
-  AuditExportEventType2["retentionDisabled"] = "retentionDisabled";
-  AuditExportEventType2["escrowAccessGranted"] = "escrowAccessGranted";
-  AuditExportEventType2["callInitiated"] = "callInitiated";
-  AuditExportEventType2["adminAction"] = "adminAction";
-  AuditExportEventType2["auditLogExported"] = "auditLogExported";
-  AuditExportEventType2["escrowEnrolled"] = "escrowEnrolled";
-  AuditExportEventType2["messageSent"] = "messageSent";
-  AuditExportEventType2["escrowRevoked"] = "escrowRevoked";
-  AuditExportEventType2["userRegistered"] = "userRegistered";
-  AuditExportEventType2["memberRemoved"] = "memberRemoved";
-  AuditExportEventType2["userRemoved"] = "userRemoved";
-  return AuditExportEventType2;
-})(AuditExportEventType || {});
-var AuditExportFormat = /* @__PURE__ */ ((AuditExportFormat2) => {
-  AuditExportFormat2["csv"] = "csv";
-  AuditExportFormat2["json"] = "json";
-  return AuditExportFormat2;
-})(AuditExportFormat || {});
-var CompartmentLabel = /* @__PURE__ */ ((CompartmentLabel2) => {
-  CompartmentLabel2["classified"] = "classified";
-  CompartmentLabel2["unclassified"] = "unclassified";
-  return CompartmentLabel2;
-})(CompartmentLabel || {});
 var ConversationKind = /* @__PURE__ */ ((ConversationKind2) => {
   ConversationKind2["group"] = "group";
   ConversationKind2["direct"] = "direct";
   return ConversationKind2;
 })(ConversationKind || {});
-var DataResidency = /* @__PURE__ */ ((DataResidency2) => {
-  DataResidency2["eu"] = "eu";
-  DataResidency2["us"] = "us";
-  DataResidency2["apac"] = "apac";
-  DataResidency2["global"] = "global";
-  return DataResidency2;
-})(DataResidency || {});
-var Error_ = /* @__PURE__ */ ((Error_2) => {
-  Error_2["forbidden"] = "forbidden";
-  Error_2["alreadyExists"] = "alreadyExists";
-  Error_2["invalidInput"] = "invalidInput";
-  Error_2["notFound"] = "notFound";
-  Error_2["unauthorized"] = "unauthorized";
-  return Error_2;
-})(Error_ || {});
 var JoinRequestStatus = /* @__PURE__ */ ((JoinRequestStatus2) => {
   JoinRequestStatus2["pending"] = "pending";
   JoinRequestStatus2["denied"] = "denied";
@@ -36364,22 +36303,6 @@ function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
   });
   return new Backend(actor, _uploadFile, _downloadFile, options.processError);
 }
-const backend = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  AuditEventType: AuditEventType$1,
-  AuditExportEventType,
-  AuditExportFormat,
-  Backend,
-  CompartmentLabel,
-  ConversationKind,
-  DataResidency,
-  Error_,
-  ExternalBlob: ExternalBlob2,
-  JoinRequestStatus,
-  MessagePriority,
-  MessageType,
-  createActor
-}, Symbol.toStringTag, { value: "Module" }));
 const AuthContext = reactExports.createContext(null);
 function AuthProvider({ children }) {
   const { identity, login, clear, loginStatus } = useInternetIdentity();
@@ -36533,7 +36456,7 @@ async function encryptMessage(key, plaintext) {
   fullPayload.set(iv, 0);
   fullPayload.set(new Uint8Array(encrypted), 12);
   console.log(
-    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`
+    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV12 + data+tag)`
   );
   return fullPayload;
 }
@@ -36641,15 +36564,20 @@ async function deriveDisplayNameKey(principal) {
   );
 }
 async function deriveStorageWrapKey(principalText) {
-  const seed = new TextEncoder().encode(`keystore:${principalText}`);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", seed);
-  return crypto.subtle.importKey(
-    "raw",
-    hashBuffer,
-    { name: "AES-GCM" },
-    false,
-    ["encrypt", "decrypt"]
-  );
+  try {
+    const seed = new TextEncoder().encode(`keystore:${principalText}`);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", seed);
+    return crypto.subtle.importKey(
+      "raw",
+      hashBuffer,
+      { name: "AES-GCM" },
+      false,
+      ["encrypt", "decrypt"]
+    );
+  } catch (err) {
+    console.error("[E2EE KEYSTORE] Failed to derive storage wrap key:", err);
+    throw err;
+  }
 }
 async function wrapKeyBytes(wrapKey, rawBytes) {
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
@@ -36665,16 +36593,26 @@ async function wrapKeyBytes(wrapKey, rawBytes) {
   for (let i = 0; i < ct2.length; i++) result[IV_LENGTH + i] = ct2[i];
   return result;
 }
-async function unwrapKeyBytes(wrapKey, wrapped) {
-  if (wrapped.length < IV_LENGTH + 1) throw new Error("wrapped blob too small");
-  const iv = wrapped.slice(0, IV_LENGTH);
-  const ct2 = wrapped.slice(IV_LENGTH);
-  const plain = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
-    wrapKey,
-    ct2
-  );
-  return new Uint8Array(plain);
+async function unwrapKeyBytes(wrapKey, wrapped, name) {
+  try {
+    if (wrapped.length < IV_LENGTH + 1)
+      throw new Error("wrapped blob too small");
+    const iv = wrapped.slice(0, IV_LENGTH);
+    const ct2 = wrapped.slice(IV_LENGTH);
+    const plain = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      wrapKey,
+      ct2
+    );
+    return new Uint8Array(plain);
+  } catch (err) {
+    console.error(
+      "[E2EE KEYSTORE] Failed to unwrap key for storage key=",
+      name ?? "(unknown)",
+      err
+    );
+    throw err;
+  }
 }
 async function loadOrCreateKeyPair(principal) {
   const stored = await dbGet(`ecdh:${principal}`);
@@ -36759,88 +36697,102 @@ function CryptoProvider({ children }) {
       return;
     }
     const principalText = principal.toText();
-    loadOrCreateKeyPair(principalText).then(async ({ keyPair: kp, isNew }) => {
-      setKeyPair(kp);
-      setIsNewKeyPair(isNew);
-      if (isNew) {
-        exportPublicKey(kp.publicKey).then((pubBytes) => {
-          const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-          console.log(
-            `[E2EE KEYS] NEW key pair generated for ${principalText}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`
-          );
-        });
-      }
-      let restoredCount = 0;
+    (async () => {
       try {
-        const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
-        const allEntries = await dbGetKeysWithPrefix(prefix2);
-        let wrapKey = null;
-        if (allEntries.length > 0) {
-          try {
-            wrapKey = await deriveStorageWrapKey(principalText);
-          } catch (wkErr) {
-            console.error(
-              "[E2EE KEYSTORE] Failed to derive storage wrap key:",
-              wkErr
+        const { keyPair: kp, isNew } = await loadOrCreateKeyPair(principalText);
+        setKeyPair(kp);
+        setIsNewKeyPair(isNew);
+        if (isNew) {
+          exportPublicKey(kp.publicKey).then((pubBytes) => {
+            const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+            console.log(
+              `[E2EE KEYS] NEW key pair generated for ${principalText}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`
             );
-          }
+          }).catch(() => {
+          });
         }
-        await Promise.all(
-          allEntries.map(async (entry) => {
-            const convId = entry.key.slice(prefix2.length);
+        let restoredCount = 0;
+        try {
+          const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
+          const allEntries = await dbGetKeysWithPrefix(prefix2);
+          let wrapKey = null;
+          if (allEntries.length > 0) {
             try {
-              const stored = entry.value;
-              if (!stored) return;
-              let rawBytes = null;
-              let fingerprint;
-              if (stored instanceof Uint8Array) {
-                rawBytes = stored.slice(0);
-              } else if (Array.isArray(stored.wrapped)) {
-                const wrappedArr = new Uint8Array(
-                  stored.wrapped
-                );
-                if (wrapKey) {
-                  rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
-                }
-                fingerprint = stored.fingerprint;
-              } else if (stored.raw) {
-                const legacy = stored;
-                rawBytes = legacy.raw instanceof Uint8Array ? legacy.raw.slice(0) : new Uint8Array(
-                  Object.values(
-                    legacy.raw
-                  )
-                );
-                fingerprint = legacy.fingerprint;
-              }
-              if (!rawBytes || rawBytes.length === 0) return;
-              const cryptoKey = await importAESKey(rawBytes);
-              convKeys.current.set(convId, cryptoKey);
-              if (fingerprint) {
-                groupKeyFingerprints.current.set(convId, fingerprint);
-              }
-              restoredCount++;
-              const fpLog = fingerprint || "none";
-              console.log(
-                `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`
-              );
-            } catch (err) {
-              console.warn(
-                `[E2EE KEYSTORE] Failed to restore key for convId=${convId}:`,
-                err
+              wrapKey = await deriveStorageWrapKey(principalText);
+            } catch (wkErr) {
+              console.error(
+                "[E2EE KEYSTORE] Cannot restore keys — wrap key derivation failed:",
+                wkErr
               );
             }
-          })
-        );
-        console.log(
-          `[E2EE KEYSTORE] Restored ${restoredCount} conversation keys from storage on startup`
-        );
+          }
+          await Promise.all(
+            allEntries.map(async (entry) => {
+              const convId = entry.key.slice(prefix2.length);
+              try {
+                const stored = entry.value;
+                if (!stored) return;
+                let rawBytes = null;
+                let fingerprint;
+                if (stored instanceof Uint8Array) {
+                  rawBytes = stored.slice(0);
+                } else if (Array.isArray(stored.wrapped)) {
+                  const wrappedArr = new Uint8Array(
+                    stored.wrapped
+                  );
+                  if (wrapKey) {
+                    rawBytes = await unwrapKeyBytes(
+                      wrapKey,
+                      wrappedArr,
+                      entry.key
+                    );
+                  } else {
+                    console.warn(
+                      `[E2EE KEYSTORE] Skipping wrapped key for convId=${convId} — wrap key unavailable`
+                    );
+                    return;
+                  }
+                  fingerprint = stored.fingerprint;
+                } else if (stored.raw) {
+                  const legacy = stored;
+                  rawBytes = legacy.raw instanceof Uint8Array ? legacy.raw.slice(0) : new Uint8Array(
+                    Object.values(
+                      legacy.raw
+                    )
+                  );
+                  fingerprint = legacy.fingerprint;
+                }
+                if (!rawBytes || rawBytes.length === 0) return;
+                const cryptoKey = await importAESKey(rawBytes);
+                convKeys.current.set(convId, cryptoKey);
+                if (fingerprint) {
+                  groupKeyFingerprints.current.set(convId, fingerprint);
+                }
+                restoredCount++;
+                const fpLog = fingerprint || "none";
+                console.log(
+                  `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`
+                );
+              } catch (err) {
+                console.error(
+                  `[E2EE KEYSTORE] Failed to restore key for convId=${convId}:`,
+                  err
+                );
+              }
+            })
+          );
+          console.log(
+            `[E2EE KEYSTORE] Restored ${restoredCount} conversation keys from storage on startup`
+          );
+        } catch (err) {
+          console.error("[E2EE KEYSTORE] Startup restoration failed:", err);
+        }
       } catch (err) {
-        console.warn("[E2EE KEYSTORE] Error during key restore:", err);
+        console.error("[E2EE KEYSTORE] Startup restoration failed:", err);
+      } finally {
+        setIsReady(true);
       }
-      setIsReady(true);
-    }).catch(() => {
-      setIsReady(true);
-    });
+    })();
   }, [principal]);
   const getConversationKey = reactExports.useCallback((convId) => {
     return convKeys.current.get(convId);
@@ -37011,7 +36963,7 @@ function CryptoProvider({ children }) {
         }
       }
       if (!key) {
-        console.warn(
+        console.log(
           `[E2EE KEYSTORE] No stored key for convId=${convId} - performing exchange`
         );
         return null;
@@ -47541,11 +47493,16 @@ function DialogDescription({
 }
 function useBackend() {
   const { actor, isFetching } = useActor(createActor);
-  const uploadBlob = actor ? async (blob) => {
-    return actor._uploadFile(blob);
+  const uploadBlob = actor ? async (bytes, mimeType) => {
+    return actor.uploadFile(bytes, mimeType);
   } : null;
   const downloadBlob = actor ? async (key) => {
-    return actor._downloadFile(key);
+    const hexKey = Array.from(key).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+    const url = `https://blob.caffeine.ai/v1/blob/${hexKey}`;
+    console.log(
+      `[E2EE FILE RECV] Fetching blob using storageKey: ${hexKey}`
+    );
+    return ExternalBlob2.fromURL(url);
   } : null;
   return {
     backend: actor ?? null,
@@ -47593,7 +47550,7 @@ function AttachmentUpload({
   onMessageSent
 }) {
   const { encryptForConv, getConversationKey } = useCrypto();
-  const { backend: backend2, uploadBlob } = useBackend();
+  const { backend, uploadBlob } = useBackend();
   const inputRef = reactExports.useRef(null);
   const [selectedFile, setSelectedFile] = reactExports.useState(null);
   const [progress, setProgress] = reactExports.useState(0);
@@ -47615,7 +47572,7 @@ function AttachmentUpload({
     [handleFile]
   );
   const handleUpload = reactExports.useCallback(async () => {
-    if (!selectedFile || !backend2 || !uploadBlob) return;
+    if (!selectedFile || !backend || !uploadBlob) return;
     const convKey = getConversationKey(conversationId.toString());
     if (!convKey) {
       setError("Encryption key not available. Cannot upload securely.");
@@ -47625,25 +47582,36 @@ function AttachmentUpload({
     setError(null);
     try {
       setProgress(10);
-      const fileBytes = new Uint8Array(await selectedFile.arrayBuffer());
-      const storageKeyBytes = await uploadBlob(
-        ExternalBlob2.fromBytes(fileBytes)
-      );
-      const storageKey2 = keyToString(storageKeyBytes);
+      const fileBuf = await selectedFile.arrayBuffer();
+      const fileBytes = new Uint8Array(fileBuf);
+      const { encryptBlob: encryptBlob2 } = await __vitePreload(async () => {
+        const { encryptBlob: encryptBlob3 } = await Promise.resolve().then(() => crypto$1);
+        return { encryptBlob: encryptBlob3 };
+      }, true ? void 0 : void 0);
       console.log(
-        "[FileUpload] Uploaded non-encrypted file. StorageKey:",
-        storageKey2,
-        "| Size:",
-        fileBytes.length
+        `[E2EE FILE] Encrypting file before upload: name=${selectedFile.name}, plaintext=${fileBytes.byteLength} bytes`
       );
+      const encrypted = await encryptBlob2(convKey, fileBuf);
+      console.log(
+        `[E2EE FILE] Encrypted blob ready: ${encrypted.byteLength} bytes (IV=12 + data+tag)`
+      );
+      console.log(
+        `[E2EE FILE] Uploading encrypted blob: byteLength=${encrypted.byteLength}, byteOffset=${encrypted.byteOffset}`
+      );
+      const storageKeyBytes = await uploadBlob(encrypted, selectedFile.type);
+      const storageKey2 = keyToString(storageKeyBytes);
+      console.log("[E2EE FILE] Storage key from upload API:", storageKey2);
       setProgress(65);
       const metaText = JSON.stringify({
         name: selectedFile.name,
         size: selectedFile.size,
         mime: selectedFile.type,
-        encrypted: false
-        // flag for receiver
+        storageKey: storageKey2,
+        encrypted: true
       });
+      console.log(
+        `[E2EE FILE] Metadata JSON (${metaText.length} chars) includes storageKey=${storageKey2.slice(0, 12)}...`
+      );
       const encryptedContent = await encryptForConv(
         conversationId.toString(),
         metaText
@@ -47651,7 +47619,7 @@ function AttachmentUpload({
       if (!encryptedContent) throw new Error("Encryption failed");
       setProgress(75);
       const msgType = getMessageType(selectedFile.type);
-      const msgResult = await backend2.sendMessage({
+      const msgResult = await backend.sendMessage({
         conversationId,
         encryptedContent,
         messageType: msgType
@@ -47659,10 +47627,10 @@ function AttachmentUpload({
       if (msgResult.__kind__ === "err") throw new Error(msgResult.err);
       setProgress(85);
       const msgId = msgResult.ok.id;
-      const attachResult = await backend2.registerAttachment({
+      const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: selectedFile.type,
-        encryptedSizeBytes: BigInt(fileBytes.length),
+        encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey: storageKey2
       });
       if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
@@ -47678,7 +47646,7 @@ function AttachmentUpload({
     }
   }, [
     selectedFile,
-    backend2,
+    backend,
     uploadBlob,
     conversationId,
     encryptForConv,
@@ -49241,7 +49209,7 @@ function VoiceNoteRecorder({
   onSent
 }) {
   const { encryptForConv, getConversationKey } = useCrypto();
-  const { backend: backend$1, uploadBlob } = useBackend();
+  const { backend, uploadBlob } = useBackend();
   const [state, setState] = reactExports.useState("idle");
   const [duration, setDuration] = reactExports.useState(0);
   const [audioBlob, setAudioBlob] = reactExports.useState(null);
@@ -49300,7 +49268,7 @@ function VoiceNoteRecorder({
     setState("idle");
   }, [audioUrl]);
   const sendVoiceNote = reactExports.useCallback(async () => {
-    if (!audioBlob || !backend$1 || !uploadBlob) return;
+    if (!audioBlob || !backend || !uploadBlob) return;
     const convKey = getConversationKey(conversationId.toString());
     if (!convKey) {
       setError("Encryption key not available.");
@@ -49309,23 +49277,17 @@ function VoiceNoteRecorder({
     setState("sending");
     setError(null);
     try {
-      const { ExternalBlob: ExternalBlob3 } = await __vitePreload(async () => {
-        const { ExternalBlob: ExternalBlob4 } = await Promise.resolve().then(() => backend);
-        return { ExternalBlob: ExternalBlob4 };
-      }, true ? void 0 : void 0);
       const arrayBuf = await audioBlob.arrayBuffer();
       const { encryptBlob: encryptBlob2 } = await __vitePreload(async () => {
         const { encryptBlob: encryptBlob3 } = await Promise.resolve().then(() => crypto$1);
         return { encryptBlob: encryptBlob3 };
       }, true ? void 0 : void 0);
       const encrypted = await encryptBlob2(convKey, arrayBuf);
-      const isolatedBuffer = new ArrayBuffer(encrypted.byteLength);
-      new Uint8Array(isolatedBuffer).set(encrypted);
-      const safeBytes = new Uint8Array(
-        isolatedBuffer
+      const storageKeyBytes = await uploadBlob(encrypted, audioBlob.type);
+      console.log(
+        "[E2EE FILE] Upload complete, storage key bytes:",
+        storageKeyBytes.length
       );
-      const externalBlob = ExternalBlob3.fromBytes(safeBytes);
-      const storageKeyBytes = await uploadBlob(externalBlob);
       const storageKey2 = keyToHex(storageKeyBytes);
       const metaText = JSON.stringify({ duration, mimeType: audioBlob.type });
       const encryptedContent = await encryptForConv(
@@ -49333,14 +49295,14 @@ function VoiceNoteRecorder({
         metaText
       );
       if (!encryptedContent) throw new Error("Encryption failed");
-      const msgResult = await backend$1.sendMessage({
+      const msgResult = await backend.sendMessage({
         conversationId,
         encryptedContent,
         messageType: MessageType.audio
       });
       if (msgResult.__kind__ === "err") throw new Error(msgResult.err);
       const msgId = msgResult.ok.id;
-      const attachResult = await backend$1.registerAttachment({
+      const attachResult = await backend.registerAttachment({
         messageId: msgId,
         mimeType: audioBlob.type,
         encryptedSizeBytes: BigInt(encrypted.byteLength),
@@ -49357,7 +49319,7 @@ function VoiceNoteRecorder({
     }
   }, [
     audioBlob,
-    backend$1,
+    backend,
     uploadBlob,
     conversationId,
     duration,
@@ -49894,7 +49856,7 @@ function MessageInput({
   onMessageSent
 }) {
   const { encryptForConv } = useCrypto();
-  const { backend: backend2 } = useBackend();
+  const { backend } = useBackend();
   const connection = useConnection();
   const { queueMessage } = useOfflineQueue();
   const [text, setText] = reactExports.useState("");
@@ -49932,23 +49894,23 @@ function MessageInput({
     el.style.height = `${Math.min(el.scrollHeight, maxH)}px`;
   }, [text]);
   const clearTypingIndicator = reactExports.useCallback(async () => {
-    if (!backend2 || !isTypingRef.current) return;
+    if (!backend || !isTypingRef.current) return;
     isTypingRef.current = false;
     try {
-      await backend2.clearTypingIndicator(conversationId);
+      await backend.clearTypingIndicator(conversationId);
     } catch {
     }
-  }, [backend2, conversationId]);
+  }, [backend, conversationId]);
   const sendTypingIndicator = reactExports.useCallback(async () => {
-    if (!backend2 || !connection.isOnline) return;
+    if (!backend || !connection.isOnline) return;
     isTypingRef.current = true;
     try {
-      await backend2.setTypingIndicator(conversationId, TYPING_TTL);
+      await backend.setTypingIndicator(conversationId, TYPING_TTL);
     } catch {
     }
     if (typingTimeout.current) clearTimeout(typingTimeout.current);
     typingTimeout.current = setTimeout(clearTypingIndicator, 4e3);
-  }, [backend2, conversationId, clearTypingIndicator, connection.isOnline]);
+  }, [backend, conversationId, clearTypingIndicator, connection.isOnline]);
   reactExports.useEffect(() => {
     return () => {
       if (typingTimeout.current) clearTimeout(typingTimeout.current);
@@ -50002,8 +49964,8 @@ function MessageInput({
         onMessageSent == null ? void 0 : onMessageSent();
         return;
       }
-      if (!backend2) throw new Error("Not connected");
-      const result = await backend2.sendMessage({
+      if (!backend) throw new Error("Not connected");
+      const result = await backend.sendMessage({
         conversationId,
         encryptedContent: encryptedClean,
         messageType: MessageType.text,
@@ -50022,7 +49984,7 @@ function MessageInput({
   }, [
     text,
     sending,
-    backend2,
+    backend,
     conversationId,
     encryptForConv,
     clearTypingIndicator,
@@ -50215,7 +50177,7 @@ function useDecryptedContent(message, conversationId, _isMine) {
       return;
     }
     let cancelled = false;
-    const RETRY_DELAYS = [0, 500, 500, 500, 500, 2e3];
+    const RETRY_DELAYS = [0, 500];
     let cumulativeDelay = 0;
     const attempts = RETRY_DELAYS.map((delay, index2) => {
       cumulativeDelay += delay;
@@ -50263,18 +50225,43 @@ function useAttachmentMeta(message, conversationId) {
   const [meta, setMeta] = reactExports.useState({});
   reactExports.useEffect(() => {
     if (message.messageType === MessageType.text) return;
-    const raw = message.encryptedContent;
-    const fresh = new Uint8Array(raw.length);
-    for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
-    decryptFromConv(conversationId, fresh).then((result) => {
-      if (!result) return;
-      try {
-        const parsed = JSON.parse(result);
-        setMeta(parsed);
-      } catch {
-      }
-    });
-  }, [message, conversationId, decryptFromConv]);
+    if (meta.name || meta.mime) return;
+    let cancelled = false;
+    const RETRY_DELAYS = [0, 500, 500, 1e3, 2e3];
+    let cumulative = 0;
+    const timers = [];
+    for (const delay of RETRY_DELAYS) {
+      cumulative += delay;
+      const t = setTimeout(async () => {
+        if (cancelled) return;
+        const raw = message.encryptedContent;
+        const fresh = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+        const result = await decryptFromConv(conversationId, fresh);
+        if (cancelled || !result) return;
+        try {
+          const parsed = JSON.parse(result);
+          setMeta(parsed);
+          cancelled = true;
+          if (parsed.storageKey) {
+            console.log(
+              `[E2EE FILE RECV] Metadata decoded: name=${parsed.name}, mime=${parsed.mime}, storageKey=${parsed.storageKey.slice(0, 12)}...`
+            );
+          } else {
+            console.log(
+              `[E2EE FILE RECV] Metadata decoded (no inline storageKey — will use attachment record): name=${parsed.name}, mime=${parsed.mime}`
+            );
+          }
+        } catch {
+        }
+      }, cumulative);
+      timers.push(t);
+    }
+    return () => {
+      cancelled = true;
+      for (const t of timers) clearTimeout(t);
+    };
+  }, [message, conversationId, decryptFromConv, meta.name, meta.mime]);
   return meta;
 }
 function hexToBytes(hex) {
@@ -50285,69 +50272,143 @@ function hexToBytes(hex) {
   }
   return bytes;
 }
-function useAttachmentBlob(message, conversationId, enabled) {
-  const { backend: backend2, downloadBlob } = useBackend();
+function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStorageKey) {
+  const { backend, downloadBlob } = useBackend();
   const { getConversationKey } = useCrypto();
   const [blobUrl, setBlobUrl] = reactExports.useState(null);
   const [loading, setLoading] = reactExports.useState(false);
   const [fetchError, setFetchError] = reactExports.useState(false);
   const blobUrlRef = reactExports.useRef(null);
+  const fetchingRef = reactExports.useRef(false);
+  const doneRef = reactExports.useRef(false);
   reactExports.useEffect(() => {
-    if (!backend2 || !downloadBlob) return;
+    if (metaStorageKey && !doneRef.current) {
+      fetchingRef.current = false;
+    }
+  }, [metaStorageKey]);
+  reactExports.useEffect(() => {
+    if (!backend || !downloadBlob) return;
     if (message.messageType === MessageType.text) return;
-    const convKey = getConversationKey(conversationId);
-    if (!convKey) return;
+    if (doneRef.current) return;
     let cancelled = false;
     setLoading(true);
     setFetchError(false);
-    (async () => {
-      try {
-        const attachments = await backend2.getMessageAttachments(message.id);
-        if (cancelled || attachments.length === 0) {
-          if (!cancelled) setLoading(false);
+    const KEY_POLL_DELAYS = [0, 500, 1e3, 2e3, 3e3];
+    let cumulative = 0;
+    const timers = [];
+    for (let attemptIndex = 0; attemptIndex < KEY_POLL_DELAYS.length; attemptIndex++) {
+      const delay = KEY_POLL_DELAYS[attemptIndex];
+      cumulative += delay;
+      const t = setTimeout(async () => {
+        if (cancelled || doneRef.current) return;
+        const convKey = getConversationKey(conversationId);
+        if (!convKey) {
+          console.log(
+            `[E2EE FILE RECV] Key not ready for convId=${conversationId}, will retry...`
+          );
+          if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
+            if (!cancelled) {
+              setFetchError(true);
+              setLoading(false);
+            }
+          }
           return;
         }
-        const attachment = attachments[0];
-        const keyBytes = hexToBytes(attachment.storageKey);
-        const externalBlob = await downloadBlob(keyBytes);
-        const rawBytes = await externalBlob.getBytes();
-        console.log(
-          `[EncryptedFile] Received encrypted blob: size = ${rawBytes.length} bytes`
-        );
-        const encryptedBytes = new Uint8Array(rawBytes.length);
-        for (let i = 0; i < rawBytes.length; i++)
-          encryptedBytes[i] = rawBytes[i];
-        const { decryptBlob: decryptBlob2 } = await __vitePreload(async () => {
-          const { decryptBlob: decryptBlob3 } = await Promise.resolve().then(() => crypto$1);
-          return { decryptBlob: decryptBlob3 };
-        }, true ? void 0 : void 0);
-        const decrypted = await decryptBlob2(convKey, encryptedBytes);
-        console.log(
-          `[EncryptedFile] Decrypted file: size = ${decrypted.byteLength} bytes`
-        );
-        if (cancelled) return;
-        const blob = new Blob([decrypted], { type: attachment.mimeType });
-        const url = URL.createObjectURL(blob);
-        if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
-        blobUrlRef.current = url;
-        setBlobUrl(url);
-      } catch {
-        if (!cancelled) setFetchError(true);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
+        if (fetchingRef.current) {
+          console.log("[E2EE FILE RECV] fetchingRef already locked, skipping");
+          return;
+        }
+        fetchingRef.current = true;
+        try {
+          const attachments = await backend.getMessageAttachments(message.id);
+          if (cancelled) return;
+          let resolvedStorageKeyHex = null;
+          if (attachments.length === 0) {
+            if (metaStorageKey) {
+              console.log(
+                "[E2EE FILE RECV] Using inline storageKey from metadata as fallback"
+              );
+              resolvedStorageKeyHex = metaStorageKey;
+            } else {
+              fetchingRef.current = false;
+              console.log(
+                `[E2EE FILE RECV] No attachment record yet (attempt ${attemptIndex + 1}/5), will retry`
+              );
+              if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
+                console.warn(
+                  `[E2EE FILE RECV] No attachment record found for msgId=${message.id} after all retries`
+                );
+                if (!cancelled) setLoading(false);
+              }
+              return;
+            }
+          } else {
+            const attachment = attachments[0];
+            resolvedStorageKeyHex = attachment.storageKey;
+          }
+          console.log(
+            `[E2EE FILE RECV] Starting download attempt, storageKey from backend=${attachments.length > 0 ? `${resolvedStorageKeyHex == null ? void 0 : resolvedStorageKeyHex.slice(0, 12)}...` : "none"}, metaStorageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 12)}...` : "none"}`
+          );
+          const keyBytes = hexToBytes(resolvedStorageKeyHex);
+          const externalBlob = await downloadBlob(keyBytes);
+          if (cancelled) return;
+          const rawBytes = await externalBlob.getBytes();
+          console.log(
+            `[E2EE FILE RECV] Downloaded encrypted blob: ${rawBytes.length} bytes`
+          );
+          const encryptedBytes = new Uint8Array(rawBytes.length);
+          for (let i = 0; i < rawBytes.length; i++)
+            encryptedBytes[i] = rawBytes[i];
+          const { decryptBlob: decryptBlob2 } = await __vitePreload(async () => {
+            const { decryptBlob: decryptBlob3 } = await Promise.resolve().then(() => crypto$1);
+            return { decryptBlob: decryptBlob3 };
+          }, true ? void 0 : void 0);
+          const decryptedArrayBuffer = await decryptBlob2(
+            convKey,
+            encryptedBytes
+          );
+          if (cancelled) return;
+          console.log(
+            `[E2EE FILE RECV] Decrypted file: ${decryptedArrayBuffer.byteLength} bytes, mime=${mimeType}`
+          );
+          const blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
+            type: mimeType || "application/octet-stream"
+          });
+          const url = URL.createObjectURL(blob);
+          console.log("[E2EE FILE RECV] Created object URL for display");
+          if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
+          blobUrlRef.current = url;
+          doneRef.current = true;
+          setBlobUrl(url);
+          setLoading(false);
+          setFetchError(false);
+          cancelled = true;
+          for (const t2 of timers) clearTimeout(t2);
+        } catch (err) {
+          console.error("[E2EE FILE RECV] Error during download/decrypt:", err);
+          fetchingRef.current = false;
+          if (!cancelled && attemptIndex === KEY_POLL_DELAYS.length - 1) {
+            setFetchError(true);
+            setLoading(false);
+          }
+        }
+      }, cumulative);
+      timers.push(t);
+    }
     return () => {
       cancelled = true;
+      for (const t of timers) clearTimeout(t);
     };
   }, [
     enabled,
-    backend2,
+    backend,
     downloadBlob,
     message.id,
     message.messageType,
     conversationId,
-    getConversationKey
+    getConversationKey,
+    mimeType,
+    metaStorageKey
   ]);
   reactExports.useEffect(() => {
     return () => {
@@ -50362,18 +50423,33 @@ function ImageAttachment({
   meta
 }) {
   const [expanded, setExpanded] = reactExports.useState(false);
+  const prevBlobUrlRef = reactExports.useRef(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
     conversationId,
-    true
+    true,
+    meta.mime ?? "application/octet-stream",
+    meta.storageKey
   );
-  if (loading) {
+  reactExports.useEffect(() => {
+    if (blobUrl && !prevBlobUrlRef.current) {
+      console.log("[FileUI] Replaced loading spinner with actual content");
+    }
+    prevBlobUrlRef.current = blobUrl;
+  }, [blobUrl]);
+  if (fetchError) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Failed to decrypt file" })
+    ] });
+  }
+  if (loading || !blobUrl && !fetchError) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading image..." })
     ] });
   }
-  if (fetchError || !blobUrl) {
+  if (!blobUrl) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: meta.name ?? "Image" })
@@ -50425,14 +50501,30 @@ function FileAttachment({
   conversationId,
   meta
 }) {
+  const prevBlobUrlRef = reactExports.useRef(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
     conversationId,
-    true
+    true,
+    meta.mime ?? "application/octet-stream",
+    meta.storageKey
   );
+  reactExports.useEffect(() => {
+    if (blobUrl && !prevBlobUrlRef.current) {
+      console.log("[FileUI] Replaced loading spinner with actual content");
+    }
+    prevBlobUrlRef.current = blobUrl;
+  }, [blobUrl]);
   const icon = message.messageType === MessageType.video ? /* @__PURE__ */ jsxRuntimeExports.jsx(Video, { size: 16 }) : message.messageType === MessageType.audio ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base leading-none", children: "🎤" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { size: 16 });
   const label = meta.name ?? (message.messageType === MessageType.video ? "Video" : message.messageType === MessageType.audio ? "Voice note" : "File");
-  if (loading) {
+  if (fetchError) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
+      icon,
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs opacity-50", children: "Failed to decrypt file" })
+    ] });
+  }
+  if (loading || !blobUrl && !fetchError) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading..." })
@@ -50441,7 +50533,7 @@ function FileAttachment({
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm", children: [
     icon,
     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
-    blobUrl && !fetchError ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+    blobUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx(
       "a",
       {
         href: blobUrl,
@@ -50451,7 +50543,7 @@ function FileAttachment({
         "data-ocid": "message.download_button",
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 14 })
       }
-    ) : fetchError ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs opacity-50", children: "Unavailable" }) : null
+    ) : null
   ] });
 }
 function MessageBubble({
@@ -50867,6 +50959,9 @@ function MessageList({
   const { pendingMessages, retryMessage, deleteQueuedMessage } = useOfflineQueue();
   const { decryptFromConv } = useCrypto();
   const markRead = useMarkRead();
+  const markReadMutateRef = reactExports.useRef(markRead.mutate);
+  markReadMutateRef.current = markRead.mutate;
+  const markedMessageIdsRef = reactExports.useRef(/* @__PURE__ */ new Set());
   const bottomRef = reactExports.useRef(null);
   const topRef = reactExports.useRef(null);
   const scrollRef = reactExports.useRef(null);
@@ -50942,7 +51037,10 @@ function MessageList({
         for (const entry of entries) {
           if (entry.isIntersecting) {
             const id = entry.target.dataset.messageId;
-            if (id) markRead.mutate(BigInt(id));
+            if (id && !markedMessageIdsRef.current.has(id)) {
+              markedMessageIdsRef.current.add(id);
+              markReadMutateRef.current(BigInt(id));
+            }
           }
         }
       },
@@ -50951,7 +51049,7 @@ function MessageList({
     const nodes = el.querySelectorAll("[data-message-id]");
     for (const node of nodes) observer.observe(node);
     return () => observer.disconnect();
-  }, [markRead]);
+  }, [allMessagesCount]);
   const uniqueSenderIds = reactExports.useMemo(() => {
     const seen2 = /* @__PURE__ */ new Set();
     const ids = [];
@@ -51788,39 +51886,37 @@ function ChatPage() {
           const keyFingerprint = Array.from(
             peer.ecdhPublicKey.slice(0, 8)
           ).join(",");
+          if (lastDerivedPeerKey.current === keyFingerprint) {
+            return;
+          }
+          lastDerivedPeerKey.current = keyFingerprint;
           const existingKey = getConversationKey(convIdStr);
-          const needsDerivation = !existingKey || lastDerivedPeerKey.current !== keyFingerprint;
-          if (needsDerivation) {
-            if (!existingKey) {
-              console.log(
-                `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`
-              );
-            }
-            lastDerivedPeerKey.current = keyFingerprint;
-            const freshPeerKeyBytes = new Uint8Array(
-              peer.ecdhPublicKey.buffer.slice(
-                peer.ecdhPublicKey.byteOffset,
-                peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength
-              )
-            );
-            deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(
-              async (key) => {
-                if (!key) {
-                  console.error(
-                    `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`
-                  );
-                } else if (keyPair) {
-                  const myPubBytes = await exportPublicKey(keyPair.publicKey);
-                  const myFp = Array.from(myPubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-                  const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-                  const sharedFp = await getKeyFingerprint(key);
-                  console.log(
-                    `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`
-                  );
-                }
-              }
+          if (!existingKey) {
+            console.log(
+              `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`
             );
           }
+          const freshPeerKeyBytes = new Uint8Array(
+            peer.ecdhPublicKey.buffer.slice(
+              peer.ecdhPublicKey.byteOffset,
+              peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength
+            )
+          );
+          deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(async (key) => {
+            if (!key) {
+              console.error(
+                `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`
+              );
+            } else if (keyPair) {
+              const myPubBytes = await exportPublicKey(keyPair.publicKey);
+              const myFp = Array.from(myPubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+              const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+              const sharedFp = await getKeyFingerprint(key);
+              console.log(
+                `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`
+              );
+            }
+          });
         }
       }
       return;
@@ -55248,7 +55344,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DU_1adqG.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DIkjKbPz.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

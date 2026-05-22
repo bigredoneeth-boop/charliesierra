@@ -25,6 +25,8 @@ import SovereignMixin "mixins/sovereign-api";
 
 
 
+
+
 actor self {
   // ── Stable state slices ──────────────────────────────────────────────────────
 
@@ -46,6 +48,7 @@ actor self {
     messages = Map.empty();
     conversationMessages = Map.empty();
     readReceipts = Map.empty();
+    receiptsByMessage = Map.empty();
     typingIndicators = Map.empty();
     state = { var nextId = 0 };
   };

@@ -636,8 +636,9 @@ export default function ChatPage() {
     const convIdStr = convId.toString();
 
     // Direct: derive ECDH shared key from peer's public key.
-    // ALWAYS re-derive when peerProfiles changes AND the key bytes are new —
-    // this handles the race where the profile arrives after the first render.
+    // Guard: we set lastDerivedPeerKey.current BEFORE any async work so that
+    // subsequent effect re-runs from polling (same key bytes, new object ref)
+    // see the fingerprint already set and skip re-derivation immediately.
     if (conv.kind === ConversationKind.direct) {
       if (peerProfiles.length > 0) {
         const peer = peerProfiles[0];
@@ -649,50 +650,58 @@ export default function ChatPage() {
           console.log(
             `[E2EE] ChatPage: peer ecdhPublicKey arrived, byteLength=${peer.ecdhPublicKey.byteLength} for convId=${convIdStr}`,
           );
-          // Serialize the key bytes to a string for change detection.
+          // Compute the fingerprint from the raw bytes — this is stable across
+          // polling re-fetches that return identical key data in new object refs.
           const keyFingerprint = Array.from(
             peer.ecdhPublicKey.slice(0, 8),
           ).join(",");
+
+          // PRIMARY GUARD: if we already processed this exact fingerprint,
+          // skip entirely — even if getConversationKey() hasn't stored the key
+          // yet (async in-flight). This prevents the loop caused by polling.
+          if (lastDerivedPeerKey.current === keyFingerprint) {
+            return;
+          }
+
+          // Claim the fingerprint synchronously BEFORE any async work so that
+          // any re-runs triggered while deriveAndStoreKey is in flight don't
+          // start a second derivation for the same key.
+          lastDerivedPeerKey.current = keyFingerprint;
+
           const existingKey = getConversationKey(convIdStr);
-          const needsDerivation =
-            !existingKey || lastDerivedPeerKey.current !== keyFingerprint;
-          if (needsDerivation) {
-            if (!existingKey) {
-              console.log(
-                `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`,
-              );
-            }
-            lastDerivedPeerKey.current = keyFingerprint;
-            // Always use a fresh buffer copy of the peer's ecdhPublicKey so Candid
-            // buffer offsets don't corrupt the WebCrypto key import.
-            const freshPeerKeyBytes = new Uint8Array(
-              peer.ecdhPublicKey.buffer.slice(
-                peer.ecdhPublicKey.byteOffset,
-                peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength,
-              ),
-            );
-            deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(
-              async (key) => {
-                if (!key) {
-                  console.error(
-                    `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`,
-                  );
-                } else if (keyPair) {
-                  const myPubBytes = await exportPublicKey(keyPair.publicKey);
-                  const myFp = Array.from(myPubBytes.slice(0, 8))
-                    .map((b) => b.toString(16).padStart(2, "0"))
-                    .join("");
-                  const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8))
-                    .map((b) => b.toString(16).padStart(2, "0"))
-                    .join("");
-                  const sharedFp = await getKeyFingerprint(key);
-                  console.log(
-                    `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`,
-                  );
-                }
-              },
+          if (!existingKey) {
+            console.log(
+              `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`,
             );
           }
+
+          // Always use a fresh buffer copy of the peer's ecdhPublicKey so Candid
+          // buffer offsets don't corrupt the WebCrypto key import.
+          const freshPeerKeyBytes = new Uint8Array(
+            peer.ecdhPublicKey.buffer.slice(
+              peer.ecdhPublicKey.byteOffset,
+              peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength,
+            ),
+          );
+          deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(async (key) => {
+            if (!key) {
+              console.error(
+                `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`,
+              );
+            } else if (keyPair) {
+              const myPubBytes = await exportPublicKey(keyPair.publicKey);
+              const myFp = Array.from(myPubBytes.slice(0, 8))
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("");
+              const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8))
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("");
+              const sharedFp = await getKeyFingerprint(key);
+              console.log(
+                `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`,
+              );
+            }
+          });
         }
       }
       return; // nothing more to do for direct chats

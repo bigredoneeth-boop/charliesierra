@@ -3,6 +3,7 @@ import { MessageType } from "@/backend";
 import { Button } from "@/components/ui/button";
 import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
+import { createExternalBlob } from "@/lib/blob-helpers";
 import { Loader2, Mic, MicOff, Play, Send, Square, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -111,24 +112,19 @@ export function VoiceNoteRecorder({
     setState("sending");
     setError(null);
     try {
-      const { ExternalBlob } = await import("@/backend");
       const arrayBuf = await audioBlob.arrayBuffer();
       const { encryptBlob } = await import("@/lib/crypto");
       const encrypted = await encryptBlob(convKey, arrayBuf);
 
       // Upload encrypted audio blob to object-storage.
-      // Allocate a brand-new, fully-isolated ArrayBuffer and copy the encrypted
-      // bytes into it byte-by-byte. This guarantees the backing buffer is not
-      // shared with the IV-prepend stage of encryptBlob(), which can produce a
-      // non-zero byteOffset composite view that confuses the blob_tree hasher
-      // and causes a 403 "Invalid Payload" when the hashes don't match the data.
-      const isolatedBuffer = new ArrayBuffer(encrypted.byteLength);
-      new Uint8Array(isolatedBuffer).set(encrypted);
-      const safeBytes = new Uint8Array(
-        isolatedBuffer,
-      ) as Uint8Array<ArrayBuffer>;
-      const externalBlob = ExternalBlob.fromBytes(safeBytes);
-      const storageKeyBytes = await uploadBlob(externalBlob);
+      // createExternalBlob guarantees a fresh zero-offset copy before passing
+      // to ExternalBlob.fromBytes(), preventing 403 Invalid Payload from hash
+      // mismatches caused by non-zero byteOffset composite views.
+      const storageKeyBytes = await uploadBlob(encrypted, audioBlob.type);
+      console.log(
+        "[E2EE FILE] Upload complete, storage key bytes:",
+        storageKeyBytes.length,
+      );
       const storageKey = keyToHex(storageKeyBytes);
 
       const metaText = JSON.stringify({ duration, mimeType: audioBlob.type });
