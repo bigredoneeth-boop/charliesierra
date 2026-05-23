@@ -118,12 +118,59 @@ export function ConversationListItem({
     })();
   }, [peerProfileData, peerPrincipalText, cachedName]);
 
+  // Decrypt the group name from encryptedName field
+  const [groupName, setGroupName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (
+      isDirect ||
+      !conversation.encryptedName ||
+      conversation.encryptedName.length === 0
+    )
+      return;
+    const convIdStr = conversation.id.toString();
+    console.log(
+      `[GROUP NAME] Decrypting group name for conversationId=${convIdStr}`,
+    );
+    (async () => {
+      try {
+        // Use the same group key derivation as message decryption
+        const { deriveGroupKey } = await import("@/lib/crypto");
+        const memberStrings = conversation.members
+          .map((m) => m.toText())
+          .sort();
+        const key = await deriveGroupKey(memberStrings);
+        const { decryptMessage: decrypt } = await import("@/lib/crypto");
+        const raw = conversation.encryptedName as Uint8Array;
+        const fresh = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+        const name = await decrypt(key, fresh);
+        if (name?.trim()) {
+          console.log(
+            `[GROUP NAME] Decrypted: "${name}" for conversationId=${convIdStr}`,
+          );
+          setGroupName(name.trim());
+        }
+      } catch (err) {
+        console.warn(
+          `[GROUP NAME] Failed to decrypt group name for conversationId=${convIdStr}:`,
+          err,
+        );
+      }
+    })();
+  }, [
+    isDirect,
+    conversation.encryptedName,
+    conversation.id,
+    conversation.members,
+  ]);
+
   const displayName = isDirect
     ? cachedName ||
       (peer
         ? `${peer.toText().slice(0, 10)}\u2026${peer.toText().slice(-6)}`
         : "Direct Message")
-    : "Encrypted Group";
+    : (groupName ?? "Group");
 
   const cachedMessages =
     queryClient.getQueryData<MessagePublic[]>([

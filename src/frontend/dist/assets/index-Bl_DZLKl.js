@@ -114,7 +114,7 @@ reactJsxRuntime_production.jsxs = jsxProd;
   jsxRuntime.exports = reactJsxRuntime_production;
 }
 var jsxRuntimeExports = jsxRuntime.exports;
-let ExternalBlob$1 = class ExternalBlob {
+class ExternalBlob {
   constructor(directURL, blob) {
     __publicField(this, "_blob");
     __publicField(this, "directURL");
@@ -149,7 +149,7 @@ let ExternalBlob$1 = class ExternalBlob {
     this.onProgress = onProgress;
     return this;
   }
-};
+}
 var ReplicaRejectCode;
 (function(ReplicaRejectCode2) {
   ReplicaRejectCode2[ReplicaRejectCode2["SysFatal"] = 1] = "SysFatal";
@@ -11235,7 +11235,7 @@ async function createActorWithConfig(createActor2, options) {
     const hashWithPrefix = new TextDecoder().decode(new Uint8Array(bytes));
     const hash = hashWithPrefix.substring(MOTOKO_DEDUPLICATION_SENTINEL.length);
     const url = await storageClient.getDirectURL(hash);
-    return ExternalBlob$1.fromURL(url);
+    return ExternalBlob.fromURL(url);
   };
   return createActor2(config.backend_canister_id, uploadFile, downloadFile, actorOptions);
 }
@@ -34735,44 +34735,6 @@ function candid_none() {
 function record_opt_to_undefined(arg) {
   return arg == null ? void 0 : arg;
 }
-class ExternalBlob2 {
-  constructor(directURL, blob) {
-    __publicField(this, "_blob");
-    __publicField(this, "directURL");
-    __publicField(this, "onProgress");
-    if (blob) {
-      this._blob = blob;
-    }
-    this.directURL = directURL;
-  }
-  static fromURL(url) {
-    return new ExternalBlob2(url, null);
-  }
-  static fromBytes(blob) {
-    const url = URL.createObjectURL(new Blob([
-      new Uint8Array(blob)
-    ], {
-      type: "application/octet-stream"
-    }));
-    return new ExternalBlob2(url, blob);
-  }
-  async getBytes() {
-    if (this._blob) {
-      return this._blob;
-    }
-    const response = await fetch(this.directURL);
-    const blob = await response.blob();
-    this._blob = new Uint8Array(await blob.arrayBuffer());
-    return this._blob;
-  }
-  getDirectURL() {
-    return this.directURL;
-  }
-  withUploadProgress(onProgress) {
-    this.onProgress = onProgress;
-    return this;
-  }
-}
 var ConversationKind = /* @__PURE__ */ ((ConversationKind2) => {
   ConversationKind2["group"] = "group";
   ConversationKind2["direct"] = "direct";
@@ -47498,11 +47460,24 @@ function useBackend() {
   } : null;
   const downloadBlob = actor ? async (key) => {
     const hexKey = Array.from(key).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-    const url = `https://blob.caffeine.ai/v1/blob/${hexKey}`;
     console.log(
-      `[E2EE FILE RECV] Fetching blob using storageKey: ${hexKey}`
+      `[E2EE FILE RECV] Downloading blob with key=${hexKey.slice(0, 16)}...`
     );
-    return ExternalBlob2.fromURL(url);
+    const url = `https://blob.caffeine.ai/v1/blob/${hexKey}`;
+    const response = await fetch(url, { method: "GET" });
+    if (!response.ok) {
+      throw new Error(
+        `Blob fetch failed: HTTP ${response.status} ${response.statusText}`
+      );
+    }
+    const arrayBuffer = await response.arrayBuffer();
+    console.log(
+      `[E2EE FILE RECV] Downloaded raw encrypted data: ${arrayBuffer.byteLength} bytes`
+    );
+    const raw = new Uint8Array(arrayBuffer);
+    const fresh = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+    return fresh;
   } : null;
   return {
     backend: actor ?? null,
@@ -50272,7 +50247,7 @@ function hexToBytes(hex) {
   }
   return bytes;
 }
-function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStorageKey) {
+function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStorageKey, retryKey = 0) {
   const { backend, downloadBlob } = useBackend();
   const { getConversationKey } = useCrypto();
   const [blobUrl, setBlobUrl] = reactExports.useState(null);
@@ -50287,13 +50262,15 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
     }
   }, [metaStorageKey]);
   reactExports.useEffect(() => {
+    fetchingRef.current = false;
+    doneRef.current = false;
     if (!backend || !downloadBlob) return;
     if (message.messageType === MessageType.text) return;
-    if (doneRef.current) return;
     let cancelled = false;
     setLoading(true);
     setFetchError(false);
-    const KEY_POLL_DELAYS = [0, 500, 1e3, 2e3, 3e3];
+    setBlobUrl(null);
+    const KEY_POLL_DELAYS = [0, 1500];
     let cumulative = 0;
     const timers = [];
     for (let attemptIndex = 0; attemptIndex < KEY_POLL_DELAYS.length; attemptIndex++) {
@@ -50319,6 +50296,9 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
           return;
         }
         fetchingRef.current = true;
+        console.log(
+          `[E2EE FILE RECV] Starting download for storageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 16)}...` : "pending"}`
+        );
         try {
           const attachments = await backend.getMessageAttachments(message.id);
           if (cancelled) return;
@@ -50330,7 +50310,6 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
               );
               resolvedStorageKeyHex = metaStorageKey;
             } else {
-              fetchingRef.current = false;
               console.log(
                 `[E2EE FILE RECV] No attachment record yet (attempt ${attemptIndex + 1}/5), will retry`
               );
@@ -50338,7 +50317,10 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
                 console.warn(
                   `[E2EE FILE RECV] No attachment record found for msgId=${message.id} after all retries`
                 );
-                if (!cancelled) setLoading(false);
+                if (!cancelled) {
+                  setFetchError(true);
+                  setLoading(false);
+                }
               }
               return;
             }
@@ -50347,18 +50329,27 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
             resolvedStorageKeyHex = attachment.storageKey;
           }
           console.log(
-            `[E2EE FILE RECV] Starting download attempt, storageKey from backend=${attachments.length > 0 ? `${resolvedStorageKeyHex == null ? void 0 : resolvedStorageKeyHex.slice(0, 12)}...` : "none"}, metaStorageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 12)}...` : "none"}`
+            `[E2EE FILE RECV] Starting download attempt, storageKey from backend=${attachments.length > 0 ? `${resolvedStorageKeyHex == null ? void 0 : resolvedStorageKeyHex.slice(0, 16)}...` : "none"}, metaStorageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 16)}...` : "none"}`
           );
-          const keyBytes = hexToBytes(resolvedStorageKeyHex);
-          const externalBlob = await downloadBlob(keyBytes);
-          if (cancelled) return;
-          const rawBytes = await externalBlob.getBytes();
+          const storageKey2 = resolvedStorageKeyHex;
           console.log(
-            `[E2EE FILE RECV] Downloaded encrypted blob: ${rawBytes.length} bytes`
+            `[E2EE FILE RECV] Downloading blob with key=${storageKey2.slice(0, 16)}...`
           );
-          const encryptedBytes = new Uint8Array(rawBytes.length);
-          for (let i = 0; i < rawBytes.length; i++)
-            encryptedBytes[i] = rawBytes[i];
+          const keyBytes = hexToBytes(storageKey2);
+          let encryptedBytes;
+          try {
+            encryptedBytes = await downloadBlob(keyBytes);
+          } catch (fetchErr) {
+            const errMsg = fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
+            console.error(
+              `[E2EE FILE RECV] Fetch failed: ${errMsg} storageKey=${storageKey2.slice(0, 16)}...`
+            );
+            throw fetchErr;
+          }
+          if (cancelled) return;
+          console.log(
+            `[E2EE FILE RECV] Downloaded raw encrypted data: ${encryptedBytes.length} bytes`
+          );
           const { decryptBlob: decryptBlob2 } = await __vitePreload(async () => {
             const { decryptBlob: decryptBlob3 } = await Promise.resolve().then(() => crypto$1);
             return { decryptBlob: decryptBlob3 };
@@ -50369,7 +50360,7 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
           );
           if (cancelled) return;
           console.log(
-            `[E2EE FILE RECV] Decrypted file: ${decryptedArrayBuffer.byteLength} bytes, mime=${mimeType}`
+            `[E2EE FILE RECV] Decrypted successfully: ${decryptedArrayBuffer.byteLength} bytes`
           );
           const blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
             type: mimeType || "application/octet-stream"
@@ -50382,15 +50373,19 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
           setBlobUrl(url);
           setLoading(false);
           setFetchError(false);
+          console.log(
+            `[E2EE FILE RECV] Download succeeded for storageKey=${storageKey2.slice(0, 16)}...`
+          );
           cancelled = true;
           for (const t2 of timers) clearTimeout(t2);
         } catch (err) {
           console.error("[E2EE FILE RECV] Error during download/decrypt:", err);
-          fetchingRef.current = false;
-          if (!cancelled && attemptIndex === KEY_POLL_DELAYS.length - 1) {
+          if (!cancelled) {
             setFetchError(true);
             setLoading(false);
           }
+        } finally {
+          fetchingRef.current = false;
         }
       }, cumulative);
       timers.push(t);
@@ -50400,6 +50395,8 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
       for (const t of timers) clearTimeout(t);
     };
   }, [
+    // retryKey triggers a full re-run and ref reset when the user taps "retry".
+    retryKey,
     enabled,
     backend,
     downloadBlob,
@@ -50423,13 +50420,15 @@ function ImageAttachment({
   meta
 }) {
   const [expanded, setExpanded] = reactExports.useState(false);
+  const [retryCount, setRetryCount] = reactExports.useState(0);
   const prevBlobUrlRef = reactExports.useRef(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
     conversationId,
     true,
     meta.mime ?? "application/octet-stream",
-    meta.storageKey
+    meta.storageKey,
+    retryCount
   );
   reactExports.useEffect(() => {
     if (blobUrl && !prevBlobUrlRef.current) {
@@ -50438,10 +50437,20 @@ function ImageAttachment({
     prevBlobUrlRef.current = blobUrl;
   }, [blobUrl]);
   if (fetchError) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Failed to decrypt file" })
-    ] });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        className: "flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer",
+        onClick: () => setRetryCount((c2) => c2 + 1),
+        "aria-label": "Retry loading image",
+        "data-ocid": "message.image_retry_button",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Failed to load — tap to retry" })
+        ]
+      }
+    );
   }
   if (loading || !blobUrl && !fetchError) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
@@ -50501,13 +50510,15 @@ function FileAttachment({
   conversationId,
   meta
 }) {
+  const [retryCount, setRetryCount] = reactExports.useState(0);
   const prevBlobUrlRef = reactExports.useRef(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
     conversationId,
     true,
     meta.mime ?? "application/octet-stream",
-    meta.storageKey
+    meta.storageKey,
+    retryCount
   );
   reactExports.useEffect(() => {
     if (blobUrl && !prevBlobUrlRef.current) {
@@ -50518,11 +50529,21 @@ function FileAttachment({
   const icon = message.messageType === MessageType.video ? /* @__PURE__ */ jsxRuntimeExports.jsx(Video, { size: 16 }) : message.messageType === MessageType.audio ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base leading-none", children: "🎤" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { size: 16 });
   const label = meta.name ?? (message.messageType === MessageType.video ? "Video" : message.messageType === MessageType.audio ? "Voice note" : "File");
   if (fetchError) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
-      icon,
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs opacity-50", children: "Failed to decrypt file" })
-    ] });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        className: "flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer",
+        onClick: () => setRetryCount((c2) => c2 + 1),
+        "aria-label": `Retry loading ${label}`,
+        "data-ocid": "message.file_retry_button",
+        children: [
+          icon,
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs opacity-50", children: "Failed to load — tap to retry" })
+        ]
+      }
+    );
   }
   if (loading || !blobUrl && !fetchError) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
@@ -50653,14 +50674,22 @@ function MessageBubble({
                   children: expired ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 text-xs opacity-60 italic", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(Timer, { size: 12 }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Message expired" })
-                  ] }) : message.isDeleted ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Message deleted" }) : message.messageType === MessageType.text ? failed ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Unable to decrypt" }) : text === null ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin opacity-40" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm leading-relaxed whitespace-pre-wrap break-words", children: text }) : isAttachment && message.messageType === MessageType.image ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  ] }) : message.isDeleted ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Message deleted" }) : message.messageType === MessageType.text ? failed ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Unable to decrypt" }) : text === null ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin opacity-40" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm leading-relaxed whitespace-pre-wrap break-words", children: text }) : isAttachment && message.messageType === MessageType.image ? isMine ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5 text-sm opacity-90", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(CheckCheck, { size: 14 }),
+                    "File delivered",
+                    (meta == null ? void 0 : meta.name) ? `: ${meta.name}` : ""
+                  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
                     ImageAttachment,
                     {
                       message,
                       conversationId,
                       meta
                     }
-                  ) : isAttachment ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  ) : isAttachment ? isMine ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5 text-sm opacity-90", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(CheckCheck, { size: 14 }),
+                    "File delivered",
+                    (meta == null ? void 0 : meta.name) ? `: ${meta.name}` : ""
+                  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
                     FileAttachment,
                     {
                       message,
@@ -51649,6 +51678,34 @@ function ChatSearchBar({
     }
   );
 }
+async function decryptGroupName(conv) {
+  if (!conv.encryptedName || conv.encryptedName.length === 0) return null;
+  const convIdStr = conv.id.toString();
+  console.log(
+    `[GROUP NAME] Decrypting group name for conversationId=${convIdStr}`
+  );
+  try {
+    const memberStrings = conv.members.map((m2) => m2.toText()).sort();
+    const key = await deriveGroupKey(memberStrings);
+    const raw = conv.encryptedName;
+    const fresh = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+    const name = await decryptMessage(key, fresh);
+    if (name == null ? void 0 : name.trim()) {
+      console.log(
+        `[GROUP NAME] Decrypted: "${name}" for conversationId=${convIdStr}`
+      );
+      return name.trim();
+    }
+    return null;
+  } catch (err) {
+    console.warn(
+      `[GROUP NAME] Failed to decrypt group name for conversationId=${convIdStr}:`,
+      err
+    );
+    return null;
+  }
+}
 function ChatHeader({
   conv,
   myPrincipal,
@@ -51662,6 +51719,13 @@ function ChatHeader({
   const navigate = useNavigate();
   const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
   const isGroup = conv.kind === ConversationKind.group;
+  const [groupName, setGroupName] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    if (!isGroup) return;
+    decryptGroupName(conv).then((name) => {
+      if (name) setGroupName(name);
+    });
+  }, [isGroup, conv]);
   const avatarPrincipal = (peerId == null ? void 0 : peerId.toText()) ?? myPrincipal;
   const ttlSeconds = void 0;
   const peerLastSeen = !isGroup && (profile == null ? void 0 : profile.lastSeen) !== void 0 ? profile.lastSeen : void 0;
@@ -51695,7 +51759,7 @@ function ChatHeader({
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-sm truncate text-foreground", children: isGroup ? "Group Conversation" : displayName }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-sm truncate text-foreground", children: isGroup ? groupName ?? "Group" : displayName }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(EncryptedBadge, { compact: true })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-0.5", children: [
@@ -52155,7 +52219,50 @@ function ConversationListItem({
       }
     })();
   }, [peerProfileData, peerPrincipalText, cachedName]);
-  const displayName = isDirect ? cachedName || (peer ? `${peer.toText().slice(0, 10)}…${peer.toText().slice(-6)}` : "Direct Message") : "Encrypted Group";
+  const [groupName, setGroupName] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    if (isDirect || !conversation.encryptedName || conversation.encryptedName.length === 0)
+      return;
+    const convIdStr = conversation.id.toString();
+    console.log(
+      `[GROUP NAME] Decrypting group name for conversationId=${convIdStr}`
+    );
+    (async () => {
+      try {
+        const { deriveGroupKey: deriveGroupKey2 } = await __vitePreload(async () => {
+          const { deriveGroupKey: deriveGroupKey3 } = await Promise.resolve().then(() => crypto$1);
+          return { deriveGroupKey: deriveGroupKey3 };
+        }, true ? void 0 : void 0);
+        const memberStrings = conversation.members.map((m2) => m2.toText()).sort();
+        const key = await deriveGroupKey2(memberStrings);
+        const { decryptMessage: decrypt } = await __vitePreload(async () => {
+          const { decryptMessage: decrypt2 } = await Promise.resolve().then(() => crypto$1);
+          return { decryptMessage: decrypt2 };
+        }, true ? void 0 : void 0);
+        const raw = conversation.encryptedName;
+        const fresh = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+        const name = await decrypt(key, fresh);
+        if (name == null ? void 0 : name.trim()) {
+          console.log(
+            `[GROUP NAME] Decrypted: "${name}" for conversationId=${convIdStr}`
+          );
+          setGroupName(name.trim());
+        }
+      } catch (err) {
+        console.warn(
+          `[GROUP NAME] Failed to decrypt group name for conversationId=${convIdStr}:`,
+          err
+        );
+      }
+    })();
+  }, [
+    isDirect,
+    conversation.encryptedName,
+    conversation.id,
+    conversation.members
+  ]);
+  const displayName = isDirect ? cachedName || (peer ? `${peer.toText().slice(0, 10)}…${peer.toText().slice(-6)}` : "Direct Message") : groupName ?? "Group";
   const cachedMessages = queryClient2.getQueryData([
     "messages",
     conversation.id.toString()
@@ -55344,7 +55451,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DIkjKbPz.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-YWNfKK1Q.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });

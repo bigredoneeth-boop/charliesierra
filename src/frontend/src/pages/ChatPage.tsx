@@ -355,6 +355,37 @@ interface HeaderProps {
   onManageOpen: () => void;
 }
 
+async function decryptGroupName(
+  conv: ConversationPublic,
+): Promise<string | null> {
+  if (!conv.encryptedName || conv.encryptedName.length === 0) return null;
+  const convIdStr = conv.id.toString();
+  console.log(
+    `[GROUP NAME] Decrypting group name for conversationId=${convIdStr}`,
+  );
+  try {
+    const memberStrings = conv.members.map((m) => m.toText()).sort();
+    const key = await deriveGroupKey(memberStrings);
+    const raw = conv.encryptedName as Uint8Array;
+    const fresh = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+    const name = await decryptMessage(key, fresh);
+    if (name?.trim()) {
+      console.log(
+        `[GROUP NAME] Decrypted: "${name}" for conversationId=${convIdStr}`,
+      );
+      return name.trim();
+    }
+    return null;
+  } catch (err) {
+    console.warn(
+      `[GROUP NAME] Failed to decrypt group name for conversationId=${convIdStr}:`,
+      err,
+    );
+    return null;
+  }
+}
+
 function ChatHeader({
   conv,
   myPrincipal,
@@ -368,6 +399,15 @@ function ChatHeader({
   const navigate = useNavigate();
   const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
   const isGroup = conv.kind === ConversationKind.group;
+
+  // Decrypt group name from encryptedName field
+  const [groupName, setGroupName] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isGroup) return;
+    decryptGroupName(conv).then((name) => {
+      if (name) setGroupName(name);
+    });
+  }, [isGroup, conv]);
   const avatarPrincipal = peerId?.toText() ?? myPrincipal;
   const ttlSeconds = undefined; // TTL would come from conversation settings
 
@@ -409,7 +449,7 @@ function ChatHeader({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-semibold text-sm truncate text-foreground">
-            {isGroup ? "Group Conversation" : displayName}
+            {isGroup ? (groupName ?? "Group") : displayName}
           </span>
           <EncryptedBadge compact />
         </div>

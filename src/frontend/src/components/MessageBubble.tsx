@@ -241,6 +241,7 @@ function useAttachmentBlob(
   enabled: boolean,
   mimeType: string,
   metaStorageKey?: string,
+  retryKey = 0,
 ) {
   const { backend, downloadBlob } = useBackend();
   const { getConversationKey } = useCrypto();
@@ -261,17 +262,22 @@ function useAttachmentBlob(
     }
   }, [metaStorageKey]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: retryKey is a primitive prop used intentionally as a reset trigger
   useEffect(() => {
+    fetchingRef.current = false;
+    doneRef.current = false;
+
     if (!enabled || !backend || !downloadBlob) return;
     if (message.messageType === MessageType.text) return;
-    if (doneRef.current) return; // already succeeded — do not re-fetch
 
     let cancelled = false;
     setLoading(true);
     setFetchError(false);
+    setBlobUrl(null);
 
     // Retry loop: poll for the conversation key becoming available.
-    const KEY_POLL_DELAYS = [0, 500, 1000, 2000, 3000];
+    // Cap at 2 attempts maximum to prevent infinite loops.
+    const KEY_POLL_DELAYS = [0, 1500];
     let cumulative = 0;
     const timers: ReturnType<typeof setTimeout>[] = [];
 
@@ -305,7 +311,17 @@ function useAttachmentBlob(
           return; // another timer already started the fetch
         }
         fetchingRef.current = true;
+        console.log(
+          `[E2EE FILE RECV] Starting download for storageKey=${
+            metaStorageKey ? `${metaStorageKey.slice(0, 16)}...` : "pending"
+          }`,
+        );
 
+        // MANDATORY: try/finally ensures fetchingRef is ALWAYS released on every
+        // exit path — success, thrown error, and early returns inside the async
+        // work. Without this, a cancelled check or any thrown error permanently
+        // locks fetchingRef, making every future render skip with
+        // "fetchingRef already locked, skipping".
         try {
           // 1. Get attachment record from backend
           const attachments = await backend.getMessageAttachments(message.id);
@@ -321,18 +337,21 @@ function useAttachmentBlob(
               );
               resolvedStorageKeyHex = metaStorageKey;
             } else {
-              // Release the lock so a later retry timer can try again
-              fetchingRef.current = false;
               console.log(
-                `[E2EE FILE RECV] No attachment record yet (attempt ${attemptIndex + 1}/5), will retry`,
+                `[E2EE FILE RECV] No attachment record yet (attempt ${
+                  attemptIndex + 1
+                }/5), will retry`,
               );
               if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
                 console.warn(
                   `[E2EE FILE RECV] No attachment record found for msgId=${message.id} after all retries`,
                 );
-                if (!cancelled) setLoading(false);
+                if (!cancelled) {
+                  setFetchError(true);
+                  setLoading(false);
+                }
               }
-              return;
+              return; // finally will release fetchingRef
             }
           } else {
             const attachment: Attachment = attachments[0];
@@ -340,25 +359,40 @@ function useAttachmentBlob(
           }
 
           console.log(
-            `[E2EE FILE RECV] Starting download attempt, storageKey from backend=${attachments.length > 0 ? `${resolvedStorageKeyHex?.slice(0, 12)}...` : "none"}, metaStorageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 12)}...` : "none"}`,
+            `[E2EE FILE RECV] Starting download attempt, storageKey from backend=${
+              attachments.length > 0
+                ? `${resolvedStorageKeyHex?.slice(0, 16)}...`
+                : "none"
+            }, metaStorageKey=${
+              metaStorageKey ? `${metaStorageKey.slice(0, 16)}...` : "none"
+            }`,
           );
 
-          // 2. Download encrypted blob from object-storage
-          const keyBytes = hexToBytes(resolvedStorageKeyHex!);
-          const externalBlob = await downloadBlob(keyBytes);
-          if (cancelled) return;
-          const rawBytes = await externalBlob.getBytes();
+          // 2. Download encrypted blob from object-storage via GET
+          const storageKey = resolvedStorageKeyHex!;
           console.log(
-            `[E2EE FILE RECV] Downloaded encrypted blob: ${rawBytes.length} bytes`,
+            `[E2EE FILE RECV] Downloading blob with key=${storageKey.slice(0, 16)}...`,
+          );
+          const keyBytes = hexToBytes(storageKey);
+          let encryptedBytes: Uint8Array;
+          try {
+            // downloadBlob returns a fresh Uint8Array of raw encrypted bytes
+            encryptedBytes = await downloadBlob(keyBytes);
+          } catch (fetchErr) {
+            const errMsg =
+              fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
+            console.error(
+              `[E2EE FILE RECV] Fetch failed: ${errMsg} storageKey=${storageKey.slice(0, 16)}...`,
+            );
+            throw fetchErr; // re-throw so the outer finally releases the lock
+          }
+          if (cancelled) return;
+          console.log(
+            `[E2EE FILE RECV] Downloaded raw encrypted data: ${encryptedBytes.length} bytes`,
           );
 
-          // CRITICAL: Element-by-element copy into a fresh zero-offset buffer
-          // so IV slicing always starts at byte 0.
-          const encryptedBytes = new Uint8Array(rawBytes.length);
-          for (let i = 0; i < rawBytes.length; i++)
-            encryptedBytes[i] = rawBytes[i];
-
-          // 3. Decrypt using IV(12) + ciphertext+tag format
+          // 3. Decrypt using IV(12) + ciphertext+tag format.
+          // encryptedBytes is already a fresh zero-offset buffer from downloadBlob.
           const { decryptBlob } = await import("@/lib/crypto");
           const decryptedArrayBuffer = await decryptBlob(
             convKey,
@@ -367,10 +401,10 @@ function useAttachmentBlob(
           if (cancelled) return;
 
           console.log(
-            `[E2EE FILE RECV] Decrypted file: ${decryptedArrayBuffer.byteLength} bytes, mime=${mimeType}`,
+            `[E2EE FILE RECV] Decrypted successfully: ${decryptedArrayBuffer.byteLength} bytes`,
           );
 
-          // 4. Create Blob and object URL
+          // 4. Create Blob with original mimeType and generate object URL
           const blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
             type: mimeType || "application/octet-stream",
           });
@@ -391,17 +425,27 @@ function useAttachmentBlob(
           setLoading(false);
           setFetchError(false);
 
+          console.log(
+            `[E2EE FILE RECV] Download succeeded for storageKey=${storageKey.slice(0, 16)}...`,
+          );
+
           // Cancel any remaining retry timers now that we succeeded.
           cancelled = true;
           for (const t2 of timers) clearTimeout(t2);
         } catch (err) {
           console.error("[E2EE FILE RECV] Error during download/decrypt:", err);
-          // Release the lock so a later retry timer can attempt again.
-          fetchingRef.current = false;
-          if (!cancelled && attemptIndex === KEY_POLL_DELAYS.length - 1) {
+          if (!cancelled) {
+            // Show error and stop after any failed attempt — the retry button
+            // lets the user manually trigger a fresh attempt.
             setFetchError(true);
             setLoading(false);
           }
+        } finally {
+          // MANDATORY finally block: unconditionally release the fetchingRef lock
+          // on EVERY exit path — success, thrown error, and returns inside the try.
+          // This prevents "fetchingRef already locked, skipping" on every render
+          // after a failed or cancelled download.
+          fetchingRef.current = false;
         }
       }, cumulative);
       timers.push(t);
@@ -410,10 +454,12 @@ function useAttachmentBlob(
     return () => {
       cancelled = true;
       for (const t of timers) clearTimeout(t);
-      // Do NOT reset fetchingRef or doneRef here — we want them to persist
-      // across fast re-mounts so we do not re-download an already-fetched file.
+      // Do NOT reset fetchingRef or doneRef here — the top of the next
+      // effect run will reset them if retryKey changed.
     };
   }, [
+    // retryKey triggers a full re-run and ref reset when the user taps "retry".
+    retryKey,
     enabled,
     backend,
     downloadBlob,
@@ -446,6 +492,7 @@ function ImageAttachment({
   meta: { name?: string; size?: number; mime?: string; storageKey?: string };
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const prevBlobUrlRef = useRef<string | null>(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
@@ -453,6 +500,7 @@ function ImageAttachment({
     true,
     meta.mime ?? "application/octet-stream",
     meta.storageKey,
+    retryCount,
   );
 
   // Log when blobUrl transitions from null to a value (spinner replaced)
@@ -465,10 +513,16 @@ function ImageAttachment({
 
   if (fetchError) {
     return (
-      <div className="flex items-center gap-2 text-sm opacity-70">
+      <button
+        type="button"
+        className="flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
+        onClick={() => setRetryCount((c) => c + 1)}
+        aria-label="Retry loading image"
+        data-ocid="message.image_retry_button"
+      >
         <ImageIcon size={16} />
-        <span>Failed to decrypt file</span>
-      </div>
+        <span>Failed to load — tap to retry</span>
+      </button>
     );
   }
 
@@ -541,6 +595,7 @@ function FileAttachment({
   conversationId: string;
   meta: { name?: string; size?: number; mime?: string; storageKey?: string };
 }) {
+  const [retryCount, setRetryCount] = useState(0);
   const prevBlobUrlRef = useRef<string | null>(null);
   const { blobUrl, loading, fetchError } = useAttachmentBlob(
     message,
@@ -548,6 +603,7 @@ function FileAttachment({
     true,
     meta.mime ?? "application/octet-stream",
     meta.storageKey,
+    retryCount,
   );
 
   // Log when blobUrl transitions from null to a value (spinner replaced)
@@ -577,11 +633,19 @@ function FileAttachment({
 
   if (fetchError) {
     return (
-      <div className="flex items-center gap-2 text-sm opacity-70">
+      <button
+        type="button"
+        className="flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
+        onClick={() => setRetryCount((c) => c + 1)}
+        aria-label={`Retry loading ${label}`}
+        data-ocid="message.file_retry_button"
+      >
         {icon}
         <span className="truncate max-w-[140px] opacity-90">{label}</span>
-        <span className="text-xs opacity-50">Failed to decrypt file</span>
-      </div>
+        <span className="text-xs opacity-50">
+          Failed to load — tap to retry
+        </span>
+      </button>
     );
   }
 
@@ -770,17 +834,31 @@ export function MessageBubble({
               </span>
             )
           ) : isAttachment && message.messageType === MessageType.image ? (
-            <ImageAttachment
-              message={message}
-              conversationId={conversationId}
-              meta={meta}
-            />
+            isMine ? (
+              <span className="flex items-center gap-1.5 text-sm opacity-90">
+                <CheckCheck size={14} />
+                File delivered{meta?.name ? `: ${meta.name}` : ""}
+              </span>
+            ) : (
+              <ImageAttachment
+                message={message}
+                conversationId={conversationId}
+                meta={meta}
+              />
+            )
           ) : isAttachment ? (
-            <FileAttachment
-              message={message}
-              conversationId={conversationId}
-              meta={meta}
-            />
+            isMine ? (
+              <span className="flex items-center gap-1.5 text-sm opacity-90">
+                <CheckCheck size={14} />
+                File delivered{meta?.name ? `: ${meta.name}` : ""}
+              </span>
+            ) : (
+              <FileAttachment
+                message={message}
+                conversationId={conversationId}
+                meta={meta}
+              />
+            )
           ) : null}
         </div>
 
