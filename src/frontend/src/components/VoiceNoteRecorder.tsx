@@ -23,13 +23,6 @@ function formatDuration(seconds: number): string {
   return `${m}:${s}`;
 }
 
-/** Convert Uint8Array storage key bytes to hex string */
-function keyToHex(key: Uint8Array): string {
-  return Array.from(key)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-
 type RecorderState = "idle" | "recording" | "preview" | "sending";
 
 export function VoiceNoteRecorder({
@@ -120,12 +113,10 @@ export function VoiceNoteRecorder({
       // createExternalBlob guarantees a fresh zero-offset copy before passing
       // to ExternalBlob.fromBytes(), preventing 403 Invalid Payload from hash
       // mismatches caused by non-zero byteOffset composite views.
-      const storageKeyBytes = await uploadBlob(encrypted, audioBlob.type);
+      const storageKey = await uploadBlob(encrypted, audioBlob.type);
       console.log(
-        "[E2EE FILE] Upload complete, storage key bytes:",
-        storageKeyBytes.length,
+        `[E2EE FILE] Final storageKey saved: ${storageKey} (length: ${storageKey.length})`,
       );
-      const storageKey = keyToHex(storageKeyBytes);
 
       const metaText = JSON.stringify({ duration, mimeType: audioBlob.type });
       const encryptedContent = await encryptForConv(

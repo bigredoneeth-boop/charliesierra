@@ -1,12 +1,14 @@
-import type { backendInterface } from "../backend";
-import { AuditEventType } from "../types/audit";
-import {
+import { 
   CompartmentLabel,
   ConversationKind,
   DataResidency,
   Error_,
   MessageType,
-} from "../backend";
+  _ImmutableObjectStorageCreateCertificateResult,
+  _ImmutableObjectStorageRefillResult,
+ } from "../backend";
+import type { backendInterface } from "../backend";
+import { AuditEventType } from "../types/audit";
 import { Principal } from "@icp-sdk/core/principal";
 
 const alice = Principal.fromText("2vxsx-fae");
@@ -221,4 +223,10 @@ export const mockBackend: backendInterface = {
   uploadFile: async (_fileBytes: Uint8Array, _mimeType: string): Promise<Uint8Array> => {
     return new Uint8Array();
   },
+  _immutableObjectStorageBlobsAreLive: async (_hashes: Array<Uint8Array>): Promise<Array<boolean>> => [],
+  _immutableObjectStorageBlobsToDelete: async (): Promise<Array<Uint8Array>> => [],
+  _immutableObjectStorageConfirmBlobDeletion: async (_blobs: Array<Uint8Array>): Promise<void> => undefined,
+  _immutableObjectStorageCreateCertificate: async (_blobHash: string): Promise<_ImmutableObjectStorageCreateCertificateResult> => ({ method: "", blob_hash: "" }),
+  _immutableObjectStorageRefillCashier: async (_refillInformation: import('../backend')._ImmutableObjectStorageRefillInformation | null): Promise<_ImmutableObjectStorageRefillResult> => ({}),
+  _immutableObjectStorageUpdateGatewayPrincipals: async (): Promise<void> => undefined,
 };

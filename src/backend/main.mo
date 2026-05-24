@@ -21,6 +21,7 @@ import DiscoveryMixin "mixins/discovery-api";
 
 import SovereignLib "lib/sovereign";
 import SovereignMixin "mixins/sovereign-api";
+import MixinObjectStorage "mo:caffeineai-object-storage/Mixin";
 
 
 
@@ -112,6 +113,7 @@ actor self {
   };
 
   // ── Mixin composition ──────────────────────────────────────────────────────
+  include MixinObjectStorage();
   include UsersMixin(usersState);
   include ConvsMixin(convsState, msgsState);
   include MsgsMixin(msgsState, convsState, enterpriseState);

@@ -320,7 +320,36 @@ export interface UserProfilePublic {
   'registeredAt' : Timestamp,
   'lastSeen' : Timestamp,
 }
+export interface _ImmutableObjectStorageCreateCertificateResult {
+  'method' : string,
+  'blob_hash' : string,
+}
+export interface _ImmutableObjectStorageRefillInformation {
+  'proposed_top_up_amount' : [] | [bigint],
+}
+export interface _ImmutableObjectStorageRefillResult {
+  'success' : [] | [boolean],
+  'topped_up_amount' : [] | [bigint],
+}
 export interface _SERVICE {
+  '_immutableObjectStorageBlobsAreLive' : ActorMethod<
+    [Array<Uint8Array>],
+    Array<boolean>
+  >,
+  '_immutableObjectStorageBlobsToDelete' : ActorMethod<[], Array<Uint8Array>>,
+  '_immutableObjectStorageConfirmBlobDeletion' : ActorMethod<
+    [Array<Uint8Array>],
+    undefined
+  >,
+  '_immutableObjectStorageCreateCertificate' : ActorMethod<
+    [string],
+    _ImmutableObjectStorageCreateCertificateResult
+  >,
+  '_immutableObjectStorageRefillCashier' : ActorMethod<
+    [[] | [_ImmutableObjectStorageRefillInformation]],
+    _ImmutableObjectStorageRefillResult
+  >,
+  '_immutableObjectStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   'addAdmin' : ActorMethod<[UserId], Result_3>,
   'addConversationMember' : ActorMethod<[AddMemberRequest], Result_3>,
   'addDevice' : ActorMethod<[AddDeviceRequest], Result_6>,

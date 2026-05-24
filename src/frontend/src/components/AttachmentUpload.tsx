@@ -52,13 +52,6 @@ export function FileIcon({ mimeType }: { mimeType: string }) {
   return <FileText size={32} className="text-primary" />;
 }
 
-/** Convert Uint8Array storage key bytes to hex string for backend storage */
-function keyToString(key: Uint8Array): string {
-  return Array.from(key)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-
 export function AttachmentUpload({
   conversationId,
   open,
@@ -123,9 +116,15 @@ export function AttachmentUpload({
       );
 
       // Step 4: Upload the encrypted bytes via the public uploadFile API
-      const storageKeyBytes = await uploadBlob(encrypted, selectedFile.type);
-      const storageKey = keyToString(storageKeyBytes);
-      console.log("[E2EE FILE] Storage key from upload API:", storageKey);
+      const storageKey = await uploadBlob(encrypted, selectedFile.type);
+      console.log(
+        `[E2EE FILE] Final short storageKey saved (length: ${storageKey.length}): ${storageKey}`,
+      );
+      if (!storageKey || storageKey.length >= 200) {
+        throw new Error(
+          `storageKey is too long or empty (${storageKey.length} chars), upload returned wrong value`,
+        );
+      }
       setProgress(65);
 
       // Step 5: Encrypt metadata for the message body

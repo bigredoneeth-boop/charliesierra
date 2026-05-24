@@ -117,7 +117,6 @@ export interface CreateDirectRequest {
     peer: UserId;
 }
 export type UserId = Principal;
-export type AttachmentId = bigint;
 export type Result = {
     __kind__: "ok";
     ok: UserProfilePublic;
@@ -133,6 +132,15 @@ export type Result_10 = {
     err: Error_;
 };
 export type MessageId = bigint;
+export type AttachmentId = bigint;
+export type Result_8 = {
+    __kind__: "ok";
+    ok: Array<RetentionMetadataRecord>;
+} | {
+    __kind__: "err";
+    err: Error_;
+};
+export type DenialReason = string;
 export interface Attachment {
     id: AttachmentId;
     messageId: MessageId;
@@ -142,14 +150,6 @@ export interface Attachment {
     uploader: UserId;
     uploadedAt: Timestamp;
 }
-export type Result_8 = {
-    __kind__: "ok";
-    ok: Array<RetentionMetadataRecord>;
-} | {
-    __kind__: "err";
-    err: Error_;
-};
-export type DenialReason = string;
 export interface ReadReceipt {
     userId: UserId;
     readAt: Timestamp;
@@ -222,13 +222,6 @@ export interface RegisterAttachmentRequest {
     encryptedSizeBytes: bigint;
     storageKey: string;
 }
-export interface PublicGroupSummary {
-    id: ConversationId;
-    name: string;
-    memberCount: bigint;
-    description?: string;
-    category?: string;
-}
 export type Result_11 = {
     __kind__: "ok";
     ok: Array<JoinRequest>;
@@ -236,7 +229,13 @@ export type Result_11 = {
     __kind__: "err";
     err: Error_;
 };
-export type ConversationId = bigint;
+export interface PublicGroupSummary {
+    id: ConversationId;
+    name: string;
+    memberCount: bigint;
+    description?: string;
+    category?: string;
+}
 export interface RetentionMetadataRecord {
     messageId: MessageId;
     sentAt: Timestamp;
@@ -249,6 +248,7 @@ export interface UpdateProfileRequest {
     encryptedAvatarKey?: string;
     encryptedDisplayName?: Uint8Array;
 }
+export type ConversationId = bigint;
 export interface SubmitJoinRequestRequest {
     conversationId: ConversationId;
     message?: string;

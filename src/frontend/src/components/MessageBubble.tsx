@@ -223,16 +223,6 @@ function useAttachmentMeta(
   return meta;
 }
 
-/** Convert hex storageKey string back to Uint8Array */
-function hexToBytes(hex: string): Uint8Array {
-  const len = hex.length;
-  const bytes = new Uint8Array(Math.ceil(len / 2));
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = Number.parseInt(hex.slice(i * 2, i * 2 + 2), 16);
-  }
-  return bytes;
-}
-
 /** Fetch, download from object-storage, and decrypt an attachment blob */
 /** Fetch, download from object-storage, and decrypt an attachment blob */
 function useAttachmentBlob(
@@ -327,64 +317,129 @@ function useAttachmentBlob(
           const attachments = await backend.getMessageAttachments(message.id);
           if (cancelled) return;
 
-          let resolvedStorageKeyHex: string | null = null;
+          // ── Storage-key selection ────────────────────────────────────────
+          // The backend attachment record may carry a full blob-tree / certificate
+          // (~59 k chars) instead of the short sha256:... key (~71 chars). Any key
+          // longer than 200 characters is invalid for the download endpoint and will
+          // produce an HTTP 400. Always prefer the shortest available key that is
+          // under 200 characters.
+          const MAX_KEY_LEN = 200;
 
-          if (attachments.length === 0) {
-            // Attachment record not registered yet — try inline storageKey from metadata
-            if (metaStorageKey) {
-              console.log(
-                "[E2EE FILE RECV] Using inline storageKey from metadata as fallback",
-              );
-              resolvedStorageKeyHex = metaStorageKey;
+          // Candidate A: key stored in the backend Attachment record.
+          const backendKey: string | null =
+            attachments.length > 0
+              ? (attachments[0] as Attachment).storageKey
+              : null;
+          // Candidate B: key decoded inline from the encrypted message metadata.
+          const inlineKey: string | null = metaStorageKey ?? null;
+
+          const backendKeyLen = backendKey?.length ?? 0;
+          const inlineKeyLen = inlineKey?.length ?? 0;
+
+          console.log(
+            `[E2EE FILE RECV] Available keys - short: ${backendKeyLen}, meta: ${inlineKeyLen}`,
+          );
+
+          // Discard any key longer than 200 chars — it is a tree/certificate blob.
+          const candidateA =
+            backendKey && backendKey.length <= MAX_KEY_LEN ? backendKey : null;
+          const candidateB =
+            inlineKey && inlineKey.length <= MAX_KEY_LEN ? inlineKey : null;
+
+          // Selection priority:
+          // 1. Prefer whichever candidate starts with 'sha256:' and has length 20-200.
+          // 2. If neither starts with 'sha256:', fall back to the shorter valid candidate under 200.
+          // 3. If short key is empty or length < 20, fall back to metaStorageKey (inlineKey / candidateB).
+          function isShortKey(k: string | null): k is string {
+            if (k == null) return false;
+            return (
+              k.startsWith("sha256:") &&
+              k.length >= 20 &&
+              k.length <= MAX_KEY_LEN
+            );
+          }
+
+          let resolvedStorageKeyHex: string | null = null;
+          if (isShortKey(candidateA)) {
+            resolvedStorageKeyHex = candidateA;
+          } else if (isShortKey(candidateB)) {
+            resolvedStorageKeyHex = candidateB;
+          } else {
+            const a = candidateA as string | null;
+            const b = candidateB as string | null;
+            if (a && a.length >= 20) {
+              // Neither starts with 'sha256:' — pick shorter valid candidate.
+              resolvedStorageKeyHex =
+                b && b.length >= 20 ? (a.length <= b.length ? a : b) : a;
             } else {
+              // Short key (candidateA) is empty or too short — fall back to inlineKey.
+              resolvedStorageKeyHex = b && b.length >= 20 ? b : null;
+            }
+          }
+
+          if (!resolvedStorageKeyHex) {
+            // No valid short key available from either source.
+            if (attachments.length === 0) {
               console.log(
                 `[E2EE FILE RECV] No attachment record yet (attempt ${
                   attemptIndex + 1
-                }/5), will retry`,
+                }/${KEY_POLL_DELAYS.length}), will retry`,
               );
-              if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
-                console.warn(
-                  `[E2EE FILE RECV] No attachment record found for msgId=${message.id} after all retries`,
-                );
-                if (!cancelled) {
-                  setFetchError(true);
-                  setLoading(false);
-                }
-              }
-              return; // finally will release fetchingRef
+            } else {
+              console.warn(
+                `[E2EE FILE RECV] Both keys exceed 200 chars — backendKey=${backendKeyLen}, inlineKey=${inlineKeyLen}. Cannot download.`,
+              );
             }
-          } else {
-            const attachment: Attachment = attachments[0];
-            resolvedStorageKeyHex = attachment.storageKey;
+            if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
+              console.warn(
+                `[E2EE FILE RECV] No valid short storageKey found for msgId=${message.id} after all retries`,
+              );
+              if (!cancelled) {
+                setFetchError(true);
+                setLoading(false);
+              }
+            }
+            return; // finally will release fetchingRef
           }
 
           console.log(
-            `[E2EE FILE RECV] Starting download attempt, storageKey from backend=${
-              attachments.length > 0
-                ? `${resolvedStorageKeyHex?.slice(0, 16)}...`
-                : "none"
-            }, metaStorageKey=${
-              metaStorageKey ? `${metaStorageKey.slice(0, 16)}...` : "none"
-            }`,
+            `[E2EE FILE RECV] Selected final storageKey (length: ${resolvedStorageKeyHex.length}): ${resolvedStorageKeyHex}`,
           );
 
           // 2. Download encrypted blob from object-storage via GET
-          const storageKey = resolvedStorageKeyHex!;
-          console.log(
-            `[E2EE FILE RECV] Downloading blob with key=${storageKey.slice(0, 16)}...`,
-          );
-          const keyBytes = hexToBytes(storageKey);
+          const storageKey = resolvedStorageKeyHex;
           let encryptedBytes: Uint8Array;
           try {
-            // downloadBlob returns a fresh Uint8Array of raw encrypted bytes
-            encryptedBytes = await downloadBlob(keyBytes);
+            // downloadBlob takes the string key directly — no hex conversion needed
+            encryptedBytes = await downloadBlob(storageKey);
           } catch (fetchErr) {
             const errMsg =
               fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
             console.error(
               `[E2EE FILE RECV] Fetch failed: ${errMsg} storageKey=${storageKey.slice(0, 16)}...`,
             );
-            throw fetchErr; // re-throw so the outer finally releases the lock
+            // If the error is non-retriable (e.g. HTTP 400 — invalid key),
+            // break all remaining retry timers immediately.
+            if (
+              fetchErr &&
+              typeof (fetchErr as Record<string, unknown>).nonRetriable ===
+                "boolean" &&
+              (fetchErr as Record<string, unknown>).nonRetriable === true
+            ) {
+              console.error(
+                "[E2EE FILE RECV] Non-retriable error — aborting all retries.",
+              );
+              cancelled = true;
+              for (const t2 of timers) clearTimeout(t2);
+              if (!cancelled) {
+                setFetchError(true);
+                setLoading(false);
+              }
+              // Set state explicitly since cancelled is now true
+              setFetchError(true);
+              setLoading(false);
+            }
+            throw fetchErr; // re-throw so the outer catch/finally runs
           }
           if (cancelled) return;
           console.log(

@@ -8,6 +8,17 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const _ImmutableObjectStorageCreateCertificateResult = IDL.Record({
+  'method' : IDL.Text,
+  'blob_hash' : IDL.Text,
+});
+export const _ImmutableObjectStorageRefillInformation = IDL.Record({
+  'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+});
+export const _ImmutableObjectStorageRefillResult = IDL.Record({
+  'success' : IDL.Opt(IDL.Bool),
+  'topped_up_amount' : IDL.Opt(IDL.Nat),
+});
 export const UserId = IDL.Principal;
 export const Error = IDL.Variant({
   'forbidden' : IDL.Null,
@@ -357,6 +368,32 @@ export const UpdateProfileRequest = IDL.Record({
 });
 
 export const idlService = IDL.Service({
+  '_immutableObjectStorageBlobsAreLive' : IDL.Func(
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      [IDL.Vec(IDL.Bool)],
+      ['query'],
+    ),
+  '_immutableObjectStorageBlobsToDelete' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      ['query'],
+    ),
+  '_immutableObjectStorageConfirmBlobDeletion' : IDL.Func(
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      [],
+      [],
+    ),
+  '_immutableObjectStorageCreateCertificate' : IDL.Func(
+      [IDL.Text],
+      [_ImmutableObjectStorageCreateCertificateResult],
+      [],
+    ),
+  '_immutableObjectStorageRefillCashier' : IDL.Func(
+      [IDL.Opt(_ImmutableObjectStorageRefillInformation)],
+      [_ImmutableObjectStorageRefillResult],
+      [],
+    ),
+  '_immutableObjectStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   'addAdmin' : IDL.Func([UserId], [Result_3], []),
   'addConversationMember' : IDL.Func([AddMemberRequest], [Result_3], []),
   'addDevice' : IDL.Func([AddDeviceRequest], [Result_6], []),
@@ -484,6 +521,17 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const _ImmutableObjectStorageCreateCertificateResult = IDL.Record({
+    'method' : IDL.Text,
+    'blob_hash' : IDL.Text,
+  });
+  const _ImmutableObjectStorageRefillInformation = IDL.Record({
+    'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+  });
+  const _ImmutableObjectStorageRefillResult = IDL.Record({
+    'success' : IDL.Opt(IDL.Bool),
+    'topped_up_amount' : IDL.Opt(IDL.Nat),
+  });
   const UserId = IDL.Principal;
   const Error = IDL.Variant({
     'forbidden' : IDL.Null,
@@ -811,6 +859,32 @@ export const idlFactory = ({ IDL }) => {
   });
   
   return IDL.Service({
+    '_immutableObjectStorageBlobsAreLive' : IDL.Func(
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        [IDL.Vec(IDL.Bool)],
+        ['query'],
+      ),
+    '_immutableObjectStorageBlobsToDelete' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        ['query'],
+      ),
+    '_immutableObjectStorageConfirmBlobDeletion' : IDL.Func(
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        [],
+        [],
+      ),
+    '_immutableObjectStorageCreateCertificate' : IDL.Func(
+        [IDL.Text],
+        [_ImmutableObjectStorageCreateCertificateResult],
+        [],
+      ),
+    '_immutableObjectStorageRefillCashier' : IDL.Func(
+        [IDL.Opt(_ImmutableObjectStorageRefillInformation)],
+        [_ImmutableObjectStorageRefillResult],
+        [],
+      ),
+    '_immutableObjectStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     'addAdmin' : IDL.Func([UserId], [Result_3], []),
     'addConversationMember' : IDL.Func([AddMemberRequest], [Result_3], []),
     'addDevice' : IDL.Func([AddDeviceRequest], [Result_6], []),
