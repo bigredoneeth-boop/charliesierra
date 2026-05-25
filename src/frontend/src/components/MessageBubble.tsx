@@ -243,19 +243,36 @@ function useAttachmentBlob(
   const fetchingRef = useRef(false);
   // Tracks whether we have already successfully produced a URL (survives re-renders).
   const doneRef = useRef(false);
+  // Tracks whether the blob has been decrypted and the object URL created.
+  // Once true, never reset — prevents duplicate download attempts after success.
+  const decryptedRef = useRef(false);
 
   // When metaStorageKey arrives (async — it comes from decrypted metadata),
   // reset the in-flight lock so the main effect can start a fresh download.
   useEffect(() => {
-    if (metaStorageKey && !doneRef.current) {
+    if (metaStorageKey && !doneRef.current && !decryptedRef.current) {
       fetchingRef.current = false;
     }
   }, [metaStorageKey]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: retryKey is a primitive prop used intentionally as a reset trigger
   useEffect(() => {
+    // CRITICAL GUARD: If we have already successfully decrypted this file,
+    // never re-enter the download pipeline regardless of why the effect fired.
+    // metaStorageKey is in the dependency array and arrives async — without this
+    // guard the effect would reset decryptedRef/blobUrl on every metadata update,
+    // wiping out a completed download and showing the spinner again.
+    if (decryptedRef.current) {
+      console.log(
+        "[E2EE FILE RECV] Already decrypted — skipping re-run of download effect",
+      );
+      return;
+    }
+
     fetchingRef.current = false;
     doneRef.current = false;
+    // decryptedRef is reset on retryKey change so a manual retry can re-download.
+    decryptedRef.current = false;
 
     if (!enabled || !backend || !downloadBlob) return;
     if (message.messageType === MessageType.text) return;
@@ -296,9 +313,13 @@ function useAttachmentBlob(
           return;
         }
 
-        if (fetchingRef.current) {
-          console.log("[E2EE FILE RECV] fetchingRef already locked, skipping");
-          return; // another timer already started the fetch
+        if (fetchingRef.current || decryptedRef.current) {
+          console.log(
+            decryptedRef.current
+              ? "[E2EE FILE RECV] Already decrypted, skipping duplicate download"
+              : "[E2EE FILE RECV] fetchingRef already locked, skipping",
+          );
+          return; // another timer already started the fetch, or already successfully done
         }
         fetchingRef.current = true;
         console.log(
@@ -470,15 +491,25 @@ function useAttachmentBlob(
           if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
           blobUrlRef.current = url;
 
-          // Mark done BEFORE setting state so a cleanup that fires synchronously
-          // after setState does not accidentally skip the update.
-          doneRef.current = true;
+          // Mark decryptedRef immediately after object URL is created, BEFORE setState,
+          // so any concurrent effect timer sees it and skips a duplicate download.
+          // Never reset decryptedRef except on an explicit retry (retryKey change).
+          decryptedRef.current = true;
 
-          // Update state — this must not be guarded by `cancelled` because we
-          // already checked it above and the work is complete.
+          // Update state — setBlobUrl then setLoading(false) called together so React
+          // batches them into a single re-render that shows the file content.
+          // doneRef is set AFTER setState calls so React's batching does not see
+          // the ref as done before the state update lands.
           setBlobUrl(url);
           setLoading(false);
           setFetchError(false);
+          console.log(
+            "[E2EE FILE RECV] UI Update: Successfully replaced spinner with file content",
+          );
+
+          // Mark doneRef after setState so the render triggered by setState completes
+          // before doneRef gates any future guard checks.
+          doneRef.current = true;
 
           console.log(
             `[E2EE FILE RECV] Download succeeded for storageKey=${storageKey.slice(0, 16)}...`,
@@ -558,10 +589,13 @@ function ImageAttachment({
     retryCount,
   );
 
-  // Log when blobUrl transitions from null to a value (spinner replaced)
+  // Log when blobUrl transitions from null to a value (spinner replaced with file content)
   useEffect(() => {
     if (blobUrl && !prevBlobUrlRef.current) {
       console.log("[FileUI] Replaced loading spinner with actual content");
+      console.log(
+        "[FileUI] Final render: Displaying decrypted file with object URL",
+      );
     }
     prevBlobUrlRef.current = blobUrl;
   }, [blobUrl]);
@@ -581,7 +615,7 @@ function ImageAttachment({
     );
   }
 
-  if (loading || (!blobUrl && !fetchError)) {
+  if (loading) {
     return (
       <div className="flex items-center gap-2 text-sm opacity-70">
         <Loader2 size={14} className="animate-spin" />
@@ -661,10 +695,13 @@ function FileAttachment({
     retryCount,
   );
 
-  // Log when blobUrl transitions from null to a value (spinner replaced)
+  // Log when blobUrl transitions from null to a value (spinner replaced with file content)
   useEffect(() => {
     if (blobUrl && !prevBlobUrlRef.current) {
       console.log("[FileUI] Replaced loading spinner with actual content");
+      console.log(
+        "[FileUI] Final render: Displaying decrypted file with object URL",
+      );
     }
     prevBlobUrlRef.current = blobUrl;
   }, [blobUrl]);
@@ -704,7 +741,7 @@ function FileAttachment({
     );
   }
 
-  if (loading || (!blobUrl && !fetchError)) {
+  if (loading) {
     return (
       <div className="flex items-center gap-2 text-sm opacity-70">
         <Loader2 size={14} className="animate-spin" />

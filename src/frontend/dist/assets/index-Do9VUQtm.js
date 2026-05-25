@@ -50484,14 +50484,22 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
   const blobUrlRef = reactExports.useRef(null);
   const fetchingRef = reactExports.useRef(false);
   const doneRef = reactExports.useRef(false);
+  const decryptedRef = reactExports.useRef(false);
   reactExports.useEffect(() => {
-    if (metaStorageKey && !doneRef.current) {
+    if (metaStorageKey && !doneRef.current && !decryptedRef.current) {
       fetchingRef.current = false;
     }
   }, [metaStorageKey]);
   reactExports.useEffect(() => {
+    if (decryptedRef.current) {
+      console.log(
+        "[E2EE FILE RECV] Already decrypted — skipping re-run of download effect"
+      );
+      return;
+    }
     fetchingRef.current = false;
     doneRef.current = false;
+    decryptedRef.current = false;
     if (!backend || !downloadBlob) return;
     if (message.messageType === MessageType.text) return;
     let cancelled = false;
@@ -50519,8 +50527,10 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
           }
           return;
         }
-        if (fetchingRef.current) {
-          console.log("[E2EE FILE RECV] fetchingRef already locked, skipping");
+        if (fetchingRef.current || decryptedRef.current) {
+          console.log(
+            decryptedRef.current ? "[E2EE FILE RECV] Already decrypted, skipping duplicate download" : "[E2EE FILE RECV] fetchingRef already locked, skipping"
+          );
           return;
         }
         fetchingRef.current = true;
@@ -50629,10 +50639,14 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
           console.log("[E2EE FILE RECV] Created object URL for display");
           if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
           blobUrlRef.current = url;
-          doneRef.current = true;
+          decryptedRef.current = true;
           setBlobUrl(url);
           setLoading(false);
           setFetchError(false);
+          console.log(
+            "[E2EE FILE RECV] UI Update: Successfully replaced spinner with file content"
+          );
+          doneRef.current = true;
           console.log(
             `[E2EE FILE RECV] Download succeeded for storageKey=${storageKey2.slice(0, 16)}...`
           );
@@ -50693,6 +50707,9 @@ function ImageAttachment({
   reactExports.useEffect(() => {
     if (blobUrl && !prevBlobUrlRef.current) {
       console.log("[FileUI] Replaced loading spinner with actual content");
+      console.log(
+        "[FileUI] Final render: Displaying decrypted file with object URL"
+      );
     }
     prevBlobUrlRef.current = blobUrl;
   }, [blobUrl]);
@@ -50712,7 +50729,7 @@ function ImageAttachment({
       }
     );
   }
-  if (loading || !blobUrl && !fetchError) {
+  if (loading) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading image..." })
@@ -50783,6 +50800,9 @@ function FileAttachment({
   reactExports.useEffect(() => {
     if (blobUrl && !prevBlobUrlRef.current) {
       console.log("[FileUI] Replaced loading spinner with actual content");
+      console.log(
+        "[FileUI] Final render: Displaying decrypted file with object URL"
+      );
     }
     prevBlobUrlRef.current = blobUrl;
   }, [blobUrl]);
@@ -50805,7 +50825,7 @@ function FileAttachment({
       }
     );
   }
-  if (loading || !blobUrl && !fetchError) {
+  if (loading) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading..." })
@@ -55711,7 +55731,7 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-D-X0DyLS.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Catj7bXj.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });
