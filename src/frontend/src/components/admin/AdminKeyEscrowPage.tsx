@@ -28,9 +28,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import {
   useApproveKeyRecovery,
+  useEnrollUserKeyEscrow,
   useEscrowGrants,
   useEscrowStats,
   useEscrowedUsers,
+  useGetEncryptedEscrowKey,
   useInitiateKeyRecovery,
   useRecoveryRequests,
   useRejectKeyRecovery,
@@ -38,15 +40,40 @@ import {
 import {
   AlertTriangle,
   CheckCircle,
+  ChevronDown,
+  ChevronUp,
   Clock,
   Copy,
+  Download,
+  FileKey,
   Key,
+  RefreshCw,
   Shield,
+  ShieldCheck,
   Users,
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { RecoveryWizardDialog } from "./RecoveryWizardDialog";
+import { SecureKeyExportModal } from "./SecureKeyExportModal";
+
+// ── vetKeys transport key generation ─────────────────────────────────────────
+async function generateTransportKeyPair(): Promise<{
+  publicKeyBytes: Uint8Array;
+  secretKey: unknown;
+}> {
+  try {
+    const { TransportSecretKey } = await import("@dfinity/vetkeys");
+    const tsk = TransportSecretKey.random();
+    return { publicKeyBytes: tsk.publicKeyBytes(), secretKey: tsk };
+  } catch (err) {
+    // If @dfinity/vetkeys fails to load, throw clearly rather than silently using wrong curve
+    throw new Error(
+      `Failed to generate vetKeys transport key pair. The @dfinity/vetkeys package is required for key recovery. ${String(err)}`,
+    );
+  }
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -421,9 +448,14 @@ function InitiateRecoveryDialog({ user, onClose }: InitiateDialogProps) {
 interface ApproveDialogProps {
   request: RecoveryRequest | null;
   onClose: () => void;
+  onApproved?: () => void;
 }
 
-function ApproveRecoveryDialog({ request, onClose }: ApproveDialogProps) {
+function ApproveRecoveryDialog({
+  request,
+  onClose,
+  onApproved,
+}: ApproveDialogProps) {
   const approveRecovery = useApproveKeyRecovery();
 
   if (!request) return null;
@@ -443,7 +475,15 @@ function ApproveRecoveryDialog({ request, onClose }: ApproveDialogProps) {
     if (!request) return;
     try {
       await approveRecovery.mutateAsync(request.id);
-      toast.success("Recovery approved");
+      toast.success(
+        "Recovery approved — retrieving key via vetKeys transport...",
+      );
+      // After approval, attempt to retrieve the encrypted key via vetKeys transport
+      try {
+        onApproved?.();
+      } catch (_e) {
+        // parent handler is optional
+      }
       onClose();
     } catch (err) {
       toast.error(
@@ -476,6 +516,14 @@ function ApproveRecoveryDialog({ request, onClose }: ApproveDialogProps) {
             approving.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-800 dark:bg-red-950/30 mb-4">
+          <p className="text-sm font-medium text-red-800 dark:text-red-200">
+            Warning: Initiating key recovery is a privileged operation logged
+            permanently on the Internet Computer. Ensure you have proper
+            authorization before proceeding.
+          </p>
+        </div>
 
         <div className="flex items-start gap-2.5 rounded border border-amber-200 bg-amber-50 px-3 py-2.5 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800">
           <AlertTriangle
@@ -687,6 +735,22 @@ export function AdminKeyEscrowPage() {
     useState<RecoveryRequest | null>(null);
   const [requestStatusFilter, setRequestStatusFilter] =
     useState<RecoveryRequestStatus | null>(null);
+  const [vetKeysExplanationOpen, setVetKeysExplanationOpen] = useState(false);
+  const [recoveredKeyState, setRecoveredKeyState] = useState<{
+    rawBytes: Uint8Array;
+    targetPrincipal: string;
+    recoveryId: string;
+  } | null>(null);
+  const [showKeyExportModal, setShowKeyExportModal] = useState(false);
+  const [wizardRequest, setWizardRequest] = useState<RecoveryRequest | null>(
+    null,
+  );
+  const [enrollConfirmUser, setEnrollConfirmUser] = useState<string | null>(
+    null,
+  );
+  const [transportKeyLoading, setTransportKeyLoading] = useState(false);
+  const enrollUserKeyEscrow = useEnrollUserKeyEscrow();
+  const getEncryptedEscrowKey = useGetEncryptedEscrowKey();
 
   const statsQuery = useEscrowStats();
   const escrowedUsersQuery = useEscrowedUsers({
@@ -719,6 +783,65 @@ export function AdminKeyEscrowPage() {
   return (
     <AdminLayout title="Key Escrow Management">
       <div className="space-y-6">
+        {/* vetKeys Explanation Panel */}
+        <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between px-4 py-3 text-left"
+            onClick={() => setVetKeysExplanationOpen(!vetKeysExplanationOpen)}
+            data-ocid="escrow.vetkeys_explanation.toggle"
+          >
+            <span className="flex items-center gap-2 text-sm font-medium text-blue-800 dark:text-blue-200">
+              <ShieldCheck className="h-4 w-4" />
+              How vetKeys Works — ICP Threshold Key Protocol
+            </span>
+            {vetKeysExplanationOpen ? (
+              <ChevronUp className="h-4 w-4 text-blue-600" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-blue-600" />
+            )}
+          </button>
+          {vetKeysExplanationOpen && (
+            <div className="border-t border-blue-200 px-4 py-3 dark:border-blue-800">
+              <ul className="space-y-2 text-sm text-blue-900 dark:text-blue-100">
+                <li className="flex gap-2">
+                  <span className="mt-0.5 text-blue-500">•</span>vetKeys
+                  (Verifiable Encrypted Threshold Keys) is an ICP cryptographic
+                  protocol where encryption keys are derived by a threshold
+                  quorum of subnet nodes — no single node ever holds the raw
+                  key.
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-0.5 text-blue-500">•</span>Key derivation
+                  is deterministic: the same inputs always produce the same key,
+                  so escrowed keys can be reliably recovered.
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-0.5 text-blue-500">•</span>During
+                  recovery, the authorized admin's browser generates a temporary
+                  transport key pair. The canister encrypts the derived key
+                  under that transport public key. Only the admin's browser
+                  (holding the transport secret) can decrypt it.
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-0.5 text-blue-500">•</span>All recovery
+                  operations require dual authorization: two distinct admins
+                  must approve before any key material is delivered.
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+        {/* Security Notice Banner */}
+        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800 dark:bg-amber-950/30">
+          <p className="text-sm text-amber-800 dark:text-amber-200">
+            <strong>Security Notice:</strong> Recovery keys are delivered
+            encrypted to the requesting admin's browser via a one-time transport
+            key. They are never stored by the canister or visible to any single
+            node.
+          </p>
+        </div>
+
         {/* ── Security Banner ── */}
         <div
           className="flex items-start gap-3 rounded-sm border border-amber-200 bg-amber-50 p-4 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800"
@@ -964,6 +1087,26 @@ export function AdminKeyEscrowPage() {
                             >
                               Initiate Recovery
                             </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-7 text-xs px-2.5"
+                              onClick={() => {
+                                const uid =
+                                  typeof (
+                                    user.userId as { toText?: () => string }
+                                  ).toText === "function"
+                                    ? (
+                                        user.userId as { toText: () => string }
+                                      ).toText()
+                                    : String(user.userId);
+                                setEnrollConfirmUser(uid);
+                              }}
+                              data-ocid={`escrow.users.enroll_vetkeys.${idx + 1}`}
+                            >
+                              Enroll in vetKeys
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -1111,6 +1254,16 @@ export function AdminKeyEscrowPage() {
                                 type="button"
                                 variant="outline"
                                 size="sm"
+                                className="h-7 text-xs px-2.5 border-blue-300 text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-400"
+                                onClick={() => setWizardRequest(req)}
+                                data-ocid={`escrow.requests.wizard.${idx + 1}`}
+                              >
+                                Recovery Wizard
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
                                 className="h-7 text-xs px-2.5 text-muted-foreground hover:border-foreground/30"
                                 onClick={() => setRejectDialogRequest(req)}
                                 data-ocid={`escrow.requests.reject.${idx + 1}`}
@@ -1245,10 +1398,145 @@ export function AdminKeyEscrowPage() {
       <ApproveRecoveryDialog
         request={approveDialogRequest}
         onClose={() => setApproveDialogRequest(null)}
+        onApproved={async () => {
+          if (!approveDialogRequest) return;
+          const targetText =
+            typeof (
+              approveDialogRequest.targetUserId as { toText?: () => string }
+            ).toText === "function"
+              ? (
+                  approveDialogRequest.targetUserId as { toText: () => string }
+                ).toText()
+              : String(approveDialogRequest.targetUserId);
+          try {
+            setTransportKeyLoading(true);
+            const { publicKeyBytes } = await generateTransportKeyPair();
+            const encryptedKeyBytes = await getEncryptedEscrowKey.mutateAsync({
+              targetPrincipal: targetText,
+              transportPublicKey: publicKeyBytes,
+            });
+            setRecoveredKeyState({
+              rawBytes: encryptedKeyBytes,
+              targetPrincipal: targetText,
+              recoveryId: String(approveDialogRequest.id),
+            });
+            setShowKeyExportModal(true);
+            setApproveDialogRequest(null);
+          } catch (err) {
+            console.error("[vetKeys] Failed to retrieve encrypted key:", err);
+            toast.error(
+              "Recovery approved but key retrieval failed. Contact your system administrator.",
+            );
+          } finally {
+            setTransportKeyLoading(false);
+          }
+        }}
       />
       <RejectRecoveryDialog
         request={rejectDialogRequest}
         onClose={() => setRejectDialogRequest(null)}
+      />
+
+      {/* Enroll in vetKeys Confirmation */}
+      {enrollConfirmUser && (
+        <Dialog open={true} onOpenChange={() => setEnrollConfirmUser(null)}>
+          <DialogContent data-ocid="escrow.enroll_vetkeys.dialog">
+            <DialogHeader>
+              <DialogTitle>Enroll in vetKeys Escrow</DialogTitle>
+              <DialogDescription>
+                This will enroll the user in the ICP vetKeys key escrow system,
+                allowing their encryption key to be deterministically recovered
+                via dual-control authorization.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800 dark:bg-amber-950/30">
+              <p className="text-sm text-amber-800 dark:text-amber-200">
+                Principal:{" "}
+                <code className="font-mono text-xs">{enrollConfirmUser}</code>
+              </p>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setEnrollConfirmUser(null)}
+                data-ocid="escrow.enroll_vetkeys.cancel_button"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await enrollUserKeyEscrow.mutateAsync(enrollConfirmUser);
+                    toast.success("User enrolled in vetKeys escrow");
+                    setEnrollConfirmUser(null);
+                  } catch (err) {
+                    toast.error(
+                      err instanceof Error ? err.message : "Enrollment failed",
+                    );
+                  }
+                }}
+                disabled={enrollUserKeyEscrow.isPending}
+                data-ocid="escrow.enroll_vetkeys.confirm_button"
+              >
+                {enrollUserKeyEscrow.isPending
+                  ? "Enrolling..."
+                  : "Confirm Enrollment"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {transportKeyLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-card p-6 shadow-xl">
+            <ShieldCheck className="h-8 w-8 animate-pulse text-blue-500" />
+            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              Retrieving encrypted key via vetKeys transport...
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Phase 2: Secure Key Export Modal */}
+      <SecureKeyExportModal
+        isOpen={showKeyExportModal}
+        onClose={() => {
+          setShowKeyExportModal(false);
+          setRecoveredKeyState(null);
+        }}
+        rawKeyBytes={recoveredKeyState?.rawBytes ?? null}
+        targetPrincipal={recoveredKeyState?.targetPrincipal ?? ""}
+        recoveryId={recoveredKeyState?.recoveryId ?? ""}
+      />
+
+      {/* Phase 2: Recovery Wizard Dialog */}
+      <RecoveryWizardDialog
+        request={wizardRequest}
+        onClose={() => setWizardRequest(null)}
+        onKeyDelivered={(rawBytes, targetPrincipal) => {
+          setRecoveredKeyState({
+            rawBytes,
+            targetPrincipal,
+            recoveryId: String(wizardRequest?.id ?? ""),
+          });
+          setShowKeyExportModal(true);
+          setWizardRequest(null);
+        }}
+        generateTransportKeyPair={generateTransportKeyPair}
+        getEncryptedEscrowKey={async (targetPrincipal, transportPubKeyHex) =>
+          getEncryptedEscrowKey.mutateAsync({
+            targetPrincipal,
+            transportPublicKey: new Uint8Array(
+              transportPubKeyHex
+                .match(/.{1,2}/g)
+                ?.map((h) => Number.parseInt(h, 16)) ?? [],
+            ),
+          })
+        }
+        getEscrowPublicKey={async () => Promise.resolve(null)}
       />
     </AdminLayout>
   );

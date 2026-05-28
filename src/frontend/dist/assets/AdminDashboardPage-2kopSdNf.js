@@ -1,6 +1,6 @@
-import { e as createLucideIcon, f as useNavigate, g as useAuth, h as useIsSuperAdmin, i as useCheckPolicyExpiry, k as useMyOrgs, l as useOrgs, m as useOrgUsers, n as useAdminAuditLog, r as reactExports, j as jsxRuntimeExports, U as Users, o as UserCheck, M as MessageSquare, p as Settings, A as AuditEventType, q as Shield, s as cn, t as ShieldCheck, v as Check, w as Copy } from "./index-D8Qg-lkp.js";
-import { u as usePolicyExpiryStore, A as AdminLayout, B as Building2, C as ClipboardList } from "./AdminLayout-xwrGurkx.js";
-import { U as UserPlus } from "./user-plus-CZ6NIyDs.js";
+import { e as createLucideIcon, Q as useNavigate, h as useAuth, V as useIsSuperAdmin, W as useCheckPolicyExpiry, X as useMyOrgs, Y as useOrgs, Z as useOrgUsers, _ as useAdminAuditLog, r as reactExports, j as jsxRuntimeExports, U as Users, $ as UserCheck, a0 as MessageSquare, a1 as Settings, a2 as AuditEventType, a3 as Shield, f as cn, a4 as ShieldCheck, a5 as Check, a6 as Copy } from "./index-CCR6Ctxt.js";
+import { u as usePolicyExpiryStore, A as AdminLayout, B as Building2, C as ClipboardList } from "./AdminLayout-CoUIN4Ho.js";
+import { U as UserPlus } from "./user-plus-BUicnfJB.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -162,6 +162,14 @@ const EVENT_TYPE_META = {
   [AuditEventType.orgSettingsUpdated]: {
     label: "Org Settings Updated",
     className: "bg-cyan-500/10 text-cyan-700 border-cyan-500/30"
+  },
+  [AuditEventType.keyRecoveryCompleted]: {
+    label: "Key Recovery Completed",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30"
+  },
+  [AuditEventType.keyEscrowEnrolled]: {
+    label: "Key Escrow Enrolled",
+    className: "bg-blue-500/10 text-blue-700 border-blue-500/30"
   }
 };
 function principalText(p) {

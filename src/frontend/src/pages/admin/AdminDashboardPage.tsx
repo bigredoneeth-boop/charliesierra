@@ -208,6 +208,14 @@ const EVENT_TYPE_META: Record<AuditEventType, EventTypeMeta> = {
     label: "Org Settings Updated",
     className: "bg-cyan-500/10 text-cyan-700 border-cyan-500/30",
   },
+  [AuditEventType.keyRecoveryCompleted]: {
+    label: "Key Recovery Completed",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30",
+  },
+  [AuditEventType.keyEscrowEnrolled]: {
+    label: "Key Escrow Enrolled",
+    className: "bg-blue-500/10 text-blue-700 border-blue-500/30",
+  },
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

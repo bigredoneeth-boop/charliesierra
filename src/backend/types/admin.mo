@@ -35,9 +35,12 @@ module {
     // Group admin variants
     #groupMemberRemoved;   // admin force-removed a member from a group
     // Key recovery variants
-    #keyRecoveryInitiated; // admin initiated a dual-control key recovery request
-    #keyRecoveryApproved;  // second admin approved the key recovery request
-    #keyRecoveryRejected;  // admin rejected the key recovery request
+    #keyRecoveryInitiated;   // admin initiated a dual-control key recovery request
+    #keyRecoveryApproved;    // second admin approved the key recovery request
+    #keyRecoveryRejected;    // admin rejected the key recovery request
+    #keyRecoveryCompleted;   // vetKD encrypted key delivered to authorized admin
+    // Key escrow variants
+    #keyEscrowEnrolled;      // user self-enrolled via vetKeys escrow
     // Retention policy management variants
     #retentionPolicyCreated; // admin created an org-level or global retention policy
     #retentionPolicyUpdated; // admin updated an existing retention policy

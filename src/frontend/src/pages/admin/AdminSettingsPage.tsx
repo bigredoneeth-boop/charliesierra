@@ -271,10 +271,10 @@ export default function AdminSettingsPage() {
             />
           </svg>
           <div>
-            <p className="text-sm font-semibold text-amber-300">
+            <p className="text-sm font-semibold text-amber-100">
               Security Notice
             </p>
-            <p className="mt-0.5 text-xs text-amber-400/80">
+            <p className="mt-0.5 text-xs text-amber-200">
               All changes are audited and immutable. Actions cannot be undone on
               the Internet Computer.
             </p>

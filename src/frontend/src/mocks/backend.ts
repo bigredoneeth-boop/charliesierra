@@ -223,7 +223,7 @@ export const mockBackend: backendInterface = {
     ok: {
       id: 1n,
       status: RecoveryRequestStatus.approved,
-      orgId: undefined,
+      orgId: (undefined as unknown as undefined),
       approvedBy: alice,
       createdAt: BigInt(Date.now() - 60000) * 1000000n,
       initiatingAdmin: alice,
@@ -249,6 +249,10 @@ export const mockBackend: backendInterface = {
     },
   }),
   getRecoveryRequests: async () => ({ __kind__: "ok", ok: [] }),
+  enrollUserKeyEscrow: async () => ({ __kind__: "ok" as const, ok: "User enrolled in vetKeys escrow" }),
+  getEncryptedEscrowKey: async (_targetPrincipal: unknown, _transportPublicKey: Uint8Array) => ({ __kind__: "ok" as const, ok: new Uint8Array(64).fill(0xAB) }),
+  getEscrowPublicKey: async () => ({ __kind__: "ok" as const, ok: new Uint8Array(48).fill(0xCD) }),
+  getRecoveryDetails: async (_requestId: unknown) => ({ __kind__: "ok" as const, ok: { id: 0n, initiatingAdmin: alice, targetUserId: alice, targetDeviceId: "device-1", reason: "", status: RecoveryRequestStatus.pending, createdAt: BigInt(Date.now()) * 1000000n, orgId: undefined, approvedBy: undefined, resolvedAt: undefined } }),
   adminGetEscrowGrants: async () => ({ __kind__: "ok", ok: [] }),
   adminGrantEscrowAccess: async () => ({
     __kind__: "ok",

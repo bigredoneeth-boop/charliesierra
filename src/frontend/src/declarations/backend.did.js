@@ -183,6 +183,7 @@ export const AuditExportEventType = IDL.Variant({
   'callInitiated' : IDL.Null,
   'keyRecoveryApproved' : IDL.Null,
   'keyRecoveryInitiated' : IDL.Null,
+  'keyRecoveryCompleted' : IDL.Null,
   'keyRecoveryRejected' : IDL.Null,
   'adminAction' : IDL.Null,
   'auditLogExported' : IDL.Null,
@@ -193,6 +194,7 @@ export const AuditExportEventType = IDL.Variant({
   'memberRemoved' : IDL.Null,
   'orgSuspended' : IDL.Null,
   'userRemoved' : IDL.Null,
+  'keyEscrowEnrolled' : IDL.Null,
   'memberRoleChanged' : IDL.Null,
 });
 export const AuditExportFormat = IDL.Variant({
@@ -228,6 +230,7 @@ export const AuditEventType = IDL.Variant({
   'messageQueueDrained' : IDL.Null,
   'memberReactivated' : IDL.Null,
   'legalHoldPlaced' : IDL.Null,
+  'keyRecoveryCompleted' : IDL.Null,
   'keyRecoveryRejected' : IDL.Null,
   'adminAction' : IDL.Null,
   'orgSettingsUpdated' : IDL.Null,
@@ -244,6 +247,7 @@ export const AuditEventType = IDL.Variant({
   'userRemoved' : IDL.Null,
   'priorityMessageSent' : IDL.Null,
   'orgUpdated' : IDL.Null,
+  'keyEscrowEnrolled' : IDL.Null,
   'memberRoleChanged' : IDL.Null,
 });
 export const ExportAuditLogsRequest = IDL.Record({
@@ -743,6 +747,11 @@ export const idlService = IDL.Service({
       [Result_6],
       [],
     ),
+  'enrollUserKeyEscrow' : IDL.Func(
+      [],
+      [IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text })],
+      [],
+    ),
   'exportAuditLog' : IDL.Func([AuditExportRequest], [Result_26], []),
   'exportAuditLogs' : IDL.Func(
       [ExportAuditLogsRequest],
@@ -774,6 +783,16 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'getDeploymentInfo' : IDL.Func([], [SovereignConfig], ['query']),
+  'getEncryptedEscrowKey' : IDL.Func(
+      [UserId, IDL.Vec(IDL.Nat8)],
+      [IDL.Variant({ 'ok' : IDL.Vec(IDL.Nat8), 'err' : IDL.Text })],
+      [],
+    ),
+  'getEscrowPublicKey' : IDL.Func(
+      [],
+      [IDL.Variant({ 'ok' : IDL.Vec(IDL.Nat8), 'err' : IDL.Text })],
+      [],
+    ),
   'getEscrowStats' : IDL.Func([], [Result_24], []),
   'getEscrowedUsers' : IDL.Func([GetEscrowedUsersRequest], [Result_23], []),
   'getGlobalRetentionPolicy' : IDL.Func(
@@ -806,6 +825,7 @@ export const idlService = IDL.Service({
   'getOrgSettings' : IDL.Func([IDL.Text], [OrgSettings], ['query']),
   'getOrgUsers' : IDL.Func([GetOrgUsersRequest], [Result_16], ['query']),
   'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
+  'getRecoveryDetails' : IDL.Func([IDL.Nat], [Result_8], []),
   'getRecoveryRequests' : IDL.Func(
       [IDL.Opt(OrgId), IDL.Opt(RecoveryRequestStatus)],
       [Result_15],
@@ -1085,6 +1105,7 @@ export const idlFactory = ({ IDL }) => {
     'callInitiated' : IDL.Null,
     'keyRecoveryApproved' : IDL.Null,
     'keyRecoveryInitiated' : IDL.Null,
+    'keyRecoveryCompleted' : IDL.Null,
     'keyRecoveryRejected' : IDL.Null,
     'adminAction' : IDL.Null,
     'auditLogExported' : IDL.Null,
@@ -1095,6 +1116,7 @@ export const idlFactory = ({ IDL }) => {
     'memberRemoved' : IDL.Null,
     'orgSuspended' : IDL.Null,
     'userRemoved' : IDL.Null,
+    'keyEscrowEnrolled' : IDL.Null,
     'memberRoleChanged' : IDL.Null,
   });
   const AuditExportFormat = IDL.Variant({
@@ -1130,6 +1152,7 @@ export const idlFactory = ({ IDL }) => {
     'messageQueueDrained' : IDL.Null,
     'memberReactivated' : IDL.Null,
     'legalHoldPlaced' : IDL.Null,
+    'keyRecoveryCompleted' : IDL.Null,
     'keyRecoveryRejected' : IDL.Null,
     'adminAction' : IDL.Null,
     'orgSettingsUpdated' : IDL.Null,
@@ -1146,6 +1169,7 @@ export const idlFactory = ({ IDL }) => {
     'userRemoved' : IDL.Null,
     'priorityMessageSent' : IDL.Null,
     'orgUpdated' : IDL.Null,
+    'keyEscrowEnrolled' : IDL.Null,
     'memberRoleChanged' : IDL.Null,
   });
   const ExportAuditLogsRequest = IDL.Record({
@@ -1620,6 +1644,11 @@ export const idlFactory = ({ IDL }) => {
         [Result_6],
         [],
       ),
+    'enrollUserKeyEscrow' : IDL.Func(
+        [],
+        [IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text })],
+        [],
+      ),
     'exportAuditLog' : IDL.Func([AuditExportRequest], [Result_26], []),
     'exportAuditLogs' : IDL.Func(
         [ExportAuditLogsRequest],
@@ -1651,6 +1680,16 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getDeploymentInfo' : IDL.Func([], [SovereignConfig], ['query']),
+    'getEncryptedEscrowKey' : IDL.Func(
+        [UserId, IDL.Vec(IDL.Nat8)],
+        [IDL.Variant({ 'ok' : IDL.Vec(IDL.Nat8), 'err' : IDL.Text })],
+        [],
+      ),
+    'getEscrowPublicKey' : IDL.Func(
+        [],
+        [IDL.Variant({ 'ok' : IDL.Vec(IDL.Nat8), 'err' : IDL.Text })],
+        [],
+      ),
     'getEscrowStats' : IDL.Func([], [Result_24], []),
     'getEscrowedUsers' : IDL.Func([GetEscrowedUsersRequest], [Result_23], []),
     'getGlobalRetentionPolicy' : IDL.Func(
@@ -1683,6 +1722,7 @@ export const idlFactory = ({ IDL }) => {
     'getOrgSettings' : IDL.Func([IDL.Text], [OrgSettings], ['query']),
     'getOrgUsers' : IDL.Func([GetOrgUsersRequest], [Result_16], ['query']),
     'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
+    'getRecoveryDetails' : IDL.Func([IDL.Nat], [Result_8], []),
     'getRecoveryRequests' : IDL.Func(
         [IDL.Opt(OrgId), IDL.Opt(RecoveryRequestStatus)],
         [Result_15],

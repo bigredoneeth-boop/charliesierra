@@ -20,7 +20,9 @@ type AuditEventType__334976789 =
     #escrowEnrolled;
     #escrowRevoked;
     #groupMemberRemoved;
+    #keyEscrowEnrolled;
     #keyRecoveryApproved;
+    #keyRecoveryCompleted;
     #keyRecoveryInitiated;
     #keyRecoveryRejected;
     #legalHoldPlaced;
@@ -310,6 +312,13 @@ type UserProfile__277265826 =
     var lastSeen : Timestamp__301639476;
     registeredAt : Timestamp__301639476
   };
+type VetEscrowRecord__210350760 =
+  {
+    enrolledAt : Timestamp__301639476;
+    keyDerivationInput : Blob;
+    principal : UserId__158757552;
+    status : {#active; #revoked}
+  };
 actor {
   stable adminState :
     {
@@ -355,7 +364,9 @@ actor {
       retentionPolicies :
         Map__605269027<ConversationId__966455625,
                         GroupRetentionPolicy__233071989>;
-      state : {var nextGrantId : Nat; var nextRecoveryRequestId : Nat}
+      state : {var nextGrantId : Nat; var nextRecoveryRequestId : Nat};
+      vetEscrowRecords :
+        Map__605269027<UserId__158757552, VetEscrowRecord__210350760>
     };
   stable invites :
     {

@@ -43,6 +43,8 @@ import SettingsMixin "mixins/settings-api";
 
 
 
+
+
 actor self {
   // ── Stable state slices ──────────────────────────────────────────────────────
 
@@ -105,6 +107,7 @@ actor self {
     escrowRecords     = Map.empty();
     escrowGrants      = Map.empty();
     recoveryRequests  = Map.empty();
+    vetEscrowRecords  = Map.empty();
     state             = { var nextGrantId = 0; var nextRecoveryRequestId = 0 };
   };
 

@@ -1,7 +1,7 @@
-import { aU as useActor, g as useAuth, a_ as useQueryClient, a$ as useQuery, aE as OrgRole, r as reactExports, b0 as useMutation, j as jsxRuntimeExports, b1 as Tabs, b2 as TabsList, b3 as TabsTrigger, b4 as TabsContent, a as Skeleton, N as Label, I as Input, b5 as PasswordPolicy, ao as Select, ap as SelectTrigger, aq as SelectValue, ar as SelectContent, aX as RetentionPeriod, as as SelectItem, b6 as AlertDialog, b7 as AlertDialogTrigger, B as Button, b8 as AlertDialogContent, b9 as AlertDialogHeader, ba as AlertDialogTitle, bb as AlertDialogDescription, bc as AlertDialogFooter, bd as AlertDialogCancel, be as AlertDialogAction, bf as GroupCreationPermission, bg as DataExportPermission, c as Badge, O as Textarea, d as ue, aZ as createActor } from "./index-D8Qg-lkp.js";
-import { A as AdminLayout } from "./AdminLayout-xwrGurkx.js";
-import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-__lwj4jH.js";
-import { S as Switch } from "./switch-J1WkqqZc.js";
+import { g as useActor, h as useAuth, i as useQueryClient, k as useQuery, O as OrgRole, r as reactExports, l as useMutation, j as jsxRuntimeExports, T as Tabs, m as TabsList, n as TabsTrigger, o as TabsContent, a as Skeleton, p as Label, I as Input, P as PasswordPolicy, q as Select, s as SelectTrigger, t as SelectValue, v as SelectContent, R as RetentionPeriod, w as SelectItem, A as AlertDialog, x as AlertDialogTrigger, B as Button, y as AlertDialogContent, z as AlertDialogHeader, D as AlertDialogTitle, E as AlertDialogDescription, F as AlertDialogFooter, G as AlertDialogCancel, H as AlertDialogAction, J as GroupCreationPermission, K as DataExportPermission, c as Badge, M as Textarea, d as ue, N as createActor } from "./index-CCR6Ctxt.js";
+import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
+import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-BxiiaiFY.js";
+import { S as Switch } from "./switch-DUSjQpAQ.js";
 function formatCycles(n) {
   if (n >= 1000000000000n) return `${(Number(n) / 1e12).toFixed(1)}T`;
   if (n >= 1000000000n) return `${(Number(n) / 1e9).toFixed(1)}B`;
@@ -184,8 +184,8 @@ function AdminSettingsPage() {
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-amber-300", children: "Security Notice" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-0.5 text-xs text-amber-400/80", children: "All changes are audited and immutable. Actions cannot be undone on the Internet Computer." })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-amber-100", children: "Security Notice" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-0.5 text-xs text-amber-200", children: "All changes are audited and immutable. Actions cannot be undone on the Internet Computer." })
           ] })
         ]
       }

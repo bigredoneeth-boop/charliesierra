@@ -196,5 +196,42 @@ mixin (
       enterpriseState, adminState, caller, orgId, statusFilter,
     );
   };
+
+  // ── vetKeys Escrow Integration ────────────────────────────────────────────
+
+  /// Retrieve the canister's vetKD public key for the escrow context.
+  /// Clients use this to generate a transport key pair for secure key delivery.
+  public shared ({ caller }) func getEscrowPublicKey()
+    : async { #ok : Blob; #err : Text } {
+    await EnterpriseLib.getEscrowPublicKey(adminState, caller);
+  };
+
+  /// Self-enroll the calling user into vetKeys-based key escrow.
+  /// Creates a permanent derivation record keyed by the caller's principal.
+  /// Returns an error if already enrolled and active.
+  public shared ({ caller }) func enrollUserKeyEscrow()
+    : async { #ok : Text; #err : Text } {
+    EnterpriseLib.enrollUserKeyEscrow(enterpriseState, adminState, caller);
+  };
+
+  /// Admin: derive and deliver the transport-encrypted escrow key for a target user.
+  /// Requires an approved dual-control recovery request (initiator != approver).
+  /// The management canister derives a BLS12-381 key encrypted to the transport key.
+  public shared ({ caller }) func getEncryptedEscrowKey(
+    targetPrincipal    : Common.UserId,
+    transportPublicKey : Blob,
+  ) : async { #ok : Blob; #err : Text } {
+    await EnterpriseLib.getEncryptedEscrowKey(
+      enterpriseState, adminState, caller, targetPrincipal, transportPublicKey,
+    );
+  };
+  /// Admin: retrieve a single recovery request by ID.
+  /// Only callable by Super Admin or Org Admin.
+  /// Used by the frontend recovery wizard to poll status and get compliance details.
+  public shared ({ caller }) func getRecoveryDetails(
+    requestId : Nat
+  ) : async Common.Result<E.RecoveryRequest, Common.Error> {
+    EnterpriseLib.getRecoveryDetails(enterpriseState, adminState, caller, requestId);
+  };
 };
 

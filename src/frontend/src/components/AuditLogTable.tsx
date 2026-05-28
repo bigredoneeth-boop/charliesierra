@@ -198,6 +198,16 @@ export const EVENT_TYPE_META: Record<AuditEventType, EventTypeMeta> = {
     className:
       "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
   },
+  [AuditEventType.keyRecoveryCompleted]: {
+    label: "Key Recovery Completed",
+    className:
+      "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+  },
+  [AuditEventType.keyEscrowEnrolled]: {
+    label: "Key Escrow Enrolled",
+    className:
+      "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+  },
 };
 
 const FALLBACK_META: EventTypeMeta = {

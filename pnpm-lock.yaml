@@ -39,6 +39,9 @@ importers:
       '@dfinity/principal':
         specifier: ~3.3.0
         version: 3.3.1
+      '@dfinity/vetkeys':
+        specifier: ^0.4.0
+        version: 0.4.0(@noble/hashes@1.8.0)
       '@icp-sdk/core':
         specifier: ~4.1.0
         version: 4.1.1(@dfinity/agent@3.3.1(@dfinity/candid@3.3.1(@dfinity/principal@3.3.1))(@dfinity/principal@3.3.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.3.1(@dfinity/principal@3.3.1))(@dfinity/identity-secp256k1@3.3.1(@dfinity/candid@3.3.1(@dfinity/principal@3.3.1))(@dfinity/principal@3.3.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/identity@3.3.1(@dfinity/agent@3.3.1(@dfinity/candid@3.3.1(@dfinity/principal@3.3.1))(@dfinity/principal@3.3.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.3.1(@dfinity/principal@3.3.1))(@dfinity/principal@3.3.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.3.1)
@@ -468,6 +471,9 @@ packages:
   '@dfinity/principal@3.3.1':
     resolution: {integrity: sha512-UWloNRbDHSwVV/gec0CrtWm/cHODPgu+jgwn5iERheVwYCEp+yGXVIssUkJeN6wFxraqqCFcoBUvg7vtWM+GBg==}
     deprecated: 'This package has been deprecated. Use @icp-sdk/core/principal instead. Migration guide: https://js.icp.build/core/latest/upgrading/v5'
+
+  '@dfinity/vetkeys@0.4.0':
+    resolution: {integrity: sha512-MLa5UvseEOVB6HgcKYtIDOZc6De0tdRm61dZlmAVKKqjnZuXoUJqypDbMe30EnofH0JMjvGQP2jGvxGRKC6nGQ==}
 
   '@dimforge/rapier3d-compat@0.12.0':
     resolution: {integrity: sha512-uekIGetywIgopfD97oDL5PfeezkFpNhwlzlaEYNOA0N6ghdsOvh/HYjSMek5Q2O1PYvRSDFcqFVJl4r4ZBwOow==}
@@ -2213,6 +2219,9 @@ packages:
   hyphenate-style-name@1.1.0:
     resolution: {integrity: sha512-WDC/ui2VVRrz3jOVi+XtjqkDjiVjTtFaAGiW37k6b+ohyQ5wYDOGkvCZa8+H0nx3gyvv0+BST9xuOgIyGQ00gw==}
 
+  idb-keyval@6.2.4:
+    resolution: {integrity: sha512-D/NzHWUmYJGXi++z67aMSrnisb9A3621CyRK5G89JyTlN13C8xf0g04DLxUKMufPem3e3L2JAXR6Z00OWy183Q==}
+
   idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
 
@@ -3271,6 +3280,15 @@ snapshots:
   '@dfinity/principal@3.3.1':
     dependencies:
       '@noble/hashes': 1.8.0
+
+  '@dfinity/vetkeys@0.4.0(@noble/hashes@1.8.0)':
+    dependencies:
+      '@dfinity/agent': 3.3.1(@dfinity/candid@3.3.1(@dfinity/principal@3.3.1))(@dfinity/principal@3.3.1)(@noble/hashes@1.8.0)
+      '@dfinity/candid': 3.3.1(@dfinity/principal@3.3.1)
+      '@dfinity/principal': 3.3.1
+      idb-keyval: 6.2.4
+    transitivePeerDependencies:
+      - '@noble/hashes'
 
   '@dimforge/rapier3d-compat@0.12.0': {}
 
@@ -4893,6 +4911,8 @@ snapshots:
     optional: true
 
   hyphenate-style-name@1.1.0: {}
+
+  idb-keyval@6.2.4: {}
 
   idb@7.1.1: {}
 

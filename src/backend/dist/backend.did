@@ -721,7 +721,9 @@ type AuditExportEventType =
    escrowEnrolled;
    escrowRevoked;
    groupMemberRemoved;
+   keyEscrowEnrolled;
    keyRecoveryApproved;
+   keyRecoveryCompleted;
    keyRecoveryInitiated;
    keyRecoveryRejected;
    memberAdded;
@@ -747,7 +749,9 @@ type AuditEventType =
    escrowEnrolled;
    escrowRevoked;
    groupMemberRemoved;
+   keyEscrowEnrolled;
    keyRecoveryApproved;
+   keyRecoveryCompleted;
    keyRecoveryInitiated;
    keyRecoveryRejected;
    legalHoldPlaced;
@@ -845,6 +849,10 @@ service : {
   enrollKeyEscrow: (deviceId: text, deviceLabel: text,
    devicePublicKeyFingerprint: text, wrappedKey: blob,
    consentLanguageVersion: text) -> (Result_6);
+  enrollUserKeyEscrow: () -> (variant {
+                                err: text;
+                                ok: text;
+                              });
   exportAuditLog: (req: AuditExportRequest) -> (Result_26);
   exportAuditLogs: (req: ExportAuditLogsRequest) -> (Result_25) query;
   exportConfigBundle: () -> (Result_27);
@@ -859,6 +867,15 @@ service : {
     }) query;
   getConversation: (id: ConversationId) -> (opt ConversationPublic) query;
   getDeploymentInfo: () -> (SovereignConfig) query;
+  getEncryptedEscrowKey: (targetPrincipal: UserId, transportPublicKey:
+   blob) -> (variant {
+               err: text;
+               ok: blob;
+             });
+  getEscrowPublicKey: () -> (variant {
+                               err: text;
+                               ok: blob;
+                             });
   getEscrowStats: () -> (Result_24);
   getEscrowedUsers: (req: GetEscrowedUsersRequest) -> (Result_23);
   getGlobalRetentionPolicy: () -> (opt RetentionPolicy) query;
@@ -876,6 +893,7 @@ service : {
   getOrgSettings: (orgId: text) -> (OrgSettings) query;
   getOrgUsers: (req: GetOrgUsersRequest) -> (Result_16) query;
   getPlatformSettings: () -> (PlatformSettings) query;
+  getRecoveryDetails: (requestId: nat) -> (Result_8);
   getRecoveryRequests: (orgId: opt OrgId, statusFilter:
    opt RecoveryRequestStatus) -> (Result_15);
   getRetentionMetadata: (req: GetRetentionMetadataRequest) ->

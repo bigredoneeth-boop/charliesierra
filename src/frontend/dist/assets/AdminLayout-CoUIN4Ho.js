@@ -1,4 +1,4 @@
-import { e as createLucideIcon, bj as React, r as reactExports, j as jsxRuntimeExports, bk as useRouterState, g as useAuth, s as cn, U as Users, aY as FileText, p as Settings, bl as LogOut, f as useNavigate } from "./index-D8Qg-lkp.js";
+import { e as createLucideIcon, bk as React, r as reactExports, j as jsxRuntimeExports, bl as useRouterState, Q as useNavigate, h as useAuth, f as cn, U as Users, bm as FileText, a1 as Settings, bn as LogOut } from "./index-CCR6Ctxt.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -199,6 +199,7 @@ function SidebarNavItem({
 function AdminSidebar({ collapsed }) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const navigate = useNavigate();
   const { principal, logout } = useAuth();
   const expiryCount = usePolicyExpiryStore((s) => s.expiryCount);
   const principalText = (principal == null ? void 0 : principal.toText()) ?? "";
@@ -286,7 +287,10 @@ function AdminSidebar({ collapsed }) {
             {
               type: "button",
               "data-ocid": "admin.logout_button",
-              onClick: logout,
+              onClick: () => {
+                logout();
+                navigate({ to: "/" });
+              },
               className: cn(
                 "flex w-full items-center gap-3 rounded-sm px-3 py-2 text-sm",
                 "text-muted-foreground hover:text-destructive hover:bg-destructive/10",

@@ -652,6 +652,7 @@ export enum AuditEventType {
     messageQueueDrained = "messageQueueDrained",
     memberReactivated = "memberReactivated",
     legalHoldPlaced = "legalHoldPlaced",
+    keyRecoveryCompleted = "keyRecoveryCompleted",
     keyRecoveryRejected = "keyRecoveryRejected",
     adminAction = "adminAction",
     orgSettingsUpdated = "orgSettingsUpdated",
@@ -668,6 +669,7 @@ export enum AuditEventType {
     userRemoved = "userRemoved",
     priorityMessageSent = "priorityMessageSent",
     orgUpdated = "orgUpdated",
+    keyEscrowEnrolled = "keyEscrowEnrolled",
     memberRoleChanged = "memberRoleChanged"
 }
 export enum AuditExportEventType {
@@ -682,6 +684,7 @@ export enum AuditExportEventType {
     callInitiated = "callInitiated",
     keyRecoveryApproved = "keyRecoveryApproved",
     keyRecoveryInitiated = "keyRecoveryInitiated",
+    keyRecoveryCompleted = "keyRecoveryCompleted",
     keyRecoveryRejected = "keyRecoveryRejected",
     adminAction = "adminAction",
     auditLogExported = "auditLogExported",
@@ -692,6 +695,7 @@ export enum AuditExportEventType {
     memberRemoved = "memberRemoved",
     orgSuspended = "orgSuspended",
     userRemoved = "userRemoved",
+    keyEscrowEnrolled = "keyEscrowEnrolled",
     memberRoleChanged = "memberRoleChanged"
 }
 export enum AuditExportFormat {
@@ -811,6 +815,13 @@ export interface backendInterface {
     disableGroupRetention(convId: ConversationId): Promise<Result_6>;
     enableGroupRetention(convId: ConversationId): Promise<Result_6>;
     enrollKeyEscrow(deviceId: string, deviceLabel: string, devicePublicKeyFingerprint: string, wrappedKey: Uint8Array, consentLanguageVersion: string): Promise<Result_6>;
+    enrollUserKeyEscrow(): Promise<{
+        __kind__: "ok";
+        ok: string;
+    } | {
+        __kind__: "err";
+        err: string;
+    }>;
     exportAuditLog(req: AuditExportRequest): Promise<Result_26>;
     exportAuditLogs(req: ExportAuditLogsRequest): Promise<Result_25>;
     exportConfigBundle(): Promise<Result_27>;
@@ -824,6 +835,20 @@ export interface backendInterface {
     }>;
     getConversation(id: ConversationId): Promise<ConversationPublic | null>;
     getDeploymentInfo(): Promise<SovereignConfig>;
+    getEncryptedEscrowKey(targetPrincipal: UserId, transportPublicKey: Uint8Array): Promise<{
+        __kind__: "ok";
+        ok: Uint8Array;
+    } | {
+        __kind__: "err";
+        err: string;
+    }>;
+    getEscrowPublicKey(): Promise<{
+        __kind__: "ok";
+        ok: Uint8Array;
+    } | {
+        __kind__: "err";
+        err: string;
+    }>;
     getEscrowStats(): Promise<Result_24>;
     getEscrowedUsers(req: GetEscrowedUsersRequest): Promise<Result_23>;
     getGlobalRetentionPolicy(): Promise<RetentionPolicy | null>;
@@ -840,6 +865,7 @@ export interface backendInterface {
     getOrgSettings(orgId: string): Promise<OrgSettings>;
     getOrgUsers(req: GetOrgUsersRequest): Promise<Result_16>;
     getPlatformSettings(): Promise<PlatformSettings>;
+    getRecoveryDetails(requestId: bigint): Promise<Result_8>;
     getRecoveryRequests(orgId: OrgId | null, statusFilter: RecoveryRequestStatus | null): Promise<Result_15>;
     getRetentionMetadata(req: GetRetentionMetadataRequest): Promise<Result_14>;
     getRetentionPolicies(req: GetRetentionPoliciesRequest): Promise<Array<RetentionPolicy>>;

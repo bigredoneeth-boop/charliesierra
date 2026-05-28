@@ -671,3 +671,62 @@ export function useRejectKeyRecovery() {
     },
   });
 }
+
+// ── Mutation: enroll user in vetKeys key escrow ────────────────────────────────
+export function useEnrollUserKeyEscrow() {
+  const queryClient = useQueryClient();
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async (_principalId: string) => {
+      if (!actor) throw new Error("Actor not ready");
+      // getEncryptedEscrowKey / enrollUserKeyEscrow not yet in canister bindings.
+      // Throw a clear error so callers know to redeploy and run pnpm bindgen.
+      const fn = (actor as unknown as Record<string, unknown>)
+        .enrollUserKeyEscrow;
+      if (typeof fn !== "function") {
+        throw new Error(
+          "vetKeys enrollment not yet available in canister bindings. Please redeploy and run pnpm bindgen.",
+        );
+      }
+      const result = (await fn.call(actor)) as { ok?: string; err?: string };
+      if ("err" in result && result.err !== undefined)
+        throw new Error(result.err);
+      return result.ok ?? "Enrolled";
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ["admin", "escrowed-users"],
+      });
+    },
+  });
+}
+
+// ── Mutation: get encrypted escrow key via vetKeys transport ─────────────────
+export function useGetEncryptedEscrowKey() {
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async ({
+      targetPrincipal,
+      transportPublicKey,
+    }: { targetPrincipal: string; transportPublicKey: Uint8Array }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const { Principal } = await import("@dfinity/principal");
+      const fn = (actor as unknown as Record<string, unknown>)
+        .getEncryptedEscrowKey;
+      if (typeof fn !== "function") {
+        throw new Error(
+          "getEncryptedEscrowKey not available in canister bindings.",
+        );
+      }
+      const result = (await fn.call(
+        actor,
+        Principal.fromText(targetPrincipal),
+        transportPublicKey,
+      )) as { ok?: Uint8Array; err?: string };
+      if ("err" in result && result.err !== undefined)
+        throw new Error(result.err);
+      if (!result.ok) throw new Error("No key data returned");
+      return result.ok;
+    },
+  });
+}

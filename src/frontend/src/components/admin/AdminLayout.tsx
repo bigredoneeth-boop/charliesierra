@@ -121,6 +121,7 @@ function SidebarNavItem({
 function AdminSidebar({ collapsed }: { collapsed: boolean }) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const navigate = useNavigate();
   const { principal, logout } = useAuth();
   const expiryCount = usePolicyExpiryStore((s) => s.expiryCount);
 
@@ -222,7 +223,10 @@ function AdminSidebar({ collapsed }: { collapsed: boolean }) {
         <button
           type="button"
           data-ocid="admin.logout_button"
-          onClick={logout}
+          onClick={() => {
+            logout();
+            navigate({ to: "/" });
+          }}
           className={cn(
             "flex w-full items-center gap-3 rounded-sm px-3 py-2 text-sm",
             "text-muted-foreground hover:text-destructive hover:bg-destructive/10",

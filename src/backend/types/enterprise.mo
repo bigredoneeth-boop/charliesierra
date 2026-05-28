@@ -2,6 +2,48 @@ import Common "common";
 import OrgTypes "orgs";
 
 module {
+  // ── vetKD System API Types ──────────────────────────────────────────────
+
+  public type VetKdCurve = { #bls12_381_g2 };
+
+  public type VetKdKeyId = {
+    curve : VetKdCurve;
+    name  : Text;
+  };
+
+  public type VetKdPublicKeyRequest = {
+    canister_id : ?Principal;
+    context     : Blob;
+    key_id      : VetKdKeyId;
+  };
+
+  public type VetKdPublicKeyResponse = {
+    public_key : Blob;
+  };
+
+  public type VetKdDeriveKeyRequest = {
+    input                : Blob;
+    context              : Blob;
+    transport_public_key : Blob;
+    key_id               : VetKdKeyId;
+  };
+
+  public type VetKdDeriveKeyResponse = {
+    encrypted_key : Blob;
+  };
+
+  // ── vetKeys Escrow Enrollment ─────────────────────────────────────────────
+
+  /// Lightweight enrollment record created when a user self-enrolls via vetKeys.
+  /// No wrapped key is stored — key material is derived on-demand via the
+  /// management canister when a recovery request is approved.
+  public type VetEscrowRecord = {
+    principal        : Common.UserId;
+    enrolledAt       : Common.Timestamp;
+    status           : { #active; #revoked };
+    keyDerivationInput : Blob; // Principal.toBlob(principal)
+  };
+
   // ── Retention Metadata ───────────────────────────────────────────────────
 
   /// Metadata-only record for a message subject to group retention policy.
@@ -154,5 +196,7 @@ module {
     #keyRecoveryInitiated;
     #keyRecoveryApproved;
     #keyRecoveryRejected;
+    #keyRecoveryCompleted;
+    #keyEscrowEnrolled;
   };
 };

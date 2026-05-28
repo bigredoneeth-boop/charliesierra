@@ -11,8 +11,26 @@ import Principal "mo:core/Principal";
 import Int "mo:core/Int";
 import Text "mo:core/Text";
 import Iter "mo:core/Iter";
+import Blob "mo:core/Blob";
+import Nat8 "mo:core/Nat8";
 
 module {
+  // ── Management Canister Interface (vetKD) ─────────────────────────────────
+
+  let managementCanister : actor {
+    vetkd_public_key : (T.VetKdPublicKeyRequest) -> async T.VetKdPublicKeyResponse;
+    vetkd_derive_key : (T.VetKdDeriveKeyRequest) -> async T.VetKdDeriveKeyResponse;
+  } = actor "aaaaa-aa";
+
+  /// Shared vetKD key identity used throughout CharlieSierra escrow.
+  let escrowKeyId : T.VetKdKeyId = {
+    curve = #bls12_381_g2;
+    name  = "key_1";
+  };
+
+  /// Shared derivation context — must match across all calls.
+  let escrowContext : Blob = "\63\68\61\72\6c\69\65\73\69\65\72\72\61\5f\6b\65\79\5f\65\73\63\72\6f\77\5f\76\31";
+
   // ── State ──────────────────────────────────────────────────────────────────
 
   public type State = {
@@ -21,10 +39,155 @@ module {
     escrowRecords      : Map.Map<(Common.UserId, Text), T.EscrowRecord>;
     escrowGrants         : Map.Map<Nat, T.EscrowAccessGrant>;
     recoveryRequests     : Map.Map<Nat, T.RecoveryRequest>;
+    vetEscrowRecords     : Map.Map<Common.UserId, T.VetEscrowRecord>;
     state                : { var nextGrantId : Nat; var nextRecoveryRequestId : Nat };
   };
 
   // ── Helpers ────────────────────────────────────────────────────────────────
+
+  /// Compute a human-readable fingerprint from a Blob by formatting the
+  /// first 8 bytes as colon-separated hex pairs (e.g. "a1:b2:c3:d4:e5:f6:07:08").
+  /// Used for vetKeys audit log entries — never logs raw key material.
+  func blobFingerprint(b : Blob) : Text {
+    let bytes = b.toArray();
+    var out = "";
+    var i = 0;
+    let limit = if (bytes.size() < 8) bytes.size() else 8;
+    while (i < limit) {
+      let byte = bytes[i];
+      let hi = byte / 16;
+      let lo = byte % 16;
+      let hexChar = func(n : Nat8) : Text {
+        if (n < 10) n.toText()
+        else if (n == 10) "a" else if (n == 11) "b" else if (n == 12) "c"
+        else if (n == 13) "d" else if (n == 14) "e" else "f"
+      };
+      if (i > 0) { out #= ":" };
+      out #= hexChar(hi) # hexChar(lo);
+      i += 1;
+    };
+    out
+  };
+
+  /// Build the derivation ID as a hex fingerprint of the escrow context blob.
+  func derivationId() : Text {
+    blobFingerprint(escrowContext)
+  };
+
+  // ── vetKeys Escrow Methods ─────────────────────────────────────────────────
+
+  /// Retrieve the canister's vetKD public key for the escrow context.
+  /// Any caller may call this — used by clients to encrypt transport keys.
+  /// Returns the BLS12-381 G2 public key blob.
+  public func getEscrowPublicKey(
+    adminState : AdminLib.State,
+    caller     : Common.UserId,
+  ) : async Common.Result<Blob, Text> {
+    let req : T.VetKdPublicKeyRequest = {
+      canister_id = null;
+      context     = escrowContext;
+      key_id      = escrowKeyId;
+    };
+    let resp = await managementCanister.vetkd_public_key(req);
+    AdminLib.recordEvent(adminState, #adminAction, caller, null, null);
+    #ok(resp.public_key);
+  };
+
+  /// Self-enroll the calling principal into vetKeys-based escrow.
+  /// Creates a VetEscrowRecord keyed by the caller's principal.
+  /// Returns an error if the caller is already enrolled.
+  public func enrollUserKeyEscrow(
+    s          : State,
+    adminState : AdminLib.State,
+    caller     : Common.UserId,
+  ) : Common.Result<Text, Text> {
+    switch (s.vetEscrowRecords.get(caller)) {
+      case (?existing) {
+        if (existing.status == #active) {
+          return #err("Already enrolled");
+        };
+        // Allow re-enrollment if previously revoked
+      };
+      case null {};
+    };
+    let record : T.VetEscrowRecord = {
+      principal          = caller;
+      enrolledAt         = Time.now();
+      status             = #active;
+      keyDerivationInput = caller.toBlob();
+    };
+    s.vetEscrowRecords.add(caller, record);
+    AdminLib.recordEvent(adminState, #keyEscrowEnrolled, caller, null, null);
+    #ok("Enrolled successfully");
+  };
+
+  /// Derive and return a transport-encrypted escrow key for a target principal.
+  /// Caller must be Super Admin or Org Admin.
+  /// Target must have an approved recovery request with dual-control satisfied
+  /// (initiatedBy != approvedBy and approvedBy is set).
+  /// The recovery request is marked #completed after successful derivation.
+  public func getEncryptedEscrowKey(
+    s                  : State,
+    adminState         : AdminLib.State,
+    caller             : Common.UserId,
+    targetPrincipal    : Common.UserId,
+    transportPublicKey : Blob,
+  ) : async Common.Result<Blob, Text> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err("Unauthorized: admin role required");
+    };
+    // Find an approved recovery request for this target with dual-control satisfied
+    var approvedRequest : ?T.RecoveryRequest = null;
+    for ((_rid, rr) in s.recoveryRequests.entries()) {
+      if (
+        Principal.equal(rr.targetUserId, targetPrincipal) and
+        rr.status == #approved
+      ) {
+        switch (rr.approvedBy) {
+          case (?approver) {
+            if (not Principal.equal(rr.initiatingAdmin, approver)) {
+              approvedRequest := ?rr;
+            };
+          };
+          case null {};
+        };
+      };
+    };
+    let rr = switch (approvedRequest) {
+      case null {
+        return #err("No approved dual-control recovery request found for this principal");
+      };
+      case (?r) r;
+    };
+    // Call management canister to derive the encrypted key
+    let deriveReq : T.VetKdDeriveKeyRequest = {
+      input                = targetPrincipal.toBlob();
+      context              = escrowContext;
+      transport_public_key = transportPublicKey;
+      key_id               = escrowKeyId;
+    };
+    let deriveResp = await managementCanister.vetkd_derive_key(deriveReq);
+    // Mark the recovery request as completed
+    let completed : T.RecoveryRequest = {
+      rr with
+      status     = #completed;
+      resolvedAt = ?Time.now();
+    };
+    s.recoveryRequests.add(rr.id, completed);
+    // Build JSON audit metadata with compliance details — no raw key material
+    let transportFingerprint = blobFingerprint(transportPublicKey);
+    let derivId = derivationId();
+    let detailsJson =
+      "{" #
+      "\"recoveryId\":" # rr.id.toText() # "," #
+      "\"targetPrincipal\":\"" # targetPrincipal.toText() # "\"," #
+      "\"transportKeyFingerprint\":\"" # transportFingerprint # "\"," #
+      "\"derivationId\":\"" # derivId # "\"" #
+      "}";
+    let detailsBlob = ?detailsJson.encodeUtf8();
+    AdminLib.recordEvent(adminState, #keyRecoveryCompleted, caller, ?targetPrincipal, detailsBlob);
+    #ok(deriveResp.encrypted_key);
+  };
 
   func escrowKey(userId : Common.UserId, deviceId : Text) : (Common.UserId, Text) {
     (userId, deviceId);
@@ -386,6 +549,8 @@ module {
       case (#keyRecoveryInitiated, #keyRecoveryInitiated) true;
       case (#keyRecoveryApproved, #keyRecoveryApproved) true;
       case (#keyRecoveryRejected, #keyRecoveryRejected) true;
+      case (#keyRecoveryCompleted, #keyRecoveryCompleted) true;
+      case (#keyEscrowEnrolled, #keyEscrowEnrolled) true;
       case (#retentionPolicyCreated, #retentionPolicyCreated) true;
       case (#retentionPolicyUpdated, #retentionPolicyUpdated) true;
       case (#legalHoldPlaced, #legalHoldPlaced) true;
@@ -427,6 +592,8 @@ module {
       case (#keyRecoveryInitiated)   "keyRecoveryInitiated";
       case (#keyRecoveryApproved)    "keyRecoveryApproved";
       case (#keyRecoveryRejected)    "keyRecoveryRejected";
+      case (#keyRecoveryCompleted)   "keyRecoveryCompleted";
+      case (#keyEscrowEnrolled)      "keyEscrowEnrolled";
       case (#retentionPolicyCreated) "retentionPolicyCreated";
       case (#retentionPolicyUpdated) "retentionPolicyUpdated";
       case (#legalHoldPlaced)        "legalHoldPlaced";
@@ -675,7 +842,20 @@ module {
       orgId;
     };
     s.recoveryRequests.add(requestId, request);
-    AdminLib.recordEvent(adminState, #keyRecoveryInitiated, caller, ?targetUserId, null);
+    // Build JSON audit metadata — no key material ever included
+    let orgIdText = switch (orgId) {
+      case (?oid) "\"" # oid # "\"";
+      case null "null";
+    };
+    let detailsJson =
+      "{" #
+      "\"recoveryId\":" # requestId.toText() # "," #
+      "\"targetPrincipal\":\"" # targetUserId.toText() # "\"," #
+      "\"orgId\":" # orgIdText # "," #
+      "\"reason\":\"" # reason # "\"" #
+      "}";
+    let detailsBlob = ?detailsJson.encodeUtf8();
+    AdminLib.recordEvent(adminState, #keyRecoveryInitiated, caller, ?targetUserId, detailsBlob);
     #ok(request);
   };
 
@@ -705,7 +885,16 @@ module {
           resolvedAt = ?Time.now();
         };
         s.recoveryRequests.add(requestId, updated);
-        AdminLib.recordEvent(adminState, #keyRecoveryApproved, caller, ?rr.targetUserId, null);
+        // Build JSON audit metadata with technical details for compliance
+        let detailsJson =
+          "{" #
+          "\"recoveryId\":" # requestId.toText() # "," #
+          "\"approverPrincipal\":\"" # caller.toText() # "\"," #
+          "\"targetPrincipal\":\"" # rr.targetUserId.toText() # "\"," #
+          "\"derivationId\":\"" # derivationId() # "\"" #
+          "}";
+        let detailsBlob = ?detailsJson.encodeUtf8();
+        AdminLib.recordEvent(adminState, #keyRecoveryApproved, caller, ?rr.targetUserId, detailsBlob);
         #ok(updated);
       };
     };
@@ -732,9 +921,34 @@ module {
           resolvedAt = ?Time.now();
         };
         s.recoveryRequests.add(requestId, updated);
-        AdminLib.recordEvent(adminState, #keyRecoveryRejected, caller, ?rr.targetUserId, null);
+        // Build JSON audit metadata — no key material ever included
+        let detailsJson =
+          "{" #
+          "\"recoveryId\":" # requestId.toText() # "," #
+          "\"rejectorPrincipal\":\"" # caller.toText() # "\"," #
+          "\"reason\":\"" # rr.reason # "\"" #
+          "}";
+        let detailsBlob = ?detailsJson.encodeUtf8();
+        AdminLib.recordEvent(adminState, #keyRecoveryRejected, caller, ?rr.targetUserId, detailsBlob);
         #ok(updated);
       };
+    };
+  };
+
+  /// Return a single recovery request by ID.
+  /// Caller must be Super Admin or Org Admin of the target org.
+  public func getRecoveryDetails(
+    s          : State,
+    adminState : AdminLib.State,
+    caller     : Common.UserId,
+    requestId  : Nat,
+  ) : Common.Result<T.RecoveryRequest, Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
+    switch (s.recoveryRequests.get(requestId)) {
+      case null { #err(#notFound) };
+      case (?rr) { #ok(rr) };
     };
   };
 

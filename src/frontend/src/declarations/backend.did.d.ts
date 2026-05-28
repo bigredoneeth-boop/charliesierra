@@ -58,6 +58,7 @@ export type AuditEventType = { 'legalHoldRemoved' : null } |
   { 'messageQueueDrained' : null } |
   { 'memberReactivated' : null } |
   { 'legalHoldPlaced' : null } |
+  { 'keyRecoveryCompleted' : null } |
   { 'keyRecoveryRejected' : null } |
   { 'adminAction' : null } |
   { 'orgSettingsUpdated' : null } |
@@ -74,6 +75,7 @@ export type AuditEventType = { 'legalHoldRemoved' : null } |
   { 'userRemoved' : null } |
   { 'priorityMessageSent' : null } |
   { 'orgUpdated' : null } |
+  { 'keyEscrowEnrolled' : null } |
   { 'memberRoleChanged' : null };
 export type AuditExportEventType = { 'memberSuspended' : null } |
   { 'userInvited' : null } |
@@ -86,6 +88,7 @@ export type AuditExportEventType = { 'memberSuspended' : null } |
   { 'callInitiated' : null } |
   { 'keyRecoveryApproved' : null } |
   { 'keyRecoveryInitiated' : null } |
+  { 'keyRecoveryCompleted' : null } |
   { 'keyRecoveryRejected' : null } |
   { 'adminAction' : null } |
   { 'auditLogExported' : null } |
@@ -96,6 +99,7 @@ export type AuditExportEventType = { 'memberSuspended' : null } |
   { 'memberRemoved' : null } |
   { 'orgSuspended' : null } |
   { 'userRemoved' : null } |
+  { 'keyEscrowEnrolled' : null } |
   { 'memberRoleChanged' : null };
 export type AuditExportFormat = { 'csv' : null } |
   { 'json' : null };
@@ -640,6 +644,11 @@ export interface _SERVICE {
     [string, string, string, Uint8Array, string],
     Result_6
   >,
+  'enrollUserKeyEscrow' : ActorMethod<
+    [],
+    { 'ok' : string } |
+      { 'err' : string }
+  >,
   'exportAuditLog' : ActorMethod<[AuditExportRequest], Result_26>,
   'exportAuditLogs' : ActorMethod<[ExportAuditLogsRequest], Result_25>,
   'exportConfigBundle' : ActorMethod<[], Result_27>,
@@ -656,6 +665,16 @@ export interface _SERVICE {
   >,
   'getConversation' : ActorMethod<[ConversationId], [] | [ConversationPublic]>,
   'getDeploymentInfo' : ActorMethod<[], SovereignConfig>,
+  'getEncryptedEscrowKey' : ActorMethod<
+    [UserId, Uint8Array],
+    { 'ok' : Uint8Array } |
+      { 'err' : string }
+  >,
+  'getEscrowPublicKey' : ActorMethod<
+    [],
+    { 'ok' : Uint8Array } |
+      { 'err' : string }
+  >,
   'getEscrowStats' : ActorMethod<[], Result_24>,
   'getEscrowedUsers' : ActorMethod<[GetEscrowedUsersRequest], Result_23>,
   'getGlobalRetentionPolicy' : ActorMethod<[], [] | [RetentionPolicy]>,
@@ -675,6 +694,7 @@ export interface _SERVICE {
   'getOrgSettings' : ActorMethod<[string], OrgSettings>,
   'getOrgUsers' : ActorMethod<[GetOrgUsersRequest], Result_16>,
   'getPlatformSettings' : ActorMethod<[], PlatformSettings>,
+  'getRecoveryDetails' : ActorMethod<[bigint], Result_8>,
   'getRecoveryRequests' : ActorMethod<
     [[] | [OrgId], [] | [RecoveryRequestStatus]],
     Result_15

@@ -1,7 +1,7 @@
-import { e as createLucideIcon, j as jsxRuntimeExports, aD as EmptyState, t as ShieldCheck, c as Badge, a as Skeleton, A as AuditEventType, r as reactExports, d as ue, w as Copy, h as useIsSuperAdmin, k as useMyOrgs, x as useMyRole, aE as OrgRole, aF as Principal, n as useAdminAuditLog, aG as useExportAuditLogs, aH as Lock, B as Button, aI as Download, X } from "./index-D8Qg-lkp.js";
-import { A as AdminLayout } from "./AdminLayout-xwrGurkx.js";
-import { S as ShieldAlert } from "./shield-alert-3SVvELxx.js";
-import { F as Funnel } from "./funnel-BEdq87Ln.js";
+import { e as createLucideIcon, j as jsxRuntimeExports, aD as EmptyState, a4 as ShieldCheck, c as Badge, a as Skeleton, a2 as AuditEventType, r as reactExports, d as ue, a6 as Copy, V as useIsSuperAdmin, X as useMyOrgs, a7 as useMyRole, O as OrgRole, aC as Principal, _ as useAdminAuditLog, aE as useExportAuditLogs, aF as Lock, B as Button, aG as Download, ab as X } from "./index-CCR6Ctxt.js";
+import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
+import { S as ShieldAlert } from "./shield-alert-BPskbdXS.js";
+import { F as Funnel } from "./funnel-CnTl0KvR.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -161,6 +161,14 @@ const EVENT_TYPE_META = {
   [AuditEventType.orgSettingsUpdated]: {
     label: "Org Settings Updated",
     className: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20"
+  },
+  [AuditEventType.keyRecoveryCompleted]: {
+    label: "Key Recovery Completed",
+    className: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+  },
+  [AuditEventType.keyEscrowEnrolled]: {
+    label: "Key Escrow Enrolled",
+    className: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
   }
 };
 const FALLBACK_META = {
