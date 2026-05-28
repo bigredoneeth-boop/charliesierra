@@ -2,6 +2,7 @@ import Common "../types/common";
 import T "../types/enterprise";
 import AdminT "../types/admin";
 import AdminLib "admin";
+import OrgTypes "../types/orgs";
 import ConvT "../types/conversations";
 import Map "mo:core/Map";
 import List "mo:core/List";
@@ -18,8 +19,9 @@ module {
     retentionPolicies  : Map.Map<Common.ConversationId, T.GroupRetentionPolicy>;
     retentionMetadata  : List.List<T.RetentionMetadataRecord>;
     escrowRecords      : Map.Map<(Common.UserId, Text), T.EscrowRecord>;
-    escrowGrants       : Map.Map<Nat, T.EscrowAccessGrant>;
-    state              : { var nextGrantId : Nat };
+    escrowGrants         : Map.Map<Nat, T.EscrowAccessGrant>;
+    recoveryRequests     : Map.Map<Nat, T.RecoveryRequest>;
+    state                : { var nextGrantId : Nat; var nextRecoveryRequestId : Nat };
   };
 
   // ── Helpers ────────────────────────────────────────────────────────────────
@@ -372,6 +374,24 @@ module {
       case (#escrowRevoked,    #escrowRevoked)    true;
       case (#escrowAccessGranted, #escrowAccessGranted) true;
       case (#auditLogExported, #auditLogExported) true;
+      case (#orgCreated,       #orgCreated)       true;
+      case (#orgUpdated,       #orgUpdated)       true;
+      case (#orgSuspended,     #orgSuspended)     true;
+      case (#orgDeleted,       #orgDeleted)       true;
+      case (#userInvited,      #userInvited)      true;
+      case (#memberRoleChanged, #memberRoleChanged) true;
+      case (#memberSuspended,  #memberSuspended)  true;
+      case (#memberReactivated, #memberReactivated) true;
+      case (#groupMemberRemoved, #groupMemberRemoved) true;
+      case (#keyRecoveryInitiated, #keyRecoveryInitiated) true;
+      case (#keyRecoveryApproved, #keyRecoveryApproved) true;
+      case (#keyRecoveryRejected, #keyRecoveryRejected) true;
+      case (#retentionPolicyCreated, #retentionPolicyCreated) true;
+      case (#retentionPolicyUpdated, #retentionPolicyUpdated) true;
+      case (#legalHoldPlaced, #legalHoldPlaced) true;
+      case (#legalHoldRemoved, #legalHoldRemoved) true;
+      case (#policyReportExported, #policyReportExported) true;
+      case (#policyExpiryCheckPerformed, #policyExpiryCheckPerformed) true;
       case _ false;
     };
   };
@@ -395,6 +415,26 @@ module {
       case (#priorityMessageSent)     "priorityMessageSent";
       case (#sovereignConfigUpdated)  "sovereignConfigUpdated";
       case (#compartmentAssigned)     "compartmentAssigned";
+      case (#orgCreated)          "orgCreated";
+      case (#orgUpdated)          "orgUpdated";
+      case (#orgSuspended)        "orgSuspended";
+      case (#orgDeleted)          "orgDeleted";
+      case (#userInvited)         "userInvited";
+      case (#memberRoleChanged)   "memberRoleChanged";
+      case (#memberSuspended)      "memberSuspended";
+      case (#memberReactivated)    "memberReactivated";
+      case (#groupMemberRemoved)   "groupMemberRemoved";
+      case (#keyRecoveryInitiated)   "keyRecoveryInitiated";
+      case (#keyRecoveryApproved)    "keyRecoveryApproved";
+      case (#keyRecoveryRejected)    "keyRecoveryRejected";
+      case (#retentionPolicyCreated) "retentionPolicyCreated";
+      case (#retentionPolicyUpdated) "retentionPolicyUpdated";
+      case (#legalHoldPlaced)        "legalHoldPlaced";
+      case (#legalHoldRemoved)       "legalHoldRemoved";
+      case (#policyReportExported)       "policyReportExported";
+      case (#policyExpiryCheckPerformed) "policyExpiryCheckPerformed";
+      case (#platformSettingsUpdated)    "platformSettingsUpdated";
+      case (#orgSettingsUpdated)         "orgSettingsUpdated";
     };
   };
 
@@ -497,6 +537,234 @@ module {
           results.add(record);
         };
       };
+    };
+    #ok(results.toArray());
+  };
+  // ── Admin Escrow Dashboard ────────────────────────────────────────────────
+
+  /// Return a summary record for every user who has at least one escrow record.
+  /// Only Super Admins or Org Admins may call this.
+  public func getEscrowedUsers(
+    s          : State,
+    adminState : AdminLib.State,
+    caller     : Common.UserId,
+    req        : T.GetEscrowedUsersRequest,
+  ) : Common.Result<[T.EscrowedUserRecord], Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
+    let effectiveLimit = if (req.limit == 0) { 50 } else { req.limit };
+    let seen = Map.empty<Common.UserId, Bool>();
+    let results = List.empty<T.EscrowedUserRecord>();
+    let afterText = req.afterUserId;
+    for (((uid, _deviceId), _record) in s.escrowRecords.entries()) {
+      switch (seen.get(uid)) {
+        case (?_) {};
+        case null {
+          seen.add(uid, true);
+          let skip = switch (afterText) {
+            case (?cursor) {
+              switch (Text.compare(uid.toText(), cursor)) {
+                case (#less) true;
+                case (#equal) true;
+                case (#greater) false;
+              };
+            };
+            case null false;
+          };
+          if (not skip and results.size() < effectiveLimit) {
+            let userRecords = List.empty<T.EscrowRecord>();
+            for (((k0, _k1), v) in s.escrowRecords.entries()) {
+              if (Principal.equal(k0, uid)) { userRecords.add(v) };
+            };
+            let deviceCount = userRecords.size();
+            var lastBackedUp : ?Common.Timestamp = null;
+            for (rec in userRecords.values()) {
+              let ts = rec.consentTimestamp;
+              lastBackedUp := switch (lastBackedUp) {
+                case null ?ts;
+                case (?existing) ?(if (ts > existing) ts else existing);
+              };
+            };
+            var hasPendingRecovery = false;
+            for ((_rid, rr) in s.recoveryRequests.entries()) {
+              if (Principal.equal(rr.targetUserId, uid) and rr.status == #pending) {
+                hasPendingRecovery := true;
+              };
+            };
+            let hasActive = userRecords.find(
+              func(r : T.EscrowRecord) : Bool { r.revokedAt == null }
+            ) != null;
+            let escrowStatus : T.EscrowStatus =
+              if (hasPendingRecovery) #pendingRecovery
+              else if (hasActive) #active
+              else #revoked;
+            let record : T.EscrowedUserRecord = {
+              userId = uid;
+              orgId = req.orgId;
+              escrowStatus;
+              lastBackedUp;
+              deviceCount;
+            };
+            results.add(record);
+          };
+        };
+      };
+    };
+    #ok(results.toArray());
+  };
+
+  /// Return platform-wide escrow statistics. Super Admin only.
+  public func getEscrowStats(
+    s          : State,
+    adminState : AdminLib.State,
+    caller     : Common.UserId,
+  ) : Common.Result<T.EscrowStatsRecord, Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
+    let seen = Map.empty<Common.UserId, Bool>();
+    for (((uid, _), _) in s.escrowRecords.entries()) {
+      seen.add(uid, true);
+    };
+    let totalEscrowed = seen.size();
+    var pendingRecoveries = 0;
+    for ((_rid, rr) in s.recoveryRequests.entries()) {
+      if (rr.status == #pending) { pendingRecoveries += 1 };
+    };
+    var lastRecoveryTimestamp : ?Common.Timestamp = null;
+    for ((_gid, grant) in s.escrowGrants.entries()) {
+      let ts = grant.grantTimestamp;
+      lastRecoveryTimestamp := switch (lastRecoveryTimestamp) {
+        case null ?ts;
+        case (?existing) ?(if (ts > existing) ts else existing);
+      };
+    };
+    #ok({ totalEscrowed; pendingRecoveries; lastRecoveryTimestamp });
+  };
+
+  /// Initiate a dual-control key recovery request.
+  /// Org Admins and Super Admins may call. Caller cannot target themselves.
+  public func initiateKeyRecovery(
+    s              : State,
+    adminState     : AdminLib.State,
+    caller         : Common.UserId,
+    targetUserId   : Common.UserId,
+    targetDeviceId : Text,
+    reason         : Text,
+    orgId          : ?OrgTypes.OrgId,
+  ) : Common.Result<T.RecoveryRequest, Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
+    if (Principal.equal(caller, targetUserId)) {
+      return #err(#forbidden);
+    };
+    let requestId = s.state.nextRecoveryRequestId;
+    s.state.nextRecoveryRequestId += 1;
+    let request : T.RecoveryRequest = {
+      id               = requestId;
+      targetUserId;
+      targetDeviceId;
+      initiatingAdmin  = caller;
+      approvedBy       = null;
+      status           = #pending;
+      reason;
+      createdAt        = Time.now();
+      resolvedAt       = null;
+      orgId;
+    };
+    s.recoveryRequests.add(requestId, request);
+    AdminLib.recordEvent(adminState, #keyRecoveryInitiated, caller, ?targetUserId, null);
+    #ok(request);
+  };
+
+  /// Approve a pending dual-control key recovery request.
+  /// The approving admin must be different from the initiating admin (dual control).
+  public func approveKeyRecovery(
+    s          : State,
+    adminState : AdminLib.State,
+    caller     : Common.UserId,
+    requestId  : Nat,
+  ) : Common.Result<T.RecoveryRequest, Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
+    switch (s.recoveryRequests.get(requestId)) {
+      case null { #err(#notFound) };
+      case (?rr) {
+        if (rr.status != #pending) { return #err(#forbidden) };
+        if (Principal.equal(caller, rr.initiatingAdmin)) {
+          return #err(#forbidden);
+        };
+        ignore adminGrantEscrowAccess(s, adminState, caller, rr.targetUserId, rr.targetDeviceId, rr.reason);
+        let updated : T.RecoveryRequest = {
+          rr with
+          status     = #approved;
+          approvedBy = ?caller;
+          resolvedAt = ?Time.now();
+        };
+        s.recoveryRequests.add(requestId, updated);
+        AdminLib.recordEvent(adminState, #keyRecoveryApproved, caller, ?rr.targetUserId, null);
+        #ok(updated);
+      };
+    };
+  };
+
+  /// Reject a pending dual-control key recovery request.
+  public func rejectKeyRecovery(
+    s          : State,
+    adminState : AdminLib.State,
+    caller     : Common.UserId,
+    requestId  : Nat,
+  ) : Common.Result<T.RecoveryRequest, Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
+    switch (s.recoveryRequests.get(requestId)) {
+      case null { #err(#notFound) };
+      case (?rr) {
+        if (rr.status != #pending) { return #err(#forbidden) };
+        let updated : T.RecoveryRequest = {
+          rr with
+          status     = #rejected;
+          approvedBy = ?caller;
+          resolvedAt = ?Time.now();
+        };
+        s.recoveryRequests.add(requestId, updated);
+        AdminLib.recordEvent(adminState, #keyRecoveryRejected, caller, ?rr.targetUserId, null);
+        #ok(updated);
+      };
+    };
+  };
+
+  /// List recovery requests, optionally filtered by orgId and/or status.
+  public func getRecoveryRequests(
+    s            : State,
+    adminState   : AdminLib.State,
+    caller       : Common.UserId,
+    orgId        : ?OrgTypes.OrgId,
+    statusFilter : ?T.RecoveryRequestStatus,
+  ) : Common.Result<[T.RecoveryRequest], Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
+    let results = List.empty<T.RecoveryRequest>();
+    for ((_rid, rr) in s.recoveryRequests.entries()) {
+      let orgMatches = switch (orgId) {
+        case null true;
+        case (?oid) {
+          switch (rr.orgId) {
+            case (?rOid) rOid == oid;
+            case null false;
+          };
+        };
+      };
+      let statusMatches = switch (statusFilter) {
+        case null true;
+        case (?sf) rr.status == sf;
+      };
+      if (orgMatches and statusMatches) { results.add(rr) };
     };
     #ok(results.toArray());
   };

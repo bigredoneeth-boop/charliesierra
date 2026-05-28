@@ -1,3 +1,4 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-maT8H2u0.js","assets/card-__lwj4jH.js","assets/AdminDashboardPage-BHA49myE.js","assets/AdminLayout-xwrGurkx.js","assets/user-plus-CZ6NIyDs.js","assets/AdminOrganizationsPage-Cv5iVkav.js","assets/AdminStatusBadge-D272FGL2.js","assets/pencil-Cq9LHiG_.js","assets/shield-alert-3SVvELxx.js","assets/AdminUsersPage-kaRsGeKu.js","assets/funnel-BEdq87Ln.js","assets/AdminGroupsPage-DXZ0-Hje.js","assets/AdminAuditPage-BkYN_T42.js","assets/AdminKeyEscrowPage-6xKIDJTT.js","assets/AdminRetentionPoliciesPage-CTOCVc9H.js","assets/switch-J1WkqqZc.js","assets/AdminSettingsPage-C5Pv2U0p.js","assets/AdminBootstrapPage-DH_ullNh.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -74,6 +75,7 @@ function _mergeNamespaces(n, m2) {
     fetch(link.href, fetchOpts);
   }
 })();
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x3) {
   return x3 && x3.__esModule && Object.prototype.hasOwnProperty.call(x3, "default") ? x3["default"] : x3;
 }
@@ -14253,10 +14255,10 @@ react_production.version = "19.1.5";
   react.exports = react_production;
 }
 var reactExports = react.exports;
-const React2 = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
-const React$4 = /* @__PURE__ */ _mergeNamespaces({
+const React$4 = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
+const React$5 = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
-  default: React2
+  default: React$4
 }, [reactExports]);
 var QueryClientContext = reactExports.createContext(
   void 0
@@ -27569,10 +27571,10 @@ var jt = (n) => {
     default:
       return null;
   }
-}, te = Array(12).fill(0), Yt = ({ visible: n, className: e }) => React2.createElement("div", { className: ["sonner-loading-wrapper", e].filter(Boolean).join(" "), "data-visible": n }, React2.createElement("div", { className: "sonner-spinner" }, te.map((t, a2) => React2.createElement("div", { className: "sonner-loading-bar", key: `spinner-bar-${a2}` })))), ee = React2.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, React2.createElement("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z", clipRule: "evenodd" })), oe = React2.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", height: "20", width: "20" }, React2.createElement("path", { fillRule: "evenodd", d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z", clipRule: "evenodd" })), ae = React2.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, React2.createElement("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z", clipRule: "evenodd" })), se = React2.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, React2.createElement("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z", clipRule: "evenodd" })), Ot = React2.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }, React2.createElement("line", { x1: "18", y1: "6", x2: "6", y2: "18" }), React2.createElement("line", { x1: "6", y1: "6", x2: "18", y2: "18" }));
+}, te = Array(12).fill(0), Yt = ({ visible: n, className: e }) => React$4.createElement("div", { className: ["sonner-loading-wrapper", e].filter(Boolean).join(" "), "data-visible": n }, React$4.createElement("div", { className: "sonner-spinner" }, te.map((t, a2) => React$4.createElement("div", { className: "sonner-loading-bar", key: `spinner-bar-${a2}` })))), ee = React$4.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, React$4.createElement("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z", clipRule: "evenodd" })), oe = React$4.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", height: "20", width: "20" }, React$4.createElement("path", { fillRule: "evenodd", d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z", clipRule: "evenodd" })), ae = React$4.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, React$4.createElement("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z", clipRule: "evenodd" })), se = React$4.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, React$4.createElement("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z", clipRule: "evenodd" })), Ot = React$4.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }, React$4.createElement("line", { x1: "18", y1: "6", x2: "6", y2: "18" }), React$4.createElement("line", { x1: "6", y1: "6", x2: "18", y2: "18" }));
 var Ft = () => {
-  let [n, e] = React2.useState(document.hidden);
-  return React2.useEffect(() => {
+  let [n, e] = React$4.useState(document.hidden);
+  return React$4.useEffect(() => {
     let t = () => {
       e(document.hidden);
     };
@@ -27610,7 +27612,7 @@ var bt = 1, yt = class {
       let a2;
       t.loading !== void 0 && (a2 = this.create({ ...t, promise: e, type: "loading", message: t.loading, description: typeof t.description != "function" ? t.description : void 0 }));
       let u = e instanceof Promise ? e : e(), f = a2 !== void 0, w2, S2 = u.then(async (i) => {
-        if (w2 = ["resolve", i], React2.isValidElement(i)) f = false, this.create({ id: a2, type: "default", message: i });
+        if (w2 = ["resolve", i], React$4.isValidElement(i)) f = false, this.create({ id: a2, type: "default", message: i });
         else if (ie(i) && !i.ok) {
           f = false;
           let T2 = typeof t.error == "function" ? await t.error(`HTTP error! status: ${i.status}`) : t.error, F2 = typeof t.description == "function" ? await t.description(`HTTP error! status: ${i.status}`) : t.description;
@@ -27663,33 +27665,33 @@ function xe(n) {
 }
 var ve = (n) => {
   var Dt, Pt, Nt, Bt, Ct, kt, It, Mt, Ht, At, Lt;
-  let { invert: e, toast: t, unstyled: a2, interacting: u, setHeights: f, visibleToasts: w2, heights: S2, index: g2, toasts: i, expanded: D, removeToast: T2, defaultRichColors: F2, closeButton: et2, style: ut2, cancelButtonStyle: ft2, actionButtonStyle: l, className: ot2 = "", descriptionClassName: at = "", duration: X2, position: st2, gap: pt, loadingIcon: rt, expandByDefault: B2, classNames: s2, icons: P2, closeButtonAriaLabel: nt2 = "Close toast", pauseWhenPageIsHidden: it2 } = n, [Y2, C2] = React2.useState(null), [lt, J2] = React2.useState(null), [W2, H2] = React2.useState(false), [A2, mt] = React2.useState(false), [L2, z2] = React2.useState(false), [ct2, d2] = React2.useState(false), [h2, y2] = React2.useState(false), [R2, j2] = React2.useState(0), [p2, _2] = React2.useState(0), O2 = React2.useRef(t.duration || X2 || Wt), G2 = React2.useRef(null), k2 = React2.useRef(null), Vt = g2 === 0, Ut = g2 + 1 <= w2, N2 = t.type, V2 = t.dismissible !== false, Kt = t.className || "", Xt = t.descriptionClassName || "", dt2 = React2.useMemo(() => S2.findIndex((r2) => r2.toastId === t.id) || 0, [S2, t.id]), Jt = React2.useMemo(() => {
+  let { invert: e, toast: t, unstyled: a2, interacting: u, setHeights: f, visibleToasts: w2, heights: S2, index: g2, toasts: i, expanded: D, removeToast: T2, defaultRichColors: F2, closeButton: et2, style: ut2, cancelButtonStyle: ft2, actionButtonStyle: l, className: ot2 = "", descriptionClassName: at = "", duration: X2, position: st2, gap: pt, loadingIcon: rt, expandByDefault: B2, classNames: s2, icons: P2, closeButtonAriaLabel: nt2 = "Close toast", pauseWhenPageIsHidden: it2 } = n, [Y2, C2] = React$4.useState(null), [lt, J2] = React$4.useState(null), [W2, H2] = React$4.useState(false), [A2, mt] = React$4.useState(false), [L2, z2] = React$4.useState(false), [ct2, d2] = React$4.useState(false), [h2, y2] = React$4.useState(false), [R2, j2] = React$4.useState(0), [p2, _2] = React$4.useState(0), O2 = React$4.useRef(t.duration || X2 || Wt), G2 = React$4.useRef(null), k2 = React$4.useRef(null), Vt = g2 === 0, Ut = g2 + 1 <= w2, N2 = t.type, V2 = t.dismissible !== false, Kt = t.className || "", Xt = t.descriptionClassName || "", dt2 = React$4.useMemo(() => S2.findIndex((r2) => r2.toastId === t.id) || 0, [S2, t.id]), Jt = React$4.useMemo(() => {
     var r2;
     return (r2 = t.closeButton) != null ? r2 : et2;
-  }, [t.closeButton, et2]), Tt = React2.useMemo(() => t.duration || X2 || Wt, [t.duration, X2]), gt = React2.useRef(0), U2 = React2.useRef(0), St = React2.useRef(0), K2 = React2.useRef(null), [Gt, Qt] = st2.split("-"), Rt = React2.useMemo(() => S2.reduce((r2, m2, c2) => c2 >= dt2 ? r2 : r2 + m2.height, 0), [S2, dt2]), Et = Ft(), qt = t.invert || e, ht = N2 === "loading";
-  U2.current = React2.useMemo(() => dt2 * pt + Rt, [dt2, Rt]), React2.useEffect(() => {
+  }, [t.closeButton, et2]), Tt = React$4.useMemo(() => t.duration || X2 || Wt, [t.duration, X2]), gt = React$4.useRef(0), U2 = React$4.useRef(0), St = React$4.useRef(0), K2 = React$4.useRef(null), [Gt, Qt] = st2.split("-"), Rt = React$4.useMemo(() => S2.reduce((r2, m2, c2) => c2 >= dt2 ? r2 : r2 + m2.height, 0), [S2, dt2]), Et = Ft(), qt = t.invert || e, ht = N2 === "loading";
+  U2.current = React$4.useMemo(() => dt2 * pt + Rt, [dt2, Rt]), React$4.useEffect(() => {
     O2.current = Tt;
-  }, [Tt]), React2.useEffect(() => {
+  }, [Tt]), React$4.useEffect(() => {
     H2(true);
-  }, []), React2.useEffect(() => {
+  }, []), React$4.useEffect(() => {
     let r2 = k2.current;
     if (r2) {
       let m2 = r2.getBoundingClientRect().height;
       return _2(m2), f((c2) => [{ toastId: t.id, height: m2, position: t.position }, ...c2]), () => f((c2) => c2.filter((b2) => b2.toastId !== t.id));
     }
-  }, [f, t.id]), React2.useLayoutEffect(() => {
+  }, [f, t.id]), React$4.useLayoutEffect(() => {
     if (!W2) return;
     let r2 = k2.current, m2 = r2.style.height;
     r2.style.height = "auto";
     let c2 = r2.getBoundingClientRect().height;
     r2.style.height = m2, _2(c2), f((b2) => b2.find((x3) => x3.toastId === t.id) ? b2.map((x3) => x3.toastId === t.id ? { ...x3, height: c2 } : x3) : [{ toastId: t.id, height: c2, position: t.position }, ...b2]);
   }, [W2, t.title, t.description, f, t.id]);
-  let $2 = React2.useCallback(() => {
+  let $2 = React$4.useCallback(() => {
     mt(true), j2(U2.current), f((r2) => r2.filter((m2) => m2.toastId !== t.id)), setTimeout(() => {
       T2(t);
     }, we);
   }, [t, T2, f, U2]);
-  React2.useEffect(() => {
+  React$4.useEffect(() => {
     if (t.promise && N2 === "loading" || t.duration === 1 / 0 || t.type === "loading") return;
     let r2;
     return D || u || it2 && Et ? (() => {
@@ -27704,14 +27706,14 @@ var ve = (n) => {
         (b2 = t.onAutoClose) == null || b2.call(t, t), $2();
       }, O2.current));
     })(), () => clearTimeout(r2);
-  }, [D, u, t, N2, it2, Et, $2]), React2.useEffect(() => {
+  }, [D, u, t, N2, it2, Et, $2]), React$4.useEffect(() => {
     t.delete && $2();
   }, [$2, t.delete]);
   function Zt() {
     var r2, m2, c2;
-    return P2 != null && P2.loading ? React2.createElement("div", { className: M(s2 == null ? void 0 : s2.loader, (r2 = t == null ? void 0 : t.classNames) == null ? void 0 : r2.loader, "sonner-loader"), "data-visible": N2 === "loading" }, P2.loading) : rt ? React2.createElement("div", { className: M(s2 == null ? void 0 : s2.loader, (m2 = t == null ? void 0 : t.classNames) == null ? void 0 : m2.loader, "sonner-loader"), "data-visible": N2 === "loading" }, rt) : React2.createElement(Yt, { className: M(s2 == null ? void 0 : s2.loader, (c2 = t == null ? void 0 : t.classNames) == null ? void 0 : c2.loader), visible: N2 === "loading" });
+    return P2 != null && P2.loading ? React$4.createElement("div", { className: M(s2 == null ? void 0 : s2.loader, (r2 = t == null ? void 0 : t.classNames) == null ? void 0 : r2.loader, "sonner-loader"), "data-visible": N2 === "loading" }, P2.loading) : rt ? React$4.createElement("div", { className: M(s2 == null ? void 0 : s2.loader, (m2 = t == null ? void 0 : t.classNames) == null ? void 0 : m2.loader, "sonner-loader"), "data-visible": N2 === "loading" }, rt) : React$4.createElement(Yt, { className: M(s2 == null ? void 0 : s2.loader, (c2 = t == null ? void 0 : t.classNames) == null ? void 0 : c2.loader), visible: N2 === "loading" });
   }
-  return React2.createElement("li", { tabIndex: 0, ref: k2, className: M(ot2, Kt, s2 == null ? void 0 : s2.toast, (Dt = t == null ? void 0 : t.classNames) == null ? void 0 : Dt.toast, s2 == null ? void 0 : s2.default, s2 == null ? void 0 : s2[N2], (Pt = t == null ? void 0 : t.classNames) == null ? void 0 : Pt[N2]), "data-sonner-toast": "", "data-rich-colors": (Nt = t.richColors) != null ? Nt : F2, "data-styled": !(t.jsx || t.unstyled || a2), "data-mounted": W2, "data-promise": !!t.promise, "data-swiped": h2, "data-removed": A2, "data-visible": Ut, "data-y-position": Gt, "data-x-position": Qt, "data-index": g2, "data-front": Vt, "data-swiping": L2, "data-dismissible": V2, "data-type": N2, "data-invert": qt, "data-swipe-out": ct2, "data-swipe-direction": lt, "data-expanded": !!(D || B2 && W2), style: { "--index": g2, "--toasts-before": g2, "--z-index": i.length - g2, "--offset": `${A2 ? R2 : U2.current}px`, "--initial-height": B2 ? "auto" : `${p2}px`, ...ut2, ...t.style }, onDragEnd: () => {
+  return React$4.createElement("li", { tabIndex: 0, ref: k2, className: M(ot2, Kt, s2 == null ? void 0 : s2.toast, (Dt = t == null ? void 0 : t.classNames) == null ? void 0 : Dt.toast, s2 == null ? void 0 : s2.default, s2 == null ? void 0 : s2[N2], (Pt = t == null ? void 0 : t.classNames) == null ? void 0 : Pt[N2]), "data-sonner-toast": "", "data-rich-colors": (Nt = t.richColors) != null ? Nt : F2, "data-styled": !(t.jsx || t.unstyled || a2), "data-mounted": W2, "data-promise": !!t.promise, "data-swiped": h2, "data-removed": A2, "data-visible": Ut, "data-y-position": Gt, "data-x-position": Qt, "data-index": g2, "data-front": Vt, "data-swiping": L2, "data-dismissible": V2, "data-type": N2, "data-invert": qt, "data-swipe-out": ct2, "data-swipe-direction": lt, "data-expanded": !!(D || B2 && W2), style: { "--index": g2, "--toasts-before": g2, "--z-index": i.length - g2, "--offset": `${A2 ? R2 : U2.current}px`, "--initial-height": B2 ? "auto" : `${p2}px`, ...ut2, ...t.style }, onDragEnd: () => {
     z2(false), C2(null), K2.current = null;
   }, onPointerDown: (r2) => {
     ht || !V2 || (G2.current = /* @__PURE__ */ new Date(), j2(U2.current), r2.target.setPointerCapture(r2.pointerId), r2.target.tagName !== "BUTTON" && (z2(true), K2.current = { x: r2.clientX, y: r2.clientY }));
@@ -27732,14 +27734,14 @@ var ve = (n) => {
     !Y2 && (Math.abs(b2) > 1 || Math.abs(c2) > 1) && C2(Math.abs(b2) > Math.abs(c2) ? "x" : "y");
     let x3 = { x: 0, y: 0 };
     Y2 === "y" ? (I2.includes("top") || I2.includes("bottom")) && (I2.includes("top") && c2 < 0 || I2.includes("bottom") && c2 > 0) && (x3.y = c2) : Y2 === "x" && (I2.includes("left") || I2.includes("right")) && (I2.includes("left") && b2 < 0 || I2.includes("right") && b2 > 0) && (x3.x = b2), (Math.abs(x3.x) > 0 || Math.abs(x3.y) > 0) && y2(true), (Z2 = k2.current) == null || Z2.style.setProperty("--swipe-amount-x", `${x3.x}px`), (zt = k2.current) == null || zt.style.setProperty("--swipe-amount-y", `${x3.y}px`);
-  } }, Jt && !t.jsx ? React2.createElement("button", { "aria-label": nt2, "data-disabled": ht, "data-close-button": true, onClick: ht || !V2 ? () => {
+  } }, Jt && !t.jsx ? React$4.createElement("button", { "aria-label": nt2, "data-disabled": ht, "data-close-button": true, onClick: ht || !V2 ? () => {
   } : () => {
     var r2;
     $2(), (r2 = t.onDismiss) == null || r2.call(t, t);
-  }, className: M(s2 == null ? void 0 : s2.closeButton, (Bt = t == null ? void 0 : t.classNames) == null ? void 0 : Bt.closeButton) }, (Ct = P2 == null ? void 0 : P2.close) != null ? Ct : Ot) : null, t.jsx || reactExports.isValidElement(t.title) ? t.jsx ? t.jsx : typeof t.title == "function" ? t.title() : t.title : React2.createElement(React2.Fragment, null, N2 || t.icon || t.promise ? React2.createElement("div", { "data-icon": "", className: M(s2 == null ? void 0 : s2.icon, (kt = t == null ? void 0 : t.classNames) == null ? void 0 : kt.icon) }, t.promise || t.type === "loading" && !t.icon ? t.icon || Zt() : null, t.type !== "loading" ? t.icon || (P2 == null ? void 0 : P2[N2]) || jt(N2) : null) : null, React2.createElement("div", { "data-content": "", className: M(s2 == null ? void 0 : s2.content, (It = t == null ? void 0 : t.classNames) == null ? void 0 : It.content) }, React2.createElement("div", { "data-title": "", className: M(s2 == null ? void 0 : s2.title, (Mt = t == null ? void 0 : t.classNames) == null ? void 0 : Mt.title) }, typeof t.title == "function" ? t.title() : t.title), t.description ? React2.createElement("div", { "data-description": "", className: M(at, Xt, s2 == null ? void 0 : s2.description, (Ht = t == null ? void 0 : t.classNames) == null ? void 0 : Ht.description) }, typeof t.description == "function" ? t.description() : t.description) : null), reactExports.isValidElement(t.cancel) ? t.cancel : t.cancel && tt(t.cancel) ? React2.createElement("button", { "data-button": true, "data-cancel": true, style: t.cancelButtonStyle || ft2, onClick: (r2) => {
+  }, className: M(s2 == null ? void 0 : s2.closeButton, (Bt = t == null ? void 0 : t.classNames) == null ? void 0 : Bt.closeButton) }, (Ct = P2 == null ? void 0 : P2.close) != null ? Ct : Ot) : null, t.jsx || reactExports.isValidElement(t.title) ? t.jsx ? t.jsx : typeof t.title == "function" ? t.title() : t.title : React$4.createElement(React$4.Fragment, null, N2 || t.icon || t.promise ? React$4.createElement("div", { "data-icon": "", className: M(s2 == null ? void 0 : s2.icon, (kt = t == null ? void 0 : t.classNames) == null ? void 0 : kt.icon) }, t.promise || t.type === "loading" && !t.icon ? t.icon || Zt() : null, t.type !== "loading" ? t.icon || (P2 == null ? void 0 : P2[N2]) || jt(N2) : null) : null, React$4.createElement("div", { "data-content": "", className: M(s2 == null ? void 0 : s2.content, (It = t == null ? void 0 : t.classNames) == null ? void 0 : It.content) }, React$4.createElement("div", { "data-title": "", className: M(s2 == null ? void 0 : s2.title, (Mt = t == null ? void 0 : t.classNames) == null ? void 0 : Mt.title) }, typeof t.title == "function" ? t.title() : t.title), t.description ? React$4.createElement("div", { "data-description": "", className: M(at, Xt, s2 == null ? void 0 : s2.description, (Ht = t == null ? void 0 : t.classNames) == null ? void 0 : Ht.description) }, typeof t.description == "function" ? t.description() : t.description) : null), reactExports.isValidElement(t.cancel) ? t.cancel : t.cancel && tt(t.cancel) ? React$4.createElement("button", { "data-button": true, "data-cancel": true, style: t.cancelButtonStyle || ft2, onClick: (r2) => {
     var m2, c2;
     tt(t.cancel) && V2 && ((c2 = (m2 = t.cancel).onClick) == null || c2.call(m2, r2), $2());
-  }, className: M(s2 == null ? void 0 : s2.cancelButton, (At = t == null ? void 0 : t.classNames) == null ? void 0 : At.cancelButton) }, t.cancel.label) : null, reactExports.isValidElement(t.action) ? t.action : t.action && tt(t.action) ? React2.createElement("button", { "data-button": true, "data-action": true, style: t.actionButtonStyle || l, onClick: (r2) => {
+  }, className: M(s2 == null ? void 0 : s2.cancelButton, (At = t == null ? void 0 : t.classNames) == null ? void 0 : At.cancelButton) }, t.cancel.label) : null, reactExports.isValidElement(t.action) ? t.action : t.action && tt(t.action) ? React$4.createElement("button", { "data-button": true, "data-action": true, style: t.actionButtonStyle || l, onClick: (r2) => {
     var m2, c2;
     tt(t.action) && ((c2 = (m2 = t.action).onClick) == null || c2.call(m2, r2), !r2.defaultPrevented && $2());
   }, className: M(s2 == null ? void 0 : s2.actionButton, (Lt = t == null ? void 0 : t.classNames) == null ? void 0 : Lt.actionButton) }, t.action.label) : null));
@@ -27764,13 +27766,13 @@ function Te(n, e) {
   }), t;
 }
 var $e = reactExports.forwardRef(function(e, t) {
-  let { invert: a2, position: u = "bottom-right", hotkey: f = ["altKey", "KeyT"], expand: w2, closeButton: S2, className: g2, offset: i, mobileOffset: D, theme: T2 = "light", richColors: F2, duration: et2, style: ut2, visibleToasts: ft2 = pe, toastOptions: l, dir: ot2 = _t(), gap: at = be, loadingIcon: X2, icons: st2, containerAriaLabel: pt = "Notifications", pauseWhenPageIsHidden: rt } = e, [B2, s2] = React2.useState([]), P2 = React2.useMemo(() => Array.from(new Set([u].concat(B2.filter((d2) => d2.position).map((d2) => d2.position)))), [B2, u]), [nt2, it2] = React2.useState([]), [Y2, C2] = React2.useState(false), [lt, J2] = React2.useState(false), [W2, H2] = React2.useState(T2 !== "system" ? T2 : typeof window != "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"), A2 = React2.useRef(null), mt = f.join("+").replace(/Key/g, "").replace(/Digit/g, ""), L2 = React2.useRef(null), z2 = React2.useRef(false), ct2 = React2.useCallback((d2) => {
+  let { invert: a2, position: u = "bottom-right", hotkey: f = ["altKey", "KeyT"], expand: w2, closeButton: S2, className: g2, offset: i, mobileOffset: D, theme: T2 = "light", richColors: F2, duration: et2, style: ut2, visibleToasts: ft2 = pe, toastOptions: l, dir: ot2 = _t(), gap: at = be, loadingIcon: X2, icons: st2, containerAriaLabel: pt = "Notifications", pauseWhenPageIsHidden: rt } = e, [B2, s2] = React$4.useState([]), P2 = React$4.useMemo(() => Array.from(new Set([u].concat(B2.filter((d2) => d2.position).map((d2) => d2.position)))), [B2, u]), [nt2, it2] = React$4.useState([]), [Y2, C2] = React$4.useState(false), [lt, J2] = React$4.useState(false), [W2, H2] = React$4.useState(T2 !== "system" ? T2 : typeof window != "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"), A2 = React$4.useRef(null), mt = f.join("+").replace(/Key/g, "").replace(/Digit/g, ""), L2 = React$4.useRef(null), z2 = React$4.useRef(false), ct2 = React$4.useCallback((d2) => {
     s2((h2) => {
       var y2;
       return (y2 = h2.find((R2) => R2.id === d2.id)) != null && y2.delete || v.dismiss(d2.id), h2.filter(({ id: R2 }) => R2 !== d2.id);
     });
   }, []);
-  return React2.useEffect(() => v.subscribe((d2) => {
+  return React$4.useEffect(() => v.subscribe((d2) => {
     if (d2.dismiss) {
       s2((h2) => h2.map((y2) => y2.id === d2.id ? { ...y2, delete: true } : y2));
       return;
@@ -27783,7 +27785,7 @@ var $e = reactExports.forwardRef(function(e, t) {
         });
       });
     });
-  }), []), React2.useEffect(() => {
+  }), []), React$4.useEffect(() => {
     if (T2 !== "system") {
       H2(T2);
       return;
@@ -27803,22 +27805,22 @@ var $e = reactExports.forwardRef(function(e, t) {
         }
       });
     }
-  }, [T2]), React2.useEffect(() => {
+  }, [T2]), React$4.useEffect(() => {
     B2.length <= 1 && C2(false);
-  }, [B2]), React2.useEffect(() => {
+  }, [B2]), React$4.useEffect(() => {
     let d2 = (h2) => {
       var R2, j2;
       f.every((p2) => h2[p2] || h2.code === p2) && (C2(true), (R2 = A2.current) == null || R2.focus()), h2.code === "Escape" && (document.activeElement === A2.current || (j2 = A2.current) != null && j2.contains(document.activeElement)) && C2(false);
     };
     return document.addEventListener("keydown", d2), () => document.removeEventListener("keydown", d2);
-  }, [f]), React2.useEffect(() => {
+  }, [f]), React$4.useEffect(() => {
     if (A2.current) return () => {
       L2.current && (L2.current.focus({ preventScroll: true }), L2.current = null, z2.current = false);
     };
-  }, [A2.current]), React2.createElement("section", { ref: t, "aria-label": `${pt} ${mt}`, tabIndex: -1, "aria-live": "polite", "aria-relevant": "additions text", "aria-atomic": "false", suppressHydrationWarning: true }, P2.map((d2, h2) => {
+  }, [A2.current]), React$4.createElement("section", { ref: t, "aria-label": `${pt} ${mt}`, tabIndex: -1, "aria-live": "polite", "aria-relevant": "additions text", "aria-atomic": "false", suppressHydrationWarning: true }, P2.map((d2, h2) => {
     var j2;
     let [y2, R2] = d2.split("-");
-    return B2.length ? React2.createElement("ol", { key: d2, dir: ot2 === "auto" ? _t() : ot2, tabIndex: -1, ref: A2, className: g2, "data-sonner-toaster": true, "data-theme": W2, "data-y-position": y2, "data-lifted": Y2 && B2.length > 1 && !w2, "data-x-position": R2, style: { "--front-toast-height": `${((j2 = nt2[0]) == null ? void 0 : j2.height) || 0}px`, "--width": `${he}px`, "--gap": `${at}px`, ...ut2, ...Te(i, D) }, onBlur: (p2) => {
+    return B2.length ? React$4.createElement("ol", { key: d2, dir: ot2 === "auto" ? _t() : ot2, tabIndex: -1, ref: A2, className: g2, "data-sonner-toaster": true, "data-theme": W2, "data-y-position": y2, "data-lifted": Y2 && B2.length > 1 && !w2, "data-x-position": R2, style: { "--front-toast-height": `${((j2 = nt2[0]) == null ? void 0 : j2.height) || 0}px`, "--width": `${he}px`, "--gap": `${at}px`, ...ut2, ...Te(i, D) }, onBlur: (p2) => {
       z2.current && !p2.currentTarget.contains(p2.relatedTarget) && (z2.current = false, L2.current && (L2.current.focus({ preventScroll: true }), L2.current = null));
     }, onFocus: (p2) => {
       p2.target instanceof HTMLElement && p2.target.dataset.dismissible === "false" || z2.current || (z2.current = true, L2.current = p2.relatedTarget);
@@ -27828,7 +27830,7 @@ var $e = reactExports.forwardRef(function(e, t) {
       p2.target instanceof HTMLElement && p2.target.dataset.dismissible === "false" || J2(true);
     }, onPointerUp: () => J2(false) }, B2.filter((p2) => !p2.position && h2 === 0 || p2.position === d2).map((p2, _2) => {
       var O2, G2;
-      return React2.createElement(ve, { key: p2.id, icons: st2, index: _2, toast: p2, defaultRichColors: F2, duration: (O2 = l == null ? void 0 : l.duration) != null ? O2 : et2, className: l == null ? void 0 : l.className, descriptionClassName: l == null ? void 0 : l.descriptionClassName, invert: a2, visibleToasts: ft2, closeButton: (G2 = l == null ? void 0 : l.closeButton) != null ? G2 : S2, interacting: lt, position: d2, style: l == null ? void 0 : l.style, unstyled: l == null ? void 0 : l.unstyled, classNames: l == null ? void 0 : l.classNames, cancelButtonStyle: l == null ? void 0 : l.cancelButtonStyle, actionButtonStyle: l == null ? void 0 : l.actionButtonStyle, removeToast: ct2, toasts: B2.filter((k2) => k2.position == p2.position), heights: nt2.filter((k2) => k2.position == p2.position), setHeights: it2, expandByDefault: w2, gap: at, loadingIcon: X2, expanded: Y2, pauseWhenPageIsHidden: rt, swipeDirections: e.swipeDirections });
+      return React$4.createElement(ve, { key: p2.id, icons: st2, index: _2, toast: p2, defaultRichColors: F2, duration: (O2 = l == null ? void 0 : l.duration) != null ? O2 : et2, className: l == null ? void 0 : l.className, descriptionClassName: l == null ? void 0 : l.descriptionClassName, invert: a2, visibleToasts: ft2, closeButton: (G2 = l == null ? void 0 : l.closeButton) != null ? G2 : S2, interacting: lt, position: d2, style: l == null ? void 0 : l.style, unstyled: l == null ? void 0 : l.unstyled, classNames: l == null ? void 0 : l.classNames, cancelButtonStyle: l == null ? void 0 : l.cancelButtonStyle, actionButtonStyle: l == null ? void 0 : l.actionButtonStyle, removeToast: ct2, toasts: B2.filter((k2) => k2.position == p2.position), heights: nt2.filter((k2) => k2.position == p2.position), setHeights: it2, expandByDefault: w2, gap: at, loadingIcon: X2, expanded: Y2, pauseWhenPageIsHidden: rt, swipeDirections: e.swipeDirections });
     })) : null;
   }));
 });
@@ -28317,7 +28319,7 @@ function handleAndDispatchCustomEvent(name, handler, detail, { discrete }) {
 }
 var useLayoutEffect2 = (globalThis == null ? void 0 : globalThis.document) ? reactExports.useLayoutEffect : () => {
 };
-var useReactId = React$4[" useId ".trim().toString()] || (() => void 0);
+var useReactId = React$5[" useId ".trim().toString()] || (() => void 0);
 var count$1 = 0;
 function useId(deterministicId) {
   const [id, setId] = reactExports.useState(useReactId());
@@ -30697,7 +30699,7 @@ function getElementRef$1(element) {
   }
   return element.props.ref || element.ref;
 }
-var useInsertionEffect = React$4[" useInsertionEffect ".trim().toString()] || useLayoutEffect2;
+var useInsertionEffect = React$5[" useInsertionEffect ".trim().toString()] || useLayoutEffect2;
 function useControllableState({
   prop,
   defaultProp,
@@ -33805,7 +33807,7 @@ const Error$1 = Variant({
   "notFound": Null,
   "unauthorized": Null
 });
-const Result_3 = Variant({ "ok": Null, "err": Error$1 });
+const Result_6 = Variant({ "ok": Null, "err": Error$1 });
 const ConversationId = Nat;
 const AddMemberRequest = Record({
   "member": UserId,
@@ -33824,7 +33826,7 @@ const DeviceRecordPublic = Record({
   "registeredAt": Timestamp,
   "lastSeen": Timestamp
 });
-const Result_6 = Variant({
+const Result_10 = Variant({
   "ok": DeviceRecordPublic,
   "err": Error$1
 });
@@ -33837,11 +33839,11 @@ const EscrowAccessGrant = Record({
   "requestingAdmin": UserId,
   "targetUserId": UserId
 });
-const Result_17 = Variant({
+const Result_31 = Variant({
   "ok": Vec(EscrowAccessGrant),
   "err": Error$1
 });
-const Result_16 = Variant({
+const Result_30 = Variant({
   "ok": EscrowAccessGrant,
   "err": Error$1
 });
@@ -33850,6 +33852,43 @@ const JoinRequestActionRequest = Record({
   "denialReason": Opt(DenialReason),
   "requestId": Text,
   "conversationId": ConversationId
+});
+const RecoveryRequestStatus$1 = Variant({
+  "pending": Null,
+  "completed": Null,
+  "approved": Null,
+  "rejected": Null
+});
+const OrgId = Text;
+const RecoveryRequest = Record({
+  "id": Nat,
+  "status": RecoveryRequestStatus$1,
+  "orgId": Opt(OrgId),
+  "approvedBy": Opt(UserId),
+  "createdAt": Timestamp,
+  "initiatingAdmin": UserId,
+  "targetDeviceId": Text,
+  "resolvedAt": Opt(Timestamp),
+  "reason": Text,
+  "targetUserId": UserId
+});
+const Result_8 = Variant({ "ok": RecoveryRequest, "err": Error$1 });
+const Result_29 = Variant({ "ok": Text, "err": Text });
+const RetentionPeriod$1 = Variant({
+  "days30": Null,
+  "days90": Null,
+  "unlimited": Null,
+  "years7": Null,
+  "year1": Null
+});
+const RetentionPolicy = Record({
+  "id": Text,
+  "orgId": Opt(OrgId),
+  "period": RetentionPeriod$1,
+  "legalHold": Bool,
+  "updatedAt": Timestamp,
+  "updatedBy": UserId,
+  "autoDelete": Bool
 });
 const CreateDirectRequest = Record({ "peer": UserId });
 const ConversationKind$1 = Variant({
@@ -33869,7 +33908,7 @@ const ConversationPublic = Record({
   "discoverable": Bool,
   "encryptedName": Opt(Vec(Nat8))
 });
-const Result_15 = Variant({
+const Result_28 = Variant({
   "ok": ConversationPublic,
   "err": Error$1
 });
@@ -33881,13 +33920,50 @@ const CreateGroupRequest = Record({
   "discoverable": Bool,
   "encryptedName": Vec(Nat8)
 });
+const CreateOrgRequest = Record({
+  "name": Text,
+  "description": Text
+});
+const OrgStatus = Variant({
+  "Active": Null,
+  "Suspended": Null,
+  "Archived": Null
+});
+const OrgRecord = Record({
+  "id": OrgId,
+  "status": OrgStatus,
+  "name": Text,
+  "createdAt": Timestamp,
+  "createdBy": UserId,
+  "memberCount": Nat,
+  "description": Text
+});
+const Result_3 = Variant({ "ok": OrgRecord, "err": Text });
+const CreateRetentionPolicyRequest = Record({
+  "orgId": Opt(OrgId),
+  "period": RetentionPeriod$1,
+  "legalHold": Bool,
+  "autoDelete": Bool
+});
+const Result_1 = Variant({
+  "ok": RetentionPolicy,
+  "err": Text
+});
 const AttachmentId = Nat;
+const Result_2 = Variant({ "ok": Null, "err": Text });
 const AuditExportEventType = Variant({
+  "memberSuspended": Null,
+  "userInvited": Null,
   "retentionEnabled": Null,
   "memberAdded": Null,
   "retentionDisabled": Null,
+  "groupMemberRemoved": Null,
+  "orgCreated": Null,
   "escrowAccessGranted": Null,
   "callInitiated": Null,
+  "keyRecoveryApproved": Null,
+  "keyRecoveryInitiated": Null,
+  "keyRecoveryRejected": Null,
   "adminAction": Null,
   "auditLogExported": Null,
   "escrowEnrolled": Null,
@@ -33895,7 +33971,9 @@ const AuditExportEventType = Variant({
   "escrowRevoked": Null,
   "userRegistered": Null,
   "memberRemoved": Null,
-  "userRemoved": Null
+  "orgSuspended": Null,
+  "userRemoved": Null,
+  "memberRoleChanged": Null
 });
 const AuditExportFormat = Variant({
   "csv": Null,
@@ -33908,7 +33986,66 @@ const AuditExportRequest = Record({
   "startDate": Opt(Timestamp),
   "format": AuditExportFormat
 });
-const Result_13 = Variant({ "ok": Text, "err": Error$1 });
+const Result_26 = Variant({ "ok": Text, "err": Error$1 });
+const AuditEventType$1 = Variant({
+  "legalHoldRemoved": Null,
+  "memberSuspended": Null,
+  "userInvited": Null,
+  "retentionEnabled": Null,
+  "memberAdded": Null,
+  "policyExpiryCheckPerformed": Null,
+  "retentionPolicyUpdated": Null,
+  "retentionDisabled": Null,
+  "groupMemberRemoved": Null,
+  "orgCreated": Null,
+  "orgDeleted": Null,
+  "platformSettingsUpdated": Null,
+  "escrowAccessGranted": Null,
+  "callInitiated": Null,
+  "sovereignConfigUpdated": Null,
+  "keyRecoveryApproved": Null,
+  "keyRecoveryInitiated": Null,
+  "messageQueueDrained": Null,
+  "memberReactivated": Null,
+  "legalHoldPlaced": Null,
+  "keyRecoveryRejected": Null,
+  "adminAction": Null,
+  "orgSettingsUpdated": Null,
+  "auditLogExported": Null,
+  "escrowEnrolled": Null,
+  "messageSent": Null,
+  "escrowRevoked": Null,
+  "compartmentAssigned": Null,
+  "policyReportExported": Null,
+  "userRegistered": Null,
+  "memberRemoved": Null,
+  "retentionPolicyCreated": Null,
+  "orgSuspended": Null,
+  "userRemoved": Null,
+  "priorityMessageSent": Null,
+  "orgUpdated": Null,
+  "memberRoleChanged": Null
+});
+const ExportAuditLogsRequest = Record({
+  "afterTimestamp": Opt(Timestamp),
+  "filterEventType": Opt(AuditEventType$1),
+  "beforeTimestamp": Opt(Timestamp),
+  "filterActor": Opt(UserId),
+  "filterOrgId": Opt(OrgId)
+});
+const AuditEvent = Record({
+  "id": Nat,
+  "orgId": Opt(OrgId),
+  "targetPrincipal": Opt(UserId),
+  "encryptedDetails": Opt(Vec(Nat8)),
+  "timestamp": Timestamp,
+  "actorPrincipal": UserId,
+  "eventType": AuditEventType$1
+});
+const Result_25 = Variant({
+  "ok": Vec(AuditEvent),
+  "err": Error$1
+});
 const CompartmentLabel = Variant({
   "classified": Null,
   "unclassified": Null
@@ -33937,45 +34074,32 @@ const ConfigExportBundle = Record({
   ),
   "residencyLabel": DataResidency
 });
-const Result_14 = Variant({
+const Result_27 = Variant({
   "ok": ConfigExportBundle,
   "err": Error$1
 });
-const AuditEventType$1 = Variant({
-  "retentionEnabled": Null,
-  "memberAdded": Null,
-  "retentionDisabled": Null,
-  "escrowAccessGranted": Null,
-  "callInitiated": Null,
-  "sovereignConfigUpdated": Null,
-  "messageQueueDrained": Null,
-  "adminAction": Null,
-  "auditLogExported": Null,
-  "escrowEnrolled": Null,
-  "messageSent": Null,
-  "escrowRevoked": Null,
-  "compartmentAssigned": Null,
-  "userRegistered": Null,
-  "memberRemoved": Null,
-  "userRemoved": Null,
-  "priorityMessageSent": Null
+const GetAllGroupsRequest = Record({ "orgId": Opt(OrgId) });
+const GroupStatus$1 = Variant({
+  "active": Null,
+  "suspended": Null
+});
+const GroupAdminRecord = Record({
+  "id": ConversationId,
+  "status": GroupStatus$1,
+  "orgId": Opt(OrgId),
+  "name": Text,
+  "createdAt": Timestamp,
+  "createdBy": UserId,
+  "memberCount": Nat
 });
 const GetAuditLogRequest = Record({
+  "afterTimestamp": Opt(Timestamp),
   "limit": Nat,
   "filterEventType": Opt(AuditEventType$1),
+  "beforeTimestamp": Opt(Timestamp),
+  "filterActor": Opt(UserId),
+  "filterOrgId": Opt(OrgId),
   "afterEventId": Opt(Nat)
-});
-const AuditEvent = Record({
-  "id": Nat,
-  "targetPrincipal": Opt(UserId),
-  "encryptedDetails": Opt(Vec(Nat8)),
-  "timestamp": Timestamp,
-  "actorPrincipal": UserId,
-  "eventType": AuditEventType$1
-});
-const Result_12 = Variant({
-  "ok": Vec(AuditEvent),
-  "err": Error$1
 });
 const SovereignConfig = Record({
   "lastUpdated": Timestamp,
@@ -33984,6 +34108,37 @@ const SovereignConfig = Record({
   "nodeCount": Opt(Nat),
   "cyclesCostMultiplier": Opt(Float64),
   "residencyLabel": DataResidency
+});
+const EscrowStatsRecord = Record({
+  "pendingRecoveries": Nat,
+  "lastRecoveryTimestamp": Opt(Timestamp),
+  "totalEscrowed": Nat
+});
+const Result_24 = Variant({
+  "ok": EscrowStatsRecord,
+  "err": Error$1
+});
+const GetEscrowedUsersRequest = Record({
+  "orgId": Opt(OrgId),
+  "limit": Nat,
+  "afterUserId": Opt(Text)
+});
+const EscrowStatus$1 = Variant({
+  "active": Null,
+  "revoked": Null,
+  "recovered": Null,
+  "pendingRecovery": Null
+});
+const EscrowedUserRecord = Record({
+  "orgId": Opt(OrgId),
+  "deviceCount": Nat,
+  "userId": UserId,
+  "escrowStatus": EscrowStatus$1,
+  "lastBackedUp": Opt(Timestamp)
+});
+const Result_23 = Variant({
+  "ok": Vec(EscrowedUserRecord),
+  "err": Error$1
 });
 const JoinRequestStatus$1 = Variant({
   "pending": Null,
@@ -33998,11 +34153,23 @@ const JoinRequest = Record({
   "message": Opt(Text),
   "requesterId": UserId
 });
-const Result_11 = Variant({
+const Result_22 = Variant({
   "ok": Vec(JoinRequest),
   "err": Error$1
 });
-const Result_10 = Variant({
+const GetGroupMembersRequest = Record({
+  "groupId": ConversationId
+});
+const GroupMemberRecord = Record({
+  "displayName": Opt(Text),
+  "userId": UserId,
+  "joinedAt": Timestamp
+});
+const Result_21 = Variant({
+  "ok": Vec(GroupMemberRecord),
+  "err": Text
+});
+const Result_20 = Variant({
   "ok": GroupRetentionPolicy,
   "err": Error$1
 });
@@ -34048,7 +34215,7 @@ const MessagePublic = Record({
   "priority": Opt(MessagePriority$1),
   "readBy": Vec(ReadReceipt)
 });
-const Result_9 = Variant({
+const Result_19 = Variant({
   "ok": Vec(MessagePublic),
   "err": Error$1
 });
@@ -34062,6 +34229,97 @@ const EscrowRecord = Record({
   "consentLanguageVersion": Text,
   "revokedAt": Opt(Timestamp),
   "revokedReason": Opt(Text)
+});
+const MemberStatus = Variant({
+  "Active": Null,
+  "Suspended": Null,
+  "Pending": Null
+});
+const OrgRole$1 = Variant({
+  "OrgAdmin": Null,
+  "Auditor": Null,
+  "SuperAdmin": Null,
+  "StandardUser": Null
+});
+const OrgMembership = Record({
+  "status": MemberStatus,
+  "orgId": OrgId,
+  "userId": UserId,
+  "joinedAt": Timestamp,
+  "role": OrgRole$1,
+  "invitedBy": UserId,
+  "email": Opt(Text),
+  "lastActive": Opt(Timestamp)
+});
+const Result_18 = Variant({
+  "ok": Vec(OrgMembership),
+  "err": Text
+});
+const Result_17 = Variant({
+  "ok": Opt(OrgRole$1),
+  "err": Text
+});
+const GroupCreationPermission$1 = Variant({
+  "orgAdminsOnly": Null,
+  "allMembers": Null
+});
+const DataExportPermission$1 = Variant({
+  "orgAdminsOnly": Null,
+  "disabled": Null,
+  "allMembers": Null
+});
+const RetentionPeriodDays = Variant({
+  "days30": Null,
+  "days90": Null,
+  "unlimited": Null,
+  "years7": Null,
+  "year1": Null
+});
+const OrgSettings = Record({
+  "legalHoldReason": Opt(Text),
+  "orgId": Text,
+  "logoStorageKey": Opt(Text),
+  "groupCreationPermission": GroupCreationPermission$1,
+  "dataExportPermission": DataExportPermission$1,
+  "defaultInviteRole": Text,
+  "logoUrl": Opt(Text),
+  "legalHoldEnabled": Bool,
+  "messageRetentionDays": Opt(RetentionPeriodDays)
+});
+const GetOrgUsersRequest = Record({
+  "orgId": Opt(OrgId),
+  "search": Opt(Text),
+  "limit": Nat,
+  "afterUserId": Opt(UserId)
+});
+const GetOrgUsersResponse = Record({
+  "total": Nat,
+  "hasMore": Bool,
+  "members": Vec(OrgMembership)
+});
+const Result_16 = Variant({
+  "ok": GetOrgUsersResponse,
+  "err": Text
+});
+const PasswordPolicy$1 = Variant({
+  "strong": Null,
+  "enterprise": Null,
+  "basic": Null
+});
+const PlatformSettings = Record({
+  "defaultRetentionDays": RetentionPeriodDays,
+  "keyEscrowEnabled": Bool,
+  "vetKeysEnabled": Bool,
+  "sessionTimeoutMinutes": Nat,
+  "platformTagline": Text,
+  "auditLogRetentionDays": RetentionPeriodDays,
+  "mfaEnforced": Bool,
+  "passwordPolicy": PasswordPolicy$1,
+  "platformName": Text
+});
+const Result_15 = Variant({
+  "ok": Vec(RecoveryRequest),
+  "err": Error$1
 });
 const GetRetentionMetadataRequest = Record({
   "endDate": Opt(Timestamp),
@@ -34077,9 +34335,12 @@ const RetentionMetadataRecord = Record({
   "recipientPrincipals": Vec(UserId),
   "convId": ConversationId
 });
-const Result_8 = Variant({
+const Result_14 = Variant({
   "ok": Vec(RetentionMetadataRecord),
   "err": Error$1
+});
+const GetRetentionPoliciesRequest = Record({
+  "orgId": Opt(OrgId)
 });
 const TypingIndicatorPublic = Record({
   "expiresAt": Timestamp,
@@ -34095,7 +34356,30 @@ const UserProfilePublic = Record({
   "registeredAt": Timestamp,
   "lastSeen": Timestamp
 });
-const Result_7 = Variant({ "ok": Vec(UserId), "err": Error$1 });
+const InviteUserRequest = Record({
+  "orgId": OrgId,
+  "role": OrgRole$1,
+  "email": Opt(Text),
+  "principalId": Text
+});
+const Result_13 = Variant({
+  "ok": OrgMembership,
+  "err": Text
+});
+const Result_12 = Variant({ "ok": Vec(UserId), "err": Error$1 });
+const GetOrgsRequest = Record({
+  "search": Opt(Text),
+  "limit": Nat,
+  "afterOrgId": Opt(OrgId)
+});
+const GetOrgsResponse = Record({
+  "total": Nat,
+  "orgs": Vec(OrgRecord)
+});
+const Result_11 = Variant({
+  "ok": GetOrgsResponse,
+  "err": Text
+});
 const ListPublicGroupsRequest = Record({
   "offset": Nat,
   "limit": Nat,
@@ -34114,7 +34398,7 @@ const RegisterAttachmentRequest = Record({
   "encryptedSizeBytes": Nat,
   "storageKey": Text
 });
-const Result_5 = Variant({ "ok": Attachment, "err": Error$1 });
+const Result_9 = Variant({ "ok": Attachment, "err": Error$1 });
 const RegisterRequest = Record({
   "ecdhPublicKey": EcdhPublicKey,
   "encryptedAvatarKey": Opt(Text),
@@ -34125,6 +34409,10 @@ const RemoveMemberRequest = Record({
   "member": UserId,
   "conversationId": ConversationId
 });
+const RemoveMemberFromGroupRequest = Record({
+  "memberId": UserId,
+  "groupId": ConversationId
+});
 const SendMessageRequest = Record({
   "ttlSeconds": Opt(Nat),
   "encryptedContent": Vec(Nat8),
@@ -34132,13 +34420,34 @@ const SendMessageRequest = Record({
   "conversationId": ConversationId,
   "priority": Opt(MessagePriority$1)
 });
-const Result_4 = Variant({ "ok": MessagePublic, "err": Error$1 });
-const Result_2 = Variant({ "ok": SovereignConfig, "err": Error$1 });
+const Result_7 = Variant({ "ok": MessagePublic, "err": Error$1 });
+const Result_5 = Variant({ "ok": SovereignConfig, "err": Error$1 });
 const SubmitJoinRequestRequest = Record({
   "conversationId": ConversationId,
   "message": Opt(Text)
 });
-const Result_1 = Variant({ "ok": JoinRequest, "err": Error$1 });
+const Result_4 = Variant({ "ok": JoinRequest, "err": Error$1 });
+const SuspendUserRequest = Record({
+  "orgId": OrgId,
+  "userId": UserId,
+  "reason": Text
+});
+const LegalHoldRequest = Record({
+  "orgId": OrgId,
+  "hold": Bool,
+  "reason": Text
+});
+const UpdateMemberRoleRequest = Record({
+  "orgId": OrgId,
+  "userId": UserId,
+  "newRole": OrgRole$1
+});
+const UpdateRetentionPolicyRequest = Record({
+  "id": Text,
+  "period": Opt(RetentionPeriod$1),
+  "legalHold": Opt(Bool),
+  "autoDelete": Opt(Bool)
+});
 const UpdateProfileRequest = Record({
   "ecdhPublicKey": Opt(EcdhPublicKey),
   "encryptedAvatarKey": Opt(Text),
@@ -34171,53 +34480,96 @@ Service({
     []
   ),
   "_immutableObjectStorageUpdateGatewayPrincipals": Func([], [], []),
-  "addAdmin": Func([UserId], [Result_3], []),
-  "addConversationMember": Func([AddMemberRequest], [Result_3], []),
-  "addDevice": Func([AddDeviceRequest], [Result_6], []),
+  "addAdmin": Func([UserId], [Result_6], []),
+  "addConversationMember": Func([AddMemberRequest], [Result_6], []),
+  "addDevice": Func([AddDeviceRequest], [Result_10], []),
   "adminGetEscrowGrants": Func(
     [Opt(UserId), Nat, Opt(Nat)],
-    [Result_17],
+    [Result_31],
     ["query"]
   ),
   "adminGrantEscrowAccess": Func(
     [UserId, Text, Text],
-    [Result_16],
+    [Result_30],
     []
   ),
-  "approveJoinRequest": Func([JoinRequestActionRequest], [Result_3], []),
+  "approveJoinRequest": Func([JoinRequestActionRequest], [Result_6], []),
+  "approveKeyRecovery": Func([Nat], [Result_8], []),
+  "bootstrapSuperAdmin": Func([UserId], [Result_29], []),
+  "checkPolicyExpiry": Func(
+    [Opt(OrgId)],
+    [Vec(RetentionPolicy)],
+    ["query"]
+  ),
   "clearTypingIndicator": Func([ConversationId], [], []),
-  "createDirectConversation": Func([CreateDirectRequest], [Result_15], []),
-  "createGroupConversation": Func([CreateGroupRequest], [Result_15], []),
-  "deleteAttachment": Func([AttachmentId], [Result_3], []),
-  "deleteConversation": Func([ConversationId], [Result_3], []),
-  "deleteGroupConversation": Func([ConversationId], [Result_3], []),
-  "denyJoinRequest": Func([JoinRequestActionRequest], [Result_3], []),
-  "disableGroupRetention": Func([ConversationId], [Result_3], []),
-  "enableGroupRetention": Func([ConversationId], [Result_3], []),
+  "createDirectConversation": Func([CreateDirectRequest], [Result_28], []),
+  "createGroupConversation": Func([CreateGroupRequest], [Result_28], []),
+  "createOrg": Func([CreateOrgRequest], [Result_3], []),
+  "createRetentionPolicy": Func(
+    [CreateRetentionPolicyRequest],
+    [Result_1],
+    []
+  ),
+  "deleteAttachment": Func([AttachmentId], [Result_6], []),
+  "deleteConversation": Func([ConversationId], [Result_6], []),
+  "deleteGroupConversation": Func([ConversationId], [Result_6], []),
+  "deleteOrg": Func([OrgId], [Result_2], []),
+  "denyJoinRequest": Func([JoinRequestActionRequest], [Result_6], []),
+  "disableGroupRetention": Func([ConversationId], [Result_6], []),
+  "enableGroupRetention": Func([ConversationId], [Result_6], []),
   "enrollKeyEscrow": Func(
     [Text, Text, Text, Vec(Nat8), Text],
-    [Result_3],
+    [Result_6],
     []
   ),
-  "exportAuditLog": Func([AuditExportRequest], [Result_13], []),
-  "exportConfigBundle": Func([], [Result_14], []),
-  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_13], []),
-  "getAuditLog": Func([GetAuditLogRequest], [Result_12], ["query"]),
+  "exportAuditLog": Func([AuditExportRequest], [Result_26], []),
+  "exportAuditLogs": Func(
+    [ExportAuditLogsRequest],
+    [Result_25],
+    ["query"]
+  ),
+  "exportConfigBundle": Func([], [Result_27], []),
+  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_26], []),
+  "getAllGroups": Func(
+    [GetAllGroupsRequest],
+    [Vec(GroupAdminRecord)],
+    []
+  ),
+  "getAuditLog": Func([GetAuditLogRequest], [Result_25], ["query"]),
+  "getCanisterHealth": Func(
+    [],
+    [
+      Record({
+        "memoryCapacity": Nat,
+        "cyclesBalance": Nat,
+        "memoryUsed": Nat
+      })
+    ],
+    ["query"]
+  ),
   "getConversation": Func(
     [ConversationId],
     [Opt(ConversationPublic)],
     ["query"]
   ),
   "getDeploymentInfo": Func([], [SovereignConfig], ["query"]),
+  "getEscrowStats": Func([], [Result_24], []),
+  "getEscrowedUsers": Func([GetEscrowedUsersRequest], [Result_23], []),
+  "getGlobalRetentionPolicy": Func(
+    [],
+    [Opt(RetentionPolicy)],
+    ["query"]
+  ),
   "getGroupCompartment": Func(
     [ConversationId],
     [Opt(CompartmentLabel)],
     ["query"]
   ),
-  "getGroupJoinRequests": Func([ConversationId], [Result_11], ["query"]),
+  "getGroupJoinRequests": Func([ConversationId], [Result_22], ["query"]),
+  "getGroupMembers": Func([GetGroupMembersRequest], [Result_21], []),
   "getGroupRetentionPolicy": Func(
     [ConversationId],
-    [Result_10],
+    [Result_20],
     ["query"]
   ),
   "getMessageAttachments": Func(
@@ -34225,11 +34577,32 @@ Service({
     [Vec(Attachment)],
     ["query"]
   ),
-  "getMessages": Func([GetMessagesRequest], [Result_9], ["query"]),
+  "getMessages": Func([GetMessagesRequest], [Result_19], ["query"]),
   "getMyEscrowStatus": Func([], [Vec(EscrowRecord)], ["query"]),
+  "getMyOrgs": Func([], [Result_18], ["query"]),
+  "getMyRole": Func([OrgId], [Result_17], ["query"]),
+  "getOrg": Func([OrgId], [Result_3], ["query"]),
+  "getOrgSettings": Func([Text], [OrgSettings], ["query"]),
+  "getOrgUsers": Func([GetOrgUsersRequest], [Result_16], ["query"]),
+  "getPlatformSettings": Func([], [PlatformSettings], ["query"]),
+  "getRecoveryRequests": Func(
+    [Opt(OrgId), Opt(RecoveryRequestStatus$1)],
+    [Result_15],
+    []
+  ),
   "getRetentionMetadata": Func(
     [GetRetentionMetadataRequest],
-    [Result_8],
+    [Result_14],
+    ["query"]
+  ),
+  "getRetentionPolicies": Func(
+    [GetRetentionPoliciesRequest],
+    [Vec(RetentionPolicy)],
+    ["query"]
+  ),
+  "getRetentionPolicy": Func(
+    [OrgId],
+    [Opt(RetentionPolicy)],
     ["query"]
   ),
   "getTypingIndicators": Func(
@@ -34247,31 +34620,49 @@ Service({
     [Vec(UserProfilePublic)],
     ["query"]
   ),
+  "hasSuperAdmin": Func([], [Bool], ["query"]),
+  "initiateKeyRecovery": Func(
+    [UserId, Text, Text, Opt(OrgId)],
+    [Result_8],
+    []
+  ),
+  "inviteUser": Func([InviteUserRequest], [Result_13], []),
   "isAdminCheck": Func([UserId], [Bool], ["query"]),
-  "listAdmins": Func([], [Result_7], ["query"]),
+  "listAdmins": Func([], [Result_12], ["query"]),
   "listConversations": Func([], [Vec(ConversationPublic)], ["query"]),
   "listMyDevices": Func([], [Vec(DeviceRecordPublic)], ["query"]),
+  "listOrgs": Func([GetOrgsRequest], [Result_11], ["query"]),
   "listPublicGroups": Func(
     [ListPublicGroupsRequest],
     [Vec(PublicGroupSummary)],
     ["query"]
   ),
-  "markMessageRead": Func([MessageId], [Result_3], []),
+  "logPolicyExpiryCheck": Func([], [], []),
+  "logPolicyReportExported": Func([Opt(OrgId)], [], []),
+  "markMessageRead": Func([MessageId], [Result_6], []),
+  "reactivateMember": Func([OrgId, UserId], [Result_2], []),
   "redeemDeviceSyncToken": Func(
     [Text, Text, Text],
-    [Result_6],
+    [Result_10],
     []
   ),
-  "registerAttachment": Func([RegisterAttachmentRequest], [Result_5], []),
+  "registerAttachment": Func([RegisterAttachmentRequest], [Result_9], []),
   "registerUser": Func([RegisterRequest], [Result], []),
-  "removeAdmin": Func([UserId], [Result_3], []),
-  "removeConversationMember": Func([RemoveMemberRequest], [Result_3], []),
-  "revokeDevice": Func([Text], [Result_3], []),
-  "revokeKeyEscrow": Func([Text, Text], [Result_3], []),
-  "sendMessage": Func([SendMessageRequest], [Result_4], []),
+  "rejectKeyRecovery": Func([Nat], [Result_8], []),
+  "removeAdmin": Func([UserId], [Result_6], []),
+  "removeConversationMember": Func([RemoveMemberRequest], [Result_6], []),
+  "removeMember": Func([OrgId, UserId], [Result_2], []),
+  "removeMemberFromGroup": Func(
+    [RemoveMemberFromGroupRequest],
+    [Result_2],
+    []
+  ),
+  "revokeDevice": Func([Text], [Result_6], []),
+  "revokeKeyEscrow": Func([Text, Text], [Result_6], []),
+  "sendMessage": Func([SendMessageRequest], [Result_7], []),
   "setGroupCompartment": Func(
     [ConversationId, CompartmentLabel],
-    [Result_3],
+    [Result_6],
     []
   ),
   "setSovereignConfig": Func(
@@ -34281,12 +34672,24 @@ Service({
       Opt(Nat),
       Opt(Float64)
     ],
-    [Result_2],
+    [Result_5],
     []
   ),
   "setTypingIndicator": Func([ConversationId, Nat], [], []),
-  "submitJoinRequest": Func([SubmitJoinRequestRequest], [Result_1], []),
+  "submitJoinRequest": Func([SubmitJoinRequestRequest], [Result_4], []),
+  "suspendMember": Func([SuspendUserRequest], [Result_2], []),
+  "suspendOrg": Func([OrgId], [Result_2], []),
+  "toggleLegalHold": Func([LegalHoldRequest], [Result_1], []),
   "touchPresence": Func([], [], []),
+  "updateMemberRole": Func([UpdateMemberRoleRequest], [Result_2], []),
+  "updateOrg": Func([OrgId, Text, Opt(Text)], [Result_3], []),
+  "updateOrgSettings": Func([Text, OrgSettings], [Result_2], []),
+  "updatePlatformSettings": Func([PlatformSettings], [Result_2], []),
+  "updateRetentionPolicy": Func(
+    [UpdateRetentionPolicyRequest],
+    [Result_1],
+    []
+  ),
   "updateUserProfile": Func([UpdateProfileRequest], [Result], []),
   "uploadFile": Func(
     [Vec(Nat8), Text],
@@ -34314,7 +34717,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "notFound": IDL2.Null,
     "unauthorized": IDL2.Null
   });
-  const Result_32 = IDL2.Variant({ "ok": IDL2.Null, "err": Error2 });
+  const Result_62 = IDL2.Variant({ "ok": IDL2.Null, "err": Error2 });
   const ConversationId2 = IDL2.Nat;
   const AddMemberRequest2 = IDL2.Record({
     "member": UserId2,
@@ -34333,7 +34736,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "registeredAt": Timestamp2,
     "lastSeen": Timestamp2
   });
-  const Result_62 = IDL2.Variant({ "ok": DeviceRecordPublic2, "err": Error2 });
+  const Result_102 = IDL2.Variant({ "ok": DeviceRecordPublic2, "err": Error2 });
   const EscrowAccessGrant2 = IDL2.Record({
     "grantTimestamp": Timestamp2,
     "grantId": IDL2.Nat,
@@ -34343,16 +34746,53 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "requestingAdmin": UserId2,
     "targetUserId": UserId2
   });
-  const Result_172 = IDL2.Variant({
+  const Result_312 = IDL2.Variant({
     "ok": IDL2.Vec(EscrowAccessGrant2),
     "err": Error2
   });
-  const Result_162 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
+  const Result_302 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
   const DenialReason2 = IDL2.Text;
   const JoinRequestActionRequest2 = IDL2.Record({
     "denialReason": IDL2.Opt(DenialReason2),
     "requestId": IDL2.Text,
     "conversationId": ConversationId2
+  });
+  const RecoveryRequestStatus2 = IDL2.Variant({
+    "pending": IDL2.Null,
+    "completed": IDL2.Null,
+    "approved": IDL2.Null,
+    "rejected": IDL2.Null
+  });
+  const OrgId2 = IDL2.Text;
+  const RecoveryRequest2 = IDL2.Record({
+    "id": IDL2.Nat,
+    "status": RecoveryRequestStatus2,
+    "orgId": IDL2.Opt(OrgId2),
+    "approvedBy": IDL2.Opt(UserId2),
+    "createdAt": Timestamp2,
+    "initiatingAdmin": UserId2,
+    "targetDeviceId": IDL2.Text,
+    "resolvedAt": IDL2.Opt(Timestamp2),
+    "reason": IDL2.Text,
+    "targetUserId": UserId2
+  });
+  const Result_82 = IDL2.Variant({ "ok": RecoveryRequest2, "err": Error2 });
+  const Result_292 = IDL2.Variant({ "ok": IDL2.Text, "err": IDL2.Text });
+  const RetentionPeriod2 = IDL2.Variant({
+    "days30": IDL2.Null,
+    "days90": IDL2.Null,
+    "unlimited": IDL2.Null,
+    "years7": IDL2.Null,
+    "year1": IDL2.Null
+  });
+  const RetentionPolicy2 = IDL2.Record({
+    "id": IDL2.Text,
+    "orgId": IDL2.Opt(OrgId2),
+    "period": RetentionPeriod2,
+    "legalHold": IDL2.Bool,
+    "updatedAt": Timestamp2,
+    "updatedBy": UserId2,
+    "autoDelete": IDL2.Bool
   });
   const CreateDirectRequest2 = IDL2.Record({ "peer": UserId2 });
   const ConversationKind2 = IDL2.Variant({
@@ -34372,7 +34812,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "discoverable": IDL2.Bool,
     "encryptedName": IDL2.Opt(IDL2.Vec(IDL2.Nat8))
   });
-  const Result_152 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
+  const Result_282 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
   const CreateGroupRequest2 = IDL2.Record({
     "initialMembers": IDL2.Vec(UserId2),
     "displayName": IDL2.Opt(IDL2.Text),
@@ -34381,13 +34821,47 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "discoverable": IDL2.Bool,
     "encryptedName": IDL2.Vec(IDL2.Nat8)
   });
+  const CreateOrgRequest2 = IDL2.Record({
+    "name": IDL2.Text,
+    "description": IDL2.Text
+  });
+  const OrgStatus2 = IDL2.Variant({
+    "Active": IDL2.Null,
+    "Suspended": IDL2.Null,
+    "Archived": IDL2.Null
+  });
+  const OrgRecord2 = IDL2.Record({
+    "id": OrgId2,
+    "status": OrgStatus2,
+    "name": IDL2.Text,
+    "createdAt": Timestamp2,
+    "createdBy": UserId2,
+    "memberCount": IDL2.Nat,
+    "description": IDL2.Text
+  });
+  const Result_32 = IDL2.Variant({ "ok": OrgRecord2, "err": IDL2.Text });
+  const CreateRetentionPolicyRequest2 = IDL2.Record({
+    "orgId": IDL2.Opt(OrgId2),
+    "period": RetentionPeriod2,
+    "legalHold": IDL2.Bool,
+    "autoDelete": IDL2.Bool
+  });
+  const Result_110 = IDL2.Variant({ "ok": RetentionPolicy2, "err": IDL2.Text });
   const AttachmentId2 = IDL2.Nat;
+  const Result_210 = IDL2.Variant({ "ok": IDL2.Null, "err": IDL2.Text });
   const AuditExportEventType2 = IDL2.Variant({
+    "memberSuspended": IDL2.Null,
+    "userInvited": IDL2.Null,
     "retentionEnabled": IDL2.Null,
     "memberAdded": IDL2.Null,
     "retentionDisabled": IDL2.Null,
+    "groupMemberRemoved": IDL2.Null,
+    "orgCreated": IDL2.Null,
     "escrowAccessGranted": IDL2.Null,
     "callInitiated": IDL2.Null,
+    "keyRecoveryApproved": IDL2.Null,
+    "keyRecoveryInitiated": IDL2.Null,
+    "keyRecoveryRejected": IDL2.Null,
     "adminAction": IDL2.Null,
     "auditLogExported": IDL2.Null,
     "escrowEnrolled": IDL2.Null,
@@ -34395,7 +34869,9 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "escrowRevoked": IDL2.Null,
     "userRegistered": IDL2.Null,
     "memberRemoved": IDL2.Null,
-    "userRemoved": IDL2.Null
+    "orgSuspended": IDL2.Null,
+    "userRemoved": IDL2.Null,
+    "memberRoleChanged": IDL2.Null
   });
   const AuditExportFormat2 = IDL2.Variant({
     "csv": IDL2.Null,
@@ -34408,7 +34884,63 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "startDate": IDL2.Opt(Timestamp2),
     "format": AuditExportFormat2
   });
-  const Result_132 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
+  const Result_262 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
+  const AuditEventType2 = IDL2.Variant({
+    "legalHoldRemoved": IDL2.Null,
+    "memberSuspended": IDL2.Null,
+    "userInvited": IDL2.Null,
+    "retentionEnabled": IDL2.Null,
+    "memberAdded": IDL2.Null,
+    "policyExpiryCheckPerformed": IDL2.Null,
+    "retentionPolicyUpdated": IDL2.Null,
+    "retentionDisabled": IDL2.Null,
+    "groupMemberRemoved": IDL2.Null,
+    "orgCreated": IDL2.Null,
+    "orgDeleted": IDL2.Null,
+    "platformSettingsUpdated": IDL2.Null,
+    "escrowAccessGranted": IDL2.Null,
+    "callInitiated": IDL2.Null,
+    "sovereignConfigUpdated": IDL2.Null,
+    "keyRecoveryApproved": IDL2.Null,
+    "keyRecoveryInitiated": IDL2.Null,
+    "messageQueueDrained": IDL2.Null,
+    "memberReactivated": IDL2.Null,
+    "legalHoldPlaced": IDL2.Null,
+    "keyRecoveryRejected": IDL2.Null,
+    "adminAction": IDL2.Null,
+    "orgSettingsUpdated": IDL2.Null,
+    "auditLogExported": IDL2.Null,
+    "escrowEnrolled": IDL2.Null,
+    "messageSent": IDL2.Null,
+    "escrowRevoked": IDL2.Null,
+    "compartmentAssigned": IDL2.Null,
+    "policyReportExported": IDL2.Null,
+    "userRegistered": IDL2.Null,
+    "memberRemoved": IDL2.Null,
+    "retentionPolicyCreated": IDL2.Null,
+    "orgSuspended": IDL2.Null,
+    "userRemoved": IDL2.Null,
+    "priorityMessageSent": IDL2.Null,
+    "orgUpdated": IDL2.Null,
+    "memberRoleChanged": IDL2.Null
+  });
+  const ExportAuditLogsRequest2 = IDL2.Record({
+    "afterTimestamp": IDL2.Opt(Timestamp2),
+    "filterEventType": IDL2.Opt(AuditEventType2),
+    "beforeTimestamp": IDL2.Opt(Timestamp2),
+    "filterActor": IDL2.Opt(UserId2),
+    "filterOrgId": IDL2.Opt(OrgId2)
+  });
+  const AuditEvent2 = IDL2.Record({
+    "id": IDL2.Nat,
+    "orgId": IDL2.Opt(OrgId2),
+    "targetPrincipal": IDL2.Opt(UserId2),
+    "encryptedDetails": IDL2.Opt(IDL2.Vec(IDL2.Nat8)),
+    "timestamp": Timestamp2,
+    "actorPrincipal": UserId2,
+    "eventType": AuditEventType2
+  });
+  const Result_252 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
   const CompartmentLabel2 = IDL2.Variant({
     "classified": IDL2.Null,
     "unclassified": IDL2.Null
@@ -34439,40 +34971,30 @@ const idlFactory = ({ IDL: IDL2 }) => {
     ),
     "residencyLabel": DataResidency2
   });
-  const Result_142 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
-  const AuditEventType2 = IDL2.Variant({
-    "retentionEnabled": IDL2.Null,
-    "memberAdded": IDL2.Null,
-    "retentionDisabled": IDL2.Null,
-    "escrowAccessGranted": IDL2.Null,
-    "callInitiated": IDL2.Null,
-    "sovereignConfigUpdated": IDL2.Null,
-    "messageQueueDrained": IDL2.Null,
-    "adminAction": IDL2.Null,
-    "auditLogExported": IDL2.Null,
-    "escrowEnrolled": IDL2.Null,
-    "messageSent": IDL2.Null,
-    "escrowRevoked": IDL2.Null,
-    "compartmentAssigned": IDL2.Null,
-    "userRegistered": IDL2.Null,
-    "memberRemoved": IDL2.Null,
-    "userRemoved": IDL2.Null,
-    "priorityMessageSent": IDL2.Null
+  const Result_272 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
+  const GetAllGroupsRequest2 = IDL2.Record({ "orgId": IDL2.Opt(OrgId2) });
+  const GroupStatus2 = IDL2.Variant({
+    "active": IDL2.Null,
+    "suspended": IDL2.Null
+  });
+  const GroupAdminRecord2 = IDL2.Record({
+    "id": ConversationId2,
+    "status": GroupStatus2,
+    "orgId": IDL2.Opt(OrgId2),
+    "name": IDL2.Text,
+    "createdAt": Timestamp2,
+    "createdBy": UserId2,
+    "memberCount": IDL2.Nat
   });
   const GetAuditLogRequest2 = IDL2.Record({
+    "afterTimestamp": IDL2.Opt(Timestamp2),
     "limit": IDL2.Nat,
     "filterEventType": IDL2.Opt(AuditEventType2),
+    "beforeTimestamp": IDL2.Opt(Timestamp2),
+    "filterActor": IDL2.Opt(UserId2),
+    "filterOrgId": IDL2.Opt(OrgId2),
     "afterEventId": IDL2.Opt(IDL2.Nat)
   });
-  const AuditEvent2 = IDL2.Record({
-    "id": IDL2.Nat,
-    "targetPrincipal": IDL2.Opt(UserId2),
-    "encryptedDetails": IDL2.Opt(IDL2.Vec(IDL2.Nat8)),
-    "timestamp": Timestamp2,
-    "actorPrincipal": UserId2,
-    "eventType": AuditEventType2
-  });
-  const Result_122 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
   const SovereignConfig2 = IDL2.Record({
     "lastUpdated": Timestamp2,
     "subnetPrincipal": IDL2.Opt(IDL2.Principal),
@@ -34480,6 +35002,34 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "nodeCount": IDL2.Opt(IDL2.Nat),
     "cyclesCostMultiplier": IDL2.Opt(IDL2.Float64),
     "residencyLabel": DataResidency2
+  });
+  const EscrowStatsRecord2 = IDL2.Record({
+    "pendingRecoveries": IDL2.Nat,
+    "lastRecoveryTimestamp": IDL2.Opt(Timestamp2),
+    "totalEscrowed": IDL2.Nat
+  });
+  const Result_242 = IDL2.Variant({ "ok": EscrowStatsRecord2, "err": Error2 });
+  const GetEscrowedUsersRequest2 = IDL2.Record({
+    "orgId": IDL2.Opt(OrgId2),
+    "limit": IDL2.Nat,
+    "afterUserId": IDL2.Opt(IDL2.Text)
+  });
+  const EscrowStatus2 = IDL2.Variant({
+    "active": IDL2.Null,
+    "revoked": IDL2.Null,
+    "recovered": IDL2.Null,
+    "pendingRecovery": IDL2.Null
+  });
+  const EscrowedUserRecord2 = IDL2.Record({
+    "orgId": IDL2.Opt(OrgId2),
+    "deviceCount": IDL2.Nat,
+    "userId": UserId2,
+    "escrowStatus": EscrowStatus2,
+    "lastBackedUp": IDL2.Opt(Timestamp2)
+  });
+  const Result_232 = IDL2.Variant({
+    "ok": IDL2.Vec(EscrowedUserRecord2),
+    "err": Error2
   });
   const JoinRequestStatus2 = IDL2.Variant({
     "pending": IDL2.Null,
@@ -34494,8 +35044,18 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "message": IDL2.Opt(IDL2.Text),
     "requesterId": UserId2
   });
-  const Result_112 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
-  const Result_102 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
+  const Result_222 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
+  const GetGroupMembersRequest2 = IDL2.Record({ "groupId": ConversationId2 });
+  const GroupMemberRecord2 = IDL2.Record({
+    "displayName": IDL2.Opt(IDL2.Text),
+    "userId": UserId2,
+    "joinedAt": Timestamp2
+  });
+  const Result_212 = IDL2.Variant({
+    "ok": IDL2.Vec(GroupMemberRecord2),
+    "err": IDL2.Text
+  });
+  const Result_202 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
   const MessageId2 = IDL2.Nat;
   const Attachment2 = IDL2.Record({
     "id": AttachmentId2,
@@ -34535,7 +35095,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "priority": IDL2.Opt(MessagePriority2),
     "readBy": IDL2.Vec(ReadReceipt2)
   });
-  const Result_92 = IDL2.Variant({
+  const Result_192 = IDL2.Variant({
     "ok": IDL2.Vec(MessagePublic2),
     "err": Error2
   });
@@ -34549,6 +35109,94 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "consentLanguageVersion": IDL2.Text,
     "revokedAt": IDL2.Opt(Timestamp2),
     "revokedReason": IDL2.Opt(IDL2.Text)
+  });
+  const MemberStatus2 = IDL2.Variant({
+    "Active": IDL2.Null,
+    "Suspended": IDL2.Null,
+    "Pending": IDL2.Null
+  });
+  const OrgRole2 = IDL2.Variant({
+    "OrgAdmin": IDL2.Null,
+    "Auditor": IDL2.Null,
+    "SuperAdmin": IDL2.Null,
+    "StandardUser": IDL2.Null
+  });
+  const OrgMembership2 = IDL2.Record({
+    "status": MemberStatus2,
+    "orgId": OrgId2,
+    "userId": UserId2,
+    "joinedAt": Timestamp2,
+    "role": OrgRole2,
+    "invitedBy": UserId2,
+    "email": IDL2.Opt(IDL2.Text),
+    "lastActive": IDL2.Opt(Timestamp2)
+  });
+  const Result_182 = IDL2.Variant({
+    "ok": IDL2.Vec(OrgMembership2),
+    "err": IDL2.Text
+  });
+  const Result_172 = IDL2.Variant({ "ok": IDL2.Opt(OrgRole2), "err": IDL2.Text });
+  const GroupCreationPermission2 = IDL2.Variant({
+    "orgAdminsOnly": IDL2.Null,
+    "allMembers": IDL2.Null
+  });
+  const DataExportPermission2 = IDL2.Variant({
+    "orgAdminsOnly": IDL2.Null,
+    "disabled": IDL2.Null,
+    "allMembers": IDL2.Null
+  });
+  const RetentionPeriodDays2 = IDL2.Variant({
+    "days30": IDL2.Null,
+    "days90": IDL2.Null,
+    "unlimited": IDL2.Null,
+    "years7": IDL2.Null,
+    "year1": IDL2.Null
+  });
+  const OrgSettings2 = IDL2.Record({
+    "legalHoldReason": IDL2.Opt(IDL2.Text),
+    "orgId": IDL2.Text,
+    "logoStorageKey": IDL2.Opt(IDL2.Text),
+    "groupCreationPermission": GroupCreationPermission2,
+    "dataExportPermission": DataExportPermission2,
+    "defaultInviteRole": IDL2.Text,
+    "logoUrl": IDL2.Opt(IDL2.Text),
+    "legalHoldEnabled": IDL2.Bool,
+    "messageRetentionDays": IDL2.Opt(RetentionPeriodDays2)
+  });
+  const GetOrgUsersRequest2 = IDL2.Record({
+    "orgId": IDL2.Opt(OrgId2),
+    "search": IDL2.Opt(IDL2.Text),
+    "limit": IDL2.Nat,
+    "afterUserId": IDL2.Opt(UserId2)
+  });
+  const GetOrgUsersResponse2 = IDL2.Record({
+    "total": IDL2.Nat,
+    "hasMore": IDL2.Bool,
+    "members": IDL2.Vec(OrgMembership2)
+  });
+  const Result_162 = IDL2.Variant({
+    "ok": GetOrgUsersResponse2,
+    "err": IDL2.Text
+  });
+  const PasswordPolicy2 = IDL2.Variant({
+    "strong": IDL2.Null,
+    "enterprise": IDL2.Null,
+    "basic": IDL2.Null
+  });
+  const PlatformSettings2 = IDL2.Record({
+    "defaultRetentionDays": RetentionPeriodDays2,
+    "keyEscrowEnabled": IDL2.Bool,
+    "vetKeysEnabled": IDL2.Bool,
+    "sessionTimeoutMinutes": IDL2.Nat,
+    "platformTagline": IDL2.Text,
+    "auditLogRetentionDays": RetentionPeriodDays2,
+    "mfaEnforced": IDL2.Bool,
+    "passwordPolicy": PasswordPolicy2,
+    "platformName": IDL2.Text
+  });
+  const Result_152 = IDL2.Variant({
+    "ok": IDL2.Vec(RecoveryRequest2),
+    "err": Error2
   });
   const GetRetentionMetadataRequest2 = IDL2.Record({
     "endDate": IDL2.Opt(Timestamp2),
@@ -34564,10 +35212,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "recipientPrincipals": IDL2.Vec(UserId2),
     "convId": ConversationId2
   });
-  const Result_82 = IDL2.Variant({
+  const Result_142 = IDL2.Variant({
     "ok": IDL2.Vec(RetentionMetadataRecord2),
     "err": Error2
   });
+  const GetRetentionPoliciesRequest2 = IDL2.Record({ "orgId": IDL2.Opt(OrgId2) });
   const TypingIndicatorPublic2 = IDL2.Record({
     "expiresAt": Timestamp2,
     "userId": UserId2,
@@ -34582,7 +35231,24 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "registeredAt": Timestamp2,
     "lastSeen": Timestamp2
   });
-  const Result_72 = IDL2.Variant({ "ok": IDL2.Vec(UserId2), "err": Error2 });
+  const InviteUserRequest2 = IDL2.Record({
+    "orgId": OrgId2,
+    "role": OrgRole2,
+    "email": IDL2.Opt(IDL2.Text),
+    "principalId": IDL2.Text
+  });
+  const Result_132 = IDL2.Variant({ "ok": OrgMembership2, "err": IDL2.Text });
+  const Result_122 = IDL2.Variant({ "ok": IDL2.Vec(UserId2), "err": Error2 });
+  const GetOrgsRequest2 = IDL2.Record({
+    "search": IDL2.Opt(IDL2.Text),
+    "limit": IDL2.Nat,
+    "afterOrgId": IDL2.Opt(OrgId2)
+  });
+  const GetOrgsResponse2 = IDL2.Record({
+    "total": IDL2.Nat,
+    "orgs": IDL2.Vec(OrgRecord2)
+  });
+  const Result_112 = IDL2.Variant({ "ok": GetOrgsResponse2, "err": IDL2.Text });
   const ListPublicGroupsRequest2 = IDL2.Record({
     "offset": IDL2.Nat,
     "limit": IDL2.Nat,
@@ -34601,7 +35267,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "encryptedSizeBytes": IDL2.Nat,
     "storageKey": IDL2.Text
   });
-  const Result_52 = IDL2.Variant({ "ok": Attachment2, "err": Error2 });
+  const Result_92 = IDL2.Variant({ "ok": Attachment2, "err": Error2 });
   const RegisterRequest2 = IDL2.Record({
     "ecdhPublicKey": EcdhPublicKey2,
     "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
@@ -34612,6 +35278,10 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "member": UserId2,
     "conversationId": ConversationId2
   });
+  const RemoveMemberFromGroupRequest2 = IDL2.Record({
+    "memberId": UserId2,
+    "groupId": ConversationId2
+  });
   const SendMessageRequest2 = IDL2.Record({
     "ttlSeconds": IDL2.Opt(IDL2.Nat),
     "encryptedContent": IDL2.Vec(IDL2.Nat8),
@@ -34619,13 +35289,34 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "conversationId": ConversationId2,
     "priority": IDL2.Opt(MessagePriority2)
   });
-  const Result_42 = IDL2.Variant({ "ok": MessagePublic2, "err": Error2 });
-  const Result_22 = IDL2.Variant({ "ok": SovereignConfig2, "err": Error2 });
+  const Result_72 = IDL2.Variant({ "ok": MessagePublic2, "err": Error2 });
+  const Result_52 = IDL2.Variant({ "ok": SovereignConfig2, "err": Error2 });
   const SubmitJoinRequestRequest2 = IDL2.Record({
     "conversationId": ConversationId2,
     "message": IDL2.Opt(IDL2.Text)
   });
-  const Result_18 = IDL2.Variant({ "ok": JoinRequest2, "err": Error2 });
+  const Result_42 = IDL2.Variant({ "ok": JoinRequest2, "err": Error2 });
+  const SuspendUserRequest2 = IDL2.Record({
+    "orgId": OrgId2,
+    "userId": UserId2,
+    "reason": IDL2.Text
+  });
+  const LegalHoldRequest2 = IDL2.Record({
+    "orgId": OrgId2,
+    "hold": IDL2.Bool,
+    "reason": IDL2.Text
+  });
+  const UpdateMemberRoleRequest2 = IDL2.Record({
+    "orgId": OrgId2,
+    "userId": UserId2,
+    "newRole": OrgRole2
+  });
+  const UpdateRetentionPolicyRequest2 = IDL2.Record({
+    "id": IDL2.Text,
+    "period": IDL2.Opt(RetentionPeriod2),
+    "legalHold": IDL2.Opt(IDL2.Bool),
+    "autoDelete": IDL2.Opt(IDL2.Bool)
+  });
   const UpdateProfileRequest2 = IDL2.Record({
     "ecdhPublicKey": IDL2.Opt(EcdhPublicKey2),
     "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
@@ -34658,57 +35349,100 @@ const idlFactory = ({ IDL: IDL2 }) => {
       []
     ),
     "_immutableObjectStorageUpdateGatewayPrincipals": IDL2.Func([], [], []),
-    "addAdmin": IDL2.Func([UserId2], [Result_32], []),
-    "addConversationMember": IDL2.Func([AddMemberRequest2], [Result_32], []),
-    "addDevice": IDL2.Func([AddDeviceRequest2], [Result_62], []),
+    "addAdmin": IDL2.Func([UserId2], [Result_62], []),
+    "addConversationMember": IDL2.Func([AddMemberRequest2], [Result_62], []),
+    "addDevice": IDL2.Func([AddDeviceRequest2], [Result_102], []),
     "adminGetEscrowGrants": IDL2.Func(
       [IDL2.Opt(UserId2), IDL2.Nat, IDL2.Opt(IDL2.Nat)],
-      [Result_172],
+      [Result_312],
       ["query"]
     ),
     "adminGrantEscrowAccess": IDL2.Func(
       [UserId2, IDL2.Text, IDL2.Text],
-      [Result_162],
+      [Result_302],
       []
     ),
-    "approveJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_32], []),
+    "approveJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_62], []),
+    "approveKeyRecovery": IDL2.Func([IDL2.Nat], [Result_82], []),
+    "bootstrapSuperAdmin": IDL2.Func([UserId2], [Result_292], []),
+    "checkPolicyExpiry": IDL2.Func(
+      [IDL2.Opt(OrgId2)],
+      [IDL2.Vec(RetentionPolicy2)],
+      ["query"]
+    ),
     "clearTypingIndicator": IDL2.Func([ConversationId2], [], []),
     "createDirectConversation": IDL2.Func(
       [CreateDirectRequest2],
-      [Result_152],
+      [Result_282],
       []
     ),
-    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_152], []),
-    "deleteAttachment": IDL2.Func([AttachmentId2], [Result_32], []),
-    "deleteConversation": IDL2.Func([ConversationId2], [Result_32], []),
-    "deleteGroupConversation": IDL2.Func([ConversationId2], [Result_32], []),
-    "denyJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_32], []),
-    "disableGroupRetention": IDL2.Func([ConversationId2], [Result_32], []),
-    "enableGroupRetention": IDL2.Func([ConversationId2], [Result_32], []),
+    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_282], []),
+    "createOrg": IDL2.Func([CreateOrgRequest2], [Result_32], []),
+    "createRetentionPolicy": IDL2.Func(
+      [CreateRetentionPolicyRequest2],
+      [Result_110],
+      []
+    ),
+    "deleteAttachment": IDL2.Func([AttachmentId2], [Result_62], []),
+    "deleteConversation": IDL2.Func([ConversationId2], [Result_62], []),
+    "deleteGroupConversation": IDL2.Func([ConversationId2], [Result_62], []),
+    "deleteOrg": IDL2.Func([OrgId2], [Result_210], []),
+    "denyJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_62], []),
+    "disableGroupRetention": IDL2.Func([ConversationId2], [Result_62], []),
+    "enableGroupRetention": IDL2.Func([ConversationId2], [Result_62], []),
     "enrollKeyEscrow": IDL2.Func(
       [IDL2.Text, IDL2.Text, IDL2.Text, IDL2.Vec(IDL2.Nat8), IDL2.Text],
-      [Result_32],
+      [Result_62],
       []
     ),
-    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_132], []),
-    "exportConfigBundle": IDL2.Func([], [Result_142], []),
-    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_132], []),
-    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_122], ["query"]),
+    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_262], []),
+    "exportAuditLogs": IDL2.Func(
+      [ExportAuditLogsRequest2],
+      [Result_252],
+      ["query"]
+    ),
+    "exportConfigBundle": IDL2.Func([], [Result_272], []),
+    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_262], []),
+    "getAllGroups": IDL2.Func(
+      [GetAllGroupsRequest2],
+      [IDL2.Vec(GroupAdminRecord2)],
+      []
+    ),
+    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_252], ["query"]),
+    "getCanisterHealth": IDL2.Func(
+      [],
+      [
+        IDL2.Record({
+          "memoryCapacity": IDL2.Nat,
+          "cyclesBalance": IDL2.Nat,
+          "memoryUsed": IDL2.Nat
+        })
+      ],
+      ["query"]
+    ),
     "getConversation": IDL2.Func(
       [ConversationId2],
       [IDL2.Opt(ConversationPublic2)],
       ["query"]
     ),
     "getDeploymentInfo": IDL2.Func([], [SovereignConfig2], ["query"]),
+    "getEscrowStats": IDL2.Func([], [Result_242], []),
+    "getEscrowedUsers": IDL2.Func([GetEscrowedUsersRequest2], [Result_232], []),
+    "getGlobalRetentionPolicy": IDL2.Func(
+      [],
+      [IDL2.Opt(RetentionPolicy2)],
+      ["query"]
+    ),
     "getGroupCompartment": IDL2.Func(
       [ConversationId2],
       [IDL2.Opt(CompartmentLabel2)],
       ["query"]
     ),
-    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_112], ["query"]),
+    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_222], ["query"]),
+    "getGroupMembers": IDL2.Func([GetGroupMembersRequest2], [Result_212], []),
     "getGroupRetentionPolicy": IDL2.Func(
       [ConversationId2],
-      [Result_102],
+      [Result_202],
       ["query"]
     ),
     "getMessageAttachments": IDL2.Func(
@@ -34716,11 +35450,32 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Vec(Attachment2)],
       ["query"]
     ),
-    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_92], ["query"]),
+    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_192], ["query"]),
     "getMyEscrowStatus": IDL2.Func([], [IDL2.Vec(EscrowRecord2)], ["query"]),
+    "getMyOrgs": IDL2.Func([], [Result_182], ["query"]),
+    "getMyRole": IDL2.Func([OrgId2], [Result_172], ["query"]),
+    "getOrg": IDL2.Func([OrgId2], [Result_32], ["query"]),
+    "getOrgSettings": IDL2.Func([IDL2.Text], [OrgSettings2], ["query"]),
+    "getOrgUsers": IDL2.Func([GetOrgUsersRequest2], [Result_162], ["query"]),
+    "getPlatformSettings": IDL2.Func([], [PlatformSettings2], ["query"]),
+    "getRecoveryRequests": IDL2.Func(
+      [IDL2.Opt(OrgId2), IDL2.Opt(RecoveryRequestStatus2)],
+      [Result_152],
+      []
+    ),
     "getRetentionMetadata": IDL2.Func(
       [GetRetentionMetadataRequest2],
-      [Result_82],
+      [Result_142],
+      ["query"]
+    ),
+    "getRetentionPolicies": IDL2.Func(
+      [GetRetentionPoliciesRequest2],
+      [IDL2.Vec(RetentionPolicy2)],
+      ["query"]
+    ),
+    "getRetentionPolicy": IDL2.Func(
+      [OrgId2],
+      [IDL2.Opt(RetentionPolicy2)],
       ["query"]
     ),
     "getTypingIndicators": IDL2.Func(
@@ -34738,43 +35493,61 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Vec(UserProfilePublic2)],
       ["query"]
     ),
+    "hasSuperAdmin": IDL2.Func([], [IDL2.Bool], ["query"]),
+    "initiateKeyRecovery": IDL2.Func(
+      [UserId2, IDL2.Text, IDL2.Text, IDL2.Opt(OrgId2)],
+      [Result_82],
+      []
+    ),
+    "inviteUser": IDL2.Func([InviteUserRequest2], [Result_132], []),
     "isAdminCheck": IDL2.Func([UserId2], [IDL2.Bool], ["query"]),
-    "listAdmins": IDL2.Func([], [Result_72], ["query"]),
+    "listAdmins": IDL2.Func([], [Result_122], ["query"]),
     "listConversations": IDL2.Func(
       [],
       [IDL2.Vec(ConversationPublic2)],
       ["query"]
     ),
     "listMyDevices": IDL2.Func([], [IDL2.Vec(DeviceRecordPublic2)], ["query"]),
+    "listOrgs": IDL2.Func([GetOrgsRequest2], [Result_112], ["query"]),
     "listPublicGroups": IDL2.Func(
       [ListPublicGroupsRequest2],
       [IDL2.Vec(PublicGroupSummary2)],
       ["query"]
     ),
-    "markMessageRead": IDL2.Func([MessageId2], [Result_32], []),
+    "logPolicyExpiryCheck": IDL2.Func([], [], []),
+    "logPolicyReportExported": IDL2.Func([IDL2.Opt(OrgId2)], [], []),
+    "markMessageRead": IDL2.Func([MessageId2], [Result_62], []),
+    "reactivateMember": IDL2.Func([OrgId2, UserId2], [Result_210], []),
     "redeemDeviceSyncToken": IDL2.Func(
       [IDL2.Text, IDL2.Text, IDL2.Text],
-      [Result_62],
+      [Result_102],
       []
     ),
     "registerAttachment": IDL2.Func(
       [RegisterAttachmentRequest2],
-      [Result_52],
+      [Result_92],
       []
     ),
     "registerUser": IDL2.Func([RegisterRequest2], [Result2], []),
-    "removeAdmin": IDL2.Func([UserId2], [Result_32], []),
+    "rejectKeyRecovery": IDL2.Func([IDL2.Nat], [Result_82], []),
+    "removeAdmin": IDL2.Func([UserId2], [Result_62], []),
     "removeConversationMember": IDL2.Func(
       [RemoveMemberRequest2],
-      [Result_32],
+      [Result_62],
       []
     ),
-    "revokeDevice": IDL2.Func([IDL2.Text], [Result_32], []),
-    "revokeKeyEscrow": IDL2.Func([IDL2.Text, IDL2.Text], [Result_32], []),
-    "sendMessage": IDL2.Func([SendMessageRequest2], [Result_42], []),
+    "removeMember": IDL2.Func([OrgId2, UserId2], [Result_210], []),
+    "removeMemberFromGroup": IDL2.Func(
+      [RemoveMemberFromGroupRequest2],
+      [Result_210],
+      []
+    ),
+    "revokeDevice": IDL2.Func([IDL2.Text], [Result_62], []),
+    "revokeKeyEscrow": IDL2.Func([IDL2.Text, IDL2.Text], [Result_62], []),
+    "sendMessage": IDL2.Func([SendMessageRequest2], [Result_72], []),
     "setGroupCompartment": IDL2.Func(
       [ConversationId2, CompartmentLabel2],
-      [Result_32],
+      [Result_62],
       []
     ),
     "setSovereignConfig": IDL2.Func(
@@ -34784,12 +35557,28 @@ const idlFactory = ({ IDL: IDL2 }) => {
         IDL2.Opt(IDL2.Nat),
         IDL2.Opt(IDL2.Float64)
       ],
-      [Result_22],
+      [Result_52],
       []
     ),
     "setTypingIndicator": IDL2.Func([ConversationId2, IDL2.Nat], [], []),
-    "submitJoinRequest": IDL2.Func([SubmitJoinRequestRequest2], [Result_18], []),
+    "submitJoinRequest": IDL2.Func([SubmitJoinRequestRequest2], [Result_42], []),
+    "suspendMember": IDL2.Func([SuspendUserRequest2], [Result_210], []),
+    "suspendOrg": IDL2.Func([OrgId2], [Result_210], []),
+    "toggleLegalHold": IDL2.Func([LegalHoldRequest2], [Result_110], []),
     "touchPresence": IDL2.Func([], [], []),
+    "updateMemberRole": IDL2.Func([UpdateMemberRoleRequest2], [Result_210], []),
+    "updateOrg": IDL2.Func(
+      [OrgId2, IDL2.Text, IDL2.Opt(IDL2.Text)],
+      [Result_32],
+      []
+    ),
+    "updateOrgSettings": IDL2.Func([IDL2.Text, OrgSettings2], [Result_210], []),
+    "updatePlatformSettings": IDL2.Func([PlatformSettings2], [Result_210], []),
+    "updateRetentionPolicy": IDL2.Func(
+      [UpdateRetentionPolicyRequest2],
+      [Result_110],
+      []
+    ),
     "updateUserProfile": IDL2.Func([UpdateProfileRequest2], [Result2], []),
     "uploadFile": IDL2.Func(
       [IDL2.Vec(IDL2.Nat8), IDL2.Text],
@@ -34809,11 +35598,74 @@ function candid_none() {
 function record_opt_to_undefined(arg) {
   return arg == null ? void 0 : arg;
 }
+var AuditEventType = /* @__PURE__ */ ((AuditEventType2) => {
+  AuditEventType2["legalHoldRemoved"] = "legalHoldRemoved";
+  AuditEventType2["memberSuspended"] = "memberSuspended";
+  AuditEventType2["userInvited"] = "userInvited";
+  AuditEventType2["retentionEnabled"] = "retentionEnabled";
+  AuditEventType2["memberAdded"] = "memberAdded";
+  AuditEventType2["policyExpiryCheckPerformed"] = "policyExpiryCheckPerformed";
+  AuditEventType2["retentionPolicyUpdated"] = "retentionPolicyUpdated";
+  AuditEventType2["retentionDisabled"] = "retentionDisabled";
+  AuditEventType2["groupMemberRemoved"] = "groupMemberRemoved";
+  AuditEventType2["orgCreated"] = "orgCreated";
+  AuditEventType2["orgDeleted"] = "orgDeleted";
+  AuditEventType2["platformSettingsUpdated"] = "platformSettingsUpdated";
+  AuditEventType2["escrowAccessGranted"] = "escrowAccessGranted";
+  AuditEventType2["callInitiated"] = "callInitiated";
+  AuditEventType2["sovereignConfigUpdated"] = "sovereignConfigUpdated";
+  AuditEventType2["keyRecoveryApproved"] = "keyRecoveryApproved";
+  AuditEventType2["keyRecoveryInitiated"] = "keyRecoveryInitiated";
+  AuditEventType2["messageQueueDrained"] = "messageQueueDrained";
+  AuditEventType2["memberReactivated"] = "memberReactivated";
+  AuditEventType2["legalHoldPlaced"] = "legalHoldPlaced";
+  AuditEventType2["keyRecoveryRejected"] = "keyRecoveryRejected";
+  AuditEventType2["adminAction"] = "adminAction";
+  AuditEventType2["orgSettingsUpdated"] = "orgSettingsUpdated";
+  AuditEventType2["auditLogExported"] = "auditLogExported";
+  AuditEventType2["escrowEnrolled"] = "escrowEnrolled";
+  AuditEventType2["messageSent"] = "messageSent";
+  AuditEventType2["escrowRevoked"] = "escrowRevoked";
+  AuditEventType2["compartmentAssigned"] = "compartmentAssigned";
+  AuditEventType2["policyReportExported"] = "policyReportExported";
+  AuditEventType2["userRegistered"] = "userRegistered";
+  AuditEventType2["memberRemoved"] = "memberRemoved";
+  AuditEventType2["retentionPolicyCreated"] = "retentionPolicyCreated";
+  AuditEventType2["orgSuspended"] = "orgSuspended";
+  AuditEventType2["userRemoved"] = "userRemoved";
+  AuditEventType2["priorityMessageSent"] = "priorityMessageSent";
+  AuditEventType2["orgUpdated"] = "orgUpdated";
+  AuditEventType2["memberRoleChanged"] = "memberRoleChanged";
+  return AuditEventType2;
+})(AuditEventType || {});
 var ConversationKind = /* @__PURE__ */ ((ConversationKind2) => {
   ConversationKind2["group"] = "group";
   ConversationKind2["direct"] = "direct";
   return ConversationKind2;
 })(ConversationKind || {});
+var DataExportPermission = /* @__PURE__ */ ((DataExportPermission2) => {
+  DataExportPermission2["orgAdminsOnly"] = "orgAdminsOnly";
+  DataExportPermission2["disabled"] = "disabled";
+  DataExportPermission2["allMembers"] = "allMembers";
+  return DataExportPermission2;
+})(DataExportPermission || {});
+var EscrowStatus = /* @__PURE__ */ ((EscrowStatus2) => {
+  EscrowStatus2["active"] = "active";
+  EscrowStatus2["revoked"] = "revoked";
+  EscrowStatus2["recovered"] = "recovered";
+  EscrowStatus2["pendingRecovery"] = "pendingRecovery";
+  return EscrowStatus2;
+})(EscrowStatus || {});
+var GroupCreationPermission = /* @__PURE__ */ ((GroupCreationPermission2) => {
+  GroupCreationPermission2["orgAdminsOnly"] = "orgAdminsOnly";
+  GroupCreationPermission2["allMembers"] = "allMembers";
+  return GroupCreationPermission2;
+})(GroupCreationPermission || {});
+var GroupStatus = /* @__PURE__ */ ((GroupStatus2) => {
+  GroupStatus2["active"] = "active";
+  GroupStatus2["suspended"] = "suspended";
+  return GroupStatus2;
+})(GroupStatus || {});
 var JoinRequestStatus = /* @__PURE__ */ ((JoinRequestStatus2) => {
   JoinRequestStatus2["pending"] = "pending";
   JoinRequestStatus2["denied"] = "denied";
@@ -34833,6 +35685,34 @@ var MessageType = /* @__PURE__ */ ((MessageType2) => {
   MessageType2["image"] = "image";
   return MessageType2;
 })(MessageType || {});
+var OrgRole = /* @__PURE__ */ ((OrgRole2) => {
+  OrgRole2["OrgAdmin"] = "OrgAdmin";
+  OrgRole2["Auditor"] = "Auditor";
+  OrgRole2["SuperAdmin"] = "SuperAdmin";
+  OrgRole2["StandardUser"] = "StandardUser";
+  return OrgRole2;
+})(OrgRole || {});
+var PasswordPolicy = /* @__PURE__ */ ((PasswordPolicy2) => {
+  PasswordPolicy2["strong"] = "strong";
+  PasswordPolicy2["enterprise"] = "enterprise";
+  PasswordPolicy2["basic"] = "basic";
+  return PasswordPolicy2;
+})(PasswordPolicy || {});
+var RecoveryRequestStatus = /* @__PURE__ */ ((RecoveryRequestStatus2) => {
+  RecoveryRequestStatus2["pending"] = "pending";
+  RecoveryRequestStatus2["completed"] = "completed";
+  RecoveryRequestStatus2["approved"] = "approved";
+  RecoveryRequestStatus2["rejected"] = "rejected";
+  return RecoveryRequestStatus2;
+})(RecoveryRequestStatus || {});
+var RetentionPeriod = /* @__PURE__ */ ((RetentionPeriod2) => {
+  RetentionPeriod2["days30"] = "days30";
+  RetentionPeriod2["days90"] = "days90";
+  RetentionPeriod2["unlimited"] = "unlimited";
+  RetentionPeriod2["years7"] = "years7";
+  RetentionPeriod2["year1"] = "year1";
+  return RetentionPeriod2;
+})(RetentionPeriod || {});
 class Backend {
   constructor(actor, _uploadFile, _downloadFile, processError2) {
     this.actor = actor;
@@ -34928,84 +35808,126 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.addAdmin(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.addAdmin(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async addConversationMember(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.addConversationMember(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.addConversationMember(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async addDevice(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.addDevice(arg0);
-        return from_candid_Result_6_n12(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.addDevice(arg0);
-      return from_candid_Result_6_n12(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
     }
   }
   async adminGetEscrowGrants(arg0, arg1, arg2) {
     if (this.processError) {
       try {
         const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n14(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2));
-        return from_candid_Result_17_n16(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_31_n16(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n14(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2));
-      return from_candid_Result_17_n16(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_31_n16(this._uploadFile, this._downloadFile, result);
     }
   }
   async adminGrantEscrowAccess(arg0, arg1, arg2) {
     if (this.processError) {
       try {
         const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-        return from_candid_Result_16_n18(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_30_n18(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-      return from_candid_Result_16_n18(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_30_n18(this._uploadFile, this._downloadFile, result);
     }
   }
   async approveJoinRequest(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.approveJoinRequest(to_candid_JoinRequestActionRequest_n20(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.approveJoinRequest(to_candid_JoinRequestActionRequest_n20(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async approveKeyRecovery(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.approveKeyRecovery(arg0);
+        return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.approveKeyRecovery(arg0);
+      return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async bootstrapSuperAdmin(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.bootstrapSuperAdmin(arg0);
+        return from_candid_Result_29_n31(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.bootstrapSuperAdmin(arg0);
+      return from_candid_Result_29_n31(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async checkPolicyExpiry(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.checkPolicyExpiry(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.checkPolicyExpiry(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
     }
   }
   async clearTypingIndicator(arg0) {
@@ -35026,252 +35948,392 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.createDirectConversation(arg0);
-        return from_candid_Result_15_n22(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.createDirectConversation(arg0);
-      return from_candid_Result_15_n22(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
     }
   }
   async createGroupConversation(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n30(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_15_n22(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n47(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n30(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_15_n22(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n47(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async createOrg(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.createOrg(arg0);
+        return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.createOrg(arg0);
+      return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async createRetentionPolicy(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.createRetentionPolicy(to_candid_CreateRetentionPolicyRequest_n55(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.createRetentionPolicy(to_candid_CreateRetentionPolicyRequest_n55(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
     }
   }
   async deleteAttachment(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.deleteAttachment(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.deleteAttachment(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async deleteConversation(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.deleteConversation(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.deleteConversation(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async deleteGroupConversation(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.deleteGroupConversation(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.deleteGroupConversation(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async deleteOrg(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteOrg(arg0);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteOrg(arg0);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async denyJoinRequest(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.denyJoinRequest(to_candid_JoinRequestActionRequest_n20(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.denyJoinRequest(to_candid_JoinRequestActionRequest_n20(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async disableGroupRetention(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.disableGroupRetention(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.disableGroupRetention(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async enableGroupRetention(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.enableGroupRetention(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.enableGroupRetention(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4) {
     if (this.processError) {
       try {
         const result = await this.actor.enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.enrollKeyEscrow(arg0, arg1, arg2, arg3, arg4);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async exportAuditLog(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n32(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_13_n39(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n63(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n32(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_13_n39(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n63(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async exportAuditLogs(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.exportAuditLogs(to_candid_ExportAuditLogsRequest_n72(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.exportAuditLogs(to_candid_ExportAuditLogsRequest_n72(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
     }
   }
   async exportConfigBundle() {
     if (this.processError) {
       try {
         const result = await this.actor.exportConfigBundle();
-        return from_candid_Result_14_n41(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_27_n83(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.exportConfigBundle();
-      return from_candid_Result_14_n41(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_27_n83(this._uploadFile, this._downloadFile, result);
     }
   }
   async generateDeviceSyncToken(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.generateDeviceSyncToken(arg0);
-        return from_candid_Result_13_n39(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.generateDeviceSyncToken(arg0);
-      return from_candid_Result_13_n39(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
     }
   }
-  async getAuditLog(arg0) {
+  async getAllGroups(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n57(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_12_n61(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getAllGroups(to_candid_GetAllGroupsRequest_n97(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_vec_n99(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n57(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_12_n61(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getAllGroups(to_candid_GetAllGroupsRequest_n97(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_vec_n99(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getAuditLog(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getCanisterHealth() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getCanisterHealth();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getCanisterHealth();
+      return result;
     }
   }
   async getConversation(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getConversation(arg0);
-        return from_candid_opt_n68(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n106(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getConversation(arg0);
-      return from_candid_opt_n68(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n106(this._uploadFile, this._downloadFile, result);
     }
   }
   async getDeploymentInfo() {
     if (this.processError) {
       try {
         const result = await this.actor.getDeploymentInfo();
-        return from_candid_SovereignConfig_n69(this._uploadFile, this._downloadFile, result);
+        return from_candid_SovereignConfig_n107(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getDeploymentInfo();
-      return from_candid_SovereignConfig_n69(this._uploadFile, this._downloadFile, result);
+      return from_candid_SovereignConfig_n107(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getEscrowStats() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getEscrowStats();
+        return from_candid_Result_24_n111(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getEscrowStats();
+      return from_candid_Result_24_n111(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getEscrowedUsers(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n115(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_23_n117(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n115(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_23_n117(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getGlobalRetentionPolicy() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getGlobalRetentionPolicy();
+        return from_candid_opt_n124(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getGlobalRetentionPolicy();
+      return from_candid_opt_n124(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupCompartment(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupCompartment(arg0);
-        return from_candid_opt_n73(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n125(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupCompartment(arg0);
-      return from_candid_opt_n73(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n125(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupJoinRequests(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupJoinRequests(arg0);
-        return from_candid_Result_11_n74(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_22_n126(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupJoinRequests(arg0);
-      return from_candid_Result_11_n74(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_22_n126(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getGroupMembers(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getGroupMembers(arg0);
+        return from_candid_Result_21_n133(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getGroupMembers(arg0);
+      return from_candid_Result_21_n133(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupRetentionPolicy(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupRetentionPolicy(arg0);
-        return from_candid_Result_10_n81(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_20_n138(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupRetentionPolicy(arg0);
-      return from_candid_Result_10_n81(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_20_n138(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMessageAttachments(arg0) {
@@ -35291,43 +36353,169 @@ class Backend {
   async getMessages(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n83(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_9_n85(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n140(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_19_n142(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n83(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_9_n85(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n140(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_19_n142(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyEscrowStatus() {
     if (this.processError) {
       try {
         const result = await this.actor.getMyEscrowStatus();
-        return from_candid_vec_n95(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n152(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyEscrowStatus();
-      return from_candid_vec_n95(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n152(this._uploadFile, this._downloadFile, result);
     }
   }
-  async getRetentionMetadata(arg0) {
+  async getMyOrgs() {
     if (this.processError) {
       try {
-        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n98(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_8_n100(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getMyOrgs();
+        return from_candid_Result_18_n155(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n98(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_8_n100(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getMyOrgs();
+      return from_candid_Result_18_n155(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getMyRole(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getMyRole(arg0);
+        return from_candid_Result_17_n164(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getMyRole(arg0);
+      return from_candid_Result_17_n164(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getOrg(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getOrg(arg0);
+        return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getOrg(arg0);
+      return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getOrgSettings(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getOrgSettings(arg0);
+        return from_candid_OrgSettings_n167(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getOrgSettings(arg0);
+      return from_candid_OrgSettings_n167(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getOrgUsers(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n175(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_16_n177(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n175(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_16_n177(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getPlatformSettings() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getPlatformSettings();
+        return from_candid_PlatformSettings_n181(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getPlatformSettings();
+      return from_candid_PlatformSettings_n181(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getRecoveryRequests(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n185(this._uploadFile, this._downloadFile, arg1));
+        return from_candid_Result_15_n188(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n185(this._uploadFile, this._downloadFile, arg1));
+      return from_candid_Result_15_n188(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getRetentionMetadata(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n191(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_14_n193(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n191(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_14_n193(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getRetentionPolicies(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n195(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n195(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getRetentionPolicy(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getRetentionPolicy(arg0);
+        return from_candid_opt_n124(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getRetentionPolicy(arg0);
+      return from_candid_opt_n124(this._uploadFile, this._downloadFile, result);
     }
   }
   async getTypingIndicators(arg0) {
@@ -35348,28 +36536,70 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfile(arg0);
-        return from_candid_opt_n102(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n196(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfile(arg0);
-      return from_candid_opt_n102(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n196(this._uploadFile, this._downloadFile, result);
     }
   }
   async getUserProfiles(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfiles(arg0);
-        return from_candid_vec_n105(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n199(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfiles(arg0);
-      return from_candid_vec_n105(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n199(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async hasSuperAdmin() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.hasSuperAdmin();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.hasSuperAdmin();
+      return result;
+    }
+  }
+  async initiateKeyRecovery(arg0, arg1, arg2, arg3) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.initiateKeyRecovery(arg0, arg1, arg2, to_candid_opt_n33(this._uploadFile, this._downloadFile, arg3));
+        return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.initiateKeyRecovery(arg0, arg1, arg2, to_candid_opt_n33(this._uploadFile, this._downloadFile, arg3));
+      return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async inviteUser(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n200(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_13_n204(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n200(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_13_n204(this._uploadFile, this._downloadFile, result);
     }
   }
   async isAdminCheck(arg0) {
@@ -35390,28 +36620,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.listAdmins();
-        return from_candid_Result_7_n106(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_12_n206(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.listAdmins();
-      return from_candid_Result_7_n106(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_12_n206(this._uploadFile, this._downloadFile, result);
     }
   }
   async listConversations() {
     if (this.processError) {
       try {
         const result = await this.actor.listConversations();
-        return from_candid_vec_n108(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n208(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.listConversations();
-      return from_candid_vec_n108(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n208(this._uploadFile, this._downloadFile, result);
     }
   }
   async listMyDevices() {
@@ -35428,172 +36658,270 @@ class Backend {
       return result;
     }
   }
-  async listPublicGroups(arg0) {
+  async listOrgs(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n109(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_vec_n111(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n209(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_11_n211(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n109(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_vec_n111(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n209(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_11_n211(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async listPublicGroups(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n216(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_vec_n218(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n216(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_vec_n218(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async logPolicyExpiryCheck() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.logPolicyExpiryCheck();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.logPolicyExpiryCheck();
+      return result;
+    }
+  }
+  async logPolicyReportExported(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.logPolicyReportExported(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0));
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.logPolicyReportExported(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0));
+      return result;
     }
   }
   async markMessageRead(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.markMessageRead(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.markMessageRead(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async reactivateMember(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.reactivateMember(arg0, arg1);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.reactivateMember(arg0, arg1);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async redeemDeviceSyncToken(arg0, arg1, arg2) {
     if (this.processError) {
       try {
         const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
-        return from_candid_Result_6_n12(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
-      return from_candid_Result_6_n12(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
     }
   }
   async registerAttachment(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.registerAttachment(arg0);
-        return from_candid_Result_5_n114(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_9_n221(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.registerAttachment(arg0);
-      return from_candid_Result_5_n114(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_9_n221(this._uploadFile, this._downloadFile, result);
     }
   }
   async registerUser(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.registerUser(to_candid_RegisterRequest_n116(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n118(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.registerUser(to_candid_RegisterRequest_n223(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n225(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.registerUser(to_candid_RegisterRequest_n116(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n118(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.registerUser(to_candid_RegisterRequest_n223(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n225(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async rejectKeyRecovery(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.rejectKeyRecovery(arg0);
+        return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.rejectKeyRecovery(arg0);
+      return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
     }
   }
   async removeAdmin(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.removeAdmin(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.removeAdmin(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async removeConversationMember(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.removeConversationMember(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.removeConversationMember(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async removeMember(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.removeMember(arg0, arg1);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.removeMember(arg0, arg1);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async removeMemberFromGroup(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.removeMemberFromGroup(arg0);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.removeMemberFromGroup(arg0);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async revokeDevice(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.revokeDevice(arg0);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.revokeDevice(arg0);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async revokeKeyEscrow(arg0, arg1) {
     if (this.processError) {
       try {
         const result = await this.actor.revokeKeyEscrow(arg0, arg1);
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.revokeKeyEscrow(arg0, arg1);
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async sendMessage(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n120(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_4_n126(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n227(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_7_n233(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n120(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_4_n126(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n227(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_7_n233(this._uploadFile, this._downloadFile, result);
     }
   }
   async setGroupCompartment(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n128(this._uploadFile, this._downloadFile, arg1));
-        return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n235(this._uploadFile, this._downloadFile, arg1));
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n128(this._uploadFile, this._downloadFile, arg1));
-      return from_candid_Result_3_n8(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n235(this._uploadFile, this._downloadFile, arg1));
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async setSovereignConfig(arg0, arg1, arg2, arg3) {
     if (this.processError) {
       try {
-        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n130(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n132(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n133(this._uploadFile, this._downloadFile, arg3));
-        return from_candid_Result_2_n134(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n237(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n239(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n240(this._uploadFile, this._downloadFile, arg3));
+        return from_candid_Result_5_n241(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n130(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n132(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n133(this._uploadFile, this._downloadFile, arg3));
-      return from_candid_Result_2_n134(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n237(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n239(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n240(this._uploadFile, this._downloadFile, arg3));
+      return from_candid_Result_5_n241(this._uploadFile, this._downloadFile, result);
     }
   }
   async setTypingIndicator(arg0, arg1) {
@@ -35613,15 +36941,57 @@ class Backend {
   async submitJoinRequest(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n136(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_1_n138(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n243(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_4_n245(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n136(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_1_n138(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n243(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_4_n245(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async suspendMember(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.suspendMember(arg0);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.suspendMember(arg0);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async suspendOrg(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.suspendOrg(arg0);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.suspendOrg(arg0);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async toggleLegalHold(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.toggleLegalHold(arg0);
+        return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.toggleLegalHold(arg0);
+      return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
     }
   }
   async touchPresence() {
@@ -35638,18 +37008,88 @@ class Backend {
       return result;
     }
   }
-  async updateUserProfile(arg0) {
+  async updateMemberRole(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n140(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n118(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n247(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n140(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n118(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n247(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updateOrg(arg0, arg1, arg2) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n249(this._uploadFile, this._downloadFile, arg2));
+        return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n249(this._uploadFile, this._downloadFile, arg2));
+      return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updateOrgSettings(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n250(this._uploadFile, this._downloadFile, arg1));
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n250(this._uploadFile, this._downloadFile, arg1));
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updatePlatformSettings(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n257(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n257(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updateRetentionPolicy(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n261(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n261(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updateUserProfile(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n263(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n225(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n263(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n225(this._uploadFile, this._downloadFile, result);
     }
   }
   async uploadFile(arg0, arg1) {
@@ -35667,197 +37107,465 @@ class Backend {
     }
   }
 }
-function from_candid_AuditEventType_n66(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n67(_uploadFile, _downloadFile, value);
+function from_candid_AuditEventType_n81(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n82(_uploadFile, _downloadFile, value);
 }
-function from_candid_AuditEvent_n64(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n65(_uploadFile, _downloadFile, value);
+function from_candid_AuditEvent_n79(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n80(_uploadFile, _downloadFile, value);
 }
-function from_candid_CompartmentLabel_n47(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n48(_uploadFile, _downloadFile, value);
+function from_candid_CompartmentLabel_n89(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n90(_uploadFile, _downloadFile, value);
 }
-function from_candid_ConfigExportBundle_n43(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n44(_uploadFile, _downloadFile, value);
+function from_candid_ConfigExportBundle_n85(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n86(_uploadFile, _downloadFile, value);
 }
-function from_candid_ConversationKind_n27(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n28(_uploadFile, _downloadFile, value);
+function from_candid_ConversationKind_n44(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n45(_uploadFile, _downloadFile, value);
 }
-function from_candid_ConversationPublic_n24(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n25(_uploadFile, _downloadFile, value);
+function from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n42(_uploadFile, _downloadFile, value);
 }
-function from_candid_DataResidency_n55(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n56(_uploadFile, _downloadFile, value);
+function from_candid_DataExportPermission_n171(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n172(_uploadFile, _downloadFile, value);
+}
+function from_candid_DataResidency_n95(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n96(_uploadFile, _downloadFile, value);
 }
 function from_candid_Error_n10(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n11(_uploadFile, _downloadFile, value);
 }
-function from_candid_EscrowRecord_n96(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n97(_uploadFile, _downloadFile, value);
+function from_candid_EscrowRecord_n153(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n154(_uploadFile, _downloadFile, value);
 }
-function from_candid_GroupRetentionPolicy_n51(_uploadFile, _downloadFile, value) {
+function from_candid_EscrowStatsRecord_n113(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n114(_uploadFile, _downloadFile, value);
+}
+function from_candid_EscrowStatus_n122(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n123(_uploadFile, _downloadFile, value);
+}
+function from_candid_EscrowedUserRecord_n120(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n121(_uploadFile, _downloadFile, value);
+}
+function from_candid_GetOrgUsersResponse_n179(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n180(_uploadFile, _downloadFile, value);
+}
+function from_candid_GetOrgsResponse_n213(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n214(_uploadFile, _downloadFile, value);
+}
+function from_candid_GroupAdminRecord_n100(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n101(_uploadFile, _downloadFile, value);
+}
+function from_candid_GroupCreationPermission_n169(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n170(_uploadFile, _downloadFile, value);
+}
+function from_candid_GroupMemberRecord_n136(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n137(_uploadFile, _downloadFile, value);
+}
+function from_candid_GroupRetentionPolicy_n93(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n94(_uploadFile, _downloadFile, value);
+}
+function from_candid_GroupStatus_n102(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n103(_uploadFile, _downloadFile, value);
+}
+function from_candid_JoinRequestStatus_n131(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n132(_uploadFile, _downloadFile, value);
+}
+function from_candid_JoinRequest_n129(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n130(_uploadFile, _downloadFile, value);
+}
+function from_candid_MemberStatus_n160(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n161(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessagePriority_n150(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n151(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessagePublic_n145(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n146(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessageType_n147(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n148(_uploadFile, _downloadFile, value);
+}
+function from_candid_OrgMembership_n158(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n159(_uploadFile, _downloadFile, value);
+}
+function from_candid_OrgRecord_n51(_uploadFile, _downloadFile, value) {
   return from_candid_record_n52(_uploadFile, _downloadFile, value);
 }
-function from_candid_JoinRequestStatus_n79(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n80(_uploadFile, _downloadFile, value);
+function from_candid_OrgRole_n162(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n163(_uploadFile, _downloadFile, value);
 }
-function from_candid_JoinRequest_n77(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n78(_uploadFile, _downloadFile, value);
+function from_candid_OrgSettings_n167(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n168(_uploadFile, _downloadFile, value);
 }
-function from_candid_MessagePriority_n93(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n94(_uploadFile, _downloadFile, value);
+function from_candid_OrgStatus_n53(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n54(_uploadFile, _downloadFile, value);
 }
-function from_candid_MessagePublic_n88(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n89(_uploadFile, _downloadFile, value);
+function from_candid_PasswordPolicy_n183(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n184(_uploadFile, _downloadFile, value);
 }
-function from_candid_MessageType_n90(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n91(_uploadFile, _downloadFile, value);
+function from_candid_PlatformSettings_n181(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n182(_uploadFile, _downloadFile, value);
 }
-function from_candid_PublicGroupSummary_n112(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n113(_uploadFile, _downloadFile, value);
+function from_candid_PublicGroupSummary_n219(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n220(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_10_n81(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n82(_uploadFile, _downloadFile, value);
+function from_candid_RecoveryRequestStatus_n26(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n27(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_11_n74(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n75(_uploadFile, _downloadFile, value);
+function from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n25(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_12_n61(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n62(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_13_n39(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n40(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_14_n41(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n42(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_15_n22(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n23(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_16_n18(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n19(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_17_n16(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n17(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_1_n138(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n139(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_2_n134(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n135(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_3_n8(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n9(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_4_n126(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n127(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_5_n114(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n115(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_6_n12(_uploadFile, _downloadFile, value) {
+function from_candid_Result_10_n12(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n13(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_7_n106(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n107(_uploadFile, _downloadFile, value);
+function from_candid_Result_11_n211(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n212(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_8_n100(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n101(_uploadFile, _downloadFile, value);
+function from_candid_Result_12_n206(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n207(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_9_n85(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n86(_uploadFile, _downloadFile, value);
+function from_candid_Result_13_n204(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n205(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_n118(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n119(_uploadFile, _downloadFile, value);
+function from_candid_Result_14_n193(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n194(_uploadFile, _downloadFile, value);
 }
-function from_candid_SovereignConfig_n69(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n70(_uploadFile, _downloadFile, value);
+function from_candid_Result_15_n188(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n189(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserProfilePublic_n103(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n104(_uploadFile, _downloadFile, value);
+function from_candid_Result_16_n177(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n178(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_17_n164(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n165(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_18_n155(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n156(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_19_n142(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n143(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_1_n59(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n60(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_20_n138(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n139(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_21_n133(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n134(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_22_n126(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n127(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_23_n117(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n118(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_24_n111(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n112(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_25_n76(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n77(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_26_n70(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n71(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_27_n83(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n84(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_28_n39(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n40(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_29_n31(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n32(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_2_n61(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n62(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_30_n18(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n19(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_31_n16(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n17(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_3_n49(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n50(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_4_n245(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n246(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_5_n241(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n242(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_6_n8(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n9(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_7_n233(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n234(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_8_n22(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n23(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_9_n221(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n222(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_n225(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n226(_uploadFile, _downloadFile, value);
+}
+function from_candid_RetentionPeriodDays_n174(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n38(_uploadFile, _downloadFile, value);
+}
+function from_candid_RetentionPeriod_n37(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n38(_uploadFile, _downloadFile, value);
+}
+function from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n36(_uploadFile, _downloadFile, value);
+}
+function from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n108(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserProfilePublic_n197(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n198(_uploadFile, _downloadFile, value);
 }
 function from_candid__ImmutableObjectStorageRefillResult_n4(_uploadFile, _downloadFile, value) {
   return from_candid_record_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n102(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_UserProfilePublic_n103(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n106(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n26(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n109(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n110(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n124(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n125(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_CompartmentLabel_n89(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n149(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_MessagePriority_n150(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n166(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_OrgRole_n162(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n173(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_RetentionPeriodDays_n174(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n196(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_UserProfilePublic_n197(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n28(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
 function from_candid_opt_n29(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n53(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n30(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n54(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n43(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n46(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
 function from_candid_opt_n6(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n68(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_ConversationPublic_n24(_uploadFile, _downloadFile, value[0]);
-}
 function from_candid_opt_n7(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n71(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
+function from_candid_record_n101(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    status: from_candid_GroupStatus_n102(_uploadFile, _downloadFile, value.status),
+    orgId: record_opt_to_undefined(from_candid_opt_n28(_uploadFile, _downloadFile, value.orgId)),
+    name: value.name,
+    createdAt: value.createdAt,
+    createdBy: value.createdBy,
+    memberCount: value.memberCount
+  };
 }
-function from_candid_opt_n72(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
+function from_candid_record_n108(_uploadFile, _downloadFile, value) {
+  return {
+    lastUpdated: value.lastUpdated,
+    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n109(_uploadFile, _downloadFile, value.subnetPrincipal)),
+    canisters: value.canisters,
+    nodeCount: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.nodeCount)),
+    cyclesCostMultiplier: record_opt_to_undefined(from_candid_opt_n110(_uploadFile, _downloadFile, value.cyclesCostMultiplier)),
+    residencyLabel: from_candid_DataResidency_n95(_uploadFile, _downloadFile, value.residencyLabel)
+  };
 }
-function from_candid_opt_n73(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_CompartmentLabel_n47(_uploadFile, _downloadFile, value[0]);
+function from_candid_record_n114(_uploadFile, _downloadFile, value) {
+  return {
+    pendingRecoveries: value.pendingRecoveries,
+    lastRecoveryTimestamp: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastRecoveryTimestamp)),
+    totalEscrowed: value.totalEscrowed
+  };
 }
-function from_candid_opt_n92(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_MessagePriority_n93(_uploadFile, _downloadFile, value[0]);
+function from_candid_record_n121(_uploadFile, _downloadFile, value) {
+  return {
+    orgId: record_opt_to_undefined(from_candid_opt_n28(_uploadFile, _downloadFile, value.orgId)),
+    deviceCount: value.deviceCount,
+    userId: value.userId,
+    escrowStatus: from_candid_EscrowStatus_n122(_uploadFile, _downloadFile, value.escrowStatus),
+    lastBackedUp: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastBackedUp))
+  };
 }
-function from_candid_record_n104(_uploadFile, _downloadFile, value) {
+function from_candid_record_n130(_uploadFile, _downloadFile, value) {
+  return {
+    status: from_candid_JoinRequestStatus_n131(_uploadFile, _downloadFile, value.status),
+    requestId: value.requestId,
+    createdAt: value.createdAt,
+    conversationId: value.conversationId,
+    message: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.message)),
+    requesterId: value.requesterId
+  };
+}
+function from_candid_record_n137(_uploadFile, _downloadFile, value) {
+  return {
+    displayName: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.displayName)),
+    userId: value.userId,
+    joinedAt: value.joinedAt
+  };
+}
+function from_candid_record_n146(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    ttlSeconds: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.ttlSeconds)),
+    encryptedContent: value.encryptedContent,
+    isDeleted: value.isDeleted,
+    sender: value.sender,
+    sentAt: value.sentAt,
+    messageType: from_candid_MessageType_n147(_uploadFile, _downloadFile, value.messageType),
+    conversationId: value.conversationId,
+    priority: record_opt_to_undefined(from_candid_opt_n149(_uploadFile, _downloadFile, value.priority)),
+    readBy: value.readBy
+  };
+}
+function from_candid_record_n154(_uploadFile, _downloadFile, value) {
+  return {
+    devicePublicKeyFingerprint: value.devicePublicKeyFingerprint,
+    userId: value.userId,
+    consentTimestamp: value.consentTimestamp,
+    deviceLabel: value.deviceLabel,
+    wrappedKey: value.wrappedKey,
+    deviceId: value.deviceId,
+    consentLanguageVersion: value.consentLanguageVersion,
+    revokedAt: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.revokedAt)),
+    revokedReason: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.revokedReason))
+  };
+}
+function from_candid_record_n159(_uploadFile, _downloadFile, value) {
+  return {
+    status: from_candid_MemberStatus_n160(_uploadFile, _downloadFile, value.status),
+    orgId: value.orgId,
+    userId: value.userId,
+    joinedAt: value.joinedAt,
+    role: from_candid_OrgRole_n162(_uploadFile, _downloadFile, value.role),
+    invitedBy: value.invitedBy,
+    email: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.email)),
+    lastActive: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastActive))
+  };
+}
+function from_candid_record_n168(_uploadFile, _downloadFile, value) {
+  return {
+    legalHoldReason: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.legalHoldReason)),
+    orgId: value.orgId,
+    logoStorageKey: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoStorageKey)),
+    groupCreationPermission: from_candid_GroupCreationPermission_n169(_uploadFile, _downloadFile, value.groupCreationPermission),
+    dataExportPermission: from_candid_DataExportPermission_n171(_uploadFile, _downloadFile, value.dataExportPermission),
+    defaultInviteRole: value.defaultInviteRole,
+    logoUrl: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoUrl)),
+    legalHoldEnabled: value.legalHoldEnabled,
+    messageRetentionDays: record_opt_to_undefined(from_candid_opt_n173(_uploadFile, _downloadFile, value.messageRetentionDays))
+  };
+}
+function from_candid_record_n180(_uploadFile, _downloadFile, value) {
+  return {
+    total: value.total,
+    hasMore: value.hasMore,
+    members: from_candid_vec_n157(_uploadFile, _downloadFile, value.members)
+  };
+}
+function from_candid_record_n182(_uploadFile, _downloadFile, value) {
+  return {
+    defaultRetentionDays: from_candid_RetentionPeriodDays_n174(_uploadFile, _downloadFile, value.defaultRetentionDays),
+    keyEscrowEnabled: value.keyEscrowEnabled,
+    vetKeysEnabled: value.vetKeysEnabled,
+    sessionTimeoutMinutes: value.sessionTimeoutMinutes,
+    platformTagline: value.platformTagline,
+    auditLogRetentionDays: from_candid_RetentionPeriodDays_n174(_uploadFile, _downloadFile, value.auditLogRetentionDays),
+    mfaEnforced: value.mfaEnforced,
+    passwordPolicy: from_candid_PasswordPolicy_n183(_uploadFile, _downloadFile, value.passwordPolicy),
+    platformName: value.platformName
+  };
+}
+function from_candid_record_n198(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     ecdhPublicKey: value.ecdhPublicKey,
-    encryptedAvatarKey: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.encryptedAvatarKey)),
+    encryptedAvatarKey: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.encryptedAvatarKey)),
     encryptedDisplayName: value.encryptedDisplayName,
     registeredAt: value.registeredAt,
     lastSeen: value.lastSeen
   };
 }
-function from_candid_record_n113(_uploadFile, _downloadFile, value) {
+function from_candid_record_n214(_uploadFile, _downloadFile, value) {
+  return {
+    total: value.total,
+    orgs: from_candid_vec_n215(_uploadFile, _downloadFile, value.orgs)
+  };
+}
+function from_candid_record_n220(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     name: value.name,
     memberCount: value.memberCount,
-    description: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.description)),
-    category: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.category))
+    description: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.description)),
+    category: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.category))
   };
 }
 function from_candid_record_n25(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
-    members: value.members,
-    lastMessageAt: value.lastMessageAt,
-    displayName: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.displayName)),
-    kind: from_candid_ConversationKind_n27(_uploadFile, _downloadFile, value.kind),
+    status: from_candid_RecoveryRequestStatus_n26(_uploadFile, _downloadFile, value.status),
+    orgId: record_opt_to_undefined(from_candid_opt_n28(_uploadFile, _downloadFile, value.orgId)),
+    approvedBy: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.approvedBy)),
     createdAt: value.createdAt,
-    createdBy: value.createdBy,
-    description: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.description)),
-    category: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.category)),
-    discoverable: value.discoverable,
-    encryptedName: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.encryptedName))
+    initiatingAdmin: value.initiatingAdmin,
+    targetDeviceId: value.targetDeviceId,
+    resolvedAt: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.resolvedAt)),
+    reason: value.reason,
+    targetUserId: value.targetUserId
   };
 }
-function from_candid_record_n44(_uploadFile, _downloadFile, value) {
+function from_candid_record_n36(_uploadFile, _downloadFile, value) {
   return {
-    compartmentMappings: from_candid_vec_n45(_uploadFile, _downloadFile, value.compartmentMappings),
-    adminPrincipals: value.adminPrincipals,
-    exportedAt: value.exportedAt,
-    exportedBy: value.exportedBy,
-    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.subnetPrincipal)),
-    canisters: value.canisters,
-    groupRetentionPolicies: from_candid_vec_n49(_uploadFile, _downloadFile, value.groupRetentionPolicies),
-    residencyLabel: from_candid_DataResidency_n55(_uploadFile, _downloadFile, value.residencyLabel)
+    id: value.id,
+    orgId: record_opt_to_undefined(from_candid_opt_n28(_uploadFile, _downloadFile, value.orgId)),
+    period: from_candid_RetentionPeriod_n37(_uploadFile, _downloadFile, value.period),
+    legalHold: value.legalHold,
+    updatedAt: value.updatedAt,
+    updatedBy: value.updatedBy,
+    autoDelete: value.autoDelete
+  };
+}
+function from_candid_record_n42(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    members: value.members,
+    lastMessageAt: value.lastMessageAt,
+    displayName: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.displayName)),
+    kind: from_candid_ConversationKind_n44(_uploadFile, _downloadFile, value.kind),
+    createdAt: value.createdAt,
+    createdBy: value.createdBy,
+    description: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.description)),
+    category: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.category)),
+    discoverable: value.discoverable,
+    encryptedName: record_opt_to_undefined(from_candid_opt_n46(_uploadFile, _downloadFile, value.encryptedName))
   };
 }
 function from_candid_record_n5(_uploadFile, _downloadFile, value) {
@@ -35868,124 +37576,89 @@ function from_candid_record_n5(_uploadFile, _downloadFile, value) {
 }
 function from_candid_record_n52(_uploadFile, _downloadFile, value) {
   return {
+    id: value.id,
+    status: from_candid_OrgStatus_n53(_uploadFile, _downloadFile, value.status),
+    name: value.name,
+    createdAt: value.createdAt,
+    createdBy: value.createdBy,
+    memberCount: value.memberCount,
+    description: value.description
+  };
+}
+function from_candid_record_n80(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    orgId: record_opt_to_undefined(from_candid_opt_n28(_uploadFile, _downloadFile, value.orgId)),
+    targetPrincipal: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.targetPrincipal)),
+    encryptedDetails: record_opt_to_undefined(from_candid_opt_n46(_uploadFile, _downloadFile, value.encryptedDetails)),
+    timestamp: value.timestamp,
+    actorPrincipal: value.actorPrincipal,
+    eventType: from_candid_AuditEventType_n81(_uploadFile, _downloadFile, value.eventType)
+  };
+}
+function from_candid_record_n86(_uploadFile, _downloadFile, value) {
+  return {
+    compartmentMappings: from_candid_vec_n87(_uploadFile, _downloadFile, value.compartmentMappings),
+    adminPrincipals: value.adminPrincipals,
+    exportedAt: value.exportedAt,
+    exportedBy: value.exportedBy,
+    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.subnetPrincipal)),
+    canisters: value.canisters,
+    groupRetentionPolicies: from_candid_vec_n91(_uploadFile, _downloadFile, value.groupRetentionPolicies),
+    residencyLabel: from_candid_DataResidency_n95(_uploadFile, _downloadFile, value.residencyLabel)
+  };
+}
+function from_candid_record_n94(_uploadFile, _downloadFile, value) {
+  return {
     retentionEnabled: value.retentionEnabled,
-    enabledAt: record_opt_to_undefined(from_candid_opt_n53(_uploadFile, _downloadFile, value.enabledAt)),
-    enabledBy: record_opt_to_undefined(from_candid_opt_n54(_uploadFile, _downloadFile, value.enabledBy)),
+    enabledAt: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.enabledAt)),
+    enabledBy: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.enabledBy)),
     convId: value.convId
   };
 }
-function from_candid_record_n65(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    targetPrincipal: record_opt_to_undefined(from_candid_opt_n54(_uploadFile, _downloadFile, value.targetPrincipal)),
-    encryptedDetails: record_opt_to_undefined(from_candid_opt_n29(_uploadFile, _downloadFile, value.encryptedDetails)),
-    timestamp: value.timestamp,
-    actorPrincipal: value.actorPrincipal,
-    eventType: from_candid_AuditEventType_n66(_uploadFile, _downloadFile, value.eventType)
-  };
-}
-function from_candid_record_n70(_uploadFile, _downloadFile, value) {
-  return {
-    lastUpdated: value.lastUpdated,
-    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n71(_uploadFile, _downloadFile, value.subnetPrincipal)),
-    canisters: value.canisters,
-    nodeCount: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.nodeCount)),
-    cyclesCostMultiplier: record_opt_to_undefined(from_candid_opt_n72(_uploadFile, _downloadFile, value.cyclesCostMultiplier)),
-    residencyLabel: from_candid_DataResidency_n55(_uploadFile, _downloadFile, value.residencyLabel)
-  };
-}
-function from_candid_record_n78(_uploadFile, _downloadFile, value) {
-  return {
-    status: from_candid_JoinRequestStatus_n79(_uploadFile, _downloadFile, value.status),
-    requestId: value.requestId,
-    createdAt: value.createdAt,
-    conversationId: value.conversationId,
-    message: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.message)),
-    requesterId: value.requesterId
-  };
-}
-function from_candid_record_n89(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    ttlSeconds: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.ttlSeconds)),
-    encryptedContent: value.encryptedContent,
-    isDeleted: value.isDeleted,
-    sender: value.sender,
-    sentAt: value.sentAt,
-    messageType: from_candid_MessageType_n90(_uploadFile, _downloadFile, value.messageType),
-    conversationId: value.conversationId,
-    priority: record_opt_to_undefined(from_candid_opt_n92(_uploadFile, _downloadFile, value.priority)),
-    readBy: value.readBy
-  };
-}
-function from_candid_record_n97(_uploadFile, _downloadFile, value) {
-  return {
-    devicePublicKeyFingerprint: value.devicePublicKeyFingerprint,
-    userId: value.userId,
-    consentTimestamp: value.consentTimestamp,
-    deviceLabel: value.deviceLabel,
-    wrappedKey: value.wrappedKey,
-    deviceId: value.deviceId,
-    consentLanguageVersion: value.consentLanguageVersion,
-    revokedAt: record_opt_to_undefined(from_candid_opt_n53(_uploadFile, _downloadFile, value.revokedAt)),
-    revokedReason: record_opt_to_undefined(from_candid_opt_n26(_uploadFile, _downloadFile, value.revokedReason))
-  };
-}
-function from_candid_tuple_n46(_uploadFile, _downloadFile, value) {
+function from_candid_tuple_n88(_uploadFile, _downloadFile, value) {
   return [
     value[0],
-    from_candid_CompartmentLabel_n47(_uploadFile, _downloadFile, value[1])
+    from_candid_CompartmentLabel_n89(_uploadFile, _downloadFile, value[1])
   ];
 }
-function from_candid_tuple_n50(_uploadFile, _downloadFile, value) {
+function from_candid_tuple_n92(_uploadFile, _downloadFile, value) {
   return [
     value[0],
-    from_candid_GroupRetentionPolicy_n51(_uploadFile, _downloadFile, value[1])
+    from_candid_GroupRetentionPolicy_n93(_uploadFile, _downloadFile, value[1])
   ];
 }
-function from_candid_variant_n101(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n107(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
-  } : value;
+function from_candid_variant_n103(_uploadFile, _downloadFile, value) {
+  return "active" in value ? "active" : "suspended" in value ? "suspended" : value;
 }
 function from_candid_variant_n11(_uploadFile, _downloadFile, value) {
   return "forbidden" in value ? Error.forbidden : "alreadyExists" in value ? Error.alreadyExists : "invalidInput" in value ? Error.invalidInput : "notFound" in value ? Error.notFound : "unauthorized" in value ? Error.unauthorized : value;
 }
-function from_candid_variant_n115(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n112(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: value.ok
+    ok: from_candid_EscrowStatsRecord_n113(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n119(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n118(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_UserProfilePublic_n103(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n119(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
+}
+function from_candid_variant_n123(_uploadFile, _downloadFile, value) {
+  return "active" in value ? "active" : "revoked" in value ? "revoked" : "recovered" in value ? "recovered" : "pendingRecovery" in value ? "pendingRecovery" : value;
 }
 function from_candid_variant_n127(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_MessagePublic_n88(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n128(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
@@ -36000,28 +37673,97 @@ function from_candid_variant_n13(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n135(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n132(_uploadFile, _downloadFile, value) {
+  return "pending" in value ? "pending" : "denied" in value ? "denied" : "approved" in value ? "approved" : value;
+}
+function from_candid_variant_n134(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_SovereignConfig_n69(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n135(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+    err: value.err
   } : value;
 }
 function from_candid_variant_n139(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_JoinRequest_n77(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_GroupRetentionPolicy_n93(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n143(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n144(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n148(_uploadFile, _downloadFile, value) {
+  return "audio" in value ? "audio" : "video" in value ? "video" : "file" in value ? "file" : "text" in value ? "text" : "image" in value ? "image" : value;
+}
+function from_candid_variant_n151(_uploadFile, _downloadFile, value) {
+  return "normal" in value ? "normal" : "high" in value ? "high" : value;
+}
+function from_candid_variant_n156(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n157(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
+function from_candid_variant_n161(_uploadFile, _downloadFile, value) {
+  return "Active" in value ? "Active" : "Suspended" in value ? "Suspended" : "Pending" in value ? "Pending" : value;
+}
+function from_candid_variant_n163(_uploadFile, _downloadFile, value) {
+  return "OrgAdmin" in value ? "OrgAdmin" : "Auditor" in value ? "Auditor" : "SuperAdmin" in value ? "SuperAdmin" : "StandardUser" in value ? "StandardUser" : value;
+}
+function from_candid_variant_n165(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_opt_n166(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
   } : value;
 }
 function from_candid_variant_n17(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n170(_uploadFile, _downloadFile, value) {
+  return "orgAdminsOnly" in value ? "orgAdminsOnly" : "allMembers" in value ? "allMembers" : value;
+}
+function from_candid_variant_n172(_uploadFile, _downloadFile, value) {
+  return "orgAdminsOnly" in value ? "orgAdminsOnly" : "disabled" in value ? "disabled" : "allMembers" in value ? "allMembers" : value;
+}
+function from_candid_variant_n178(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_GetOrgUsersResponse_n179(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
+function from_candid_variant_n184(_uploadFile, _downloadFile, value) {
+  return "strong" in value ? "strong" : "enterprise" in value ? "enterprise" : "basic" in value ? "basic" : value;
+}
+function from_candid_variant_n189(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n190(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
@@ -36036,19 +37778,7 @@ function from_candid_variant_n19(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_ConversationPublic_n24(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n28(_uploadFile, _downloadFile, value) {
-  return "group" in value ? "group" : "direct" in value ? "direct" : value;
-}
-function from_candid_variant_n40(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n194(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -36057,58 +37787,169 @@ function from_candid_variant_n40(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n42(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n205(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_ConfigExportBundle_n43(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_OrgMembership_n158(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
+function from_candid_variant_n207(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n48(_uploadFile, _downloadFile, value) {
-  return "classified" in value ? "classified" : "unclassified" in value ? "unclassified" : value;
+function from_candid_variant_n212(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_GetOrgsResponse_n213(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
 }
-function from_candid_variant_n56(_uploadFile, _downloadFile, value) {
-  return "eu" in value ? "eu" : "us" in value ? "us" : "apac" in value ? "apac" : "global" in value ? "global" : value;
+function from_candid_variant_n222(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n226(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_UserProfilePublic_n197(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n234(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_MessagePublic_n145(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n242(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n246(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_JoinRequest_n129(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n27(_uploadFile, _downloadFile, value) {
+  return "pending" in value ? "pending" : "completed" in value ? "completed" : "approved" in value ? "approved" : "rejected" in value ? "rejected" : value;
+}
+function from_candid_variant_n32(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
+function from_candid_variant_n38(_uploadFile, _downloadFile, value) {
+  return "days30" in value ? "days30" : "days90" in value ? "days90" : "unlimited" in value ? "unlimited" : "years7" in value ? "years7" : "year1" in value ? "year1" : value;
+}
+function from_candid_variant_n40(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n45(_uploadFile, _downloadFile, value) {
+  return "group" in value ? "group" : "direct" in value ? "direct" : value;
+}
+function from_candid_variant_n50(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_OrgRecord_n51(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
+function from_candid_variant_n54(_uploadFile, _downloadFile, value) {
+  return "Active" in value ? "Active" : "Suspended" in value ? "Suspended" : "Archived" in value ? "Archived" : value;
+}
+function from_candid_variant_n60(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
 }
 function from_candid_variant_n62(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n63(_uploadFile, _downloadFile, value.ok)
+    ok: value.ok
   } : "err" in value ? {
     __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+    err: value.err
   } : value;
 }
-function from_candid_variant_n67(_uploadFile, _downloadFile, value) {
-  return "retentionEnabled" in value ? "retentionEnabled" : "memberAdded" in value ? "memberAdded" : "retentionDisabled" in value ? "retentionDisabled" : "escrowAccessGranted" in value ? "escrowAccessGranted" : "callInitiated" in value ? "callInitiated" : "sovereignConfigUpdated" in value ? "sovereignConfigUpdated" : "messageQueueDrained" in value ? "messageQueueDrained" : "adminAction" in value ? "adminAction" : "auditLogExported" in value ? "auditLogExported" : "escrowEnrolled" in value ? "escrowEnrolled" : "messageSent" in value ? "messageSent" : "escrowRevoked" in value ? "escrowRevoked" : "compartmentAssigned" in value ? "compartmentAssigned" : "userRegistered" in value ? "userRegistered" : "memberRemoved" in value ? "memberRemoved" : "userRemoved" in value ? "userRemoved" : "priorityMessageSent" in value ? "priorityMessageSent" : value;
-}
-function from_candid_variant_n75(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n71(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n76(_uploadFile, _downloadFile, value.ok)
+    ok: value.ok
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n80(_uploadFile, _downloadFile, value) {
-  return "pending" in value ? "pending" : "denied" in value ? "denied" : "approved" in value ? "approved" : value;
+function from_candid_variant_n77(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n78(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
 }
 function from_candid_variant_n82(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_GroupRetentionPolicy_n51(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
-  } : value;
+  return "legalHoldRemoved" in value ? "legalHoldRemoved" : "memberSuspended" in value ? "memberSuspended" : "userInvited" in value ? "userInvited" : "retentionEnabled" in value ? "retentionEnabled" : "memberAdded" in value ? "memberAdded" : "policyExpiryCheckPerformed" in value ? "policyExpiryCheckPerformed" : "retentionPolicyUpdated" in value ? "retentionPolicyUpdated" : "retentionDisabled" in value ? "retentionDisabled" : "groupMemberRemoved" in value ? "groupMemberRemoved" : "orgCreated" in value ? "orgCreated" : "orgDeleted" in value ? "orgDeleted" : "platformSettingsUpdated" in value ? "platformSettingsUpdated" : "escrowAccessGranted" in value ? "escrowAccessGranted" : "callInitiated" in value ? "callInitiated" : "sovereignConfigUpdated" in value ? "sovereignConfigUpdated" : "keyRecoveryApproved" in value ? "keyRecoveryApproved" : "keyRecoveryInitiated" in value ? "keyRecoveryInitiated" : "messageQueueDrained" in value ? "messageQueueDrained" : "memberReactivated" in value ? "memberReactivated" : "legalHoldPlaced" in value ? "legalHoldPlaced" : "keyRecoveryRejected" in value ? "keyRecoveryRejected" : "adminAction" in value ? "adminAction" : "orgSettingsUpdated" in value ? "orgSettingsUpdated" : "auditLogExported" in value ? "auditLogExported" : "escrowEnrolled" in value ? "escrowEnrolled" : "messageSent" in value ? "messageSent" : "escrowRevoked" in value ? "escrowRevoked" : "compartmentAssigned" in value ? "compartmentAssigned" : "policyReportExported" in value ? "policyReportExported" : "userRegistered" in value ? "userRegistered" : "memberRemoved" in value ? "memberRemoved" : "retentionPolicyCreated" in value ? "retentionPolicyCreated" : "orgSuspended" in value ? "orgSuspended" : "userRemoved" in value ? "userRemoved" : "priorityMessageSent" in value ? "priorityMessageSent" : "orgUpdated" in value ? "orgUpdated" : "memberRoleChanged" in value ? "memberRoleChanged" : value;
 }
-function from_candid_variant_n86(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n84(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n87(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_ConfigExportBundle_n85(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
@@ -36123,92 +37964,170 @@ function from_candid_variant_n9(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n91(_uploadFile, _downloadFile, value) {
-  return "audio" in value ? "audio" : "video" in value ? "video" : "file" in value ? "file" : "text" in value ? "text" : "image" in value ? "image" : value;
+function from_candid_variant_n90(_uploadFile, _downloadFile, value) {
+  return "classified" in value ? "classified" : "unclassified" in value ? "unclassified" : value;
 }
-function from_candid_variant_n94(_uploadFile, _downloadFile, value) {
-  return "normal" in value ? "normal" : "high" in value ? "high" : value;
+function from_candid_variant_n96(_uploadFile, _downloadFile, value) {
+  return "eu" in value ? "eu" : "us" in value ? "us" : "apac" in value ? "apac" : "global" in value ? "global" : value;
 }
-function from_candid_vec_n105(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_UserProfilePublic_n103(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n119(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_EscrowedUserRecord_n120(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n108(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_ConversationPublic_n24(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n128(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_JoinRequest_n129(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n111(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_PublicGroupSummary_n112(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n135(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_GroupMemberRecord_n136(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n45(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_tuple_n46(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n144(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_MessagePublic_n145(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n49(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_tuple_n50(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n152(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_EscrowRecord_n153(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n63(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_AuditEvent_n64(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n157(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_OrgMembership_n158(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n76(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_JoinRequest_n77(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n190(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n199(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_UserProfilePublic_n197(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n208(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n215(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_OrgRecord_n51(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n218(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_PublicGroupSummary_n219(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n34(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n78(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_AuditEvent_n79(_uploadFile, _downloadFile, x3));
 }
 function from_candid_vec_n87(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_MessagePublic_n88(_uploadFile, _downloadFile, x3));
+  return value.map((x3) => from_candid_tuple_n88(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n95(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_EscrowRecord_n96(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n91(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_tuple_n92(_uploadFile, _downloadFile, x3));
 }
-function to_candid_AuditEventType_n59(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n60(_uploadFile, _downloadFile, value);
+function from_candid_vec_n99(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_GroupAdminRecord_n100(_uploadFile, _downloadFile, x3));
 }
-function to_candid_AuditExportEventType_n35(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n36(_uploadFile, _downloadFile, value);
+function to_candid_AuditEventType_n74(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n75(_uploadFile, _downloadFile, value);
 }
-function to_candid_AuditExportFormat_n37(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n38(_uploadFile, _downloadFile, value);
+function to_candid_AuditExportEventType_n66(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n67(_uploadFile, _downloadFile, value);
 }
-function to_candid_AuditExportRequest_n32(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n33(_uploadFile, _downloadFile, value);
+function to_candid_AuditExportFormat_n68(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n69(_uploadFile, _downloadFile, value);
 }
-function to_candid_CompartmentLabel_n128(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n129(_uploadFile, _downloadFile, value);
+function to_candid_AuditExportRequest_n63(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n64(_uploadFile, _downloadFile, value);
 }
-function to_candid_CreateGroupRequest_n30(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n31(_uploadFile, _downloadFile, value);
+function to_candid_CompartmentLabel_n235(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n236(_uploadFile, _downloadFile, value);
 }
-function to_candid_DataResidency_n130(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n131(_uploadFile, _downloadFile, value);
+function to_candid_CreateGroupRequest_n47(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n48(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetAuditLogRequest_n57(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n58(_uploadFile, _downloadFile, value);
+function to_candid_CreateRetentionPolicyRequest_n55(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n56(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetMessagesRequest_n83(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n84(_uploadFile, _downloadFile, value);
+function to_candid_DataExportPermission_n254(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n255(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetRetentionMetadataRequest_n98(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n99(_uploadFile, _downloadFile, value);
+function to_candid_DataResidency_n237(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n238(_uploadFile, _downloadFile, value);
+}
+function to_candid_ExportAuditLogsRequest_n72(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n73(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetAllGroupsRequest_n97(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n98(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetAuditLogRequest_n104(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n105(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetEscrowedUsersRequest_n115(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n116(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetMessagesRequest_n140(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n141(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetOrgUsersRequest_n175(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n176(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetOrgsRequest_n209(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n210(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetRetentionMetadataRequest_n191(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n192(_uploadFile, _downloadFile, value);
+}
+function to_candid_GetRetentionPoliciesRequest_n195(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n98(_uploadFile, _downloadFile, value);
+}
+function to_candid_GroupCreationPermission_n252(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n253(_uploadFile, _downloadFile, value);
+}
+function to_candid_InviteUserRequest_n200(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n201(_uploadFile, _downloadFile, value);
 }
 function to_candid_JoinRequestActionRequest_n20(_uploadFile, _downloadFile, value) {
   return to_candid_record_n21(_uploadFile, _downloadFile, value);
 }
-function to_candid_ListPublicGroupsRequest_n109(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n110(_uploadFile, _downloadFile, value);
+function to_candid_ListPublicGroupsRequest_n216(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n217(_uploadFile, _downloadFile, value);
 }
-function to_candid_MessagePriority_n124(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n125(_uploadFile, _downloadFile, value);
+function to_candid_MessagePriority_n231(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n232(_uploadFile, _downloadFile, value);
 }
-function to_candid_MessageType_n122(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n123(_uploadFile, _downloadFile, value);
+function to_candid_MessageType_n229(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n230(_uploadFile, _downloadFile, value);
 }
-function to_candid_RegisterRequest_n116(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n117(_uploadFile, _downloadFile, value);
+function to_candid_OrgRole_n202(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n203(_uploadFile, _downloadFile, value);
 }
-function to_candid_SendMessageRequest_n120(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n121(_uploadFile, _downloadFile, value);
+function to_candid_OrgSettings_n250(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n251(_uploadFile, _downloadFile, value);
 }
-function to_candid_SubmitJoinRequestRequest_n136(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n137(_uploadFile, _downloadFile, value);
+function to_candid_PasswordPolicy_n259(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n260(_uploadFile, _downloadFile, value);
 }
-function to_candid_UpdateProfileRequest_n140(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n141(_uploadFile, _downloadFile, value);
+function to_candid_PlatformSettings_n257(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n258(_uploadFile, _downloadFile, value);
+}
+function to_candid_RecoveryRequestStatus_n186(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n187(_uploadFile, _downloadFile, value);
+}
+function to_candid_RegisterRequest_n223(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n224(_uploadFile, _downloadFile, value);
+}
+function to_candid_RetentionPeriodDays_n256(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n58(_uploadFile, _downloadFile, value);
+}
+function to_candid_RetentionPeriod_n57(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n58(_uploadFile, _downloadFile, value);
+}
+function to_candid_SendMessageRequest_n227(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n228(_uploadFile, _downloadFile, value);
+}
+function to_candid_SubmitJoinRequestRequest_n243(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n244(_uploadFile, _downloadFile, value);
+}
+function to_candid_UpdateMemberRoleRequest_n247(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n248(_uploadFile, _downloadFile, value);
+}
+function to_candid_UpdateProfileRequest_n263(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n264(_uploadFile, _downloadFile, value);
+}
+function to_candid_UpdateRetentionPolicyRequest_n261(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n262(_uploadFile, _downloadFile, value);
 }
 function to_candid__ImmutableObjectStorageRefillInformation_n2(_uploadFile, _downloadFile, value) {
   return to_candid_record_n3(_uploadFile, _downloadFile, value);
@@ -36216,52 +38135,75 @@ function to_candid__ImmutableObjectStorageRefillInformation_n2(_uploadFile, _dow
 function to_candid_opt_n1(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(to_candid__ImmutableObjectStorageRefillInformation_n2(_uploadFile, _downloadFile, value));
 }
-function to_candid_opt_n132(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(value);
-}
-function to_candid_opt_n133(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(value);
-}
 function to_candid_opt_n14(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
 function to_candid_opt_n15(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_record_n110(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n185(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(to_candid_RecoveryRequestStatus_n186(_uploadFile, _downloadFile, value));
+}
+function to_candid_opt_n239(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_opt_n240(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_opt_n249(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_opt_n33(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_record_n105(_uploadFile, _downloadFile, value) {
   return {
-    offset: value.offset,
+    afterTimestamp: value.afterTimestamp ? candid_some(value.afterTimestamp) : candid_none(),
     limit: value.limit,
-    category: value.category ? candid_some(value.category) : candid_none()
+    filterEventType: value.filterEventType ? candid_some(to_candid_AuditEventType_n74(_uploadFile, _downloadFile, value.filterEventType)) : candid_none(),
+    beforeTimestamp: value.beforeTimestamp ? candid_some(value.beforeTimestamp) : candid_none(),
+    filterActor: value.filterActor ? candid_some(value.filterActor) : candid_none(),
+    filterOrgId: value.filterOrgId ? candid_some(value.filterOrgId) : candid_none(),
+    afterEventId: value.afterEventId ? candid_some(value.afterEventId) : candid_none()
   };
 }
-function to_candid_record_n117(_uploadFile, _downloadFile, value) {
+function to_candid_record_n116(_uploadFile, _downloadFile, value) {
   return {
-    ecdhPublicKey: value.ecdhPublicKey,
-    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
-    encryptedDisplayName: value.encryptedDisplayName
-  };
-}
-function to_candid_record_n121(_uploadFile, _downloadFile, value) {
-  return {
-    ttlSeconds: value.ttlSeconds ? candid_some(value.ttlSeconds) : candid_none(),
-    encryptedContent: value.encryptedContent,
-    messageType: to_candid_MessageType_n122(_uploadFile, _downloadFile, value.messageType),
-    conversationId: value.conversationId,
-    priority: value.priority ? candid_some(to_candid_MessagePriority_n124(_uploadFile, _downloadFile, value.priority)) : candid_none()
-  };
-}
-function to_candid_record_n137(_uploadFile, _downloadFile, value) {
-  return {
-    conversationId: value.conversationId,
-    message: value.message ? candid_some(value.message) : candid_none()
+    orgId: value.orgId ? candid_some(value.orgId) : candid_none(),
+    limit: value.limit,
+    afterUserId: value.afterUserId ? candid_some(value.afterUserId) : candid_none()
   };
 }
 function to_candid_record_n141(_uploadFile, _downloadFile, value) {
   return {
-    ecdhPublicKey: value.ecdhPublicKey ? candid_some(value.ecdhPublicKey) : candid_none(),
-    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
-    encryptedDisplayName: value.encryptedDisplayName ? candid_some(value.encryptedDisplayName) : candid_none()
+    beforeMessageId: value.beforeMessageId ? candid_some(value.beforeMessageId) : candid_none(),
+    limit: value.limit,
+    conversationId: value.conversationId
+  };
+}
+function to_candid_record_n176(_uploadFile, _downloadFile, value) {
+  return {
+    orgId: value.orgId ? candid_some(value.orgId) : candid_none(),
+    search: value.search ? candid_some(value.search) : candid_none(),
+    limit: value.limit,
+    afterUserId: value.afterUserId ? candid_some(value.afterUserId) : candid_none()
+  };
+}
+function to_candid_record_n192(_uploadFile, _downloadFile, value) {
+  return {
+    endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
+    limit: value.limit,
+    afterMessageId: value.afterMessageId ? candid_some(value.afterMessageId) : candid_none(),
+    convId: value.convId ? candid_some(value.convId) : candid_none(),
+    startDate: value.startDate ? candid_some(value.startDate) : candid_none()
+  };
+}
+function to_candid_record_n201(_uploadFile, _downloadFile, value) {
+  return {
+    orgId: value.orgId,
+    role: to_candid_OrgRole_n202(_uploadFile, _downloadFile, value.role),
+    email: value.email ? candid_some(value.email) : candid_none(),
+    principalId: value.principalId
   };
 }
 function to_candid_record_n21(_uploadFile, _downloadFile, value) {
@@ -36271,12 +38213,96 @@ function to_candid_record_n21(_uploadFile, _downloadFile, value) {
     conversationId: value.conversationId
   };
 }
+function to_candid_record_n210(_uploadFile, _downloadFile, value) {
+  return {
+    search: value.search ? candid_some(value.search) : candid_none(),
+    limit: value.limit,
+    afterOrgId: value.afterOrgId ? candid_some(value.afterOrgId) : candid_none()
+  };
+}
+function to_candid_record_n217(_uploadFile, _downloadFile, value) {
+  return {
+    offset: value.offset,
+    limit: value.limit,
+    category: value.category ? candid_some(value.category) : candid_none()
+  };
+}
+function to_candid_record_n224(_uploadFile, _downloadFile, value) {
+  return {
+    ecdhPublicKey: value.ecdhPublicKey,
+    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
+    encryptedDisplayName: value.encryptedDisplayName
+  };
+}
+function to_candid_record_n228(_uploadFile, _downloadFile, value) {
+  return {
+    ttlSeconds: value.ttlSeconds ? candid_some(value.ttlSeconds) : candid_none(),
+    encryptedContent: value.encryptedContent,
+    messageType: to_candid_MessageType_n229(_uploadFile, _downloadFile, value.messageType),
+    conversationId: value.conversationId,
+    priority: value.priority ? candid_some(to_candid_MessagePriority_n231(_uploadFile, _downloadFile, value.priority)) : candid_none()
+  };
+}
+function to_candid_record_n244(_uploadFile, _downloadFile, value) {
+  return {
+    conversationId: value.conversationId,
+    message: value.message ? candid_some(value.message) : candid_none()
+  };
+}
+function to_candid_record_n248(_uploadFile, _downloadFile, value) {
+  return {
+    orgId: value.orgId,
+    userId: value.userId,
+    newRole: to_candid_OrgRole_n202(_uploadFile, _downloadFile, value.newRole)
+  };
+}
+function to_candid_record_n251(_uploadFile, _downloadFile, value) {
+  return {
+    legalHoldReason: value.legalHoldReason ? candid_some(value.legalHoldReason) : candid_none(),
+    orgId: value.orgId,
+    logoStorageKey: value.logoStorageKey ? candid_some(value.logoStorageKey) : candid_none(),
+    groupCreationPermission: to_candid_GroupCreationPermission_n252(_uploadFile, _downloadFile, value.groupCreationPermission),
+    dataExportPermission: to_candid_DataExportPermission_n254(_uploadFile, _downloadFile, value.dataExportPermission),
+    defaultInviteRole: value.defaultInviteRole,
+    logoUrl: value.logoUrl ? candid_some(value.logoUrl) : candid_none(),
+    legalHoldEnabled: value.legalHoldEnabled,
+    messageRetentionDays: value.messageRetentionDays ? candid_some(to_candid_RetentionPeriodDays_n256(_uploadFile, _downloadFile, value.messageRetentionDays)) : candid_none()
+  };
+}
+function to_candid_record_n258(_uploadFile, _downloadFile, value) {
+  return {
+    defaultRetentionDays: to_candid_RetentionPeriodDays_n256(_uploadFile, _downloadFile, value.defaultRetentionDays),
+    keyEscrowEnabled: value.keyEscrowEnabled,
+    vetKeysEnabled: value.vetKeysEnabled,
+    sessionTimeoutMinutes: value.sessionTimeoutMinutes,
+    platformTagline: value.platformTagline,
+    auditLogRetentionDays: to_candid_RetentionPeriodDays_n256(_uploadFile, _downloadFile, value.auditLogRetentionDays),
+    mfaEnforced: value.mfaEnforced,
+    passwordPolicy: to_candid_PasswordPolicy_n259(_uploadFile, _downloadFile, value.passwordPolicy),
+    platformName: value.platformName
+  };
+}
+function to_candid_record_n262(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    period: value.period ? candid_some(to_candid_RetentionPeriod_n57(_uploadFile, _downloadFile, value.period)) : candid_none(),
+    legalHold: value.legalHold ? candid_some(value.legalHold) : candid_none(),
+    autoDelete: value.autoDelete ? candid_some(value.autoDelete) : candid_none()
+  };
+}
+function to_candid_record_n264(_uploadFile, _downloadFile, value) {
+  return {
+    ecdhPublicKey: value.ecdhPublicKey ? candid_some(value.ecdhPublicKey) : candid_none(),
+    encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
+    encryptedDisplayName: value.encryptedDisplayName ? candid_some(value.encryptedDisplayName) : candid_none()
+  };
+}
 function to_candid_record_n3(_uploadFile, _downloadFile, value) {
   return {
     proposed_top_up_amount: value.proposed_top_up_amount ? candid_some(value.proposed_top_up_amount) : candid_none()
   };
 }
-function to_candid_record_n31(_uploadFile, _downloadFile, value) {
+function to_candid_record_n48(_uploadFile, _downloadFile, value) {
   return {
     initialMembers: value.initialMembers,
     displayName: value.displayName ? candid_some(value.displayName) : candid_none(),
@@ -36286,39 +38312,60 @@ function to_candid_record_n31(_uploadFile, _downloadFile, value) {
     encryptedName: value.encryptedName
   };
 }
-function to_candid_record_n33(_uploadFile, _downloadFile, value) {
+function to_candid_record_n56(_uploadFile, _downloadFile, value) {
+  return {
+    orgId: value.orgId ? candid_some(value.orgId) : candid_none(),
+    period: to_candid_RetentionPeriod_n57(_uploadFile, _downloadFile, value.period),
+    legalHold: value.legalHold,
+    autoDelete: value.autoDelete
+  };
+}
+function to_candid_record_n64(_uploadFile, _downloadFile, value) {
   return {
     endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
     affectedUser: value.affectedUser ? candid_some(value.affectedUser) : candid_none(),
-    eventTypes: value.eventTypes ? candid_some(to_candid_vec_n34(_uploadFile, _downloadFile, value.eventTypes)) : candid_none(),
+    eventTypes: value.eventTypes ? candid_some(to_candid_vec_n65(_uploadFile, _downloadFile, value.eventTypes)) : candid_none(),
     startDate: value.startDate ? candid_some(value.startDate) : candid_none(),
-    format: to_candid_AuditExportFormat_n37(_uploadFile, _downloadFile, value.format)
+    format: to_candid_AuditExportFormat_n68(_uploadFile, _downloadFile, value.format)
   };
 }
-function to_candid_record_n58(_uploadFile, _downloadFile, value) {
+function to_candid_record_n73(_uploadFile, _downloadFile, value) {
   return {
-    limit: value.limit,
-    filterEventType: value.filterEventType ? candid_some(to_candid_AuditEventType_n59(_uploadFile, _downloadFile, value.filterEventType)) : candid_none(),
-    afterEventId: value.afterEventId ? candid_some(value.afterEventId) : candid_none()
+    afterTimestamp: value.afterTimestamp ? candid_some(value.afterTimestamp) : candid_none(),
+    filterEventType: value.filterEventType ? candid_some(to_candid_AuditEventType_n74(_uploadFile, _downloadFile, value.filterEventType)) : candid_none(),
+    beforeTimestamp: value.beforeTimestamp ? candid_some(value.beforeTimestamp) : candid_none(),
+    filterActor: value.filterActor ? candid_some(value.filterActor) : candid_none(),
+    filterOrgId: value.filterOrgId ? candid_some(value.filterOrgId) : candid_none()
   };
 }
-function to_candid_record_n84(_uploadFile, _downloadFile, value) {
+function to_candid_record_n98(_uploadFile, _downloadFile, value) {
   return {
-    beforeMessageId: value.beforeMessageId ? candid_some(value.beforeMessageId) : candid_none(),
-    limit: value.limit,
-    conversationId: value.conversationId
+    orgId: value.orgId ? candid_some(value.orgId) : candid_none()
   };
 }
-function to_candid_record_n99(_uploadFile, _downloadFile, value) {
-  return {
-    endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
-    limit: value.limit,
-    afterMessageId: value.afterMessageId ? candid_some(value.afterMessageId) : candid_none(),
-    convId: value.convId ? candid_some(value.convId) : candid_none(),
-    startDate: value.startDate ? candid_some(value.startDate) : candid_none()
-  };
+function to_candid_variant_n187(_uploadFile, _downloadFile, value) {
+  return value == "pending" ? {
+    pending: null
+  } : value == "completed" ? {
+    completed: null
+  } : value == "approved" ? {
+    approved: null
+  } : value == "rejected" ? {
+    rejected: null
+  } : value;
 }
-function to_candid_variant_n123(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n203(_uploadFile, _downloadFile, value) {
+  return value == "OrgAdmin" ? {
+    OrgAdmin: null
+  } : value == "Auditor" ? {
+    Auditor: null
+  } : value == "SuperAdmin" ? {
+    SuperAdmin: null
+  } : value == "StandardUser" ? {
+    StandardUser: null
+  } : value;
+}
+function to_candid_variant_n230(_uploadFile, _downloadFile, value) {
   return value == "audio" ? {
     audio: null
   } : value == "video" ? {
@@ -36331,21 +38378,21 @@ function to_candid_variant_n123(_uploadFile, _downloadFile, value) {
     image: null
   } : value;
 }
-function to_candid_variant_n125(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n232(_uploadFile, _downloadFile, value) {
   return value == "normal" ? {
     normal: null
   } : value == "high" ? {
     high: null
   } : value;
 }
-function to_candid_variant_n129(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n236(_uploadFile, _downloadFile, value) {
   return value == "classified" ? {
     classified: null
   } : value == "unclassified" ? {
     unclassified: null
   } : value;
 }
-function to_candid_variant_n131(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n238(_uploadFile, _downloadFile, value) {
   return value == "eu" ? {
     eu: null
   } : value == "us" ? {
@@ -36356,17 +38403,69 @@ function to_candid_variant_n131(_uploadFile, _downloadFile, value) {
     global: null
   } : value;
 }
-function to_candid_variant_n36(_uploadFile, _downloadFile, value) {
-  return value == "retentionEnabled" ? {
+function to_candid_variant_n253(_uploadFile, _downloadFile, value) {
+  return value == "orgAdminsOnly" ? {
+    orgAdminsOnly: null
+  } : value == "allMembers" ? {
+    allMembers: null
+  } : value;
+}
+function to_candid_variant_n255(_uploadFile, _downloadFile, value) {
+  return value == "orgAdminsOnly" ? {
+    orgAdminsOnly: null
+  } : value == "disabled" ? {
+    disabled: null
+  } : value == "allMembers" ? {
+    allMembers: null
+  } : value;
+}
+function to_candid_variant_n260(_uploadFile, _downloadFile, value) {
+  return value == "strong" ? {
+    strong: null
+  } : value == "enterprise" ? {
+    enterprise: null
+  } : value == "basic" ? {
+    basic: null
+  } : value;
+}
+function to_candid_variant_n58(_uploadFile, _downloadFile, value) {
+  return value == "days30" ? {
+    days30: null
+  } : value == "days90" ? {
+    days90: null
+  } : value == "unlimited" ? {
+    unlimited: null
+  } : value == "years7" ? {
+    years7: null
+  } : value == "year1" ? {
+    year1: null
+  } : value;
+}
+function to_candid_variant_n67(_uploadFile, _downloadFile, value) {
+  return value == "memberSuspended" ? {
+    memberSuspended: null
+  } : value == "userInvited" ? {
+    userInvited: null
+  } : value == "retentionEnabled" ? {
     retentionEnabled: null
   } : value == "memberAdded" ? {
     memberAdded: null
   } : value == "retentionDisabled" ? {
     retentionDisabled: null
+  } : value == "groupMemberRemoved" ? {
+    groupMemberRemoved: null
+  } : value == "orgCreated" ? {
+    orgCreated: null
   } : value == "escrowAccessGranted" ? {
     escrowAccessGranted: null
   } : value == "callInitiated" ? {
     callInitiated: null
+  } : value == "keyRecoveryApproved" ? {
+    keyRecoveryApproved: null
+  } : value == "keyRecoveryInitiated" ? {
+    keyRecoveryInitiated: null
+  } : value == "keyRecoveryRejected" ? {
+    keyRecoveryRejected: null
   } : value == "adminAction" ? {
     adminAction: null
   } : value == "auditLogExported" ? {
@@ -36381,34 +38480,68 @@ function to_candid_variant_n36(_uploadFile, _downloadFile, value) {
     userRegistered: null
   } : value == "memberRemoved" ? {
     memberRemoved: null
+  } : value == "orgSuspended" ? {
+    orgSuspended: null
   } : value == "userRemoved" ? {
     userRemoved: null
+  } : value == "memberRoleChanged" ? {
+    memberRoleChanged: null
   } : value;
 }
-function to_candid_variant_n38(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n69(_uploadFile, _downloadFile, value) {
   return value == "csv" ? {
     csv: null
   } : value == "json" ? {
     json: null
   } : value;
 }
-function to_candid_variant_n60(_uploadFile, _downloadFile, value) {
-  return value == "retentionEnabled" ? {
+function to_candid_variant_n75(_uploadFile, _downloadFile, value) {
+  return value == "legalHoldRemoved" ? {
+    legalHoldRemoved: null
+  } : value == "memberSuspended" ? {
+    memberSuspended: null
+  } : value == "userInvited" ? {
+    userInvited: null
+  } : value == "retentionEnabled" ? {
     retentionEnabled: null
   } : value == "memberAdded" ? {
     memberAdded: null
+  } : value == "policyExpiryCheckPerformed" ? {
+    policyExpiryCheckPerformed: null
+  } : value == "retentionPolicyUpdated" ? {
+    retentionPolicyUpdated: null
   } : value == "retentionDisabled" ? {
     retentionDisabled: null
+  } : value == "groupMemberRemoved" ? {
+    groupMemberRemoved: null
+  } : value == "orgCreated" ? {
+    orgCreated: null
+  } : value == "orgDeleted" ? {
+    orgDeleted: null
+  } : value == "platformSettingsUpdated" ? {
+    platformSettingsUpdated: null
   } : value == "escrowAccessGranted" ? {
     escrowAccessGranted: null
   } : value == "callInitiated" ? {
     callInitiated: null
   } : value == "sovereignConfigUpdated" ? {
     sovereignConfigUpdated: null
+  } : value == "keyRecoveryApproved" ? {
+    keyRecoveryApproved: null
+  } : value == "keyRecoveryInitiated" ? {
+    keyRecoveryInitiated: null
   } : value == "messageQueueDrained" ? {
     messageQueueDrained: null
+  } : value == "memberReactivated" ? {
+    memberReactivated: null
+  } : value == "legalHoldPlaced" ? {
+    legalHoldPlaced: null
+  } : value == "keyRecoveryRejected" ? {
+    keyRecoveryRejected: null
   } : value == "adminAction" ? {
     adminAction: null
+  } : value == "orgSettingsUpdated" ? {
+    orgSettingsUpdated: null
   } : value == "auditLogExported" ? {
     auditLogExported: null
   } : value == "escrowEnrolled" ? {
@@ -36419,18 +38552,28 @@ function to_candid_variant_n60(_uploadFile, _downloadFile, value) {
     escrowRevoked: null
   } : value == "compartmentAssigned" ? {
     compartmentAssigned: null
+  } : value == "policyReportExported" ? {
+    policyReportExported: null
   } : value == "userRegistered" ? {
     userRegistered: null
   } : value == "memberRemoved" ? {
     memberRemoved: null
+  } : value == "retentionPolicyCreated" ? {
+    retentionPolicyCreated: null
+  } : value == "orgSuspended" ? {
+    orgSuspended: null
   } : value == "userRemoved" ? {
     userRemoved: null
   } : value == "priorityMessageSent" ? {
     priorityMessageSent: null
+  } : value == "orgUpdated" ? {
+    orgUpdated: null
+  } : value == "memberRoleChanged" ? {
+    memberRoleChanged: null
   } : value;
 }
-function to_candid_vec_n34(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => to_candid_AuditExportEventType_n35(_uploadFile, _downloadFile, x3));
+function to_candid_vec_n65(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => to_candid_AuditExportEventType_n66(_uploadFile, _downloadFile, x3));
 }
 function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
   const agent = options.agent || HttpAgent.createSync({
@@ -37214,7 +39357,7 @@ function LoadingSpinner({
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center", "aria-label": label, children: spinner });
 }
 var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-var use = React$4[" use ".trim().toString()];
+var use = React$5[" use ".trim().toString()];
 function isPromiseLike(value) {
   return typeof value === "object" && value !== null && "then" in value;
 }
@@ -37393,4123 +39536,515 @@ function Button({
     }
   );
 }
-function Input({ className, type, ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "input",
-    {
-      type,
-      "data-slot": "input",
-      className: cn(
-        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-        className
-      ),
-      ...props
-    }
-  );
-}
-var NODES = [
-  "a",
-  "button",
-  "div",
-  "form",
-  "h2",
-  "h3",
-  "img",
-  "input",
-  "label",
-  "li",
-  "nav",
-  "ol",
-  "p",
-  "select",
-  "span",
-  "svg",
-  "ul"
-];
-var Primitive = NODES.reduce((primitive, node) => {
-  const Slot2 = /* @__PURE__ */ createSlot(`Primitive.${node}`);
-  const Node2 = reactExports.forwardRef((props, forwardedRef) => {
-    const { asChild, ...primitiveProps } = props;
-    const Comp = asChild ? Slot2 : node;
-    if (typeof window !== "undefined") {
-      window[Symbol.for("radix-ui")] = true;
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Comp, { ...primitiveProps, ref: forwardedRef });
-  });
-  Node2.displayName = `Primitive.${node}`;
-  return { ...primitive, [node]: Node2 };
-}, {});
-var NAME$1 = "Label";
-var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive.label,
-    {
-      ...props,
-      ref: forwardedRef,
-      onMouseDown: (event) => {
-        var _a3;
-        const target = event.target;
-        if (target.closest("button, input, select, textarea")) return;
-        (_a3 = props.onMouseDown) == null ? void 0 : _a3.call(props, event);
-        if (!event.defaultPrevented && event.detail > 1) event.preventDefault();
-      }
-    }
-  );
-});
-Label$1.displayName = NAME$1;
-var Root$4 = Label$1;
-function Label({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$4,
-    {
-      "data-slot": "label",
-      className: cn(
-        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        className
-      ),
-      ...props
-    }
-  );
-}
-function useUserProfile(userId) {
-  const { actor } = useActor(createActor);
+const STALE = 3e4;
+function useMyOrgs() {
+  const { actor, isFetching } = useActor(createActor);
   return useQuery({
-    queryKey: ["profile", userId == null ? void 0 : userId.toText()],
+    queryKey: ["admin", "my-orgs"],
     queryFn: async () => {
-      if (!actor || !userId) return null;
-      return actor.getUserProfile(userId);
+      if (!actor) return [];
+      const res = await actor.getMyOrgs();
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
     },
-    enabled: !!actor && !!userId,
-    staleTime: 3e4,
-    retry: 2
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
   });
 }
-function useUserProfiles(userIds) {
-  const { actor } = useActor(createActor);
+function useMyRole(orgId) {
+  const { actor, isFetching } = useActor(createActor);
   return useQuery({
-    queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
+    queryKey: ["admin", "my-role", orgId],
     queryFn: async () => {
-      if (!actor || userIds.length === 0) return [];
-      return actor.getUserProfiles(userIds);
+      if (!actor || !orgId) return null;
+      const res = await actor.getMyRole(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
     },
-    enabled: !!actor && userIds.length > 0,
-    staleTime: 3e4,
-    retry: 2
+    enabled: !!actor && !isFetching && !!orgId,
+    staleTime: STALE
   });
 }
-function useUpdateProfile() {
+function useOrgs(req) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "orgs",
+      req.limit.toString(),
+      req.afterOrgId,
+      req.search ?? ""
+    ],
+    queryFn: async () => {
+      if (!actor) return { total: BigInt(0), orgs: [] };
+      const res = await actor.listOrgs({
+        limit: req.limit,
+        afterOrgId: req.afterOrgId,
+        search: req.search ?? void 0
+      });
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useOrgDetails(orgId) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "org", orgId],
+    queryFn: async () => {
+      if (!actor || !orgId) return null;
+      const res = await actor.getOrg(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching && !!orgId,
+    staleTime: STALE
+  });
+}
+function useOrgUsers(req) {
+  var _a3, _b3;
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "org-users",
+      req == null ? void 0 : req.orgId,
+      req == null ? void 0 : req.limit.toString(),
+      (_b3 = (_a3 = req == null ? void 0 : req.afterUserId) == null ? void 0 : _a3.toText) == null ? void 0 : _b3.call(_a3),
+      (req == null ? void 0 : req.search) ?? null
+    ],
+    queryFn: async () => {
+      if (!actor || !req)
+        return { total: BigInt(0), hasMore: false, members: [] };
+      const res = await actor.getOrgUsers(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching && !!req,
+    staleTime: STALE
+  });
+}
+function useAdminAuditLog(req) {
+  var _a3;
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "audit-log",
+      req.limit.toString(),
+      req.filterEventType,
+      (_a3 = req.afterEventId) == null ? void 0 : _a3.toString()
+    ],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getAuditLog(req);
+      if (res.__kind__ === "err") throw new Error(String(res.err));
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useAllGroups(req) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "groups", req.orgId ?? null],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllGroups(req);
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useGroupMembers(groupId) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "group-members", groupId.toString()],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getGroupMembers({ groupId });
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useRemoveMemberFromGroup() {
   const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.removeMemberFromGroup(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "group-members", req.groupId.toString()]
+      });
+      void qc.invalidateQueries({ queryKey: ["admin", "groups"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useIsSuperAdmin() {
+  const { actor, isFetching } = useActor(createActor);
   const { principal } = useAuth();
-  const queryClient2 = useQueryClient();
+  return useQuery({
+    queryKey: ["admin", "is-super-admin", principal == null ? void 0 : principal.toText()],
+    queryFn: async () => {
+      if (!actor || !principal) return false;
+      const res = await actor.listAdmins();
+      if (res.__kind__ === "err") return false;
+      return res.ok.some((p2) => p2.toText() === principal.toText());
+    },
+    enabled: !!actor && !isFetching && !!principal,
+    staleTime: STALE
+  });
+}
+function useCreateOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.createOrg(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
+    }
+  });
+}
+function useInviteUser() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.inviteUser(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "org-users", req.orgId]
+      });
+    }
+  });
+}
+function useUpdateMemberRole() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.updateMemberRole(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "org-users", req.orgId]
+      });
+    }
+  });
+}
+function useSuspendMember() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.suspendMember(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "org-users", req.orgId]
+      });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useRemoveMember() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ orgId, userId }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.removeMember(orgId, userId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, { orgId }) => {
+      void qc.invalidateQueries({ queryKey: ["admin", "org-users", orgId] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useReactivateMember() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ orgId, userId }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.reactivateMember(orgId, userId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, { orgId }) => {
+      void qc.invalidateQueries({ queryKey: ["admin", "org-users", orgId] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useUpdateOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({
-      encryptedDisplayName,
-      ecdhPublicKey,
-      encryptedAvatarKey
+      orgId,
+      name,
+      description
     }) => {
-      if (!actor) throw new Error("Not connected");
-      let result = await actor.updateUserProfile({
-        encryptedDisplayName,
-        ecdhPublicKey,
-        encryptedAvatarKey
-      });
-      const isNotFound2 = result.__kind__ === "err" && (!result.err || result.err === "notFound");
-      if (isNotFound2) {
-        if (!encryptedDisplayName || !ecdhPublicKey) {
-          throw new Error(
-            "Profile not found on server. Please reload and try again."
-          );
-        }
-        const regResult = await actor.registerUser({
-          encryptedDisplayName,
-          ecdhPublicKey,
-          encryptedAvatarKey
-        });
-        if (regResult.__kind__ === "err") {
-          result = await actor.updateUserProfile({
-            encryptedDisplayName,
-            ecdhPublicKey,
-            encryptedAvatarKey
-          });
-        } else {
-          return regResult.ok;
-        }
-      }
-      if (result.__kind__ === "err") {
-        const errLabel = result.err || "unknown";
-        const messages = {
-          unauthorized: "You must be logged in to update your profile.",
-          forbidden: "You don't have permission to perform this action.",
-          notFound: "Profile not found. Please reload and try again.",
-          alreadyExists: "A profile with these details already exists.",
-          invalidInput: "Invalid profile data. Please check your input."
-        };
-        throw new Error(messages[errLabel] ?? `Update failed: ${errLabel}`);
-      }
-      return result.ok;
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.updateOrg(orgId, name, description);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
     },
-    onSuccess: (updatedProfile) => {
-      const userId = principal == null ? void 0 : principal.toText();
-      if (!userId) return;
-      if (updatedProfile) {
-        queryClient2.setQueryData(
-          ["profile", userId],
-          updatedProfile
-        );
-      }
-      queryClient2.invalidateQueries({
-        queryKey: ["profile", userId],
-        exact: true
-      });
+    onSuccess: (_data, { orgId }) => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "org", orgId] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
     }
   });
 }
-const AVATAR_STORAGE_PREFIX = "cs_avatar:";
-function getLocalAvatarKey(principal) {
-  return `${AVATAR_STORAGE_PREFIX}${principal}`;
-}
-function getLocalAvatarDataUrl(principal) {
-  try {
-    return localStorage.getItem(getLocalAvatarKey(principal));
-  } catch {
-    return null;
-  }
-}
-function setLocalAvatarDataUrl(principal, dataUrl) {
-  try {
-    localStorage.setItem(getLocalAvatarKey(principal), dataUrl);
-  } catch {
-  }
-}
-function removeLocalAvatar(principal) {
-  try {
-    localStorage.removeItem(getLocalAvatarKey(principal));
-  } catch {
-  }
-}
-const DISPLAY_NAME_PREFIX = "cs_name:";
-function getLocalDisplayName(principal) {
-  try {
-    return localStorage.getItem(`${DISPLAY_NAME_PREFIX}${principal}`);
-  } catch {
-    return null;
-  }
-}
-function setLocalDisplayName(principal, name) {
-  try {
-    if (name.trim()) {
-      localStorage.setItem(`${DISPLAY_NAME_PREFIX}${principal}`, name.trim());
-    }
-  } catch {
-  }
-}
-function shortPrincipal(principal) {
-  if (principal.length <= 16) return principal;
-  return `${principal.slice(0, 10)}…${principal.slice(-4)}`;
-}
-function getDisplayName(principal) {
-  return getLocalDisplayName(principal) ?? shortPrincipal(principal);
-}
-function useDisplayName(principal) {
-  const [name, setName] = reactExports.useState(
-    principal ? getDisplayName(principal) : ""
-  );
-  reactExports.useEffect(() => {
-    if (!principal) return;
-    setName(getDisplayName(principal));
-    const handler = (e) => {
-      var _a3;
-      if (e.key === `${DISPLAY_NAME_PREFIX}${principal}`) {
-        setName(((_a3 = e.newValue) == null ? void 0 : _a3.trim()) || shortPrincipal(principal));
-      }
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
-  }, [principal]);
-  return name || (principal ? shortPrincipal(principal) : "");
-}
-function useHasDisplayName() {
-  const { principal } = useAuth();
-  const principalText = (principal == null ? void 0 : principal.toText()) ?? null;
-  const {
-    data: profile,
-    isLoading,
-    isFetched
-  } = useUserProfile(principal ?? null);
-  if (!principalText) return null;
-  if (isLoading && !isFetched) return null;
-  const cached = getLocalDisplayName(principalText);
-  if (cached && cached.trim().length >= 2) return true;
-  if (profile && profile.encryptedDisplayName.length > 0) return true;
-  return false;
-}
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-const toCamelCase = (string) => string.replace(
-  /^([A-Z])|[\s-_]+(\w)/g,
-  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
-);
-const toPascalCase = (string) => {
-  const camelCase = toCamelCase(string);
-  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
-};
-const mergeClasses = (...classes) => classes.filter((className, index2, array) => {
-  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index2;
-}).join(" ").trim();
-const hasA11yProp = (props) => {
-  for (const prop in props) {
-    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
-      return true;
-    }
-  }
-};
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-var defaultAttributes = {
-  xmlns: "http://www.w3.org/2000/svg",
-  width: 24,
-  height: 24,
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round",
-  strokeLinejoin: "round"
-};
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const Icon$1 = reactExports.forwardRef(
-  ({
-    color = "currentColor",
-    size: size2 = 24,
-    strokeWidth = 2,
-    absoluteStrokeWidth,
-    className = "",
-    children,
-    iconNode,
-    ...rest
-  }, ref) => reactExports.createElement(
-    "svg",
-    {
-      ref,
-      ...defaultAttributes,
-      width: size2,
-      height: size2,
-      stroke: color,
-      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size2) : strokeWidth,
-      className: mergeClasses("lucide", className),
-      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
-      ...rest
+function useSuspendOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (orgId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.suspendOrg(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
     },
-    [
-      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
-      ...Array.isArray(children) ? children : [children]
-    ]
-  )
-);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const createLucideIcon = (iconName, iconNode) => {
-  const Component2 = reactExports.forwardRef(
-    ({ className, ...props }, ref) => reactExports.createElement(Icon$1, {
-      ref,
-      iconNode,
-      className: mergeClasses(
-        `lucide-${toKebabCase(toPascalCase(iconName))}`,
-        `lucide-${iconName}`,
-        className
-      ),
-      ...props
-    })
-  );
-  Component2.displayName = toPascalCase(iconName);
-  return Component2;
-};
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$O = [
-  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
-  ["path", { d: "M19 12H5", key: "x3x0zl" }]
-];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$O);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$N = [
-  ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
-  ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
-];
-const CheckCheck = createLucideIcon("check-check", __iconNode$N);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$M = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$M);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$L = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$L);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$K = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$K);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$J = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$J);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$I = [
-  [
-    "path",
-    {
-      d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
-      key: "9ktpf1"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-];
-const Compass = createLucideIcon("compass", __iconNode$I);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$H = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
-];
-const Copy = createLucideIcon("copy", __iconNode$H);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$G = [
-  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
-  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
-  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
-];
-const Database = createLucideIcon("database", __iconNode$G);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$F = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
-];
-const Download = createLucideIcon("download", __iconNode$F);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$E = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
-];
-const FileText = createLucideIcon("file-text", __iconNode$E);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$D = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
-];
-const Globe = createLucideIcon("globe", __iconNode$D);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$C = [
-  ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
-  [
-    "path",
-    {
-      d: "M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
-      key: "1d0kgt"
-    }
-  ]
-];
-const House = createLucideIcon("house", __iconNode$C);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$B = [
-  ["path", { d: "M16 5h6", key: "1vod17" }],
-  ["path", { d: "M19 2v6", key: "4bpg5p" }],
-  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
-];
-const ImagePlus = createLucideIcon("image-plus", __iconNode$B);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$A = [
-  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
-];
-const Image = createLucideIcon("image", __iconNode$A);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$z = [
-  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
-  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
-  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
-];
-const Key = createLucideIcon("key", __iconNode$z);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$y = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$y);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$x = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
-];
-const Lock = createLucideIcon("lock", __iconNode$x);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$w = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
-];
-const LogOut = createLucideIcon("log-out", __iconNode$w);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$v = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$v);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$u = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
-];
-const MessageSquare = createLucideIcon("message-square", __iconNode$u);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$t = [
-  ["line", { x1: "2", x2: "22", y1: "2", y2: "22", key: "a6p6uj" }],
-  ["path", { d: "M18.89 13.23A7.12 7.12 0 0 0 19 12v-2", key: "80xlxr" }],
-  ["path", { d: "M5 10v2a7 7 0 0 0 12 5", key: "p2k8kg" }],
-  ["path", { d: "M15 9.34V5a3 3 0 0 0-5.68-1.33", key: "1gzdoj" }],
-  ["path", { d: "M9 9v3a3 3 0 0 0 5.12 2.12", key: "r2i35w" }],
-  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
-];
-const MicOff = createLucideIcon("mic-off", __iconNode$t);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$s = [
-  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
-  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
-  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
-];
-const Mic = createLucideIcon("mic", __iconNode$s);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$r = [
-  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
-  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
-  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
-];
-const Monitor = createLucideIcon("monitor", __iconNode$r);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$q = [
-  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
-];
-const Moon = createLucideIcon("moon", __iconNode$q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$p = [
-  ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
-  [
-    "path",
-    {
-      d: "m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486",
-      key: "1pkts6"
-    }
-  ]
-];
-const Paperclip = createLucideIcon("paperclip", __iconNode$p);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$o = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
-const Play = createLucideIcon("play", __iconNode$o);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$n = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$n);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$m = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
-];
-const Search = createLucideIcon("search", __iconNode$m);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$l = [
-  [
-    "path",
-    {
-      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-      key: "1ffxy3"
-    }
-  ],
-  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
-];
-const Send = createLucideIcon("send", __iconNode$l);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$k = [
-  [
-    "path",
-    {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
-];
-const Settings = createLucideIcon("settings", __iconNode$k);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$j = [
-  [
-    "path",
-    {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
-    }
-  ],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
-];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$j);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$i = [
-  ["path", { d: "m2 2 20 20", key: "1ooewy" }],
-  [
-    "path",
-    {
-      d: "M5 5a1 1 0 0 0-1 1v7c0 5 3.5 7.5 7.67 8.94a1 1 0 0 0 .67.01c2.35-.82 4.48-1.97 5.9-3.71",
-      key: "1jlk70"
-    }
-  ],
-  [
-    "path",
-    {
-      d: "M9.309 3.652A12.252 12.252 0 0 0 11.24 2.28a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v7a9.784 9.784 0 0 1-.08 1.264",
-      key: "18rp1v"
-    }
-  ]
-];
-const ShieldOff = createLucideIcon("shield-off", __iconNode$i);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$h = [
-  [
-    "path",
-    {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
-    }
-  ]
-];
-const Shield = createLucideIcon("shield", __iconNode$h);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$g = [
-  ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
-  ["path", { d: "M12 18h.01", key: "mhygvu" }]
-];
-const Smartphone = createLucideIcon("smartphone", __iconNode$g);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$f = [
-  ["path", { d: "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7", key: "1m0v6g" }],
-  [
-    "path",
-    {
-      d: "M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z",
-      key: "ohrbg2"
-    }
-  ]
-];
-const SquarePen = createLucideIcon("square-pen", __iconNode$f);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$e = [
-  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
-];
-const Square = createLucideIcon("square", __iconNode$e);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$d = [
-  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
-  ["path", { d: "M12 2v2", key: "tus03m" }],
-  ["path", { d: "M12 20v2", key: "1lh1kg" }],
-  ["path", { d: "m4.93 4.93 1.41 1.41", key: "149t6j" }],
-  ["path", { d: "m17.66 17.66 1.41 1.41", key: "ptbguv" }],
-  ["path", { d: "M2 12h2", key: "1t8f8n" }],
-  ["path", { d: "M20 12h2", key: "1q8mjw" }],
-  ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
-  ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
-];
-const Sun = createLucideIcon("sun", __iconNode$d);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$c = [
-  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
-  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
-  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
-];
-const Timer = createLucideIcon("timer", __iconNode$c);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$b = [
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
-];
-const Trash2 = createLucideIcon("trash-2", __iconNode$b);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$a = [
-  [
-    "path",
-    {
-      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-      key: "wmoenq"
-    }
-  ],
-  ["path", { d: "M12 9v4", key: "juzpu7" }],
-  ["path", { d: "M12 17h.01", key: "p32p05" }]
-];
-const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$a);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$9 = [
-  ["path", { d: "M12 3v12", key: "1x0j5s" }],
-  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
-];
-const Upload = createLucideIcon("upload", __iconNode$9);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$8 = [
-  ["path", { d: "m16 11 2 2 4-4", key: "9rsbq5" }],
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
-];
-const UserCheck = createLucideIcon("user-check", __iconNode$8);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$7 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
-  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
-];
-const UserMinus = createLucideIcon("user-minus", __iconNode$7);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$6 = [
-  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
-  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
-];
-const User = createLucideIcon("user", __iconNode$6);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$5 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
-  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
-];
-const Users = createLucideIcon("users", __iconNode$5);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$4 = [
-  [
-    "path",
-    {
-      d: "m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5",
-      key: "ftymec"
-    }
-  ],
-  ["rect", { x: "2", y: "6", width: "14", height: "12", rx: "2", key: "158x01" }]
-];
-const Video = createLucideIcon("video", __iconNode$4);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$3 = [
-  ["path", { d: "M12 20h.01", key: "zekei9" }],
-  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }],
-  ["path", { d: "M5 12.859a10 10 0 0 1 5.17-2.69", key: "1dl1wf" }],
-  ["path", { d: "M19 12.859a10 10 0 0 0-2.007-1.523", key: "4k23kn" }],
-  ["path", { d: "M2 8.82a15 15 0 0 1 4.177-2.643", key: "1grhjp" }],
-  ["path", { d: "M22 8.82a15 15 0 0 0-11.288-3.764", key: "z3jwby" }],
-  ["path", { d: "m2 2 20 20", key: "1ooewy" }]
-];
-const WifiOff = createLucideIcon("wifi-off", __iconNode$3);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$2 = [
-  ["path", { d: "M12 20h.01", key: "zekei9" }],
-  ["path", { d: "M2 8.82a15 15 0 0 1 20 0", key: "dnpr2z" }],
-  ["path", { d: "M5 12.859a10 10 0 0 1 14 0", key: "1x1e6c" }],
-  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }]
-];
-const Wifi = createLucideIcon("wifi", __iconNode$2);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$1 = [
-  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
-  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
-];
-const X = createLucideIcon("x", __iconNode$1);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode = [
-  [
-    "path",
-    {
-      d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
-      key: "1xq2db"
-    }
-  ]
-];
-const Zap = createLucideIcon("zap", __iconNode);
-let lastPublishTime = 0;
-function OnboardingGate({ children }) {
-  const { principal } = useAuth();
-  const { keyPair, isReady, isNewKeyPair, setIsNewKeyPair } = useCrypto();
-  const hasPublishedRef = reactExports.useRef(false);
-  const hasDisplayName = useHasDisplayName();
-  const updateProfile = useUpdateProfile();
-  const { data: profile } = useUserProfile(principal ?? null);
-  const profileRef = reactExports.useRef(profile);
-  const mutateAsyncRef = reactExports.useRef(updateProfile.mutateAsync);
-  reactExports.useEffect(() => {
-    profileRef.current = profile;
-  });
-  reactExports.useEffect(() => {
-    mutateAsyncRef.current = updateProfile.mutateAsync;
-  });
-  const [name, setName] = reactExports.useState("");
-  const [saving, setSaving] = reactExports.useState(false);
-  const [localReady, setLocalReady] = reactExports.useState(false);
-  const [loadingTooLong, setLoadingTooLong] = reactExports.useState(false);
-  const [timedOut, setTimedOut] = reactExports.useState(false);
-  reactExports.useEffect(() => {
-    if (hasDisplayName !== null) return;
-    const hintTimer = setTimeout(() => setLoadingTooLong(true), 2e3);
-    const giveUpTimer = setTimeout(() => setTimedOut(true), 6e3);
-    return () => {
-      clearTimeout(hintTimer);
-      clearTimeout(giveUpTimer);
-    };
-  }, [hasDisplayName]);
-  reactExports.useEffect(() => {
-    if (!isNewKeyPair || !keyPair || !isReady || !principal) return;
-    if (hasPublishedRef.current) {
-      console.log(
-        "[E2EE KEYSYNC] Skipping publish - already published this session"
-      );
-      return;
-    }
-    const now2 = Date.now();
-    if (now2 - lastPublishTime < 5e3) {
-      console.log("[E2EE KEYSYNC] Skipping publish - cooldown active");
-      return;
-    }
-    console.log(
-      "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile"
-    );
-    (async () => {
-      try {
-        const pubBytes = await exportPublicKey(keyPair.publicKey);
-        const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-        const latestProfile = profileRef.current;
-        const storedKey = latestProfile == null ? void 0 : latestProfile.ecdhPublicKey;
-        if (storedKey && storedKey.length === pubBytes.length) {
-          const storedBytes = new Uint8Array(
-            storedKey instanceof Uint8Array ? storedKey.buffer.slice(
-              storedKey.byteOffset,
-              storedKey.byteOffset + storedKey.byteLength
-            ) : storedKey
-          );
-          const identical = pubBytes.every((b2, i) => b2 === storedBytes[i]);
-          if (identical) {
-            console.log(
-              "[E2EE KEYSYNC] Public key unchanged - skipping publish"
-            );
-            hasPublishedRef.current = true;
-            setIsNewKeyPair(false);
-            return;
-          }
-        }
-        hasPublishedRef.current = true;
-        lastPublishTime = Date.now();
-        const existingDisplayName = (latestProfile == null ? void 0 : latestProfile.encryptedDisplayName) && latestProfile.encryptedDisplayName.length > 0 ? new Uint8Array(
-          latestProfile.encryptedDisplayName instanceof Uint8Array ? latestProfile.encryptedDisplayName.buffer.slice(
-            latestProfile.encryptedDisplayName.byteOffset,
-            latestProfile.encryptedDisplayName.byteOffset + latestProfile.encryptedDisplayName.byteLength
-          ) : latestProfile.encryptedDisplayName
-        ) : new Uint8Array(0);
-        await mutateAsyncRef.current({
-          encryptedDisplayName: existingDisplayName,
-          ecdhPublicKey: pubBytes
-        });
-        setIsNewKeyPair(false);
-        console.log(
-          `[E2EE KEYSYNC] Published new public key (fingerprint=${fp})`
-        );
-      } catch (err) {
-        hasPublishedRef.current = false;
-        console.warn(
-          "[E2EE KEYSYNC] Failed to publish public key to profile:",
-          err
-        );
-      }
-    })();
-  }, [isNewKeyPair, keyPair, isReady, principal, setIsNewKeyPair]);
-  const { decryptOwnDisplayName } = useCrypto();
-  reactExports.useEffect(() => {
-    if (!principal || !isReady || !keyPair || !profile) return;
-    if (profile.encryptedDisplayName.length === 0) return;
-    const principalText = principal.toText();
-    const cached = localStorage.getItem(`cs_name:${principalText}`);
-    if (cached == null ? void 0 : cached.trim()) return;
-    decryptOwnDisplayName(
-      new Uint8Array(profile.encryptedDisplayName)
-    ).then((decrypted) => {
-      if (decrypted == null ? void 0 : decrypted.trim()) {
-        setLocalDisplayName(principalText, decrypted.trim());
-        setLocalReady((prev) => !prev);
-      }
-    }).catch(() => {
-    });
-  }, [principal, isReady, keyPair, profile, decryptOwnDisplayName]);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const trimmed = name.trim();
-    if (trimmed.length < 2 || trimmed.length > 50) return;
-    if (!keyPair || !isReady || !principal) return;
-    setSaving(true);
-    try {
-      const pubBytes = await exportPublicKey(keyPair.publicKey);
-      const aesKey = await deriveDisplayNameKey(principal);
-      const encryptedDisplayName = await encryptMessage(
-        aesKey,
-        new TextEncoder().encode(trimmed)
-      );
-      await updateProfile.mutateAsync({
-        encryptedDisplayName,
-        ecdhPublicKey: pubBytes
-      });
-      setLocalDisplayName(principal.toText(), trimmed);
-      ue.success(`Welcome, ${trimmed}!`);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Could not save your name. Please try again.";
-      ue.error(message);
-    } finally {
-      setSaving(false);
-    }
-  };
-  const isValid = name.trim().length >= 2 && name.trim().length <= 50 && isReady && !!keyPair;
-  if (hasDisplayName === null && !timedOut) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: "fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-background",
-        "data-ocid": "onboarding.loading_state",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36, label: "Securing your session…" }),
-          loadingTooLong && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground animate-pulse", children: "Still setting up… this usually takes a few seconds." })
-        ]
-      }
-    );
-  }
-  if (hasDisplayName) return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children });
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
-    {
-      className: "fixed inset-0 z-50 flex items-center justify-center bg-background",
-      "data-ocid": "onboarding.page",
-      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-md px-6 py-10 flex flex-col items-center gap-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "img",
-            {
-              src: "/assets/newshieldlogo.png",
-              alt: "CharlieSierra",
-              className: "h-16 w-auto object-contain",
-              onError: (e) => {
-                e.target.style.display = "none";
-              }
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-foreground", children: "Welcome to CharlieSierra" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground mt-1", children: "Before you start, choose a display name others will see." })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "form",
-          {
-            onSubmit: handleSubmit,
-            className: "w-full space-y-5",
-            "data-ocid": "onboarding.form",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "onboarding-name", className: "text-sm font-medium", children: "Display Name" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Input,
-                  {
-                    id: "onboarding-name",
-                    type: "text",
-                    value: name,
-                    onChange: (e) => setName(e.target.value),
-                    placeholder: "e.g. Alex, Commander J, Sierra-7",
-                    minLength: 2,
-                    maxLength: 50,
-                    autoFocus: true,
-                    disabled: saving || !isReady,
-                    "data-ocid": "onboarding.name_input",
-                    className: "text-sm"
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "2–50 characters. Your name is encrypted before leaving this device." })
-              ] }),
-              name.trim().length > 0 && name.trim().length < 2 && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "p",
-                {
-                  className: "text-xs text-destructive",
-                  "data-ocid": "onboarding.name_field_error",
-                  children: "Name must be at least 2 characters."
-                }
-              ),
-              !isReady && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "p",
-                {
-                  className: "text-xs text-muted-foreground text-center",
-                  "data-ocid": "onboarding.loading_state",
-                  children: "Initialising secure keys…"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Button,
-                {
-                  type: "submit",
-                  disabled: !isValid || saving || !isReady,
-                  "data-ocid": "onboarding.submit_button",
-                  className: "w-full",
-                  children: saving ? "Saving…" : !isReady ? "Please wait…" : "Continue"
-                }
-              )
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-xs text-muted-foreground", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { size: 13, className: "text-primary" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Authenticated via Internet Identity · E2EE secured" })
-        ] })
-      ] })
-    }
-  );
-}
-const STORAGE_KEY$1 = "cs_a11y";
-const DEFAULTS = {
-  fontSizeScale: 1,
-  highContrast: false,
-  reduceAnimations: false,
-  colorBlindMode: "none"
-};
-function loadPrefs() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY$1);
-    if (!raw) return DEFAULTS;
-    const parsed = JSON.parse(raw);
-    return {
-      fontSizeScale: typeof parsed.fontSizeScale === "number" ? Math.min(2, Math.max(1, parsed.fontSizeScale)) : DEFAULTS.fontSizeScale,
-      highContrast: typeof parsed.highContrast === "boolean" ? parsed.highContrast : DEFAULTS.highContrast,
-      reduceAnimations: typeof parsed.reduceAnimations === "boolean" ? parsed.reduceAnimations : DEFAULTS.reduceAnimations,
-      colorBlindMode: [
-        "none",
-        "protanopia",
-        "deuteranopia",
-        "tritanopia"
-      ].includes(parsed.colorBlindMode) ? parsed.colorBlindMode : DEFAULTS.colorBlindMode
-    };
-  } catch {
-    return DEFAULTS;
-  }
-}
-const AccessibilityContext = reactExports.createContext(
-  null
-);
-function AccessibilityProvider({
-  children
-}) {
-  const [prefs, setPrefs] = reactExports.useState(loadPrefs);
-  const isFirstRun = reactExports.useRef(true);
-  reactExports.useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    }
-    localStorage.setItem(STORAGE_KEY$1, JSON.stringify(prefs));
-  }, [prefs]);
-  reactExports.useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--font-size-scale",
-      String(prefs.fontSizeScale)
-    );
-  }, [prefs.fontSizeScale]);
-  reactExports.useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-high-contrast",
-      prefs.highContrast ? "true" : "false"
-    );
-  }, [prefs.highContrast]);
-  reactExports.useEffect(() => {
-    document.documentElement.classList.toggle(
-      "reduce-motion",
-      prefs.reduceAnimations
-    );
-  }, [prefs.reduceAnimations]);
-  reactExports.useEffect(() => {
-    document.documentElement.dataset.colorBlind = prefs.colorBlindMode;
-  }, [prefs.colorBlindMode]);
-  const setFontSizeScale = reactExports.useCallback((scale) => {
-    setPrefs((p2) => ({
-      ...p2,
-      fontSizeScale: Math.min(2, Math.max(1, scale))
-    }));
-  }, []);
-  const setHighContrast = reactExports.useCallback((on) => {
-    setPrefs((p2) => ({ ...p2, highContrast: on }));
-  }, []);
-  const setReduceAnimations = reactExports.useCallback((on) => {
-    setPrefs((p2) => ({ ...p2, reduceAnimations: on }));
-  }, []);
-  const setColorBlindMode = reactExports.useCallback((mode) => {
-    setPrefs((p2) => ({ ...p2, colorBlindMode: mode }));
-  }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    AccessibilityContext.Provider,
-    {
-      value: {
-        ...prefs,
-        setFontSizeScale,
-        setHighContrast,
-        setReduceAnimations,
-        setColorBlindMode
-      },
-      children
-    }
-  );
-}
-function useAccessibility() {
-  const ctx = reactExports.useContext(AccessibilityContext);
-  if (!ctx)
-    throw new Error(
-      "useAccessibility must be used within AccessibilityProvider"
-    );
-  return ctx;
-}
-function EncryptedBadge({
-  compact = false,
-  className = ""
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "div",
-    {
-      className: `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10 border border-primary/20 text-primary text-xs font-medium ${className}`,
-      title: "End-to-end encrypted",
-      "aria-label": "End-to-end encrypted",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { size: 11, className: "flex-shrink-0" }),
-        !compact && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "End-to-end encrypted" })
-      ]
-    }
-  );
-}
-var AUTOFOCUS_ON_MOUNT = "focusScope.autoFocusOnMount";
-var AUTOFOCUS_ON_UNMOUNT = "focusScope.autoFocusOnUnmount";
-var EVENT_OPTIONS$1 = { bubbles: false, cancelable: true };
-var FOCUS_SCOPE_NAME = "FocusScope";
-var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
-  const {
-    loop = false,
-    trapped = false,
-    onMountAutoFocus: onMountAutoFocusProp,
-    onUnmountAutoFocus: onUnmountAutoFocusProp,
-    ...scopeProps
-  } = props;
-  const [container, setContainer] = reactExports.useState(null);
-  const onMountAutoFocus = useCallbackRef$1(onMountAutoFocusProp);
-  const onUnmountAutoFocus = useCallbackRef$1(onUnmountAutoFocusProp);
-  const lastFocusedElementRef = reactExports.useRef(null);
-  const composedRefs = useComposedRefs(forwardedRef, (node) => setContainer(node));
-  const focusScope = reactExports.useRef({
-    paused: false,
-    pause() {
-      this.paused = true;
-    },
-    resume() {
-      this.paused = false;
-    }
-  }).current;
-  reactExports.useEffect(() => {
-    if (trapped) {
-      let handleFocusIn2 = function(event) {
-        if (focusScope.paused || !container) return;
-        const target = event.target;
-        if (container.contains(target)) {
-          lastFocusedElementRef.current = target;
-        } else {
-          focus(lastFocusedElementRef.current, { select: true });
-        }
-      }, handleFocusOut2 = function(event) {
-        if (focusScope.paused || !container) return;
-        const relatedTarget = event.relatedTarget;
-        if (relatedTarget === null) return;
-        if (!container.contains(relatedTarget)) {
-          focus(lastFocusedElementRef.current, { select: true });
-        }
-      }, handleMutations2 = function(mutations) {
-        const focusedElement = document.activeElement;
-        if (focusedElement !== document.body) return;
-        for (const mutation of mutations) {
-          if (mutation.removedNodes.length > 0) focus(container);
-        }
-      };
-      document.addEventListener("focusin", handleFocusIn2);
-      document.addEventListener("focusout", handleFocusOut2);
-      const mutationObserver = new MutationObserver(handleMutations2);
-      if (container) mutationObserver.observe(container, { childList: true, subtree: true });
-      return () => {
-        document.removeEventListener("focusin", handleFocusIn2);
-        document.removeEventListener("focusout", handleFocusOut2);
-        mutationObserver.disconnect();
-      };
-    }
-  }, [trapped, container, focusScope.paused]);
-  reactExports.useEffect(() => {
-    if (container) {
-      focusScopesStack.add(focusScope);
-      const previouslyFocusedElement = document.activeElement;
-      const hasFocusedCandidate = container.contains(previouslyFocusedElement);
-      if (!hasFocusedCandidate) {
-        const mountEvent = new CustomEvent(AUTOFOCUS_ON_MOUNT, EVENT_OPTIONS$1);
-        container.addEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
-        container.dispatchEvent(mountEvent);
-        if (!mountEvent.defaultPrevented) {
-          focusFirst$1(removeLinks(getTabbableCandidates(container)), { select: true });
-          if (document.activeElement === previouslyFocusedElement) {
-            focus(container);
-          }
-        }
-      }
-      return () => {
-        container.removeEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
-        setTimeout(() => {
-          const unmountEvent = new CustomEvent(AUTOFOCUS_ON_UNMOUNT, EVENT_OPTIONS$1);
-          container.addEventListener(AUTOFOCUS_ON_UNMOUNT, onUnmountAutoFocus);
-          container.dispatchEvent(unmountEvent);
-          if (!unmountEvent.defaultPrevented) {
-            focus(previouslyFocusedElement ?? document.body, { select: true });
-          }
-          container.removeEventListener(AUTOFOCUS_ON_UNMOUNT, onUnmountAutoFocus);
-          focusScopesStack.remove(focusScope);
-        }, 0);
-      };
-    }
-  }, [container, onMountAutoFocus, onUnmountAutoFocus, focusScope]);
-  const handleKeyDown = reactExports.useCallback(
-    (event) => {
-      if (!loop && !trapped) return;
-      if (focusScope.paused) return;
-      const isTabKey = event.key === "Tab" && !event.altKey && !event.ctrlKey && !event.metaKey;
-      const focusedElement = document.activeElement;
-      if (isTabKey && focusedElement) {
-        const container2 = event.currentTarget;
-        const [first, last2] = getTabbableEdges(container2);
-        const hasTabbableElementsInside = first && last2;
-        if (!hasTabbableElementsInside) {
-          if (focusedElement === container2) event.preventDefault();
-        } else {
-          if (!event.shiftKey && focusedElement === last2) {
-            event.preventDefault();
-            if (loop) focus(first, { select: true });
-          } else if (event.shiftKey && focusedElement === first) {
-            event.preventDefault();
-            if (loop) focus(last2, { select: true });
-          }
-        }
-      }
-    },
-    [loop, trapped, focusScope.paused]
-  );
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive$1.div, { tabIndex: -1, ...scopeProps, ref: composedRefs, onKeyDown: handleKeyDown });
-});
-FocusScope.displayName = FOCUS_SCOPE_NAME;
-function focusFirst$1(candidates, { select = false } = {}) {
-  const previouslyFocusedElement = document.activeElement;
-  for (const candidate of candidates) {
-    focus(candidate, { select });
-    if (document.activeElement !== previouslyFocusedElement) return;
-  }
-}
-function getTabbableEdges(container) {
-  const candidates = getTabbableCandidates(container);
-  const first = findVisible(candidates, container);
-  const last2 = findVisible(candidates.reverse(), container);
-  return [first, last2];
-}
-function getTabbableCandidates(container) {
-  const nodes = [];
-  const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT, {
-    acceptNode: (node) => {
-      const isHiddenInput = node.tagName === "INPUT" && node.type === "hidden";
-      if (node.disabled || node.hidden || isHiddenInput) return NodeFilter.FILTER_SKIP;
-      return node.tabIndex >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
     }
   });
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-  return nodes;
 }
-function findVisible(elements, container) {
-  for (const element of elements) {
-    if (!isHidden(element, { upTo: container })) return element;
-  }
-}
-function isHidden(node, { upTo }) {
-  if (getComputedStyle(node).visibility === "hidden") return true;
-  while (node) {
-    if (upTo !== void 0 && node === upTo) return false;
-    if (getComputedStyle(node).display === "none") return true;
-    node = node.parentElement;
-  }
-  return false;
-}
-function isSelectableInput(element) {
-  return element instanceof HTMLInputElement && "select" in element;
-}
-function focus(element, { select = false } = {}) {
-  if (element && element.focus) {
-    const previouslyFocusedElement = document.activeElement;
-    element.focus({ preventScroll: true });
-    if (element !== previouslyFocusedElement && isSelectableInput(element) && select)
-      element.select();
-  }
-}
-var focusScopesStack = createFocusScopesStack();
-function createFocusScopesStack() {
-  let stack = [];
-  return {
-    add(focusScope) {
-      const activeFocusScope = stack[0];
-      if (focusScope !== activeFocusScope) {
-        activeFocusScope == null ? void 0 : activeFocusScope.pause();
-      }
-      stack = arrayRemove(stack, focusScope);
-      stack.unshift(focusScope);
+function useDeleteOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (orgId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.deleteOrg(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
     },
-    remove(focusScope) {
-      var _a3;
-      stack = arrayRemove(stack, focusScope);
-      (_a3 = stack[0]) == null ? void 0 : _a3.resume();
-    }
-  };
-}
-function arrayRemove(array, item) {
-  const updatedArray = [...array];
-  const index2 = updatedArray.indexOf(item);
-  if (index2 !== -1) {
-    updatedArray.splice(index2, 1);
-  }
-  return updatedArray;
-}
-function removeLinks(items) {
-  return items.filter((item) => item.tagName !== "A");
-}
-var count = 0;
-function useFocusGuards() {
-  reactExports.useEffect(() => {
-    const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
-    document.body.insertAdjacentElement("afterbegin", edgeGuards[0] ?? createFocusGuard());
-    document.body.insertAdjacentElement("beforeend", edgeGuards[1] ?? createFocusGuard());
-    count++;
-    return () => {
-      if (count === 1) {
-        document.querySelectorAll("[data-radix-focus-guard]").forEach((node) => node.remove());
-      }
-      count--;
-    };
-  }, []);
-}
-function createFocusGuard() {
-  const element = document.createElement("span");
-  element.setAttribute("data-radix-focus-guard", "");
-  element.tabIndex = 0;
-  element.style.outline = "none";
-  element.style.opacity = "0";
-  element.style.position = "fixed";
-  element.style.pointerEvents = "none";
-  return element;
-}
-var __assign = function() {
-  __assign = Object.assign || function __assign2(t) {
-    for (var s2, i = 1, n = arguments.length; i < n; i++) {
-      s2 = arguments[i];
-      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2)) t[p2] = s2[p2];
-    }
-    return t;
-  };
-  return __assign.apply(this, arguments);
-};
-function __rest(s2, e) {
-  var t = {};
-  for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e.indexOf(p2) < 0)
-    t[p2] = s2[p2];
-  if (s2 != null && typeof Object.getOwnPropertySymbols === "function")
-    for (var i = 0, p2 = Object.getOwnPropertySymbols(s2); i < p2.length; i++) {
-      if (e.indexOf(p2[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i]))
-        t[p2[i]] = s2[p2[i]];
-    }
-  return t;
-}
-function __spreadArray(to, from, pack) {
-  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-    if (ar || !(i in from)) {
-      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-      ar[i] = from[i];
-    }
-  }
-  return to.concat(ar || Array.prototype.slice.call(from));
-}
-typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
-  var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-};
-var zeroRightClassName = "right-scroll-bar-position";
-var fullWidthClassName = "width-before-scroll-bar";
-var noScrollbarsClassName = "with-scroll-bars-hidden";
-var removedBarSizeVariable = "--removed-body-scroll-bar-size";
-function assignRef(ref, value) {
-  if (typeof ref === "function") {
-    ref(value);
-  } else if (ref) {
-    ref.current = value;
-  }
-  return ref;
-}
-function useCallbackRef(initialValue, callback) {
-  var ref = reactExports.useState(function() {
-    return {
-      // value
-      value: initialValue,
-      // last callback
-      callback,
-      // "memoized" public interface
-      facade: {
-        get current() {
-          return ref.value;
-        },
-        set current(value) {
-          var last2 = ref.value;
-          if (last2 !== value) {
-            ref.value = value;
-            ref.callback(value, last2);
-          }
-        }
-      }
-    };
-  })[0];
-  ref.callback = callback;
-  return ref.facade;
-}
-var useIsomorphicLayoutEffect = typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
-var currentValues = /* @__PURE__ */ new WeakMap();
-function useMergeRefs(refs, defaultValue) {
-  var callbackRef = useCallbackRef(null, function(newValue) {
-    return refs.forEach(function(ref) {
-      return assignRef(ref, newValue);
-    });
-  });
-  useIsomorphicLayoutEffect(function() {
-    var oldValue = currentValues.get(callbackRef);
-    if (oldValue) {
-      var prevRefs_1 = new Set(oldValue);
-      var nextRefs_1 = new Set(refs);
-      var current_1 = callbackRef.current;
-      prevRefs_1.forEach(function(ref) {
-        if (!nextRefs_1.has(ref)) {
-          assignRef(ref, null);
-        }
-      });
-      nextRefs_1.forEach(function(ref) {
-        if (!prevRefs_1.has(ref)) {
-          assignRef(ref, current_1);
-        }
-      });
-    }
-    currentValues.set(callbackRef, refs);
-  }, [refs]);
-  return callbackRef;
-}
-function ItoI(a2) {
-  return a2;
-}
-function innerCreateMedium(defaults, middleware) {
-  if (middleware === void 0) {
-    middleware = ItoI;
-  }
-  var buffer = [];
-  var assigned = false;
-  var medium = {
-    read: function() {
-      if (assigned) {
-        throw new Error("Sidecar: could not `read` from an `assigned` medium. `read` could be used only with `useMedium`.");
-      }
-      if (buffer.length) {
-        return buffer[buffer.length - 1];
-      }
-      return defaults;
-    },
-    useMedium: function(data) {
-      var item = middleware(data, assigned);
-      buffer.push(item);
-      return function() {
-        buffer = buffer.filter(function(x3) {
-          return x3 !== item;
-        });
-      };
-    },
-    assignSyncMedium: function(cb) {
-      assigned = true;
-      while (buffer.length) {
-        var cbs = buffer;
-        buffer = [];
-        cbs.forEach(cb);
-      }
-      buffer = {
-        push: function(x3) {
-          return cb(x3);
-        },
-        filter: function() {
-          return buffer;
-        }
-      };
-    },
-    assignMedium: function(cb) {
-      assigned = true;
-      var pendingQueue = [];
-      if (buffer.length) {
-        var cbs = buffer;
-        buffer = [];
-        cbs.forEach(cb);
-        pendingQueue = buffer;
-      }
-      var executeQueue = function() {
-        var cbs2 = pendingQueue;
-        pendingQueue = [];
-        cbs2.forEach(cb);
-      };
-      var cycle = function() {
-        return Promise.resolve().then(executeQueue);
-      };
-      cycle();
-      buffer = {
-        push: function(x3) {
-          pendingQueue.push(x3);
-          cycle();
-        },
-        filter: function(filter) {
-          pendingQueue = pendingQueue.filter(filter);
-          return buffer;
-        }
-      };
-    }
-  };
-  return medium;
-}
-function createSidecarMedium(options) {
-  if (options === void 0) {
-    options = {};
-  }
-  var medium = innerCreateMedium(null);
-  medium.options = __assign({ async: true, ssr: false }, options);
-  return medium;
-}
-var SideCar$1 = function(_a3) {
-  var sideCar = _a3.sideCar, rest = __rest(_a3, ["sideCar"]);
-  if (!sideCar) {
-    throw new Error("Sidecar: please provide `sideCar` property to import the right car");
-  }
-  var Target = sideCar.read();
-  if (!Target) {
-    throw new Error("Sidecar medium not found");
-  }
-  return reactExports.createElement(Target, __assign({}, rest));
-};
-SideCar$1.isSideCarExport = true;
-function exportSidecar(medium, exported) {
-  medium.useMedium(exported);
-  return SideCar$1;
-}
-var effectCar = createSidecarMedium();
-var nothing = function() {
-  return;
-};
-var RemoveScroll = reactExports.forwardRef(function(props, parentRef) {
-  var ref = reactExports.useRef(null);
-  var _a3 = reactExports.useState({
-    onScrollCapture: nothing,
-    onWheelCapture: nothing,
-    onTouchMoveCapture: nothing
-  }), callbacks = _a3[0], setCallbacks = _a3[1];
-  var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noRelative = props.noRelative, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b3 = props.as, Container = _b3 === void 0 ? "div" : _b3, gapMode = props.gapMode, rest = __rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noRelative", "noIsolation", "inert", "allowPinchZoom", "as", "gapMode"]);
-  var SideCar2 = sideCar;
-  var containerRef = useMergeRefs([ref, parentRef]);
-  var containerProps = __assign(__assign({}, rest), callbacks);
-  return reactExports.createElement(
-    reactExports.Fragment,
-    null,
-    enabled && reactExports.createElement(SideCar2, { sideCar: effectCar, removeScrollBar, shards, noRelative, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref, gapMode }),
-    forwardProps ? reactExports.cloneElement(reactExports.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef })) : reactExports.createElement(Container, __assign({}, containerProps, { className, ref: containerRef }), children)
-  );
-});
-RemoveScroll.defaultProps = {
-  enabled: true,
-  removeScrollBar: true,
-  inert: false
-};
-RemoveScroll.classNames = {
-  fullWidth: fullWidthClassName,
-  zeroRight: zeroRightClassName
-};
-var getNonce = function() {
-  if (typeof __webpack_nonce__ !== "undefined") {
-    return __webpack_nonce__;
-  }
-  return void 0;
-};
-function makeStyleTag() {
-  if (!document)
-    return null;
-  var tag = document.createElement("style");
-  tag.type = "text/css";
-  var nonce = getNonce();
-  if (nonce) {
-    tag.setAttribute("nonce", nonce);
-  }
-  return tag;
-}
-function injectStyles(tag, css) {
-  if (tag.styleSheet) {
-    tag.styleSheet.cssText = css;
-  } else {
-    tag.appendChild(document.createTextNode(css));
-  }
-}
-function insertStyleTag(tag) {
-  var head = document.head || document.getElementsByTagName("head")[0];
-  head.appendChild(tag);
-}
-var stylesheetSingleton = function() {
-  var counter = 0;
-  var stylesheet = null;
-  return {
-    add: function(style2) {
-      if (counter == 0) {
-        if (stylesheet = makeStyleTag()) {
-          injectStyles(stylesheet, style2);
-          insertStyleTag(stylesheet);
-        }
-      }
-      counter++;
-    },
-    remove: function() {
-      counter--;
-      if (!counter && stylesheet) {
-        stylesheet.parentNode && stylesheet.parentNode.removeChild(stylesheet);
-        stylesheet = null;
-      }
-    }
-  };
-};
-var styleHookSingleton = function() {
-  var sheet = stylesheetSingleton();
-  return function(styles, isDynamic) {
-    reactExports.useEffect(function() {
-      sheet.add(styles);
-      return function() {
-        sheet.remove();
-      };
-    }, [styles && isDynamic]);
-  };
-};
-var styleSingleton = function() {
-  var useStyle = styleHookSingleton();
-  var Sheet2 = function(_a3) {
-    var styles = _a3.styles, dynamic = _a3.dynamic;
-    useStyle(styles, dynamic);
-    return null;
-  };
-  return Sheet2;
-};
-var zeroGap = {
-  left: 0,
-  top: 0,
-  right: 0,
-  gap: 0
-};
-var parse = function(x3) {
-  return parseInt(x3 || "", 10) || 0;
-};
-var getOffset = function(gapMode) {
-  var cs = window.getComputedStyle(document.body);
-  var left = cs[gapMode === "padding" ? "paddingLeft" : "marginLeft"];
-  var top = cs[gapMode === "padding" ? "paddingTop" : "marginTop"];
-  var right = cs[gapMode === "padding" ? "paddingRight" : "marginRight"];
-  return [parse(left), parse(top), parse(right)];
-};
-var getGapWidth = function(gapMode) {
-  if (gapMode === void 0) {
-    gapMode = "margin";
-  }
-  if (typeof window === "undefined") {
-    return zeroGap;
-  }
-  var offsets = getOffset(gapMode);
-  var documentWidth = document.documentElement.clientWidth;
-  var windowWidth = window.innerWidth;
-  return {
-    left: offsets[0],
-    top: offsets[1],
-    right: offsets[2],
-    gap: Math.max(0, windowWidth - documentWidth + offsets[2] - offsets[0])
-  };
-};
-var Style = styleSingleton();
-var lockAttribute = "data-scroll-locked";
-var getStyles = function(_a3, allowRelative, gapMode, important) {
-  var left = _a3.left, top = _a3.top, right = _a3.right, gap = _a3.gap;
-  if (gapMode === void 0) {
-    gapMode = "margin";
-  }
-  return "\n  .".concat(noScrollbarsClassName, " {\n   overflow: hidden ").concat(important, ";\n   padding-right: ").concat(gap, "px ").concat(important, ";\n  }\n  body[").concat(lockAttribute, "] {\n    overflow: hidden ").concat(important, ";\n    overscroll-behavior: contain;\n    ").concat([
-    allowRelative && "position: relative ".concat(important, ";"),
-    gapMode === "margin" && "\n    padding-left: ".concat(left, "px;\n    padding-top: ").concat(top, "px;\n    padding-right: ").concat(right, "px;\n    margin-left:0;\n    margin-top:0;\n    margin-right: ").concat(gap, "px ").concat(important, ";\n    "),
-    gapMode === "padding" && "padding-right: ".concat(gap, "px ").concat(important, ";")
-  ].filter(Boolean).join(""), "\n  }\n  \n  .").concat(zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(zeroRightClassName, " .").concat(zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " .").concat(fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body[").concat(lockAttribute, "] {\n    ").concat(removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
-};
-var getCurrentUseCounter = function() {
-  var counter = parseInt(document.body.getAttribute(lockAttribute) || "0", 10);
-  return isFinite(counter) ? counter : 0;
-};
-var useLockAttribute = function() {
-  reactExports.useEffect(function() {
-    document.body.setAttribute(lockAttribute, (getCurrentUseCounter() + 1).toString());
-    return function() {
-      var newCounter = getCurrentUseCounter() - 1;
-      if (newCounter <= 0) {
-        document.body.removeAttribute(lockAttribute);
-      } else {
-        document.body.setAttribute(lockAttribute, newCounter.toString());
-      }
-    };
-  }, []);
-};
-var RemoveScrollBar = function(_a3) {
-  var noRelative = _a3.noRelative, noImportant = _a3.noImportant, _b3 = _a3.gapMode, gapMode = _b3 === void 0 ? "margin" : _b3;
-  useLockAttribute();
-  var gap = reactExports.useMemo(function() {
-    return getGapWidth(gapMode);
-  }, [gapMode]);
-  return reactExports.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : "") });
-};
-var passiveSupported = false;
-if (typeof window !== "undefined") {
-  try {
-    var options = Object.defineProperty({}, "passive", {
-      get: function() {
-        passiveSupported = true;
-        return true;
-      }
-    });
-    window.addEventListener("test", options, options);
-    window.removeEventListener("test", options, options);
-  } catch (err) {
-    passiveSupported = false;
-  }
-}
-var nonPassive = passiveSupported ? { passive: false } : false;
-var alwaysContainsScroll = function(node) {
-  return node.tagName === "TEXTAREA";
-};
-var elementCanBeScrolled = function(node, overflow) {
-  if (!(node instanceof Element)) {
-    return false;
-  }
-  var styles = window.getComputedStyle(node);
-  return (
-    // not-not-scrollable
-    styles[overflow] !== "hidden" && // contains scroll inside self
-    !(styles.overflowY === styles.overflowX && !alwaysContainsScroll(node) && styles[overflow] === "visible")
-  );
-};
-var elementCouldBeVScrolled = function(node) {
-  return elementCanBeScrolled(node, "overflowY");
-};
-var elementCouldBeHScrolled = function(node) {
-  return elementCanBeScrolled(node, "overflowX");
-};
-var locationCouldBeScrolled = function(axis, node) {
-  var ownerDocument = node.ownerDocument;
-  var current = node;
-  do {
-    if (typeof ShadowRoot !== "undefined" && current instanceof ShadowRoot) {
-      current = current.host;
-    }
-    var isScrollable = elementCouldBeScrolled(axis, current);
-    if (isScrollable) {
-      var _a3 = getScrollVariables(axis, current), scrollHeight = _a3[1], clientHeight = _a3[2];
-      if (scrollHeight > clientHeight) {
-        return true;
-      }
-    }
-    current = current.parentNode;
-  } while (current && current !== ownerDocument.body);
-  return false;
-};
-var getVScrollVariables = function(_a3) {
-  var scrollTop = _a3.scrollTop, scrollHeight = _a3.scrollHeight, clientHeight = _a3.clientHeight;
-  return [
-    scrollTop,
-    scrollHeight,
-    clientHeight
-  ];
-};
-var getHScrollVariables = function(_a3) {
-  var scrollLeft = _a3.scrollLeft, scrollWidth = _a3.scrollWidth, clientWidth = _a3.clientWidth;
-  return [
-    scrollLeft,
-    scrollWidth,
-    clientWidth
-  ];
-};
-var elementCouldBeScrolled = function(axis, node) {
-  return axis === "v" ? elementCouldBeVScrolled(node) : elementCouldBeHScrolled(node);
-};
-var getScrollVariables = function(axis, node) {
-  return axis === "v" ? getVScrollVariables(node) : getHScrollVariables(node);
-};
-var getDirectionFactor = function(axis, direction) {
-  return axis === "h" && direction === "rtl" ? -1 : 1;
-};
-var handleScroll = function(axis, endTarget, event, sourceDelta, noOverscroll) {
-  var directionFactor = getDirectionFactor(axis, window.getComputedStyle(endTarget).direction);
-  var delta = directionFactor * sourceDelta;
-  var target = event.target;
-  var targetInLock = endTarget.contains(target);
-  var shouldCancelScroll = false;
-  var isDeltaPositive = delta > 0;
-  var availableScroll = 0;
-  var availableScrollTop = 0;
-  do {
-    if (!target) {
-      break;
-    }
-    var _a3 = getScrollVariables(axis, target), position = _a3[0], scroll_1 = _a3[1], capacity = _a3[2];
-    var elementScroll = scroll_1 - capacity - directionFactor * position;
-    if (position || elementScroll) {
-      if (elementCouldBeScrolled(axis, target)) {
-        availableScroll += elementScroll;
-        availableScrollTop += position;
-      }
-    }
-    var parent_1 = target.parentNode;
-    target = parent_1 && parent_1.nodeType === Node.DOCUMENT_FRAGMENT_NODE ? parent_1.host : parent_1;
-  } while (
-    // portaled content
-    !targetInLock && target !== document.body || // self content
-    targetInLock && (endTarget.contains(target) || endTarget === target)
-  );
-  if (isDeltaPositive && (Math.abs(availableScroll) < 1 || false)) {
-    shouldCancelScroll = true;
-  } else if (!isDeltaPositive && (Math.abs(availableScrollTop) < 1 || false)) {
-    shouldCancelScroll = true;
-  }
-  return shouldCancelScroll;
-};
-var getTouchXY = function(event) {
-  return "changedTouches" in event ? [event.changedTouches[0].clientX, event.changedTouches[0].clientY] : [0, 0];
-};
-var getDeltaXY = function(event) {
-  return [event.deltaX, event.deltaY];
-};
-var extractRef = function(ref) {
-  return ref && "current" in ref ? ref.current : ref;
-};
-var deltaCompare = function(x3, y2) {
-  return x3[0] === y2[0] && x3[1] === y2[1];
-};
-var generateStyle = function(id) {
-  return "\n  .block-interactivity-".concat(id, " {pointer-events: none;}\n  .allow-interactivity-").concat(id, " {pointer-events: all;}\n");
-};
-var idCounter = 0;
-var lockStack = [];
-function RemoveScrollSideCar(props) {
-  var shouldPreventQueue = reactExports.useRef([]);
-  var touchStartRef = reactExports.useRef([0, 0]);
-  var activeAxis = reactExports.useRef();
-  var id = reactExports.useState(idCounter++)[0];
-  var Style2 = reactExports.useState(styleSingleton)[0];
-  var lastProps = reactExports.useRef(props);
-  reactExports.useEffect(function() {
-    lastProps.current = props;
-  }, [props]);
-  reactExports.useEffect(function() {
-    if (props.inert) {
-      document.body.classList.add("block-interactivity-".concat(id));
-      var allow_1 = __spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), true).filter(Boolean);
-      allow_1.forEach(function(el) {
-        return el.classList.add("allow-interactivity-".concat(id));
-      });
-      return function() {
-        document.body.classList.remove("block-interactivity-".concat(id));
-        allow_1.forEach(function(el) {
-          return el.classList.remove("allow-interactivity-".concat(id));
-        });
-      };
-    }
-    return;
-  }, [props.inert, props.lockRef.current, props.shards]);
-  var shouldCancelEvent = reactExports.useCallback(function(event, parent) {
-    if ("touches" in event && event.touches.length === 2 || event.type === "wheel" && event.ctrlKey) {
-      return !lastProps.current.allowPinchZoom;
-    }
-    var touch = getTouchXY(event);
-    var touchStart = touchStartRef.current;
-    var deltaX = "deltaX" in event ? event.deltaX : touchStart[0] - touch[0];
-    var deltaY = "deltaY" in event ? event.deltaY : touchStart[1] - touch[1];
-    var currentAxis;
-    var target = event.target;
-    var moveDirection = Math.abs(deltaX) > Math.abs(deltaY) ? "h" : "v";
-    if ("touches" in event && moveDirection === "h" && target.type === "range") {
-      return false;
-    }
-    var selection = window.getSelection();
-    var anchorNode = selection && selection.anchorNode;
-    var isTouchingSelection = anchorNode ? anchorNode === target || anchorNode.contains(target) : false;
-    if (isTouchingSelection) {
-      return false;
-    }
-    var canBeScrolledInMainDirection = locationCouldBeScrolled(moveDirection, target);
-    if (!canBeScrolledInMainDirection) {
-      return true;
-    }
-    if (canBeScrolledInMainDirection) {
-      currentAxis = moveDirection;
-    } else {
-      currentAxis = moveDirection === "v" ? "h" : "v";
-      canBeScrolledInMainDirection = locationCouldBeScrolled(moveDirection, target);
-    }
-    if (!canBeScrolledInMainDirection) {
-      return false;
-    }
-    if (!activeAxis.current && "changedTouches" in event && (deltaX || deltaY)) {
-      activeAxis.current = currentAxis;
-    }
-    if (!currentAxis) {
-      return true;
-    }
-    var cancelingAxis = activeAxis.current || currentAxis;
-    return handleScroll(cancelingAxis, parent, event, cancelingAxis === "h" ? deltaX : deltaY);
-  }, []);
-  var shouldPrevent = reactExports.useCallback(function(_event) {
-    var event = _event;
-    if (!lockStack.length || lockStack[lockStack.length - 1] !== Style2) {
-      return;
-    }
-    var delta = "deltaY" in event ? getDeltaXY(event) : getTouchXY(event);
-    var sourceEvent = shouldPreventQueue.current.filter(function(e) {
-      return e.name === event.type && (e.target === event.target || event.target === e.shadowParent) && deltaCompare(e.delta, delta);
-    })[0];
-    if (sourceEvent && sourceEvent.should) {
-      if (event.cancelable) {
-        event.preventDefault();
-      }
-      return;
-    }
-    if (!sourceEvent) {
-      var shardNodes = (lastProps.current.shards || []).map(extractRef).filter(Boolean).filter(function(node) {
-        return node.contains(event.target);
-      });
-      var shouldStop = shardNodes.length > 0 ? shouldCancelEvent(event, shardNodes[0]) : !lastProps.current.noIsolation;
-      if (shouldStop) {
-        if (event.cancelable) {
-          event.preventDefault();
-        }
-      }
-    }
-  }, []);
-  var shouldCancel = reactExports.useCallback(function(name, delta, target, should) {
-    var event = { name, delta, target, should, shadowParent: getOutermostShadowParent(target) };
-    shouldPreventQueue.current.push(event);
-    setTimeout(function() {
-      shouldPreventQueue.current = shouldPreventQueue.current.filter(function(e) {
-        return e !== event;
-      });
-    }, 1);
-  }, []);
-  var scrollTouchStart = reactExports.useCallback(function(event) {
-    touchStartRef.current = getTouchXY(event);
-    activeAxis.current = void 0;
-  }, []);
-  var scrollWheel = reactExports.useCallback(function(event) {
-    shouldCancel(event.type, getDeltaXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
-  }, []);
-  var scrollTouchMove = reactExports.useCallback(function(event) {
-    shouldCancel(event.type, getTouchXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
-  }, []);
-  reactExports.useEffect(function() {
-    lockStack.push(Style2);
-    props.setCallbacks({
-      onScrollCapture: scrollWheel,
-      onWheelCapture: scrollWheel,
-      onTouchMoveCapture: scrollTouchMove
-    });
-    document.addEventListener("wheel", shouldPrevent, nonPassive);
-    document.addEventListener("touchmove", shouldPrevent, nonPassive);
-    document.addEventListener("touchstart", scrollTouchStart, nonPassive);
-    return function() {
-      lockStack = lockStack.filter(function(inst) {
-        return inst !== Style2;
-      });
-      document.removeEventListener("wheel", shouldPrevent, nonPassive);
-      document.removeEventListener("touchmove", shouldPrevent, nonPassive);
-      document.removeEventListener("touchstart", scrollTouchStart, nonPassive);
-    };
-  }, []);
-  var removeScrollBar = props.removeScrollBar, inert = props.inert;
-  return reactExports.createElement(
-    reactExports.Fragment,
-    null,
-    inert ? reactExports.createElement(Style2, { styles: generateStyle(id) }) : null,
-    removeScrollBar ? reactExports.createElement(RemoveScrollBar, { noRelative: props.noRelative, gapMode: props.gapMode }) : null
-  );
-}
-function getOutermostShadowParent(node) {
-  var shadowParent = null;
-  while (node !== null) {
-    if (node instanceof ShadowRoot) {
-      shadowParent = node.host;
-      node = node.host;
-    }
-    node = node.parentNode;
-  }
-  return shadowParent;
-}
-const SideCar = exportSidecar(effectCar, RemoveScrollSideCar);
-var ReactRemoveScroll = reactExports.forwardRef(function(props, ref) {
-  return reactExports.createElement(RemoveScroll, __assign({}, props, { ref, sideCar: SideCar }));
-});
-ReactRemoveScroll.classNames = RemoveScroll.classNames;
-var getDefaultParent = function(originalTarget) {
-  if (typeof document === "undefined") {
-    return null;
-  }
-  var sampleTarget = Array.isArray(originalTarget) ? originalTarget[0] : originalTarget;
-  return sampleTarget.ownerDocument.body;
-};
-var counterMap = /* @__PURE__ */ new WeakMap();
-var uncontrolledNodes = /* @__PURE__ */ new WeakMap();
-var markerMap = {};
-var lockCount = 0;
-var unwrapHost = function(node) {
-  return node && (node.host || unwrapHost(node.parentNode));
-};
-var correctTargets = function(parent, targets) {
-  return targets.map(function(target) {
-    if (parent.contains(target)) {
-      return target;
-    }
-    var correctedTarget = unwrapHost(target);
-    if (correctedTarget && parent.contains(correctedTarget)) {
-      return correctedTarget;
-    }
-    console.error("aria-hidden", target, "in not contained inside", parent, ". Doing nothing");
-    return null;
-  }).filter(function(x3) {
-    return Boolean(x3);
-  });
-};
-var applyAttributeToOthers = function(originalTarget, parentNode, markerName, controlAttribute) {
-  var targets = correctTargets(parentNode, Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
-  if (!markerMap[markerName]) {
-    markerMap[markerName] = /* @__PURE__ */ new WeakMap();
-  }
-  var markerCounter = markerMap[markerName];
-  var hiddenNodes = [];
-  var elementsToKeep = /* @__PURE__ */ new Set();
-  var elementsToStop = new Set(targets);
-  var keep = function(el) {
-    if (!el || elementsToKeep.has(el)) {
-      return;
-    }
-    elementsToKeep.add(el);
-    keep(el.parentNode);
-  };
-  targets.forEach(keep);
-  var deep = function(parent) {
-    if (!parent || elementsToStop.has(parent)) {
-      return;
-    }
-    Array.prototype.forEach.call(parent.children, function(node) {
-      if (elementsToKeep.has(node)) {
-        deep(node);
-      } else {
-        try {
-          var attr = node.getAttribute(controlAttribute);
-          var alreadyHidden = attr !== null && attr !== "false";
-          var counterValue = (counterMap.get(node) || 0) + 1;
-          var markerValue = (markerCounter.get(node) || 0) + 1;
-          counterMap.set(node, counterValue);
-          markerCounter.set(node, markerValue);
-          hiddenNodes.push(node);
-          if (counterValue === 1 && alreadyHidden) {
-            uncontrolledNodes.set(node, true);
-          }
-          if (markerValue === 1) {
-            node.setAttribute(markerName, "true");
-          }
-          if (!alreadyHidden) {
-            node.setAttribute(controlAttribute, "true");
-          }
-        } catch (e) {
-          console.error("aria-hidden: cannot operate on ", node, e);
-        }
-      }
-    });
-  };
-  deep(parentNode);
-  elementsToKeep.clear();
-  lockCount++;
-  return function() {
-    hiddenNodes.forEach(function(node) {
-      var counterValue = counterMap.get(node) - 1;
-      var markerValue = markerCounter.get(node) - 1;
-      counterMap.set(node, counterValue);
-      markerCounter.set(node, markerValue);
-      if (!counterValue) {
-        if (!uncontrolledNodes.has(node)) {
-          node.removeAttribute(controlAttribute);
-        }
-        uncontrolledNodes.delete(node);
-      }
-      if (!markerValue) {
-        node.removeAttribute(markerName);
-      }
-    });
-    lockCount--;
-    if (!lockCount) {
-      counterMap = /* @__PURE__ */ new WeakMap();
-      counterMap = /* @__PURE__ */ new WeakMap();
-      uncontrolledNodes = /* @__PURE__ */ new WeakMap();
-      markerMap = {};
-    }
-  };
-};
-var hideOthers = function(originalTarget, parentNode, markerName) {
-  if (markerName === void 0) {
-    markerName = "data-aria-hidden";
-  }
-  var targets = Array.from(Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
-  var activeParentNode = getDefaultParent(originalTarget);
-  if (!activeParentNode) {
-    return function() {
-      return null;
-    };
-  }
-  targets.push.apply(targets, Array.from(activeParentNode.querySelectorAll("[aria-live], script")));
-  return applyAttributeToOthers(targets, activeParentNode, markerName, "aria-hidden");
-};
-var DIALOG_NAME = "Dialog";
-var [createDialogContext, createDialogScope] = createContextScope(DIALOG_NAME);
-var [DialogProvider, useDialogContext] = createDialogContext(DIALOG_NAME);
-var Dialog$1 = (props) => {
-  const {
-    __scopeDialog,
-    children,
-    open: openProp,
-    defaultOpen,
-    onOpenChange,
-    modal = true
-  } = props;
-  const triggerRef = reactExports.useRef(null);
-  const contentRef = reactExports.useRef(null);
-  const [open, setOpen] = useControllableState({
-    prop: openProp,
-    defaultProp: defaultOpen ?? false,
-    onChange: onOpenChange,
-    caller: DIALOG_NAME
-  });
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    DialogProvider,
-    {
-      scope: __scopeDialog,
-      triggerRef,
-      contentRef,
-      contentId: useId(),
-      titleId: useId(),
-      descriptionId: useId(),
-      open,
-      onOpenChange: setOpen,
-      onOpenToggle: reactExports.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
-      modal,
-      children
-    }
-  );
-};
-Dialog$1.displayName = DIALOG_NAME;
-var TRIGGER_NAME$4 = "DialogTrigger";
-var DialogTrigger = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...triggerProps } = props;
-    const context = useDialogContext(TRIGGER_NAME$4, __scopeDialog);
-    const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Primitive$1.button,
-      {
-        type: "button",
-        "aria-haspopup": "dialog",
-        "aria-expanded": context.open,
-        "aria-controls": context.contentId,
-        "data-state": getState$1(context.open),
-        ...triggerProps,
-        ref: composedTriggerRef,
-        onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
-      }
-    );
-  }
-);
-DialogTrigger.displayName = TRIGGER_NAME$4;
-var PORTAL_NAME$2 = "DialogPortal";
-var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME$2, {
-  forceMount: void 0
-});
-var DialogPortal$1 = (props) => {
-  const { __scopeDialog, forceMount, children, container } = props;
-  const context = useDialogContext(PORTAL_NAME$2, __scopeDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, { scope: __scopeDialog, forceMount, children: reactExports.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$3, { asChild: true, container, children: child }) })) });
-};
-DialogPortal$1.displayName = PORTAL_NAME$2;
-var OVERLAY_NAME$1 = "DialogOverlay";
-var DialogOverlay$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const portalContext = usePortalContext(OVERLAY_NAME$1, props.__scopeDialog);
-    const { forceMount = portalContext.forceMount, ...overlayProps } = props;
-    const context = useDialogContext(OVERLAY_NAME$1, props.__scopeDialog);
-    return context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlayImpl, { ...overlayProps, ref: forwardedRef }) }) : null;
-  }
-);
-DialogOverlay$1.displayName = OVERLAY_NAME$1;
-var Slot$1 = /* @__PURE__ */ createSlot$1("DialogOverlay.RemoveScroll");
-var DialogOverlayImpl = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...overlayProps } = props;
-    const context = useDialogContext(OVERLAY_NAME$1, __scopeDialog);
-    return (
-      // Make sure `Content` is scrollable even when it doesn't live inside `RemoveScroll`
-      // ie. when `Overlay` and `Content` are siblings
-      /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot$1, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Primitive$1.div,
-        {
-          "data-state": getState$1(context.open),
-          ...overlayProps,
-          ref: forwardedRef,
-          style: { pointerEvents: "auto", ...overlayProps.style }
-        }
-      ) })
-    );
-  }
-);
-var CONTENT_NAME$3 = "DialogContent";
-var DialogContent$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const portalContext = usePortalContext(CONTENT_NAME$3, props.__scopeDialog);
-    const { forceMount = portalContext.forceMount, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentNonModal, { ...contentProps, ref: forwardedRef }) });
-  }
-);
-DialogContent$1.displayName = CONTENT_NAME$3;
-var DialogContentModal = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
-    const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
-    reactExports.useEffect(() => {
-      const content = contentRef.current;
-      if (content) return hideOthers(content);
-    }, []);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      DialogContentImpl,
-      {
-        ...props,
-        ref: composedRefs,
-        trapFocus: context.open,
-        disableOutsidePointerEvents: true,
-        onCloseAutoFocus: composeEventHandlers(props.onCloseAutoFocus, (event) => {
-          var _a3;
-          event.preventDefault();
-          (_a3 = context.triggerRef.current) == null ? void 0 : _a3.focus();
-        }),
-        onPointerDownOutside: composeEventHandlers(props.onPointerDownOutside, (event) => {
-          const originalEvent = event.detail.originalEvent;
-          const ctrlLeftClick = originalEvent.button === 0 && originalEvent.ctrlKey === true;
-          const isRightClick = originalEvent.button === 2 || ctrlLeftClick;
-          if (isRightClick) event.preventDefault();
-        }),
-        onFocusOutside: composeEventHandlers(
-          props.onFocusOutside,
-          (event) => event.preventDefault()
-        )
-      }
-    );
-  }
-);
-var DialogContentNonModal = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
-    const hasInteractedOutsideRef = reactExports.useRef(false);
-    const hasPointerDownOutsideRef = reactExports.useRef(false);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      DialogContentImpl,
-      {
-        ...props,
-        ref: forwardedRef,
-        trapFocus: false,
-        disableOutsidePointerEvents: false,
-        onCloseAutoFocus: (event) => {
-          var _a3, _b3;
-          (_a3 = props.onCloseAutoFocus) == null ? void 0 : _a3.call(props, event);
-          if (!event.defaultPrevented) {
-            if (!hasInteractedOutsideRef.current) (_b3 = context.triggerRef.current) == null ? void 0 : _b3.focus();
-            event.preventDefault();
-          }
-          hasInteractedOutsideRef.current = false;
-          hasPointerDownOutsideRef.current = false;
-        },
-        onInteractOutside: (event) => {
-          var _a3, _b3;
-          (_a3 = props.onInteractOutside) == null ? void 0 : _a3.call(props, event);
-          if (!event.defaultPrevented) {
-            hasInteractedOutsideRef.current = true;
-            if (event.detail.originalEvent.type === "pointerdown") {
-              hasPointerDownOutsideRef.current = true;
-            }
-          }
-          const target = event.target;
-          const targetIsTrigger = (_b3 = context.triggerRef.current) == null ? void 0 : _b3.contains(target);
-          if (targetIsTrigger) event.preventDefault();
-          if (event.detail.originalEvent.type === "focusin" && hasPointerDownOutsideRef.current) {
-            event.preventDefault();
-          }
-        }
-      }
-    );
-  }
-);
-var DialogContentImpl = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME$3, __scopeDialog);
-    const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, contentRef);
-    useFocusGuards();
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        FocusScope,
-        {
-          asChild: true,
-          loop: true,
-          trapped: trapFocus,
-          onMountAutoFocus: onOpenAutoFocus,
-          onUnmountAutoFocus: onCloseAutoFocus,
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            DismissableLayer,
-            {
-              role: "dialog",
-              id: context.contentId,
-              "aria-describedby": context.descriptionId,
-              "aria-labelledby": context.titleId,
-              "data-state": getState$1(context.open),
-              ...contentProps,
-              ref: composedRefs,
-              onDismiss: () => context.onOpenChange(false)
-            }
-          )
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TitleWarning, { titleId: context.titleId }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(DescriptionWarning$1, { contentRef, descriptionId: context.descriptionId })
-      ] })
-    ] });
-  }
-);
-var TITLE_NAME$1 = "DialogTitle";
-var DialogTitle$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...titleProps } = props;
-    const context = useDialogContext(TITLE_NAME$1, __scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive$1.h2, { id: context.titleId, ...titleProps, ref: forwardedRef });
-  }
-);
-DialogTitle$1.displayName = TITLE_NAME$1;
-var DESCRIPTION_NAME$1 = "DialogDescription";
-var DialogDescription$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...descriptionProps } = props;
-    const context = useDialogContext(DESCRIPTION_NAME$1, __scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive$1.p, { id: context.descriptionId, ...descriptionProps, ref: forwardedRef });
-  }
-);
-DialogDescription$1.displayName = DESCRIPTION_NAME$1;
-var CLOSE_NAME = "DialogClose";
-var DialogClose = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...closeProps } = props;
-    const context = useDialogContext(CLOSE_NAME, __scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Primitive$1.button,
-      {
-        type: "button",
-        ...closeProps,
-        ref: forwardedRef,
-        onClick: composeEventHandlers(props.onClick, () => context.onOpenChange(false))
-      }
-    );
-  }
-);
-DialogClose.displayName = CLOSE_NAME;
-function getState$1(open) {
-  return open ? "open" : "closed";
-}
-var TITLE_WARNING_NAME = "DialogTitleWarning";
-var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
-  contentName: CONTENT_NAME$3,
-  titleName: TITLE_NAME$1,
-  docsSlug: "dialog"
-});
-var TitleWarning = ({ titleId }) => {
-  const titleWarningContext = useWarningContext(TITLE_WARNING_NAME);
-  const MESSAGE = `\`${titleWarningContext.contentName}\` requires a \`${titleWarningContext.titleName}\` for the component to be accessible for screen reader users.
-
-If you want to hide the \`${titleWarningContext.titleName}\`, you can wrap it with our VisuallyHidden component.
-
-For more information, see https://radix-ui.com/primitives/docs/components/${titleWarningContext.docsSlug}`;
-  reactExports.useEffect(() => {
-    if (titleId) {
-      const hasTitle = document.getElementById(titleId);
-      if (!hasTitle) console.error(MESSAGE);
-    }
-  }, [MESSAGE, titleId]);
-  return null;
-};
-var DESCRIPTION_WARNING_NAME = "DialogDescriptionWarning";
-var DescriptionWarning$1 = ({ contentRef, descriptionId }) => {
-  const descriptionWarningContext = useWarningContext(DESCRIPTION_WARNING_NAME);
-  const MESSAGE = `Warning: Missing \`Description\` or \`aria-describedby={undefined}\` for {${descriptionWarningContext.contentName}}.`;
-  reactExports.useEffect(() => {
-    var _a3;
-    const describedById = (_a3 = contentRef.current) == null ? void 0 : _a3.getAttribute("aria-describedby");
-    if (descriptionId && describedById) {
-      const hasDescription = document.getElementById(descriptionId);
-      if (!hasDescription) console.warn(MESSAGE);
-    }
-  }, [MESSAGE, contentRef, descriptionId]);
-  return null;
-};
-var Root$3 = Dialog$1;
-var Trigger$2 = DialogTrigger;
-var Portal$1 = DialogPortal$1;
-var Overlay = DialogOverlay$1;
-var Content$1 = DialogContent$1;
-var Title = DialogTitle$1;
-var Description = DialogDescription$1;
-var Close = DialogClose;
-var ROOT_NAME = "AlertDialog";
-var [createAlertDialogContext] = createContextScope(ROOT_NAME, [
-  createDialogScope
-]);
-var useDialogScope = createDialogScope();
-var AlertDialog$1 = (props) => {
-  const { __scopeAlertDialog, ...alertDialogProps } = props;
-  const dialogScope = useDialogScope(__scopeAlertDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { ...dialogScope, ...alertDialogProps, modal: true });
-};
-AlertDialog$1.displayName = ROOT_NAME;
-var TRIGGER_NAME$3 = "AlertDialogTrigger";
-var AlertDialogTrigger$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeAlertDialog, ...triggerProps } = props;
-    const dialogScope = useDialogScope(__scopeAlertDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$2, { ...dialogScope, ...triggerProps, ref: forwardedRef });
-  }
-);
-AlertDialogTrigger$1.displayName = TRIGGER_NAME$3;
-var PORTAL_NAME$1 = "AlertDialogPortal";
-var AlertDialogPortal$1 = (props) => {
-  const { __scopeAlertDialog, ...portalProps } = props;
-  const dialogScope = useDialogScope(__scopeAlertDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { ...dialogScope, ...portalProps });
-};
-AlertDialogPortal$1.displayName = PORTAL_NAME$1;
-var OVERLAY_NAME = "AlertDialogOverlay";
-var AlertDialogOverlay$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeAlertDialog, ...overlayProps } = props;
-    const dialogScope = useDialogScope(__scopeAlertDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Overlay, { ...dialogScope, ...overlayProps, ref: forwardedRef });
-  }
-);
-AlertDialogOverlay$1.displayName = OVERLAY_NAME;
-var CONTENT_NAME$2 = "AlertDialogContent";
-var [AlertDialogContentProvider, useAlertDialogContentContext] = createAlertDialogContext(CONTENT_NAME$2);
-var Slottable = /* @__PURE__ */ createSlottable("AlertDialogContent");
-var AlertDialogContent$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeAlertDialog, children, ...contentProps } = props;
-    const dialogScope = useDialogScope(__scopeAlertDialog);
-    const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, contentRef);
-    const cancelRef = reactExports.useRef(null);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      WarningProvider,
-      {
-        contentName: CONTENT_NAME$2,
-        titleName: TITLE_NAME,
-        docsSlug: "alert-dialog",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogContentProvider, { scope: __scopeAlertDialog, cancelRef, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          Content$1,
-          {
-            role: "alertdialog",
-            ...dialogScope,
-            ...contentProps,
-            ref: composedRefs,
-            onOpenAutoFocus: composeEventHandlers(contentProps.onOpenAutoFocus, (event) => {
-              var _a3;
-              event.preventDefault();
-              (_a3 = cancelRef.current) == null ? void 0 : _a3.focus({ preventScroll: true });
-            }),
-            onPointerDownOutside: (event) => event.preventDefault(),
-            onInteractOutside: (event) => event.preventDefault(),
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Slottable, { children }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(DescriptionWarning, { contentRef })
-            ]
-          }
-        ) })
-      }
-    );
-  }
-);
-AlertDialogContent$1.displayName = CONTENT_NAME$2;
-var TITLE_NAME = "AlertDialogTitle";
-var AlertDialogTitle$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeAlertDialog, ...titleProps } = props;
-    const dialogScope = useDialogScope(__scopeAlertDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Title, { ...dialogScope, ...titleProps, ref: forwardedRef });
-  }
-);
-AlertDialogTitle$1.displayName = TITLE_NAME;
-var DESCRIPTION_NAME = "AlertDialogDescription";
-var AlertDialogDescription$1 = reactExports.forwardRef((props, forwardedRef) => {
-  const { __scopeAlertDialog, ...descriptionProps } = props;
-  const dialogScope = useDialogScope(__scopeAlertDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Description, { ...dialogScope, ...descriptionProps, ref: forwardedRef });
-});
-AlertDialogDescription$1.displayName = DESCRIPTION_NAME;
-var ACTION_NAME = "AlertDialogAction";
-var AlertDialogAction$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeAlertDialog, ...actionProps } = props;
-    const dialogScope = useDialogScope(__scopeAlertDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { ...dialogScope, ...actionProps, ref: forwardedRef });
-  }
-);
-AlertDialogAction$1.displayName = ACTION_NAME;
-var CANCEL_NAME = "AlertDialogCancel";
-var AlertDialogCancel$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeAlertDialog, ...cancelProps } = props;
-    const { cancelRef } = useAlertDialogContentContext(CANCEL_NAME, __scopeAlertDialog);
-    const dialogScope = useDialogScope(__scopeAlertDialog);
-    const ref = useComposedRefs(forwardedRef, cancelRef);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { ...dialogScope, ...cancelProps, ref });
-  }
-);
-AlertDialogCancel$1.displayName = CANCEL_NAME;
-var DescriptionWarning = ({ contentRef }) => {
-  const MESSAGE = `\`${CONTENT_NAME$2}\` requires a description for the component to be accessible for screen reader users.
-
-You can add a description to the \`${CONTENT_NAME$2}\` by passing a \`${DESCRIPTION_NAME}\` component as a child, which also benefits sighted users by adding visible context to the dialog.
-
-Alternatively, you can use your own component as a description by assigning it an \`id\` and passing the same value to the \`aria-describedby\` prop in \`${CONTENT_NAME$2}\`. If the description is confusing or duplicative for sighted users, you can use the \`@radix-ui/react-visually-hidden\` primitive as a wrapper around your description component.
-
-For more information, see https://radix-ui.com/primitives/docs/components/alert-dialog`;
-  reactExports.useEffect(() => {
-    var _a3;
-    const hasDescription = document.getElementById(
-      (_a3 = contentRef.current) == null ? void 0 : _a3.getAttribute("aria-describedby")
-    );
-    if (!hasDescription) console.warn(MESSAGE);
-  }, [MESSAGE, contentRef]);
-  return null;
-};
-var Root2$2 = AlertDialog$1;
-var Trigger2 = AlertDialogTrigger$1;
-var Portal2 = AlertDialogPortal$1;
-var Overlay2 = AlertDialogOverlay$1;
-var Content2$1 = AlertDialogContent$1;
-var Action = AlertDialogAction$1;
-var Cancel = AlertDialogCancel$1;
-var Title2 = AlertDialogTitle$1;
-var Description2 = AlertDialogDescription$1;
-function AlertDialog({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$2, { "data-slot": "alert-dialog", ...props });
-}
-function AlertDialogTrigger({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger2, { "data-slot": "alert-dialog-trigger", ...props });
-}
-function AlertDialogPortal({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal2, { "data-slot": "alert-dialog-portal", ...props });
-}
-function AlertDialogOverlay({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Overlay2,
-    {
-      "data-slot": "alert-dialog-overlay",
-      className: cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
-        className
-      ),
-      ...props
-    }
-  );
-}
-function AlertDialogContent({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogPortal, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogOverlay, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Content2$1,
-      {
-        "data-slot": "alert-dialog-content",
-        className: cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
-          className
-        ),
-        ...props
-      }
-    )
-  ] });
-}
-function AlertDialogHeader({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
-    {
-      "data-slot": "alert-dialog-header",
-      className: cn("flex flex-col gap-2 text-center sm:text-left", className),
-      ...props
-    }
-  );
-}
-function AlertDialogFooter({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
-    {
-      "data-slot": "alert-dialog-footer",
-      className: cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-        className
-      ),
-      ...props
-    }
-  );
-}
-function AlertDialogTitle({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Title2,
-    {
-      "data-slot": "alert-dialog-title",
-      className: cn("text-lg font-semibold", className),
-      ...props
-    }
-  );
-}
-function AlertDialogDescription({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Description2,
-    {
-      "data-slot": "alert-dialog-description",
-      className: cn("text-muted-foreground text-sm", className),
-      ...props
-    }
-  );
-}
-function AlertDialogAction({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Action,
-    {
-      className: cn(buttonVariants(), className),
-      ...props
-    }
-  );
-}
-function AlertDialogCancel({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Cancel,
-    {
-      className: cn(buttonVariants({ variant: "outline" }), className),
-      ...props
-    }
-  );
-}
-var DirectionContext = reactExports.createContext(void 0);
-function useDirection(localDir) {
-  const globalDir = reactExports.useContext(DirectionContext);
-  return localDir || globalDir || "ltr";
-}
-function clamp(value, [min2, max2]) {
-  return Math.min(max2, Math.max(min2, value));
-}
-function useStateMachine(initialState, machine) {
-  return reactExports.useReducer((state, event) => {
-    const nextState = machine[state][event];
-    return nextState ?? state;
-  }, initialState);
-}
-var SCROLL_AREA_NAME = "ScrollArea";
-var [createScrollAreaContext] = createContextScope(SCROLL_AREA_NAME);
-var [ScrollAreaProvider, useScrollAreaContext] = createScrollAreaContext(SCROLL_AREA_NAME);
-var ScrollArea$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const {
-      __scopeScrollArea,
-      type = "hover",
-      dir,
-      scrollHideDelay = 600,
-      ...scrollAreaProps
-    } = props;
-    const [scrollArea, setScrollArea] = reactExports.useState(null);
-    const [viewport, setViewport] = reactExports.useState(null);
-    const [content, setContent] = reactExports.useState(null);
-    const [scrollbarX, setScrollbarX] = reactExports.useState(null);
-    const [scrollbarY, setScrollbarY] = reactExports.useState(null);
-    const [cornerWidth, setCornerWidth] = reactExports.useState(0);
-    const [cornerHeight, setCornerHeight] = reactExports.useState(0);
-    const [scrollbarXEnabled, setScrollbarXEnabled] = reactExports.useState(false);
-    const [scrollbarYEnabled, setScrollbarYEnabled] = reactExports.useState(false);
-    const composedRefs = useComposedRefs(forwardedRef, (node) => setScrollArea(node));
-    const direction = useDirection(dir);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ScrollAreaProvider,
-      {
-        scope: __scopeScrollArea,
-        type,
-        dir: direction,
-        scrollHideDelay,
-        scrollArea,
-        viewport,
-        onViewportChange: setViewport,
-        content,
-        onContentChange: setContent,
-        scrollbarX,
-        onScrollbarXChange: setScrollbarX,
-        scrollbarXEnabled,
-        onScrollbarXEnabledChange: setScrollbarXEnabled,
-        scrollbarY,
-        onScrollbarYChange: setScrollbarY,
-        scrollbarYEnabled,
-        onScrollbarYEnabledChange: setScrollbarYEnabled,
-        onCornerWidthChange: setCornerWidth,
-        onCornerHeightChange: setCornerHeight,
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Primitive$1.div,
-          {
-            dir: direction,
-            ...scrollAreaProps,
-            ref: composedRefs,
-            style: {
-              position: "relative",
-              // Pass corner sizes as CSS vars to reduce re-renders of context consumers
-              ["--radix-scroll-area-corner-width"]: cornerWidth + "px",
-              ["--radix-scroll-area-corner-height"]: cornerHeight + "px",
-              ...props.style
-            }
-          }
-        )
-      }
-    );
-  }
-);
-ScrollArea$1.displayName = SCROLL_AREA_NAME;
-var VIEWPORT_NAME$1 = "ScrollAreaViewport";
-var ScrollAreaViewport = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeScrollArea, children, nonce, ...viewportProps } = props;
-    const context = useScrollAreaContext(VIEWPORT_NAME$1, __scopeScrollArea);
-    const ref = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, ref, context.onViewportChange);
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "style",
-        {
-          dangerouslySetInnerHTML: {
-            __html: `[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}`
-          },
-          nonce
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Primitive$1.div,
-        {
-          "data-radix-scroll-area-viewport": "",
-          ...viewportProps,
-          ref: composedRefs,
-          style: {
-            /**
-             * We don't support `visible` because the intention is to have at least one scrollbar
-             * if this component is used and `visible` will behave like `auto` in that case
-             * https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#description
-             *
-             * We don't handle `auto` because the intention is for the native implementation
-             * to be hidden if using this component. We just want to ensure the node is scrollable
-             * so could have used either `scroll` or `auto` here. We picked `scroll` to prevent
-             * the browser from having to work out whether to render native scrollbars or not,
-             * we tell it to with the intention of hiding them in CSS.
-             */
-            overflowX: context.scrollbarXEnabled ? "scroll" : "hidden",
-            overflowY: context.scrollbarYEnabled ? "scroll" : "hidden",
-            ...props.style
-          },
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: context.onContentChange, style: { minWidth: "100%", display: "table" }, children })
-        }
-      )
-    ] });
-  }
-);
-ScrollAreaViewport.displayName = VIEWPORT_NAME$1;
-var SCROLLBAR_NAME = "ScrollAreaScrollbar";
-var ScrollAreaScrollbar = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { forceMount, ...scrollbarProps } = props;
-    const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-    const { onScrollbarXEnabledChange, onScrollbarYEnabledChange } = context;
-    const isHorizontal = props.orientation === "horizontal";
-    reactExports.useEffect(() => {
-      isHorizontal ? onScrollbarXEnabledChange(true) : onScrollbarYEnabledChange(true);
-      return () => {
-        isHorizontal ? onScrollbarXEnabledChange(false) : onScrollbarYEnabledChange(false);
-      };
-    }, [isHorizontal, onScrollbarXEnabledChange, onScrollbarYEnabledChange]);
-    return context.type === "hover" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarHover, { ...scrollbarProps, ref: forwardedRef, forceMount }) : context.type === "scroll" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarScroll, { ...scrollbarProps, ref: forwardedRef, forceMount }) : context.type === "auto" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarAuto, { ...scrollbarProps, ref: forwardedRef, forceMount }) : context.type === "always" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarVisible, { ...scrollbarProps, ref: forwardedRef }) : null;
-  }
-);
-ScrollAreaScrollbar.displayName = SCROLLBAR_NAME;
-var ScrollAreaScrollbarHover = reactExports.forwardRef((props, forwardedRef) => {
-  const { forceMount, ...scrollbarProps } = props;
-  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-  const [visible, setVisible] = reactExports.useState(false);
-  reactExports.useEffect(() => {
-    const scrollArea = context.scrollArea;
-    let hideTimer = 0;
-    if (scrollArea) {
-      const handlePointerEnter = () => {
-        window.clearTimeout(hideTimer);
-        setVisible(true);
-      };
-      const handlePointerLeave = () => {
-        hideTimer = window.setTimeout(() => setVisible(false), context.scrollHideDelay);
-      };
-      scrollArea.addEventListener("pointerenter", handlePointerEnter);
-      scrollArea.addEventListener("pointerleave", handlePointerLeave);
-      return () => {
-        window.clearTimeout(hideTimer);
-        scrollArea.removeEventListener("pointerenter", handlePointerEnter);
-        scrollArea.removeEventListener("pointerleave", handlePointerLeave);
-      };
-    }
-  }, [context.scrollArea, context.scrollHideDelay]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || visible, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollAreaScrollbarAuto,
-    {
-      "data-state": visible ? "visible" : "hidden",
-      ...scrollbarProps,
-      ref: forwardedRef
-    }
-  ) });
-});
-var ScrollAreaScrollbarScroll = reactExports.forwardRef((props, forwardedRef) => {
-  const { forceMount, ...scrollbarProps } = props;
-  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-  const isHorizontal = props.orientation === "horizontal";
-  const debounceScrollEnd = useDebounceCallback(() => send("SCROLL_END"), 100);
-  const [state, send] = useStateMachine("hidden", {
-    hidden: {
-      SCROLL: "scrolling"
-    },
-    scrolling: {
-      SCROLL_END: "idle",
-      POINTER_ENTER: "interacting"
-    },
-    interacting: {
-      SCROLL: "interacting",
-      POINTER_LEAVE: "idle"
-    },
-    idle: {
-      HIDE: "hidden",
-      SCROLL: "scrolling",
-      POINTER_ENTER: "interacting"
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
     }
   });
-  reactExports.useEffect(() => {
-    if (state === "idle") {
-      const hideTimer = window.setTimeout(() => send("HIDE"), context.scrollHideDelay);
-      return () => window.clearTimeout(hideTimer);
-    }
-  }, [state, context.scrollHideDelay, send]);
-  reactExports.useEffect(() => {
-    const viewport = context.viewport;
-    const scrollDirection = isHorizontal ? "scrollLeft" : "scrollTop";
-    if (viewport) {
-      let prevScrollPos = viewport[scrollDirection];
-      const handleScroll2 = () => {
-        const scrollPos = viewport[scrollDirection];
-        const hasScrollInDirectionChanged = prevScrollPos !== scrollPos;
-        if (hasScrollInDirectionChanged) {
-          send("SCROLL");
-          debounceScrollEnd();
-        }
-        prevScrollPos = scrollPos;
-      };
-      viewport.addEventListener("scroll", handleScroll2);
-      return () => viewport.removeEventListener("scroll", handleScroll2);
-    }
-  }, [context.viewport, isHorizontal, send, debounceScrollEnd]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || state !== "hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollAreaScrollbarVisible,
-    {
-      "data-state": state === "hidden" ? "hidden" : "visible",
-      ...scrollbarProps,
-      ref: forwardedRef,
-      onPointerEnter: composeEventHandlers(props.onPointerEnter, () => send("POINTER_ENTER")),
-      onPointerLeave: composeEventHandlers(props.onPointerLeave, () => send("POINTER_LEAVE"))
-    }
-  ) });
-});
-var ScrollAreaScrollbarAuto = reactExports.forwardRef((props, forwardedRef) => {
-  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-  const { forceMount, ...scrollbarProps } = props;
-  const [visible, setVisible] = reactExports.useState(false);
-  const isHorizontal = props.orientation === "horizontal";
-  const handleResize = useDebounceCallback(() => {
-    if (context.viewport) {
-      const isOverflowX = context.viewport.offsetWidth < context.viewport.scrollWidth;
-      const isOverflowY = context.viewport.offsetHeight < context.viewport.scrollHeight;
-      setVisible(isHorizontal ? isOverflowX : isOverflowY);
-    }
-  }, 10);
-  useResizeObserver(context.viewport, handleResize);
-  useResizeObserver(context.content, handleResize);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || visible, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollAreaScrollbarVisible,
-    {
-      "data-state": visible ? "visible" : "hidden",
-      ...scrollbarProps,
-      ref: forwardedRef
-    }
-  ) });
-});
-var ScrollAreaScrollbarVisible = reactExports.forwardRef((props, forwardedRef) => {
-  const { orientation = "vertical", ...scrollbarProps } = props;
-  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-  const thumbRef = reactExports.useRef(null);
-  const pointerOffsetRef = reactExports.useRef(0);
-  const [sizes, setSizes] = reactExports.useState({
-    content: 0,
-    viewport: 0,
-    scrollbar: { size: 0, paddingStart: 0, paddingEnd: 0 }
-  });
-  const thumbRatio = getThumbRatio(sizes.viewport, sizes.content);
-  const commonProps = {
-    ...scrollbarProps,
-    sizes,
-    onSizesChange: setSizes,
-    hasThumb: Boolean(thumbRatio > 0 && thumbRatio < 1),
-    onThumbChange: (thumb) => thumbRef.current = thumb,
-    onThumbPointerUp: () => pointerOffsetRef.current = 0,
-    onThumbPointerDown: (pointerPos) => pointerOffsetRef.current = pointerPos
-  };
-  function getScrollPosition(pointerPos, dir) {
-    return getScrollPositionFromPointer(pointerPos, pointerOffsetRef.current, sizes, dir);
-  }
-  if (orientation === "horizontal") {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ScrollAreaScrollbarX,
-      {
-        ...commonProps,
-        ref: forwardedRef,
-        onThumbPositionChange: () => {
-          if (context.viewport && thumbRef.current) {
-            const scrollPos = context.viewport.scrollLeft;
-            const offset2 = getThumbOffsetFromScroll(scrollPos, sizes, context.dir);
-            thumbRef.current.style.transform = `translate3d(${offset2}px, 0, 0)`;
-          }
-        },
-        onWheelScroll: (scrollPos) => {
-          if (context.viewport) context.viewport.scrollLeft = scrollPos;
-        },
-        onDragScroll: (pointerPos) => {
-          if (context.viewport) {
-            context.viewport.scrollLeft = getScrollPosition(pointerPos, context.dir);
-          }
-        }
-      }
-    );
-  }
-  if (orientation === "vertical") {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ScrollAreaScrollbarY,
-      {
-        ...commonProps,
-        ref: forwardedRef,
-        onThumbPositionChange: () => {
-          if (context.viewport && thumbRef.current) {
-            const scrollPos = context.viewport.scrollTop;
-            const offset2 = getThumbOffsetFromScroll(scrollPos, sizes);
-            thumbRef.current.style.transform = `translate3d(0, ${offset2}px, 0)`;
-          }
-        },
-        onWheelScroll: (scrollPos) => {
-          if (context.viewport) context.viewport.scrollTop = scrollPos;
-        },
-        onDragScroll: (pointerPos) => {
-          if (context.viewport) context.viewport.scrollTop = getScrollPosition(pointerPos);
-        }
-      }
-    );
-  }
-  return null;
-});
-var ScrollAreaScrollbarX = reactExports.forwardRef((props, forwardedRef) => {
-  const { sizes, onSizesChange, ...scrollbarProps } = props;
-  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-  const [computedStyle, setComputedStyle] = reactExports.useState();
-  const ref = reactExports.useRef(null);
-  const composeRefs2 = useComposedRefs(forwardedRef, ref, context.onScrollbarXChange);
-  reactExports.useEffect(() => {
-    if (ref.current) setComputedStyle(getComputedStyle(ref.current));
-  }, [ref]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollAreaScrollbarImpl,
-    {
-      "data-orientation": "horizontal",
-      ...scrollbarProps,
-      ref: composeRefs2,
-      sizes,
-      style: {
-        bottom: 0,
-        left: context.dir === "rtl" ? "var(--radix-scroll-area-corner-width)" : 0,
-        right: context.dir === "ltr" ? "var(--radix-scroll-area-corner-width)" : 0,
-        ["--radix-scroll-area-thumb-width"]: getThumbSize(sizes) + "px",
-        ...props.style
-      },
-      onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.x),
-      onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.x),
-      onWheelScroll: (event, maxScrollPos) => {
-        if (context.viewport) {
-          const scrollPos = context.viewport.scrollLeft + event.deltaX;
-          props.onWheelScroll(scrollPos);
-          if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) {
-            event.preventDefault();
-          }
-        }
-      },
-      onResize: () => {
-        if (ref.current && context.viewport && computedStyle) {
-          onSizesChange({
-            content: context.viewport.scrollWidth,
-            viewport: context.viewport.offsetWidth,
-            scrollbar: {
-              size: ref.current.clientWidth,
-              paddingStart: toInt(computedStyle.paddingLeft),
-              paddingEnd: toInt(computedStyle.paddingRight)
-            }
-          });
-        }
-      }
-    }
-  );
-});
-var ScrollAreaScrollbarY = reactExports.forwardRef((props, forwardedRef) => {
-  const { sizes, onSizesChange, ...scrollbarProps } = props;
-  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-  const [computedStyle, setComputedStyle] = reactExports.useState();
-  const ref = reactExports.useRef(null);
-  const composeRefs2 = useComposedRefs(forwardedRef, ref, context.onScrollbarYChange);
-  reactExports.useEffect(() => {
-    if (ref.current) setComputedStyle(getComputedStyle(ref.current));
-  }, [ref]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollAreaScrollbarImpl,
-    {
-      "data-orientation": "vertical",
-      ...scrollbarProps,
-      ref: composeRefs2,
-      sizes,
-      style: {
-        top: 0,
-        right: context.dir === "ltr" ? 0 : void 0,
-        left: context.dir === "rtl" ? 0 : void 0,
-        bottom: "var(--radix-scroll-area-corner-height)",
-        ["--radix-scroll-area-thumb-height"]: getThumbSize(sizes) + "px",
-        ...props.style
-      },
-      onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.y),
-      onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.y),
-      onWheelScroll: (event, maxScrollPos) => {
-        if (context.viewport) {
-          const scrollPos = context.viewport.scrollTop + event.deltaY;
-          props.onWheelScroll(scrollPos);
-          if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) {
-            event.preventDefault();
-          }
-        }
-      },
-      onResize: () => {
-        if (ref.current && context.viewport && computedStyle) {
-          onSizesChange({
-            content: context.viewport.scrollHeight,
-            viewport: context.viewport.offsetHeight,
-            scrollbar: {
-              size: ref.current.clientHeight,
-              paddingStart: toInt(computedStyle.paddingTop),
-              paddingEnd: toInt(computedStyle.paddingBottom)
-            }
-          });
-        }
-      }
-    }
-  );
-});
-var [ScrollbarProvider, useScrollbarContext] = createScrollAreaContext(SCROLLBAR_NAME);
-var ScrollAreaScrollbarImpl = reactExports.forwardRef((props, forwardedRef) => {
-  const {
-    __scopeScrollArea,
-    sizes,
-    hasThumb,
-    onThumbChange,
-    onThumbPointerUp,
-    onThumbPointerDown,
-    onThumbPositionChange,
-    onDragScroll,
-    onWheelScroll,
-    onResize,
-    ...scrollbarProps
-  } = props;
-  const context = useScrollAreaContext(SCROLLBAR_NAME, __scopeScrollArea);
-  const [scrollbar, setScrollbar] = reactExports.useState(null);
-  const composeRefs2 = useComposedRefs(forwardedRef, (node) => setScrollbar(node));
-  const rectRef = reactExports.useRef(null);
-  const prevWebkitUserSelectRef = reactExports.useRef("");
-  const viewport = context.viewport;
-  const maxScrollPos = sizes.content - sizes.viewport;
-  const handleWheelScroll = useCallbackRef$1(onWheelScroll);
-  const handleThumbPositionChange = useCallbackRef$1(onThumbPositionChange);
-  const handleResize = useDebounceCallback(onResize, 10);
-  function handleDragScroll(event) {
-    if (rectRef.current) {
-      const x3 = event.clientX - rectRef.current.left;
-      const y2 = event.clientY - rectRef.current.top;
-      onDragScroll({ x: x3, y: y2 });
-    }
-  }
-  reactExports.useEffect(() => {
-    const handleWheel = (event) => {
-      const element = event.target;
-      const isScrollbarWheel = scrollbar == null ? void 0 : scrollbar.contains(element);
-      if (isScrollbarWheel) handleWheelScroll(event, maxScrollPos);
-    };
-    document.addEventListener("wheel", handleWheel, { passive: false });
-    return () => document.removeEventListener("wheel", handleWheel, { passive: false });
-  }, [viewport, scrollbar, maxScrollPos, handleWheelScroll]);
-  reactExports.useEffect(handleThumbPositionChange, [sizes, handleThumbPositionChange]);
-  useResizeObserver(scrollbar, handleResize);
-  useResizeObserver(context.content, handleResize);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollbarProvider,
-    {
-      scope: __scopeScrollArea,
-      scrollbar,
-      hasThumb,
-      onThumbChange: useCallbackRef$1(onThumbChange),
-      onThumbPointerUp: useCallbackRef$1(onThumbPointerUp),
-      onThumbPositionChange: handleThumbPositionChange,
-      onThumbPointerDown: useCallbackRef$1(onThumbPointerDown),
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Primitive$1.div,
-        {
-          ...scrollbarProps,
-          ref: composeRefs2,
-          style: { position: "absolute", ...scrollbarProps.style },
-          onPointerDown: composeEventHandlers(props.onPointerDown, (event) => {
-            const mainPointer = 0;
-            if (event.button === mainPointer) {
-              const element = event.target;
-              element.setPointerCapture(event.pointerId);
-              rectRef.current = scrollbar.getBoundingClientRect();
-              prevWebkitUserSelectRef.current = document.body.style.webkitUserSelect;
-              document.body.style.webkitUserSelect = "none";
-              if (context.viewport) context.viewport.style.scrollBehavior = "auto";
-              handleDragScroll(event);
-            }
-          }),
-          onPointerMove: composeEventHandlers(props.onPointerMove, handleDragScroll),
-          onPointerUp: composeEventHandlers(props.onPointerUp, (event) => {
-            const element = event.target;
-            if (element.hasPointerCapture(event.pointerId)) {
-              element.releasePointerCapture(event.pointerId);
-            }
-            document.body.style.webkitUserSelect = prevWebkitUserSelectRef.current;
-            if (context.viewport) context.viewport.style.scrollBehavior = "";
-            rectRef.current = null;
-          })
-        }
-      )
-    }
-  );
-});
-var THUMB_NAME = "ScrollAreaThumb";
-var ScrollAreaThumb = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { forceMount, ...thumbProps } = props;
-    const scrollbarContext = useScrollbarContext(THUMB_NAME, props.__scopeScrollArea);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || scrollbarContext.hasThumb, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaThumbImpl, { ref: forwardedRef, ...thumbProps }) });
-  }
-);
-var ScrollAreaThumbImpl = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeScrollArea, style: style2, ...thumbProps } = props;
-    const scrollAreaContext = useScrollAreaContext(THUMB_NAME, __scopeScrollArea);
-    const scrollbarContext = useScrollbarContext(THUMB_NAME, __scopeScrollArea);
-    const { onThumbPositionChange } = scrollbarContext;
-    const composedRef = useComposedRefs(
-      forwardedRef,
-      (node) => scrollbarContext.onThumbChange(node)
-    );
-    const removeUnlinkedScrollListenerRef = reactExports.useRef(void 0);
-    const debounceScrollEnd = useDebounceCallback(() => {
-      if (removeUnlinkedScrollListenerRef.current) {
-        removeUnlinkedScrollListenerRef.current();
-        removeUnlinkedScrollListenerRef.current = void 0;
-      }
-    }, 100);
-    reactExports.useEffect(() => {
-      const viewport = scrollAreaContext.viewport;
-      if (viewport) {
-        const handleScroll2 = () => {
-          debounceScrollEnd();
-          if (!removeUnlinkedScrollListenerRef.current) {
-            const listener = addUnlinkedScrollListener(viewport, onThumbPositionChange);
-            removeUnlinkedScrollListenerRef.current = listener;
-            onThumbPositionChange();
-          }
-        };
-        onThumbPositionChange();
-        viewport.addEventListener("scroll", handleScroll2);
-        return () => viewport.removeEventListener("scroll", handleScroll2);
-      }
-    }, [scrollAreaContext.viewport, debounceScrollEnd, onThumbPositionChange]);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Primitive$1.div,
-      {
-        "data-state": scrollbarContext.hasThumb ? "visible" : "hidden",
-        ...thumbProps,
-        ref: composedRef,
-        style: {
-          width: "var(--radix-scroll-area-thumb-width)",
-          height: "var(--radix-scroll-area-thumb-height)",
-          ...style2
-        },
-        onPointerDownCapture: composeEventHandlers(props.onPointerDownCapture, (event) => {
-          const thumb = event.target;
-          const thumbRect = thumb.getBoundingClientRect();
-          const x3 = event.clientX - thumbRect.left;
-          const y2 = event.clientY - thumbRect.top;
-          scrollbarContext.onThumbPointerDown({ x: x3, y: y2 });
-        }),
-        onPointerUp: composeEventHandlers(props.onPointerUp, scrollbarContext.onThumbPointerUp)
-      }
-    );
-  }
-);
-ScrollAreaThumb.displayName = THUMB_NAME;
-var CORNER_NAME = "ScrollAreaCorner";
-var ScrollAreaCorner = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const context = useScrollAreaContext(CORNER_NAME, props.__scopeScrollArea);
-    const hasBothScrollbarsVisible = Boolean(context.scrollbarX && context.scrollbarY);
-    const hasCorner = context.type !== "scroll" && hasBothScrollbarsVisible;
-    return hasCorner ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaCornerImpl, { ...props, ref: forwardedRef }) : null;
-  }
-);
-ScrollAreaCorner.displayName = CORNER_NAME;
-var ScrollAreaCornerImpl = reactExports.forwardRef((props, forwardedRef) => {
-  const { __scopeScrollArea, ...cornerProps } = props;
-  const context = useScrollAreaContext(CORNER_NAME, __scopeScrollArea);
-  const [width, setWidth] = reactExports.useState(0);
-  const [height, setHeight] = reactExports.useState(0);
-  const hasSize = Boolean(width && height);
-  useResizeObserver(context.scrollbarX, () => {
-    var _a3;
-    const height2 = ((_a3 = context.scrollbarX) == null ? void 0 : _a3.offsetHeight) || 0;
-    context.onCornerHeightChange(height2);
-    setHeight(height2);
-  });
-  useResizeObserver(context.scrollbarY, () => {
-    var _a3;
-    const width2 = ((_a3 = context.scrollbarY) == null ? void 0 : _a3.offsetWidth) || 0;
-    context.onCornerWidthChange(width2);
-    setWidth(width2);
-  });
-  return hasSize ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive$1.div,
-    {
-      ...cornerProps,
-      ref: forwardedRef,
-      style: {
-        width,
-        height,
-        position: "absolute",
-        right: context.dir === "ltr" ? 0 : void 0,
-        left: context.dir === "rtl" ? 0 : void 0,
-        bottom: 0,
-        ...props.style
-      }
-    }
-  ) : null;
-});
-function toInt(value) {
-  return value ? parseInt(value, 10) : 0;
 }
-function getThumbRatio(viewportSize, contentSize) {
-  const ratio = viewportSize / contentSize;
-  return isNaN(ratio) ? 0 : ratio;
-}
-function getThumbSize(sizes) {
-  const ratio = getThumbRatio(sizes.viewport, sizes.content);
-  const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
-  const thumbSize = (sizes.scrollbar.size - scrollbarPadding) * ratio;
-  return Math.max(thumbSize, 18);
-}
-function getScrollPositionFromPointer(pointerPos, pointerOffset, sizes, dir = "ltr") {
-  const thumbSizePx = getThumbSize(sizes);
-  const thumbCenter = thumbSizePx / 2;
-  const offset2 = pointerOffset || thumbCenter;
-  const thumbOffsetFromEnd = thumbSizePx - offset2;
-  const minPointerPos = sizes.scrollbar.paddingStart + offset2;
-  const maxPointerPos = sizes.scrollbar.size - sizes.scrollbar.paddingEnd - thumbOffsetFromEnd;
-  const maxScrollPos = sizes.content - sizes.viewport;
-  const scrollRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
-  const interpolate = linearScale([minPointerPos, maxPointerPos], scrollRange);
-  return interpolate(pointerPos);
-}
-function getThumbOffsetFromScroll(scrollPos, sizes, dir = "ltr") {
-  const thumbSizePx = getThumbSize(sizes);
-  const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
-  const scrollbar = sizes.scrollbar.size - scrollbarPadding;
-  const maxScrollPos = sizes.content - sizes.viewport;
-  const maxThumbPos = scrollbar - thumbSizePx;
-  const scrollClampRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
-  const scrollWithoutMomentum = clamp(scrollPos, scrollClampRange);
-  const interpolate = linearScale([0, maxScrollPos], [0, maxThumbPos]);
-  return interpolate(scrollWithoutMomentum);
-}
-function linearScale(input, output) {
-  return (value) => {
-    if (input[0] === input[1] || output[0] === output[1]) return output[0];
-    const ratio = (output[1] - output[0]) / (input[1] - input[0]);
-    return output[0] + ratio * (value - input[0]);
-  };
-}
-function isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos) {
-  return scrollPos > 0 && scrollPos < maxScrollPos;
-}
-var addUnlinkedScrollListener = (node, handler = () => {
-}) => {
-  let prevPosition = { left: node.scrollLeft, top: node.scrollTop };
-  let rAF = 0;
-  (function loop() {
-    const position = { left: node.scrollLeft, top: node.scrollTop };
-    const isHorizontalScroll = prevPosition.left !== position.left;
-    const isVerticalScroll = prevPosition.top !== position.top;
-    if (isHorizontalScroll || isVerticalScroll) handler();
-    prevPosition = position;
-    rAF = window.requestAnimationFrame(loop);
-  })();
-  return () => window.cancelAnimationFrame(rAF);
-};
-function useDebounceCallback(callback, delay) {
-  const handleCallback = useCallbackRef$1(callback);
-  const debounceTimerRef = reactExports.useRef(0);
-  reactExports.useEffect(() => () => window.clearTimeout(debounceTimerRef.current), []);
-  return reactExports.useCallback(() => {
-    window.clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = window.setTimeout(handleCallback, delay);
-  }, [handleCallback, delay]);
-}
-function useResizeObserver(element, onResize) {
-  const handleResize = useCallbackRef$1(onResize);
-  useLayoutEffect2(() => {
-    let rAF = 0;
-    if (element) {
-      const resizeObserver = new ResizeObserver(() => {
-        cancelAnimationFrame(rAF);
-        rAF = window.requestAnimationFrame(handleResize);
-      });
-      resizeObserver.observe(element);
-      return () => {
-        window.cancelAnimationFrame(rAF);
-        resizeObserver.unobserve(element);
-      };
-    }
-  }, [element, handleResize]);
-}
-var Root$2 = ScrollArea$1;
-var Viewport$1 = ScrollAreaViewport;
-var Corner = ScrollAreaCorner;
-function ScrollArea({
-  className,
-  children,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Root$2,
-    {
-      "data-slot": "scroll-area",
-      className: cn("relative", className),
-      ...props,
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Viewport$1,
-          {
-            "data-slot": "scroll-area-viewport",
-            className: "focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1",
-            children
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollBar, {}),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Corner, {})
-      ]
-    }
-  );
-}
-function ScrollBar({
-  className,
-  orientation = "vertical",
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollAreaScrollbar,
-    {
-      "data-slot": "scroll-area-scrollbar",
-      orientation,
-      className: cn(
-        "flex touch-none p-px transition-colors select-none",
-        orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent",
-        orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent",
-        className
-      ),
-      ...props,
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ScrollAreaThumb,
-        {
-          "data-slot": "scroll-area-thumb",
-          className: "bg-border relative flex-1 rounded-full"
-        }
-      )
-    }
-  );
-}
-var NAME = "Separator";
-var DEFAULT_ORIENTATION = "horizontal";
-var ORIENTATIONS = ["horizontal", "vertical"];
-var Separator$1 = reactExports.forwardRef((props, forwardedRef) => {
-  const { decorative, orientation: orientationProp = DEFAULT_ORIENTATION, ...domProps } = props;
-  const orientation = isValidOrientation(orientationProp) ? orientationProp : DEFAULT_ORIENTATION;
-  const ariaOrientation = orientation === "vertical" ? orientation : void 0;
-  const semanticProps = decorative ? { role: "none" } : { "aria-orientation": ariaOrientation, role: "separator" };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive.div,
-    {
-      "data-orientation": orientation,
-      ...semanticProps,
-      ...domProps,
-      ref: forwardedRef
-    }
-  );
-});
-Separator$1.displayName = NAME;
-function isValidOrientation(orientation) {
-  return ORIENTATIONS.includes(orientation);
-}
-var Root$1 = Separator$1;
-function Separator({
-  className,
-  orientation = "horizontal",
-  decorative = true,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$1,
-    {
-      "data-slot": "separator",
-      decorative,
-      orientation,
-      className: cn(
-        "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
-        className
-      ),
-      ...props
-    }
-  );
-}
-function Sheet({ ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { "data-slot": "sheet", ...props });
-}
-function SheetTrigger({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$2, { "data-slot": "sheet-trigger", ...props });
-}
-function SheetPortal({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { "data-slot": "sheet-portal", ...props });
-}
-function SheetOverlay({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Overlay,
-    {
-      "data-slot": "sheet-overlay",
-      className: cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
-        className
-      ),
-      ...props
-    }
-  );
-}
-function SheetContent({
-  className,
-  children,
-  side = "right",
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(SheetPortal, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(SheetOverlay, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      Content$1,
-      {
-        "data-slot": "sheet-content",
-        className: cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
-          side === "right" && "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
-          side === "left" && "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
-          side === "top" && "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
-          side === "bottom" && "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
-          className
-        ),
-        ...props,
-        children: [
-          children,
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(Close, { className: "ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "size-4" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "Close" })
-          ] })
-        ]
-      }
-    )
-  ] });
-}
-function SheetHeader({ className, ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
-    {
-      "data-slot": "sheet-header",
-      className: cn("flex flex-col gap-1.5 p-4", className),
-      ...props
-    }
-  );
-}
-function SheetTitle({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Title,
-    {
-      "data-slot": "sheet-title",
-      className: cn("text-foreground font-semibold", className),
-      ...props
-    }
-  );
-}
-function Skeleton({ className, ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
-    {
-      "data-slot": "skeleton",
-      className: cn("bg-accent animate-pulse rounded-md", className),
-      ...props
-    }
-  );
-}
-const HIDDEN_CONVS_KEY = "cs_hidden_convs";
-function getHiddenConvIds() {
-  try {
-    const raw = localStorage.getItem(HIDDEN_CONVS_KEY);
-    if (!raw) return /* @__PURE__ */ new Set();
-    const arr = JSON.parse(raw);
-    return new Set(arr);
-  } catch {
-    return /* @__PURE__ */ new Set();
-  }
-}
-function addHiddenConvId(convIdStr) {
-  try {
-    const current = getHiddenConvIds();
-    current.add(convIdStr);
-    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
-  } catch {
-  }
-}
-function removeHiddenConvId(convIdStr) {
-  try {
-    const current = getHiddenConvIds();
-    if (!current.has(convIdStr)) return;
-    current.delete(convIdStr);
-    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
-  } catch {
-  }
-}
-function useConversations() {
+function useHasSuperAdmin() {
   const { actor, isFetching } = useActor(createActor);
   return useQuery({
-    queryKey: ["conversations"],
+    queryKey: ["admin", "has-super-admin"],
+    queryFn: async () => {
+      if (!actor) return false;
+      return actor.hasSuperAdmin();
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useExportAuditLogs() {
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.exportAuditLogs(req);
+      if (res.__kind__ === "err") throw new Error(String(res.err));
+      return res.ok;
+    }
+  });
+}
+function useEscrowStats() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "escrow-stats"],
+    queryFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.getEscrowStats();
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useEscrowedUsers(req) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "escrowed-users",
+      req.orgId ?? null,
+      req.afterUserId ?? null,
+      req.limit.toString()
+    ],
     queryFn: async () => {
       if (!actor) return [];
-      const all = await actor.listConversations();
-      const hidden = getHiddenConvIds();
-      if (hidden.size === 0) return all;
-      return all.filter((c2) => !hidden.has(c2.id.toString()));
+      const res = await actor.getEscrowedUsers(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useRecoveryRequests(orgId, statusFilter) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "recovery-requests", orgId, statusFilter],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getRecoveryRequests(
+        null,
+        statusFilter ?? null
+      );
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useEscrowGrants(targetUserId) {
+  var _a3;
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "escrow-grants", (_a3 = targetUserId == null ? void 0 : targetUserId.toText) == null ? void 0 : _a3.call(targetUserId)],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.adminGetEscrowGrants(
+        targetUserId ?? null,
+        50n,
+        null
+      );
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useInitiateKeyRecovery() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      targetUserId,
+      targetDeviceId,
+      reason,
+      orgId
+    }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.initiateKeyRecovery(
+        targetUserId,
+        targetDeviceId,
+        reason,
+        orgId ?? null
+      );
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useApproveKeyRecovery() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (requestId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.approveKeyRecovery(requestId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useCheckPolicyExpiry() {
+  const { actor, isFetching } = useActor(createActor);
+  const { principal } = useAuth();
+  return useQuery({
+    queryKey: ["admin", "policy-expiry", principal == null ? void 0 : principal.toText()],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.checkPolicyExpiry(null);
     },
     enabled: !!actor && !isFetching,
     staleTime: 6e4,
-    gcTime: 3e5,
-    refetchInterval: 3e4,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false
+    refetchInterval: 6e4
   });
 }
-function useConversation(id) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["conversation", id == null ? void 0 : id.toString()],
-    queryFn: async () => {
-      if (!actor || id === null) return null;
-      return actor.getConversation(id);
-    },
-    enabled: !!actor && !isFetching && id !== null,
-    staleTime: 6e4,
-    gcTime: 3e5,
-    refetchInterval: 3e4,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false
-  });
-}
-function useMessages(conversationId, limit = 50n) {
-  const { actor, isFetching } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  const query = useQuery({
-    queryKey: ["messages", conversationId == null ? void 0 : conversationId.toString()],
-    queryFn: async () => {
-      if (!actor || conversationId === null) return [];
-      const req = {
-        conversationId,
-        limit,
-        beforeMessageId: void 0
-      };
-      const result = await actor.getMessages(req);
-      if (result.__kind__ === "ok") return result.ok;
-      return [];
-    },
-    enabled: !!actor && !isFetching && conversationId !== null,
-    staleTime: 1e4,
-    gcTime: 3e5,
-    refetchInterval: 1e4,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false
-  });
-  reactExports.useEffect(() => {
-    if (conversationId === null || !query.data || query.data.length === 0)
-      return;
-    const convIdStr = conversationId.toString();
-    const hidden = getHiddenConvIds();
-    if (!hidden.has(convIdStr)) return;
-    console.log(
-      `[ChatUnhide] Auto-unhiding convId=${convIdStr} because a new message arrived`
-    );
-    removeHiddenConvId(convIdStr);
-    queryClient2.invalidateQueries({ queryKey: ["conversations"] });
-  }, [conversationId, query.data, queryClient2]);
-  return query;
-}
-function useMarkRead() {
+function useLogPolicyReportExported() {
   const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
   return useMutation({
-    mutationFn: async (messageId) => {
-      if (!actor) throw new Error("Not connected");
-      return actor.markMessageRead(messageId);
+    mutationFn: async (orgFilter) => {
+      if (!actor) throw new Error("Actor not ready");
+      await actor.logPolicyReportExported(orgFilter ?? null);
+    }
+  });
+}
+function useLogPolicyExpiryCheck() {
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      await actor.logPolicyExpiryCheck();
+    }
+  });
+}
+function useRejectKeyRecovery() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (requestId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.rejectKeyRecovery(requestId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
     },
     onSuccess: () => {
-      queryClient2.invalidateQueries({ queryKey: ["messages"] });
-    }
-  });
-}
-function useAddConversationMember() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.addConversationMember(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: (_2, vars) => {
-      queryClient2.invalidateQueries({
-        queryKey: ["conversation", vars.conversationId.toString()]
-      });
-      queryClient2.invalidateQueries({ queryKey: ["conversations"] });
-    }
-  });
-}
-function useRemoveConversationMember() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.removeConversationMember(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: (_2, vars) => {
-      queryClient2.invalidateQueries({
-        queryKey: ["conversation", vars.conversationId.toString()]
-      });
-      queryClient2.invalidateQueries({ queryKey: ["conversations"] });
-    }
-  });
-}
-function useDeleteConversation() {
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (conversationId) => {
-      const convIdStr = conversationId.toString();
-      addHiddenConvId(convIdStr);
-      console.log(
-        `[ChatDelete] User deleted chat locally only - convId=${convIdStr} (other user still has full history)`
-      );
-    },
-    onSuccess: (_2, conversationId) => {
-      queryClient2.removeQueries({
-        queryKey: ["conversation", conversationId.toString()]
-      });
-      queryClient2.removeQueries({
-        queryKey: ["messages", conversationId.toString()]
-      });
-      queryClient2.invalidateQueries({ queryKey: ["conversations"] });
-    }
-  });
-}
-function useDeleteGroupConversation() {
-  return useDeleteConversation();
-}
-function usePublicGroups(category, offset2 = 0n) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["publicGroups", category ?? "", offset2.toString()],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.listPublicGroups({
-        limit: 20n,
-        offset: offset2,
-        category: category ?? void 0
-      });
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: 6e4,
-    gcTime: 3e5,
-    refetchInterval: 6e4,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false
-  });
-}
-function useSubmitJoinRequest() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.submitJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: () => {
-      queryClient2.invalidateQueries({ queryKey: ["publicGroups"] });
-    }
-  });
-}
-function useGroupJoinRequests(conversationId) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["groupJoinRequests", conversationId == null ? void 0 : conversationId.toString()],
-    queryFn: async () => {
-      if (!actor || conversationId === null) return [];
-      const result = await actor.getGroupJoinRequests(conversationId);
-      if (result.__kind__ === "err") return [];
-      return result.ok;
-    },
-    enabled: !!actor && !isFetching && conversationId !== null,
-    staleTime: 15e3,
-    gcTime: 3e5,
-    refetchInterval: 15e3,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false
-  });
-}
-function useApproveJoinRequest() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.approveJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: (_2, vars) => {
-      queryClient2.invalidateQueries({
-        queryKey: ["groupJoinRequests", vars.conversationId.toString()]
-      });
-      queryClient2.invalidateQueries({ queryKey: ["publicGroups"] });
-    }
-  });
-}
-function useDenyJoinRequest() {
-  const { actor } = useActor(createActor);
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Not connected");
-      const result = await actor.denyJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: (_2, vars) => {
-      queryClient2.invalidateQueries({
-        queryKey: ["groupJoinRequests", vars.conversationId.toString()]
-      });
-      queryClient2.invalidateQueries({ queryKey: ["publicGroups"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
     }
   });
 }
@@ -45430,10 +43965,10 @@ function ErrorComponent({ error }) {
   ] });
 }
 function ClientOnly({ children, fallback = null }) {
-  return useHydrated() ? /* @__PURE__ */ jsxRuntimeExports.jsx(React2.Fragment, { children }) : /* @__PURE__ */ jsxRuntimeExports.jsx(React2.Fragment, { children: fallback });
+  return useHydrated() ? /* @__PURE__ */ jsxRuntimeExports.jsx(React$4.Fragment, { children }) : /* @__PURE__ */ jsxRuntimeExports.jsx(React$4.Fragment, { children: fallback });
 }
 function useHydrated() {
-  return React2.useSyncExternalStore(
+  return React$4.useSyncExternalStore(
     subscribe,
     () => true,
     () => false
@@ -46117,7 +44652,7 @@ class Route extends BaseRoute {
     this.useNavigate = () => {
       return useNavigate({ from: this.fullPath });
     };
-    this.Link = React2.forwardRef(
+    this.Link = React$4.forwardRef(
       (props, ref) => {
         return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { ref, from: this.fullPath, ...props });
       }
@@ -46171,7 +44706,7 @@ class RootRoute extends BaseRootRoute {
     this.useNavigate = () => {
       return useNavigate({ from: this.fullPath });
     };
-    this.Link = React2.forwardRef(
+    this.Link = React$4.forwardRef(
       (props, ref) => {
         return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { ref, from: this.fullPath, ...props });
       }
@@ -46729,6 +45264,4225 @@ function RouterProvider({ router: router2, ...rest }) {
 function useLocation(opts) {
   return useRouterState({
     select: (state) => state.location
+  });
+}
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const toCamelCase = (string) => string.replace(
+  /^([A-Z])|[\s-_]+(\w)/g,
+  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+);
+const toPascalCase = (string) => {
+  const camelCase = toCamelCase(string);
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+};
+const mergeClasses = (...classes) => classes.filter((className, index2, array) => {
+  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index2;
+}).join(" ").trim();
+const hasA11yProp = (props) => {
+  for (const prop in props) {
+    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+      return true;
+    }
+  }
+};
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Icon$1 = reactExports.forwardRef(
+  ({
+    color = "currentColor",
+    size: size2 = 24,
+    strokeWidth = 2,
+    absoluteStrokeWidth,
+    className = "",
+    children,
+    iconNode,
+    ...rest
+  }, ref) => reactExports.createElement(
+    "svg",
+    {
+      ref,
+      ...defaultAttributes,
+      width: size2,
+      height: size2,
+      stroke: color,
+      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size2) : strokeWidth,
+      className: mergeClasses("lucide", className),
+      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
+      ...rest
+    },
+    [
+      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
+      ...Array.isArray(children) ? children : [children]
+    ]
+  )
+);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const createLucideIcon = (iconName, iconNode) => {
+  const Component2 = reactExports.forwardRef(
+    ({ className, ...props }, ref) => reactExports.createElement(Icon$1, {
+      ref,
+      iconNode,
+      className: mergeClasses(
+        `lucide-${toKebabCase(toPascalCase(iconName))}`,
+        `lucide-${iconName}`,
+        className
+      ),
+      ...props
+    })
+  );
+  Component2.displayName = toPascalCase(iconName);
+  return Component2;
+};
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$P = [
+  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
+  ["path", { d: "M19 12H5", key: "x3x0zl" }]
+];
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$P);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$O = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$O);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$N = [
+  ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
+  ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
+];
+const CheckCheck = createLucideIcon("check-check", __iconNode$N);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$M = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$M);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$L = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$L);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$K = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$K);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$J = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$J);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$I = [
+  [
+    "path",
+    {
+      d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
+      key: "9ktpf1"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const Compass = createLucideIcon("compass", __iconNode$I);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$H = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$H);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$G = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$G);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$F = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$F);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$E = [
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
+];
+const FileText = createLucideIcon("file-text", __iconNode$E);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$D = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
+];
+const Globe = createLucideIcon("globe", __iconNode$D);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$C = [
+  ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
+  [
+    "path",
+    {
+      d: "M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
+      key: "1d0kgt"
+    }
+  ]
+];
+const House = createLucideIcon("house", __iconNode$C);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$B = [
+  ["path", { d: "M16 5h6", key: "1vod17" }],
+  ["path", { d: "M19 2v6", key: "4bpg5p" }],
+  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
+];
+const ImagePlus = createLucideIcon("image-plus", __iconNode$B);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$A = [
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+];
+const Image = createLucideIcon("image", __iconNode$A);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$z = [
+  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
+  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
+  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
+];
+const Key = createLucideIcon("key", __iconNode$z);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$y = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$y);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$x = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+];
+const Lock = createLucideIcon("lock", __iconNode$x);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$w = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$w);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$v = [
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
+];
+const Menu = createLucideIcon("menu", __iconNode$v);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$u = [
+  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
+];
+const MessageSquare = createLucideIcon("message-square", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [
+  ["line", { x1: "2", x2: "22", y1: "2", y2: "22", key: "a6p6uj" }],
+  ["path", { d: "M18.89 13.23A7.12 7.12 0 0 0 19 12v-2", key: "80xlxr" }],
+  ["path", { d: "M5 10v2a7 7 0 0 0 12 5", key: "p2k8kg" }],
+  ["path", { d: "M15 9.34V5a3 3 0 0 0-5.68-1.33", key: "1gzdoj" }],
+  ["path", { d: "M9 9v3a3 3 0 0 0 5.12 2.12", key: "r2i35w" }],
+  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+];
+const MicOff = createLucideIcon("mic-off", __iconNode$t);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$s = [
+  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
+  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
+  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+];
+const Mic = createLucideIcon("mic", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [
+  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
+  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
+  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
+];
+const Monitor = createLucideIcon("monitor", __iconNode$r);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [
+  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
+];
+const Moon = createLucideIcon("moon", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
+  [
+    "path",
+    {
+      d: "m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486",
+      key: "1pkts6"
+    }
+  ]
+];
+const Paperclip = createLucideIcon("paperclip", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
+const Play = createLucideIcon("play", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$n);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$m = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$m);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$l = [
+  [
+    "path",
+    {
+      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+      key: "1ffxy3"
+    }
+  ],
+  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+];
+const Send = createLucideIcon("send", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Settings = createLucideIcon("settings", __iconNode$k);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$j = [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+];
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$j);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$i = [
+  ["path", { d: "m2 2 20 20", key: "1ooewy" }],
+  [
+    "path",
+    {
+      d: "M5 5a1 1 0 0 0-1 1v7c0 5 3.5 7.5 7.67 8.94a1 1 0 0 0 .67.01c2.35-.82 4.48-1.97 5.9-3.71",
+      key: "1jlk70"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M9.309 3.652A12.252 12.252 0 0 0 11.24 2.28a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v7a9.784 9.784 0 0 1-.08 1.264",
+      key: "18rp1v"
+    }
+  ]
+];
+const ShieldOff = createLucideIcon("shield-off", __iconNode$i);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$h = [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ]
+];
+const Shield = createLucideIcon("shield", __iconNode$h);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$g = [
+  ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+  ["path", { d: "M12 18h.01", key: "mhygvu" }]
+];
+const Smartphone = createLucideIcon("smartphone", __iconNode$g);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$f = [
+  ["path", { d: "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7", key: "1m0v6g" }],
+  [
+    "path",
+    {
+      d: "M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z",
+      key: "ohrbg2"
+    }
+  ]
+];
+const SquarePen = createLucideIcon("square-pen", __iconNode$f);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$e = [
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
+];
+const Square = createLucideIcon("square", __iconNode$e);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$d = [
+  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+  ["path", { d: "M12 2v2", key: "tus03m" }],
+  ["path", { d: "M12 20v2", key: "1lh1kg" }],
+  ["path", { d: "m4.93 4.93 1.41 1.41", key: "149t6j" }],
+  ["path", { d: "m17.66 17.66 1.41 1.41", key: "ptbguv" }],
+  ["path", { d: "M2 12h2", key: "1t8f8n" }],
+  ["path", { d: "M20 12h2", key: "1q8mjw" }],
+  ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
+  ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
+];
+const Sun = createLucideIcon("sun", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
+  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
+  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
+];
+const Timer = createLucideIcon("timer", __iconNode$c);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$b = [
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+];
+const Trash2 = createLucideIcon("trash-2", __iconNode$b);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$a = [
+  [
+    "path",
+    {
+      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
+      key: "wmoenq"
+    }
+  ],
+  ["path", { d: "M12 9v4", key: "juzpu7" }],
+  ["path", { d: "M12 17h.01", key: "p32p05" }]
+];
+const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$a);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$9 = [
+  ["path", { d: "M12 3v12", key: "1x0j5s" }],
+  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
+];
+const Upload = createLucideIcon("upload", __iconNode$9);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$8 = [
+  ["path", { d: "m16 11 2 2 4-4", key: "9rsbq5" }],
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+];
+const UserCheck = createLucideIcon("user-check", __iconNode$8);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$7 = [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
+  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
+];
+const UserMinus = createLucideIcon("user-minus", __iconNode$7);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$6 = [
+  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
+  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
+];
+const User = createLucideIcon("user", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
+  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+];
+const Users = createLucideIcon("users", __iconNode$5);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$4 = [
+  [
+    "path",
+    {
+      d: "m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5",
+      key: "ftymec"
+    }
+  ],
+  ["rect", { x: "2", y: "6", width: "14", height: "12", rx: "2", key: "158x01" }]
+];
+const Video = createLucideIcon("video", __iconNode$4);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$3 = [
+  ["path", { d: "M12 20h.01", key: "zekei9" }],
+  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }],
+  ["path", { d: "M5 12.859a10 10 0 0 1 5.17-2.69", key: "1dl1wf" }],
+  ["path", { d: "M19 12.859a10 10 0 0 0-2.007-1.523", key: "4k23kn" }],
+  ["path", { d: "M2 8.82a15 15 0 0 1 4.177-2.643", key: "1grhjp" }],
+  ["path", { d: "M22 8.82a15 15 0 0 0-11.288-3.764", key: "z3jwby" }],
+  ["path", { d: "m2 2 20 20", key: "1ooewy" }]
+];
+const WifiOff = createLucideIcon("wifi-off", __iconNode$3);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$2 = [
+  ["path", { d: "M12 20h.01", key: "zekei9" }],
+  ["path", { d: "M2 8.82a15 15 0 0 1 20 0", key: "dnpr2z" }],
+  ["path", { d: "M5 12.859a10 10 0 0 1 14 0", key: "1x1e6c" }],
+  ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }]
+];
+const Wifi = createLucideIcon("wifi", __iconNode$2);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$1 = [
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+];
+const X = createLucideIcon("x", __iconNode$1);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode = [
+  [
+    "path",
+    {
+      d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
+      key: "1xq2db"
+    }
+  ]
+];
+const Zap = createLucideIcon("zap", __iconNode);
+function AdminAccessGate({
+  children,
+  compartment: _compartment
+}) {
+  const { actor, isFetching } = useActor(createActor);
+  const { principal, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { data: isAdmin, isLoading } = useQuery({
+    queryKey: ["admin-check", principal == null ? void 0 : principal.toText()],
+    queryFn: async () => {
+      if (!actor || !principal) return false;
+      return actor.isAdminCheck(principal);
+    },
+    enabled: !!actor && !isFetching && isAuthenticated && !!principal,
+    refetchInterval: 6e4,
+    staleTime: 55e3
+  });
+  const { data: hasSuperAdmin, isLoading: hasSuperAdminLoading } = useHasSuperAdmin();
+  if (isLoading || hasSuperAdminLoading || isFetching) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "flex items-center justify-center min-h-screen bg-background",
+        "data-ocid": "admin.gate_loading_state",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { fullScreen: true, label: "Verifying access…" })
+      }
+    );
+  }
+  if (hasSuperAdmin === false) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex flex-col items-center justify-center min-h-screen bg-background gap-6 px-6",
+        "data-ocid": "admin.bootstrap_prompt",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center border border-primary/20", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { size: 36, className: "text-primary" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-sm space-y-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl font-semibold font-mono text-foreground", children: "Admin Console Not Configured" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground leading-relaxed", children: "No Super Admin has been set up yet. Complete the one-time bootstrap process to activate the Admin Console." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Link,
+            {
+              to: "/admin/bootstrap",
+              "data-ocid": "admin.bootstrap_link",
+              className: "inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-mono font-medium hover:bg-primary/90 transition-colors",
+              children: [
+                "Begin Bootstrap Setup",
+                /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { size: 14 })
+              ]
+            }
+          )
+        ]
+      }
+    );
+  }
+  if (!isAdmin) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex flex-col items-center justify-center min-h-screen bg-background gap-6 px-6",
+        "data-ocid": "admin.access_denied",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-20 h-20 rounded-3xl bg-destructive/10 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldOff, { size: 36, className: "text-destructive" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-sm space-y-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl font-semibold text-foreground", children: "Access Denied" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground leading-relaxed", children: "This area is restricted to administrators. If you believe this is an error, contact your system administrator." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 px-3 py-1.5 rounded-full bg-destructive/10 border border-destructive/20", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { size: 12, className: "text-destructive" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium text-destructive", children: "Administrator access required" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              variant: "outline",
+              size: "sm",
+              onClick: () => navigate({ to: "/app/conversations" }),
+              "data-ocid": "admin.back_button",
+              children: "Go back to conversations"
+            }
+          )
+        ]
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children });
+}
+function Input({ className, type, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "input",
+    {
+      type,
+      "data-slot": "input",
+      className: cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        className
+      ),
+      ...props
+    }
+  );
+}
+var NODES = [
+  "a",
+  "button",
+  "div",
+  "form",
+  "h2",
+  "h3",
+  "img",
+  "input",
+  "label",
+  "li",
+  "nav",
+  "ol",
+  "p",
+  "select",
+  "span",
+  "svg",
+  "ul"
+];
+var Primitive = NODES.reduce((primitive, node) => {
+  const Slot2 = /* @__PURE__ */ createSlot(`Primitive.${node}`);
+  const Node2 = reactExports.forwardRef((props, forwardedRef) => {
+    const { asChild, ...primitiveProps } = props;
+    const Comp = asChild ? Slot2 : node;
+    if (typeof window !== "undefined") {
+      window[Symbol.for("radix-ui")] = true;
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Comp, { ...primitiveProps, ref: forwardedRef });
+  });
+  Node2.displayName = `Primitive.${node}`;
+  return { ...primitive, [node]: Node2 };
+}, {});
+var NAME$1 = "Label";
+var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Primitive.label,
+    {
+      ...props,
+      ref: forwardedRef,
+      onMouseDown: (event) => {
+        var _a3;
+        const target = event.target;
+        if (target.closest("button, input, select, textarea")) return;
+        (_a3 = props.onMouseDown) == null ? void 0 : _a3.call(props, event);
+        if (!event.defaultPrevented && event.detail > 1) event.preventDefault();
+      }
+    }
+  );
+});
+Label$1.displayName = NAME$1;
+var Root$4 = Label$1;
+function Label({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root$4,
+    {
+      "data-slot": "label",
+      className: cn(
+        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function useUserProfile(userId) {
+  const { actor } = useActor(createActor);
+  return useQuery({
+    queryKey: ["profile", userId == null ? void 0 : userId.toText()],
+    queryFn: async () => {
+      if (!actor || !userId) return null;
+      return actor.getUserProfile(userId);
+    },
+    enabled: !!actor && !!userId,
+    staleTime: 3e4,
+    retry: 2
+  });
+}
+function useUserProfiles(userIds) {
+  const { actor } = useActor(createActor);
+  return useQuery({
+    queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
+    queryFn: async () => {
+      if (!actor || userIds.length === 0) return [];
+      return actor.getUserProfiles(userIds);
+    },
+    enabled: !!actor && userIds.length > 0,
+    staleTime: 3e4,
+    retry: 2
+  });
+}
+function useUpdateProfile() {
+  const { actor } = useActor(createActor);
+  const { principal } = useAuth();
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      encryptedDisplayName,
+      ecdhPublicKey,
+      encryptedAvatarKey
+    }) => {
+      if (!actor) throw new Error("Not connected");
+      let result = await actor.updateUserProfile({
+        encryptedDisplayName,
+        ecdhPublicKey,
+        encryptedAvatarKey
+      });
+      const isNotFound2 = result.__kind__ === "err" && (!result.err || result.err === "notFound");
+      if (isNotFound2) {
+        if (!encryptedDisplayName || !ecdhPublicKey) {
+          throw new Error(
+            "Profile not found on server. Please reload and try again."
+          );
+        }
+        const regResult = await actor.registerUser({
+          encryptedDisplayName,
+          ecdhPublicKey,
+          encryptedAvatarKey
+        });
+        if (regResult.__kind__ === "err") {
+          result = await actor.updateUserProfile({
+            encryptedDisplayName,
+            ecdhPublicKey,
+            encryptedAvatarKey
+          });
+        } else {
+          return regResult.ok;
+        }
+      }
+      if (result.__kind__ === "err") {
+        const errLabel = result.err || "unknown";
+        const messages = {
+          unauthorized: "You must be logged in to update your profile.",
+          forbidden: "You don't have permission to perform this action.",
+          notFound: "Profile not found. Please reload and try again.",
+          alreadyExists: "A profile with these details already exists.",
+          invalidInput: "Invalid profile data. Please check your input."
+        };
+        throw new Error(messages[errLabel] ?? `Update failed: ${errLabel}`);
+      }
+      return result.ok;
+    },
+    onSuccess: (updatedProfile) => {
+      const userId = principal == null ? void 0 : principal.toText();
+      if (!userId) return;
+      if (updatedProfile) {
+        queryClient2.setQueryData(
+          ["profile", userId],
+          updatedProfile
+        );
+      }
+      queryClient2.invalidateQueries({
+        queryKey: ["profile", userId],
+        exact: true
+      });
+    }
+  });
+}
+const AVATAR_STORAGE_PREFIX = "cs_avatar:";
+function getLocalAvatarKey(principal) {
+  return `${AVATAR_STORAGE_PREFIX}${principal}`;
+}
+function getLocalAvatarDataUrl(principal) {
+  try {
+    return localStorage.getItem(getLocalAvatarKey(principal));
+  } catch {
+    return null;
+  }
+}
+function setLocalAvatarDataUrl(principal, dataUrl) {
+  try {
+    localStorage.setItem(getLocalAvatarKey(principal), dataUrl);
+  } catch {
+  }
+}
+function removeLocalAvatar(principal) {
+  try {
+    localStorage.removeItem(getLocalAvatarKey(principal));
+  } catch {
+  }
+}
+const DISPLAY_NAME_PREFIX = "cs_name:";
+function getLocalDisplayName(principal) {
+  try {
+    return localStorage.getItem(`${DISPLAY_NAME_PREFIX}${principal}`);
+  } catch {
+    return null;
+  }
+}
+function setLocalDisplayName(principal, name) {
+  try {
+    if (name.trim()) {
+      localStorage.setItem(`${DISPLAY_NAME_PREFIX}${principal}`, name.trim());
+    }
+  } catch {
+  }
+}
+function shortPrincipal(principal) {
+  if (principal.length <= 16) return principal;
+  return `${principal.slice(0, 10)}…${principal.slice(-4)}`;
+}
+function getDisplayName(principal) {
+  return getLocalDisplayName(principal) ?? shortPrincipal(principal);
+}
+function useDisplayName(principal) {
+  const [name, setName] = reactExports.useState(
+    principal ? getDisplayName(principal) : ""
+  );
+  reactExports.useEffect(() => {
+    if (!principal) return;
+    setName(getDisplayName(principal));
+    const handler = (e) => {
+      var _a3;
+      if (e.key === `${DISPLAY_NAME_PREFIX}${principal}`) {
+        setName(((_a3 = e.newValue) == null ? void 0 : _a3.trim()) || shortPrincipal(principal));
+      }
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, [principal]);
+  return name || (principal ? shortPrincipal(principal) : "");
+}
+function useHasDisplayName() {
+  const { principal } = useAuth();
+  const principalText = (principal == null ? void 0 : principal.toText()) ?? null;
+  const {
+    data: profile,
+    isLoading,
+    isFetched
+  } = useUserProfile(principal ?? null);
+  if (!principalText) return null;
+  if (isLoading && !isFetched) return null;
+  const cached = getLocalDisplayName(principalText);
+  if (cached && cached.trim().length >= 2) return true;
+  if (profile && profile.encryptedDisplayName.length > 0) return true;
+  return false;
+}
+let lastPublishTime = 0;
+function OnboardingGate({ children }) {
+  const { principal } = useAuth();
+  const { keyPair, isReady, isNewKeyPair, setIsNewKeyPair } = useCrypto();
+  const hasPublishedRef = reactExports.useRef(false);
+  const hasDisplayName = useHasDisplayName();
+  const updateProfile = useUpdateProfile();
+  const { data: profile } = useUserProfile(principal ?? null);
+  const profileRef = reactExports.useRef(profile);
+  const mutateAsyncRef = reactExports.useRef(updateProfile.mutateAsync);
+  reactExports.useEffect(() => {
+    profileRef.current = profile;
+  });
+  reactExports.useEffect(() => {
+    mutateAsyncRef.current = updateProfile.mutateAsync;
+  });
+  const [name, setName] = reactExports.useState("");
+  const [saving, setSaving] = reactExports.useState(false);
+  const [localReady, setLocalReady] = reactExports.useState(false);
+  const [loadingTooLong, setLoadingTooLong] = reactExports.useState(false);
+  const [timedOut, setTimedOut] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    if (hasDisplayName !== null) return;
+    const hintTimer = setTimeout(() => setLoadingTooLong(true), 2e3);
+    const giveUpTimer = setTimeout(() => setTimedOut(true), 6e3);
+    return () => {
+      clearTimeout(hintTimer);
+      clearTimeout(giveUpTimer);
+    };
+  }, [hasDisplayName]);
+  reactExports.useEffect(() => {
+    if (!isNewKeyPair || !keyPair || !isReady || !principal) return;
+    if (hasPublishedRef.current) {
+      console.log(
+        "[E2EE KEYSYNC] Skipping publish - already published this session"
+      );
+      return;
+    }
+    const now2 = Date.now();
+    if (now2 - lastPublishTime < 5e3) {
+      console.log("[E2EE KEYSYNC] Skipping publish - cooldown active");
+      return;
+    }
+    console.log(
+      "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile"
+    );
+    (async () => {
+      try {
+        const pubBytes = await exportPublicKey(keyPair.publicKey);
+        const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+        const latestProfile = profileRef.current;
+        const storedKey = latestProfile == null ? void 0 : latestProfile.ecdhPublicKey;
+        if (storedKey && storedKey.length === pubBytes.length) {
+          const storedBytes = new Uint8Array(
+            storedKey instanceof Uint8Array ? storedKey.buffer.slice(
+              storedKey.byteOffset,
+              storedKey.byteOffset + storedKey.byteLength
+            ) : storedKey
+          );
+          const identical = pubBytes.every((b2, i) => b2 === storedBytes[i]);
+          if (identical) {
+            console.log(
+              "[E2EE KEYSYNC] Public key unchanged - skipping publish"
+            );
+            hasPublishedRef.current = true;
+            setIsNewKeyPair(false);
+            return;
+          }
+        }
+        hasPublishedRef.current = true;
+        lastPublishTime = Date.now();
+        const existingDisplayName = (latestProfile == null ? void 0 : latestProfile.encryptedDisplayName) && latestProfile.encryptedDisplayName.length > 0 ? new Uint8Array(
+          latestProfile.encryptedDisplayName instanceof Uint8Array ? latestProfile.encryptedDisplayName.buffer.slice(
+            latestProfile.encryptedDisplayName.byteOffset,
+            latestProfile.encryptedDisplayName.byteOffset + latestProfile.encryptedDisplayName.byteLength
+          ) : latestProfile.encryptedDisplayName
+        ) : new Uint8Array(0);
+        await mutateAsyncRef.current({
+          encryptedDisplayName: existingDisplayName,
+          ecdhPublicKey: pubBytes
+        });
+        setIsNewKeyPair(false);
+        console.log(
+          `[E2EE KEYSYNC] Published new public key (fingerprint=${fp})`
+        );
+      } catch (err) {
+        hasPublishedRef.current = false;
+        console.warn(
+          "[E2EE KEYSYNC] Failed to publish public key to profile:",
+          err
+        );
+      }
+    })();
+  }, [isNewKeyPair, keyPair, isReady, principal, setIsNewKeyPair]);
+  const { decryptOwnDisplayName } = useCrypto();
+  reactExports.useEffect(() => {
+    if (!principal || !isReady || !keyPair || !profile) return;
+    if (profile.encryptedDisplayName.length === 0) return;
+    const principalText = principal.toText();
+    const cached = localStorage.getItem(`cs_name:${principalText}`);
+    if (cached == null ? void 0 : cached.trim()) return;
+    decryptOwnDisplayName(
+      new Uint8Array(profile.encryptedDisplayName)
+    ).then((decrypted) => {
+      if (decrypted == null ? void 0 : decrypted.trim()) {
+        setLocalDisplayName(principalText, decrypted.trim());
+        setLocalReady((prev) => !prev);
+      }
+    }).catch(() => {
+    });
+  }, [principal, isReady, keyPair, profile, decryptOwnDisplayName]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const trimmed = name.trim();
+    if (trimmed.length < 2 || trimmed.length > 50) return;
+    if (!keyPair || !isReady || !principal) return;
+    setSaving(true);
+    try {
+      const pubBytes = await exportPublicKey(keyPair.publicKey);
+      const aesKey = await deriveDisplayNameKey(principal);
+      const encryptedDisplayName = await encryptMessage(
+        aesKey,
+        new TextEncoder().encode(trimmed)
+      );
+      await updateProfile.mutateAsync({
+        encryptedDisplayName,
+        ecdhPublicKey: pubBytes
+      });
+      setLocalDisplayName(principal.toText(), trimmed);
+      ue.success(`Welcome, ${trimmed}!`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Could not save your name. Please try again.";
+      ue.error(message);
+    } finally {
+      setSaving(false);
+    }
+  };
+  const isValid = name.trim().length >= 2 && name.trim().length <= 50 && isReady && !!keyPair;
+  if (hasDisplayName === null && !timedOut) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-background",
+        "data-ocid": "onboarding.loading_state",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36, label: "Securing your session…" }),
+          loadingTooLong && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground animate-pulse", children: "Still setting up… this usually takes a few seconds." })
+        ]
+      }
+    );
+  }
+  if (hasDisplayName) return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      className: "fixed inset-0 z-50 flex items-center justify-center bg-background",
+      "data-ocid": "onboarding.page",
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-md px-6 py-10 flex flex-col items-center gap-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              src: "/assets/newshieldlogo.png",
+              alt: "CharlieSierra",
+              className: "h-16 w-auto object-contain",
+              onError: (e) => {
+                e.target.style.display = "none";
+              }
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-foreground", children: "Welcome to CharlieSierra" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground mt-1", children: "Before you start, choose a display name others will see." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "form",
+          {
+            onSubmit: handleSubmit,
+            className: "w-full space-y-5",
+            "data-ocid": "onboarding.form",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "onboarding-name", className: "text-sm font-medium", children: "Display Name" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Input,
+                  {
+                    id: "onboarding-name",
+                    type: "text",
+                    value: name,
+                    onChange: (e) => setName(e.target.value),
+                    placeholder: "e.g. Alex, Commander J, Sierra-7",
+                    minLength: 2,
+                    maxLength: 50,
+                    autoFocus: true,
+                    disabled: saving || !isReady,
+                    "data-ocid": "onboarding.name_input",
+                    className: "text-sm"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "2–50 characters. Your name is encrypted before leaving this device." })
+              ] }),
+              name.trim().length > 0 && name.trim().length < 2 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "p",
+                {
+                  className: "text-xs text-destructive",
+                  "data-ocid": "onboarding.name_field_error",
+                  children: "Name must be at least 2 characters."
+                }
+              ),
+              !isReady && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "p",
+                {
+                  className: "text-xs text-muted-foreground text-center",
+                  "data-ocid": "onboarding.loading_state",
+                  children: "Initialising secure keys…"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Button,
+                {
+                  type: "submit",
+                  disabled: !isValid || saving || !isReady,
+                  "data-ocid": "onboarding.submit_button",
+                  className: "w-full",
+                  children: saving ? "Saving…" : !isReady ? "Please wait…" : "Continue"
+                }
+              )
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-xs text-muted-foreground", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { size: 13, className: "text-primary" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Authenticated via Internet Identity · E2EE secured" })
+        ] })
+      ] })
+    }
+  );
+}
+const STORAGE_KEY$1 = "cs_a11y";
+const DEFAULTS = {
+  fontSizeScale: 1,
+  highContrast: false,
+  reduceAnimations: false,
+  colorBlindMode: "none"
+};
+function loadPrefs() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY$1);
+    if (!raw) return DEFAULTS;
+    const parsed = JSON.parse(raw);
+    return {
+      fontSizeScale: typeof parsed.fontSizeScale === "number" ? Math.min(2, Math.max(1, parsed.fontSizeScale)) : DEFAULTS.fontSizeScale,
+      highContrast: typeof parsed.highContrast === "boolean" ? parsed.highContrast : DEFAULTS.highContrast,
+      reduceAnimations: typeof parsed.reduceAnimations === "boolean" ? parsed.reduceAnimations : DEFAULTS.reduceAnimations,
+      colorBlindMode: [
+        "none",
+        "protanopia",
+        "deuteranopia",
+        "tritanopia"
+      ].includes(parsed.colorBlindMode) ? parsed.colorBlindMode : DEFAULTS.colorBlindMode
+    };
+  } catch {
+    return DEFAULTS;
+  }
+}
+const AccessibilityContext = reactExports.createContext(
+  null
+);
+function AccessibilityProvider({
+  children
+}) {
+  const [prefs, setPrefs] = reactExports.useState(loadPrefs);
+  const isFirstRun = reactExports.useRef(true);
+  reactExports.useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY$1, JSON.stringify(prefs));
+  }, [prefs]);
+  reactExports.useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--font-size-scale",
+      String(prefs.fontSizeScale)
+    );
+  }, [prefs.fontSizeScale]);
+  reactExports.useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-high-contrast",
+      prefs.highContrast ? "true" : "false"
+    );
+  }, [prefs.highContrast]);
+  reactExports.useEffect(() => {
+    document.documentElement.classList.toggle(
+      "reduce-motion",
+      prefs.reduceAnimations
+    );
+  }, [prefs.reduceAnimations]);
+  reactExports.useEffect(() => {
+    document.documentElement.dataset.colorBlind = prefs.colorBlindMode;
+  }, [prefs.colorBlindMode]);
+  const setFontSizeScale = reactExports.useCallback((scale) => {
+    setPrefs((p2) => ({
+      ...p2,
+      fontSizeScale: Math.min(2, Math.max(1, scale))
+    }));
+  }, []);
+  const setHighContrast = reactExports.useCallback((on) => {
+    setPrefs((p2) => ({ ...p2, highContrast: on }));
+  }, []);
+  const setReduceAnimations = reactExports.useCallback((on) => {
+    setPrefs((p2) => ({ ...p2, reduceAnimations: on }));
+  }, []);
+  const setColorBlindMode = reactExports.useCallback((mode) => {
+    setPrefs((p2) => ({ ...p2, colorBlindMode: mode }));
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    AccessibilityContext.Provider,
+    {
+      value: {
+        ...prefs,
+        setFontSizeScale,
+        setHighContrast,
+        setReduceAnimations,
+        setColorBlindMode
+      },
+      children
+    }
+  );
+}
+function useAccessibility() {
+  const ctx = reactExports.useContext(AccessibilityContext);
+  if (!ctx)
+    throw new Error(
+      "useAccessibility must be used within AccessibilityProvider"
+    );
+  return ctx;
+}
+function EncryptedBadge({
+  compact = false,
+  className = ""
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10 border border-primary/20 text-primary text-xs font-medium ${className}`,
+      title: "End-to-end encrypted",
+      "aria-label": "End-to-end encrypted",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { size: 11, className: "flex-shrink-0" }),
+        !compact && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "End-to-end encrypted" })
+      ]
+    }
+  );
+}
+var AUTOFOCUS_ON_MOUNT = "focusScope.autoFocusOnMount";
+var AUTOFOCUS_ON_UNMOUNT = "focusScope.autoFocusOnUnmount";
+var EVENT_OPTIONS$1 = { bubbles: false, cancelable: true };
+var FOCUS_SCOPE_NAME = "FocusScope";
+var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
+  const {
+    loop = false,
+    trapped = false,
+    onMountAutoFocus: onMountAutoFocusProp,
+    onUnmountAutoFocus: onUnmountAutoFocusProp,
+    ...scopeProps
+  } = props;
+  const [container, setContainer] = reactExports.useState(null);
+  const onMountAutoFocus = useCallbackRef$1(onMountAutoFocusProp);
+  const onUnmountAutoFocus = useCallbackRef$1(onUnmountAutoFocusProp);
+  const lastFocusedElementRef = reactExports.useRef(null);
+  const composedRefs = useComposedRefs(forwardedRef, (node) => setContainer(node));
+  const focusScope = reactExports.useRef({
+    paused: false,
+    pause() {
+      this.paused = true;
+    },
+    resume() {
+      this.paused = false;
+    }
+  }).current;
+  reactExports.useEffect(() => {
+    if (trapped) {
+      let handleFocusIn2 = function(event) {
+        if (focusScope.paused || !container) return;
+        const target = event.target;
+        if (container.contains(target)) {
+          lastFocusedElementRef.current = target;
+        } else {
+          focus(lastFocusedElementRef.current, { select: true });
+        }
+      }, handleFocusOut2 = function(event) {
+        if (focusScope.paused || !container) return;
+        const relatedTarget = event.relatedTarget;
+        if (relatedTarget === null) return;
+        if (!container.contains(relatedTarget)) {
+          focus(lastFocusedElementRef.current, { select: true });
+        }
+      }, handleMutations2 = function(mutations) {
+        const focusedElement = document.activeElement;
+        if (focusedElement !== document.body) return;
+        for (const mutation of mutations) {
+          if (mutation.removedNodes.length > 0) focus(container);
+        }
+      };
+      document.addEventListener("focusin", handleFocusIn2);
+      document.addEventListener("focusout", handleFocusOut2);
+      const mutationObserver = new MutationObserver(handleMutations2);
+      if (container) mutationObserver.observe(container, { childList: true, subtree: true });
+      return () => {
+        document.removeEventListener("focusin", handleFocusIn2);
+        document.removeEventListener("focusout", handleFocusOut2);
+        mutationObserver.disconnect();
+      };
+    }
+  }, [trapped, container, focusScope.paused]);
+  reactExports.useEffect(() => {
+    if (container) {
+      focusScopesStack.add(focusScope);
+      const previouslyFocusedElement = document.activeElement;
+      const hasFocusedCandidate = container.contains(previouslyFocusedElement);
+      if (!hasFocusedCandidate) {
+        const mountEvent = new CustomEvent(AUTOFOCUS_ON_MOUNT, EVENT_OPTIONS$1);
+        container.addEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
+        container.dispatchEvent(mountEvent);
+        if (!mountEvent.defaultPrevented) {
+          focusFirst$1(removeLinks(getTabbableCandidates(container)), { select: true });
+          if (document.activeElement === previouslyFocusedElement) {
+            focus(container);
+          }
+        }
+      }
+      return () => {
+        container.removeEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
+        setTimeout(() => {
+          const unmountEvent = new CustomEvent(AUTOFOCUS_ON_UNMOUNT, EVENT_OPTIONS$1);
+          container.addEventListener(AUTOFOCUS_ON_UNMOUNT, onUnmountAutoFocus);
+          container.dispatchEvent(unmountEvent);
+          if (!unmountEvent.defaultPrevented) {
+            focus(previouslyFocusedElement ?? document.body, { select: true });
+          }
+          container.removeEventListener(AUTOFOCUS_ON_UNMOUNT, onUnmountAutoFocus);
+          focusScopesStack.remove(focusScope);
+        }, 0);
+      };
+    }
+  }, [container, onMountAutoFocus, onUnmountAutoFocus, focusScope]);
+  const handleKeyDown = reactExports.useCallback(
+    (event) => {
+      if (!loop && !trapped) return;
+      if (focusScope.paused) return;
+      const isTabKey = event.key === "Tab" && !event.altKey && !event.ctrlKey && !event.metaKey;
+      const focusedElement = document.activeElement;
+      if (isTabKey && focusedElement) {
+        const container2 = event.currentTarget;
+        const [first, last2] = getTabbableEdges(container2);
+        const hasTabbableElementsInside = first && last2;
+        if (!hasTabbableElementsInside) {
+          if (focusedElement === container2) event.preventDefault();
+        } else {
+          if (!event.shiftKey && focusedElement === last2) {
+            event.preventDefault();
+            if (loop) focus(first, { select: true });
+          } else if (event.shiftKey && focusedElement === first) {
+            event.preventDefault();
+            if (loop) focus(last2, { select: true });
+          }
+        }
+      }
+    },
+    [loop, trapped, focusScope.paused]
+  );
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive$1.div, { tabIndex: -1, ...scopeProps, ref: composedRefs, onKeyDown: handleKeyDown });
+});
+FocusScope.displayName = FOCUS_SCOPE_NAME;
+function focusFirst$1(candidates, { select = false } = {}) {
+  const previouslyFocusedElement = document.activeElement;
+  for (const candidate of candidates) {
+    focus(candidate, { select });
+    if (document.activeElement !== previouslyFocusedElement) return;
+  }
+}
+function getTabbableEdges(container) {
+  const candidates = getTabbableCandidates(container);
+  const first = findVisible(candidates, container);
+  const last2 = findVisible(candidates.reverse(), container);
+  return [first, last2];
+}
+function getTabbableCandidates(container) {
+  const nodes = [];
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT, {
+    acceptNode: (node) => {
+      const isHiddenInput = node.tagName === "INPUT" && node.type === "hidden";
+      if (node.disabled || node.hidden || isHiddenInput) return NodeFilter.FILTER_SKIP;
+      return node.tabIndex >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+    }
+  });
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  return nodes;
+}
+function findVisible(elements, container) {
+  for (const element of elements) {
+    if (!isHidden(element, { upTo: container })) return element;
+  }
+}
+function isHidden(node, { upTo }) {
+  if (getComputedStyle(node).visibility === "hidden") return true;
+  while (node) {
+    if (upTo !== void 0 && node === upTo) return false;
+    if (getComputedStyle(node).display === "none") return true;
+    node = node.parentElement;
+  }
+  return false;
+}
+function isSelectableInput(element) {
+  return element instanceof HTMLInputElement && "select" in element;
+}
+function focus(element, { select = false } = {}) {
+  if (element && element.focus) {
+    const previouslyFocusedElement = document.activeElement;
+    element.focus({ preventScroll: true });
+    if (element !== previouslyFocusedElement && isSelectableInput(element) && select)
+      element.select();
+  }
+}
+var focusScopesStack = createFocusScopesStack();
+function createFocusScopesStack() {
+  let stack = [];
+  return {
+    add(focusScope) {
+      const activeFocusScope = stack[0];
+      if (focusScope !== activeFocusScope) {
+        activeFocusScope == null ? void 0 : activeFocusScope.pause();
+      }
+      stack = arrayRemove(stack, focusScope);
+      stack.unshift(focusScope);
+    },
+    remove(focusScope) {
+      var _a3;
+      stack = arrayRemove(stack, focusScope);
+      (_a3 = stack[0]) == null ? void 0 : _a3.resume();
+    }
+  };
+}
+function arrayRemove(array, item) {
+  const updatedArray = [...array];
+  const index2 = updatedArray.indexOf(item);
+  if (index2 !== -1) {
+    updatedArray.splice(index2, 1);
+  }
+  return updatedArray;
+}
+function removeLinks(items) {
+  return items.filter((item) => item.tagName !== "A");
+}
+var count = 0;
+function useFocusGuards() {
+  reactExports.useEffect(() => {
+    const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
+    document.body.insertAdjacentElement("afterbegin", edgeGuards[0] ?? createFocusGuard());
+    document.body.insertAdjacentElement("beforeend", edgeGuards[1] ?? createFocusGuard());
+    count++;
+    return () => {
+      if (count === 1) {
+        document.querySelectorAll("[data-radix-focus-guard]").forEach((node) => node.remove());
+      }
+      count--;
+    };
+  }, []);
+}
+function createFocusGuard() {
+  const element = document.createElement("span");
+  element.setAttribute("data-radix-focus-guard", "");
+  element.tabIndex = 0;
+  element.style.outline = "none";
+  element.style.opacity = "0";
+  element.style.position = "fixed";
+  element.style.pointerEvents = "none";
+  return element;
+}
+var __assign = function() {
+  __assign = Object.assign || function __assign2(t) {
+    for (var s2, i = 1, n = arguments.length; i < n; i++) {
+      s2 = arguments[i];
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2)) t[p2] = s2[p2];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+function __rest(s2, e) {
+  var t = {};
+  for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e.indexOf(p2) < 0)
+    t[p2] = s2[p2];
+  if (s2 != null && typeof Object.getOwnPropertySymbols === "function")
+    for (var i = 0, p2 = Object.getOwnPropertySymbols(s2); i < p2.length; i++) {
+      if (e.indexOf(p2[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i]))
+        t[p2[i]] = s2[p2[i]];
+    }
+  return t;
+}
+function __spreadArray(to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+}
+typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+  var e = new Error(message);
+  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+var zeroRightClassName = "right-scroll-bar-position";
+var fullWidthClassName = "width-before-scroll-bar";
+var noScrollbarsClassName = "with-scroll-bars-hidden";
+var removedBarSizeVariable = "--removed-body-scroll-bar-size";
+function assignRef(ref, value) {
+  if (typeof ref === "function") {
+    ref(value);
+  } else if (ref) {
+    ref.current = value;
+  }
+  return ref;
+}
+function useCallbackRef(initialValue, callback) {
+  var ref = reactExports.useState(function() {
+    return {
+      // value
+      value: initialValue,
+      // last callback
+      callback,
+      // "memoized" public interface
+      facade: {
+        get current() {
+          return ref.value;
+        },
+        set current(value) {
+          var last2 = ref.value;
+          if (last2 !== value) {
+            ref.value = value;
+            ref.callback(value, last2);
+          }
+        }
+      }
+    };
+  })[0];
+  ref.callback = callback;
+  return ref.facade;
+}
+var useIsomorphicLayoutEffect = typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
+var currentValues = /* @__PURE__ */ new WeakMap();
+function useMergeRefs(refs, defaultValue) {
+  var callbackRef = useCallbackRef(null, function(newValue) {
+    return refs.forEach(function(ref) {
+      return assignRef(ref, newValue);
+    });
+  });
+  useIsomorphicLayoutEffect(function() {
+    var oldValue = currentValues.get(callbackRef);
+    if (oldValue) {
+      var prevRefs_1 = new Set(oldValue);
+      var nextRefs_1 = new Set(refs);
+      var current_1 = callbackRef.current;
+      prevRefs_1.forEach(function(ref) {
+        if (!nextRefs_1.has(ref)) {
+          assignRef(ref, null);
+        }
+      });
+      nextRefs_1.forEach(function(ref) {
+        if (!prevRefs_1.has(ref)) {
+          assignRef(ref, current_1);
+        }
+      });
+    }
+    currentValues.set(callbackRef, refs);
+  }, [refs]);
+  return callbackRef;
+}
+function ItoI(a2) {
+  return a2;
+}
+function innerCreateMedium(defaults, middleware) {
+  if (middleware === void 0) {
+    middleware = ItoI;
+  }
+  var buffer = [];
+  var assigned = false;
+  var medium = {
+    read: function() {
+      if (assigned) {
+        throw new Error("Sidecar: could not `read` from an `assigned` medium. `read` could be used only with `useMedium`.");
+      }
+      if (buffer.length) {
+        return buffer[buffer.length - 1];
+      }
+      return defaults;
+    },
+    useMedium: function(data) {
+      var item = middleware(data, assigned);
+      buffer.push(item);
+      return function() {
+        buffer = buffer.filter(function(x3) {
+          return x3 !== item;
+        });
+      };
+    },
+    assignSyncMedium: function(cb) {
+      assigned = true;
+      while (buffer.length) {
+        var cbs = buffer;
+        buffer = [];
+        cbs.forEach(cb);
+      }
+      buffer = {
+        push: function(x3) {
+          return cb(x3);
+        },
+        filter: function() {
+          return buffer;
+        }
+      };
+    },
+    assignMedium: function(cb) {
+      assigned = true;
+      var pendingQueue = [];
+      if (buffer.length) {
+        var cbs = buffer;
+        buffer = [];
+        cbs.forEach(cb);
+        pendingQueue = buffer;
+      }
+      var executeQueue = function() {
+        var cbs2 = pendingQueue;
+        pendingQueue = [];
+        cbs2.forEach(cb);
+      };
+      var cycle = function() {
+        return Promise.resolve().then(executeQueue);
+      };
+      cycle();
+      buffer = {
+        push: function(x3) {
+          pendingQueue.push(x3);
+          cycle();
+        },
+        filter: function(filter) {
+          pendingQueue = pendingQueue.filter(filter);
+          return buffer;
+        }
+      };
+    }
+  };
+  return medium;
+}
+function createSidecarMedium(options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var medium = innerCreateMedium(null);
+  medium.options = __assign({ async: true, ssr: false }, options);
+  return medium;
+}
+var SideCar$1 = function(_a3) {
+  var sideCar = _a3.sideCar, rest = __rest(_a3, ["sideCar"]);
+  if (!sideCar) {
+    throw new Error("Sidecar: please provide `sideCar` property to import the right car");
+  }
+  var Target = sideCar.read();
+  if (!Target) {
+    throw new Error("Sidecar medium not found");
+  }
+  return reactExports.createElement(Target, __assign({}, rest));
+};
+SideCar$1.isSideCarExport = true;
+function exportSidecar(medium, exported) {
+  medium.useMedium(exported);
+  return SideCar$1;
+}
+var effectCar = createSidecarMedium();
+var nothing = function() {
+  return;
+};
+var RemoveScroll = reactExports.forwardRef(function(props, parentRef) {
+  var ref = reactExports.useRef(null);
+  var _a3 = reactExports.useState({
+    onScrollCapture: nothing,
+    onWheelCapture: nothing,
+    onTouchMoveCapture: nothing
+  }), callbacks = _a3[0], setCallbacks = _a3[1];
+  var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noRelative = props.noRelative, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b3 = props.as, Container = _b3 === void 0 ? "div" : _b3, gapMode = props.gapMode, rest = __rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noRelative", "noIsolation", "inert", "allowPinchZoom", "as", "gapMode"]);
+  var SideCar2 = sideCar;
+  var containerRef = useMergeRefs([ref, parentRef]);
+  var containerProps = __assign(__assign({}, rest), callbacks);
+  return reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    enabled && reactExports.createElement(SideCar2, { sideCar: effectCar, removeScrollBar, shards, noRelative, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref, gapMode }),
+    forwardProps ? reactExports.cloneElement(reactExports.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef })) : reactExports.createElement(Container, __assign({}, containerProps, { className, ref: containerRef }), children)
+  );
+});
+RemoveScroll.defaultProps = {
+  enabled: true,
+  removeScrollBar: true,
+  inert: false
+};
+RemoveScroll.classNames = {
+  fullWidth: fullWidthClassName,
+  zeroRight: zeroRightClassName
+};
+var getNonce = function() {
+  if (typeof __webpack_nonce__ !== "undefined") {
+    return __webpack_nonce__;
+  }
+  return void 0;
+};
+function makeStyleTag() {
+  if (!document)
+    return null;
+  var tag = document.createElement("style");
+  tag.type = "text/css";
+  var nonce = getNonce();
+  if (nonce) {
+    tag.setAttribute("nonce", nonce);
+  }
+  return tag;
+}
+function injectStyles(tag, css) {
+  if (tag.styleSheet) {
+    tag.styleSheet.cssText = css;
+  } else {
+    tag.appendChild(document.createTextNode(css));
+  }
+}
+function insertStyleTag(tag) {
+  var head = document.head || document.getElementsByTagName("head")[0];
+  head.appendChild(tag);
+}
+var stylesheetSingleton = function() {
+  var counter = 0;
+  var stylesheet = null;
+  return {
+    add: function(style2) {
+      if (counter == 0) {
+        if (stylesheet = makeStyleTag()) {
+          injectStyles(stylesheet, style2);
+          insertStyleTag(stylesheet);
+        }
+      }
+      counter++;
+    },
+    remove: function() {
+      counter--;
+      if (!counter && stylesheet) {
+        stylesheet.parentNode && stylesheet.parentNode.removeChild(stylesheet);
+        stylesheet = null;
+      }
+    }
+  };
+};
+var styleHookSingleton = function() {
+  var sheet = stylesheetSingleton();
+  return function(styles, isDynamic) {
+    reactExports.useEffect(function() {
+      sheet.add(styles);
+      return function() {
+        sheet.remove();
+      };
+    }, [styles && isDynamic]);
+  };
+};
+var styleSingleton = function() {
+  var useStyle = styleHookSingleton();
+  var Sheet2 = function(_a3) {
+    var styles = _a3.styles, dynamic = _a3.dynamic;
+    useStyle(styles, dynamic);
+    return null;
+  };
+  return Sheet2;
+};
+var zeroGap = {
+  left: 0,
+  top: 0,
+  right: 0,
+  gap: 0
+};
+var parse = function(x3) {
+  return parseInt(x3 || "", 10) || 0;
+};
+var getOffset = function(gapMode) {
+  var cs = window.getComputedStyle(document.body);
+  var left = cs[gapMode === "padding" ? "paddingLeft" : "marginLeft"];
+  var top = cs[gapMode === "padding" ? "paddingTop" : "marginTop"];
+  var right = cs[gapMode === "padding" ? "paddingRight" : "marginRight"];
+  return [parse(left), parse(top), parse(right)];
+};
+var getGapWidth = function(gapMode) {
+  if (gapMode === void 0) {
+    gapMode = "margin";
+  }
+  if (typeof window === "undefined") {
+    return zeroGap;
+  }
+  var offsets = getOffset(gapMode);
+  var documentWidth = document.documentElement.clientWidth;
+  var windowWidth = window.innerWidth;
+  return {
+    left: offsets[0],
+    top: offsets[1],
+    right: offsets[2],
+    gap: Math.max(0, windowWidth - documentWidth + offsets[2] - offsets[0])
+  };
+};
+var Style = styleSingleton();
+var lockAttribute = "data-scroll-locked";
+var getStyles = function(_a3, allowRelative, gapMode, important) {
+  var left = _a3.left, top = _a3.top, right = _a3.right, gap = _a3.gap;
+  if (gapMode === void 0) {
+    gapMode = "margin";
+  }
+  return "\n  .".concat(noScrollbarsClassName, " {\n   overflow: hidden ").concat(important, ";\n   padding-right: ").concat(gap, "px ").concat(important, ";\n  }\n  body[").concat(lockAttribute, "] {\n    overflow: hidden ").concat(important, ";\n    overscroll-behavior: contain;\n    ").concat([
+    allowRelative && "position: relative ".concat(important, ";"),
+    gapMode === "margin" && "\n    padding-left: ".concat(left, "px;\n    padding-top: ").concat(top, "px;\n    padding-right: ").concat(right, "px;\n    margin-left:0;\n    margin-top:0;\n    margin-right: ").concat(gap, "px ").concat(important, ";\n    "),
+    gapMode === "padding" && "padding-right: ".concat(gap, "px ").concat(important, ";")
+  ].filter(Boolean).join(""), "\n  }\n  \n  .").concat(zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(zeroRightClassName, " .").concat(zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " .").concat(fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body[").concat(lockAttribute, "] {\n    ").concat(removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
+};
+var getCurrentUseCounter = function() {
+  var counter = parseInt(document.body.getAttribute(lockAttribute) || "0", 10);
+  return isFinite(counter) ? counter : 0;
+};
+var useLockAttribute = function() {
+  reactExports.useEffect(function() {
+    document.body.setAttribute(lockAttribute, (getCurrentUseCounter() + 1).toString());
+    return function() {
+      var newCounter = getCurrentUseCounter() - 1;
+      if (newCounter <= 0) {
+        document.body.removeAttribute(lockAttribute);
+      } else {
+        document.body.setAttribute(lockAttribute, newCounter.toString());
+      }
+    };
+  }, []);
+};
+var RemoveScrollBar = function(_a3) {
+  var noRelative = _a3.noRelative, noImportant = _a3.noImportant, _b3 = _a3.gapMode, gapMode = _b3 === void 0 ? "margin" : _b3;
+  useLockAttribute();
+  var gap = reactExports.useMemo(function() {
+    return getGapWidth(gapMode);
+  }, [gapMode]);
+  return reactExports.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : "") });
+};
+var passiveSupported = false;
+if (typeof window !== "undefined") {
+  try {
+    var options = Object.defineProperty({}, "passive", {
+      get: function() {
+        passiveSupported = true;
+        return true;
+      }
+    });
+    window.addEventListener("test", options, options);
+    window.removeEventListener("test", options, options);
+  } catch (err) {
+    passiveSupported = false;
+  }
+}
+var nonPassive = passiveSupported ? { passive: false } : false;
+var alwaysContainsScroll = function(node) {
+  return node.tagName === "TEXTAREA";
+};
+var elementCanBeScrolled = function(node, overflow) {
+  if (!(node instanceof Element)) {
+    return false;
+  }
+  var styles = window.getComputedStyle(node);
+  return (
+    // not-not-scrollable
+    styles[overflow] !== "hidden" && // contains scroll inside self
+    !(styles.overflowY === styles.overflowX && !alwaysContainsScroll(node) && styles[overflow] === "visible")
+  );
+};
+var elementCouldBeVScrolled = function(node) {
+  return elementCanBeScrolled(node, "overflowY");
+};
+var elementCouldBeHScrolled = function(node) {
+  return elementCanBeScrolled(node, "overflowX");
+};
+var locationCouldBeScrolled = function(axis, node) {
+  var ownerDocument = node.ownerDocument;
+  var current = node;
+  do {
+    if (typeof ShadowRoot !== "undefined" && current instanceof ShadowRoot) {
+      current = current.host;
+    }
+    var isScrollable = elementCouldBeScrolled(axis, current);
+    if (isScrollable) {
+      var _a3 = getScrollVariables(axis, current), scrollHeight = _a3[1], clientHeight = _a3[2];
+      if (scrollHeight > clientHeight) {
+        return true;
+      }
+    }
+    current = current.parentNode;
+  } while (current && current !== ownerDocument.body);
+  return false;
+};
+var getVScrollVariables = function(_a3) {
+  var scrollTop = _a3.scrollTop, scrollHeight = _a3.scrollHeight, clientHeight = _a3.clientHeight;
+  return [
+    scrollTop,
+    scrollHeight,
+    clientHeight
+  ];
+};
+var getHScrollVariables = function(_a3) {
+  var scrollLeft = _a3.scrollLeft, scrollWidth = _a3.scrollWidth, clientWidth = _a3.clientWidth;
+  return [
+    scrollLeft,
+    scrollWidth,
+    clientWidth
+  ];
+};
+var elementCouldBeScrolled = function(axis, node) {
+  return axis === "v" ? elementCouldBeVScrolled(node) : elementCouldBeHScrolled(node);
+};
+var getScrollVariables = function(axis, node) {
+  return axis === "v" ? getVScrollVariables(node) : getHScrollVariables(node);
+};
+var getDirectionFactor = function(axis, direction) {
+  return axis === "h" && direction === "rtl" ? -1 : 1;
+};
+var handleScroll = function(axis, endTarget, event, sourceDelta, noOverscroll) {
+  var directionFactor = getDirectionFactor(axis, window.getComputedStyle(endTarget).direction);
+  var delta = directionFactor * sourceDelta;
+  var target = event.target;
+  var targetInLock = endTarget.contains(target);
+  var shouldCancelScroll = false;
+  var isDeltaPositive = delta > 0;
+  var availableScroll = 0;
+  var availableScrollTop = 0;
+  do {
+    if (!target) {
+      break;
+    }
+    var _a3 = getScrollVariables(axis, target), position = _a3[0], scroll_1 = _a3[1], capacity = _a3[2];
+    var elementScroll = scroll_1 - capacity - directionFactor * position;
+    if (position || elementScroll) {
+      if (elementCouldBeScrolled(axis, target)) {
+        availableScroll += elementScroll;
+        availableScrollTop += position;
+      }
+    }
+    var parent_1 = target.parentNode;
+    target = parent_1 && parent_1.nodeType === Node.DOCUMENT_FRAGMENT_NODE ? parent_1.host : parent_1;
+  } while (
+    // portaled content
+    !targetInLock && target !== document.body || // self content
+    targetInLock && (endTarget.contains(target) || endTarget === target)
+  );
+  if (isDeltaPositive && (Math.abs(availableScroll) < 1 || false)) {
+    shouldCancelScroll = true;
+  } else if (!isDeltaPositive && (Math.abs(availableScrollTop) < 1 || false)) {
+    shouldCancelScroll = true;
+  }
+  return shouldCancelScroll;
+};
+var getTouchXY = function(event) {
+  return "changedTouches" in event ? [event.changedTouches[0].clientX, event.changedTouches[0].clientY] : [0, 0];
+};
+var getDeltaXY = function(event) {
+  return [event.deltaX, event.deltaY];
+};
+var extractRef = function(ref) {
+  return ref && "current" in ref ? ref.current : ref;
+};
+var deltaCompare = function(x3, y2) {
+  return x3[0] === y2[0] && x3[1] === y2[1];
+};
+var generateStyle = function(id) {
+  return "\n  .block-interactivity-".concat(id, " {pointer-events: none;}\n  .allow-interactivity-").concat(id, " {pointer-events: all;}\n");
+};
+var idCounter = 0;
+var lockStack = [];
+function RemoveScrollSideCar(props) {
+  var shouldPreventQueue = reactExports.useRef([]);
+  var touchStartRef = reactExports.useRef([0, 0]);
+  var activeAxis = reactExports.useRef();
+  var id = reactExports.useState(idCounter++)[0];
+  var Style2 = reactExports.useState(styleSingleton)[0];
+  var lastProps = reactExports.useRef(props);
+  reactExports.useEffect(function() {
+    lastProps.current = props;
+  }, [props]);
+  reactExports.useEffect(function() {
+    if (props.inert) {
+      document.body.classList.add("block-interactivity-".concat(id));
+      var allow_1 = __spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), true).filter(Boolean);
+      allow_1.forEach(function(el) {
+        return el.classList.add("allow-interactivity-".concat(id));
+      });
+      return function() {
+        document.body.classList.remove("block-interactivity-".concat(id));
+        allow_1.forEach(function(el) {
+          return el.classList.remove("allow-interactivity-".concat(id));
+        });
+      };
+    }
+    return;
+  }, [props.inert, props.lockRef.current, props.shards]);
+  var shouldCancelEvent = reactExports.useCallback(function(event, parent) {
+    if ("touches" in event && event.touches.length === 2 || event.type === "wheel" && event.ctrlKey) {
+      return !lastProps.current.allowPinchZoom;
+    }
+    var touch = getTouchXY(event);
+    var touchStart = touchStartRef.current;
+    var deltaX = "deltaX" in event ? event.deltaX : touchStart[0] - touch[0];
+    var deltaY = "deltaY" in event ? event.deltaY : touchStart[1] - touch[1];
+    var currentAxis;
+    var target = event.target;
+    var moveDirection = Math.abs(deltaX) > Math.abs(deltaY) ? "h" : "v";
+    if ("touches" in event && moveDirection === "h" && target.type === "range") {
+      return false;
+    }
+    var selection = window.getSelection();
+    var anchorNode = selection && selection.anchorNode;
+    var isTouchingSelection = anchorNode ? anchorNode === target || anchorNode.contains(target) : false;
+    if (isTouchingSelection) {
+      return false;
+    }
+    var canBeScrolledInMainDirection = locationCouldBeScrolled(moveDirection, target);
+    if (!canBeScrolledInMainDirection) {
+      return true;
+    }
+    if (canBeScrolledInMainDirection) {
+      currentAxis = moveDirection;
+    } else {
+      currentAxis = moveDirection === "v" ? "h" : "v";
+      canBeScrolledInMainDirection = locationCouldBeScrolled(moveDirection, target);
+    }
+    if (!canBeScrolledInMainDirection) {
+      return false;
+    }
+    if (!activeAxis.current && "changedTouches" in event && (deltaX || deltaY)) {
+      activeAxis.current = currentAxis;
+    }
+    if (!currentAxis) {
+      return true;
+    }
+    var cancelingAxis = activeAxis.current || currentAxis;
+    return handleScroll(cancelingAxis, parent, event, cancelingAxis === "h" ? deltaX : deltaY);
+  }, []);
+  var shouldPrevent = reactExports.useCallback(function(_event) {
+    var event = _event;
+    if (!lockStack.length || lockStack[lockStack.length - 1] !== Style2) {
+      return;
+    }
+    var delta = "deltaY" in event ? getDeltaXY(event) : getTouchXY(event);
+    var sourceEvent = shouldPreventQueue.current.filter(function(e) {
+      return e.name === event.type && (e.target === event.target || event.target === e.shadowParent) && deltaCompare(e.delta, delta);
+    })[0];
+    if (sourceEvent && sourceEvent.should) {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      return;
+    }
+    if (!sourceEvent) {
+      var shardNodes = (lastProps.current.shards || []).map(extractRef).filter(Boolean).filter(function(node) {
+        return node.contains(event.target);
+      });
+      var shouldStop = shardNodes.length > 0 ? shouldCancelEvent(event, shardNodes[0]) : !lastProps.current.noIsolation;
+      if (shouldStop) {
+        if (event.cancelable) {
+          event.preventDefault();
+        }
+      }
+    }
+  }, []);
+  var shouldCancel = reactExports.useCallback(function(name, delta, target, should) {
+    var event = { name, delta, target, should, shadowParent: getOutermostShadowParent(target) };
+    shouldPreventQueue.current.push(event);
+    setTimeout(function() {
+      shouldPreventQueue.current = shouldPreventQueue.current.filter(function(e) {
+        return e !== event;
+      });
+    }, 1);
+  }, []);
+  var scrollTouchStart = reactExports.useCallback(function(event) {
+    touchStartRef.current = getTouchXY(event);
+    activeAxis.current = void 0;
+  }, []);
+  var scrollWheel = reactExports.useCallback(function(event) {
+    shouldCancel(event.type, getDeltaXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
+  }, []);
+  var scrollTouchMove = reactExports.useCallback(function(event) {
+    shouldCancel(event.type, getTouchXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
+  }, []);
+  reactExports.useEffect(function() {
+    lockStack.push(Style2);
+    props.setCallbacks({
+      onScrollCapture: scrollWheel,
+      onWheelCapture: scrollWheel,
+      onTouchMoveCapture: scrollTouchMove
+    });
+    document.addEventListener("wheel", shouldPrevent, nonPassive);
+    document.addEventListener("touchmove", shouldPrevent, nonPassive);
+    document.addEventListener("touchstart", scrollTouchStart, nonPassive);
+    return function() {
+      lockStack = lockStack.filter(function(inst) {
+        return inst !== Style2;
+      });
+      document.removeEventListener("wheel", shouldPrevent, nonPassive);
+      document.removeEventListener("touchmove", shouldPrevent, nonPassive);
+      document.removeEventListener("touchstart", scrollTouchStart, nonPassive);
+    };
+  }, []);
+  var removeScrollBar = props.removeScrollBar, inert = props.inert;
+  return reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    inert ? reactExports.createElement(Style2, { styles: generateStyle(id) }) : null,
+    removeScrollBar ? reactExports.createElement(RemoveScrollBar, { noRelative: props.noRelative, gapMode: props.gapMode }) : null
+  );
+}
+function getOutermostShadowParent(node) {
+  var shadowParent = null;
+  while (node !== null) {
+    if (node instanceof ShadowRoot) {
+      shadowParent = node.host;
+      node = node.host;
+    }
+    node = node.parentNode;
+  }
+  return shadowParent;
+}
+const SideCar = exportSidecar(effectCar, RemoveScrollSideCar);
+var ReactRemoveScroll = reactExports.forwardRef(function(props, ref) {
+  return reactExports.createElement(RemoveScroll, __assign({}, props, { ref, sideCar: SideCar }));
+});
+ReactRemoveScroll.classNames = RemoveScroll.classNames;
+var getDefaultParent = function(originalTarget) {
+  if (typeof document === "undefined") {
+    return null;
+  }
+  var sampleTarget = Array.isArray(originalTarget) ? originalTarget[0] : originalTarget;
+  return sampleTarget.ownerDocument.body;
+};
+var counterMap = /* @__PURE__ */ new WeakMap();
+var uncontrolledNodes = /* @__PURE__ */ new WeakMap();
+var markerMap = {};
+var lockCount = 0;
+var unwrapHost = function(node) {
+  return node && (node.host || unwrapHost(node.parentNode));
+};
+var correctTargets = function(parent, targets) {
+  return targets.map(function(target) {
+    if (parent.contains(target)) {
+      return target;
+    }
+    var correctedTarget = unwrapHost(target);
+    if (correctedTarget && parent.contains(correctedTarget)) {
+      return correctedTarget;
+    }
+    console.error("aria-hidden", target, "in not contained inside", parent, ". Doing nothing");
+    return null;
+  }).filter(function(x3) {
+    return Boolean(x3);
+  });
+};
+var applyAttributeToOthers = function(originalTarget, parentNode, markerName, controlAttribute) {
+  var targets = correctTargets(parentNode, Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
+  if (!markerMap[markerName]) {
+    markerMap[markerName] = /* @__PURE__ */ new WeakMap();
+  }
+  var markerCounter = markerMap[markerName];
+  var hiddenNodes = [];
+  var elementsToKeep = /* @__PURE__ */ new Set();
+  var elementsToStop = new Set(targets);
+  var keep = function(el) {
+    if (!el || elementsToKeep.has(el)) {
+      return;
+    }
+    elementsToKeep.add(el);
+    keep(el.parentNode);
+  };
+  targets.forEach(keep);
+  var deep = function(parent) {
+    if (!parent || elementsToStop.has(parent)) {
+      return;
+    }
+    Array.prototype.forEach.call(parent.children, function(node) {
+      if (elementsToKeep.has(node)) {
+        deep(node);
+      } else {
+        try {
+          var attr = node.getAttribute(controlAttribute);
+          var alreadyHidden = attr !== null && attr !== "false";
+          var counterValue = (counterMap.get(node) || 0) + 1;
+          var markerValue = (markerCounter.get(node) || 0) + 1;
+          counterMap.set(node, counterValue);
+          markerCounter.set(node, markerValue);
+          hiddenNodes.push(node);
+          if (counterValue === 1 && alreadyHidden) {
+            uncontrolledNodes.set(node, true);
+          }
+          if (markerValue === 1) {
+            node.setAttribute(markerName, "true");
+          }
+          if (!alreadyHidden) {
+            node.setAttribute(controlAttribute, "true");
+          }
+        } catch (e) {
+          console.error("aria-hidden: cannot operate on ", node, e);
+        }
+      }
+    });
+  };
+  deep(parentNode);
+  elementsToKeep.clear();
+  lockCount++;
+  return function() {
+    hiddenNodes.forEach(function(node) {
+      var counterValue = counterMap.get(node) - 1;
+      var markerValue = markerCounter.get(node) - 1;
+      counterMap.set(node, counterValue);
+      markerCounter.set(node, markerValue);
+      if (!counterValue) {
+        if (!uncontrolledNodes.has(node)) {
+          node.removeAttribute(controlAttribute);
+        }
+        uncontrolledNodes.delete(node);
+      }
+      if (!markerValue) {
+        node.removeAttribute(markerName);
+      }
+    });
+    lockCount--;
+    if (!lockCount) {
+      counterMap = /* @__PURE__ */ new WeakMap();
+      counterMap = /* @__PURE__ */ new WeakMap();
+      uncontrolledNodes = /* @__PURE__ */ new WeakMap();
+      markerMap = {};
+    }
+  };
+};
+var hideOthers = function(originalTarget, parentNode, markerName) {
+  if (markerName === void 0) {
+    markerName = "data-aria-hidden";
+  }
+  var targets = Array.from(Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
+  var activeParentNode = getDefaultParent(originalTarget);
+  if (!activeParentNode) {
+    return function() {
+      return null;
+    };
+  }
+  targets.push.apply(targets, Array.from(activeParentNode.querySelectorAll("[aria-live], script")));
+  return applyAttributeToOthers(targets, activeParentNode, markerName, "aria-hidden");
+};
+var DIALOG_NAME = "Dialog";
+var [createDialogContext, createDialogScope] = createContextScope(DIALOG_NAME);
+var [DialogProvider, useDialogContext] = createDialogContext(DIALOG_NAME);
+var Dialog$1 = (props) => {
+  const {
+    __scopeDialog,
+    children,
+    open: openProp,
+    defaultOpen,
+    onOpenChange,
+    modal = true
+  } = props;
+  const triggerRef = reactExports.useRef(null);
+  const contentRef = reactExports.useRef(null);
+  const [open, setOpen] = useControllableState({
+    prop: openProp,
+    defaultProp: defaultOpen ?? false,
+    onChange: onOpenChange,
+    caller: DIALOG_NAME
+  });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    DialogProvider,
+    {
+      scope: __scopeDialog,
+      triggerRef,
+      contentRef,
+      contentId: useId(),
+      titleId: useId(),
+      descriptionId: useId(),
+      open,
+      onOpenChange: setOpen,
+      onOpenToggle: reactExports.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
+      modal,
+      children
+    }
+  );
+};
+Dialog$1.displayName = DIALOG_NAME;
+var TRIGGER_NAME$4 = "DialogTrigger";
+var DialogTrigger = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeDialog, ...triggerProps } = props;
+    const context = useDialogContext(TRIGGER_NAME$4, __scopeDialog);
+    const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive$1.button,
+      {
+        type: "button",
+        "aria-haspopup": "dialog",
+        "aria-expanded": context.open,
+        "aria-controls": context.contentId,
+        "data-state": getState$1(context.open),
+        ...triggerProps,
+        ref: composedTriggerRef,
+        onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
+      }
+    );
+  }
+);
+DialogTrigger.displayName = TRIGGER_NAME$4;
+var PORTAL_NAME$2 = "DialogPortal";
+var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME$2, {
+  forceMount: void 0
+});
+var DialogPortal$1 = (props) => {
+  const { __scopeDialog, forceMount, children, container } = props;
+  const context = useDialogContext(PORTAL_NAME$2, __scopeDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, { scope: __scopeDialog, forceMount, children: reactExports.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$3, { asChild: true, container, children: child }) })) });
+};
+DialogPortal$1.displayName = PORTAL_NAME$2;
+var OVERLAY_NAME$1 = "DialogOverlay";
+var DialogOverlay$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const portalContext = usePortalContext(OVERLAY_NAME$1, props.__scopeDialog);
+    const { forceMount = portalContext.forceMount, ...overlayProps } = props;
+    const context = useDialogContext(OVERLAY_NAME$1, props.__scopeDialog);
+    return context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlayImpl, { ...overlayProps, ref: forwardedRef }) }) : null;
+  }
+);
+DialogOverlay$1.displayName = OVERLAY_NAME$1;
+var Slot$1 = /* @__PURE__ */ createSlot$1("DialogOverlay.RemoveScroll");
+var DialogOverlayImpl = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeDialog, ...overlayProps } = props;
+    const context = useDialogContext(OVERLAY_NAME$1, __scopeDialog);
+    return (
+      // Make sure `Content` is scrollable even when it doesn't live inside `RemoveScroll`
+      // ie. when `Overlay` and `Content` are siblings
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot$1, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive$1.div,
+        {
+          "data-state": getState$1(context.open),
+          ...overlayProps,
+          ref: forwardedRef,
+          style: { pointerEvents: "auto", ...overlayProps.style }
+        }
+      ) })
+    );
+  }
+);
+var CONTENT_NAME$3 = "DialogContent";
+var DialogContent$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const portalContext = usePortalContext(CONTENT_NAME$3, props.__scopeDialog);
+    const { forceMount = portalContext.forceMount, ...contentProps } = props;
+    const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentNonModal, { ...contentProps, ref: forwardedRef }) });
+  }
+);
+DialogContent$1.displayName = CONTENT_NAME$3;
+var DialogContentModal = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
+    const contentRef = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
+    reactExports.useEffect(() => {
+      const content = contentRef.current;
+      if (content) return hideOthers(content);
+    }, []);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      DialogContentImpl,
+      {
+        ...props,
+        ref: composedRefs,
+        trapFocus: context.open,
+        disableOutsidePointerEvents: true,
+        onCloseAutoFocus: composeEventHandlers(props.onCloseAutoFocus, (event) => {
+          var _a3;
+          event.preventDefault();
+          (_a3 = context.triggerRef.current) == null ? void 0 : _a3.focus();
+        }),
+        onPointerDownOutside: composeEventHandlers(props.onPointerDownOutside, (event) => {
+          const originalEvent = event.detail.originalEvent;
+          const ctrlLeftClick = originalEvent.button === 0 && originalEvent.ctrlKey === true;
+          const isRightClick = originalEvent.button === 2 || ctrlLeftClick;
+          if (isRightClick) event.preventDefault();
+        }),
+        onFocusOutside: composeEventHandlers(
+          props.onFocusOutside,
+          (event) => event.preventDefault()
+        )
+      }
+    );
+  }
+);
+var DialogContentNonModal = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
+    const hasInteractedOutsideRef = reactExports.useRef(false);
+    const hasPointerDownOutsideRef = reactExports.useRef(false);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      DialogContentImpl,
+      {
+        ...props,
+        ref: forwardedRef,
+        trapFocus: false,
+        disableOutsidePointerEvents: false,
+        onCloseAutoFocus: (event) => {
+          var _a3, _b3;
+          (_a3 = props.onCloseAutoFocus) == null ? void 0 : _a3.call(props, event);
+          if (!event.defaultPrevented) {
+            if (!hasInteractedOutsideRef.current) (_b3 = context.triggerRef.current) == null ? void 0 : _b3.focus();
+            event.preventDefault();
+          }
+          hasInteractedOutsideRef.current = false;
+          hasPointerDownOutsideRef.current = false;
+        },
+        onInteractOutside: (event) => {
+          var _a3, _b3;
+          (_a3 = props.onInteractOutside) == null ? void 0 : _a3.call(props, event);
+          if (!event.defaultPrevented) {
+            hasInteractedOutsideRef.current = true;
+            if (event.detail.originalEvent.type === "pointerdown") {
+              hasPointerDownOutsideRef.current = true;
+            }
+          }
+          const target = event.target;
+          const targetIsTrigger = (_b3 = context.triggerRef.current) == null ? void 0 : _b3.contains(target);
+          if (targetIsTrigger) event.preventDefault();
+          if (event.detail.originalEvent.type === "focusin" && hasPointerDownOutsideRef.current) {
+            event.preventDefault();
+          }
+        }
+      }
+    );
+  }
+);
+var DialogContentImpl = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
+    const context = useDialogContext(CONTENT_NAME$3, __scopeDialog);
+    const contentRef = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, contentRef);
+    useFocusGuards();
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        FocusScope,
+        {
+          asChild: true,
+          loop: true,
+          trapped: trapFocus,
+          onMountAutoFocus: onOpenAutoFocus,
+          onUnmountAutoFocus: onCloseAutoFocus,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            DismissableLayer,
+            {
+              role: "dialog",
+              id: context.contentId,
+              "aria-describedby": context.descriptionId,
+              "aria-labelledby": context.titleId,
+              "data-state": getState$1(context.open),
+              ...contentProps,
+              ref: composedRefs,
+              onDismiss: () => context.onOpenChange(false)
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TitleWarning, { titleId: context.titleId }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(DescriptionWarning$1, { contentRef, descriptionId: context.descriptionId })
+      ] })
+    ] });
+  }
+);
+var TITLE_NAME$1 = "DialogTitle";
+var DialogTitle$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeDialog, ...titleProps } = props;
+    const context = useDialogContext(TITLE_NAME$1, __scopeDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive$1.h2, { id: context.titleId, ...titleProps, ref: forwardedRef });
+  }
+);
+DialogTitle$1.displayName = TITLE_NAME$1;
+var DESCRIPTION_NAME$1 = "DialogDescription";
+var DialogDescription$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeDialog, ...descriptionProps } = props;
+    const context = useDialogContext(DESCRIPTION_NAME$1, __scopeDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive$1.p, { id: context.descriptionId, ...descriptionProps, ref: forwardedRef });
+  }
+);
+DialogDescription$1.displayName = DESCRIPTION_NAME$1;
+var CLOSE_NAME = "DialogClose";
+var DialogClose = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeDialog, ...closeProps } = props;
+    const context = useDialogContext(CLOSE_NAME, __scopeDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive$1.button,
+      {
+        type: "button",
+        ...closeProps,
+        ref: forwardedRef,
+        onClick: composeEventHandlers(props.onClick, () => context.onOpenChange(false))
+      }
+    );
+  }
+);
+DialogClose.displayName = CLOSE_NAME;
+function getState$1(open) {
+  return open ? "open" : "closed";
+}
+var TITLE_WARNING_NAME = "DialogTitleWarning";
+var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
+  contentName: CONTENT_NAME$3,
+  titleName: TITLE_NAME$1,
+  docsSlug: "dialog"
+});
+var TitleWarning = ({ titleId }) => {
+  const titleWarningContext = useWarningContext(TITLE_WARNING_NAME);
+  const MESSAGE = `\`${titleWarningContext.contentName}\` requires a \`${titleWarningContext.titleName}\` for the component to be accessible for screen reader users.
+
+If you want to hide the \`${titleWarningContext.titleName}\`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/${titleWarningContext.docsSlug}`;
+  reactExports.useEffect(() => {
+    if (titleId) {
+      const hasTitle = document.getElementById(titleId);
+      if (!hasTitle) console.error(MESSAGE);
+    }
+  }, [MESSAGE, titleId]);
+  return null;
+};
+var DESCRIPTION_WARNING_NAME = "DialogDescriptionWarning";
+var DescriptionWarning$1 = ({ contentRef, descriptionId }) => {
+  const descriptionWarningContext = useWarningContext(DESCRIPTION_WARNING_NAME);
+  const MESSAGE = `Warning: Missing \`Description\` or \`aria-describedby={undefined}\` for {${descriptionWarningContext.contentName}}.`;
+  reactExports.useEffect(() => {
+    var _a3;
+    const describedById = (_a3 = contentRef.current) == null ? void 0 : _a3.getAttribute("aria-describedby");
+    if (descriptionId && describedById) {
+      const hasDescription = document.getElementById(descriptionId);
+      if (!hasDescription) console.warn(MESSAGE);
+    }
+  }, [MESSAGE, contentRef, descriptionId]);
+  return null;
+};
+var Root$3 = Dialog$1;
+var Trigger$2 = DialogTrigger;
+var Portal$1 = DialogPortal$1;
+var Overlay = DialogOverlay$1;
+var Content$1 = DialogContent$1;
+var Title = DialogTitle$1;
+var Description = DialogDescription$1;
+var Close = DialogClose;
+var ROOT_NAME = "AlertDialog";
+var [createAlertDialogContext] = createContextScope(ROOT_NAME, [
+  createDialogScope
+]);
+var useDialogScope = createDialogScope();
+var AlertDialog$1 = (props) => {
+  const { __scopeAlertDialog, ...alertDialogProps } = props;
+  const dialogScope = useDialogScope(__scopeAlertDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { ...dialogScope, ...alertDialogProps, modal: true });
+};
+AlertDialog$1.displayName = ROOT_NAME;
+var TRIGGER_NAME$3 = "AlertDialogTrigger";
+var AlertDialogTrigger$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeAlertDialog, ...triggerProps } = props;
+    const dialogScope = useDialogScope(__scopeAlertDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$2, { ...dialogScope, ...triggerProps, ref: forwardedRef });
+  }
+);
+AlertDialogTrigger$1.displayName = TRIGGER_NAME$3;
+var PORTAL_NAME$1 = "AlertDialogPortal";
+var AlertDialogPortal$1 = (props) => {
+  const { __scopeAlertDialog, ...portalProps } = props;
+  const dialogScope = useDialogScope(__scopeAlertDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { ...dialogScope, ...portalProps });
+};
+AlertDialogPortal$1.displayName = PORTAL_NAME$1;
+var OVERLAY_NAME = "AlertDialogOverlay";
+var AlertDialogOverlay$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeAlertDialog, ...overlayProps } = props;
+    const dialogScope = useDialogScope(__scopeAlertDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Overlay, { ...dialogScope, ...overlayProps, ref: forwardedRef });
+  }
+);
+AlertDialogOverlay$1.displayName = OVERLAY_NAME;
+var CONTENT_NAME$2 = "AlertDialogContent";
+var [AlertDialogContentProvider, useAlertDialogContentContext] = createAlertDialogContext(CONTENT_NAME$2);
+var Slottable = /* @__PURE__ */ createSlottable("AlertDialogContent");
+var AlertDialogContent$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeAlertDialog, children, ...contentProps } = props;
+    const dialogScope = useDialogScope(__scopeAlertDialog);
+    const contentRef = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, contentRef);
+    const cancelRef = reactExports.useRef(null);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      WarningProvider,
+      {
+        contentName: CONTENT_NAME$2,
+        titleName: TITLE_NAME,
+        docsSlug: "alert-dialog",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogContentProvider, { scope: __scopeAlertDialog, cancelRef, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Content$1,
+          {
+            role: "alertdialog",
+            ...dialogScope,
+            ...contentProps,
+            ref: composedRefs,
+            onOpenAutoFocus: composeEventHandlers(contentProps.onOpenAutoFocus, (event) => {
+              var _a3;
+              event.preventDefault();
+              (_a3 = cancelRef.current) == null ? void 0 : _a3.focus({ preventScroll: true });
+            }),
+            onPointerDownOutside: (event) => event.preventDefault(),
+            onInteractOutside: (event) => event.preventDefault(),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Slottable, { children }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(DescriptionWarning, { contentRef })
+            ]
+          }
+        ) })
+      }
+    );
+  }
+);
+AlertDialogContent$1.displayName = CONTENT_NAME$2;
+var TITLE_NAME = "AlertDialogTitle";
+var AlertDialogTitle$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeAlertDialog, ...titleProps } = props;
+    const dialogScope = useDialogScope(__scopeAlertDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Title, { ...dialogScope, ...titleProps, ref: forwardedRef });
+  }
+);
+AlertDialogTitle$1.displayName = TITLE_NAME;
+var DESCRIPTION_NAME = "AlertDialogDescription";
+var AlertDialogDescription$1 = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeAlertDialog, ...descriptionProps } = props;
+  const dialogScope = useDialogScope(__scopeAlertDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Description, { ...dialogScope, ...descriptionProps, ref: forwardedRef });
+});
+AlertDialogDescription$1.displayName = DESCRIPTION_NAME;
+var ACTION_NAME = "AlertDialogAction";
+var AlertDialogAction$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeAlertDialog, ...actionProps } = props;
+    const dialogScope = useDialogScope(__scopeAlertDialog);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { ...dialogScope, ...actionProps, ref: forwardedRef });
+  }
+);
+AlertDialogAction$1.displayName = ACTION_NAME;
+var CANCEL_NAME = "AlertDialogCancel";
+var AlertDialogCancel$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeAlertDialog, ...cancelProps } = props;
+    const { cancelRef } = useAlertDialogContentContext(CANCEL_NAME, __scopeAlertDialog);
+    const dialogScope = useDialogScope(__scopeAlertDialog);
+    const ref = useComposedRefs(forwardedRef, cancelRef);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { ...dialogScope, ...cancelProps, ref });
+  }
+);
+AlertDialogCancel$1.displayName = CANCEL_NAME;
+var DescriptionWarning = ({ contentRef }) => {
+  const MESSAGE = `\`${CONTENT_NAME$2}\` requires a description for the component to be accessible for screen reader users.
+
+You can add a description to the \`${CONTENT_NAME$2}\` by passing a \`${DESCRIPTION_NAME}\` component as a child, which also benefits sighted users by adding visible context to the dialog.
+
+Alternatively, you can use your own component as a description by assigning it an \`id\` and passing the same value to the \`aria-describedby\` prop in \`${CONTENT_NAME$2}\`. If the description is confusing or duplicative for sighted users, you can use the \`@radix-ui/react-visually-hidden\` primitive as a wrapper around your description component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/alert-dialog`;
+  reactExports.useEffect(() => {
+    var _a3;
+    const hasDescription = document.getElementById(
+      (_a3 = contentRef.current) == null ? void 0 : _a3.getAttribute("aria-describedby")
+    );
+    if (!hasDescription) console.warn(MESSAGE);
+  }, [MESSAGE, contentRef]);
+  return null;
+};
+var Root2$2 = AlertDialog$1;
+var Trigger2 = AlertDialogTrigger$1;
+var Portal2 = AlertDialogPortal$1;
+var Overlay2 = AlertDialogOverlay$1;
+var Content2$1 = AlertDialogContent$1;
+var Action = AlertDialogAction$1;
+var Cancel = AlertDialogCancel$1;
+var Title2 = AlertDialogTitle$1;
+var Description2 = AlertDialogDescription$1;
+function AlertDialog({
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$2, { "data-slot": "alert-dialog", ...props });
+}
+function AlertDialogTrigger({
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger2, { "data-slot": "alert-dialog-trigger", ...props });
+}
+function AlertDialogPortal({
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal2, { "data-slot": "alert-dialog-portal", ...props });
+}
+function AlertDialogOverlay({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Overlay2,
+    {
+      "data-slot": "alert-dialog-overlay",
+      className: cn(
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function AlertDialogContent({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogPortal, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDialogOverlay, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Content2$1,
+      {
+        "data-slot": "alert-dialog-content",
+        className: cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
+          className
+        ),
+        ...props
+      }
+    )
+  ] });
+}
+function AlertDialogHeader({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      "data-slot": "alert-dialog-header",
+      className: cn("flex flex-col gap-2 text-center sm:text-left", className),
+      ...props
+    }
+  );
+}
+function AlertDialogFooter({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      "data-slot": "alert-dialog-footer",
+      className: cn(
+        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function AlertDialogTitle({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Title2,
+    {
+      "data-slot": "alert-dialog-title",
+      className: cn("text-lg font-semibold", className),
+      ...props
+    }
+  );
+}
+function AlertDialogDescription({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Description2,
+    {
+      "data-slot": "alert-dialog-description",
+      className: cn("text-muted-foreground text-sm", className),
+      ...props
+    }
+  );
+}
+function AlertDialogAction({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Action,
+    {
+      className: cn(buttonVariants(), className),
+      ...props
+    }
+  );
+}
+function AlertDialogCancel({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Cancel,
+    {
+      className: cn(buttonVariants({ variant: "outline" }), className),
+      ...props
+    }
+  );
+}
+var DirectionContext = reactExports.createContext(void 0);
+function useDirection(localDir) {
+  const globalDir = reactExports.useContext(DirectionContext);
+  return localDir || globalDir || "ltr";
+}
+function clamp(value, [min2, max2]) {
+  return Math.min(max2, Math.max(min2, value));
+}
+function useStateMachine(initialState, machine) {
+  return reactExports.useReducer((state, event) => {
+    const nextState = machine[state][event];
+    return nextState ?? state;
+  }, initialState);
+}
+var SCROLL_AREA_NAME = "ScrollArea";
+var [createScrollAreaContext] = createContextScope(SCROLL_AREA_NAME);
+var [ScrollAreaProvider, useScrollAreaContext] = createScrollAreaContext(SCROLL_AREA_NAME);
+var ScrollArea$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeScrollArea,
+      type = "hover",
+      dir,
+      scrollHideDelay = 600,
+      ...scrollAreaProps
+    } = props;
+    const [scrollArea, setScrollArea] = reactExports.useState(null);
+    const [viewport, setViewport] = reactExports.useState(null);
+    const [content, setContent] = reactExports.useState(null);
+    const [scrollbarX, setScrollbarX] = reactExports.useState(null);
+    const [scrollbarY, setScrollbarY] = reactExports.useState(null);
+    const [cornerWidth, setCornerWidth] = reactExports.useState(0);
+    const [cornerHeight, setCornerHeight] = reactExports.useState(0);
+    const [scrollbarXEnabled, setScrollbarXEnabled] = reactExports.useState(false);
+    const [scrollbarYEnabled, setScrollbarYEnabled] = reactExports.useState(false);
+    const composedRefs = useComposedRefs(forwardedRef, (node) => setScrollArea(node));
+    const direction = useDirection(dir);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScrollAreaProvider,
+      {
+        scope: __scopeScrollArea,
+        type,
+        dir: direction,
+        scrollHideDelay,
+        scrollArea,
+        viewport,
+        onViewportChange: setViewport,
+        content,
+        onContentChange: setContent,
+        scrollbarX,
+        onScrollbarXChange: setScrollbarX,
+        scrollbarXEnabled,
+        onScrollbarXEnabledChange: setScrollbarXEnabled,
+        scrollbarY,
+        onScrollbarYChange: setScrollbarY,
+        scrollbarYEnabled,
+        onScrollbarYEnabledChange: setScrollbarYEnabled,
+        onCornerWidthChange: setCornerWidth,
+        onCornerHeightChange: setCornerHeight,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Primitive$1.div,
+          {
+            dir: direction,
+            ...scrollAreaProps,
+            ref: composedRefs,
+            style: {
+              position: "relative",
+              // Pass corner sizes as CSS vars to reduce re-renders of context consumers
+              ["--radix-scroll-area-corner-width"]: cornerWidth + "px",
+              ["--radix-scroll-area-corner-height"]: cornerHeight + "px",
+              ...props.style
+            }
+          }
+        )
+      }
+    );
+  }
+);
+ScrollArea$1.displayName = SCROLL_AREA_NAME;
+var VIEWPORT_NAME$1 = "ScrollAreaViewport";
+var ScrollAreaViewport = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeScrollArea, children, nonce, ...viewportProps } = props;
+    const context = useScrollAreaContext(VIEWPORT_NAME$1, __scopeScrollArea);
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, ref, context.onViewportChange);
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "style",
+        {
+          dangerouslySetInnerHTML: {
+            __html: `[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}`
+          },
+          nonce
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive$1.div,
+        {
+          "data-radix-scroll-area-viewport": "",
+          ...viewportProps,
+          ref: composedRefs,
+          style: {
+            /**
+             * We don't support `visible` because the intention is to have at least one scrollbar
+             * if this component is used and `visible` will behave like `auto` in that case
+             * https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#description
+             *
+             * We don't handle `auto` because the intention is for the native implementation
+             * to be hidden if using this component. We just want to ensure the node is scrollable
+             * so could have used either `scroll` or `auto` here. We picked `scroll` to prevent
+             * the browser from having to work out whether to render native scrollbars or not,
+             * we tell it to with the intention of hiding them in CSS.
+             */
+            overflowX: context.scrollbarXEnabled ? "scroll" : "hidden",
+            overflowY: context.scrollbarYEnabled ? "scroll" : "hidden",
+            ...props.style
+          },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: context.onContentChange, style: { minWidth: "100%", display: "table" }, children })
+        }
+      )
+    ] });
+  }
+);
+ScrollAreaViewport.displayName = VIEWPORT_NAME$1;
+var SCROLLBAR_NAME = "ScrollAreaScrollbar";
+var ScrollAreaScrollbar = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { forceMount, ...scrollbarProps } = props;
+    const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+    const { onScrollbarXEnabledChange, onScrollbarYEnabledChange } = context;
+    const isHorizontal = props.orientation === "horizontal";
+    reactExports.useEffect(() => {
+      isHorizontal ? onScrollbarXEnabledChange(true) : onScrollbarYEnabledChange(true);
+      return () => {
+        isHorizontal ? onScrollbarXEnabledChange(false) : onScrollbarYEnabledChange(false);
+      };
+    }, [isHorizontal, onScrollbarXEnabledChange, onScrollbarYEnabledChange]);
+    return context.type === "hover" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarHover, { ...scrollbarProps, ref: forwardedRef, forceMount }) : context.type === "scroll" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarScroll, { ...scrollbarProps, ref: forwardedRef, forceMount }) : context.type === "auto" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarAuto, { ...scrollbarProps, ref: forwardedRef, forceMount }) : context.type === "always" ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaScrollbarVisible, { ...scrollbarProps, ref: forwardedRef }) : null;
+  }
+);
+ScrollAreaScrollbar.displayName = SCROLLBAR_NAME;
+var ScrollAreaScrollbarHover = reactExports.forwardRef((props, forwardedRef) => {
+  const { forceMount, ...scrollbarProps } = props;
+  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+  const [visible, setVisible] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    const scrollArea = context.scrollArea;
+    let hideTimer = 0;
+    if (scrollArea) {
+      const handlePointerEnter = () => {
+        window.clearTimeout(hideTimer);
+        setVisible(true);
+      };
+      const handlePointerLeave = () => {
+        hideTimer = window.setTimeout(() => setVisible(false), context.scrollHideDelay);
+      };
+      scrollArea.addEventListener("pointerenter", handlePointerEnter);
+      scrollArea.addEventListener("pointerleave", handlePointerLeave);
+      return () => {
+        window.clearTimeout(hideTimer);
+        scrollArea.removeEventListener("pointerenter", handlePointerEnter);
+        scrollArea.removeEventListener("pointerleave", handlePointerLeave);
+      };
+    }
+  }, [context.scrollArea, context.scrollHideDelay]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || visible, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScrollAreaScrollbarAuto,
+    {
+      "data-state": visible ? "visible" : "hidden",
+      ...scrollbarProps,
+      ref: forwardedRef
+    }
+  ) });
+});
+var ScrollAreaScrollbarScroll = reactExports.forwardRef((props, forwardedRef) => {
+  const { forceMount, ...scrollbarProps } = props;
+  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+  const isHorizontal = props.orientation === "horizontal";
+  const debounceScrollEnd = useDebounceCallback(() => send("SCROLL_END"), 100);
+  const [state, send] = useStateMachine("hidden", {
+    hidden: {
+      SCROLL: "scrolling"
+    },
+    scrolling: {
+      SCROLL_END: "idle",
+      POINTER_ENTER: "interacting"
+    },
+    interacting: {
+      SCROLL: "interacting",
+      POINTER_LEAVE: "idle"
+    },
+    idle: {
+      HIDE: "hidden",
+      SCROLL: "scrolling",
+      POINTER_ENTER: "interacting"
+    }
+  });
+  reactExports.useEffect(() => {
+    if (state === "idle") {
+      const hideTimer = window.setTimeout(() => send("HIDE"), context.scrollHideDelay);
+      return () => window.clearTimeout(hideTimer);
+    }
+  }, [state, context.scrollHideDelay, send]);
+  reactExports.useEffect(() => {
+    const viewport = context.viewport;
+    const scrollDirection = isHorizontal ? "scrollLeft" : "scrollTop";
+    if (viewport) {
+      let prevScrollPos = viewport[scrollDirection];
+      const handleScroll2 = () => {
+        const scrollPos = viewport[scrollDirection];
+        const hasScrollInDirectionChanged = prevScrollPos !== scrollPos;
+        if (hasScrollInDirectionChanged) {
+          send("SCROLL");
+          debounceScrollEnd();
+        }
+        prevScrollPos = scrollPos;
+      };
+      viewport.addEventListener("scroll", handleScroll2);
+      return () => viewport.removeEventListener("scroll", handleScroll2);
+    }
+  }, [context.viewport, isHorizontal, send, debounceScrollEnd]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || state !== "hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScrollAreaScrollbarVisible,
+    {
+      "data-state": state === "hidden" ? "hidden" : "visible",
+      ...scrollbarProps,
+      ref: forwardedRef,
+      onPointerEnter: composeEventHandlers(props.onPointerEnter, () => send("POINTER_ENTER")),
+      onPointerLeave: composeEventHandlers(props.onPointerLeave, () => send("POINTER_LEAVE"))
+    }
+  ) });
+});
+var ScrollAreaScrollbarAuto = reactExports.forwardRef((props, forwardedRef) => {
+  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+  const { forceMount, ...scrollbarProps } = props;
+  const [visible, setVisible] = reactExports.useState(false);
+  const isHorizontal = props.orientation === "horizontal";
+  const handleResize = useDebounceCallback(() => {
+    if (context.viewport) {
+      const isOverflowX = context.viewport.offsetWidth < context.viewport.scrollWidth;
+      const isOverflowY = context.viewport.offsetHeight < context.viewport.scrollHeight;
+      setVisible(isHorizontal ? isOverflowX : isOverflowY);
+    }
+  }, 10);
+  useResizeObserver(context.viewport, handleResize);
+  useResizeObserver(context.content, handleResize);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || visible, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScrollAreaScrollbarVisible,
+    {
+      "data-state": visible ? "visible" : "hidden",
+      ...scrollbarProps,
+      ref: forwardedRef
+    }
+  ) });
+});
+var ScrollAreaScrollbarVisible = reactExports.forwardRef((props, forwardedRef) => {
+  const { orientation = "vertical", ...scrollbarProps } = props;
+  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+  const thumbRef = reactExports.useRef(null);
+  const pointerOffsetRef = reactExports.useRef(0);
+  const [sizes, setSizes] = reactExports.useState({
+    content: 0,
+    viewport: 0,
+    scrollbar: { size: 0, paddingStart: 0, paddingEnd: 0 }
+  });
+  const thumbRatio = getThumbRatio(sizes.viewport, sizes.content);
+  const commonProps = {
+    ...scrollbarProps,
+    sizes,
+    onSizesChange: setSizes,
+    hasThumb: Boolean(thumbRatio > 0 && thumbRatio < 1),
+    onThumbChange: (thumb) => thumbRef.current = thumb,
+    onThumbPointerUp: () => pointerOffsetRef.current = 0,
+    onThumbPointerDown: (pointerPos) => pointerOffsetRef.current = pointerPos
+  };
+  function getScrollPosition(pointerPos, dir) {
+    return getScrollPositionFromPointer(pointerPos, pointerOffsetRef.current, sizes, dir);
+  }
+  if (orientation === "horizontal") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScrollAreaScrollbarX,
+      {
+        ...commonProps,
+        ref: forwardedRef,
+        onThumbPositionChange: () => {
+          if (context.viewport && thumbRef.current) {
+            const scrollPos = context.viewport.scrollLeft;
+            const offset2 = getThumbOffsetFromScroll(scrollPos, sizes, context.dir);
+            thumbRef.current.style.transform = `translate3d(${offset2}px, 0, 0)`;
+          }
+        },
+        onWheelScroll: (scrollPos) => {
+          if (context.viewport) context.viewport.scrollLeft = scrollPos;
+        },
+        onDragScroll: (pointerPos) => {
+          if (context.viewport) {
+            context.viewport.scrollLeft = getScrollPosition(pointerPos, context.dir);
+          }
+        }
+      }
+    );
+  }
+  if (orientation === "vertical") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScrollAreaScrollbarY,
+      {
+        ...commonProps,
+        ref: forwardedRef,
+        onThumbPositionChange: () => {
+          if (context.viewport && thumbRef.current) {
+            const scrollPos = context.viewport.scrollTop;
+            const offset2 = getThumbOffsetFromScroll(scrollPos, sizes);
+            thumbRef.current.style.transform = `translate3d(0, ${offset2}px, 0)`;
+          }
+        },
+        onWheelScroll: (scrollPos) => {
+          if (context.viewport) context.viewport.scrollTop = scrollPos;
+        },
+        onDragScroll: (pointerPos) => {
+          if (context.viewport) context.viewport.scrollTop = getScrollPosition(pointerPos);
+        }
+      }
+    );
+  }
+  return null;
+});
+var ScrollAreaScrollbarX = reactExports.forwardRef((props, forwardedRef) => {
+  const { sizes, onSizesChange, ...scrollbarProps } = props;
+  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+  const [computedStyle, setComputedStyle] = reactExports.useState();
+  const ref = reactExports.useRef(null);
+  const composeRefs2 = useComposedRefs(forwardedRef, ref, context.onScrollbarXChange);
+  reactExports.useEffect(() => {
+    if (ref.current) setComputedStyle(getComputedStyle(ref.current));
+  }, [ref]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScrollAreaScrollbarImpl,
+    {
+      "data-orientation": "horizontal",
+      ...scrollbarProps,
+      ref: composeRefs2,
+      sizes,
+      style: {
+        bottom: 0,
+        left: context.dir === "rtl" ? "var(--radix-scroll-area-corner-width)" : 0,
+        right: context.dir === "ltr" ? "var(--radix-scroll-area-corner-width)" : 0,
+        ["--radix-scroll-area-thumb-width"]: getThumbSize(sizes) + "px",
+        ...props.style
+      },
+      onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.x),
+      onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.x),
+      onWheelScroll: (event, maxScrollPos) => {
+        if (context.viewport) {
+          const scrollPos = context.viewport.scrollLeft + event.deltaX;
+          props.onWheelScroll(scrollPos);
+          if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) {
+            event.preventDefault();
+          }
+        }
+      },
+      onResize: () => {
+        if (ref.current && context.viewport && computedStyle) {
+          onSizesChange({
+            content: context.viewport.scrollWidth,
+            viewport: context.viewport.offsetWidth,
+            scrollbar: {
+              size: ref.current.clientWidth,
+              paddingStart: toInt(computedStyle.paddingLeft),
+              paddingEnd: toInt(computedStyle.paddingRight)
+            }
+          });
+        }
+      }
+    }
+  );
+});
+var ScrollAreaScrollbarY = reactExports.forwardRef((props, forwardedRef) => {
+  const { sizes, onSizesChange, ...scrollbarProps } = props;
+  const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+  const [computedStyle, setComputedStyle] = reactExports.useState();
+  const ref = reactExports.useRef(null);
+  const composeRefs2 = useComposedRefs(forwardedRef, ref, context.onScrollbarYChange);
+  reactExports.useEffect(() => {
+    if (ref.current) setComputedStyle(getComputedStyle(ref.current));
+  }, [ref]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScrollAreaScrollbarImpl,
+    {
+      "data-orientation": "vertical",
+      ...scrollbarProps,
+      ref: composeRefs2,
+      sizes,
+      style: {
+        top: 0,
+        right: context.dir === "ltr" ? 0 : void 0,
+        left: context.dir === "rtl" ? 0 : void 0,
+        bottom: "var(--radix-scroll-area-corner-height)",
+        ["--radix-scroll-area-thumb-height"]: getThumbSize(sizes) + "px",
+        ...props.style
+      },
+      onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.y),
+      onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.y),
+      onWheelScroll: (event, maxScrollPos) => {
+        if (context.viewport) {
+          const scrollPos = context.viewport.scrollTop + event.deltaY;
+          props.onWheelScroll(scrollPos);
+          if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) {
+            event.preventDefault();
+          }
+        }
+      },
+      onResize: () => {
+        if (ref.current && context.viewport && computedStyle) {
+          onSizesChange({
+            content: context.viewport.scrollHeight,
+            viewport: context.viewport.offsetHeight,
+            scrollbar: {
+              size: ref.current.clientHeight,
+              paddingStart: toInt(computedStyle.paddingTop),
+              paddingEnd: toInt(computedStyle.paddingBottom)
+            }
+          });
+        }
+      }
+    }
+  );
+});
+var [ScrollbarProvider, useScrollbarContext] = createScrollAreaContext(SCROLLBAR_NAME);
+var ScrollAreaScrollbarImpl = reactExports.forwardRef((props, forwardedRef) => {
+  const {
+    __scopeScrollArea,
+    sizes,
+    hasThumb,
+    onThumbChange,
+    onThumbPointerUp,
+    onThumbPointerDown,
+    onThumbPositionChange,
+    onDragScroll,
+    onWheelScroll,
+    onResize,
+    ...scrollbarProps
+  } = props;
+  const context = useScrollAreaContext(SCROLLBAR_NAME, __scopeScrollArea);
+  const [scrollbar, setScrollbar] = reactExports.useState(null);
+  const composeRefs2 = useComposedRefs(forwardedRef, (node) => setScrollbar(node));
+  const rectRef = reactExports.useRef(null);
+  const prevWebkitUserSelectRef = reactExports.useRef("");
+  const viewport = context.viewport;
+  const maxScrollPos = sizes.content - sizes.viewport;
+  const handleWheelScroll = useCallbackRef$1(onWheelScroll);
+  const handleThumbPositionChange = useCallbackRef$1(onThumbPositionChange);
+  const handleResize = useDebounceCallback(onResize, 10);
+  function handleDragScroll(event) {
+    if (rectRef.current) {
+      const x3 = event.clientX - rectRef.current.left;
+      const y2 = event.clientY - rectRef.current.top;
+      onDragScroll({ x: x3, y: y2 });
+    }
+  }
+  reactExports.useEffect(() => {
+    const handleWheel = (event) => {
+      const element = event.target;
+      const isScrollbarWheel = scrollbar == null ? void 0 : scrollbar.contains(element);
+      if (isScrollbarWheel) handleWheelScroll(event, maxScrollPos);
+    };
+    document.addEventListener("wheel", handleWheel, { passive: false });
+    return () => document.removeEventListener("wheel", handleWheel, { passive: false });
+  }, [viewport, scrollbar, maxScrollPos, handleWheelScroll]);
+  reactExports.useEffect(handleThumbPositionChange, [sizes, handleThumbPositionChange]);
+  useResizeObserver(scrollbar, handleResize);
+  useResizeObserver(context.content, handleResize);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScrollbarProvider,
+    {
+      scope: __scopeScrollArea,
+      scrollbar,
+      hasThumb,
+      onThumbChange: useCallbackRef$1(onThumbChange),
+      onThumbPointerUp: useCallbackRef$1(onThumbPointerUp),
+      onThumbPositionChange: handleThumbPositionChange,
+      onThumbPointerDown: useCallbackRef$1(onThumbPointerDown),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive$1.div,
+        {
+          ...scrollbarProps,
+          ref: composeRefs2,
+          style: { position: "absolute", ...scrollbarProps.style },
+          onPointerDown: composeEventHandlers(props.onPointerDown, (event) => {
+            const mainPointer = 0;
+            if (event.button === mainPointer) {
+              const element = event.target;
+              element.setPointerCapture(event.pointerId);
+              rectRef.current = scrollbar.getBoundingClientRect();
+              prevWebkitUserSelectRef.current = document.body.style.webkitUserSelect;
+              document.body.style.webkitUserSelect = "none";
+              if (context.viewport) context.viewport.style.scrollBehavior = "auto";
+              handleDragScroll(event);
+            }
+          }),
+          onPointerMove: composeEventHandlers(props.onPointerMove, handleDragScroll),
+          onPointerUp: composeEventHandlers(props.onPointerUp, (event) => {
+            const element = event.target;
+            if (element.hasPointerCapture(event.pointerId)) {
+              element.releasePointerCapture(event.pointerId);
+            }
+            document.body.style.webkitUserSelect = prevWebkitUserSelectRef.current;
+            if (context.viewport) context.viewport.style.scrollBehavior = "";
+            rectRef.current = null;
+          })
+        }
+      )
+    }
+  );
+});
+var THUMB_NAME = "ScrollAreaThumb";
+var ScrollAreaThumb = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { forceMount, ...thumbProps } = props;
+    const scrollbarContext = useScrollbarContext(THUMB_NAME, props.__scopeScrollArea);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || scrollbarContext.hasThumb, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaThumbImpl, { ref: forwardedRef, ...thumbProps }) });
+  }
+);
+var ScrollAreaThumbImpl = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeScrollArea, style: style2, ...thumbProps } = props;
+    const scrollAreaContext = useScrollAreaContext(THUMB_NAME, __scopeScrollArea);
+    const scrollbarContext = useScrollbarContext(THUMB_NAME, __scopeScrollArea);
+    const { onThumbPositionChange } = scrollbarContext;
+    const composedRef = useComposedRefs(
+      forwardedRef,
+      (node) => scrollbarContext.onThumbChange(node)
+    );
+    const removeUnlinkedScrollListenerRef = reactExports.useRef(void 0);
+    const debounceScrollEnd = useDebounceCallback(() => {
+      if (removeUnlinkedScrollListenerRef.current) {
+        removeUnlinkedScrollListenerRef.current();
+        removeUnlinkedScrollListenerRef.current = void 0;
+      }
+    }, 100);
+    reactExports.useEffect(() => {
+      const viewport = scrollAreaContext.viewport;
+      if (viewport) {
+        const handleScroll2 = () => {
+          debounceScrollEnd();
+          if (!removeUnlinkedScrollListenerRef.current) {
+            const listener = addUnlinkedScrollListener(viewport, onThumbPositionChange);
+            removeUnlinkedScrollListenerRef.current = listener;
+            onThumbPositionChange();
+          }
+        };
+        onThumbPositionChange();
+        viewport.addEventListener("scroll", handleScroll2);
+        return () => viewport.removeEventListener("scroll", handleScroll2);
+      }
+    }, [scrollAreaContext.viewport, debounceScrollEnd, onThumbPositionChange]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive$1.div,
+      {
+        "data-state": scrollbarContext.hasThumb ? "visible" : "hidden",
+        ...thumbProps,
+        ref: composedRef,
+        style: {
+          width: "var(--radix-scroll-area-thumb-width)",
+          height: "var(--radix-scroll-area-thumb-height)",
+          ...style2
+        },
+        onPointerDownCapture: composeEventHandlers(props.onPointerDownCapture, (event) => {
+          const thumb = event.target;
+          const thumbRect = thumb.getBoundingClientRect();
+          const x3 = event.clientX - thumbRect.left;
+          const y2 = event.clientY - thumbRect.top;
+          scrollbarContext.onThumbPointerDown({ x: x3, y: y2 });
+        }),
+        onPointerUp: composeEventHandlers(props.onPointerUp, scrollbarContext.onThumbPointerUp)
+      }
+    );
+  }
+);
+ScrollAreaThumb.displayName = THUMB_NAME;
+var CORNER_NAME = "ScrollAreaCorner";
+var ScrollAreaCorner = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const context = useScrollAreaContext(CORNER_NAME, props.__scopeScrollArea);
+    const hasBothScrollbarsVisible = Boolean(context.scrollbarX && context.scrollbarY);
+    const hasCorner = context.type !== "scroll" && hasBothScrollbarsVisible;
+    return hasCorner ? /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaCornerImpl, { ...props, ref: forwardedRef }) : null;
+  }
+);
+ScrollAreaCorner.displayName = CORNER_NAME;
+var ScrollAreaCornerImpl = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeScrollArea, ...cornerProps } = props;
+  const context = useScrollAreaContext(CORNER_NAME, __scopeScrollArea);
+  const [width, setWidth] = reactExports.useState(0);
+  const [height, setHeight] = reactExports.useState(0);
+  const hasSize = Boolean(width && height);
+  useResizeObserver(context.scrollbarX, () => {
+    var _a3;
+    const height2 = ((_a3 = context.scrollbarX) == null ? void 0 : _a3.offsetHeight) || 0;
+    context.onCornerHeightChange(height2);
+    setHeight(height2);
+  });
+  useResizeObserver(context.scrollbarY, () => {
+    var _a3;
+    const width2 = ((_a3 = context.scrollbarY) == null ? void 0 : _a3.offsetWidth) || 0;
+    context.onCornerWidthChange(width2);
+    setWidth(width2);
+  });
+  return hasSize ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Primitive$1.div,
+    {
+      ...cornerProps,
+      ref: forwardedRef,
+      style: {
+        width,
+        height,
+        position: "absolute",
+        right: context.dir === "ltr" ? 0 : void 0,
+        left: context.dir === "rtl" ? 0 : void 0,
+        bottom: 0,
+        ...props.style
+      }
+    }
+  ) : null;
+});
+function toInt(value) {
+  return value ? parseInt(value, 10) : 0;
+}
+function getThumbRatio(viewportSize, contentSize) {
+  const ratio = viewportSize / contentSize;
+  return isNaN(ratio) ? 0 : ratio;
+}
+function getThumbSize(sizes) {
+  const ratio = getThumbRatio(sizes.viewport, sizes.content);
+  const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
+  const thumbSize = (sizes.scrollbar.size - scrollbarPadding) * ratio;
+  return Math.max(thumbSize, 18);
+}
+function getScrollPositionFromPointer(pointerPos, pointerOffset, sizes, dir = "ltr") {
+  const thumbSizePx = getThumbSize(sizes);
+  const thumbCenter = thumbSizePx / 2;
+  const offset2 = pointerOffset || thumbCenter;
+  const thumbOffsetFromEnd = thumbSizePx - offset2;
+  const minPointerPos = sizes.scrollbar.paddingStart + offset2;
+  const maxPointerPos = sizes.scrollbar.size - sizes.scrollbar.paddingEnd - thumbOffsetFromEnd;
+  const maxScrollPos = sizes.content - sizes.viewport;
+  const scrollRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
+  const interpolate = linearScale([minPointerPos, maxPointerPos], scrollRange);
+  return interpolate(pointerPos);
+}
+function getThumbOffsetFromScroll(scrollPos, sizes, dir = "ltr") {
+  const thumbSizePx = getThumbSize(sizes);
+  const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
+  const scrollbar = sizes.scrollbar.size - scrollbarPadding;
+  const maxScrollPos = sizes.content - sizes.viewport;
+  const maxThumbPos = scrollbar - thumbSizePx;
+  const scrollClampRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
+  const scrollWithoutMomentum = clamp(scrollPos, scrollClampRange);
+  const interpolate = linearScale([0, maxScrollPos], [0, maxThumbPos]);
+  return interpolate(scrollWithoutMomentum);
+}
+function linearScale(input, output) {
+  return (value) => {
+    if (input[0] === input[1] || output[0] === output[1]) return output[0];
+    const ratio = (output[1] - output[0]) / (input[1] - input[0]);
+    return output[0] + ratio * (value - input[0]);
+  };
+}
+function isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos) {
+  return scrollPos > 0 && scrollPos < maxScrollPos;
+}
+var addUnlinkedScrollListener = (node, handler = () => {
+}) => {
+  let prevPosition = { left: node.scrollLeft, top: node.scrollTop };
+  let rAF = 0;
+  (function loop() {
+    const position = { left: node.scrollLeft, top: node.scrollTop };
+    const isHorizontalScroll = prevPosition.left !== position.left;
+    const isVerticalScroll = prevPosition.top !== position.top;
+    if (isHorizontalScroll || isVerticalScroll) handler();
+    prevPosition = position;
+    rAF = window.requestAnimationFrame(loop);
+  })();
+  return () => window.cancelAnimationFrame(rAF);
+};
+function useDebounceCallback(callback, delay) {
+  const handleCallback = useCallbackRef$1(callback);
+  const debounceTimerRef = reactExports.useRef(0);
+  reactExports.useEffect(() => () => window.clearTimeout(debounceTimerRef.current), []);
+  return reactExports.useCallback(() => {
+    window.clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = window.setTimeout(handleCallback, delay);
+  }, [handleCallback, delay]);
+}
+function useResizeObserver(element, onResize) {
+  const handleResize = useCallbackRef$1(onResize);
+  useLayoutEffect2(() => {
+    let rAF = 0;
+    if (element) {
+      const resizeObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(rAF);
+        rAF = window.requestAnimationFrame(handleResize);
+      });
+      resizeObserver.observe(element);
+      return () => {
+        window.cancelAnimationFrame(rAF);
+        resizeObserver.unobserve(element);
+      };
+    }
+  }, [element, handleResize]);
+}
+var Root$2 = ScrollArea$1;
+var Viewport$1 = ScrollAreaViewport;
+var Corner = ScrollAreaCorner;
+function ScrollArea({
+  className,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Root$2,
+    {
+      "data-slot": "scroll-area",
+      className: cn("relative", className),
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Viewport$1,
+          {
+            "data-slot": "scroll-area-viewport",
+            className: "focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1",
+            children
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollBar, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Corner, {})
+      ]
+    }
+  );
+}
+function ScrollBar({
+  className,
+  orientation = "vertical",
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScrollAreaScrollbar,
+    {
+      "data-slot": "scroll-area-scrollbar",
+      orientation,
+      className: cn(
+        "flex touch-none p-px transition-colors select-none",
+        orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent",
+        orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ScrollAreaThumb,
+        {
+          "data-slot": "scroll-area-thumb",
+          className: "bg-border relative flex-1 rounded-full"
+        }
+      )
+    }
+  );
+}
+var NAME = "Separator";
+var DEFAULT_ORIENTATION = "horizontal";
+var ORIENTATIONS = ["horizontal", "vertical"];
+var Separator$1 = reactExports.forwardRef((props, forwardedRef) => {
+  const { decorative, orientation: orientationProp = DEFAULT_ORIENTATION, ...domProps } = props;
+  const orientation = isValidOrientation(orientationProp) ? orientationProp : DEFAULT_ORIENTATION;
+  const ariaOrientation = orientation === "vertical" ? orientation : void 0;
+  const semanticProps = decorative ? { role: "none" } : { "aria-orientation": ariaOrientation, role: "separator" };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Primitive.div,
+    {
+      "data-orientation": orientation,
+      ...semanticProps,
+      ...domProps,
+      ref: forwardedRef
+    }
+  );
+});
+Separator$1.displayName = NAME;
+function isValidOrientation(orientation) {
+  return ORIENTATIONS.includes(orientation);
+}
+var Root$1 = Separator$1;
+function Separator({
+  className,
+  orientation = "horizontal",
+  decorative = true,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root$1,
+    {
+      "data-slot": "separator",
+      decorative,
+      orientation,
+      className: cn(
+        "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function Sheet({ ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { "data-slot": "sheet", ...props });
+}
+function SheetTrigger({
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$2, { "data-slot": "sheet-trigger", ...props });
+}
+function SheetPortal({
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { "data-slot": "sheet-portal", ...props });
+}
+function SheetOverlay({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Overlay,
+    {
+      "data-slot": "sheet-overlay",
+      className: cn(
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function SheetContent({
+  className,
+  children,
+  side = "right",
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(SheetPortal, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(SheetOverlay, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      Content$1,
+      {
+        "data-slot": "sheet-content",
+        className: cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+          side === "right" && "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
+          side === "left" && "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
+          side === "top" && "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
+          side === "bottom" && "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
+          className
+        ),
+        ...props,
+        children: [
+          children,
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(Close, { className: "ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "size-4" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "Close" })
+          ] })
+        ]
+      }
+    )
+  ] });
+}
+function SheetHeader({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      "data-slot": "sheet-header",
+      className: cn("flex flex-col gap-1.5 p-4", className),
+      ...props
+    }
+  );
+}
+function SheetTitle({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Title,
+    {
+      "data-slot": "sheet-title",
+      className: cn("text-foreground font-semibold", className),
+      ...props
+    }
+  );
+}
+function Skeleton({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      "data-slot": "skeleton",
+      className: cn("bg-accent animate-pulse rounded-md", className),
+      ...props
+    }
+  );
+}
+const HIDDEN_CONVS_KEY = "cs_hidden_convs";
+function getHiddenConvIds() {
+  try {
+    const raw = localStorage.getItem(HIDDEN_CONVS_KEY);
+    if (!raw) return /* @__PURE__ */ new Set();
+    const arr = JSON.parse(raw);
+    return new Set(arr);
+  } catch {
+    return /* @__PURE__ */ new Set();
+  }
+}
+function addHiddenConvId(convIdStr) {
+  try {
+    const current = getHiddenConvIds();
+    current.add(convIdStr);
+    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
+  } catch {
+  }
+}
+function removeHiddenConvId(convIdStr) {
+  try {
+    const current = getHiddenConvIds();
+    if (!current.has(convIdStr)) return;
+    current.delete(convIdStr);
+    localStorage.setItem(HIDDEN_CONVS_KEY, JSON.stringify([...current]));
+  } catch {
+  }
+}
+function useConversations() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["conversations"],
+    queryFn: async () => {
+      if (!actor) return [];
+      const all = await actor.listConversations();
+      const hidden = getHiddenConvIds();
+      if (hidden.size === 0) return all;
+      return all.filter((c2) => !hidden.has(c2.id.toString()));
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: 6e4,
+    gcTime: 3e5,
+    refetchInterval: 3e4,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false
+  });
+}
+function useConversation(id) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["conversation", id == null ? void 0 : id.toString()],
+    queryFn: async () => {
+      if (!actor || id === null) return null;
+      return actor.getConversation(id);
+    },
+    enabled: !!actor && !isFetching && id !== null,
+    staleTime: 6e4,
+    gcTime: 3e5,
+    refetchInterval: 3e4,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false
+  });
+}
+function useMessages(conversationId, limit = 50n) {
+  const { actor, isFetching } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  const query = useQuery({
+    queryKey: ["messages", conversationId == null ? void 0 : conversationId.toString()],
+    queryFn: async () => {
+      if (!actor || conversationId === null) return [];
+      const req = {
+        conversationId,
+        limit,
+        beforeMessageId: void 0
+      };
+      const result = await actor.getMessages(req);
+      if (result.__kind__ === "ok") return result.ok;
+      return [];
+    },
+    enabled: !!actor && !isFetching && conversationId !== null,
+    staleTime: 1e4,
+    gcTime: 3e5,
+    refetchInterval: 1e4,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false
+  });
+  reactExports.useEffect(() => {
+    if (conversationId === null || !query.data || query.data.length === 0)
+      return;
+    const convIdStr = conversationId.toString();
+    const hidden = getHiddenConvIds();
+    if (!hidden.has(convIdStr)) return;
+    console.log(
+      `[ChatUnhide] Auto-unhiding convId=${convIdStr} because a new message arrived`
+    );
+    removeHiddenConvId(convIdStr);
+    queryClient2.invalidateQueries({ queryKey: ["conversations"] });
+  }, [conversationId, query.data, queryClient2]);
+  return query;
+}
+function useMarkRead() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (messageId) => {
+      if (!actor) throw new Error("Not connected");
+      return actor.markMessageRead(messageId);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["messages"] });
+    }
+  });
+}
+function useAddConversationMember() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Not connected");
+      const result = await actor.addConversationMember(req);
+      if (result.__kind__ === "err") throw new Error(result.err);
+      return result.ok;
+    },
+    onSuccess: (_2, vars) => {
+      queryClient2.invalidateQueries({
+        queryKey: ["conversation", vars.conversationId.toString()]
+      });
+      queryClient2.invalidateQueries({ queryKey: ["conversations"] });
+    }
+  });
+}
+function useRemoveConversationMember() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Not connected");
+      const result = await actor.removeConversationMember(req);
+      if (result.__kind__ === "err") throw new Error(result.err);
+      return result.ok;
+    },
+    onSuccess: (_2, vars) => {
+      queryClient2.invalidateQueries({
+        queryKey: ["conversation", vars.conversationId.toString()]
+      });
+      queryClient2.invalidateQueries({ queryKey: ["conversations"] });
+    }
+  });
+}
+function useDeleteConversation() {
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (conversationId) => {
+      const convIdStr = conversationId.toString();
+      addHiddenConvId(convIdStr);
+      console.log(
+        `[ChatDelete] User deleted chat locally only - convId=${convIdStr} (other user still has full history)`
+      );
+    },
+    onSuccess: (_2, conversationId) => {
+      queryClient2.removeQueries({
+        queryKey: ["conversation", conversationId.toString()]
+      });
+      queryClient2.removeQueries({
+        queryKey: ["messages", conversationId.toString()]
+      });
+      queryClient2.invalidateQueries({ queryKey: ["conversations"] });
+    }
+  });
+}
+function useDeleteGroupConversation() {
+  return useDeleteConversation();
+}
+function usePublicGroups(category, offset2 = 0n) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["publicGroups", category ?? "", offset2.toString()],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.listPublicGroups({
+        limit: 20n,
+        offset: offset2,
+        category: category ?? void 0
+      });
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: 6e4,
+    gcTime: 3e5,
+    refetchInterval: 6e4,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false
+  });
+}
+function useSubmitJoinRequest() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Not connected");
+      const result = await actor.submitJoinRequest(req);
+      if (result.__kind__ === "err") throw new Error(result.err);
+      return result.ok;
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["publicGroups"] });
+    }
+  });
+}
+function useGroupJoinRequests(conversationId) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["groupJoinRequests", conversationId == null ? void 0 : conversationId.toString()],
+    queryFn: async () => {
+      if (!actor || conversationId === null) return [];
+      const result = await actor.getGroupJoinRequests(conversationId);
+      if (result.__kind__ === "err") return [];
+      return result.ok;
+    },
+    enabled: !!actor && !isFetching && conversationId !== null,
+    staleTime: 15e3,
+    gcTime: 3e5,
+    refetchInterval: 15e3,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false
+  });
+}
+function useApproveJoinRequest() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Not connected");
+      const result = await actor.approveJoinRequest(req);
+      if (result.__kind__ === "err") throw new Error(result.err);
+      return result.ok;
+    },
+    onSuccess: (_2, vars) => {
+      queryClient2.invalidateQueries({
+        queryKey: ["groupJoinRequests", vars.conversationId.toString()]
+      });
+      queryClient2.invalidateQueries({ queryKey: ["publicGroups"] });
+    }
+  });
+}
+function useDenyJoinRequest() {
+  const { actor } = useActor(createActor);
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Not connected");
+      const result = await actor.denyJoinRequest(req);
+      if (result.__kind__ === "err") throw new Error(result.err);
+      return result.ok;
+    },
+    onSuccess: (_2, vars) => {
+      queryClient2.invalidateQueries({
+        queryKey: ["groupJoinRequests", vars.conversationId.toString()]
+      });
+      queryClient2.invalidateQueries({ queryKey: ["publicGroups"] });
+    }
   });
 }
 const AVATAR_COLORS = [
@@ -48009,14 +50763,14 @@ function createCollection(name) {
   );
   const CollectionProvider = (props) => {
     const { scope, children } = props;
-    const ref = React2.useRef(null);
-    const itemMap = React2.useRef(/* @__PURE__ */ new Map()).current;
+    const ref = React$4.useRef(null);
+    const itemMap = React$4.useRef(/* @__PURE__ */ new Map()).current;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(CollectionProviderImpl, { scope, itemMap, collectionRef: ref, children });
   };
   CollectionProvider.displayName = PROVIDER_NAME2;
   const COLLECTION_SLOT_NAME = name + "CollectionSlot";
   const CollectionSlotImpl = /* @__PURE__ */ createSlot$1(COLLECTION_SLOT_NAME);
-  const CollectionSlot = React2.forwardRef(
+  const CollectionSlot = React$4.forwardRef(
     (props, forwardedRef) => {
       const { scope, children } = props;
       const context = useCollectionContext(COLLECTION_SLOT_NAME, scope);
@@ -48028,13 +50782,13 @@ function createCollection(name) {
   const ITEM_SLOT_NAME = name + "CollectionItemSlot";
   const ITEM_DATA_ATTR = "data-radix-collection-item";
   const CollectionItemSlotImpl = /* @__PURE__ */ createSlot$1(ITEM_SLOT_NAME);
-  const CollectionItemSlot = React2.forwardRef(
+  const CollectionItemSlot = React$4.forwardRef(
     (props, forwardedRef) => {
       const { scope, children, ...itemData } = props;
-      const ref = React2.useRef(null);
+      const ref = React$4.useRef(null);
       const composedRefs = useComposedRefs(forwardedRef, ref);
       const context = useCollectionContext(ITEM_SLOT_NAME, scope);
-      React2.useEffect(() => {
+      React$4.useEffect(() => {
         context.itemMap.set(ref, { ref, ...itemData });
         return () => void context.itemMap.delete(ref);
       });
@@ -48044,7 +50798,7 @@ function createCollection(name) {
   CollectionItemSlot.displayName = ITEM_SLOT_NAME;
   function useCollection2(scope) {
     const context = useCollectionContext(name + "CollectionConsumer", scope);
-    const getItems = React2.useCallback(() => {
+    const getItems = React$4.useCallback(() => {
       const collectionNode = context.collectionRef.current;
       if (!collectionNode) return [];
       const orderedNodes = Array.from(collectionNode.querySelectorAll(`[${ITEM_DATA_ATTR}]`));
@@ -49948,26 +52702,6 @@ async function getAllQueuedMessages() {
     req.onerror = () => reject(req.error);
   });
 }
-var AuditEventType = /* @__PURE__ */ ((AuditEventType2) => {
-  AuditEventType2["userRegistered"] = "userRegistered";
-  AuditEventType2["messageSent"] = "messageSent";
-  AuditEventType2["callInitiated"] = "callInitiated";
-  AuditEventType2["memberAdded"] = "memberAdded";
-  AuditEventType2["memberRemoved"] = "memberRemoved";
-  AuditEventType2["adminAction"] = "adminAction";
-  AuditEventType2["userRemoved"] = "userRemoved";
-  AuditEventType2["retentionEnabled"] = "retentionEnabled";
-  AuditEventType2["retentionDisabled"] = "retentionDisabled";
-  AuditEventType2["escrowEnrolled"] = "escrowEnrolled";
-  AuditEventType2["escrowRevoked"] = "escrowRevoked";
-  AuditEventType2["escrowAccessGranted"] = "escrowAccessGranted";
-  AuditEventType2["auditLogExported"] = "auditLogExported";
-  AuditEventType2["messageQueueDrained"] = "messageQueueDrained";
-  AuditEventType2["priorityMessageSent"] = "priorityMessageSent";
-  AuditEventType2["sovereignConfigUpdated"] = "sovereignConfigUpdated";
-  AuditEventType2["compartmentAssigned"] = "compartmentAssigned";
-  return AuditEventType2;
-})(AuditEventType || {});
 function useOfflineQueue() {
   const { actor } = useActor(createActor);
   const { principal, isAuthenticated } = useAuth();
@@ -52725,21 +55459,32 @@ const NAV_ITEMS = [
     icon: MessageSquare,
     label: "Conversations",
     ocid: "nav.conversations",
-    ariaLabel: "Go to Conversations"
+    ariaLabel: "Go to Conversations",
+    adminSeparatorBefore: false
   },
   {
     to: "/app/discover",
     icon: Compass,
     label: "Discover",
     ocid: "nav.discover",
-    ariaLabel: "Discover public groups"
+    ariaLabel: "Discover public groups",
+    adminSeparatorBefore: false
   },
   {
     to: "/app/settings",
     icon: Settings,
     label: "Settings",
     ocid: "nav.settings",
-    ariaLabel: "Go to Settings"
+    ariaLabel: "Go to Settings",
+    adminSeparatorBefore: false
+  },
+  {
+    to: "/admin",
+    icon: Shield,
+    label: "Admin",
+    ocid: "nav.admin",
+    ariaLabel: "Go to Admin Console",
+    adminSeparatorBefore: true
   }
 ];
 function SidebarContent({ onNavigate }) {
@@ -52760,25 +55505,36 @@ function SidebarContent({ onNavigate }) {
         className: "h-14 w-auto object-contain flex-shrink-0"
       }
     ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex-1 px-3 py-4 space-y-1", "aria-label": "Main navigation", children: NAV_ITEMS.map(({ to, icon: Icon2, label, ocid, ariaLabel }) => {
-      const active = location2.pathname.startsWith(to);
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        Link,
-        {
-          to,
-          onClick: onNavigate,
-          "data-ocid": ocid,
-          "aria-label": ariaLabel,
-          "aria-current": active ? "page" : void 0,
-          className: `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 ${active ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" : "text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"}`,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 16, "aria-hidden": "true" }),
-            label
-          ]
-        },
-        to
-      );
-    }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex-1 px-3 py-4 space-y-1", "aria-label": "Main navigation", children: NAV_ITEMS.map(
+      ({
+        to,
+        icon: Icon2,
+        label,
+        ocid,
+        ariaLabel,
+        adminSeparatorBefore
+      }) => {
+        const active = location2.pathname.startsWith(to);
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          adminSeparatorBefore && /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, { className: "my-2 bg-sidebar-border/60" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Link,
+            {
+              to,
+              onClick: onNavigate,
+              "data-ocid": ocid,
+              "aria-label": ariaLabel,
+              "aria-current": active ? "page" : void 0,
+              className: `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 ${active ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" : "text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 16, "aria-hidden": "true" }),
+                label
+              ]
+            }
+          )
+        ] }, to);
+      }
+    ) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, { className: "bg-sidebar-border" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 py-2 border-t border-sidebar-border", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "a",
@@ -55731,7 +58487,26 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Catj7bXj.js"), true ? [] : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-maT8H2u0.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const AdminDashboardPage = reactExports.lazy(
+  () => __vitePreload(() => import("./AdminDashboardPage-BHA49myE.js"), true ? __vite__mapDeps([2,3,4]) : void 0)
+);
+const AdminOrganizationsPage = reactExports.lazy(
+  () => __vitePreload(() => import("./AdminOrganizationsPage-Cv5iVkav.js"), true ? __vite__mapDeps([5,3,6,7,8]) : void 0)
+);
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-kaRsGeKu.js"), true ? __vite__mapDeps([9,3,6,10,4]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-DXZ0-Hje.js"), true ? __vite__mapDeps([11,3]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-BkYN_T42.js"), true ? __vite__mapDeps([12,3,8,10]) : void 0));
+const AdminKeyEscrowPage = reactExports.lazy(
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-6xKIDJTT.js"), true ? __vite__mapDeps([13,3]) : void 0)
+);
+const AdminRetentionPoliciesPage = reactExports.lazy(
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-CTOCVc9H.js").then((n) => n.A), true ? __vite__mapDeps([14,3,1,15,7]) : void 0)
+);
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C5Pv2U0p.js"), true ? __vite__mapDeps([16,3,1,15]) : void 0));
+const AdminBootstrapPage = reactExports.lazy(
+  () => __vitePreload(() => import("./AdminBootstrapPage-DH_ullNh.js"), true ? __vite__mapDeps([17,8]) : void 0)
+);
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
 });
@@ -55800,6 +58575,82 @@ const notFoundRoute = createRoute({
   path: "*",
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(NotFoundPage, {})
 });
+function AdminGuard() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminAccessGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    reactExports.Suspense,
+    {
+      fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-background", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36 }) }),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
+    }
+  ) });
+}
+const adminRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin",
+  component: AdminGuard,
+  beforeLoad: async () => {
+    const { AuthClient: AuthClient2 } = await __vitePreload(async () => {
+      const { AuthClient: AuthClient3 } = await Promise.resolve().then(() => index$2);
+      return { AuthClient: AuthClient3 };
+    }, true ? void 0 : void 0);
+    const client2 = await AuthClient2.create();
+    const isAuthenticated = await client2.isAuthenticated();
+    if (!isAuthenticated) {
+      throw redirect({ to: "/" });
+    }
+  }
+});
+const adminIndexRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboardPage, {})
+});
+const adminOrgsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/organizations",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminOrganizationsPage, {})
+});
+const adminUsersRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/users",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminUsersPage, {})
+});
+const adminGroupsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/groups",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminGroupsPage, {})
+});
+const adminAuditRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/audit-logs",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminAuditPage, {})
+});
+const adminKeyEscrowRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/key-escrow",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminKeyEscrowPage, {})
+});
+const adminRetentionPoliciesRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/retention-policies",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminRetentionPoliciesPage, {})
+});
+const adminSettingsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/settings",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(AdminSettingsPage, {})
+});
+const adminBootstrapRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin/bootstrap",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(
+    reactExports.Suspense,
+    {
+      fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-background", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36 }) }),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminBootstrapPage, {})
+    }
+  )
+});
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -55809,6 +58660,18 @@ const routeTree = rootRoute.addChildren([
     conversationDetailRoute,
     settingsRoute,
     discoverRoute
+  ]),
+  // /admin/bootstrap is a top-level sibling so it bypasses all auth guards.
+  adminBootstrapRoute,
+  adminRoute.addChildren([
+    adminIndexRoute,
+    adminOrgsRoute,
+    adminUsersRoute,
+    adminGroupsRoute,
+    adminAuditRoute,
+    adminKeyEscrowRoute,
+    adminRetentionPoliciesRoute,
+    adminSettingsRoute
   ]),
   notFoundRoute
 ]);
@@ -55840,18 +58703,147 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(InternetIdentityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) })
 );
 export {
+  Anchor as $,
+  AuditEventType as A,
   Button as B,
   Compass as C,
+  ChevronDown as D,
+  useCreateOrg as E,
+  Dialog as F,
+  DialogContent as G,
+  DialogHeader as H,
   Input as I,
+  DialogTitle as J,
+  DialogDescription as K,
   Layout as L,
+  MessageSquare as M,
+  Label as N,
+  Textarea as O,
+  DialogFooter as P,
+  useUpdateOrg as Q,
+  RefreshCw as R,
   Search as S,
+  Trash2 as T,
   Users as U,
+  useSuspendOrg as V,
+  useDeleteOrg as W,
+  X,
+  useCallbackRef$1 as Y,
+  useDirection as Z,
+  Root2$3 as _,
   Skeleton as a,
+  useQuery as a$,
+  Presence as a0,
+  Portal$3 as a1,
+  useComposedRefs as a2,
+  composeEventHandlers as a3,
+  Primitive$1 as a4,
+  createContextScope as a5,
+  createPopperScope as a6,
+  createRovingFocusGroupScope as a7,
+  createCollection as a8,
+  hideOthers as a9,
+  useGroupMembers as aA,
+  useRemoveMemberFromGroup as aB,
+  UserMinus as aC,
+  EmptyState as aD,
+  OrgRole as aE,
+  Principal$1 as aF,
+  useExportAuditLogs as aG,
+  Lock as aH,
+  Download as aI,
+  useEscrowStats as aJ,
+  useEscrowedUsers as aK,
+  useRecoveryRequests as aL,
+  RecoveryRequestStatus as aM,
+  Key as aN,
+  EscrowStatus as aO,
+  useEscrowGrants as aP,
+  useInitiateKeyRecovery as aQ,
+  useApproveKeyRecovery as aR,
+  useRejectKeyRecovery as aS,
+  __vitePreload as aT,
+  useActor as aU,
+  useLogPolicyExpiryCheck as aV,
+  useLogPolicyReportExported as aW,
+  RetentionPeriod as aX,
+  FileText as aY,
+  createActor as aZ,
+  useQueryClient as a_,
+  Item as aa,
+  dispatchDiscreteCustomEvent as ab,
+  useFocusGuards as ac,
+  ReactRemoveScroll as ad,
+  FocusScope as ae,
+  DismissableLayer as af,
+  Root as ag,
+  Content$2 as ah,
+  createSlot$1 as ai,
+  Arrow as aj,
+  composeRefs as ak,
+  useControllableState as al,
+  useId as am,
+  TriangleAlert as an,
+  Select as ao,
+  SelectTrigger as ap,
+  SelectValue as aq,
+  SelectContent as ar,
+  SelectItem as as,
+  useInviteUser as at,
+  useUpdateMemberRole as au,
+  useSuspendMember as av,
+  useReactivateMember as aw,
+  useRemoveMember as ax,
+  useAllGroups as ay,
+  GroupStatus as az,
   useSubmitJoinRequest as b,
-  cn as c,
-  Badge as d,
-  ue as e,
+  useMutation as b0,
+  Tabs as b1,
+  TabsList as b2,
+  TabsTrigger as b3,
+  TabsContent as b4,
+  PasswordPolicy as b5,
+  AlertDialog as b6,
+  AlertDialogTrigger as b7,
+  AlertDialogContent as b8,
+  AlertDialogHeader as b9,
+  AlertDialogTitle as ba,
+  AlertDialogDescription as bb,
+  AlertDialogFooter as bc,
+  AlertDialogCancel as bd,
+  AlertDialogAction as be,
+  GroupCreationPermission as bf,
+  DataExportPermission as bg,
+  usePrevious as bh,
+  useSize as bi,
+  React$4 as bj,
+  useRouterState as bk,
+  LogOut as bl,
+  LoaderCircle as bm,
+  commonjsGlobal as bn,
+  getDefaultExportFromCjs as bo,
+  Badge as c,
+  ue as d,
+  createLucideIcon as e,
+  useNavigate as f,
+  useAuth as g,
+  useIsSuperAdmin as h,
+  useCheckPolicyExpiry as i,
   jsxRuntimeExports as j,
+  useMyOrgs as k,
+  useOrgs as l,
+  useOrgUsers as m,
+  useAdminAuditLog as n,
+  UserCheck as o,
+  Settings as p,
+  Shield as q,
   reactExports as r,
-  usePublicGroups as u
+  cn as s,
+  ShieldCheck as t,
+  usePublicGroups as u,
+  Check as v,
+  Copy as w,
+  useMyRole as x,
+  useOrgDetails as y,
+  ArrowLeft as z
 };

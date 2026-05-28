@@ -1,5 +1,6 @@
 import Common "../types/common";
 import E "../types/enterprise";
+import OrgTypes "../types/orgs";
 import AdminLib "../lib/admin";
 import EnterpriseLib "../lib/enterprise";
 import ConvsLib "../lib/conversations";
@@ -142,6 +143,58 @@ mixin (
     req : E.GetRetentionMetadataRequest
   ) : async Common.Result<[E.RetentionMetadataRecord], Common.Error> {
     EnterpriseLib.getRetentionMetadata(enterpriseState, adminState, caller, req);
+  };
+  // ── Key Escrow Admin Dashboard ──────────────────────────────────────────
+
+  /// Admin: list all users with escrowed keys (dashboard table).
+  /// Super Admins or Org Admins only. Org-scoped via req.orgId.
+  public shared ({ caller }) func getEscrowedUsers(
+    req : E.GetEscrowedUsersRequest
+  ) : async Common.Result<[E.EscrowedUserRecord], Common.Error> {
+    EnterpriseLib.getEscrowedUsers(enterpriseState, adminState, caller, req);
+  };
+
+  /// Admin: return platform-wide escrow statistics. Super Admin only.
+  public shared ({ caller }) func getEscrowStats()
+    : async Common.Result<E.EscrowStatsRecord, Common.Error> {
+    EnterpriseLib.getEscrowStats(enterpriseState, adminState, caller);
+  };
+
+  /// Admin: initiate a dual-control key recovery request.
+  public shared ({ caller }) func initiateKeyRecovery(
+    targetUserId   : Common.UserId,
+    targetDeviceId : Text,
+    reason         : Text,
+    orgId          : ?OrgTypes.OrgId,
+  ) : async Common.Result<E.RecoveryRequest, Common.Error> {
+    EnterpriseLib.initiateKeyRecovery(
+      enterpriseState, adminState, caller,
+      targetUserId, targetDeviceId, reason, orgId,
+    );
+  };
+
+  /// Admin: approve a pending key recovery request (dual control — must differ from initiator).
+  public shared ({ caller }) func approveKeyRecovery(
+    requestId : Nat
+  ) : async Common.Result<E.RecoveryRequest, Common.Error> {
+    EnterpriseLib.approveKeyRecovery(enterpriseState, adminState, caller, requestId);
+  };
+
+  /// Admin: reject a pending key recovery request.
+  public shared ({ caller }) func rejectKeyRecovery(
+    requestId : Nat
+  ) : async Common.Result<E.RecoveryRequest, Common.Error> {
+    EnterpriseLib.rejectKeyRecovery(enterpriseState, adminState, caller, requestId);
+  };
+
+  /// Admin: list recovery requests, optionally filtered by orgId and/or status.
+  public shared ({ caller }) func getRecoveryRequests(
+    orgId        : ?OrgTypes.OrgId,
+    statusFilter : ?E.RecoveryRequestStatus,
+  ) : async Common.Result<[E.RecoveryRequest], Common.Error> {
+    EnterpriseLib.getRecoveryRequests(
+      enterpriseState, adminState, caller, orgId, statusFilter,
+    );
   };
 };
 

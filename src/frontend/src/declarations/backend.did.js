@@ -27,7 +27,7 @@ export const Error = IDL.Variant({
   'notFound' : IDL.Null,
   'unauthorized' : IDL.Null,
 });
-export const Result_3 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
+export const Result_6 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
 export const ConversationId = IDL.Nat;
 export const AddMemberRequest = IDL.Record({
   'member' : UserId,
@@ -46,7 +46,7 @@ export const DeviceRecordPublic = IDL.Record({
   'registeredAt' : Timestamp,
   'lastSeen' : Timestamp,
 });
-export const Result_6 = IDL.Variant({
+export const Result_10 = IDL.Variant({
   'ok' : DeviceRecordPublic,
   'err' : Error,
 });
@@ -59,11 +59,11 @@ export const EscrowAccessGrant = IDL.Record({
   'requestingAdmin' : UserId,
   'targetUserId' : UserId,
 });
-export const Result_17 = IDL.Variant({
+export const Result_31 = IDL.Variant({
   'ok' : IDL.Vec(EscrowAccessGrant),
   'err' : Error,
 });
-export const Result_16 = IDL.Variant({
+export const Result_30 = IDL.Variant({
   'ok' : EscrowAccessGrant,
   'err' : Error,
 });
@@ -72,6 +72,43 @@ export const JoinRequestActionRequest = IDL.Record({
   'denialReason' : IDL.Opt(DenialReason),
   'requestId' : IDL.Text,
   'conversationId' : ConversationId,
+});
+export const RecoveryRequestStatus = IDL.Variant({
+  'pending' : IDL.Null,
+  'completed' : IDL.Null,
+  'approved' : IDL.Null,
+  'rejected' : IDL.Null,
+});
+export const OrgId = IDL.Text;
+export const RecoveryRequest = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : RecoveryRequestStatus,
+  'orgId' : IDL.Opt(OrgId),
+  'approvedBy' : IDL.Opt(UserId),
+  'createdAt' : Timestamp,
+  'initiatingAdmin' : UserId,
+  'targetDeviceId' : IDL.Text,
+  'resolvedAt' : IDL.Opt(Timestamp),
+  'reason' : IDL.Text,
+  'targetUserId' : UserId,
+});
+export const Result_8 = IDL.Variant({ 'ok' : RecoveryRequest, 'err' : Error });
+export const Result_29 = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
+export const RetentionPeriod = IDL.Variant({
+  'days30' : IDL.Null,
+  'days90' : IDL.Null,
+  'unlimited' : IDL.Null,
+  'years7' : IDL.Null,
+  'year1' : IDL.Null,
+});
+export const RetentionPolicy = IDL.Record({
+  'id' : IDL.Text,
+  'orgId' : IDL.Opt(OrgId),
+  'period' : RetentionPeriod,
+  'legalHold' : IDL.Bool,
+  'updatedAt' : Timestamp,
+  'updatedBy' : UserId,
+  'autoDelete' : IDL.Bool,
 });
 export const CreateDirectRequest = IDL.Record({ 'peer' : UserId });
 export const ConversationKind = IDL.Variant({
@@ -91,7 +128,7 @@ export const ConversationPublic = IDL.Record({
   'discoverable' : IDL.Bool,
   'encryptedName' : IDL.Opt(IDL.Vec(IDL.Nat8)),
 });
-export const Result_15 = IDL.Variant({
+export const Result_28 = IDL.Variant({
   'ok' : ConversationPublic,
   'err' : Error,
 });
@@ -103,13 +140,50 @@ export const CreateGroupRequest = IDL.Record({
   'discoverable' : IDL.Bool,
   'encryptedName' : IDL.Vec(IDL.Nat8),
 });
+export const CreateOrgRequest = IDL.Record({
+  'name' : IDL.Text,
+  'description' : IDL.Text,
+});
+export const OrgStatus = IDL.Variant({
+  'Active' : IDL.Null,
+  'Suspended' : IDL.Null,
+  'Archived' : IDL.Null,
+});
+export const OrgRecord = IDL.Record({
+  'id' : OrgId,
+  'status' : OrgStatus,
+  'name' : IDL.Text,
+  'createdAt' : Timestamp,
+  'createdBy' : UserId,
+  'memberCount' : IDL.Nat,
+  'description' : IDL.Text,
+});
+export const Result_3 = IDL.Variant({ 'ok' : OrgRecord, 'err' : IDL.Text });
+export const CreateRetentionPolicyRequest = IDL.Record({
+  'orgId' : IDL.Opt(OrgId),
+  'period' : RetentionPeriod,
+  'legalHold' : IDL.Bool,
+  'autoDelete' : IDL.Bool,
+});
+export const Result_1 = IDL.Variant({
+  'ok' : RetentionPolicy,
+  'err' : IDL.Text,
+});
 export const AttachmentId = IDL.Nat;
+export const Result_2 = IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text });
 export const AuditExportEventType = IDL.Variant({
+  'memberSuspended' : IDL.Null,
+  'userInvited' : IDL.Null,
   'retentionEnabled' : IDL.Null,
   'memberAdded' : IDL.Null,
   'retentionDisabled' : IDL.Null,
+  'groupMemberRemoved' : IDL.Null,
+  'orgCreated' : IDL.Null,
   'escrowAccessGranted' : IDL.Null,
   'callInitiated' : IDL.Null,
+  'keyRecoveryApproved' : IDL.Null,
+  'keyRecoveryInitiated' : IDL.Null,
+  'keyRecoveryRejected' : IDL.Null,
   'adminAction' : IDL.Null,
   'auditLogExported' : IDL.Null,
   'escrowEnrolled' : IDL.Null,
@@ -117,7 +191,9 @@ export const AuditExportEventType = IDL.Variant({
   'escrowRevoked' : IDL.Null,
   'userRegistered' : IDL.Null,
   'memberRemoved' : IDL.Null,
+  'orgSuspended' : IDL.Null,
   'userRemoved' : IDL.Null,
+  'memberRoleChanged' : IDL.Null,
 });
 export const AuditExportFormat = IDL.Variant({
   'csv' : IDL.Null,
@@ -130,7 +206,66 @@ export const AuditExportRequest = IDL.Record({
   'startDate' : IDL.Opt(Timestamp),
   'format' : AuditExportFormat,
 });
-export const Result_13 = IDL.Variant({ 'ok' : IDL.Text, 'err' : Error });
+export const Result_26 = IDL.Variant({ 'ok' : IDL.Text, 'err' : Error });
+export const AuditEventType = IDL.Variant({
+  'legalHoldRemoved' : IDL.Null,
+  'memberSuspended' : IDL.Null,
+  'userInvited' : IDL.Null,
+  'retentionEnabled' : IDL.Null,
+  'memberAdded' : IDL.Null,
+  'policyExpiryCheckPerformed' : IDL.Null,
+  'retentionPolicyUpdated' : IDL.Null,
+  'retentionDisabled' : IDL.Null,
+  'groupMemberRemoved' : IDL.Null,
+  'orgCreated' : IDL.Null,
+  'orgDeleted' : IDL.Null,
+  'platformSettingsUpdated' : IDL.Null,
+  'escrowAccessGranted' : IDL.Null,
+  'callInitiated' : IDL.Null,
+  'sovereignConfigUpdated' : IDL.Null,
+  'keyRecoveryApproved' : IDL.Null,
+  'keyRecoveryInitiated' : IDL.Null,
+  'messageQueueDrained' : IDL.Null,
+  'memberReactivated' : IDL.Null,
+  'legalHoldPlaced' : IDL.Null,
+  'keyRecoveryRejected' : IDL.Null,
+  'adminAction' : IDL.Null,
+  'orgSettingsUpdated' : IDL.Null,
+  'auditLogExported' : IDL.Null,
+  'escrowEnrolled' : IDL.Null,
+  'messageSent' : IDL.Null,
+  'escrowRevoked' : IDL.Null,
+  'compartmentAssigned' : IDL.Null,
+  'policyReportExported' : IDL.Null,
+  'userRegistered' : IDL.Null,
+  'memberRemoved' : IDL.Null,
+  'retentionPolicyCreated' : IDL.Null,
+  'orgSuspended' : IDL.Null,
+  'userRemoved' : IDL.Null,
+  'priorityMessageSent' : IDL.Null,
+  'orgUpdated' : IDL.Null,
+  'memberRoleChanged' : IDL.Null,
+});
+export const ExportAuditLogsRequest = IDL.Record({
+  'afterTimestamp' : IDL.Opt(Timestamp),
+  'filterEventType' : IDL.Opt(AuditEventType),
+  'beforeTimestamp' : IDL.Opt(Timestamp),
+  'filterActor' : IDL.Opt(UserId),
+  'filterOrgId' : IDL.Opt(OrgId),
+});
+export const AuditEvent = IDL.Record({
+  'id' : IDL.Nat,
+  'orgId' : IDL.Opt(OrgId),
+  'targetPrincipal' : IDL.Opt(UserId),
+  'encryptedDetails' : IDL.Opt(IDL.Vec(IDL.Nat8)),
+  'timestamp' : Timestamp,
+  'actorPrincipal' : UserId,
+  'eventType' : AuditEventType,
+});
+export const Result_25 = IDL.Variant({
+  'ok' : IDL.Vec(AuditEvent),
+  'err' : Error,
+});
 export const CompartmentLabel = IDL.Variant({
   'classified' : IDL.Null,
   'unclassified' : IDL.Null,
@@ -159,45 +294,32 @@ export const ConfigExportBundle = IDL.Record({
   ),
   'residencyLabel' : DataResidency,
 });
-export const Result_14 = IDL.Variant({
+export const Result_27 = IDL.Variant({
   'ok' : ConfigExportBundle,
   'err' : Error,
 });
-export const AuditEventType = IDL.Variant({
-  'retentionEnabled' : IDL.Null,
-  'memberAdded' : IDL.Null,
-  'retentionDisabled' : IDL.Null,
-  'escrowAccessGranted' : IDL.Null,
-  'callInitiated' : IDL.Null,
-  'sovereignConfigUpdated' : IDL.Null,
-  'messageQueueDrained' : IDL.Null,
-  'adminAction' : IDL.Null,
-  'auditLogExported' : IDL.Null,
-  'escrowEnrolled' : IDL.Null,
-  'messageSent' : IDL.Null,
-  'escrowRevoked' : IDL.Null,
-  'compartmentAssigned' : IDL.Null,
-  'userRegistered' : IDL.Null,
-  'memberRemoved' : IDL.Null,
-  'userRemoved' : IDL.Null,
-  'priorityMessageSent' : IDL.Null,
+export const GetAllGroupsRequest = IDL.Record({ 'orgId' : IDL.Opt(OrgId) });
+export const GroupStatus = IDL.Variant({
+  'active' : IDL.Null,
+  'suspended' : IDL.Null,
+});
+export const GroupAdminRecord = IDL.Record({
+  'id' : ConversationId,
+  'status' : GroupStatus,
+  'orgId' : IDL.Opt(OrgId),
+  'name' : IDL.Text,
+  'createdAt' : Timestamp,
+  'createdBy' : UserId,
+  'memberCount' : IDL.Nat,
 });
 export const GetAuditLogRequest = IDL.Record({
+  'afterTimestamp' : IDL.Opt(Timestamp),
   'limit' : IDL.Nat,
   'filterEventType' : IDL.Opt(AuditEventType),
+  'beforeTimestamp' : IDL.Opt(Timestamp),
+  'filterActor' : IDL.Opt(UserId),
+  'filterOrgId' : IDL.Opt(OrgId),
   'afterEventId' : IDL.Opt(IDL.Nat),
-});
-export const AuditEvent = IDL.Record({
-  'id' : IDL.Nat,
-  'targetPrincipal' : IDL.Opt(UserId),
-  'encryptedDetails' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-  'timestamp' : Timestamp,
-  'actorPrincipal' : UserId,
-  'eventType' : AuditEventType,
-});
-export const Result_12 = IDL.Variant({
-  'ok' : IDL.Vec(AuditEvent),
-  'err' : Error,
 });
 export const SovereignConfig = IDL.Record({
   'lastUpdated' : Timestamp,
@@ -206,6 +328,37 @@ export const SovereignConfig = IDL.Record({
   'nodeCount' : IDL.Opt(IDL.Nat),
   'cyclesCostMultiplier' : IDL.Opt(IDL.Float64),
   'residencyLabel' : DataResidency,
+});
+export const EscrowStatsRecord = IDL.Record({
+  'pendingRecoveries' : IDL.Nat,
+  'lastRecoveryTimestamp' : IDL.Opt(Timestamp),
+  'totalEscrowed' : IDL.Nat,
+});
+export const Result_24 = IDL.Variant({
+  'ok' : EscrowStatsRecord,
+  'err' : Error,
+});
+export const GetEscrowedUsersRequest = IDL.Record({
+  'orgId' : IDL.Opt(OrgId),
+  'limit' : IDL.Nat,
+  'afterUserId' : IDL.Opt(IDL.Text),
+});
+export const EscrowStatus = IDL.Variant({
+  'active' : IDL.Null,
+  'revoked' : IDL.Null,
+  'recovered' : IDL.Null,
+  'pendingRecovery' : IDL.Null,
+});
+export const EscrowedUserRecord = IDL.Record({
+  'orgId' : IDL.Opt(OrgId),
+  'deviceCount' : IDL.Nat,
+  'userId' : UserId,
+  'escrowStatus' : EscrowStatus,
+  'lastBackedUp' : IDL.Opt(Timestamp),
+});
+export const Result_23 = IDL.Variant({
+  'ok' : IDL.Vec(EscrowedUserRecord),
+  'err' : Error,
 });
 export const JoinRequestStatus = IDL.Variant({
   'pending' : IDL.Null,
@@ -220,11 +373,23 @@ export const JoinRequest = IDL.Record({
   'message' : IDL.Opt(IDL.Text),
   'requesterId' : UserId,
 });
-export const Result_11 = IDL.Variant({
+export const Result_22 = IDL.Variant({
   'ok' : IDL.Vec(JoinRequest),
   'err' : Error,
 });
-export const Result_10 = IDL.Variant({
+export const GetGroupMembersRequest = IDL.Record({
+  'groupId' : ConversationId,
+});
+export const GroupMemberRecord = IDL.Record({
+  'displayName' : IDL.Opt(IDL.Text),
+  'userId' : UserId,
+  'joinedAt' : Timestamp,
+});
+export const Result_21 = IDL.Variant({
+  'ok' : IDL.Vec(GroupMemberRecord),
+  'err' : IDL.Text,
+});
+export const Result_20 = IDL.Variant({
   'ok' : GroupRetentionPolicy,
   'err' : Error,
 });
@@ -270,7 +435,7 @@ export const MessagePublic = IDL.Record({
   'priority' : IDL.Opt(MessagePriority),
   'readBy' : IDL.Vec(ReadReceipt),
 });
-export const Result_9 = IDL.Variant({
+export const Result_19 = IDL.Variant({
   'ok' : IDL.Vec(MessagePublic),
   'err' : Error,
 });
@@ -284,6 +449,97 @@ export const EscrowRecord = IDL.Record({
   'consentLanguageVersion' : IDL.Text,
   'revokedAt' : IDL.Opt(Timestamp),
   'revokedReason' : IDL.Opt(IDL.Text),
+});
+export const MemberStatus = IDL.Variant({
+  'Active' : IDL.Null,
+  'Suspended' : IDL.Null,
+  'Pending' : IDL.Null,
+});
+export const OrgRole = IDL.Variant({
+  'OrgAdmin' : IDL.Null,
+  'Auditor' : IDL.Null,
+  'SuperAdmin' : IDL.Null,
+  'StandardUser' : IDL.Null,
+});
+export const OrgMembership = IDL.Record({
+  'status' : MemberStatus,
+  'orgId' : OrgId,
+  'userId' : UserId,
+  'joinedAt' : Timestamp,
+  'role' : OrgRole,
+  'invitedBy' : UserId,
+  'email' : IDL.Opt(IDL.Text),
+  'lastActive' : IDL.Opt(Timestamp),
+});
+export const Result_18 = IDL.Variant({
+  'ok' : IDL.Vec(OrgMembership),
+  'err' : IDL.Text,
+});
+export const Result_17 = IDL.Variant({
+  'ok' : IDL.Opt(OrgRole),
+  'err' : IDL.Text,
+});
+export const GroupCreationPermission = IDL.Variant({
+  'orgAdminsOnly' : IDL.Null,
+  'allMembers' : IDL.Null,
+});
+export const DataExportPermission = IDL.Variant({
+  'orgAdminsOnly' : IDL.Null,
+  'disabled' : IDL.Null,
+  'allMembers' : IDL.Null,
+});
+export const RetentionPeriodDays = IDL.Variant({
+  'days30' : IDL.Null,
+  'days90' : IDL.Null,
+  'unlimited' : IDL.Null,
+  'years7' : IDL.Null,
+  'year1' : IDL.Null,
+});
+export const OrgSettings = IDL.Record({
+  'legalHoldReason' : IDL.Opt(IDL.Text),
+  'orgId' : IDL.Text,
+  'logoStorageKey' : IDL.Opt(IDL.Text),
+  'groupCreationPermission' : GroupCreationPermission,
+  'dataExportPermission' : DataExportPermission,
+  'defaultInviteRole' : IDL.Text,
+  'logoUrl' : IDL.Opt(IDL.Text),
+  'legalHoldEnabled' : IDL.Bool,
+  'messageRetentionDays' : IDL.Opt(RetentionPeriodDays),
+});
+export const GetOrgUsersRequest = IDL.Record({
+  'orgId' : IDL.Opt(OrgId),
+  'search' : IDL.Opt(IDL.Text),
+  'limit' : IDL.Nat,
+  'afterUserId' : IDL.Opt(UserId),
+});
+export const GetOrgUsersResponse = IDL.Record({
+  'total' : IDL.Nat,
+  'hasMore' : IDL.Bool,
+  'members' : IDL.Vec(OrgMembership),
+});
+export const Result_16 = IDL.Variant({
+  'ok' : GetOrgUsersResponse,
+  'err' : IDL.Text,
+});
+export const PasswordPolicy = IDL.Variant({
+  'strong' : IDL.Null,
+  'enterprise' : IDL.Null,
+  'basic' : IDL.Null,
+});
+export const PlatformSettings = IDL.Record({
+  'defaultRetentionDays' : RetentionPeriodDays,
+  'keyEscrowEnabled' : IDL.Bool,
+  'vetKeysEnabled' : IDL.Bool,
+  'sessionTimeoutMinutes' : IDL.Nat,
+  'platformTagline' : IDL.Text,
+  'auditLogRetentionDays' : RetentionPeriodDays,
+  'mfaEnforced' : IDL.Bool,
+  'passwordPolicy' : PasswordPolicy,
+  'platformName' : IDL.Text,
+});
+export const Result_15 = IDL.Variant({
+  'ok' : IDL.Vec(RecoveryRequest),
+  'err' : Error,
 });
 export const GetRetentionMetadataRequest = IDL.Record({
   'endDate' : IDL.Opt(Timestamp),
@@ -299,9 +555,12 @@ export const RetentionMetadataRecord = IDL.Record({
   'recipientPrincipals' : IDL.Vec(UserId),
   'convId' : ConversationId,
 });
-export const Result_8 = IDL.Variant({
+export const Result_14 = IDL.Variant({
   'ok' : IDL.Vec(RetentionMetadataRecord),
   'err' : Error,
+});
+export const GetRetentionPoliciesRequest = IDL.Record({
+  'orgId' : IDL.Opt(OrgId),
 });
 export const TypingIndicatorPublic = IDL.Record({
   'expiresAt' : Timestamp,
@@ -317,7 +576,30 @@ export const UserProfilePublic = IDL.Record({
   'registeredAt' : Timestamp,
   'lastSeen' : Timestamp,
 });
-export const Result_7 = IDL.Variant({ 'ok' : IDL.Vec(UserId), 'err' : Error });
+export const InviteUserRequest = IDL.Record({
+  'orgId' : OrgId,
+  'role' : OrgRole,
+  'email' : IDL.Opt(IDL.Text),
+  'principalId' : IDL.Text,
+});
+export const Result_13 = IDL.Variant({
+  'ok' : OrgMembership,
+  'err' : IDL.Text,
+});
+export const Result_12 = IDL.Variant({ 'ok' : IDL.Vec(UserId), 'err' : Error });
+export const GetOrgsRequest = IDL.Record({
+  'search' : IDL.Opt(IDL.Text),
+  'limit' : IDL.Nat,
+  'afterOrgId' : IDL.Opt(OrgId),
+});
+export const GetOrgsResponse = IDL.Record({
+  'total' : IDL.Nat,
+  'orgs' : IDL.Vec(OrgRecord),
+});
+export const Result_11 = IDL.Variant({
+  'ok' : GetOrgsResponse,
+  'err' : IDL.Text,
+});
 export const ListPublicGroupsRequest = IDL.Record({
   'offset' : IDL.Nat,
   'limit' : IDL.Nat,
@@ -336,7 +618,7 @@ export const RegisterAttachmentRequest = IDL.Record({
   'encryptedSizeBytes' : IDL.Nat,
   'storageKey' : IDL.Text,
 });
-export const Result_5 = IDL.Variant({ 'ok' : Attachment, 'err' : Error });
+export const Result_9 = IDL.Variant({ 'ok' : Attachment, 'err' : Error });
 export const RegisterRequest = IDL.Record({
   'ecdhPublicKey' : EcdhPublicKey,
   'encryptedAvatarKey' : IDL.Opt(IDL.Text),
@@ -347,6 +629,10 @@ export const RemoveMemberRequest = IDL.Record({
   'member' : UserId,
   'conversationId' : ConversationId,
 });
+export const RemoveMemberFromGroupRequest = IDL.Record({
+  'memberId' : UserId,
+  'groupId' : ConversationId,
+});
 export const SendMessageRequest = IDL.Record({
   'ttlSeconds' : IDL.Opt(IDL.Nat),
   'encryptedContent' : IDL.Vec(IDL.Nat8),
@@ -354,13 +640,34 @@ export const SendMessageRequest = IDL.Record({
   'conversationId' : ConversationId,
   'priority' : IDL.Opt(MessagePriority),
 });
-export const Result_4 = IDL.Variant({ 'ok' : MessagePublic, 'err' : Error });
-export const Result_2 = IDL.Variant({ 'ok' : SovereignConfig, 'err' : Error });
+export const Result_7 = IDL.Variant({ 'ok' : MessagePublic, 'err' : Error });
+export const Result_5 = IDL.Variant({ 'ok' : SovereignConfig, 'err' : Error });
 export const SubmitJoinRequestRequest = IDL.Record({
   'conversationId' : ConversationId,
   'message' : IDL.Opt(IDL.Text),
 });
-export const Result_1 = IDL.Variant({ 'ok' : JoinRequest, 'err' : Error });
+export const Result_4 = IDL.Variant({ 'ok' : JoinRequest, 'err' : Error });
+export const SuspendUserRequest = IDL.Record({
+  'orgId' : OrgId,
+  'userId' : UserId,
+  'reason' : IDL.Text,
+});
+export const LegalHoldRequest = IDL.Record({
+  'orgId' : OrgId,
+  'hold' : IDL.Bool,
+  'reason' : IDL.Text,
+});
+export const UpdateMemberRoleRequest = IDL.Record({
+  'orgId' : OrgId,
+  'userId' : UserId,
+  'newRole' : OrgRole,
+});
+export const UpdateRetentionPolicyRequest = IDL.Record({
+  'id' : IDL.Text,
+  'period' : IDL.Opt(RetentionPeriod),
+  'legalHold' : IDL.Opt(IDL.Bool),
+  'autoDelete' : IDL.Opt(IDL.Bool),
+});
 export const UpdateProfileRequest = IDL.Record({
   'ecdhPublicKey' : IDL.Opt(EcdhPublicKey),
   'encryptedAvatarKey' : IDL.Opt(IDL.Text),
@@ -394,53 +701,96 @@ export const idlService = IDL.Service({
       [],
     ),
   '_immutableObjectStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-  'addAdmin' : IDL.Func([UserId], [Result_3], []),
-  'addConversationMember' : IDL.Func([AddMemberRequest], [Result_3], []),
-  'addDevice' : IDL.Func([AddDeviceRequest], [Result_6], []),
+  'addAdmin' : IDL.Func([UserId], [Result_6], []),
+  'addConversationMember' : IDL.Func([AddMemberRequest], [Result_6], []),
+  'addDevice' : IDL.Func([AddDeviceRequest], [Result_10], []),
   'adminGetEscrowGrants' : IDL.Func(
       [IDL.Opt(UserId), IDL.Nat, IDL.Opt(IDL.Nat)],
-      [Result_17],
+      [Result_31],
       ['query'],
     ),
   'adminGrantEscrowAccess' : IDL.Func(
       [UserId, IDL.Text, IDL.Text],
-      [Result_16],
+      [Result_30],
       [],
     ),
-  'approveJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_3], []),
+  'approveJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_6], []),
+  'approveKeyRecovery' : IDL.Func([IDL.Nat], [Result_8], []),
+  'bootstrapSuperAdmin' : IDL.Func([UserId], [Result_29], []),
+  'checkPolicyExpiry' : IDL.Func(
+      [IDL.Opt(OrgId)],
+      [IDL.Vec(RetentionPolicy)],
+      ['query'],
+    ),
   'clearTypingIndicator' : IDL.Func([ConversationId], [], []),
-  'createDirectConversation' : IDL.Func([CreateDirectRequest], [Result_15], []),
-  'createGroupConversation' : IDL.Func([CreateGroupRequest], [Result_15], []),
-  'deleteAttachment' : IDL.Func([AttachmentId], [Result_3], []),
-  'deleteConversation' : IDL.Func([ConversationId], [Result_3], []),
-  'deleteGroupConversation' : IDL.Func([ConversationId], [Result_3], []),
-  'denyJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_3], []),
-  'disableGroupRetention' : IDL.Func([ConversationId], [Result_3], []),
-  'enableGroupRetention' : IDL.Func([ConversationId], [Result_3], []),
+  'createDirectConversation' : IDL.Func([CreateDirectRequest], [Result_28], []),
+  'createGroupConversation' : IDL.Func([CreateGroupRequest], [Result_28], []),
+  'createOrg' : IDL.Func([CreateOrgRequest], [Result_3], []),
+  'createRetentionPolicy' : IDL.Func(
+      [CreateRetentionPolicyRequest],
+      [Result_1],
+      [],
+    ),
+  'deleteAttachment' : IDL.Func([AttachmentId], [Result_6], []),
+  'deleteConversation' : IDL.Func([ConversationId], [Result_6], []),
+  'deleteGroupConversation' : IDL.Func([ConversationId], [Result_6], []),
+  'deleteOrg' : IDL.Func([OrgId], [Result_2], []),
+  'denyJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_6], []),
+  'disableGroupRetention' : IDL.Func([ConversationId], [Result_6], []),
+  'enableGroupRetention' : IDL.Func([ConversationId], [Result_6], []),
   'enrollKeyEscrow' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Vec(IDL.Nat8), IDL.Text],
-      [Result_3],
+      [Result_6],
       [],
     ),
-  'exportAuditLog' : IDL.Func([AuditExportRequest], [Result_13], []),
-  'exportConfigBundle' : IDL.Func([], [Result_14], []),
-  'generateDeviceSyncToken' : IDL.Func([IDL.Vec(IDL.Nat8)], [Result_13], []),
-  'getAuditLog' : IDL.Func([GetAuditLogRequest], [Result_12], ['query']),
+  'exportAuditLog' : IDL.Func([AuditExportRequest], [Result_26], []),
+  'exportAuditLogs' : IDL.Func(
+      [ExportAuditLogsRequest],
+      [Result_25],
+      ['query'],
+    ),
+  'exportConfigBundle' : IDL.Func([], [Result_27], []),
+  'generateDeviceSyncToken' : IDL.Func([IDL.Vec(IDL.Nat8)], [Result_26], []),
+  'getAllGroups' : IDL.Func(
+      [GetAllGroupsRequest],
+      [IDL.Vec(GroupAdminRecord)],
+      [],
+    ),
+  'getAuditLog' : IDL.Func([GetAuditLogRequest], [Result_25], ['query']),
+  'getCanisterHealth' : IDL.Func(
+      [],
+      [
+        IDL.Record({
+          'memoryCapacity' : IDL.Nat,
+          'cyclesBalance' : IDL.Nat,
+          'memoryUsed' : IDL.Nat,
+        }),
+      ],
+      ['query'],
+    ),
   'getConversation' : IDL.Func(
       [ConversationId],
       [IDL.Opt(ConversationPublic)],
       ['query'],
     ),
   'getDeploymentInfo' : IDL.Func([], [SovereignConfig], ['query']),
+  'getEscrowStats' : IDL.Func([], [Result_24], []),
+  'getEscrowedUsers' : IDL.Func([GetEscrowedUsersRequest], [Result_23], []),
+  'getGlobalRetentionPolicy' : IDL.Func(
+      [],
+      [IDL.Opt(RetentionPolicy)],
+      ['query'],
+    ),
   'getGroupCompartment' : IDL.Func(
       [ConversationId],
       [IDL.Opt(CompartmentLabel)],
       ['query'],
     ),
-  'getGroupJoinRequests' : IDL.Func([ConversationId], [Result_11], ['query']),
+  'getGroupJoinRequests' : IDL.Func([ConversationId], [Result_22], ['query']),
+  'getGroupMembers' : IDL.Func([GetGroupMembersRequest], [Result_21], []),
   'getGroupRetentionPolicy' : IDL.Func(
       [ConversationId],
-      [Result_10],
+      [Result_20],
       ['query'],
     ),
   'getMessageAttachments' : IDL.Func(
@@ -448,11 +798,32 @@ export const idlService = IDL.Service({
       [IDL.Vec(Attachment)],
       ['query'],
     ),
-  'getMessages' : IDL.Func([GetMessagesRequest], [Result_9], ['query']),
+  'getMessages' : IDL.Func([GetMessagesRequest], [Result_19], ['query']),
   'getMyEscrowStatus' : IDL.Func([], [IDL.Vec(EscrowRecord)], ['query']),
+  'getMyOrgs' : IDL.Func([], [Result_18], ['query']),
+  'getMyRole' : IDL.Func([OrgId], [Result_17], ['query']),
+  'getOrg' : IDL.Func([OrgId], [Result_3], ['query']),
+  'getOrgSettings' : IDL.Func([IDL.Text], [OrgSettings], ['query']),
+  'getOrgUsers' : IDL.Func([GetOrgUsersRequest], [Result_16], ['query']),
+  'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
+  'getRecoveryRequests' : IDL.Func(
+      [IDL.Opt(OrgId), IDL.Opt(RecoveryRequestStatus)],
+      [Result_15],
+      [],
+    ),
   'getRetentionMetadata' : IDL.Func(
       [GetRetentionMetadataRequest],
-      [Result_8],
+      [Result_14],
+      ['query'],
+    ),
+  'getRetentionPolicies' : IDL.Func(
+      [GetRetentionPoliciesRequest],
+      [IDL.Vec(RetentionPolicy)],
+      ['query'],
+    ),
+  'getRetentionPolicy' : IDL.Func(
+      [OrgId],
+      [IDL.Opt(RetentionPolicy)],
       ['query'],
     ),
   'getTypingIndicators' : IDL.Func(
@@ -470,31 +841,49 @@ export const idlService = IDL.Service({
       [IDL.Vec(UserProfilePublic)],
       ['query'],
     ),
+  'hasSuperAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'initiateKeyRecovery' : IDL.Func(
+      [UserId, IDL.Text, IDL.Text, IDL.Opt(OrgId)],
+      [Result_8],
+      [],
+    ),
+  'inviteUser' : IDL.Func([InviteUserRequest], [Result_13], []),
   'isAdminCheck' : IDL.Func([UserId], [IDL.Bool], ['query']),
-  'listAdmins' : IDL.Func([], [Result_7], ['query']),
+  'listAdmins' : IDL.Func([], [Result_12], ['query']),
   'listConversations' : IDL.Func([], [IDL.Vec(ConversationPublic)], ['query']),
   'listMyDevices' : IDL.Func([], [IDL.Vec(DeviceRecordPublic)], ['query']),
+  'listOrgs' : IDL.Func([GetOrgsRequest], [Result_11], ['query']),
   'listPublicGroups' : IDL.Func(
       [ListPublicGroupsRequest],
       [IDL.Vec(PublicGroupSummary)],
       ['query'],
     ),
-  'markMessageRead' : IDL.Func([MessageId], [Result_3], []),
+  'logPolicyExpiryCheck' : IDL.Func([], [], []),
+  'logPolicyReportExported' : IDL.Func([IDL.Opt(OrgId)], [], []),
+  'markMessageRead' : IDL.Func([MessageId], [Result_6], []),
+  'reactivateMember' : IDL.Func([OrgId, UserId], [Result_2], []),
   'redeemDeviceSyncToken' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text],
-      [Result_6],
+      [Result_10],
       [],
     ),
-  'registerAttachment' : IDL.Func([RegisterAttachmentRequest], [Result_5], []),
+  'registerAttachment' : IDL.Func([RegisterAttachmentRequest], [Result_9], []),
   'registerUser' : IDL.Func([RegisterRequest], [Result], []),
-  'removeAdmin' : IDL.Func([UserId], [Result_3], []),
-  'removeConversationMember' : IDL.Func([RemoveMemberRequest], [Result_3], []),
-  'revokeDevice' : IDL.Func([IDL.Text], [Result_3], []),
-  'revokeKeyEscrow' : IDL.Func([IDL.Text, IDL.Text], [Result_3], []),
-  'sendMessage' : IDL.Func([SendMessageRequest], [Result_4], []),
+  'rejectKeyRecovery' : IDL.Func([IDL.Nat], [Result_8], []),
+  'removeAdmin' : IDL.Func([UserId], [Result_6], []),
+  'removeConversationMember' : IDL.Func([RemoveMemberRequest], [Result_6], []),
+  'removeMember' : IDL.Func([OrgId, UserId], [Result_2], []),
+  'removeMemberFromGroup' : IDL.Func(
+      [RemoveMemberFromGroupRequest],
+      [Result_2],
+      [],
+    ),
+  'revokeDevice' : IDL.Func([IDL.Text], [Result_6], []),
+  'revokeKeyEscrow' : IDL.Func([IDL.Text, IDL.Text], [Result_6], []),
+  'sendMessage' : IDL.Func([SendMessageRequest], [Result_7], []),
   'setGroupCompartment' : IDL.Func(
       [ConversationId, CompartmentLabel],
-      [Result_3],
+      [Result_6],
       [],
     ),
   'setSovereignConfig' : IDL.Func(
@@ -504,12 +893,24 @@ export const idlService = IDL.Service({
         IDL.Opt(IDL.Nat),
         IDL.Opt(IDL.Float64),
       ],
-      [Result_2],
+      [Result_5],
       [],
     ),
   'setTypingIndicator' : IDL.Func([ConversationId, IDL.Nat], [], []),
-  'submitJoinRequest' : IDL.Func([SubmitJoinRequestRequest], [Result_1], []),
+  'submitJoinRequest' : IDL.Func([SubmitJoinRequestRequest], [Result_4], []),
+  'suspendMember' : IDL.Func([SuspendUserRequest], [Result_2], []),
+  'suspendOrg' : IDL.Func([OrgId], [Result_2], []),
+  'toggleLegalHold' : IDL.Func([LegalHoldRequest], [Result_1], []),
   'touchPresence' : IDL.Func([], [], []),
+  'updateMemberRole' : IDL.Func([UpdateMemberRoleRequest], [Result_2], []),
+  'updateOrg' : IDL.Func([OrgId, IDL.Text, IDL.Opt(IDL.Text)], [Result_3], []),
+  'updateOrgSettings' : IDL.Func([IDL.Text, OrgSettings], [Result_2], []),
+  'updatePlatformSettings' : IDL.Func([PlatformSettings], [Result_2], []),
+  'updateRetentionPolicy' : IDL.Func(
+      [UpdateRetentionPolicyRequest],
+      [Result_1],
+      [],
+    ),
   'updateUserProfile' : IDL.Func([UpdateProfileRequest], [Result], []),
   'uploadFile' : IDL.Func(
       [IDL.Vec(IDL.Nat8), IDL.Text],
@@ -540,7 +941,7 @@ export const idlFactory = ({ IDL }) => {
     'notFound' : IDL.Null,
     'unauthorized' : IDL.Null,
   });
-  const Result_3 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
+  const Result_6 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
   const ConversationId = IDL.Nat;
   const AddMemberRequest = IDL.Record({
     'member' : UserId,
@@ -559,7 +960,7 @@ export const idlFactory = ({ IDL }) => {
     'registeredAt' : Timestamp,
     'lastSeen' : Timestamp,
   });
-  const Result_6 = IDL.Variant({ 'ok' : DeviceRecordPublic, 'err' : Error });
+  const Result_10 = IDL.Variant({ 'ok' : DeviceRecordPublic, 'err' : Error });
   const EscrowAccessGrant = IDL.Record({
     'grantTimestamp' : Timestamp,
     'grantId' : IDL.Nat,
@@ -569,16 +970,53 @@ export const idlFactory = ({ IDL }) => {
     'requestingAdmin' : UserId,
     'targetUserId' : UserId,
   });
-  const Result_17 = IDL.Variant({
+  const Result_31 = IDL.Variant({
     'ok' : IDL.Vec(EscrowAccessGrant),
     'err' : Error,
   });
-  const Result_16 = IDL.Variant({ 'ok' : EscrowAccessGrant, 'err' : Error });
+  const Result_30 = IDL.Variant({ 'ok' : EscrowAccessGrant, 'err' : Error });
   const DenialReason = IDL.Text;
   const JoinRequestActionRequest = IDL.Record({
     'denialReason' : IDL.Opt(DenialReason),
     'requestId' : IDL.Text,
     'conversationId' : ConversationId,
+  });
+  const RecoveryRequestStatus = IDL.Variant({
+    'pending' : IDL.Null,
+    'completed' : IDL.Null,
+    'approved' : IDL.Null,
+    'rejected' : IDL.Null,
+  });
+  const OrgId = IDL.Text;
+  const RecoveryRequest = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : RecoveryRequestStatus,
+    'orgId' : IDL.Opt(OrgId),
+    'approvedBy' : IDL.Opt(UserId),
+    'createdAt' : Timestamp,
+    'initiatingAdmin' : UserId,
+    'targetDeviceId' : IDL.Text,
+    'resolvedAt' : IDL.Opt(Timestamp),
+    'reason' : IDL.Text,
+    'targetUserId' : UserId,
+  });
+  const Result_8 = IDL.Variant({ 'ok' : RecoveryRequest, 'err' : Error });
+  const Result_29 = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
+  const RetentionPeriod = IDL.Variant({
+    'days30' : IDL.Null,
+    'days90' : IDL.Null,
+    'unlimited' : IDL.Null,
+    'years7' : IDL.Null,
+    'year1' : IDL.Null,
+  });
+  const RetentionPolicy = IDL.Record({
+    'id' : IDL.Text,
+    'orgId' : IDL.Opt(OrgId),
+    'period' : RetentionPeriod,
+    'legalHold' : IDL.Bool,
+    'updatedAt' : Timestamp,
+    'updatedBy' : UserId,
+    'autoDelete' : IDL.Bool,
   });
   const CreateDirectRequest = IDL.Record({ 'peer' : UserId });
   const ConversationKind = IDL.Variant({
@@ -598,7 +1036,7 @@ export const idlFactory = ({ IDL }) => {
     'discoverable' : IDL.Bool,
     'encryptedName' : IDL.Opt(IDL.Vec(IDL.Nat8)),
   });
-  const Result_15 = IDL.Variant({ 'ok' : ConversationPublic, 'err' : Error });
+  const Result_28 = IDL.Variant({ 'ok' : ConversationPublic, 'err' : Error });
   const CreateGroupRequest = IDL.Record({
     'initialMembers' : IDL.Vec(UserId),
     'displayName' : IDL.Opt(IDL.Text),
@@ -607,13 +1045,47 @@ export const idlFactory = ({ IDL }) => {
     'discoverable' : IDL.Bool,
     'encryptedName' : IDL.Vec(IDL.Nat8),
   });
+  const CreateOrgRequest = IDL.Record({
+    'name' : IDL.Text,
+    'description' : IDL.Text,
+  });
+  const OrgStatus = IDL.Variant({
+    'Active' : IDL.Null,
+    'Suspended' : IDL.Null,
+    'Archived' : IDL.Null,
+  });
+  const OrgRecord = IDL.Record({
+    'id' : OrgId,
+    'status' : OrgStatus,
+    'name' : IDL.Text,
+    'createdAt' : Timestamp,
+    'createdBy' : UserId,
+    'memberCount' : IDL.Nat,
+    'description' : IDL.Text,
+  });
+  const Result_3 = IDL.Variant({ 'ok' : OrgRecord, 'err' : IDL.Text });
+  const CreateRetentionPolicyRequest = IDL.Record({
+    'orgId' : IDL.Opt(OrgId),
+    'period' : RetentionPeriod,
+    'legalHold' : IDL.Bool,
+    'autoDelete' : IDL.Bool,
+  });
+  const Result_1 = IDL.Variant({ 'ok' : RetentionPolicy, 'err' : IDL.Text });
   const AttachmentId = IDL.Nat;
+  const Result_2 = IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text });
   const AuditExportEventType = IDL.Variant({
+    'memberSuspended' : IDL.Null,
+    'userInvited' : IDL.Null,
     'retentionEnabled' : IDL.Null,
     'memberAdded' : IDL.Null,
     'retentionDisabled' : IDL.Null,
+    'groupMemberRemoved' : IDL.Null,
+    'orgCreated' : IDL.Null,
     'escrowAccessGranted' : IDL.Null,
     'callInitiated' : IDL.Null,
+    'keyRecoveryApproved' : IDL.Null,
+    'keyRecoveryInitiated' : IDL.Null,
+    'keyRecoveryRejected' : IDL.Null,
     'adminAction' : IDL.Null,
     'auditLogExported' : IDL.Null,
     'escrowEnrolled' : IDL.Null,
@@ -621,7 +1093,9 @@ export const idlFactory = ({ IDL }) => {
     'escrowRevoked' : IDL.Null,
     'userRegistered' : IDL.Null,
     'memberRemoved' : IDL.Null,
+    'orgSuspended' : IDL.Null,
     'userRemoved' : IDL.Null,
+    'memberRoleChanged' : IDL.Null,
   });
   const AuditExportFormat = IDL.Variant({
     'csv' : IDL.Null,
@@ -634,7 +1108,63 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : IDL.Opt(Timestamp),
     'format' : AuditExportFormat,
   });
-  const Result_13 = IDL.Variant({ 'ok' : IDL.Text, 'err' : Error });
+  const Result_26 = IDL.Variant({ 'ok' : IDL.Text, 'err' : Error });
+  const AuditEventType = IDL.Variant({
+    'legalHoldRemoved' : IDL.Null,
+    'memberSuspended' : IDL.Null,
+    'userInvited' : IDL.Null,
+    'retentionEnabled' : IDL.Null,
+    'memberAdded' : IDL.Null,
+    'policyExpiryCheckPerformed' : IDL.Null,
+    'retentionPolicyUpdated' : IDL.Null,
+    'retentionDisabled' : IDL.Null,
+    'groupMemberRemoved' : IDL.Null,
+    'orgCreated' : IDL.Null,
+    'orgDeleted' : IDL.Null,
+    'platformSettingsUpdated' : IDL.Null,
+    'escrowAccessGranted' : IDL.Null,
+    'callInitiated' : IDL.Null,
+    'sovereignConfigUpdated' : IDL.Null,
+    'keyRecoveryApproved' : IDL.Null,
+    'keyRecoveryInitiated' : IDL.Null,
+    'messageQueueDrained' : IDL.Null,
+    'memberReactivated' : IDL.Null,
+    'legalHoldPlaced' : IDL.Null,
+    'keyRecoveryRejected' : IDL.Null,
+    'adminAction' : IDL.Null,
+    'orgSettingsUpdated' : IDL.Null,
+    'auditLogExported' : IDL.Null,
+    'escrowEnrolled' : IDL.Null,
+    'messageSent' : IDL.Null,
+    'escrowRevoked' : IDL.Null,
+    'compartmentAssigned' : IDL.Null,
+    'policyReportExported' : IDL.Null,
+    'userRegistered' : IDL.Null,
+    'memberRemoved' : IDL.Null,
+    'retentionPolicyCreated' : IDL.Null,
+    'orgSuspended' : IDL.Null,
+    'userRemoved' : IDL.Null,
+    'priorityMessageSent' : IDL.Null,
+    'orgUpdated' : IDL.Null,
+    'memberRoleChanged' : IDL.Null,
+  });
+  const ExportAuditLogsRequest = IDL.Record({
+    'afterTimestamp' : IDL.Opt(Timestamp),
+    'filterEventType' : IDL.Opt(AuditEventType),
+    'beforeTimestamp' : IDL.Opt(Timestamp),
+    'filterActor' : IDL.Opt(UserId),
+    'filterOrgId' : IDL.Opt(OrgId),
+  });
+  const AuditEvent = IDL.Record({
+    'id' : IDL.Nat,
+    'orgId' : IDL.Opt(OrgId),
+    'targetPrincipal' : IDL.Opt(UserId),
+    'encryptedDetails' : IDL.Opt(IDL.Vec(IDL.Nat8)),
+    'timestamp' : Timestamp,
+    'actorPrincipal' : UserId,
+    'eventType' : AuditEventType,
+  });
+  const Result_25 = IDL.Variant({ 'ok' : IDL.Vec(AuditEvent), 'err' : Error });
   const CompartmentLabel = IDL.Variant({
     'classified' : IDL.Null,
     'unclassified' : IDL.Null,
@@ -665,40 +1195,30 @@ export const idlFactory = ({ IDL }) => {
     ),
     'residencyLabel' : DataResidency,
   });
-  const Result_14 = IDL.Variant({ 'ok' : ConfigExportBundle, 'err' : Error });
-  const AuditEventType = IDL.Variant({
-    'retentionEnabled' : IDL.Null,
-    'memberAdded' : IDL.Null,
-    'retentionDisabled' : IDL.Null,
-    'escrowAccessGranted' : IDL.Null,
-    'callInitiated' : IDL.Null,
-    'sovereignConfigUpdated' : IDL.Null,
-    'messageQueueDrained' : IDL.Null,
-    'adminAction' : IDL.Null,
-    'auditLogExported' : IDL.Null,
-    'escrowEnrolled' : IDL.Null,
-    'messageSent' : IDL.Null,
-    'escrowRevoked' : IDL.Null,
-    'compartmentAssigned' : IDL.Null,
-    'userRegistered' : IDL.Null,
-    'memberRemoved' : IDL.Null,
-    'userRemoved' : IDL.Null,
-    'priorityMessageSent' : IDL.Null,
+  const Result_27 = IDL.Variant({ 'ok' : ConfigExportBundle, 'err' : Error });
+  const GetAllGroupsRequest = IDL.Record({ 'orgId' : IDL.Opt(OrgId) });
+  const GroupStatus = IDL.Variant({
+    'active' : IDL.Null,
+    'suspended' : IDL.Null,
+  });
+  const GroupAdminRecord = IDL.Record({
+    'id' : ConversationId,
+    'status' : GroupStatus,
+    'orgId' : IDL.Opt(OrgId),
+    'name' : IDL.Text,
+    'createdAt' : Timestamp,
+    'createdBy' : UserId,
+    'memberCount' : IDL.Nat,
   });
   const GetAuditLogRequest = IDL.Record({
+    'afterTimestamp' : IDL.Opt(Timestamp),
     'limit' : IDL.Nat,
     'filterEventType' : IDL.Opt(AuditEventType),
+    'beforeTimestamp' : IDL.Opt(Timestamp),
+    'filterActor' : IDL.Opt(UserId),
+    'filterOrgId' : IDL.Opt(OrgId),
     'afterEventId' : IDL.Opt(IDL.Nat),
   });
-  const AuditEvent = IDL.Record({
-    'id' : IDL.Nat,
-    'targetPrincipal' : IDL.Opt(UserId),
-    'encryptedDetails' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'timestamp' : Timestamp,
-    'actorPrincipal' : UserId,
-    'eventType' : AuditEventType,
-  });
-  const Result_12 = IDL.Variant({ 'ok' : IDL.Vec(AuditEvent), 'err' : Error });
   const SovereignConfig = IDL.Record({
     'lastUpdated' : Timestamp,
     'subnetPrincipal' : IDL.Opt(IDL.Principal),
@@ -706,6 +1226,34 @@ export const idlFactory = ({ IDL }) => {
     'nodeCount' : IDL.Opt(IDL.Nat),
     'cyclesCostMultiplier' : IDL.Opt(IDL.Float64),
     'residencyLabel' : DataResidency,
+  });
+  const EscrowStatsRecord = IDL.Record({
+    'pendingRecoveries' : IDL.Nat,
+    'lastRecoveryTimestamp' : IDL.Opt(Timestamp),
+    'totalEscrowed' : IDL.Nat,
+  });
+  const Result_24 = IDL.Variant({ 'ok' : EscrowStatsRecord, 'err' : Error });
+  const GetEscrowedUsersRequest = IDL.Record({
+    'orgId' : IDL.Opt(OrgId),
+    'limit' : IDL.Nat,
+    'afterUserId' : IDL.Opt(IDL.Text),
+  });
+  const EscrowStatus = IDL.Variant({
+    'active' : IDL.Null,
+    'revoked' : IDL.Null,
+    'recovered' : IDL.Null,
+    'pendingRecovery' : IDL.Null,
+  });
+  const EscrowedUserRecord = IDL.Record({
+    'orgId' : IDL.Opt(OrgId),
+    'deviceCount' : IDL.Nat,
+    'userId' : UserId,
+    'escrowStatus' : EscrowStatus,
+    'lastBackedUp' : IDL.Opt(Timestamp),
+  });
+  const Result_23 = IDL.Variant({
+    'ok' : IDL.Vec(EscrowedUserRecord),
+    'err' : Error,
   });
   const JoinRequestStatus = IDL.Variant({
     'pending' : IDL.Null,
@@ -720,8 +1268,18 @@ export const idlFactory = ({ IDL }) => {
     'message' : IDL.Opt(IDL.Text),
     'requesterId' : UserId,
   });
-  const Result_11 = IDL.Variant({ 'ok' : IDL.Vec(JoinRequest), 'err' : Error });
-  const Result_10 = IDL.Variant({ 'ok' : GroupRetentionPolicy, 'err' : Error });
+  const Result_22 = IDL.Variant({ 'ok' : IDL.Vec(JoinRequest), 'err' : Error });
+  const GetGroupMembersRequest = IDL.Record({ 'groupId' : ConversationId });
+  const GroupMemberRecord = IDL.Record({
+    'displayName' : IDL.Opt(IDL.Text),
+    'userId' : UserId,
+    'joinedAt' : Timestamp,
+  });
+  const Result_21 = IDL.Variant({
+    'ok' : IDL.Vec(GroupMemberRecord),
+    'err' : IDL.Text,
+  });
+  const Result_20 = IDL.Variant({ 'ok' : GroupRetentionPolicy, 'err' : Error });
   const MessageId = IDL.Nat;
   const Attachment = IDL.Record({
     'id' : AttachmentId,
@@ -761,7 +1319,7 @@ export const idlFactory = ({ IDL }) => {
     'priority' : IDL.Opt(MessagePriority),
     'readBy' : IDL.Vec(ReadReceipt),
   });
-  const Result_9 = IDL.Variant({
+  const Result_19 = IDL.Variant({
     'ok' : IDL.Vec(MessagePublic),
     'err' : Error,
   });
@@ -775,6 +1333,94 @@ export const idlFactory = ({ IDL }) => {
     'consentLanguageVersion' : IDL.Text,
     'revokedAt' : IDL.Opt(Timestamp),
     'revokedReason' : IDL.Opt(IDL.Text),
+  });
+  const MemberStatus = IDL.Variant({
+    'Active' : IDL.Null,
+    'Suspended' : IDL.Null,
+    'Pending' : IDL.Null,
+  });
+  const OrgRole = IDL.Variant({
+    'OrgAdmin' : IDL.Null,
+    'Auditor' : IDL.Null,
+    'SuperAdmin' : IDL.Null,
+    'StandardUser' : IDL.Null,
+  });
+  const OrgMembership = IDL.Record({
+    'status' : MemberStatus,
+    'orgId' : OrgId,
+    'userId' : UserId,
+    'joinedAt' : Timestamp,
+    'role' : OrgRole,
+    'invitedBy' : UserId,
+    'email' : IDL.Opt(IDL.Text),
+    'lastActive' : IDL.Opt(Timestamp),
+  });
+  const Result_18 = IDL.Variant({
+    'ok' : IDL.Vec(OrgMembership),
+    'err' : IDL.Text,
+  });
+  const Result_17 = IDL.Variant({ 'ok' : IDL.Opt(OrgRole), 'err' : IDL.Text });
+  const GroupCreationPermission = IDL.Variant({
+    'orgAdminsOnly' : IDL.Null,
+    'allMembers' : IDL.Null,
+  });
+  const DataExportPermission = IDL.Variant({
+    'orgAdminsOnly' : IDL.Null,
+    'disabled' : IDL.Null,
+    'allMembers' : IDL.Null,
+  });
+  const RetentionPeriodDays = IDL.Variant({
+    'days30' : IDL.Null,
+    'days90' : IDL.Null,
+    'unlimited' : IDL.Null,
+    'years7' : IDL.Null,
+    'year1' : IDL.Null,
+  });
+  const OrgSettings = IDL.Record({
+    'legalHoldReason' : IDL.Opt(IDL.Text),
+    'orgId' : IDL.Text,
+    'logoStorageKey' : IDL.Opt(IDL.Text),
+    'groupCreationPermission' : GroupCreationPermission,
+    'dataExportPermission' : DataExportPermission,
+    'defaultInviteRole' : IDL.Text,
+    'logoUrl' : IDL.Opt(IDL.Text),
+    'legalHoldEnabled' : IDL.Bool,
+    'messageRetentionDays' : IDL.Opt(RetentionPeriodDays),
+  });
+  const GetOrgUsersRequest = IDL.Record({
+    'orgId' : IDL.Opt(OrgId),
+    'search' : IDL.Opt(IDL.Text),
+    'limit' : IDL.Nat,
+    'afterUserId' : IDL.Opt(UserId),
+  });
+  const GetOrgUsersResponse = IDL.Record({
+    'total' : IDL.Nat,
+    'hasMore' : IDL.Bool,
+    'members' : IDL.Vec(OrgMembership),
+  });
+  const Result_16 = IDL.Variant({
+    'ok' : GetOrgUsersResponse,
+    'err' : IDL.Text,
+  });
+  const PasswordPolicy = IDL.Variant({
+    'strong' : IDL.Null,
+    'enterprise' : IDL.Null,
+    'basic' : IDL.Null,
+  });
+  const PlatformSettings = IDL.Record({
+    'defaultRetentionDays' : RetentionPeriodDays,
+    'keyEscrowEnabled' : IDL.Bool,
+    'vetKeysEnabled' : IDL.Bool,
+    'sessionTimeoutMinutes' : IDL.Nat,
+    'platformTagline' : IDL.Text,
+    'auditLogRetentionDays' : RetentionPeriodDays,
+    'mfaEnforced' : IDL.Bool,
+    'passwordPolicy' : PasswordPolicy,
+    'platformName' : IDL.Text,
+  });
+  const Result_15 = IDL.Variant({
+    'ok' : IDL.Vec(RecoveryRequest),
+    'err' : Error,
   });
   const GetRetentionMetadataRequest = IDL.Record({
     'endDate' : IDL.Opt(Timestamp),
@@ -790,10 +1436,11 @@ export const idlFactory = ({ IDL }) => {
     'recipientPrincipals' : IDL.Vec(UserId),
     'convId' : ConversationId,
   });
-  const Result_8 = IDL.Variant({
+  const Result_14 = IDL.Variant({
     'ok' : IDL.Vec(RetentionMetadataRecord),
     'err' : Error,
   });
+  const GetRetentionPoliciesRequest = IDL.Record({ 'orgId' : IDL.Opt(OrgId) });
   const TypingIndicatorPublic = IDL.Record({
     'expiresAt' : Timestamp,
     'userId' : UserId,
@@ -808,7 +1455,24 @@ export const idlFactory = ({ IDL }) => {
     'registeredAt' : Timestamp,
     'lastSeen' : Timestamp,
   });
-  const Result_7 = IDL.Variant({ 'ok' : IDL.Vec(UserId), 'err' : Error });
+  const InviteUserRequest = IDL.Record({
+    'orgId' : OrgId,
+    'role' : OrgRole,
+    'email' : IDL.Opt(IDL.Text),
+    'principalId' : IDL.Text,
+  });
+  const Result_13 = IDL.Variant({ 'ok' : OrgMembership, 'err' : IDL.Text });
+  const Result_12 = IDL.Variant({ 'ok' : IDL.Vec(UserId), 'err' : Error });
+  const GetOrgsRequest = IDL.Record({
+    'search' : IDL.Opt(IDL.Text),
+    'limit' : IDL.Nat,
+    'afterOrgId' : IDL.Opt(OrgId),
+  });
+  const GetOrgsResponse = IDL.Record({
+    'total' : IDL.Nat,
+    'orgs' : IDL.Vec(OrgRecord),
+  });
+  const Result_11 = IDL.Variant({ 'ok' : GetOrgsResponse, 'err' : IDL.Text });
   const ListPublicGroupsRequest = IDL.Record({
     'offset' : IDL.Nat,
     'limit' : IDL.Nat,
@@ -827,7 +1491,7 @@ export const idlFactory = ({ IDL }) => {
     'encryptedSizeBytes' : IDL.Nat,
     'storageKey' : IDL.Text,
   });
-  const Result_5 = IDL.Variant({ 'ok' : Attachment, 'err' : Error });
+  const Result_9 = IDL.Variant({ 'ok' : Attachment, 'err' : Error });
   const RegisterRequest = IDL.Record({
     'ecdhPublicKey' : EcdhPublicKey,
     'encryptedAvatarKey' : IDL.Opt(IDL.Text),
@@ -838,6 +1502,10 @@ export const idlFactory = ({ IDL }) => {
     'member' : UserId,
     'conversationId' : ConversationId,
   });
+  const RemoveMemberFromGroupRequest = IDL.Record({
+    'memberId' : UserId,
+    'groupId' : ConversationId,
+  });
   const SendMessageRequest = IDL.Record({
     'ttlSeconds' : IDL.Opt(IDL.Nat),
     'encryptedContent' : IDL.Vec(IDL.Nat8),
@@ -845,13 +1513,34 @@ export const idlFactory = ({ IDL }) => {
     'conversationId' : ConversationId,
     'priority' : IDL.Opt(MessagePriority),
   });
-  const Result_4 = IDL.Variant({ 'ok' : MessagePublic, 'err' : Error });
-  const Result_2 = IDL.Variant({ 'ok' : SovereignConfig, 'err' : Error });
+  const Result_7 = IDL.Variant({ 'ok' : MessagePublic, 'err' : Error });
+  const Result_5 = IDL.Variant({ 'ok' : SovereignConfig, 'err' : Error });
   const SubmitJoinRequestRequest = IDL.Record({
     'conversationId' : ConversationId,
     'message' : IDL.Opt(IDL.Text),
   });
-  const Result_1 = IDL.Variant({ 'ok' : JoinRequest, 'err' : Error });
+  const Result_4 = IDL.Variant({ 'ok' : JoinRequest, 'err' : Error });
+  const SuspendUserRequest = IDL.Record({
+    'orgId' : OrgId,
+    'userId' : UserId,
+    'reason' : IDL.Text,
+  });
+  const LegalHoldRequest = IDL.Record({
+    'orgId' : OrgId,
+    'hold' : IDL.Bool,
+    'reason' : IDL.Text,
+  });
+  const UpdateMemberRoleRequest = IDL.Record({
+    'orgId' : OrgId,
+    'userId' : UserId,
+    'newRole' : OrgRole,
+  });
+  const UpdateRetentionPolicyRequest = IDL.Record({
+    'id' : IDL.Text,
+    'period' : IDL.Opt(RetentionPeriod),
+    'legalHold' : IDL.Opt(IDL.Bool),
+    'autoDelete' : IDL.Opt(IDL.Bool),
+  });
   const UpdateProfileRequest = IDL.Record({
     'ecdhPublicKey' : IDL.Opt(EcdhPublicKey),
     'encryptedAvatarKey' : IDL.Opt(IDL.Text),
@@ -885,57 +1574,100 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     '_immutableObjectStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-    'addAdmin' : IDL.Func([UserId], [Result_3], []),
-    'addConversationMember' : IDL.Func([AddMemberRequest], [Result_3], []),
-    'addDevice' : IDL.Func([AddDeviceRequest], [Result_6], []),
+    'addAdmin' : IDL.Func([UserId], [Result_6], []),
+    'addConversationMember' : IDL.Func([AddMemberRequest], [Result_6], []),
+    'addDevice' : IDL.Func([AddDeviceRequest], [Result_10], []),
     'adminGetEscrowGrants' : IDL.Func(
         [IDL.Opt(UserId), IDL.Nat, IDL.Opt(IDL.Nat)],
-        [Result_17],
+        [Result_31],
         ['query'],
       ),
     'adminGrantEscrowAccess' : IDL.Func(
         [UserId, IDL.Text, IDL.Text],
-        [Result_16],
+        [Result_30],
         [],
       ),
-    'approveJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_3], []),
+    'approveJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_6], []),
+    'approveKeyRecovery' : IDL.Func([IDL.Nat], [Result_8], []),
+    'bootstrapSuperAdmin' : IDL.Func([UserId], [Result_29], []),
+    'checkPolicyExpiry' : IDL.Func(
+        [IDL.Opt(OrgId)],
+        [IDL.Vec(RetentionPolicy)],
+        ['query'],
+      ),
     'clearTypingIndicator' : IDL.Func([ConversationId], [], []),
     'createDirectConversation' : IDL.Func(
         [CreateDirectRequest],
-        [Result_15],
+        [Result_28],
         [],
       ),
-    'createGroupConversation' : IDL.Func([CreateGroupRequest], [Result_15], []),
-    'deleteAttachment' : IDL.Func([AttachmentId], [Result_3], []),
-    'deleteConversation' : IDL.Func([ConversationId], [Result_3], []),
-    'deleteGroupConversation' : IDL.Func([ConversationId], [Result_3], []),
-    'denyJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_3], []),
-    'disableGroupRetention' : IDL.Func([ConversationId], [Result_3], []),
-    'enableGroupRetention' : IDL.Func([ConversationId], [Result_3], []),
+    'createGroupConversation' : IDL.Func([CreateGroupRequest], [Result_28], []),
+    'createOrg' : IDL.Func([CreateOrgRequest], [Result_3], []),
+    'createRetentionPolicy' : IDL.Func(
+        [CreateRetentionPolicyRequest],
+        [Result_1],
+        [],
+      ),
+    'deleteAttachment' : IDL.Func([AttachmentId], [Result_6], []),
+    'deleteConversation' : IDL.Func([ConversationId], [Result_6], []),
+    'deleteGroupConversation' : IDL.Func([ConversationId], [Result_6], []),
+    'deleteOrg' : IDL.Func([OrgId], [Result_2], []),
+    'denyJoinRequest' : IDL.Func([JoinRequestActionRequest], [Result_6], []),
+    'disableGroupRetention' : IDL.Func([ConversationId], [Result_6], []),
+    'enableGroupRetention' : IDL.Func([ConversationId], [Result_6], []),
     'enrollKeyEscrow' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Vec(IDL.Nat8), IDL.Text],
-        [Result_3],
+        [Result_6],
         [],
       ),
-    'exportAuditLog' : IDL.Func([AuditExportRequest], [Result_13], []),
-    'exportConfigBundle' : IDL.Func([], [Result_14], []),
-    'generateDeviceSyncToken' : IDL.Func([IDL.Vec(IDL.Nat8)], [Result_13], []),
-    'getAuditLog' : IDL.Func([GetAuditLogRequest], [Result_12], ['query']),
+    'exportAuditLog' : IDL.Func([AuditExportRequest], [Result_26], []),
+    'exportAuditLogs' : IDL.Func(
+        [ExportAuditLogsRequest],
+        [Result_25],
+        ['query'],
+      ),
+    'exportConfigBundle' : IDL.Func([], [Result_27], []),
+    'generateDeviceSyncToken' : IDL.Func([IDL.Vec(IDL.Nat8)], [Result_26], []),
+    'getAllGroups' : IDL.Func(
+        [GetAllGroupsRequest],
+        [IDL.Vec(GroupAdminRecord)],
+        [],
+      ),
+    'getAuditLog' : IDL.Func([GetAuditLogRequest], [Result_25], ['query']),
+    'getCanisterHealth' : IDL.Func(
+        [],
+        [
+          IDL.Record({
+            'memoryCapacity' : IDL.Nat,
+            'cyclesBalance' : IDL.Nat,
+            'memoryUsed' : IDL.Nat,
+          }),
+        ],
+        ['query'],
+      ),
     'getConversation' : IDL.Func(
         [ConversationId],
         [IDL.Opt(ConversationPublic)],
         ['query'],
       ),
     'getDeploymentInfo' : IDL.Func([], [SovereignConfig], ['query']),
+    'getEscrowStats' : IDL.Func([], [Result_24], []),
+    'getEscrowedUsers' : IDL.Func([GetEscrowedUsersRequest], [Result_23], []),
+    'getGlobalRetentionPolicy' : IDL.Func(
+        [],
+        [IDL.Opt(RetentionPolicy)],
+        ['query'],
+      ),
     'getGroupCompartment' : IDL.Func(
         [ConversationId],
         [IDL.Opt(CompartmentLabel)],
         ['query'],
       ),
-    'getGroupJoinRequests' : IDL.Func([ConversationId], [Result_11], ['query']),
+    'getGroupJoinRequests' : IDL.Func([ConversationId], [Result_22], ['query']),
+    'getGroupMembers' : IDL.Func([GetGroupMembersRequest], [Result_21], []),
     'getGroupRetentionPolicy' : IDL.Func(
         [ConversationId],
-        [Result_10],
+        [Result_20],
         ['query'],
       ),
     'getMessageAttachments' : IDL.Func(
@@ -943,11 +1675,32 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(Attachment)],
         ['query'],
       ),
-    'getMessages' : IDL.Func([GetMessagesRequest], [Result_9], ['query']),
+    'getMessages' : IDL.Func([GetMessagesRequest], [Result_19], ['query']),
     'getMyEscrowStatus' : IDL.Func([], [IDL.Vec(EscrowRecord)], ['query']),
+    'getMyOrgs' : IDL.Func([], [Result_18], ['query']),
+    'getMyRole' : IDL.Func([OrgId], [Result_17], ['query']),
+    'getOrg' : IDL.Func([OrgId], [Result_3], ['query']),
+    'getOrgSettings' : IDL.Func([IDL.Text], [OrgSettings], ['query']),
+    'getOrgUsers' : IDL.Func([GetOrgUsersRequest], [Result_16], ['query']),
+    'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
+    'getRecoveryRequests' : IDL.Func(
+        [IDL.Opt(OrgId), IDL.Opt(RecoveryRequestStatus)],
+        [Result_15],
+        [],
+      ),
     'getRetentionMetadata' : IDL.Func(
         [GetRetentionMetadataRequest],
-        [Result_8],
+        [Result_14],
+        ['query'],
+      ),
+    'getRetentionPolicies' : IDL.Func(
+        [GetRetentionPoliciesRequest],
+        [IDL.Vec(RetentionPolicy)],
+        ['query'],
+      ),
+    'getRetentionPolicy' : IDL.Func(
+        [OrgId],
+        [IDL.Opt(RetentionPolicy)],
         ['query'],
       ),
     'getTypingIndicators' : IDL.Func(
@@ -965,43 +1718,61 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(UserProfilePublic)],
         ['query'],
       ),
+    'hasSuperAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'initiateKeyRecovery' : IDL.Func(
+        [UserId, IDL.Text, IDL.Text, IDL.Opt(OrgId)],
+        [Result_8],
+        [],
+      ),
+    'inviteUser' : IDL.Func([InviteUserRequest], [Result_13], []),
     'isAdminCheck' : IDL.Func([UserId], [IDL.Bool], ['query']),
-    'listAdmins' : IDL.Func([], [Result_7], ['query']),
+    'listAdmins' : IDL.Func([], [Result_12], ['query']),
     'listConversations' : IDL.Func(
         [],
         [IDL.Vec(ConversationPublic)],
         ['query'],
       ),
     'listMyDevices' : IDL.Func([], [IDL.Vec(DeviceRecordPublic)], ['query']),
+    'listOrgs' : IDL.Func([GetOrgsRequest], [Result_11], ['query']),
     'listPublicGroups' : IDL.Func(
         [ListPublicGroupsRequest],
         [IDL.Vec(PublicGroupSummary)],
         ['query'],
       ),
-    'markMessageRead' : IDL.Func([MessageId], [Result_3], []),
+    'logPolicyExpiryCheck' : IDL.Func([], [], []),
+    'logPolicyReportExported' : IDL.Func([IDL.Opt(OrgId)], [], []),
+    'markMessageRead' : IDL.Func([MessageId], [Result_6], []),
+    'reactivateMember' : IDL.Func([OrgId, UserId], [Result_2], []),
     'redeemDeviceSyncToken' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text],
-        [Result_6],
+        [Result_10],
         [],
       ),
     'registerAttachment' : IDL.Func(
         [RegisterAttachmentRequest],
-        [Result_5],
+        [Result_9],
         [],
       ),
     'registerUser' : IDL.Func([RegisterRequest], [Result], []),
-    'removeAdmin' : IDL.Func([UserId], [Result_3], []),
+    'rejectKeyRecovery' : IDL.Func([IDL.Nat], [Result_8], []),
+    'removeAdmin' : IDL.Func([UserId], [Result_6], []),
     'removeConversationMember' : IDL.Func(
         [RemoveMemberRequest],
-        [Result_3],
+        [Result_6],
         [],
       ),
-    'revokeDevice' : IDL.Func([IDL.Text], [Result_3], []),
-    'revokeKeyEscrow' : IDL.Func([IDL.Text, IDL.Text], [Result_3], []),
-    'sendMessage' : IDL.Func([SendMessageRequest], [Result_4], []),
+    'removeMember' : IDL.Func([OrgId, UserId], [Result_2], []),
+    'removeMemberFromGroup' : IDL.Func(
+        [RemoveMemberFromGroupRequest],
+        [Result_2],
+        [],
+      ),
+    'revokeDevice' : IDL.Func([IDL.Text], [Result_6], []),
+    'revokeKeyEscrow' : IDL.Func([IDL.Text, IDL.Text], [Result_6], []),
+    'sendMessage' : IDL.Func([SendMessageRequest], [Result_7], []),
     'setGroupCompartment' : IDL.Func(
         [ConversationId, CompartmentLabel],
-        [Result_3],
+        [Result_6],
         [],
       ),
     'setSovereignConfig' : IDL.Func(
@@ -1011,12 +1782,28 @@ export const idlFactory = ({ IDL }) => {
           IDL.Opt(IDL.Nat),
           IDL.Opt(IDL.Float64),
         ],
-        [Result_2],
+        [Result_5],
         [],
       ),
     'setTypingIndicator' : IDL.Func([ConversationId, IDL.Nat], [], []),
-    'submitJoinRequest' : IDL.Func([SubmitJoinRequestRequest], [Result_1], []),
+    'submitJoinRequest' : IDL.Func([SubmitJoinRequestRequest], [Result_4], []),
+    'suspendMember' : IDL.Func([SuspendUserRequest], [Result_2], []),
+    'suspendOrg' : IDL.Func([OrgId], [Result_2], []),
+    'toggleLegalHold' : IDL.Func([LegalHoldRequest], [Result_1], []),
     'touchPresence' : IDL.Func([], [], []),
+    'updateMemberRole' : IDL.Func([UpdateMemberRoleRequest], [Result_2], []),
+    'updateOrg' : IDL.Func(
+        [OrgId, IDL.Text, IDL.Opt(IDL.Text)],
+        [Result_3],
+        [],
+      ),
+    'updateOrgSettings' : IDL.Func([IDL.Text, OrgSettings], [Result_2], []),
+    'updatePlatformSettings' : IDL.Func([PlatformSettings], [Result_2], []),
+    'updateRetentionPolicy' : IDL.Func(
+        [UpdateRetentionPolicyRequest],
+        [Result_1],
+        [],
+      ),
     'updateUserProfile' : IDL.Func([UpdateProfileRequest], [Result], []),
     'uploadFile' : IDL.Func(
         [IDL.Vec(IDL.Nat8), IDL.Text],

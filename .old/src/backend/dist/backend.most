@@ -19,14 +19,34 @@ type AuditEventType__334976789 =
     #escrowAccessGranted;
     #escrowEnrolled;
     #escrowRevoked;
+    #groupMemberRemoved;
+    #keyRecoveryApproved;
+    #keyRecoveryInitiated;
+    #keyRecoveryRejected;
+    #legalHoldPlaced;
+    #legalHoldRemoved;
     #memberAdded;
+    #memberReactivated;
     #memberRemoved;
+    #memberRoleChanged;
+    #memberSuspended;
     #messageQueueDrained;
     #messageSent;
+    #orgCreated;
+    #orgDeleted;
+    #orgSettingsUpdated;
+    #orgSuspended;
+    #orgUpdated;
+    #platformSettingsUpdated;
+    #policyExpiryCheckPerformed;
+    #policyReportExported;
     #priorityMessageSent;
     #retentionDisabled;
     #retentionEnabled;
+    #retentionPolicyCreated;
+    #retentionPolicyUpdated;
     #sovereignConfigUpdated;
+    #userInvited;
     #userRegistered;
     #userRemoved
   };
@@ -36,6 +56,7 @@ type AuditEvent__699314008 =
     encryptedDetails : ?Blob;
     eventType : AuditEventType__334976789;
     id : Nat;
+    orgId : ?OrgId__195627598;
     targetPrincipal : ?UserId__158757552;
     timestamp : Timestamp__301639476
   };
@@ -56,6 +77,8 @@ type Conversation__442121514 =
     var lastMessageAt : Timestamp__301639476;
     members : [UserId__158757552]
   };
+type DataExportPermission__78218430 =
+  {#allMembers; #disabled; #orgAdminsOnly};
 type DataResidency__814192359 = {#apac; #eu; #global; #us};
 type Data__159895909<T> = {var count : Nat__490723111; elements : [var ?T]};
 type Data__791452850<K, V> =
@@ -97,6 +120,7 @@ type EscrowRecord__427528100 =
     userId : UserId__158757552;
     wrappedKey : Blob
   };
+type GroupCreationPermission__442225383 = {#allMembers; #orgAdminsOnly};
 type GroupRetentionPolicy__233071989 =
   {
     convId : ConversationId__966455625;
@@ -108,6 +132,7 @@ type Internal__667636161<T> =
   {children : [var ?Node__92254746<T>]; data : Data__159895909<T>};
 type Internal__8484328<K, V> =
   {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type InviteStatus__155487868 = {#Accepted; #Expired; #Pending; #Revoked};
 type JoinRequestStatus__965962348 = {#approved; #denied; #pending};
 type JoinRequest__726477487 =
   {
@@ -131,6 +156,7 @@ type Map__158565046<K, V> = Map__297112838<K, V>;
 type Map__297112838<K, V> =
   {var root : Node__46230540<K, V>; var size : Nat__490723111};
 type Map__605269027<K, V> = Map__158565046<K, V>;
+type MemberStatus__375090403 = {#Active; #Pending; #Suspended};
 type MessageId__291319400 = Nat;
 type MessagePriority__710871321 = {#high; #normal};
 type MessageType__339792795 = {#audio; #file; #image; #text; #video};
@@ -152,11 +178,86 @@ type Node__46230540<K, V> =
   {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
 type Node__92254746<T> =
   {#internal : Internal__667636161<T>; #leaf : Leaf__520550824<T>};
+type OrgId__195627598 = Text;
+type OrgInvite__781467659 =
+  {
+    createdAt : Timestamp__301639476;
+    expiresAt : Timestamp__301639476;
+    id : Text;
+    invitedBy : UserId__158757552;
+    orgId : OrgId__195627598;
+    principalOrEmail : Text;
+    role : OrgRole__907703072;
+    status : InviteStatus__155487868
+  };
+type OrgMembership__162165522 =
+  {
+    email : ?Text;
+    invitedBy : UserId__158757552;
+    joinedAt : Timestamp__301639476;
+    lastActive : ?Timestamp__301639476;
+    orgId : OrgId__195627598;
+    role : OrgRole__907703072;
+    status : MemberStatus__375090403;
+    userId : UserId__158757552
+  };
+type OrgRecord__907003018 =
+  {
+    createdAt : Timestamp__301639476;
+    createdBy : UserId__158757552;
+    description : Text;
+    id : OrgId__195627598;
+    memberCount : Nat;
+    name : Text;
+    status : OrgStatus__611067598
+  };
+type OrgRole__907703072 = {#Auditor; #OrgAdmin; #StandardUser; #SuperAdmin};
+type OrgSettings__337404528 =
+  {
+    dataExportPermission : DataExportPermission__78218430;
+    defaultInviteRole : Text;
+    groupCreationPermission : GroupCreationPermission__442225383;
+    legalHoldEnabled : Bool;
+    legalHoldReason : ?Text;
+    logoStorageKey : ?Text;
+    logoUrl : ?Text;
+    messageRetentionDays : ?RetentionPeriodDays__56229840;
+    orgId : Text
+  };
+type OrgStatus__611067598 = {#Active; #Archived; #Suspended};
+type PasswordPolicy__154415480 = {#basic; #enterprise; #strong};
+type PlatformSettings__592001590 =
+  {
+    auditLogRetentionDays : RetentionPeriodDays__56229840;
+    defaultRetentionDays : RetentionPeriodDays__56229840;
+    keyEscrowEnabled : Bool;
+    mfaEnforced : Bool;
+    passwordPolicy : PasswordPolicy__154415480;
+    platformName : Text;
+    platformTagline : Text;
+    sessionTimeoutMinutes : Nat;
+    vetKeysEnabled : Bool
+  };
 type ReadReceiptRecord__853033662 =
   {
     messageId : MessageId__291319400;
     var readAt : Timestamp__301639476;
     userId : UserId__158757552
+  };
+type RecoveryRequestStatus__279176078 =
+  {#approved; #completed; #pending; #rejected};
+type RecoveryRequest__566528485 =
+  {
+    approvedBy : ?UserId__158757552;
+    createdAt : Timestamp__301639476;
+    id : Nat;
+    initiatingAdmin : UserId__158757552;
+    orgId : ?OrgId__195627598;
+    reason : Text;
+    resolvedAt : ?Timestamp__301639476;
+    status : RecoveryRequestStatus__279176078;
+    targetDeviceId : Text;
+    targetUserId : UserId__158757552
   };
 type RetentionMetadataRecord__943494619 =
   {
@@ -165,6 +266,20 @@ type RetentionMetadataRecord__943494619 =
     recipientPrincipals : [UserId__158757552];
     senderPrincipal : UserId__158757552;
     sentAt : Timestamp__301639476
+  };
+type RetentionPeriodDays__56229840 =
+  {#days30; #days90; #unlimited; #year1; #years7};
+type RetentionPeriod__472546870 =
+  {#days30; #days90; #unlimited; #year1; #years7};
+type RetentionPolicy__757505855 =
+  {
+    autoDelete : Bool;
+    id : Text;
+    legalHold : Bool;
+    orgId : ?OrgId__195627598;
+    period : RetentionPeriod__472546870;
+    updatedAt : Timestamp__301639476;
+    updatedBy : UserId__158757552
   };
 type Set__532252804<T> = Set__710576254<T>;
 type Set__710576254<T> =
@@ -200,7 +315,7 @@ actor {
     {
       adminPrincipals : Set__532252804<UserId__158757552>;
       auditLog : Map__605269027<Nat, AuditEvent__699314008>;
-      state : {var nextEventId : Nat}
+      state : {var bootstrapCompleted : Bool; var nextEventId : Nat}
     };
   stable attState :
     {
@@ -235,11 +350,22 @@ actor {
       escrowGrants : Map__605269027<Nat, EscrowAccessGrant__445250214>;
       escrowRecords :
         Map__605269027<(UserId__158757552, Text), EscrowRecord__427528100>;
+      recoveryRequests : Map__605269027<Nat, RecoveryRequest__566528485>;
       retentionMetadata : List__415060402<RetentionMetadataRecord__943494619>;
       retentionPolicies :
         Map__605269027<ConversationId__966455625,
                         GroupRetentionPolicy__233071989>;
-      state : {var nextGrantId : Nat}
+      state : {var nextGrantId : Nat; var nextRecoveryRequestId : Nat}
+    };
+  stable invites :
+    {
+      var root : Node__46230540<Text, OrgInvite__781467659>;
+      var size : Nat__490723111
+    };
+  stable memberships :
+    {
+      var root : Node__46230540<Text, OrgMembership__162165522>;
+      var size : Nat__490723111
     };
   stable msgsState :
     {
@@ -256,6 +382,21 @@ actor {
       typingIndicators :
         Map__605269027<(ConversationId__966455625, UserId__158757552),
                         TypingIndicator__500933211>
+    };
+  stable orgsData :
+    {
+      var root : Node__46230540<OrgId__195627598, OrgRecord__907003018>;
+      var size : Nat__490723111
+    };
+  stable retentionState :
+    {
+      retentionPolicies : Map__605269027<Text, RetentionPolicy__757505855>;
+      state : {var nextPolicyId : Nat}
+    };
+  stable settingsState :
+    {
+      orgSettingsMap : Map__605269027<Text, OrgSettings__337404528>;
+      platformSettings : {var value : PlatformSettings__592001590}
     };
   stable sovereignState :
     {

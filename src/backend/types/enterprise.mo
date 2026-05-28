@@ -1,4 +1,5 @@
 import Common "common";
+import OrgTypes "orgs";
 
 module {
   // ── Retention Metadata ───────────────────────────────────────────────────
@@ -57,6 +58,63 @@ module {
     accessOutcome    : Text;
   };
 
+  // ── Key Recovery ─────────────────────────────────────────────────────────
+
+  /// Status of a dual-control key recovery request.
+  public type RecoveryRequestStatus = {
+    #pending;    // awaiting second-admin approval
+    #approved;   // second admin approved; access grant created
+    #rejected;   // admin rejected the request
+    #completed;  // recovery fully completed
+  };
+
+  /// Dual-control key recovery request record.
+  public type RecoveryRequest = {
+    id               : Nat;
+    targetUserId     : Common.UserId;
+    targetDeviceId   : Text;
+    initiatingAdmin  : Common.UserId;
+    approvedBy       : ?Common.UserId;
+    status           : RecoveryRequestStatus;
+    reason           : Text;
+    createdAt        : Common.Timestamp;
+    resolvedAt       : ?Common.Timestamp;
+    orgId            : ?OrgTypes.OrgId;
+  };
+
+  // ── Escrow Dashboard Types ────────────────────────────────────────────────
+
+  /// Escrow status for a user as shown in the admin dashboard.
+  public type EscrowStatus = {
+    #active;           // at least one non-revoked escrow record
+    #pendingRecovery;  // a pending recovery request exists for this user
+    #recovered;        // all records revoked and a completed/approved grant exists
+    #revoked;          // all records have been revoked
+  };
+
+  /// Per-user summary record for the escrow admin dashboard.
+  public type EscrowedUserRecord = {
+    userId       : Common.UserId;
+    orgId        : ?OrgTypes.OrgId;
+    escrowStatus : EscrowStatus;
+    lastBackedUp : ?Common.Timestamp;
+    deviceCount  : Nat;
+  };
+
+  /// Request type for listing escrowed users.
+  public type GetEscrowedUsersRequest = {
+    orgId       : ?OrgTypes.OrgId;
+    afterUserId : ?Text;
+    limit       : Nat;
+  };
+
+  /// Platform-wide escrow statistics (Super Admin only).
+  public type EscrowStatsRecord = {
+    totalEscrowed         : Nat;
+    pendingRecoveries     : Nat;
+    lastRecoveryTimestamp : ?Common.Timestamp;
+  };
+
   // ── Audit Export ─────────────────────────────────────────────────────────
 
   public type AuditExportFormat = { #csv; #json };
@@ -85,5 +143,16 @@ module {
     #escrowRevoked;
     #escrowAccessGranted;
     #auditLogExported;
+    // Organisation management variants
+    #orgCreated;
+    #orgSuspended;
+    #userInvited;
+    #memberRoleChanged;
+    #memberSuspended;
+    #groupMemberRemoved;
+    // Key recovery variants
+    #keyRecoveryInitiated;
+    #keyRecoveryApproved;
+    #keyRecoveryRejected;
   };
 };

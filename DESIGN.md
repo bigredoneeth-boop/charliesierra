@@ -1,68 +1,67 @@
-# Design Brief: CharlieSierra
+# Design Brief: CharlieSierra Admin Console
 
 ## Direction
-CharlieSierra (Professional/Government Edition) — Decentralized E2EE messaging on ICP with WCAG AAA accessibility.
+CharlieSierra Admin Console (Government Edition) — Professional multi-org RBAC admin interface for secure messaging oversight on ICP with WCAG 2.1 AA accessibility.
 
 ## Tone
-Utilitarian, auditable. Zero decorative elements; information density optimized for clarity.
+Brutalist utilitarian — zero decoration, maximum information density, unambiguous action hierarchy, severe legibility for compliance and audit workflows.
 
 ## Differentiation
-Encryption status in every header, multi-device sync badges, group discovery approval workflows, searchable chat index, high-contrast mode.
+Admin-specific token set (status badges, table alternation, sidebar emphasis) instantly distinguishes admin sections from messaging UI. High-contrast borders, grid alignment, monospace timestamps in audit logs.
 
 ## Color Palette
 | Token | Light | Dark | Role |
 |---|---|---|---|
 | background | 0.99 0 0 | 0.09 0 0 | Page surface |
 | foreground | 0.08 0 0 | 0.95 0 0 | Text (WCAG AAA) |
-| card | 0.96 0 0 | 0.14 0 0 | Card/panel |
-| primary | 0.58 0.2 262 | 0.75 0.2 262 | E2EE, buttons, trust |
-| destructive | 0.50 0.26 24 | 0.65 0.24 24 | Delete, leave, revoke |
-| muted | 0.89 0.01 255 | 0.60 0.01 255 | Secondary, timestamps |
+| card | 0.96 0 0 | 0.14 0 0 | Panels, sections |
+| primary | 0.52 0.2 262 | 0.75 0.2 262 | CTAs, active states, trust |
+| success | 0.6 0.18 150 | 0.72 0.16 150 | Active users, approved |
+| warning | 0.75 0.15 85 | 0.82 0.14 85 | Pending, review needed |
+| destructive | 0.5 0.26 24 | 0.65 0.24 24 | Suspended, revoked, delete |
+| sidebar | 0.93 0 0 | 0.14 0 0 | Sidebar bg (darker in light) |
 
 ## Typography
-- Display: General Sans (600, 24-32px) — Headers, chat titles, conversation names
-- Body: General Sans (400, 14-16px) — Messages, labels, chat list, UI copy
-- Mono: Geist Mono (400, 12-13px) — Fingerprints, device IDs, code, audit trails
+- Display: General Sans 600 18-24px — Page titles, section headers
+- Body: General Sans 400 14-16px — Labels, table data, UI copy
+- Mono: Geist Mono 400 12-13px — Principal IDs, timestamps, audit trails
+
+## Elevation & Depth
+Depth via 1px borders and background alternation, not shadows. Shadow-admin (1px 2px 6px) only for modals and floating menus. Sidebar has recessed background, active menu item uses primary highlight.
 
 ## Structural Zones
 | Zone | Background | Border | Notes |
 |---|---|---|---|
-| Header | bg-card | border-b 1px | Title, E2EE badge, device sync, call buttons |
-| Sidebar | bg-background | border-r 1px | Chat list, online status, search, discovery |
-| Chat view | bg-background | — | Message bubbles, timestamps, read receipts |
-| Input | bg-card | border-t 1px | Sticky composer, attachments, send button |
-| Modals | bg-popover | 1px border | Approval workflows, settings, verification |
-
-## Elevation & Depth
-Minimal shadow hierarchy: shadow-message (2px/8px) for chat bubbles, shadow-elevated (4px/16px) for modals and headers. Depth via layering and 1px borders rather than shadows.
+| Header | bg-card | border-b 1px | Title, org selector, user menu |
+| Sidebar | bg-sidebar | border-r 1px | Nav items, active=bg-primary-200, icon+text |
+| Content | bg-background | — | Panels bg-card with border, alternating rows |
+| Footer | — | — | Not used in admin |
+| Tables | alternating bg-background/bg-secondary | border-border | Striped rows, headers bold, data monospace |
 
 ## Spacing & Rhythm
-Chat bubbles 8px padding, 4px radius. Message groups 12px vertical gap. Sidebar items 8px padding. Input 12px padding. Radii: 4px (inputs, bubbles), 6px (cards), 0 (minimal).
+Dense tables (8px horizontal padding per cell, 10px row height). Sidebar items 8px padding. Page sections 24px gap. Header 16px padding. Card padding 16px. All borders 1px solid. No rounded corners on table rows; 4px on cards/badges/inputs.
 
 ## Component Patterns
-- Message bubble: Minimal radius (4px), shadow-message, bg-primary sent / bg-card received, timestamp below
-- Encryption badge: Lock icon + "E2EE Verified" or "Key Pending" in header, always visible
-- Multi-device sync: Badge (mobile/desktop icons) right of username in header
-- Group discovery: Modal list with approval requests, admin buttons (approve/reject)
-- Chat search: Sticky search bar above chat list, filters by text/date/sender
-- Approval workflows: Expandable list items, collapsible details, action buttons aligned right
+- Status badges: .badge-active (green), .badge-pending (amber), .badge-suspended (red), compact inline 12px padding
+- Table rows: alternating bg via .table-row-alt class, hover:bg-secondary/50
+- Header bar: bg-card, border-b, flex space-between for title/controls
+- Sidebar item: active=bg-sidebar-primary text-sidebar-primary-foreground, inactive=text-sidebar-foreground hover:bg-sidebar-accent/30
+- Audit log cell: principal IDs in monospace, timestamp right-aligned
 
-## Motion & Animation
-- Transitions: cubic-bezier(0.4, 0, 0.2, 1), 0.3s smooth on all interactive state changes
-- Message fade-in: opacity 0→1, 0.2s on new messages
-- Typing indicator: three-dot pulse 1s loop, muted-foreground
-- Notifications: slide-in from top 0.4s, auto-dismiss 4s
-- Expandables: smooth height 0.3s, prefer CSS transitions over animations
+## Motion
+- Focus: 2px primary ring, 0.1s visible on tab
+- Hover: background shift 0.15s on interactive elements
+- Table row: highlight on hover (subtle bg-primary/5)
+- Reduce motion respected: all 0.01ms via prefers-reduced-motion
 
 ## Constraints
-- No full-page gradients or ambient effects; no blur/glassmorphism
-- Shadows only for depth (shadow-message, shadow-elevated), never glow/neon
-- WCAG AAA text contrast: min 7:1 on critical UI (0.8+ L diff in dark mode)
-- Minimal color palette: 3–5 semantic tokens in use simultaneously
-- All interactive targets ≥44px (touch-friendly)
-- High-contrast mode via `[data-high-contrast="true"]` attribute on root
-- Semantic HTML (nav, main, article); visible focus indicators; aria labels
-- Support prefers-reduced-motion media query for animations
+- No gradients, no blur, no glassmorphism
+- No decorative shadows; depth via borders only
+- WCAG 2.1 AA minimum (7:1 contrast on buttons, 4.5:1 on body text)
+- All touchable targets ≥44px height
+- High-contrast mode override via [data-high-contrast="true"]
+- Semantic HTML (table, nav, main, section); visible focus; aria labels
+- Sidebar fixed width 240px on desktop, collapsible on mobile
 
 ## Signature Detail
-E2EE lock icon in header changes state (locked/verified/pending) based on key verification. Message bubbles show subtle padlock on hover. Multi-device sync badge (mobile+desktop) appears in header. Disappearing messages fade with countdown timer.
+Admin-exclusive badge colors (green/amber/red status states) instantly mark admin sections. Monospace principal IDs in audit logs reinforce security/compliance tone. Sidebar active highlight via purple background (not just text weight) creates unambiguous active state.

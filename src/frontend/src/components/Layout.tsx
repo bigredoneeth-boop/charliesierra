@@ -11,6 +11,7 @@ import {
   Menu,
   MessageSquare,
   Settings,
+  Shield,
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -33,6 +34,7 @@ const NAV_ITEMS = [
     label: "Conversations",
     ocid: "nav.conversations",
     ariaLabel: "Go to Conversations",
+    adminSeparatorBefore: false,
   },
   {
     to: "/app/discover",
@@ -40,6 +42,7 @@ const NAV_ITEMS = [
     label: "Discover",
     ocid: "nav.discover",
     ariaLabel: "Discover public groups",
+    adminSeparatorBefore: false,
   },
   {
     to: "/app/settings",
@@ -47,6 +50,15 @@ const NAV_ITEMS = [
     label: "Settings",
     ocid: "nav.settings",
     ariaLabel: "Go to Settings",
+    adminSeparatorBefore: false,
+  },
+  {
+    to: "/admin",
+    icon: Shield,
+    label: "Admin",
+    ocid: "nav.admin",
+    ariaLabel: "Go to Admin Console",
+    adminSeparatorBefore: true,
   },
 ];
 
@@ -74,27 +86,41 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1" aria-label="Main navigation">
-        {NAV_ITEMS.map(({ to, icon: Icon, label, ocid, ariaLabel }) => {
-          const active = location.pathname.startsWith(to);
-          return (
-            <Link
-              key={to}
-              to={to}
-              onClick={onNavigate}
-              data-ocid={ocid}
-              aria-label={ariaLabel}
-              aria-current={active ? "page" : undefined}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 ${
-                active
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
-              }`}
-            >
-              <Icon size={16} aria-hidden="true" />
-              {label}
-            </Link>
-          );
-        })}
+        {NAV_ITEMS.map(
+          ({
+            to,
+            icon: Icon,
+            label,
+            ocid,
+            ariaLabel,
+            adminSeparatorBefore,
+          }) => {
+            const active = location.pathname.startsWith(to);
+            return (
+              <div key={to}>
+                {/* Subtle separator before Admin item */}
+                {adminSeparatorBefore && (
+                  <Separator className="my-2 bg-sidebar-border/60" />
+                )}
+                <Link
+                  to={to}
+                  onClick={onNavigate}
+                  data-ocid={ocid}
+                  aria-label={ariaLabel}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 ${
+                    active
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
+                  }`}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  {label}
+                </Link>
+              </div>
+            );
+          },
+        )}
       </nav>
 
       <Separator className="bg-sidebar-border" />

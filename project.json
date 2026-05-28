@@ -1,29 +1,23 @@
 {
-  "overview": "CharlieSierra is a fully decentralized, end-to-end encrypted secure messaging platform built on the Internet Computer. Designed for government and enterprise use, it features minimalist high-contrast UI, WCAG 2.1 AA accessibility, multi-device key sync via QR pairing, full-text message search, and a community/group discovery system with admin approval workflows — all while maintaining zero-knowledge encrypted messaging.",
+  "overview": "CharlieSierra is a decentralized, end-to-end encrypted secure messaging platform for government and military use, with a full Admin Console for managing organizations, users, groups, audit logs, key escrow, retention policies, and platform settings.",
   "features": [
-    "End-to-end encrypted 1:1 and group chats with AES-GCM + ECDH",
-    "Internet Identity authentication",
-    "Read receipts, typing indicators, disappearing messages",
-    "File, image, video, voice note sharing",
-    "WebRTC voice and video calling",
-    "Enterprise admin controls: audit logs, key escrow, retention metadata",
-    "Sovereign deployment: data residency, compartments (classified/unclassified)",
-    "Offline message queuing with priority messaging and auto-failover",
-    "WCAG 2.1 AA accessibility with high-contrast professional theme",
-    "Multi-device key sync via QR code pairing",
-    "Full-text search in chats (client-side, privacy-preserving)",
-    "Community/group discovery with join requests and admin approval workflows"
+    "End-to-end encrypted messaging",
+    "Admin Console with role-based access control",
+    "Multi-tenant organization management",
+    "Platform and organization settings control panel",
+    "Immutable audit logs",
+    "Key escrow with dual-control recovery",
+    "Retention policy management with legal hold",
+    "Logo upload and org branding"
   ],
-  "category": "productivity",
+  "category": "secure-messaging",
   "tags": [
-    "messaging",
-    "encrypted",
+    "security",
     "government",
-    "enterprise",
-    "icp",
-    "accessibility",
-    "group-discovery",
-    "multi-device"
+    "military",
+    "encrypted",
+    "admin-console",
+    "internet-computer"
   ],
-  "last_updated": "2026-05-09T20:10:51.391Z"
+  "last_updated": "2026-05-28T00:18:58.280Z"
 }

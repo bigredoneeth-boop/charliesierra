@@ -21,11 +21,24 @@ type UserProfilePublic =
    registeredAt: Timestamp;
  };
 type UserId = principal;
+type UpdateRetentionPolicyRequest = 
+ record {
+   autoDelete: opt bool;
+   id: text;
+   legalHold: opt bool;
+   period: opt RetentionPeriod;
+ };
 type UpdateProfileRequest = 
  record {
    ecdhPublicKey: opt EcdhPublicKey;
    encryptedAvatarKey: opt text;
    encryptedDisplayName: opt blob;
+ };
+type UpdateMemberRoleRequest = 
+ record {
+   newRole: OrgRole;
+   orgId: OrgId;
+   userId: UserId;
  };
 type TypingIndicatorPublic = 
  record {
@@ -34,6 +47,12 @@ type TypingIndicatorPublic =
    userId: UserId;
  };
 type Timestamp = int;
+type SuspendUserRequest = 
+ record {
+   orgId: OrgId;
+   reason: text;
+   userId: UserId;
+ };
 type SubmitJoinRequestRequest = 
  record {
    conversationId: ConversationId;
@@ -56,6 +75,32 @@ type SendMessageRequest =
    priority: opt MessagePriority;
    ttlSeconds: opt nat;
  };
+type RetentionPolicy = 
+ record {
+   autoDelete: bool;
+   id: text;
+   legalHold: bool;
+   orgId: opt OrgId;
+   period: RetentionPeriod;
+   updatedAt: Timestamp;
+   updatedBy: UserId;
+ };
+type RetentionPeriodDays = 
+ variant {
+   days30;
+   days90;
+   unlimited;
+   year1;
+   years7;
+ };
+type RetentionPeriod = 
+ variant {
+   days30;
+   days90;
+   unlimited;
+   year1;
+   years7;
+ };
 type RetentionMetadataRecord = 
  record {
    convId: ConversationId;
@@ -67,87 +112,157 @@ type RetentionMetadataRecord =
 type Result_9 = 
  variant {
    err: Error;
-   ok: vec MessagePublic;
+   ok: Attachment;
  };
 type Result_8 = 
  variant {
    err: Error;
-   ok: vec RetentionMetadataRecord;
+   ok: RecoveryRequest;
  };
 type Result_7 = 
  variant {
    err: Error;
-   ok: vec UserId;
+   ok: MessagePublic;
  };
 type Result_6 = 
  variant {
    err: Error;
-   ok: DeviceRecordPublic;
+   ok;
  };
 type Result_5 = 
  variant {
    err: Error;
-   ok: Attachment;
+   ok: SovereignConfig;
  };
 type Result_4 = 
  variant {
    err: Error;
-   ok: MessagePublic;
+   ok: JoinRequest;
  };
-type Result_3 = 
- variant {
-   err: Error;
-   ok;
- };
-type Result_2 = 
- variant {
-   err: Error;
-   ok: SovereignConfig;
- };
-type Result_17 = 
+type Result_31 = 
  variant {
    err: Error;
    ok: vec EscrowAccessGrant;
  };
-type Result_16 = 
+type Result_30 = 
  variant {
    err: Error;
    ok: EscrowAccessGrant;
  };
-type Result_15 = 
+type Result_3 = 
+ variant {
+   err: text;
+   ok: OrgRecord;
+ };
+type Result_29 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result_28 = 
  variant {
    err: Error;
    ok: ConversationPublic;
  };
-type Result_14 = 
+type Result_27 = 
  variant {
    err: Error;
    ok: ConfigExportBundle;
  };
-type Result_13 = 
+type Result_26 = 
  variant {
    err: Error;
    ok: text;
  };
-type Result_12 = 
+type Result_25 = 
  variant {
    err: Error;
    ok: vec AuditEvent;
  };
-type Result_11 = 
+type Result_24 = 
+ variant {
+   err: Error;
+   ok: EscrowStatsRecord;
+ };
+type Result_23 = 
+ variant {
+   err: Error;
+   ok: vec EscrowedUserRecord;
+ };
+type Result_22 = 
  variant {
    err: Error;
    ok: vec JoinRequest;
  };
-type Result_10 = 
+type Result_21 = 
+ variant {
+   err: text;
+   ok: vec GroupMemberRecord;
+ };
+type Result_20 = 
  variant {
    err: Error;
    ok: GroupRetentionPolicy;
  };
-type Result_1 = 
+type Result_2 = 
+ variant {
+   err: text;
+   ok;
+ };
+type Result_19 = 
  variant {
    err: Error;
-   ok: JoinRequest;
+   ok: vec MessagePublic;
+ };
+type Result_18 = 
+ variant {
+   err: text;
+   ok: vec OrgMembership;
+ };
+type Result_17 = 
+ variant {
+   err: text;
+   ok: opt OrgRole;
+ };
+type Result_16 = 
+ variant {
+   err: text;
+   ok: GetOrgUsersResponse;
+ };
+type Result_15 = 
+ variant {
+   err: Error;
+   ok: vec RecoveryRequest;
+ };
+type Result_14 = 
+ variant {
+   err: Error;
+   ok: vec RetentionMetadataRecord;
+ };
+type Result_13 = 
+ variant {
+   err: text;
+   ok: OrgMembership;
+ };
+type Result_12 = 
+ variant {
+   err: Error;
+   ok: vec UserId;
+ };
+type Result_11 = 
+ variant {
+   err: text;
+   ok: GetOrgsResponse;
+ };
+type Result_10 = 
+ variant {
+   err: Error;
+   ok: DeviceRecordPublic;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: RetentionPolicy;
  };
 type Result = 
  variant {
@@ -158,6 +273,11 @@ type RemoveMemberRequest =
  record {
    conversationId: ConversationId;
    member: UserId;
+ };
+type RemoveMemberFromGroupRequest = 
+ record {
+   groupId: ConversationId;
+   memberId: UserId;
  };
 type RegisterRequest = 
  record {
@@ -172,6 +292,26 @@ type RegisterAttachmentRequest =
    mimeType: text;
    storageKey: text;
  };
+type RecoveryRequestStatus = 
+ variant {
+   approved;
+   completed;
+   pending;
+   rejected;
+ };
+type RecoveryRequest = 
+ record {
+   approvedBy: opt UserId;
+   createdAt: Timestamp;
+   id: nat;
+   initiatingAdmin: UserId;
+   orgId: opt OrgId;
+   reason: text;
+   resolvedAt: opt Timestamp;
+   status: RecoveryRequestStatus;
+   targetDeviceId: text;
+   targetUserId: UserId;
+ };
 type ReadReceipt = 
  record {
    readAt: Timestamp;
@@ -185,6 +325,71 @@ type PublicGroupSummary =
    memberCount: nat;
    name: text;
  };
+type PlatformSettings = 
+ record {
+   auditLogRetentionDays: RetentionPeriodDays;
+   defaultRetentionDays: RetentionPeriodDays;
+   keyEscrowEnabled: bool;
+   mfaEnforced: bool;
+   passwordPolicy: PasswordPolicy;
+   platformName: text;
+   platformTagline: text;
+   sessionTimeoutMinutes: nat;
+   vetKeysEnabled: bool;
+ };
+type PasswordPolicy = 
+ variant {
+   basic;
+   enterprise;
+   strong;
+ };
+type OrgStatus = 
+ variant {
+   Active;
+   Archived;
+   Suspended;
+ };
+type OrgSettings = 
+ record {
+   dataExportPermission: DataExportPermission;
+   defaultInviteRole: text;
+   groupCreationPermission: GroupCreationPermission;
+   legalHoldEnabled: bool;
+   legalHoldReason: opt text;
+   logoStorageKey: opt text;
+   logoUrl: opt text;
+   messageRetentionDays: opt RetentionPeriodDays;
+   orgId: text;
+ };
+type OrgRole = 
+ variant {
+   Auditor;
+   OrgAdmin;
+   StandardUser;
+   SuperAdmin;
+ };
+type OrgRecord = 
+ record {
+   createdAt: Timestamp;
+   createdBy: UserId;
+   description: text;
+   id: OrgId;
+   memberCount: nat;
+   name: text;
+   status: OrgStatus;
+ };
+type OrgMembership = 
+ record {
+   email: opt text;
+   invitedBy: UserId;
+   joinedAt: Timestamp;
+   lastActive: opt Timestamp;
+   orgId: OrgId;
+   role: OrgRole;
+   status: MemberStatus;
+   userId: UserId;
+ };
+type OrgId = text;
 type MessageType = 
  variant {
    audio;
@@ -212,11 +417,23 @@ type MessagePriority =
    normal;
  };
 type MessageId = nat;
+type MemberStatus = 
+ variant {
+   Active;
+   Pending;
+   Suspended;
+ };
 type ListPublicGroupsRequest = 
  record {
    category: opt text;
    limit: nat;
    offset: nat;
+ };
+type LegalHoldRequest = 
+ record {
+   hold: bool;
+   orgId: OrgId;
+   reason: text;
  };
 type JoinRequestStatus = 
  variant {
@@ -239,6 +456,18 @@ type JoinRequest =
    requesterId: UserId;
    status: JoinRequestStatus;
  };
+type InviteUserRequest = 
+ record {
+   email: opt text;
+   orgId: OrgId;
+   principalId: text;
+   role: OrgRole;
+ };
+type GroupStatus = 
+ variant {
+   active;
+   suspended;
+ };
 type GroupRetentionPolicy = 
  record {
    convId: ConversationId;
@@ -246,6 +475,28 @@ type GroupRetentionPolicy =
    enabledBy: opt UserId;
    retentionEnabled: bool;
  };
+type GroupMemberRecord = 
+ record {
+   displayName: opt text;
+   joinedAt: Timestamp;
+   userId: UserId;
+ };
+type GroupCreationPermission = 
+ variant {
+   allMembers;
+   orgAdminsOnly;
+ };
+type GroupAdminRecord = 
+ record {
+   createdAt: Timestamp;
+   createdBy: UserId;
+   id: ConversationId;
+   memberCount: nat;
+   name: text;
+   orgId: opt OrgId;
+   status: GroupStatus;
+ };
+type GetRetentionPoliciesRequest = record {orgId: opt OrgId;};
 type GetRetentionMetadataRequest = 
  record {
    afterMessageId: opt MessageId;
@@ -254,17 +505,82 @@ type GetRetentionMetadataRequest =
    limit: nat;
    startDate: opt Timestamp;
  };
+type GetOrgsResponse = 
+ record {
+   orgs: vec OrgRecord;
+   total: nat;
+ };
+type GetOrgsRequest = 
+ record {
+   afterOrgId: opt OrgId;
+   limit: nat;
+   search: opt text;
+ };
+type GetOrgUsersResponse = 
+ record {
+   hasMore: bool;
+   members: vec OrgMembership;
+   total: nat;
+ };
+type GetOrgUsersRequest = 
+ record {
+   afterUserId: opt UserId;
+   limit: nat;
+   orgId: opt OrgId;
+   search: opt text;
+ };
 type GetMessagesRequest = 
  record {
    beforeMessageId: opt MessageId;
    conversationId: ConversationId;
    limit: nat;
  };
+type GetGroupMembersRequest = record {groupId: ConversationId;};
+type GetEscrowedUsersRequest = 
+ record {
+   afterUserId: opt text;
+   limit: nat;
+   orgId: opt OrgId;
+ };
 type GetAuditLogRequest = 
  record {
    afterEventId: opt nat;
+   afterTimestamp: opt Timestamp;
+   beforeTimestamp: opt Timestamp;
+   filterActor: opt UserId;
    filterEventType: opt AuditEventType;
+   filterOrgId: opt OrgId;
    limit: nat;
+ };
+type GetAllGroupsRequest = record {orgId: opt OrgId;};
+type ExportAuditLogsRequest = 
+ record {
+   afterTimestamp: opt Timestamp;
+   beforeTimestamp: opt Timestamp;
+   filterActor: opt UserId;
+   filterEventType: opt AuditEventType;
+   filterOrgId: opt OrgId;
+ };
+type EscrowedUserRecord = 
+ record {
+   deviceCount: nat;
+   escrowStatus: EscrowStatus;
+   lastBackedUp: opt Timestamp;
+   orgId: opt OrgId;
+   userId: UserId;
+ };
+type EscrowStatus = 
+ variant {
+   active;
+   pendingRecovery;
+   recovered;
+   revoked;
+ };
+type EscrowStatsRecord = 
+ record {
+   lastRecoveryTimestamp: opt Timestamp;
+   pendingRecoveries: nat;
+   totalEscrowed: nat;
  };
 type EscrowRecord = 
  record {
@@ -312,6 +628,24 @@ type DataResidency =
    eu;
    global;
    us;
+ };
+type DataExportPermission = 
+ variant {
+   allMembers;
+   disabled;
+   orgAdminsOnly;
+ };
+type CreateRetentionPolicyRequest = 
+ record {
+   autoDelete: bool;
+   legalHold: bool;
+   orgId: opt OrgId;
+   period: RetentionPeriod;
+ };
+type CreateOrgRequest = 
+ record {
+   description: text;
+   name: text;
  };
 type CreateGroupRequest = 
  record {
@@ -386,11 +720,20 @@ type AuditExportEventType =
    escrowAccessGranted;
    escrowEnrolled;
    escrowRevoked;
+   groupMemberRemoved;
+   keyRecoveryApproved;
+   keyRecoveryInitiated;
+   keyRecoveryRejected;
    memberAdded;
    memberRemoved;
+   memberRoleChanged;
+   memberSuspended;
    messageSent;
+   orgCreated;
+   orgSuspended;
    retentionDisabled;
    retentionEnabled;
+   userInvited;
    userRegistered;
    userRemoved;
  };
@@ -403,14 +746,34 @@ type AuditEventType =
    escrowAccessGranted;
    escrowEnrolled;
    escrowRevoked;
+   groupMemberRemoved;
+   keyRecoveryApproved;
+   keyRecoveryInitiated;
+   keyRecoveryRejected;
+   legalHoldPlaced;
+   legalHoldRemoved;
    memberAdded;
+   memberReactivated;
    memberRemoved;
+   memberRoleChanged;
+   memberSuspended;
    messageQueueDrained;
    messageSent;
+   orgCreated;
+   orgDeleted;
+   orgSettingsUpdated;
+   orgSuspended;
+   orgUpdated;
+   platformSettingsUpdated;
+   policyExpiryCheckPerformed;
+   policyReportExported;
    priorityMessageSent;
    retentionDisabled;
    retentionEnabled;
+   retentionPolicyCreated;
+   retentionPolicyUpdated;
    sovereignConfigUpdated;
+   userInvited;
    userRegistered;
    userRemoved;
  };
@@ -420,6 +783,7 @@ type AuditEvent =
    encryptedDetails: opt blob;
    eventType: AuditEventType;
    id: nat;
+   orgId: opt OrgId;
    targetPrincipal: opt UserId;
    timestamp: Timestamp;
  };
@@ -455,68 +819,116 @@ service : {
    opt _ImmutableObjectStorageRefillInformation) ->
    (_ImmutableObjectStorageRefillResult);
   _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
-  addAdmin: (newAdmin: UserId) -> (Result_3);
-  addConversationMember: (req: AddMemberRequest) -> (Result_3);
-  addDevice: (req: AddDeviceRequest) -> (Result_6);
+  addAdmin: (newAdmin: UserId) -> (Result_6);
+  addConversationMember: (req: AddMemberRequest) -> (Result_6);
+  addDevice: (req: AddDeviceRequest) -> (Result_10);
   adminGetEscrowGrants: (targetUserId: opt UserId, limit: nat, afterGrantId:
-   opt nat) -> (Result_17) query;
+   opt nat) -> (Result_31) query;
   adminGrantEscrowAccess: (targetUserId: UserId, targetDeviceId: text,
-   reason: text) -> (Result_16);
-  approveJoinRequest: (req: JoinRequestActionRequest) -> (Result_3);
+   reason: text) -> (Result_30);
+  approveJoinRequest: (req: JoinRequestActionRequest) -> (Result_6);
+  approveKeyRecovery: (requestId: nat) -> (Result_8);
+  bootstrapSuperAdmin: (targetPrincipal: UserId) -> (Result_29);
+  checkPolicyExpiry: (callerOrgId: opt OrgId) -> (vec RetentionPolicy) query;
   clearTypingIndicator: (conversationId: ConversationId) -> ();
-  createDirectConversation: (req: CreateDirectRequest) -> (Result_15);
-  createGroupConversation: (req: CreateGroupRequest) -> (Result_15);
-  deleteAttachment: (attachmentId: AttachmentId) -> (Result_3);
-  deleteConversation: (conversationId: ConversationId) -> (Result_3);
-  deleteGroupConversation: (conversationId: ConversationId) -> (Result_3);
-  denyJoinRequest: (req: JoinRequestActionRequest) -> (Result_3);
-  disableGroupRetention: (convId: ConversationId) -> (Result_3);
-  enableGroupRetention: (convId: ConversationId) -> (Result_3);
+  createDirectConversation: (req: CreateDirectRequest) -> (Result_28);
+  createGroupConversation: (req: CreateGroupRequest) -> (Result_28);
+  createOrg: (req: CreateOrgRequest) -> (Result_3);
+  createRetentionPolicy: (req: CreateRetentionPolicyRequest) -> (Result_1);
+  deleteAttachment: (attachmentId: AttachmentId) -> (Result_6);
+  deleteConversation: (conversationId: ConversationId) -> (Result_6);
+  deleteGroupConversation: (conversationId: ConversationId) -> (Result_6);
+  deleteOrg: (orgId: OrgId) -> (Result_2);
+  denyJoinRequest: (req: JoinRequestActionRequest) -> (Result_6);
+  disableGroupRetention: (convId: ConversationId) -> (Result_6);
+  enableGroupRetention: (convId: ConversationId) -> (Result_6);
   enrollKeyEscrow: (deviceId: text, deviceLabel: text,
    devicePublicKeyFingerprint: text, wrappedKey: blob,
-   consentLanguageVersion: text) -> (Result_3);
-  exportAuditLog: (req: AuditExportRequest) -> (Result_13);
-  exportConfigBundle: () -> (Result_14);
-  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_13);
-  getAuditLog: (req: GetAuditLogRequest) -> (Result_12) query;
+   consentLanguageVersion: text) -> (Result_6);
+  exportAuditLog: (req: AuditExportRequest) -> (Result_26);
+  exportAuditLogs: (req: ExportAuditLogsRequest) -> (Result_25) query;
+  exportConfigBundle: () -> (Result_27);
+  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_26);
+  getAllGroups: (req: GetAllGroupsRequest) -> (vec GroupAdminRecord);
+  getAuditLog: (req: GetAuditLogRequest) -> (Result_25) query;
+  getCanisterHealth: () ->
+   (record {
+      cyclesBalance: nat;
+      memoryCapacity: nat;
+      memoryUsed: nat;
+    }) query;
   getConversation: (id: ConversationId) -> (opt ConversationPublic) query;
   getDeploymentInfo: () -> (SovereignConfig) query;
+  getEscrowStats: () -> (Result_24);
+  getEscrowedUsers: (req: GetEscrowedUsersRequest) -> (Result_23);
+  getGlobalRetentionPolicy: () -> (opt RetentionPolicy) query;
   getGroupCompartment: (convId: ConversationId) ->
    (opt CompartmentLabel) query;
-  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_11) query;
-  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_10) query;
+  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_22) query;
+  getGroupMembers: (req: GetGroupMembersRequest) -> (Result_21);
+  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_20) query;
   getMessageAttachments: (messageId: MessageId) -> (vec Attachment) query;
-  getMessages: (req: GetMessagesRequest) -> (Result_9) query;
+  getMessages: (req: GetMessagesRequest) -> (Result_19) query;
   getMyEscrowStatus: () -> (vec EscrowRecord) query;
+  getMyOrgs: () -> (Result_18) query;
+  getMyRole: (orgId: OrgId) -> (Result_17) query;
+  getOrg: (orgId: OrgId) -> (Result_3) query;
+  getOrgSettings: (orgId: text) -> (OrgSettings) query;
+  getOrgUsers: (req: GetOrgUsersRequest) -> (Result_16) query;
+  getPlatformSettings: () -> (PlatformSettings) query;
+  getRecoveryRequests: (orgId: opt OrgId, statusFilter:
+   opt RecoveryRequestStatus) -> (Result_15);
   getRetentionMetadata: (req: GetRetentionMetadataRequest) ->
-   (Result_8) query;
+   (Result_14) query;
+  getRetentionPolicies: (req: GetRetentionPoliciesRequest) ->
+   (vec RetentionPolicy) query;
+  getRetentionPolicy: (orgId: OrgId) -> (opt RetentionPolicy) query;
   getTypingIndicators: (conversationId: ConversationId) ->
    (vec TypingIndicatorPublic) query;
   getUserProfile: (userId: UserId) -> (opt UserProfilePublic) query;
   getUserProfiles: (userIds: vec UserId) -> (vec UserProfilePublic) query;
+  hasSuperAdmin: () -> (bool) query;
+  initiateKeyRecovery: (targetUserId: UserId, targetDeviceId: text, reason:
+   text, orgId: opt OrgId) -> (Result_8);
+  inviteUser: (req: InviteUserRequest) -> (Result_13);
   isAdminCheck: ("principal": UserId) -> (bool) query;
-  listAdmins: () -> (Result_7) query;
+  listAdmins: () -> (Result_12) query;
   listConversations: () -> (vec ConversationPublic) query;
   listMyDevices: () -> (vec DeviceRecordPublic) query;
+  listOrgs: (req: GetOrgsRequest) -> (Result_11) query;
   listPublicGroups: (req: ListPublicGroupsRequest) ->
    (vec PublicGroupSummary) query;
-  markMessageRead: (messageId: MessageId) -> (Result_3);
+  logPolicyExpiryCheck: () -> ();
+  logPolicyReportExported: (orgFilter: opt OrgId) -> ();
+  markMessageRead: (messageId: MessageId) -> (Result_6);
+  reactivateMember: (orgId: OrgId, userId: UserId) -> (Result_2);
   redeemDeviceSyncToken: (token: text, deviceId: text, deviceLabel: text) ->
-   (Result_6);
-  registerAttachment: (req: RegisterAttachmentRequest) -> (Result_5);
+   (Result_10);
+  registerAttachment: (req: RegisterAttachmentRequest) -> (Result_9);
   registerUser: (req: RegisterRequest) -> (Result);
-  removeAdmin: (target: UserId) -> (Result_3);
-  removeConversationMember: (req: RemoveMemberRequest) -> (Result_3);
-  revokeDevice: (deviceId: text) -> (Result_3);
-  revokeKeyEscrow: (deviceId: text, reason: text) -> (Result_3);
-  sendMessage: (req: SendMessageRequest) -> (Result_4);
+  rejectKeyRecovery: (requestId: nat) -> (Result_8);
+  removeAdmin: (target: UserId) -> (Result_6);
+  removeConversationMember: (req: RemoveMemberRequest) -> (Result_6);
+  removeMember: (orgId: OrgId, userId: UserId) -> (Result_2);
+  removeMemberFromGroup: (req: RemoveMemberFromGroupRequest) -> (Result_2);
+  revokeDevice: (deviceId: text) -> (Result_6);
+  revokeKeyEscrow: (deviceId: text, reason: text) -> (Result_6);
+  sendMessage: (req: SendMessageRequest) -> (Result_7);
   setGroupCompartment: (convId: ConversationId, compartment:
-   CompartmentLabel) -> (Result_3);
+   CompartmentLabel) -> (Result_6);
   setSovereignConfig: (residency: DataResidency, subnet: opt principal,
-   nodeCount: opt nat, costMult: opt float64) -> (Result_2);
+   nodeCount: opt nat, costMult: opt float64) -> (Result_5);
   setTypingIndicator: (conversationId: ConversationId, ttlSeconds: nat) -> ();
-  submitJoinRequest: (req: SubmitJoinRequestRequest) -> (Result_1);
+  submitJoinRequest: (req: SubmitJoinRequestRequest) -> (Result_4);
+  suspendMember: (req: SuspendUserRequest) -> (Result_2);
+  suspendOrg: (orgId: OrgId) -> (Result_2);
+  toggleLegalHold: (req: LegalHoldRequest) -> (Result_1);
   touchPresence: () -> ();
+  updateMemberRole: (req: UpdateMemberRoleRequest) -> (Result_2);
+  updateOrg: (orgId: OrgId, name: text, description: opt text) -> (Result_3);
+  updateOrgSettings: (orgId: text, update: OrgSettings) -> (Result_2);
+  updatePlatformSettings: (update: PlatformSettings) -> (Result_2);
+  updateRetentionPolicy: (req: UpdateRetentionPolicyRequest) -> (Result_1);
   updateUserProfile: (req: UpdateProfileRequest) -> (Result);
   uploadFile: (fileBytes: blob, _mimeType: text) -> (blob);
 }

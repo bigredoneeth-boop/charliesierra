@@ -18,10 +18,25 @@ import AdminMixin "mixins/admin-api";
 import EnterpriseMixin "mixins/enterprise-api";
 import DevicesMixin "mixins/devices-api";
 import DiscoveryMixin "mixins/discovery-api";
+import OrgsMixin "mixins/orgs-api";
+import OrgTypes "types/orgs";
 
 import SovereignLib "lib/sovereign";
 import SovereignMixin "mixins/sovereign-api";
 import MixinObjectStorage "mo:caffeineai-object-storage/Mixin";
+import GroupsAdminMixin "mixins/groups-admin-api";
+import RetentionLib "lib/retention";
+import RetentionMixin "mixins/retention-api";
+
+import SettingsLib "lib/settings";
+import SettingsMixin "mixins/settings-api";
+
+
+
+
+
+
+
 
 
 
@@ -65,7 +80,7 @@ actor self {
   let adminState : AdminLib.State = {
     auditLog = Map.empty();
     adminPrincipals = Set.empty();
-    state = { var nextEventId = 0 };
+    state = { var nextEventId = 0; var bootstrapCompleted = false };
   };
 
   // Sovereign deployment
@@ -89,8 +104,18 @@ actor self {
     retentionMetadata = List.empty();
     escrowRecords     = Map.empty();
     escrowGrants      = Map.empty();
-    state             = { var nextGrantId = 0 };
+    recoveryRequests  = Map.empty();
+    state             = { var nextGrantId = 0; var nextRecoveryRequestId = 0 };
   };
+
+  // Retention Policy Management
+  let retentionState : RetentionLib.State = {
+    retentionPolicies = Map.empty();
+    state             = { var nextPolicyId = 0 };
+  };
+
+  // Settings (platform-wide and per-org)
+  let settingsState : SettingsLib.State = SettingsLib.emptyState();
 
   // Devices (multi-device sync)
   let devicesState : DevicesLib.State = {
@@ -102,6 +127,14 @@ actor self {
   let discoveryState : DiscoveryLib.State = {
     joinRequests = Map.empty();
   };
+
+  // Orgs — multi-tenant organisation management
+  // orgsData    : orgId -> OrgRecord
+  // memberships : "orgId:principalText" -> OrgMembership  (Text key for Map compatibility)
+  // invites     : inviteId -> OrgInvite
+  let orgsData    : Map.Map<OrgTypes.OrgId, OrgTypes.OrgRecord>    = Map.empty();
+  let memberships : Map.Map<Text, OrgTypes.OrgMembership>          = Map.empty();
+  let invites     : Map.Map<Text, OrgTypes.OrgInvite>              = Map.empty();
 
   // Bootstrap: add the canister's own principal as the first admin so the deployer
   // (who is the controller) can call addAdmin to grant themselves or others access.
@@ -118,9 +151,15 @@ actor self {
   include ConvsMixin(convsState, msgsState);
   include MsgsMixin(msgsState, convsState, enterpriseState);
   include AttMixin(attState);
-  include AdminMixin(adminState);
+  include AdminMixin(adminState, memberships);
   include EnterpriseMixin(adminState, enterpriseState, convsState);
   include SovereignMixin(adminState, enterpriseState, sovereignState);
   include DevicesMixin(devicesState);
   include DiscoveryMixin(discoveryState, convsState);
+  // Wire org state + adminState into the OrgsMixin.
+  // adminState.adminPrincipals serves as the SuperAdmin set (shared with AdminLib).
+  include OrgsMixin(adminState, orgsData, memberships, invites);
+  include GroupsAdminMixin(adminState, convsState, memberships);
+  include RetentionMixin(adminState, retentionState);
+  include SettingsMixin(adminState, settingsState, memberships);
 };
