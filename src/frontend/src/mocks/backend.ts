@@ -487,4 +487,30 @@ export const mockBackend: backendInterface = {
   _immutableObjectStorageCreateCertificate: async (_blobHash: string): Promise<_ImmutableObjectStorageCreateCertificateResult> => ({ method: "", blob_hash: "" }),
   _immutableObjectStorageRefillCashier: async (_refillInformation: import('../backend')._ImmutableObjectStorageRefillInformation | null): Promise<_ImmutableObjectStorageRefillResult> => ({}),
   _immutableObjectStorageUpdateGatewayPrincipals: async (): Promise<void> => undefined,
+  getNotificationPreferences: async () => ({
+    __kind__: "ok" as const,
+    ok: { directMessagesEnabled: true, groupMessagesEnabled: true },
+  }),
+  getPendingNotifications: async () => ({
+    __kind__: "ok" as const,
+    ok: [] as Array<{ id: string; notifType: string; senderDisplayName: string; groupName?: string; timestamp: bigint }>,
+  }),
+  getVAPIDPublicKey: async () => "",
+  subscribeToPush: async (_endpoint: string, _auth: string, _p256dh: string) => ({
+    __kind__: "ok" as const,
+    ok: null,
+  }),
+  unsubscribeFromPush: async () => ({
+    __kind__: "ok" as const,
+    ok: null,
+  }),
+  updateNotificationPreferences: async (_dm: boolean, _group: boolean) => ({
+    __kind__: "ok" as const,
+    ok: null,
+  }),
+  hasDataResetBeenPerformed: async (): Promise<boolean> => false,
+  resetAllTestData: async (): Promise<{ __kind__: 'ok'; ok: string } | { __kind__: 'err'; err: string }> => ({
+    __kind__: 'ok',
+    ok: 'Test data reset successfully',
+  }),
 };

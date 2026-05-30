@@ -30,6 +30,10 @@ import RetentionMixin "mixins/retention-api";
 
 import SettingsLib "lib/settings";
 import SettingsMixin "mixins/settings-api";
+import NotificationsMixin "mixins/notifications-api";
+import NotifTypes "types/notifications";
+
+
 
 
 
@@ -82,7 +86,7 @@ actor self {
   let adminState : AdminLib.State = {
     auditLog = Map.empty();
     adminPrincipals = Set.empty();
-    state = { var nextEventId = 0; var bootstrapCompleted = false };
+    state = { var nextEventId = 0; var bootstrapCompleted = false; var dataResetCompleted = false };
   };
 
   // Sovereign deployment
@@ -139,6 +143,11 @@ actor self {
   let memberships : Map.Map<Text, OrgTypes.OrgMembership>          = Map.empty();
   let invites     : Map.Map<Text, OrgTypes.OrgInvite>              = Map.empty();
 
+  // Notifications — push subscriptions, preferences, and pending triggers
+  let pushSubscriptions    : Map.Map<Principal, NotifTypes.PushSubscriptionRecord> = Map.empty();
+  let notificationPrefs    : Map.Map<Principal, NotifTypes.NotificationPreferences> = Map.empty();
+  let pendingNotifications : Map.Map<Principal, [NotifTypes.PendingNotification]>   = Map.empty();
+
   // Bootstrap: add the canister's own principal as the first admin so the deployer
   // (who is the controller) can call addAdmin to grant themselves or others access.
   AdminLib.ensureDeployer(adminState, Principal.fromActor(self));
@@ -152,9 +161,9 @@ actor self {
   include MixinObjectStorage();
   include UsersMixin(usersState);
   include ConvsMixin(convsState, msgsState);
-  include MsgsMixin(msgsState, convsState, enterpriseState);
+  include MsgsMixin(msgsState, convsState, enterpriseState, pushSubscriptions, notificationPrefs, pendingNotifications);
   include AttMixin(attState);
-  include AdminMixin(adminState, memberships);
+  include AdminMixin(adminState, memberships, usersState, convsState, msgsState, attState, invites);
   include EnterpriseMixin(adminState, enterpriseState, convsState);
   include SovereignMixin(adminState, enterpriseState, sovereignState);
   include DevicesMixin(devicesState);
@@ -164,5 +173,6 @@ actor self {
   include OrgsMixin(adminState, orgsData, memberships, invites);
   include GroupsAdminMixin(adminState, convsState, memberships);
   include RetentionMixin(adminState, retentionState);
+  include NotificationsMixin(pushSubscriptions, notificationPrefs, pendingNotifications);
   include SettingsMixin(adminState, settingsState, memberships);
 };

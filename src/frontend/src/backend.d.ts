@@ -7,22 +7,17 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface RetentionPolicy {
-    id: string;
-    orgId?: OrgId;
-    period: RetentionPeriod;
-    legalHold: boolean;
-    updatedAt: Timestamp;
-    updatedBy: UserId;
-    autoDelete: boolean;
-}
-export type Result_20 = {
+export type Result_32 = {
     __kind__: "ok";
-    ok: GroupRetentionPolicy;
+    ok: EscrowAccessGrant;
 } | {
     __kind__: "err";
     err: Error_;
 };
+export interface NotificationPreferences {
+    groupMessagesEnabled: boolean;
+    directMessagesEnabled: boolean;
+}
 export type Result_2 = {
     __kind__: "ok";
     ok: null;
@@ -42,6 +37,22 @@ export interface RecoveryRequest {
     reason: string;
     targetUserId: UserId;
 }
+export interface RetentionPolicy {
+    id: string;
+    orgId?: OrgId;
+    period: RetentionPeriod;
+    legalHold: boolean;
+    updatedAt: Timestamp;
+    updatedBy: UserId;
+    autoDelete: boolean;
+}
+export type Result_20 = {
+    __kind__: "ok";
+    ok: OrgRole | null;
+} | {
+    __kind__: "err";
+    err: string;
+};
 export interface EscrowAccessGrant {
     grantTimestamp: Timestamp;
     grantId: bigint;
@@ -116,17 +127,17 @@ export type Result_6 = {
 };
 export type Result_26 = {
     __kind__: "ok";
-    ok: string;
+    ok: Array<EscrowedUserRecord>;
 } | {
     __kind__: "err";
     err: Error_;
 };
 export type Result_12 = {
     __kind__: "ok";
-    ok: Array<UserId>;
+    ok: GetOrgsResponse;
 } | {
     __kind__: "err";
-    err: Error_;
+    err: string;
 };
 export interface GroupRetentionPolicy {
     retentionEnabled: boolean;
@@ -153,7 +164,7 @@ export type Result = {
 };
 export type Result_10 = {
     __kind__: "ok";
-    ok: DeviceRecordPublic;
+    ok: Attachment;
 } | {
     __kind__: "err";
     err: Error_;
@@ -167,10 +178,10 @@ export interface UpdateRetentionPolicyRequest {
 export type MessageId = bigint;
 export type Result_8 = {
     __kind__: "ok";
-    ok: RecoveryRequest;
+    ok: string;
 } | {
     __kind__: "err";
-    err: Error_;
+    err: string;
 };
 export interface GetOrgsRequest {
     search?: string;
@@ -214,14 +225,14 @@ export interface EscrowRecord {
 }
 export type Result_13 = {
     __kind__: "ok";
-    ok: OrgMembership;
+    ok: Array<UserId>;
 } | {
     __kind__: "err";
-    err: string;
+    err: Error_;
 };
 export type Result_25 = {
     __kind__: "ok";
-    ok: Array<AuditEvent>;
+    ok: Array<JoinRequest>;
 } | {
     __kind__: "err";
     err: Error_;
@@ -235,14 +246,14 @@ export interface PublicGroupSummary {
 }
 export type Result_11 = {
     __kind__: "ok";
-    ok: GetOrgsResponse;
+    ok: DeviceRecordPublic;
 } | {
     __kind__: "err";
-    err: string;
+    err: Error_;
 };
 export type Result_27 = {
     __kind__: "ok";
-    ok: ConfigExportBundle;
+    ok: EscrowStatsRecord;
 } | {
     __kind__: "err";
     err: Error_;
@@ -267,7 +278,7 @@ export interface GetMessagesRequest {
 }
 export type Result_21 = {
     __kind__: "ok";
-    ok: Array<GroupMemberRecord>;
+    ok: Array<OrgMembership>;
 } | {
     __kind__: "err";
     err: string;
@@ -283,7 +294,7 @@ export interface UserProfilePublic {
 export type EcdhPublicKey = Uint8Array;
 export type Result_18 = {
     __kind__: "ok";
-    ok: Array<OrgMembership>;
+    ok: GetOrgUsersResponse;
 } | {
     __kind__: "err";
     err: string;
@@ -304,14 +315,14 @@ export interface EscrowedUserRecord {
 }
 export type Result_23 = {
     __kind__: "ok";
-    ok: Array<EscrowedUserRecord>;
+    ok: GroupRetentionPolicy;
 } | {
     __kind__: "err";
     err: Error_;
 };
 export type Result_15 = {
     __kind__: "ok";
-    ok: Array<RecoveryRequest>;
+    ok: Array<RetentionMetadataRecord>;
 } | {
     __kind__: "err";
     err: Error_;
@@ -325,6 +336,13 @@ export interface ConfigExportBundle {
     canisters: string;
     groupRetentionPolicies: Array<[ConversationId, GroupRetentionPolicy]>;
     residencyLabel: DataResidency;
+}
+export interface PendingNotification {
+    id: string;
+    notifType: string;
+    senderDisplayName: string;
+    timestamp: bigint;
+    groupName?: string;
 }
 export type OrgId = string;
 export interface LegalHoldRequest {
@@ -377,7 +395,7 @@ export interface GroupAdminRecord {
 }
 export type Result_31 = {
     __kind__: "ok";
-    ok: Array<EscrowAccessGrant>;
+    ok: ConversationPublic;
 } | {
     __kind__: "err";
     err: Error_;
@@ -400,7 +418,7 @@ export interface RemoveMemberRequest {
 }
 export type Result_28 = {
     __kind__: "ok";
-    ok: ConversationPublic;
+    ok: Array<AuditEvent>;
 } | {
     __kind__: "err";
     err: Error_;
@@ -410,7 +428,7 @@ export interface GetRetentionPoliciesRequest {
 }
 export type Result_9 = {
     __kind__: "ok";
-    ok: Attachment;
+    ok: RecoveryRequest;
 } | {
     __kind__: "err";
     err: Error_;
@@ -425,7 +443,7 @@ export interface RemoveMemberFromGroupRequest {
 export type DenialReason = string;
 export type Result_30 = {
     __kind__: "ok";
-    ok: EscrowAccessGrant;
+    ok: ConfigExportBundle;
 } | {
     __kind__: "err";
     err: Error_;
@@ -444,17 +462,17 @@ export interface DeviceRecordPublic {
 export type Timestamp = bigint;
 export type Result_17 = {
     __kind__: "ok";
-    ok: OrgRole | null;
+    ok: Array<PendingNotification>;
 } | {
     __kind__: "err";
     err: string;
 };
 export type Result_16 = {
     __kind__: "ok";
-    ok: GetOrgUsersResponse;
+    ok: Array<RecoveryRequest>;
 } | {
     __kind__: "err";
-    err: string;
+    err: Error_;
 };
 export type Result_1 = {
     __kind__: "ok";
@@ -471,7 +489,7 @@ export interface RegisterAttachmentRequest {
 }
 export type Result_22 = {
     __kind__: "ok";
-    ok: Array<JoinRequest>;
+    ok: Array<MessagePublic>;
 } | {
     __kind__: "err";
     err: Error_;
@@ -501,14 +519,7 @@ export interface ExportAuditLogsRequest {
 export type ConversationId = bigint;
 export type Result_19 = {
     __kind__: "ok";
-    ok: Array<MessagePublic>;
-} | {
-    __kind__: "err";
-    err: Error_;
-};
-export type Result_29 = {
-    __kind__: "ok";
-    ok: string;
+    ok: NotificationPreferences;
 } | {
     __kind__: "err";
     err: string;
@@ -517,19 +528,26 @@ export interface SubmitJoinRequestRequest {
     conversationId: ConversationId;
     message?: string;
 }
-export type Result_24 = {
+export type Result_29 = {
     __kind__: "ok";
-    ok: EscrowStatsRecord;
+    ok: string;
 } | {
     __kind__: "err";
     err: Error_;
 };
-export type Result_14 = {
+export type Result_24 = {
     __kind__: "ok";
-    ok: Array<RetentionMetadataRecord>;
+    ok: Array<GroupMemberRecord>;
 } | {
     __kind__: "err";
-    err: Error_;
+    err: string;
+};
+export type Result_14 = {
+    __kind__: "ok";
+    ok: OrgMembership;
+} | {
+    __kind__: "err";
+    err: string;
 };
 export interface AddMemberRequest {
     member: UserId;
@@ -553,6 +571,13 @@ export interface InviteUserRequest {
     email?: string;
     principalId: string;
 }
+export type Result_33 = {
+    __kind__: "ok";
+    ok: Array<EscrowAccessGrant>;
+} | {
+    __kind__: "err";
+    err: Error_;
+};
 export interface GetOrgUsersRequest {
     orgId?: OrgId;
     search?: string;
@@ -795,16 +820,16 @@ export enum RetentionPeriod {
 export interface backendInterface {
     addAdmin(newAdmin: UserId): Promise<Result_6>;
     addConversationMember(req: AddMemberRequest): Promise<Result_6>;
-    addDevice(req: AddDeviceRequest): Promise<Result_10>;
-    adminGetEscrowGrants(targetUserId: UserId | null, limit: bigint, afterGrantId: bigint | null): Promise<Result_31>;
-    adminGrantEscrowAccess(targetUserId: UserId, targetDeviceId: string, reason: string): Promise<Result_30>;
+    addDevice(req: AddDeviceRequest): Promise<Result_11>;
+    adminGetEscrowGrants(targetUserId: UserId | null, limit: bigint, afterGrantId: bigint | null): Promise<Result_33>;
+    adminGrantEscrowAccess(targetUserId: UserId, targetDeviceId: string, reason: string): Promise<Result_32>;
     approveJoinRequest(req: JoinRequestActionRequest): Promise<Result_6>;
-    approveKeyRecovery(requestId: bigint): Promise<Result_8>;
-    bootstrapSuperAdmin(targetPrincipal: UserId): Promise<Result_29>;
+    approveKeyRecovery(requestId: bigint): Promise<Result_9>;
+    bootstrapSuperAdmin(targetPrincipal: UserId): Promise<Result_8>;
     checkPolicyExpiry(callerOrgId: OrgId | null): Promise<Array<RetentionPolicy>>;
     clearTypingIndicator(conversationId: ConversationId): Promise<void>;
-    createDirectConversation(req: CreateDirectRequest): Promise<Result_28>;
-    createGroupConversation(req: CreateGroupRequest): Promise<Result_28>;
+    createDirectConversation(req: CreateDirectRequest): Promise<Result_31>;
+    createGroupConversation(req: CreateGroupRequest): Promise<Result_31>;
     createOrg(req: CreateOrgRequest): Promise<Result_3>;
     createRetentionPolicy(req: CreateRetentionPolicyRequest): Promise<Result_1>;
     deleteAttachment(attachmentId: AttachmentId): Promise<Result_6>;
@@ -822,12 +847,12 @@ export interface backendInterface {
         __kind__: "err";
         err: string;
     }>;
-    exportAuditLog(req: AuditExportRequest): Promise<Result_26>;
-    exportAuditLogs(req: ExportAuditLogsRequest): Promise<Result_25>;
-    exportConfigBundle(): Promise<Result_27>;
-    generateDeviceSyncToken(devicePublicKey: Uint8Array): Promise<Result_26>;
+    exportAuditLog(req: AuditExportRequest): Promise<Result_29>;
+    exportAuditLogs(req: ExportAuditLogsRequest): Promise<Result_28>;
+    exportConfigBundle(): Promise<Result_30>;
+    generateDeviceSyncToken(devicePublicKey: Uint8Array): Promise<Result_29>;
     getAllGroups(req: GetAllGroupsRequest): Promise<Array<GroupAdminRecord>>;
-    getAuditLog(req: GetAuditLogRequest): Promise<Result_25>;
+    getAuditLog(req: GetAuditLogRequest): Promise<Result_28>;
     getCanisterHealth(): Promise<{
         memoryCapacity: bigint;
         cyclesBalance: bigint;
@@ -849,51 +874,56 @@ export interface backendInterface {
         __kind__: "err";
         err: string;
     }>;
-    getEscrowStats(): Promise<Result_24>;
-    getEscrowedUsers(req: GetEscrowedUsersRequest): Promise<Result_23>;
+    getEscrowStats(): Promise<Result_27>;
+    getEscrowedUsers(req: GetEscrowedUsersRequest): Promise<Result_26>;
     getGlobalRetentionPolicy(): Promise<RetentionPolicy | null>;
     getGroupCompartment(convId: ConversationId): Promise<CompartmentLabel | null>;
-    getGroupJoinRequests(conversationId: ConversationId): Promise<Result_22>;
-    getGroupMembers(req: GetGroupMembersRequest): Promise<Result_21>;
-    getGroupRetentionPolicy(convId: ConversationId): Promise<Result_20>;
+    getGroupJoinRequests(conversationId: ConversationId): Promise<Result_25>;
+    getGroupMembers(req: GetGroupMembersRequest): Promise<Result_24>;
+    getGroupRetentionPolicy(convId: ConversationId): Promise<Result_23>;
     getMessageAttachments(messageId: MessageId): Promise<Array<Attachment>>;
-    getMessages(req: GetMessagesRequest): Promise<Result_19>;
+    getMessages(req: GetMessagesRequest): Promise<Result_22>;
     getMyEscrowStatus(): Promise<Array<EscrowRecord>>;
-    getMyOrgs(): Promise<Result_18>;
-    getMyRole(orgId: OrgId): Promise<Result_17>;
+    getMyOrgs(): Promise<Result_21>;
+    getMyRole(orgId: OrgId): Promise<Result_20>;
+    getNotificationPreferences(): Promise<Result_19>;
     getOrg(orgId: OrgId): Promise<Result_3>;
     getOrgSettings(orgId: string): Promise<OrgSettings>;
-    getOrgUsers(req: GetOrgUsersRequest): Promise<Result_16>;
+    getOrgUsers(req: GetOrgUsersRequest): Promise<Result_18>;
+    getPendingNotifications(): Promise<Result_17>;
     getPlatformSettings(): Promise<PlatformSettings>;
-    getRecoveryDetails(requestId: bigint): Promise<Result_8>;
-    getRecoveryRequests(orgId: OrgId | null, statusFilter: RecoveryRequestStatus | null): Promise<Result_15>;
-    getRetentionMetadata(req: GetRetentionMetadataRequest): Promise<Result_14>;
+    getRecoveryDetails(requestId: bigint): Promise<Result_9>;
+    getRecoveryRequests(orgId: OrgId | null, statusFilter: RecoveryRequestStatus | null): Promise<Result_16>;
+    getRetentionMetadata(req: GetRetentionMetadataRequest): Promise<Result_15>;
     getRetentionPolicies(req: GetRetentionPoliciesRequest): Promise<Array<RetentionPolicy>>;
     getRetentionPolicy(orgId: OrgId): Promise<RetentionPolicy | null>;
     getTypingIndicators(conversationId: ConversationId): Promise<Array<TypingIndicatorPublic>>;
     getUserProfile(userId: UserId): Promise<UserProfilePublic | null>;
     getUserProfiles(userIds: Array<UserId>): Promise<Array<UserProfilePublic>>;
+    getVAPIDPublicKey(): Promise<string>;
+    hasDataResetBeenPerformed(): Promise<boolean>;
     hasSuperAdmin(): Promise<boolean>;
-    initiateKeyRecovery(targetUserId: UserId, targetDeviceId: string, reason: string, orgId: OrgId | null): Promise<Result_8>;
-    inviteUser(req: InviteUserRequest): Promise<Result_13>;
+    initiateKeyRecovery(targetUserId: UserId, targetDeviceId: string, reason: string, orgId: OrgId | null): Promise<Result_9>;
+    inviteUser(req: InviteUserRequest): Promise<Result_14>;
     isAdminCheck(principal: UserId): Promise<boolean>;
-    listAdmins(): Promise<Result_12>;
+    listAdmins(): Promise<Result_13>;
     listConversations(): Promise<Array<ConversationPublic>>;
     listMyDevices(): Promise<Array<DeviceRecordPublic>>;
-    listOrgs(req: GetOrgsRequest): Promise<Result_11>;
+    listOrgs(req: GetOrgsRequest): Promise<Result_12>;
     listPublicGroups(req: ListPublicGroupsRequest): Promise<Array<PublicGroupSummary>>;
     logPolicyExpiryCheck(): Promise<void>;
     logPolicyReportExported(orgFilter: OrgId | null): Promise<void>;
     markMessageRead(messageId: MessageId): Promise<Result_6>;
     reactivateMember(orgId: OrgId, userId: UserId): Promise<Result_2>;
-    redeemDeviceSyncToken(token: string, deviceId: string, deviceLabel: string): Promise<Result_10>;
-    registerAttachment(req: RegisterAttachmentRequest): Promise<Result_9>;
+    redeemDeviceSyncToken(token: string, deviceId: string, deviceLabel: string): Promise<Result_11>;
+    registerAttachment(req: RegisterAttachmentRequest): Promise<Result_10>;
     registerUser(req: RegisterRequest): Promise<Result>;
-    rejectKeyRecovery(requestId: bigint): Promise<Result_8>;
+    rejectKeyRecovery(requestId: bigint): Promise<Result_9>;
     removeAdmin(target: UserId): Promise<Result_6>;
     removeConversationMember(req: RemoveMemberRequest): Promise<Result_6>;
     removeMember(orgId: OrgId, userId: UserId): Promise<Result_2>;
     removeMemberFromGroup(req: RemoveMemberFromGroupRequest): Promise<Result_2>;
+    resetAllTestData(): Promise<Result_8>;
     revokeDevice(deviceId: string): Promise<Result_6>;
     revokeKeyEscrow(deviceId: string, reason: string): Promise<Result_6>;
     sendMessage(req: SendMessageRequest): Promise<Result_7>;
@@ -901,11 +931,14 @@ export interface backendInterface {
     setSovereignConfig(residency: DataResidency, subnet: Principal | null, nodeCount: bigint | null, costMult: number | null): Promise<Result_5>;
     setTypingIndicator(conversationId: ConversationId, ttlSeconds: bigint): Promise<void>;
     submitJoinRequest(req: SubmitJoinRequestRequest): Promise<Result_4>;
+    subscribeToPush(endpoint: string, authKey: string, p256dh: string): Promise<Result_2>;
     suspendMember(req: SuspendUserRequest): Promise<Result_2>;
     suspendOrg(orgId: OrgId): Promise<Result_2>;
     toggleLegalHold(req: LegalHoldRequest): Promise<Result_1>;
     touchPresence(): Promise<void>;
+    unsubscribeFromPush(): Promise<Result_2>;
     updateMemberRole(req: UpdateMemberRoleRequest): Promise<Result_2>;
+    updateNotificationPreferences(directEnabled: boolean, groupEnabled: boolean): Promise<Result_2>;
     updateOrg(orgId: OrgId, name: string, description: string | null): Promise<Result_3>;
     updateOrgSettings(orgId: string, update: OrgSettings): Promise<Result_2>;
     updatePlatformSettings(update: PlatformSettings): Promise<Result_2>;

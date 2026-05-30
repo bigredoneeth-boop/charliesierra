@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-DYPN2Mha.js","assets/card-Dj0kq17T.js","assets/AdminDashboardPage-BTTObsvn.js","assets/AdminLayout-BDDpCrSB.js","assets/PrincipalDisplay-D8D_dUnb.js","assets/user-plus-zq1tHvNN.js","assets/AdminOrganizationsPage-COmLJJVD.js","assets/AdminStatusBadge-qanklKys.js","assets/ConfirmDialog-DqKdVDfg.js","assets/pencil-CNSJZTrw.js","assets/shield-alert-D78AsEcn.js","assets/AdminUsersPage-CM49WUMX.js","assets/funnel-CE1pPga4.js","assets/AdminGroupsPage-CnMXz5Rn.js","assets/AdminAuditPage-u9AJn5ds.js","assets/AdminKeyEscrowPage-BoQCtJr7.js","assets/AdminRetentionPoliciesPage-SyWyIMBB.js","assets/switch-B55RMrIa.js","assets/AdminSettingsPage-yjxk-6NV.js","assets/AdminBootstrapPage-BlhH17BC.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-BA1-hglk.js","assets/card-7gh68e_y.js","assets/AdminDashboardPage-BtYTV5ND.js","assets/AdminLayout-CR9BmsWz.js","assets/PrincipalDisplay-xEgaOtnB.js","assets/user-plus-DtTLaKfK.js","assets/AdminOrganizationsPage-DBdCCMGj.js","assets/AdminStatusBadge-BmO8xPN-.js","assets/ConfirmDialog-B4D4JX0S.js","assets/pencil-DHMnYz-9.js","assets/shield-alert-CYLUM9rQ.js","assets/AdminUsersPage-uzzrP9n0.js","assets/funnel-DY2jR4lM.js","assets/AdminGroupsPage-PIgvj0e1.js","assets/AdminAuditPage-DSlcPxe3.js","assets/AdminKeyEscrowPage-BvlglFWX.js","assets/AdminRetentionPoliciesPage-DDzqV5E3.js","assets/AdminSettingsPage-C3JCK54F.js","assets/AdminBootstrapPage-CSWyWl8-.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -30268,7 +30268,7 @@ var Arrow$1 = reactExports.forwardRef((props, forwardedRef) => {
   );
 });
 Arrow$1.displayName = NAME$3;
-var Root$6 = Arrow$1;
+var Root$7 = Arrow$1;
 function useSize(element) {
   const [size2, setSize] = reactExports.useState(void 0);
   useLayoutEffect2(() => {
@@ -30515,7 +30515,7 @@ var PopperArrow = reactExports.forwardRef(function PopperArrow2(props, forwarded
           visibility: contentContext.shouldHideArrow ? "hidden" : void 0
         },
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Root$6,
+          Root$7,
           {
             ...arrowProps,
             ref: forwardedRef,
@@ -30800,7 +30800,7 @@ var VisuallyHidden = reactExports.forwardRef(
   }
 );
 VisuallyHidden.displayName = NAME$2;
-var Root$5 = VisuallyHidden;
+var Root$6 = VisuallyHidden;
 var [createTooltipContext] = createContextScope("Tooltip", [
   createPopperScope
 ]);
@@ -31132,7 +31132,7 @@ var TooltipContentImpl = reactExports.forwardRef(
             },
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Slottable$1, { children }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(VisuallyHiddenContentContextProvider, { scope: __scopeTooltip, isInside: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root$5, { id: context.contentId, role: "tooltip", children: ariaLabel || children }) })
+              /* @__PURE__ */ jsxRuntimeExports.jsx(VisuallyHiddenContentContextProvider, { scope: __scopeTooltip, isInside: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root$6, { id: context.contentId, role: "tooltip", children: ariaLabel || children }) })
             ]
           }
         )
@@ -33834,7 +33834,7 @@ const DeviceRecordPublic = Record({
   "registeredAt": Timestamp,
   "lastSeen": Timestamp
 });
-const Result_10 = Variant({
+const Result_11 = Variant({
   "ok": DeviceRecordPublic,
   "err": Error$1
 });
@@ -33847,11 +33847,11 @@ const EscrowAccessGrant = Record({
   "requestingAdmin": UserId,
   "targetUserId": UserId
 });
-const Result_31 = Variant({
+const Result_33 = Variant({
   "ok": Vec(EscrowAccessGrant),
   "err": Error$1
 });
-const Result_30 = Variant({
+const Result_32 = Variant({
   "ok": EscrowAccessGrant,
   "err": Error$1
 });
@@ -33880,8 +33880,8 @@ const RecoveryRequest = Record({
   "reason": Text,
   "targetUserId": UserId
 });
-const Result_8 = Variant({ "ok": RecoveryRequest, "err": Error$1 });
-const Result_29 = Variant({ "ok": Text, "err": Text });
+const Result_9 = Variant({ "ok": RecoveryRequest, "err": Error$1 });
+const Result_8 = Variant({ "ok": Text, "err": Text });
 const RetentionPeriod$1 = Variant({
   "days30": Null,
   "days90": Null,
@@ -33916,7 +33916,7 @@ const ConversationPublic = Record({
   "discoverable": Bool,
   "encryptedName": Opt(Vec(Nat8))
 });
-const Result_28 = Variant({
+const Result_31 = Variant({
   "ok": ConversationPublic,
   "err": Error$1
 });
@@ -33996,7 +33996,7 @@ const AuditExportRequest = Record({
   "startDate": Opt(Timestamp),
   "format": AuditExportFormat
 });
-const Result_26 = Variant({ "ok": Text, "err": Error$1 });
+const Result_29 = Variant({ "ok": Text, "err": Error$1 });
 const AuditEventType$1 = Variant({
   "legalHoldRemoved": Null,
   "memberSuspended": Null,
@@ -34054,7 +34054,7 @@ const AuditEvent = Record({
   "actorPrincipal": UserId,
   "eventType": AuditEventType$1
 });
-const Result_25 = Variant({
+const Result_28 = Variant({
   "ok": Vec(AuditEvent),
   "err": Error$1
 });
@@ -34086,7 +34086,7 @@ const ConfigExportBundle = Record({
   ),
   "residencyLabel": DataResidency
 });
-const Result_27 = Variant({
+const Result_30 = Variant({
   "ok": ConfigExportBundle,
   "err": Error$1
 });
@@ -34126,7 +34126,7 @@ const EscrowStatsRecord = Record({
   "lastRecoveryTimestamp": Opt(Timestamp),
   "totalEscrowed": Nat
 });
-const Result_24 = Variant({
+const Result_27 = Variant({
   "ok": EscrowStatsRecord,
   "err": Error$1
 });
@@ -34148,7 +34148,7 @@ const EscrowedUserRecord = Record({
   "escrowStatus": EscrowStatus$1,
   "lastBackedUp": Opt(Timestamp)
 });
-const Result_23 = Variant({
+const Result_26 = Variant({
   "ok": Vec(EscrowedUserRecord),
   "err": Error$1
 });
@@ -34165,7 +34165,7 @@ const JoinRequest = Record({
   "message": Opt(Text),
   "requesterId": UserId
 });
-const Result_22 = Variant({
+const Result_25 = Variant({
   "ok": Vec(JoinRequest),
   "err": Error$1
 });
@@ -34177,11 +34177,11 @@ const GroupMemberRecord = Record({
   "userId": UserId,
   "joinedAt": Timestamp
 });
-const Result_21 = Variant({
+const Result_24 = Variant({
   "ok": Vec(GroupMemberRecord),
   "err": Text
 });
-const Result_20 = Variant({
+const Result_23 = Variant({
   "ok": GroupRetentionPolicy,
   "err": Error$1
 });
@@ -34227,7 +34227,7 @@ const MessagePublic = Record({
   "priority": Opt(MessagePriority$1),
   "readBy": Vec(ReadReceipt)
 });
-const Result_19 = Variant({
+const Result_22 = Variant({
   "ok": Vec(MessagePublic),
   "err": Error$1
 });
@@ -34263,12 +34263,20 @@ const OrgMembership = Record({
   "email": Opt(Text),
   "lastActive": Opt(Timestamp)
 });
-const Result_18 = Variant({
+const Result_21 = Variant({
   "ok": Vec(OrgMembership),
   "err": Text
 });
-const Result_17 = Variant({
+const Result_20 = Variant({
   "ok": Opt(OrgRole$1),
+  "err": Text
+});
+const NotificationPreferences = Record({
+  "groupMessagesEnabled": Bool,
+  "directMessagesEnabled": Bool
+});
+const Result_19 = Variant({
+  "ok": NotificationPreferences,
   "err": Text
 });
 const GroupCreationPermission$1 = Variant({
@@ -34309,8 +34317,19 @@ const GetOrgUsersResponse = Record({
   "hasMore": Bool,
   "members": Vec(OrgMembership)
 });
-const Result_16 = Variant({
+const Result_18 = Variant({
   "ok": GetOrgUsersResponse,
+  "err": Text
+});
+const PendingNotification = Record({
+  "id": Text,
+  "notifType": Text,
+  "senderDisplayName": Text,
+  "timestamp": Int,
+  "groupName": Opt(Text)
+});
+const Result_17 = Variant({
+  "ok": Vec(PendingNotification),
   "err": Text
 });
 const PasswordPolicy$1 = Variant({
@@ -34329,7 +34348,7 @@ const PlatformSettings = Record({
   "passwordPolicy": PasswordPolicy$1,
   "platformName": Text
 });
-const Result_15 = Variant({
+const Result_16 = Variant({
   "ok": Vec(RecoveryRequest),
   "err": Error$1
 });
@@ -34347,7 +34366,7 @@ const RetentionMetadataRecord = Record({
   "recipientPrincipals": Vec(UserId),
   "convId": ConversationId
 });
-const Result_14 = Variant({
+const Result_15 = Variant({
   "ok": Vec(RetentionMetadataRecord),
   "err": Error$1
 });
@@ -34374,11 +34393,11 @@ const InviteUserRequest = Record({
   "email": Opt(Text),
   "principalId": Text
 });
-const Result_13 = Variant({
+const Result_14 = Variant({
   "ok": OrgMembership,
   "err": Text
 });
-const Result_12 = Variant({ "ok": Vec(UserId), "err": Error$1 });
+const Result_13 = Variant({ "ok": Vec(UserId), "err": Error$1 });
 const GetOrgsRequest = Record({
   "search": Opt(Text),
   "limit": Nat,
@@ -34388,7 +34407,7 @@ const GetOrgsResponse = Record({
   "total": Nat,
   "orgs": Vec(OrgRecord)
 });
-const Result_11 = Variant({
+const Result_12 = Variant({
   "ok": GetOrgsResponse,
   "err": Text
 });
@@ -34410,7 +34429,7 @@ const RegisterAttachmentRequest = Record({
   "encryptedSizeBytes": Nat,
   "storageKey": Text
 });
-const Result_9 = Variant({ "ok": Attachment, "err": Error$1 });
+const Result_10 = Variant({ "ok": Attachment, "err": Error$1 });
 const RegisterRequest = Record({
   "ecdhPublicKey": EcdhPublicKey,
   "encryptedAvatarKey": Opt(Text),
@@ -34494,28 +34513,28 @@ Service({
   "_immutableObjectStorageUpdateGatewayPrincipals": Func([], [], []),
   "addAdmin": Func([UserId], [Result_6], []),
   "addConversationMember": Func([AddMemberRequest], [Result_6], []),
-  "addDevice": Func([AddDeviceRequest], [Result_10], []),
+  "addDevice": Func([AddDeviceRequest], [Result_11], []),
   "adminGetEscrowGrants": Func(
     [Opt(UserId), Nat, Opt(Nat)],
-    [Result_31],
+    [Result_33],
     ["query"]
   ),
   "adminGrantEscrowAccess": Func(
     [UserId, Text, Text],
-    [Result_30],
+    [Result_32],
     []
   ),
   "approveJoinRequest": Func([JoinRequestActionRequest], [Result_6], []),
-  "approveKeyRecovery": Func([Nat], [Result_8], []),
-  "bootstrapSuperAdmin": Func([UserId], [Result_29], []),
+  "approveKeyRecovery": Func([Nat], [Result_9], []),
+  "bootstrapSuperAdmin": Func([UserId], [Result_8], []),
   "checkPolicyExpiry": Func(
     [Opt(OrgId)],
     [Vec(RetentionPolicy)],
     ["query"]
   ),
   "clearTypingIndicator": Func([ConversationId], [], []),
-  "createDirectConversation": Func([CreateDirectRequest], [Result_28], []),
-  "createGroupConversation": Func([CreateGroupRequest], [Result_28], []),
+  "createDirectConversation": Func([CreateDirectRequest], [Result_31], []),
+  "createGroupConversation": Func([CreateGroupRequest], [Result_31], []),
   "createOrg": Func([CreateOrgRequest], [Result_3], []),
   "createRetentionPolicy": Func(
     [CreateRetentionPolicyRequest],
@@ -34539,20 +34558,20 @@ Service({
     [Variant({ "ok": Text, "err": Text })],
     []
   ),
-  "exportAuditLog": Func([AuditExportRequest], [Result_26], []),
+  "exportAuditLog": Func([AuditExportRequest], [Result_29], []),
   "exportAuditLogs": Func(
     [ExportAuditLogsRequest],
-    [Result_25],
+    [Result_28],
     ["query"]
   ),
-  "exportConfigBundle": Func([], [Result_27], []),
-  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_26], []),
+  "exportConfigBundle": Func([], [Result_30], []),
+  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_29], []),
   "getAllGroups": Func(
     [GetAllGroupsRequest],
     [Vec(GroupAdminRecord)],
     []
   ),
-  "getAuditLog": Func([GetAuditLogRequest], [Result_25], ["query"]),
+  "getAuditLog": Func([GetAuditLogRequest], [Result_28], ["query"]),
   "getCanisterHealth": Func(
     [],
     [
@@ -34580,8 +34599,8 @@ Service({
     [Variant({ "ok": Vec(Nat8), "err": Text })],
     []
   ),
-  "getEscrowStats": Func([], [Result_24], []),
-  "getEscrowedUsers": Func([GetEscrowedUsersRequest], [Result_23], []),
+  "getEscrowStats": Func([], [Result_27], []),
+  "getEscrowedUsers": Func([GetEscrowedUsersRequest], [Result_26], []),
   "getGlobalRetentionPolicy": Func(
     [],
     [Opt(RetentionPolicy)],
@@ -34592,11 +34611,11 @@ Service({
     [Opt(CompartmentLabel)],
     ["query"]
   ),
-  "getGroupJoinRequests": Func([ConversationId], [Result_22], ["query"]),
-  "getGroupMembers": Func([GetGroupMembersRequest], [Result_21], []),
+  "getGroupJoinRequests": Func([ConversationId], [Result_25], ["query"]),
+  "getGroupMembers": Func([GetGroupMembersRequest], [Result_24], []),
   "getGroupRetentionPolicy": Func(
     [ConversationId],
-    [Result_20],
+    [Result_23],
     ["query"]
   ),
   "getMessageAttachments": Func(
@@ -34604,23 +34623,25 @@ Service({
     [Vec(Attachment)],
     ["query"]
   ),
-  "getMessages": Func([GetMessagesRequest], [Result_19], ["query"]),
+  "getMessages": Func([GetMessagesRequest], [Result_22], ["query"]),
   "getMyEscrowStatus": Func([], [Vec(EscrowRecord)], ["query"]),
-  "getMyOrgs": Func([], [Result_18], ["query"]),
-  "getMyRole": Func([OrgId], [Result_17], ["query"]),
+  "getMyOrgs": Func([], [Result_21], ["query"]),
+  "getMyRole": Func([OrgId], [Result_20], ["query"]),
+  "getNotificationPreferences": Func([], [Result_19], ["query"]),
   "getOrg": Func([OrgId], [Result_3], ["query"]),
   "getOrgSettings": Func([Text], [OrgSettings], ["query"]),
-  "getOrgUsers": Func([GetOrgUsersRequest], [Result_16], ["query"]),
+  "getOrgUsers": Func([GetOrgUsersRequest], [Result_18], ["query"]),
+  "getPendingNotifications": Func([], [Result_17], []),
   "getPlatformSettings": Func([], [PlatformSettings], ["query"]),
-  "getRecoveryDetails": Func([Nat], [Result_8], []),
+  "getRecoveryDetails": Func([Nat], [Result_9], []),
   "getRecoveryRequests": Func(
     [Opt(OrgId), Opt(RecoveryRequestStatus$1)],
-    [Result_15],
+    [Result_16],
     []
   ),
   "getRetentionMetadata": Func(
     [GetRetentionMetadataRequest],
-    [Result_14],
+    [Result_15],
     ["query"]
   ),
   "getRetentionPolicies": Func(
@@ -34648,18 +34669,20 @@ Service({
     [Vec(UserProfilePublic)],
     ["query"]
   ),
+  "getVAPIDPublicKey": Func([], [Text], ["query"]),
+  "hasDataResetBeenPerformed": Func([], [Bool], ["query"]),
   "hasSuperAdmin": Func([], [Bool], ["query"]),
   "initiateKeyRecovery": Func(
     [UserId, Text, Text, Opt(OrgId)],
-    [Result_8],
+    [Result_9],
     []
   ),
-  "inviteUser": Func([InviteUserRequest], [Result_13], []),
+  "inviteUser": Func([InviteUserRequest], [Result_14], []),
   "isAdminCheck": Func([UserId], [Bool], ["query"]),
-  "listAdmins": Func([], [Result_12], ["query"]),
+  "listAdmins": Func([], [Result_13], ["query"]),
   "listConversations": Func([], [Vec(ConversationPublic)], ["query"]),
   "listMyDevices": Func([], [Vec(DeviceRecordPublic)], ["query"]),
-  "listOrgs": Func([GetOrgsRequest], [Result_11], ["query"]),
+  "listOrgs": Func([GetOrgsRequest], [Result_12], ["query"]),
   "listPublicGroups": Func(
     [ListPublicGroupsRequest],
     [Vec(PublicGroupSummary)],
@@ -34671,12 +34694,12 @@ Service({
   "reactivateMember": Func([OrgId, UserId], [Result_2], []),
   "redeemDeviceSyncToken": Func(
     [Text, Text, Text],
-    [Result_10],
+    [Result_11],
     []
   ),
-  "registerAttachment": Func([RegisterAttachmentRequest], [Result_9], []),
+  "registerAttachment": Func([RegisterAttachmentRequest], [Result_10], []),
   "registerUser": Func([RegisterRequest], [Result], []),
-  "rejectKeyRecovery": Func([Nat], [Result_8], []),
+  "rejectKeyRecovery": Func([Nat], [Result_9], []),
   "removeAdmin": Func([UserId], [Result_6], []),
   "removeConversationMember": Func([RemoveMemberRequest], [Result_6], []),
   "removeMember": Func([OrgId, UserId], [Result_2], []),
@@ -34685,6 +34708,7 @@ Service({
     [Result_2],
     []
   ),
+  "resetAllTestData": Func([], [Result_8], []),
   "revokeDevice": Func([Text], [Result_6], []),
   "revokeKeyEscrow": Func([Text, Text], [Result_6], []),
   "sendMessage": Func([SendMessageRequest], [Result_7], []),
@@ -34705,11 +34729,18 @@ Service({
   ),
   "setTypingIndicator": Func([ConversationId, Nat], [], []),
   "submitJoinRequest": Func([SubmitJoinRequestRequest], [Result_4], []),
+  "subscribeToPush": Func([Text, Text, Text], [Result_2], []),
   "suspendMember": Func([SuspendUserRequest], [Result_2], []),
   "suspendOrg": Func([OrgId], [Result_2], []),
   "toggleLegalHold": Func([LegalHoldRequest], [Result_1], []),
   "touchPresence": Func([], [], []),
+  "unsubscribeFromPush": Func([], [Result_2], []),
   "updateMemberRole": Func([UpdateMemberRoleRequest], [Result_2], []),
+  "updateNotificationPreferences": Func(
+    [Bool, Bool],
+    [Result_2],
+    []
+  ),
   "updateOrg": Func([OrgId, Text, Opt(Text)], [Result_3], []),
   "updateOrgSettings": Func([Text, OrgSettings], [Result_2], []),
   "updatePlatformSettings": Func([PlatformSettings], [Result_2], []),
@@ -34764,7 +34795,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "registeredAt": Timestamp2,
     "lastSeen": Timestamp2
   });
-  const Result_102 = IDL2.Variant({ "ok": DeviceRecordPublic2, "err": Error2 });
+  const Result_112 = IDL2.Variant({ "ok": DeviceRecordPublic2, "err": Error2 });
   const EscrowAccessGrant2 = IDL2.Record({
     "grantTimestamp": Timestamp2,
     "grantId": IDL2.Nat,
@@ -34774,11 +34805,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "requestingAdmin": UserId2,
     "targetUserId": UserId2
   });
-  const Result_312 = IDL2.Variant({
+  const Result_332 = IDL2.Variant({
     "ok": IDL2.Vec(EscrowAccessGrant2),
     "err": Error2
   });
-  const Result_302 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
+  const Result_322 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
   const DenialReason2 = IDL2.Text;
   const JoinRequestActionRequest2 = IDL2.Record({
     "denialReason": IDL2.Opt(DenialReason2),
@@ -34804,8 +34835,8 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "reason": IDL2.Text,
     "targetUserId": UserId2
   });
-  const Result_82 = IDL2.Variant({ "ok": RecoveryRequest2, "err": Error2 });
-  const Result_292 = IDL2.Variant({ "ok": IDL2.Text, "err": IDL2.Text });
+  const Result_92 = IDL2.Variant({ "ok": RecoveryRequest2, "err": Error2 });
+  const Result_82 = IDL2.Variant({ "ok": IDL2.Text, "err": IDL2.Text });
   const RetentionPeriod2 = IDL2.Variant({
     "days30": IDL2.Null,
     "days90": IDL2.Null,
@@ -34840,7 +34871,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "discoverable": IDL2.Bool,
     "encryptedName": IDL2.Opt(IDL2.Vec(IDL2.Nat8))
   });
-  const Result_282 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
+  const Result_312 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
   const CreateGroupRequest2 = IDL2.Record({
     "initialMembers": IDL2.Vec(UserId2),
     "displayName": IDL2.Opt(IDL2.Text),
@@ -34867,7 +34898,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "memberCount": IDL2.Nat,
     "description": IDL2.Text
   });
-  const Result_32 = IDL2.Variant({ "ok": OrgRecord2, "err": IDL2.Text });
+  const Result_34 = IDL2.Variant({ "ok": OrgRecord2, "err": IDL2.Text });
   const CreateRetentionPolicyRequest2 = IDL2.Record({
     "orgId": IDL2.Opt(OrgId2),
     "period": RetentionPeriod2,
@@ -34914,7 +34945,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "startDate": IDL2.Opt(Timestamp2),
     "format": AuditExportFormat2
   });
-  const Result_262 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
+  const Result_292 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
   const AuditEventType2 = IDL2.Variant({
     "legalHoldRemoved": IDL2.Null,
     "memberSuspended": IDL2.Null,
@@ -34972,7 +35003,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "actorPrincipal": UserId2,
     "eventType": AuditEventType2
   });
-  const Result_252 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
+  const Result_282 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
   const CompartmentLabel2 = IDL2.Variant({
     "classified": IDL2.Null,
     "unclassified": IDL2.Null
@@ -35003,7 +35034,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     ),
     "residencyLabel": DataResidency2
   });
-  const Result_272 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
+  const Result_302 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
   const GetAllGroupsRequest2 = IDL2.Record({ "orgId": IDL2.Opt(OrgId2) });
   const GroupStatus2 = IDL2.Variant({
     "active": IDL2.Null,
@@ -35040,7 +35071,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "lastRecoveryTimestamp": IDL2.Opt(Timestamp2),
     "totalEscrowed": IDL2.Nat
   });
-  const Result_242 = IDL2.Variant({ "ok": EscrowStatsRecord2, "err": Error2 });
+  const Result_272 = IDL2.Variant({ "ok": EscrowStatsRecord2, "err": Error2 });
   const GetEscrowedUsersRequest2 = IDL2.Record({
     "orgId": IDL2.Opt(OrgId2),
     "limit": IDL2.Nat,
@@ -35059,7 +35090,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "escrowStatus": EscrowStatus2,
     "lastBackedUp": IDL2.Opt(Timestamp2)
   });
-  const Result_232 = IDL2.Variant({
+  const Result_262 = IDL2.Variant({
     "ok": IDL2.Vec(EscrowedUserRecord2),
     "err": Error2
   });
@@ -35076,18 +35107,18 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "message": IDL2.Opt(IDL2.Text),
     "requesterId": UserId2
   });
-  const Result_222 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
+  const Result_252 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
   const GetGroupMembersRequest2 = IDL2.Record({ "groupId": ConversationId2 });
   const GroupMemberRecord2 = IDL2.Record({
     "displayName": IDL2.Opt(IDL2.Text),
     "userId": UserId2,
     "joinedAt": Timestamp2
   });
-  const Result_212 = IDL2.Variant({
+  const Result_242 = IDL2.Variant({
     "ok": IDL2.Vec(GroupMemberRecord2),
     "err": IDL2.Text
   });
-  const Result_202 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
+  const Result_232 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
   const MessageId2 = IDL2.Nat;
   const Attachment2 = IDL2.Record({
     "id": AttachmentId2,
@@ -35127,7 +35158,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "priority": IDL2.Opt(MessagePriority2),
     "readBy": IDL2.Vec(ReadReceipt2)
   });
-  const Result_192 = IDL2.Variant({
+  const Result_222 = IDL2.Variant({
     "ok": IDL2.Vec(MessagePublic2),
     "err": Error2
   });
@@ -35163,11 +35194,19 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "email": IDL2.Opt(IDL2.Text),
     "lastActive": IDL2.Opt(Timestamp2)
   });
-  const Result_182 = IDL2.Variant({
+  const Result_212 = IDL2.Variant({
     "ok": IDL2.Vec(OrgMembership2),
     "err": IDL2.Text
   });
-  const Result_172 = IDL2.Variant({ "ok": IDL2.Opt(OrgRole2), "err": IDL2.Text });
+  const Result_202 = IDL2.Variant({ "ok": IDL2.Opt(OrgRole2), "err": IDL2.Text });
+  const NotificationPreferences2 = IDL2.Record({
+    "groupMessagesEnabled": IDL2.Bool,
+    "directMessagesEnabled": IDL2.Bool
+  });
+  const Result_192 = IDL2.Variant({
+    "ok": NotificationPreferences2,
+    "err": IDL2.Text
+  });
   const GroupCreationPermission2 = IDL2.Variant({
     "orgAdminsOnly": IDL2.Null,
     "allMembers": IDL2.Null
@@ -35206,8 +35245,19 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "hasMore": IDL2.Bool,
     "members": IDL2.Vec(OrgMembership2)
   });
-  const Result_162 = IDL2.Variant({
+  const Result_182 = IDL2.Variant({
     "ok": GetOrgUsersResponse2,
+    "err": IDL2.Text
+  });
+  const PendingNotification2 = IDL2.Record({
+    "id": IDL2.Text,
+    "notifType": IDL2.Text,
+    "senderDisplayName": IDL2.Text,
+    "timestamp": IDL2.Int,
+    "groupName": IDL2.Opt(IDL2.Text)
+  });
+  const Result_172 = IDL2.Variant({
+    "ok": IDL2.Vec(PendingNotification2),
     "err": IDL2.Text
   });
   const PasswordPolicy2 = IDL2.Variant({
@@ -35226,7 +35276,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "passwordPolicy": PasswordPolicy2,
     "platformName": IDL2.Text
   });
-  const Result_152 = IDL2.Variant({
+  const Result_162 = IDL2.Variant({
     "ok": IDL2.Vec(RecoveryRequest2),
     "err": Error2
   });
@@ -35244,7 +35294,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "recipientPrincipals": IDL2.Vec(UserId2),
     "convId": ConversationId2
   });
-  const Result_142 = IDL2.Variant({
+  const Result_152 = IDL2.Variant({
     "ok": IDL2.Vec(RetentionMetadataRecord2),
     "err": Error2
   });
@@ -35269,8 +35319,8 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "email": IDL2.Opt(IDL2.Text),
     "principalId": IDL2.Text
   });
-  const Result_132 = IDL2.Variant({ "ok": OrgMembership2, "err": IDL2.Text });
-  const Result_122 = IDL2.Variant({ "ok": IDL2.Vec(UserId2), "err": Error2 });
+  const Result_142 = IDL2.Variant({ "ok": OrgMembership2, "err": IDL2.Text });
+  const Result_132 = IDL2.Variant({ "ok": IDL2.Vec(UserId2), "err": Error2 });
   const GetOrgsRequest2 = IDL2.Record({
     "search": IDL2.Opt(IDL2.Text),
     "limit": IDL2.Nat,
@@ -35280,7 +35330,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "total": IDL2.Nat,
     "orgs": IDL2.Vec(OrgRecord2)
   });
-  const Result_112 = IDL2.Variant({ "ok": GetOrgsResponse2, "err": IDL2.Text });
+  const Result_122 = IDL2.Variant({ "ok": GetOrgsResponse2, "err": IDL2.Text });
   const ListPublicGroupsRequest2 = IDL2.Record({
     "offset": IDL2.Nat,
     "limit": IDL2.Nat,
@@ -35299,7 +35349,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "encryptedSizeBytes": IDL2.Nat,
     "storageKey": IDL2.Text
   });
-  const Result_92 = IDL2.Variant({ "ok": Attachment2, "err": Error2 });
+  const Result_102 = IDL2.Variant({ "ok": Attachment2, "err": Error2 });
   const RegisterRequest2 = IDL2.Record({
     "ecdhPublicKey": EcdhPublicKey2,
     "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
@@ -35383,20 +35433,20 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "_immutableObjectStorageUpdateGatewayPrincipals": IDL2.Func([], [], []),
     "addAdmin": IDL2.Func([UserId2], [Result_62], []),
     "addConversationMember": IDL2.Func([AddMemberRequest2], [Result_62], []),
-    "addDevice": IDL2.Func([AddDeviceRequest2], [Result_102], []),
+    "addDevice": IDL2.Func([AddDeviceRequest2], [Result_112], []),
     "adminGetEscrowGrants": IDL2.Func(
       [IDL2.Opt(UserId2), IDL2.Nat, IDL2.Opt(IDL2.Nat)],
-      [Result_312],
+      [Result_332],
       ["query"]
     ),
     "adminGrantEscrowAccess": IDL2.Func(
       [UserId2, IDL2.Text, IDL2.Text],
-      [Result_302],
+      [Result_322],
       []
     ),
     "approveJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_62], []),
-    "approveKeyRecovery": IDL2.Func([IDL2.Nat], [Result_82], []),
-    "bootstrapSuperAdmin": IDL2.Func([UserId2], [Result_292], []),
+    "approveKeyRecovery": IDL2.Func([IDL2.Nat], [Result_92], []),
+    "bootstrapSuperAdmin": IDL2.Func([UserId2], [Result_82], []),
     "checkPolicyExpiry": IDL2.Func(
       [IDL2.Opt(OrgId2)],
       [IDL2.Vec(RetentionPolicy2)],
@@ -35405,11 +35455,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "clearTypingIndicator": IDL2.Func([ConversationId2], [], []),
     "createDirectConversation": IDL2.Func(
       [CreateDirectRequest2],
-      [Result_282],
+      [Result_312],
       []
     ),
-    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_282], []),
-    "createOrg": IDL2.Func([CreateOrgRequest2], [Result_32], []),
+    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_312], []),
+    "createOrg": IDL2.Func([CreateOrgRequest2], [Result_34], []),
     "createRetentionPolicy": IDL2.Func(
       [CreateRetentionPolicyRequest2],
       [Result_110],
@@ -35432,20 +35482,20 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Variant({ "ok": IDL2.Text, "err": IDL2.Text })],
       []
     ),
-    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_262], []),
+    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_292], []),
     "exportAuditLogs": IDL2.Func(
       [ExportAuditLogsRequest2],
-      [Result_252],
+      [Result_282],
       ["query"]
     ),
-    "exportConfigBundle": IDL2.Func([], [Result_272], []),
-    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_262], []),
+    "exportConfigBundle": IDL2.Func([], [Result_302], []),
+    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_292], []),
     "getAllGroups": IDL2.Func(
       [GetAllGroupsRequest2],
       [IDL2.Vec(GroupAdminRecord2)],
       []
     ),
-    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_252], ["query"]),
+    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_282], ["query"]),
     "getCanisterHealth": IDL2.Func(
       [],
       [
@@ -35473,8 +35523,8 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Variant({ "ok": IDL2.Vec(IDL2.Nat8), "err": IDL2.Text })],
       []
     ),
-    "getEscrowStats": IDL2.Func([], [Result_242], []),
-    "getEscrowedUsers": IDL2.Func([GetEscrowedUsersRequest2], [Result_232], []),
+    "getEscrowStats": IDL2.Func([], [Result_272], []),
+    "getEscrowedUsers": IDL2.Func([GetEscrowedUsersRequest2], [Result_262], []),
     "getGlobalRetentionPolicy": IDL2.Func(
       [],
       [IDL2.Opt(RetentionPolicy2)],
@@ -35485,11 +35535,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Opt(CompartmentLabel2)],
       ["query"]
     ),
-    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_222], ["query"]),
-    "getGroupMembers": IDL2.Func([GetGroupMembersRequest2], [Result_212], []),
+    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_252], ["query"]),
+    "getGroupMembers": IDL2.Func([GetGroupMembersRequest2], [Result_242], []),
     "getGroupRetentionPolicy": IDL2.Func(
       [ConversationId2],
-      [Result_202],
+      [Result_232],
       ["query"]
     ),
     "getMessageAttachments": IDL2.Func(
@@ -35497,23 +35547,25 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Vec(Attachment2)],
       ["query"]
     ),
-    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_192], ["query"]),
+    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_222], ["query"]),
     "getMyEscrowStatus": IDL2.Func([], [IDL2.Vec(EscrowRecord2)], ["query"]),
-    "getMyOrgs": IDL2.Func([], [Result_182], ["query"]),
-    "getMyRole": IDL2.Func([OrgId2], [Result_172], ["query"]),
-    "getOrg": IDL2.Func([OrgId2], [Result_32], ["query"]),
+    "getMyOrgs": IDL2.Func([], [Result_212], ["query"]),
+    "getMyRole": IDL2.Func([OrgId2], [Result_202], ["query"]),
+    "getNotificationPreferences": IDL2.Func([], [Result_192], ["query"]),
+    "getOrg": IDL2.Func([OrgId2], [Result_34], ["query"]),
     "getOrgSettings": IDL2.Func([IDL2.Text], [OrgSettings2], ["query"]),
-    "getOrgUsers": IDL2.Func([GetOrgUsersRequest2], [Result_162], ["query"]),
+    "getOrgUsers": IDL2.Func([GetOrgUsersRequest2], [Result_182], ["query"]),
+    "getPendingNotifications": IDL2.Func([], [Result_172], []),
     "getPlatformSettings": IDL2.Func([], [PlatformSettings2], ["query"]),
-    "getRecoveryDetails": IDL2.Func([IDL2.Nat], [Result_82], []),
+    "getRecoveryDetails": IDL2.Func([IDL2.Nat], [Result_92], []),
     "getRecoveryRequests": IDL2.Func(
       [IDL2.Opt(OrgId2), IDL2.Opt(RecoveryRequestStatus2)],
-      [Result_152],
+      [Result_162],
       []
     ),
     "getRetentionMetadata": IDL2.Func(
       [GetRetentionMetadataRequest2],
-      [Result_142],
+      [Result_152],
       ["query"]
     ),
     "getRetentionPolicies": IDL2.Func(
@@ -35541,22 +35593,24 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Vec(UserProfilePublic2)],
       ["query"]
     ),
+    "getVAPIDPublicKey": IDL2.Func([], [IDL2.Text], ["query"]),
+    "hasDataResetBeenPerformed": IDL2.Func([], [IDL2.Bool], ["query"]),
     "hasSuperAdmin": IDL2.Func([], [IDL2.Bool], ["query"]),
     "initiateKeyRecovery": IDL2.Func(
       [UserId2, IDL2.Text, IDL2.Text, IDL2.Opt(OrgId2)],
-      [Result_82],
+      [Result_92],
       []
     ),
-    "inviteUser": IDL2.Func([InviteUserRequest2], [Result_132], []),
+    "inviteUser": IDL2.Func([InviteUserRequest2], [Result_142], []),
     "isAdminCheck": IDL2.Func([UserId2], [IDL2.Bool], ["query"]),
-    "listAdmins": IDL2.Func([], [Result_122], ["query"]),
+    "listAdmins": IDL2.Func([], [Result_132], ["query"]),
     "listConversations": IDL2.Func(
       [],
       [IDL2.Vec(ConversationPublic2)],
       ["query"]
     ),
     "listMyDevices": IDL2.Func([], [IDL2.Vec(DeviceRecordPublic2)], ["query"]),
-    "listOrgs": IDL2.Func([GetOrgsRequest2], [Result_112], ["query"]),
+    "listOrgs": IDL2.Func([GetOrgsRequest2], [Result_122], ["query"]),
     "listPublicGroups": IDL2.Func(
       [ListPublicGroupsRequest2],
       [IDL2.Vec(PublicGroupSummary2)],
@@ -35568,16 +35622,16 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "reactivateMember": IDL2.Func([OrgId2, UserId2], [Result_210], []),
     "redeemDeviceSyncToken": IDL2.Func(
       [IDL2.Text, IDL2.Text, IDL2.Text],
-      [Result_102],
+      [Result_112],
       []
     ),
     "registerAttachment": IDL2.Func(
       [RegisterAttachmentRequest2],
-      [Result_92],
+      [Result_102],
       []
     ),
     "registerUser": IDL2.Func([RegisterRequest2], [Result2], []),
-    "rejectKeyRecovery": IDL2.Func([IDL2.Nat], [Result_82], []),
+    "rejectKeyRecovery": IDL2.Func([IDL2.Nat], [Result_92], []),
     "removeAdmin": IDL2.Func([UserId2], [Result_62], []),
     "removeConversationMember": IDL2.Func(
       [RemoveMemberRequest2],
@@ -35590,6 +35644,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [Result_210],
       []
     ),
+    "resetAllTestData": IDL2.Func([], [Result_82], []),
     "revokeDevice": IDL2.Func([IDL2.Text], [Result_62], []),
     "revokeKeyEscrow": IDL2.Func([IDL2.Text, IDL2.Text], [Result_62], []),
     "sendMessage": IDL2.Func([SendMessageRequest2], [Result_72], []),
@@ -35610,14 +35665,25 @@ const idlFactory = ({ IDL: IDL2 }) => {
     ),
     "setTypingIndicator": IDL2.Func([ConversationId2, IDL2.Nat], [], []),
     "submitJoinRequest": IDL2.Func([SubmitJoinRequestRequest2], [Result_42], []),
+    "subscribeToPush": IDL2.Func(
+      [IDL2.Text, IDL2.Text, IDL2.Text],
+      [Result_210],
+      []
+    ),
     "suspendMember": IDL2.Func([SuspendUserRequest2], [Result_210], []),
     "suspendOrg": IDL2.Func([OrgId2], [Result_210], []),
     "toggleLegalHold": IDL2.Func([LegalHoldRequest2], [Result_110], []),
     "touchPresence": IDL2.Func([], [], []),
+    "unsubscribeFromPush": IDL2.Func([], [Result_210], []),
     "updateMemberRole": IDL2.Func([UpdateMemberRoleRequest2], [Result_210], []),
+    "updateNotificationPreferences": IDL2.Func(
+      [IDL2.Bool, IDL2.Bool],
+      [Result_210],
+      []
+    ),
     "updateOrg": IDL2.Func(
       [OrgId2, IDL2.Text, IDL2.Opt(IDL2.Text)],
-      [Result_32],
+      [Result_34],
       []
     ),
     "updateOrgSettings": IDL2.Func([IDL2.Text, OrgSettings2], [Result_210], []),
@@ -35886,42 +35952,42 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.addDevice(arg0);
-        return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_11_n12(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.addDevice(arg0);
-      return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_11_n12(this._uploadFile, this._downloadFile, result);
     }
   }
   async adminGetEscrowGrants(arg0, arg1, arg2) {
     if (this.processError) {
       try {
         const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n14(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2));
-        return from_candid_Result_31_n16(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_33_n16(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n14(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2));
-      return from_candid_Result_31_n16(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_33_n16(this._uploadFile, this._downloadFile, result);
     }
   }
   async adminGrantEscrowAccess(arg0, arg1, arg2) {
     if (this.processError) {
       try {
         const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-        return from_candid_Result_30_n18(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_32_n18(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-      return from_candid_Result_30_n18(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_32_n18(this._uploadFile, this._downloadFile, result);
     }
   }
   async approveJoinRequest(arg0) {
@@ -35942,28 +36008,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.approveKeyRecovery(arg0);
-        return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.approveKeyRecovery(arg0);
-      return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
     }
   }
   async bootstrapSuperAdmin(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.bootstrapSuperAdmin(arg0);
-        return from_candid_Result_29_n31(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.bootstrapSuperAdmin(arg0);
-      return from_candid_Result_29_n31(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
     }
   }
   async checkPolicyExpiry(arg0) {
@@ -35998,28 +36064,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.createDirectConversation(arg0);
-        return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.createDirectConversation(arg0);
-      return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
     }
   }
   async createGroupConversation(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n47(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n47(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_28_n39(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
     }
   }
   async createOrg(arg0) {
@@ -36180,56 +36246,56 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n63(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n63(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
     }
   }
   async exportAuditLogs(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.exportAuditLogs(to_candid_ExportAuditLogsRequest_n72(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.exportAuditLogs(to_candid_ExportAuditLogsRequest_n72(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
     }
   }
   async exportConfigBundle() {
     if (this.processError) {
       try {
         const result = await this.actor.exportConfigBundle();
-        return from_candid_Result_27_n83(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_30_n83(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.exportConfigBundle();
-      return from_candid_Result_27_n83(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_30_n83(this._uploadFile, this._downloadFile, result);
     }
   }
   async generateDeviceSyncToken(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.generateDeviceSyncToken(arg0);
-        return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.generateDeviceSyncToken(arg0);
-      return from_candid_Result_26_n70(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
     }
   }
   async getAllGroups(arg0) {
@@ -36250,14 +36316,14 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_25_n76(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
     }
   }
   async getCanisterHealth() {
@@ -36334,28 +36400,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getEscrowStats();
-        return from_candid_Result_24_n112(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_27_n112(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getEscrowStats();
-      return from_candid_Result_24_n112(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_27_n112(this._uploadFile, this._downloadFile, result);
     }
   }
   async getEscrowedUsers(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n116(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_23_n118(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_26_n118(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n116(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_23_n118(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_26_n118(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGlobalRetentionPolicy() {
@@ -36390,42 +36456,42 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupJoinRequests(arg0);
-        return from_candid_Result_22_n127(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_25_n127(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupJoinRequests(arg0);
-      return from_candid_Result_22_n127(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_25_n127(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupMembers(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupMembers(arg0);
-        return from_candid_Result_21_n134(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_24_n134(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupMembers(arg0);
-      return from_candid_Result_21_n134(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_24_n134(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupRetentionPolicy(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupRetentionPolicy(arg0);
-        return from_candid_Result_20_n139(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_23_n139(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupRetentionPolicy(arg0);
-      return from_candid_Result_20_n139(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_23_n139(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMessageAttachments(arg0) {
@@ -36446,14 +36512,14 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n141(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_19_n143(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_22_n143(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n141(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_19_n143(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_22_n143(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyEscrowStatus() {
@@ -36474,28 +36540,42 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getMyOrgs();
-        return from_candid_Result_18_n156(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_21_n156(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyOrgs();
-      return from_candid_Result_18_n156(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_21_n156(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyRole(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getMyRole(arg0);
-        return from_candid_Result_17_n165(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_20_n165(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyRole(arg0);
-      return from_candid_Result_17_n165(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_20_n165(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getNotificationPreferences() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getNotificationPreferences();
+        return from_candid_Result_19_n168(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getNotificationPreferences();
+      return from_candid_Result_19_n168(this._uploadFile, this._downloadFile, result);
     }
   }
   async getOrg(arg0) {
@@ -36516,97 +36596,111 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getOrgSettings(arg0);
-        return from_candid_OrgSettings_n168(this._uploadFile, this._downloadFile, result);
+        return from_candid_OrgSettings_n170(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getOrgSettings(arg0);
-      return from_candid_OrgSettings_n168(this._uploadFile, this._downloadFile, result);
+      return from_candid_OrgSettings_n170(this._uploadFile, this._downloadFile, result);
     }
   }
   async getOrgUsers(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n176(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_16_n178(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n178(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_18_n180(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n176(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_16_n178(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n178(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_18_n180(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getPendingNotifications() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getPendingNotifications();
+        return from_candid_Result_17_n184(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getPendingNotifications();
+      return from_candid_Result_17_n184(this._uploadFile, this._downloadFile, result);
     }
   }
   async getPlatformSettings() {
     if (this.processError) {
       try {
         const result = await this.actor.getPlatformSettings();
-        return from_candid_PlatformSettings_n182(this._uploadFile, this._downloadFile, result);
+        return from_candid_PlatformSettings_n189(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getPlatformSettings();
-      return from_candid_PlatformSettings_n182(this._uploadFile, this._downloadFile, result);
+      return from_candid_PlatformSettings_n189(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRecoveryDetails(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getRecoveryDetails(arg0);
-        return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getRecoveryDetails(arg0);
-      return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRecoveryRequests(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n186(this._uploadFile, this._downloadFile, arg1));
-        return from_candid_Result_15_n189(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n193(this._uploadFile, this._downloadFile, arg1));
+        return from_candid_Result_16_n196(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n186(this._uploadFile, this._downloadFile, arg1));
-      return from_candid_Result_15_n189(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n193(this._uploadFile, this._downloadFile, arg1));
+      return from_candid_Result_16_n196(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRetentionMetadata(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n192(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_14_n194(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n199(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_15_n201(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n192(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_14_n194(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n199(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_15_n201(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRetentionPolicies(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n196(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n203(this._uploadFile, this._downloadFile, arg0));
         return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n196(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n203(this._uploadFile, this._downloadFile, arg0));
       return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
     }
   }
@@ -36642,28 +36736,56 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfile(arg0);
-        return from_candid_opt_n197(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n204(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfile(arg0);
-      return from_candid_opt_n197(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n204(this._uploadFile, this._downloadFile, result);
     }
   }
   async getUserProfiles(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfiles(arg0);
-        return from_candid_vec_n200(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n207(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfiles(arg0);
-      return from_candid_vec_n200(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n207(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getVAPIDPublicKey() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getVAPIDPublicKey();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getVAPIDPublicKey();
+      return result;
+    }
+  }
+  async hasDataResetBeenPerformed() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.hasDataResetBeenPerformed();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.hasDataResetBeenPerformed();
+      return result;
     }
   }
   async hasSuperAdmin() {
@@ -36684,28 +36806,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.initiateKeyRecovery(arg0, arg1, arg2, to_candid_opt_n33(this._uploadFile, this._downloadFile, arg3));
-        return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.initiateKeyRecovery(arg0, arg1, arg2, to_candid_opt_n33(this._uploadFile, this._downloadFile, arg3));
-      return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
     }
   }
   async inviteUser(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n201(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_13_n205(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n208(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_14_n212(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n201(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_13_n205(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n208(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_14_n212(this._uploadFile, this._downloadFile, result);
     }
   }
   async isAdminCheck(arg0) {
@@ -36726,28 +36848,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.listAdmins();
-        return from_candid_Result_12_n207(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_13_n214(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.listAdmins();
-      return from_candid_Result_12_n207(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_13_n214(this._uploadFile, this._downloadFile, result);
     }
   }
   async listConversations() {
     if (this.processError) {
       try {
         const result = await this.actor.listConversations();
-        return from_candid_vec_n209(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n216(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.listConversations();
-      return from_candid_vec_n209(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n216(this._uploadFile, this._downloadFile, result);
     }
   }
   async listMyDevices() {
@@ -36767,29 +36889,29 @@ class Backend {
   async listOrgs(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n210(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_11_n212(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n217(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_12_n219(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n210(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_11_n212(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n217(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_12_n219(this._uploadFile, this._downloadFile, result);
     }
   }
   async listPublicGroups(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n217(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_vec_n219(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n224(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_vec_n226(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n217(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_vec_n219(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n224(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_vec_n226(this._uploadFile, this._downloadFile, result);
     }
   }
   async logPolicyExpiryCheck() {
@@ -36852,56 +36974,56 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
-        return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_11_n12(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.redeemDeviceSyncToken(arg0, arg1, arg2);
-      return from_candid_Result_10_n12(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_11_n12(this._uploadFile, this._downloadFile, result);
     }
   }
   async registerAttachment(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.registerAttachment(arg0);
-        return from_candid_Result_9_n222(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_10_n229(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.registerAttachment(arg0);
-      return from_candid_Result_9_n222(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_10_n229(this._uploadFile, this._downloadFile, result);
     }
   }
   async registerUser(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.registerUser(to_candid_RegisterRequest_n224(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n226(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.registerUser(to_candid_RegisterRequest_n231(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.registerUser(to_candid_RegisterRequest_n224(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n226(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.registerUser(to_candid_RegisterRequest_n231(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
     }
   }
   async rejectKeyRecovery(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.rejectKeyRecovery(arg0);
-        return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.rejectKeyRecovery(arg0);
-      return from_candid_Result_8_n22(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_9_n22(this._uploadFile, this._downloadFile, result);
     }
   }
   async removeAdmin(arg0) {
@@ -36960,6 +37082,20 @@ class Backend {
       return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
+  async resetAllTestData() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.resetAllTestData();
+        return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.resetAllTestData();
+      return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+    }
+  }
   async revokeDevice(arg0) {
     if (this.processError) {
       try {
@@ -36991,43 +37127,43 @@ class Backend {
   async sendMessage(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n228(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_7_n234(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n235(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_7_n241(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n228(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_7_n234(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n235(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_7_n241(this._uploadFile, this._downloadFile, result);
     }
   }
   async setGroupCompartment(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n236(this._uploadFile, this._downloadFile, arg1));
+        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n243(this._uploadFile, this._downloadFile, arg1));
         return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n236(this._uploadFile, this._downloadFile, arg1));
+      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n243(this._uploadFile, this._downloadFile, arg1));
       return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async setSovereignConfig(arg0, arg1, arg2, arg3) {
     if (this.processError) {
       try {
-        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n238(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n240(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n241(this._uploadFile, this._downloadFile, arg3));
-        return from_candid_Result_5_n242(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n245(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n247(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n248(this._uploadFile, this._downloadFile, arg3));
+        return from_candid_Result_5_n249(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n238(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n240(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n241(this._uploadFile, this._downloadFile, arg3));
-      return from_candid_Result_5_n242(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n245(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n247(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n248(this._uploadFile, this._downloadFile, arg3));
+      return from_candid_Result_5_n249(this._uploadFile, this._downloadFile, result);
     }
   }
   async setTypingIndicator(arg0, arg1) {
@@ -37047,15 +37183,29 @@ class Backend {
   async submitJoinRequest(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n244(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_4_n246(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n251(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_4_n253(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n244(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_4_n246(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n251(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_4_n253(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async subscribeToPush(arg0, arg1, arg2) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.subscribeToPush(arg0, arg1, arg2);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.subscribeToPush(arg0, arg1, arg2);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async suspendMember(arg0) {
@@ -37114,88 +37264,116 @@ class Backend {
       return result;
     }
   }
-  async updateMemberRole(arg0) {
+  async unsubscribeFromPush() {
     if (this.processError) {
       try {
-        const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n248(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.unsubscribeFromPush();
         return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n248(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.unsubscribeFromPush();
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updateMemberRole(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n255(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n255(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async updateNotificationPreferences(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.updateNotificationPreferences(arg0, arg1);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.updateNotificationPreferences(arg0, arg1);
       return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async updateOrg(arg0, arg1, arg2) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n250(this._uploadFile, this._downloadFile, arg2));
+        const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n257(this._uploadFile, this._downloadFile, arg2));
         return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n250(this._uploadFile, this._downloadFile, arg2));
+      const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n257(this._uploadFile, this._downloadFile, arg2));
       return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
     }
   }
   async updateOrgSettings(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n251(this._uploadFile, this._downloadFile, arg1));
+        const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n258(this._uploadFile, this._downloadFile, arg1));
         return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n251(this._uploadFile, this._downloadFile, arg1));
+      const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n258(this._uploadFile, this._downloadFile, arg1));
       return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async updatePlatformSettings(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n258(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n265(this._uploadFile, this._downloadFile, arg0));
         return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n258(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n265(this._uploadFile, this._downloadFile, arg0));
       return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async updateRetentionPolicy(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n262(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n269(this._uploadFile, this._downloadFile, arg0));
         return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n262(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n269(this._uploadFile, this._downloadFile, arg0));
       return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
     }
   }
   async updateUserProfile(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n264(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n226(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n271(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n264(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n226(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n271(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
     }
   }
   async uploadFile(arg0, arg1) {
@@ -37231,8 +37409,8 @@ function from_candid_ConversationKind_n44(_uploadFile, _downloadFile, value) {
 function from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, value) {
   return from_candid_record_n42(_uploadFile, _downloadFile, value);
 }
-function from_candid_DataExportPermission_n172(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n173(_uploadFile, _downloadFile, value);
+function from_candid_DataExportPermission_n174(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n175(_uploadFile, _downloadFile, value);
 }
 function from_candid_DataResidency_n95(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n96(_uploadFile, _downloadFile, value);
@@ -37252,17 +37430,17 @@ function from_candid_EscrowStatus_n123(_uploadFile, _downloadFile, value) {
 function from_candid_EscrowedUserRecord_n121(_uploadFile, _downloadFile, value) {
   return from_candid_record_n122(_uploadFile, _downloadFile, value);
 }
-function from_candid_GetOrgUsersResponse_n180(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n181(_uploadFile, _downloadFile, value);
+function from_candid_GetOrgUsersResponse_n182(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n183(_uploadFile, _downloadFile, value);
 }
-function from_candid_GetOrgsResponse_n214(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n215(_uploadFile, _downloadFile, value);
+function from_candid_GetOrgsResponse_n221(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n222(_uploadFile, _downloadFile, value);
 }
 function from_candid_GroupAdminRecord_n100(_uploadFile, _downloadFile, value) {
   return from_candid_record_n101(_uploadFile, _downloadFile, value);
 }
-function from_candid_GroupCreationPermission_n170(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n171(_uploadFile, _downloadFile, value);
+function from_candid_GroupCreationPermission_n172(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n173(_uploadFile, _downloadFile, value);
 }
 function from_candid_GroupMemberRecord_n137(_uploadFile, _downloadFile, value) {
   return from_candid_record_n138(_uploadFile, _downloadFile, value);
@@ -37300,20 +37478,23 @@ function from_candid_OrgRecord_n51(_uploadFile, _downloadFile, value) {
 function from_candid_OrgRole_n163(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n164(_uploadFile, _downloadFile, value);
 }
-function from_candid_OrgSettings_n168(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n169(_uploadFile, _downloadFile, value);
+function from_candid_OrgSettings_n170(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n171(_uploadFile, _downloadFile, value);
 }
 function from_candid_OrgStatus_n53(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n54(_uploadFile, _downloadFile, value);
 }
-function from_candid_PasswordPolicy_n184(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n185(_uploadFile, _downloadFile, value);
+function from_candid_PasswordPolicy_n191(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n192(_uploadFile, _downloadFile, value);
 }
-function from_candid_PlatformSettings_n182(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n183(_uploadFile, _downloadFile, value);
+function from_candid_PendingNotification_n187(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n188(_uploadFile, _downloadFile, value);
 }
-function from_candid_PublicGroupSummary_n220(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n221(_uploadFile, _downloadFile, value);
+function from_candid_PlatformSettings_n189(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n190(_uploadFile, _downloadFile, value);
+}
+function from_candid_PublicGroupSummary_n227(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n228(_uploadFile, _downloadFile, value);
 }
 function from_candid_RecoveryRequestStatus_n26(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n27(_uploadFile, _downloadFile, value);
@@ -37321,103 +37502,109 @@ function from_candid_RecoveryRequestStatus_n26(_uploadFile, _downloadFile, value
 function from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, value) {
   return from_candid_record_n25(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_10_n12(_uploadFile, _downloadFile, value) {
+function from_candid_Result_10_n229(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n230(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_11_n12(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n13(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_11_n212(_uploadFile, _downloadFile, value) {
+function from_candid_Result_12_n219(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n220(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_13_n214(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n215(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_14_n212(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n213(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_12_n207(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n208(_uploadFile, _downloadFile, value);
+function from_candid_Result_15_n201(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n202(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_13_n205(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n206(_uploadFile, _downloadFile, value);
+function from_candid_Result_16_n196(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n197(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_14_n194(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n195(_uploadFile, _downloadFile, value);
+function from_candid_Result_17_n184(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n185(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_15_n189(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n190(_uploadFile, _downloadFile, value);
+function from_candid_Result_18_n180(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n181(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_16_n178(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n179(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_17_n165(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n166(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_18_n156(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n157(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_19_n143(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n144(_uploadFile, _downloadFile, value);
+function from_candid_Result_19_n168(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n169(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_1_n59(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n60(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_20_n139(_uploadFile, _downloadFile, value) {
+function from_candid_Result_20_n165(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n166(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_21_n156(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n157(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_22_n143(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n144(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_23_n139(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n140(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_21_n134(_uploadFile, _downloadFile, value) {
+function from_candid_Result_24_n134(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n135(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_22_n127(_uploadFile, _downloadFile, value) {
+function from_candid_Result_25_n127(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n128(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_23_n118(_uploadFile, _downloadFile, value) {
+function from_candid_Result_26_n118(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n119(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_24_n112(_uploadFile, _downloadFile, value) {
+function from_candid_Result_27_n112(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n113(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_25_n76(_uploadFile, _downloadFile, value) {
+function from_candid_Result_28_n76(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n77(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_26_n70(_uploadFile, _downloadFile, value) {
+function from_candid_Result_29_n70(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n71(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_27_n83(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n84(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_28_n39(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n40(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_29_n31(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n32(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_2_n61(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n62(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_30_n18(_uploadFile, _downloadFile, value) {
+function from_candid_Result_30_n83(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n84(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_31_n39(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n40(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_32_n18(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n19(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_31_n16(_uploadFile, _downloadFile, value) {
+function from_candid_Result_33_n16(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n17(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_3_n49(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n50(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_4_n246(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n247(_uploadFile, _downloadFile, value);
+function from_candid_Result_4_n253(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n254(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_5_n242(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n243(_uploadFile, _downloadFile, value);
+function from_candid_Result_5_n249(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n250(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_6_n8(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n9(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_7_n234(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n235(_uploadFile, _downloadFile, value);
+function from_candid_Result_7_n241(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n242(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_8_n22(_uploadFile, _downloadFile, value) {
+function from_candid_Result_8_n31(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n32(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_9_n22(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n23(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_9_n222(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n223(_uploadFile, _downloadFile, value);
+function from_candid_Result_n233(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n234(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_n226(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n227(_uploadFile, _downloadFile, value);
-}
-function from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value) {
+function from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n38(_uploadFile, _downloadFile, value);
 }
 function from_candid_RetentionPeriod_n37(_uploadFile, _downloadFile, value) {
@@ -37429,8 +37616,8 @@ function from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, value) {
 function from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value) {
   return from_candid_record_n108(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserProfilePublic_n198(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n199(_uploadFile, _downloadFile, value);
+function from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n206(_uploadFile, _downloadFile, value);
 }
 function from_candid__ImmutableObjectStorageRefillResult_n4(_uploadFile, _downloadFile, value) {
   return from_candid_record_n5(_uploadFile, _downloadFile, value);
@@ -37456,11 +37643,11 @@ function from_candid_opt_n150(_uploadFile, _downloadFile, value) {
 function from_candid_opt_n167(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : from_candid_OrgRole_n163(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n174(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n176(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n197(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_UserProfilePublic_n198(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n204(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, value[0]);
 }
 function from_candid_opt_n28(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
@@ -37576,40 +37763,49 @@ function from_candid_record_n160(_uploadFile, _downloadFile, value) {
     lastActive: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastActive))
   };
 }
-function from_candid_record_n169(_uploadFile, _downloadFile, value) {
+function from_candid_record_n171(_uploadFile, _downloadFile, value) {
   return {
     legalHoldReason: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.legalHoldReason)),
     orgId: value.orgId,
     logoStorageKey: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoStorageKey)),
-    groupCreationPermission: from_candid_GroupCreationPermission_n170(_uploadFile, _downloadFile, value.groupCreationPermission),
-    dataExportPermission: from_candid_DataExportPermission_n172(_uploadFile, _downloadFile, value.dataExportPermission),
+    groupCreationPermission: from_candid_GroupCreationPermission_n172(_uploadFile, _downloadFile, value.groupCreationPermission),
+    dataExportPermission: from_candid_DataExportPermission_n174(_uploadFile, _downloadFile, value.dataExportPermission),
     defaultInviteRole: value.defaultInviteRole,
     logoUrl: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoUrl)),
     legalHoldEnabled: value.legalHoldEnabled,
-    messageRetentionDays: record_opt_to_undefined(from_candid_opt_n174(_uploadFile, _downloadFile, value.messageRetentionDays))
+    messageRetentionDays: record_opt_to_undefined(from_candid_opt_n176(_uploadFile, _downloadFile, value.messageRetentionDays))
   };
 }
-function from_candid_record_n181(_uploadFile, _downloadFile, value) {
+function from_candid_record_n183(_uploadFile, _downloadFile, value) {
   return {
     total: value.total,
     hasMore: value.hasMore,
     members: from_candid_vec_n158(_uploadFile, _downloadFile, value.members)
   };
 }
-function from_candid_record_n183(_uploadFile, _downloadFile, value) {
+function from_candid_record_n188(_uploadFile, _downloadFile, value) {
   return {
-    defaultRetentionDays: from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value.defaultRetentionDays),
+    id: value.id,
+    notifType: value.notifType,
+    senderDisplayName: value.senderDisplayName,
+    timestamp: value.timestamp,
+    groupName: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.groupName))
+  };
+}
+function from_candid_record_n190(_uploadFile, _downloadFile, value) {
+  return {
+    defaultRetentionDays: from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value.defaultRetentionDays),
     keyEscrowEnabled: value.keyEscrowEnabled,
     vetKeysEnabled: value.vetKeysEnabled,
     sessionTimeoutMinutes: value.sessionTimeoutMinutes,
     platformTagline: value.platformTagline,
-    auditLogRetentionDays: from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value.auditLogRetentionDays),
+    auditLogRetentionDays: from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value.auditLogRetentionDays),
     mfaEnforced: value.mfaEnforced,
-    passwordPolicy: from_candid_PasswordPolicy_n184(_uploadFile, _downloadFile, value.passwordPolicy),
+    passwordPolicy: from_candid_PasswordPolicy_n191(_uploadFile, _downloadFile, value.passwordPolicy),
     platformName: value.platformName
   };
 }
-function from_candid_record_n199(_uploadFile, _downloadFile, value) {
+function from_candid_record_n206(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     ecdhPublicKey: value.ecdhPublicKey,
@@ -37619,13 +37815,13 @@ function from_candid_record_n199(_uploadFile, _downloadFile, value) {
     lastSeen: value.lastSeen
   };
 }
-function from_candid_record_n215(_uploadFile, _downloadFile, value) {
+function from_candid_record_n222(_uploadFile, _downloadFile, value) {
   return {
     total: value.total,
-    orgs: from_candid_vec_n216(_uploadFile, _downloadFile, value.orgs)
+    orgs: from_candid_vec_n223(_uploadFile, _downloadFile, value.orgs)
   };
 }
-function from_candid_record_n221(_uploadFile, _downloadFile, value) {
+function from_candid_record_n228(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     name: value.name,
@@ -37848,6 +38044,15 @@ function from_candid_variant_n166(_uploadFile, _downloadFile, value) {
     err: value.err
   } : value;
 }
+function from_candid_variant_n169(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
+}
 function from_candid_variant_n17(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
@@ -37857,23 +38062,29 @@ function from_candid_variant_n17(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n171(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n173(_uploadFile, _downloadFile, value) {
   return "orgAdminsOnly" in value ? "orgAdminsOnly" : "allMembers" in value ? "allMembers" : value;
 }
-function from_candid_variant_n173(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n175(_uploadFile, _downloadFile, value) {
   return "orgAdminsOnly" in value ? "orgAdminsOnly" : "disabled" in value ? "disabled" : "allMembers" in value ? "allMembers" : value;
 }
-function from_candid_variant_n179(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n181(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_GetOrgUsersResponse_n180(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_GetOrgUsersResponse_n182(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
   } : value;
 }
 function from_candid_variant_n185(_uploadFile, _downloadFile, value) {
-  return "strong" in value ? "strong" : "enterprise" in value ? "enterprise" : "basic" in value ? "basic" : value;
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n186(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: value.err
+  } : value;
 }
 function from_candid_variant_n19(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
@@ -37884,34 +38095,19 @@ function from_candid_variant_n19(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n190(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n192(_uploadFile, _downloadFile, value) {
+  return "strong" in value ? "strong" : "enterprise" in value ? "enterprise" : "basic" in value ? "basic" : value;
+}
+function from_candid_variant_n197(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n191(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n198(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n195(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n206(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_OrgMembership_n159(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: value.err
-  } : value;
-}
-function from_candid_variant_n208(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n202(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -37923,13 +38119,13 @@ function from_candid_variant_n208(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n213(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_GetOrgsResponse_n214(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_OrgMembership_n159(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
   } : value;
 }
-function from_candid_variant_n223(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n215(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -37938,13 +38134,13 @@ function from_candid_variant_n223(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n227(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n220(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_UserProfilePublic_n198(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_GetOrgsResponse_n221(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+    err: value.err
   } : value;
 }
 function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
@@ -37956,7 +38152,25 @@ function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n235(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n230(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n234(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n242(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_MessagePublic_n146(_uploadFile, _downloadFile, value.ok)
@@ -37965,7 +38179,7 @@ function from_candid_variant_n235(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n243(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n250(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value.ok)
@@ -37974,7 +38188,7 @@ function from_candid_variant_n243(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n247(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n254(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_JoinRequest_n130(_uploadFile, _downloadFile, value.ok)
@@ -38103,20 +38317,23 @@ function from_candid_vec_n153(_uploadFile, _downloadFile, value) {
 function from_candid_vec_n158(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_OrgMembership_n159(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n191(_uploadFile, _downloadFile, value) {
+function from_candid_vec_n186(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_PendingNotification_n187(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n198(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n200(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_UserProfilePublic_n198(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n209(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n207(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, x3));
 }
 function from_candid_vec_n216(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n223(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_OrgRecord_n51(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n219(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_PublicGroupSummary_n220(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n226(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_PublicGroupSummary_n227(_uploadFile, _downloadFile, x3));
 }
 function from_candid_vec_n34(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, x3));
@@ -38145,8 +38362,8 @@ function to_candid_AuditExportFormat_n68(_uploadFile, _downloadFile, value) {
 function to_candid_AuditExportRequest_n63(_uploadFile, _downloadFile, value) {
   return to_candid_record_n64(_uploadFile, _downloadFile, value);
 }
-function to_candid_CompartmentLabel_n236(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n237(_uploadFile, _downloadFile, value);
+function to_candid_CompartmentLabel_n243(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n244(_uploadFile, _downloadFile, value);
 }
 function to_candid_CreateGroupRequest_n47(_uploadFile, _downloadFile, value) {
   return to_candid_record_n48(_uploadFile, _downloadFile, value);
@@ -38154,11 +38371,11 @@ function to_candid_CreateGroupRequest_n47(_uploadFile, _downloadFile, value) {
 function to_candid_CreateRetentionPolicyRequest_n55(_uploadFile, _downloadFile, value) {
   return to_candid_record_n56(_uploadFile, _downloadFile, value);
 }
-function to_candid_DataExportPermission_n255(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n256(_uploadFile, _downloadFile, value);
+function to_candid_DataExportPermission_n262(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n263(_uploadFile, _downloadFile, value);
 }
-function to_candid_DataResidency_n238(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n239(_uploadFile, _downloadFile, value);
+function to_candid_DataResidency_n245(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n246(_uploadFile, _downloadFile, value);
 }
 function to_candid_ExportAuditLogsRequest_n72(_uploadFile, _downloadFile, value) {
   return to_candid_record_n73(_uploadFile, _downloadFile, value);
@@ -38175,74 +38392,74 @@ function to_candid_GetEscrowedUsersRequest_n116(_uploadFile, _downloadFile, valu
 function to_candid_GetMessagesRequest_n141(_uploadFile, _downloadFile, value) {
   return to_candid_record_n142(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetOrgUsersRequest_n176(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n177(_uploadFile, _downloadFile, value);
+function to_candid_GetOrgUsersRequest_n178(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n179(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetOrgsRequest_n210(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n211(_uploadFile, _downloadFile, value);
+function to_candid_GetOrgsRequest_n217(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n218(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetRetentionMetadataRequest_n192(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n193(_uploadFile, _downloadFile, value);
+function to_candid_GetRetentionMetadataRequest_n199(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n200(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetRetentionPoliciesRequest_n196(_uploadFile, _downloadFile, value) {
+function to_candid_GetRetentionPoliciesRequest_n203(_uploadFile, _downloadFile, value) {
   return to_candid_record_n98(_uploadFile, _downloadFile, value);
 }
-function to_candid_GroupCreationPermission_n253(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n254(_uploadFile, _downloadFile, value);
+function to_candid_GroupCreationPermission_n260(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n261(_uploadFile, _downloadFile, value);
 }
-function to_candid_InviteUserRequest_n201(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n202(_uploadFile, _downloadFile, value);
+function to_candid_InviteUserRequest_n208(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n209(_uploadFile, _downloadFile, value);
 }
 function to_candid_JoinRequestActionRequest_n20(_uploadFile, _downloadFile, value) {
   return to_candid_record_n21(_uploadFile, _downloadFile, value);
 }
-function to_candid_ListPublicGroupsRequest_n217(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n218(_uploadFile, _downloadFile, value);
-}
-function to_candid_MessagePriority_n232(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n233(_uploadFile, _downloadFile, value);
-}
-function to_candid_MessageType_n230(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n231(_uploadFile, _downloadFile, value);
-}
-function to_candid_OrgRole_n203(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n204(_uploadFile, _downloadFile, value);
-}
-function to_candid_OrgSettings_n251(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n252(_uploadFile, _downloadFile, value);
-}
-function to_candid_PasswordPolicy_n260(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n261(_uploadFile, _downloadFile, value);
-}
-function to_candid_PlatformSettings_n258(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n259(_uploadFile, _downloadFile, value);
-}
-function to_candid_RecoveryRequestStatus_n187(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n188(_uploadFile, _downloadFile, value);
-}
-function to_candid_RegisterRequest_n224(_uploadFile, _downloadFile, value) {
+function to_candid_ListPublicGroupsRequest_n224(_uploadFile, _downloadFile, value) {
   return to_candid_record_n225(_uploadFile, _downloadFile, value);
 }
-function to_candid_RetentionPeriodDays_n257(_uploadFile, _downloadFile, value) {
+function to_candid_MessagePriority_n239(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n240(_uploadFile, _downloadFile, value);
+}
+function to_candid_MessageType_n237(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n238(_uploadFile, _downloadFile, value);
+}
+function to_candid_OrgRole_n210(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n211(_uploadFile, _downloadFile, value);
+}
+function to_candid_OrgSettings_n258(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n259(_uploadFile, _downloadFile, value);
+}
+function to_candid_PasswordPolicy_n267(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n268(_uploadFile, _downloadFile, value);
+}
+function to_candid_PlatformSettings_n265(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n266(_uploadFile, _downloadFile, value);
+}
+function to_candid_RecoveryRequestStatus_n194(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n195(_uploadFile, _downloadFile, value);
+}
+function to_candid_RegisterRequest_n231(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n232(_uploadFile, _downloadFile, value);
+}
+function to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value) {
   return to_candid_variant_n58(_uploadFile, _downloadFile, value);
 }
 function to_candid_RetentionPeriod_n57(_uploadFile, _downloadFile, value) {
   return to_candid_variant_n58(_uploadFile, _downloadFile, value);
 }
-function to_candid_SendMessageRequest_n228(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n229(_uploadFile, _downloadFile, value);
+function to_candid_SendMessageRequest_n235(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n236(_uploadFile, _downloadFile, value);
 }
-function to_candid_SubmitJoinRequestRequest_n244(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n245(_uploadFile, _downloadFile, value);
+function to_candid_SubmitJoinRequestRequest_n251(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n252(_uploadFile, _downloadFile, value);
 }
-function to_candid_UpdateMemberRoleRequest_n248(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n249(_uploadFile, _downloadFile, value);
+function to_candid_UpdateMemberRoleRequest_n255(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n256(_uploadFile, _downloadFile, value);
 }
-function to_candid_UpdateProfileRequest_n264(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n265(_uploadFile, _downloadFile, value);
+function to_candid_UpdateProfileRequest_n271(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n272(_uploadFile, _downloadFile, value);
 }
-function to_candid_UpdateRetentionPolicyRequest_n262(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n263(_uploadFile, _downloadFile, value);
+function to_candid_UpdateRetentionPolicyRequest_n269(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n270(_uploadFile, _downloadFile, value);
 }
 function to_candid__ImmutableObjectStorageRefillInformation_n2(_uploadFile, _downloadFile, value) {
   return to_candid_record_n3(_uploadFile, _downloadFile, value);
@@ -38256,16 +38473,16 @@ function to_candid_opt_n14(_uploadFile, _downloadFile, value) {
 function to_candid_opt_n15(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_opt_n186(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(to_candid_RecoveryRequestStatus_n187(_uploadFile, _downloadFile, value));
+function to_candid_opt_n193(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(to_candid_RecoveryRequestStatus_n194(_uploadFile, _downloadFile, value));
 }
-function to_candid_opt_n240(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n247(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_opt_n241(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n248(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_opt_n250(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n257(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
 function to_candid_opt_n33(_uploadFile, _downloadFile, value) {
@@ -38296,7 +38513,7 @@ function to_candid_record_n142(_uploadFile, _downloadFile, value) {
     conversationId: value.conversationId
   };
 }
-function to_candid_record_n177(_uploadFile, _downloadFile, value) {
+function to_candid_record_n179(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId ? candid_some(value.orgId) : candid_none(),
     search: value.search ? candid_some(value.search) : candid_none(),
@@ -38304,7 +38521,7 @@ function to_candid_record_n177(_uploadFile, _downloadFile, value) {
     afterUserId: value.afterUserId ? candid_some(value.afterUserId) : candid_none()
   };
 }
-function to_candid_record_n193(_uploadFile, _downloadFile, value) {
+function to_candid_record_n200(_uploadFile, _downloadFile, value) {
   return {
     endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
     limit: value.limit,
@@ -38313,10 +38530,10 @@ function to_candid_record_n193(_uploadFile, _downloadFile, value) {
     startDate: value.startDate ? candid_some(value.startDate) : candid_none()
   };
 }
-function to_candid_record_n202(_uploadFile, _downloadFile, value) {
+function to_candid_record_n209(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId,
-    role: to_candid_OrgRole_n203(_uploadFile, _downloadFile, value.role),
+    role: to_candid_OrgRole_n210(_uploadFile, _downloadFile, value.role),
     email: value.email ? candid_some(value.email) : candid_none(),
     principalId: value.principalId
   };
@@ -38328,76 +38545,76 @@ function to_candid_record_n21(_uploadFile, _downloadFile, value) {
     conversationId: value.conversationId
   };
 }
-function to_candid_record_n211(_uploadFile, _downloadFile, value) {
+function to_candid_record_n218(_uploadFile, _downloadFile, value) {
   return {
     search: value.search ? candid_some(value.search) : candid_none(),
     limit: value.limit,
     afterOrgId: value.afterOrgId ? candid_some(value.afterOrgId) : candid_none()
   };
 }
-function to_candid_record_n218(_uploadFile, _downloadFile, value) {
+function to_candid_record_n225(_uploadFile, _downloadFile, value) {
   return {
     offset: value.offset,
     limit: value.limit,
     category: value.category ? candid_some(value.category) : candid_none()
   };
 }
-function to_candid_record_n225(_uploadFile, _downloadFile, value) {
+function to_candid_record_n232(_uploadFile, _downloadFile, value) {
   return {
     ecdhPublicKey: value.ecdhPublicKey,
     encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
     encryptedDisplayName: value.encryptedDisplayName
   };
 }
-function to_candid_record_n229(_uploadFile, _downloadFile, value) {
+function to_candid_record_n236(_uploadFile, _downloadFile, value) {
   return {
     ttlSeconds: value.ttlSeconds ? candid_some(value.ttlSeconds) : candid_none(),
     encryptedContent: value.encryptedContent,
-    messageType: to_candid_MessageType_n230(_uploadFile, _downloadFile, value.messageType),
+    messageType: to_candid_MessageType_n237(_uploadFile, _downloadFile, value.messageType),
     conversationId: value.conversationId,
-    priority: value.priority ? candid_some(to_candid_MessagePriority_n232(_uploadFile, _downloadFile, value.priority)) : candid_none()
+    priority: value.priority ? candid_some(to_candid_MessagePriority_n239(_uploadFile, _downloadFile, value.priority)) : candid_none()
   };
 }
-function to_candid_record_n245(_uploadFile, _downloadFile, value) {
+function to_candid_record_n252(_uploadFile, _downloadFile, value) {
   return {
     conversationId: value.conversationId,
     message: value.message ? candid_some(value.message) : candid_none()
   };
 }
-function to_candid_record_n249(_uploadFile, _downloadFile, value) {
+function to_candid_record_n256(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId,
     userId: value.userId,
-    newRole: to_candid_OrgRole_n203(_uploadFile, _downloadFile, value.newRole)
-  };
-}
-function to_candid_record_n252(_uploadFile, _downloadFile, value) {
-  return {
-    legalHoldReason: value.legalHoldReason ? candid_some(value.legalHoldReason) : candid_none(),
-    orgId: value.orgId,
-    logoStorageKey: value.logoStorageKey ? candid_some(value.logoStorageKey) : candid_none(),
-    groupCreationPermission: to_candid_GroupCreationPermission_n253(_uploadFile, _downloadFile, value.groupCreationPermission),
-    dataExportPermission: to_candid_DataExportPermission_n255(_uploadFile, _downloadFile, value.dataExportPermission),
-    defaultInviteRole: value.defaultInviteRole,
-    logoUrl: value.logoUrl ? candid_some(value.logoUrl) : candid_none(),
-    legalHoldEnabled: value.legalHoldEnabled,
-    messageRetentionDays: value.messageRetentionDays ? candid_some(to_candid_RetentionPeriodDays_n257(_uploadFile, _downloadFile, value.messageRetentionDays)) : candid_none()
+    newRole: to_candid_OrgRole_n210(_uploadFile, _downloadFile, value.newRole)
   };
 }
 function to_candid_record_n259(_uploadFile, _downloadFile, value) {
   return {
-    defaultRetentionDays: to_candid_RetentionPeriodDays_n257(_uploadFile, _downloadFile, value.defaultRetentionDays),
+    legalHoldReason: value.legalHoldReason ? candid_some(value.legalHoldReason) : candid_none(),
+    orgId: value.orgId,
+    logoStorageKey: value.logoStorageKey ? candid_some(value.logoStorageKey) : candid_none(),
+    groupCreationPermission: to_candid_GroupCreationPermission_n260(_uploadFile, _downloadFile, value.groupCreationPermission),
+    dataExportPermission: to_candid_DataExportPermission_n262(_uploadFile, _downloadFile, value.dataExportPermission),
+    defaultInviteRole: value.defaultInviteRole,
+    logoUrl: value.logoUrl ? candid_some(value.logoUrl) : candid_none(),
+    legalHoldEnabled: value.legalHoldEnabled,
+    messageRetentionDays: value.messageRetentionDays ? candid_some(to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value.messageRetentionDays)) : candid_none()
+  };
+}
+function to_candid_record_n266(_uploadFile, _downloadFile, value) {
+  return {
+    defaultRetentionDays: to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value.defaultRetentionDays),
     keyEscrowEnabled: value.keyEscrowEnabled,
     vetKeysEnabled: value.vetKeysEnabled,
     sessionTimeoutMinutes: value.sessionTimeoutMinutes,
     platformTagline: value.platformTagline,
-    auditLogRetentionDays: to_candid_RetentionPeriodDays_n257(_uploadFile, _downloadFile, value.auditLogRetentionDays),
+    auditLogRetentionDays: to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value.auditLogRetentionDays),
     mfaEnforced: value.mfaEnforced,
-    passwordPolicy: to_candid_PasswordPolicy_n260(_uploadFile, _downloadFile, value.passwordPolicy),
+    passwordPolicy: to_candid_PasswordPolicy_n267(_uploadFile, _downloadFile, value.passwordPolicy),
     platformName: value.platformName
   };
 }
-function to_candid_record_n263(_uploadFile, _downloadFile, value) {
+function to_candid_record_n270(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     period: value.period ? candid_some(to_candid_RetentionPeriod_n57(_uploadFile, _downloadFile, value.period)) : candid_none(),
@@ -38405,7 +38622,7 @@ function to_candid_record_n263(_uploadFile, _downloadFile, value) {
     autoDelete: value.autoDelete ? candid_some(value.autoDelete) : candid_none()
   };
 }
-function to_candid_record_n265(_uploadFile, _downloadFile, value) {
+function to_candid_record_n272(_uploadFile, _downloadFile, value) {
   return {
     ecdhPublicKey: value.ecdhPublicKey ? candid_some(value.ecdhPublicKey) : candid_none(),
     encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
@@ -38458,7 +38675,7 @@ function to_candid_record_n98(_uploadFile, _downloadFile, value) {
     orgId: value.orgId ? candid_some(value.orgId) : candid_none()
   };
 }
-function to_candid_variant_n188(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n195(_uploadFile, _downloadFile, value) {
   return value == "pending" ? {
     pending: null
   } : value == "completed" ? {
@@ -38469,7 +38686,7 @@ function to_candid_variant_n188(_uploadFile, _downloadFile, value) {
     rejected: null
   } : value;
 }
-function to_candid_variant_n204(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n211(_uploadFile, _downloadFile, value) {
   return value == "OrgAdmin" ? {
     OrgAdmin: null
   } : value == "Auditor" ? {
@@ -38480,7 +38697,7 @@ function to_candid_variant_n204(_uploadFile, _downloadFile, value) {
     StandardUser: null
   } : value;
 }
-function to_candid_variant_n231(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n238(_uploadFile, _downloadFile, value) {
   return value == "audio" ? {
     audio: null
   } : value == "video" ? {
@@ -38493,21 +38710,21 @@ function to_candid_variant_n231(_uploadFile, _downloadFile, value) {
     image: null
   } : value;
 }
-function to_candid_variant_n233(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n240(_uploadFile, _downloadFile, value) {
   return value == "normal" ? {
     normal: null
   } : value == "high" ? {
     high: null
   } : value;
 }
-function to_candid_variant_n237(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n244(_uploadFile, _downloadFile, value) {
   return value == "classified" ? {
     classified: null
   } : value == "unclassified" ? {
     unclassified: null
   } : value;
 }
-function to_candid_variant_n239(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n246(_uploadFile, _downloadFile, value) {
   return value == "eu" ? {
     eu: null
   } : value == "us" ? {
@@ -38518,14 +38735,14 @@ function to_candid_variant_n239(_uploadFile, _downloadFile, value) {
     global: null
   } : value;
 }
-function to_candid_variant_n254(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n261(_uploadFile, _downloadFile, value) {
   return value == "orgAdminsOnly" ? {
     orgAdminsOnly: null
   } : value == "allMembers" ? {
     allMembers: null
   } : value;
 }
-function to_candid_variant_n256(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n263(_uploadFile, _downloadFile, value) {
   return value == "orgAdminsOnly" ? {
     orgAdminsOnly: null
   } : value == "disabled" ? {
@@ -38534,7 +38751,7 @@ function to_candid_variant_n256(_uploadFile, _downloadFile, value) {
     allMembers: null
   } : value;
 }
-function to_candid_variant_n261(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n268(_uploadFile, _downloadFile, value) {
   return value == "strong" ? {
     strong: null
   } : value == "enterprise" ? {
@@ -45548,11 +45765,39 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$P = [
+const __iconNode$R = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$P);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$R);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$Q = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$Q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$P = [
+  ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
+  [
+    "path",
+    {
+      d: "M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326",
+      key: "11g9vi"
+    }
+  ]
+];
+const Bell = createLucideIcon("bell", __iconNode$P);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45560,45 +45805,46 @@ const ArrowLeft = createLucideIcon("arrow-left", __iconNode$P);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$O = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
-];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$O);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$N = [
   ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
   ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
 ];
-const CheckCheck = createLucideIcon("check-check", __iconNode$N);
+const CheckCheck = createLucideIcon("check-check", __iconNode$O);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$M = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$M);
+const __iconNode$N = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$N);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$L = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$L);
+const __iconNode$M = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$M);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$K = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$K);
+const __iconNode$L = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$L);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$K = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$K);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45606,11 +45852,10 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$K);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$J = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+  ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+  ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
 ];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$J);
+const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$J);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46373,13 +46618,13 @@ var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
   );
 });
 Label$1.displayName = NAME$1;
-var Root$4 = Label$1;
+var Root$5 = Label$1;
 function Label({
   className,
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$4,
+    Root$5,
     {
       "data-slot": "label",
       className: cn(
@@ -47973,7 +48218,7 @@ var DialogTrigger = reactExports.forwardRef(
         "aria-haspopup": "dialog",
         "aria-expanded": context.open,
         "aria-controls": context.contentId,
-        "data-state": getState$1(context.open),
+        "data-state": getState$2(context.open),
         ...triggerProps,
         ref: composedTriggerRef,
         onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
@@ -48013,7 +48258,7 @@ var DialogOverlayImpl = reactExports.forwardRef(
       /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot$1, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         Primitive$1.div,
         {
-          "data-state": getState$1(context.open),
+          "data-state": getState$2(context.open),
           ...overlayProps,
           ref: forwardedRef,
           style: { pointerEvents: "auto", ...overlayProps.style }
@@ -48132,7 +48377,7 @@ var DialogContentImpl = reactExports.forwardRef(
               id: context.contentId,
               "aria-describedby": context.descriptionId,
               "aria-labelledby": context.titleId,
-              "data-state": getState$1(context.open),
+              "data-state": getState$2(context.open),
               ...contentProps,
               ref: composedRefs,
               onDismiss: () => context.onOpenChange(false)
@@ -48182,7 +48427,7 @@ var DialogClose = reactExports.forwardRef(
   }
 );
 DialogClose.displayName = CLOSE_NAME;
-function getState$1(open) {
+function getState$2(open) {
   return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
@@ -48220,7 +48465,7 @@ var DescriptionWarning$1 = ({ contentRef, descriptionId }) => {
   }, [MESSAGE, contentRef, descriptionId]);
   return null;
 };
-var Root$3 = Dialog$1;
+var Root$4 = Dialog$1;
 var Trigger$2 = DialogTrigger;
 var Portal$1 = DialogPortal$1;
 var Overlay = DialogOverlay$1;
@@ -48236,7 +48481,7 @@ var useDialogScope = createDialogScope();
 var AlertDialog$1 = (props) => {
   const { __scopeAlertDialog, ...alertDialogProps } = props;
   const dialogScope = useDialogScope(__scopeAlertDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { ...dialogScope, ...alertDialogProps, modal: true });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$4, { ...dialogScope, ...alertDialogProps, modal: true });
 };
 AlertDialog$1.displayName = ROOT_NAME;
 var TRIGGER_NAME$3 = "AlertDialogTrigger";
@@ -49011,19 +49256,19 @@ var ScrollAreaScrollbarImpl = reactExports.forwardRef((props, forwardedRef) => {
     }
   );
 });
-var THUMB_NAME = "ScrollAreaThumb";
+var THUMB_NAME$1 = "ScrollAreaThumb";
 var ScrollAreaThumb = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { forceMount, ...thumbProps } = props;
-    const scrollbarContext = useScrollbarContext(THUMB_NAME, props.__scopeScrollArea);
+    const scrollbarContext = useScrollbarContext(THUMB_NAME$1, props.__scopeScrollArea);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || scrollbarContext.hasThumb, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaThumbImpl, { ref: forwardedRef, ...thumbProps }) });
   }
 );
 var ScrollAreaThumbImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeScrollArea, style: style2, ...thumbProps } = props;
-    const scrollAreaContext = useScrollAreaContext(THUMB_NAME, __scopeScrollArea);
-    const scrollbarContext = useScrollbarContext(THUMB_NAME, __scopeScrollArea);
+    const scrollAreaContext = useScrollAreaContext(THUMB_NAME$1, __scopeScrollArea);
+    const scrollbarContext = useScrollbarContext(THUMB_NAME$1, __scopeScrollArea);
     const { onThumbPositionChange } = scrollbarContext;
     const composedRef = useComposedRefs(
       forwardedRef,
@@ -49075,7 +49320,7 @@ var ScrollAreaThumbImpl = reactExports.forwardRef(
     );
   }
 );
-ScrollAreaThumb.displayName = THUMB_NAME;
+ScrollAreaThumb.displayName = THUMB_NAME$1;
 var CORNER_NAME = "ScrollAreaCorner";
 var ScrollAreaCorner = reactExports.forwardRef(
   (props, forwardedRef) => {
@@ -49207,7 +49452,7 @@ function useResizeObserver(element, onResize) {
     }
   }, [element, handleResize]);
 }
-var Root$2 = ScrollArea$1;
+var Root$3 = ScrollArea$1;
 var Viewport$1 = ScrollAreaViewport;
 var Corner = ScrollAreaCorner;
 function ScrollArea({
@@ -49216,7 +49461,7 @@ function ScrollArea({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Root$2,
+    Root$3,
     {
       "data-slot": "scroll-area",
       className: cn("relative", className),
@@ -49285,7 +49530,7 @@ Separator$1.displayName = NAME;
 function isValidOrientation(orientation) {
   return ORIENTATIONS.includes(orientation);
 }
-var Root$1 = Separator$1;
+var Root$2 = Separator$1;
 function Separator({
   className,
   orientation = "horizontal",
@@ -49293,7 +49538,7 @@ function Separator({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$1,
+    Root$2,
     {
       "data-slot": "separator",
       decorative,
@@ -49307,7 +49552,7 @@ function Separator({
   );
 }
 function Sheet({ ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { "data-slot": "sheet", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$4, { "data-slot": "sheet", ...props });
 }
 function SheetTrigger({
   ...props
@@ -50458,7 +50703,7 @@ function GroupManagePanel({
 function Dialog({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { "data-slot": "dialog", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$4, { "data-slot": "dialog", ...props });
 }
 function DialogPortal({
   ...props
@@ -52054,7 +52299,7 @@ var SelectArrow = reactExports.forwardRef(
   }
 );
 SelectArrow.displayName = ARROW_NAME;
-var BUBBLE_INPUT_NAME$1 = "SelectBubbleInput";
+var BUBBLE_INPUT_NAME$2 = "SelectBubbleInput";
 var SelectBubbleInput = reactExports.forwardRef(
   ({ __scopeSelect, value, ...props }, forwardedRef) => {
     const ref = reactExports.useRef(null);
@@ -52086,7 +52331,7 @@ var SelectBubbleInput = reactExports.forwardRef(
     );
   }
 );
-SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
+SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$2;
 function shouldShowPlaceholder(value) {
   return value === "" || value === void 0;
 }
@@ -55630,6 +55875,71 @@ function ThemeToggle({ size: size2 = "md", className = "" }) {
     }
   );
 }
+const DISMISS_KEY = "pwa-install-dismissed-at";
+const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1e3;
+function usePWAInstall() {
+  const [deferredPrompt, setDeferredPrompt] = reactExports.useState(null);
+  const [isInstallable, setIsInstallable] = reactExports.useState(
+    () => !window.matchMedia("(display-mode: standalone)").matches
+  );
+  const [isInstalled, setIsInstalled] = reactExports.useState(
+    () => window.matchMedia("(display-mode: standalone)").matches
+  );
+  reactExports.useEffect(() => {
+    if (isInstalled) return;
+    const dismissedAt = localStorage.getItem(DISMISS_KEY);
+    if (dismissedAt && Date.now() - Number.parseInt(dismissedAt, 10) < DISMISS_TTL_MS) {
+      return;
+    }
+    const onBeforeInstall = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+    const onAppInstalled = () => {
+      setIsInstalled(true);
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    };
+    window.addEventListener("beforeinstallprompt", onBeforeInstall);
+    window.addEventListener("appinstalled", onAppInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onBeforeInstall);
+      window.removeEventListener("appinstalled", onAppInstalled);
+    };
+  }, [isInstalled]);
+  const promptInstall = async () => {
+    if (!deferredPrompt) return;
+    await deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    setDeferredPrompt(null);
+    setIsInstallable(false);
+  };
+  const dismissInstall = () => {
+    localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    setIsInstallable(false);
+    setDeferredPrompt(null);
+  };
+  return { isInstallable, isInstalled, promptInstall, dismissInstall };
+}
+function OfflineIndicator() {
+  const [isOnline2, setIsOnline] = reactExports.useState(navigator.onLine);
+  reactExports.useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+  if (isOnline2) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed top-0 left-0 z-50 w-full bg-amber-900/90 text-amber-100 flex items-center gap-2 px-4 py-2 text-sm font-medium", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(WifiOff, { className: "h-4 w-4 shrink-0" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "You are offline — messages will queue and send when you reconnect." })
+  ] });
+}
 const NAV_ITEMS = [
   {
     to: "/app/conversations",
@@ -55669,6 +55979,7 @@ function SidebarContent({ onNavigate }) {
   const location2 = useLocation();
   const navigate = useNavigate();
   const ownDisplayName = useDisplayName((principal == null ? void 0 : principal.toText()) ?? null);
+  const { isInstalled, promptInstall } = usePWAInstall();
   const handleLogout = () => {
     logout();
     navigate({ to: "/login" });
@@ -55727,6 +56038,20 @@ function SidebarContent({ onNavigate }) {
         ]
       }
     ) }),
+    !isInstalled && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        onClick: promptInstall,
+        "data-ocid": "nav.get_the_app_button",
+        "aria-label": "Install CharlieSierra app",
+        className: "flex items-center gap-1.5 px-2 py-1.5 rounded border border-sidebar-border text-muted-foreground hover:text-sidebar-foreground hover:border-muted-foreground text-[10px] transition-colors duration-200 w-full",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 11, "aria-hidden": "true", className: "shrink-0" }),
+          "Get the App"
+        ]
+      }
+    ) }),
     isAuthenticated && principal && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-3 py-4 space-y-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 px-2", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -55772,6 +56097,7 @@ function Layout({
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-screen overflow-hidden bg-background", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(OfflineIndicator, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "hidden md:flex w-[280px] flex-shrink-0 flex-col border-r border-border", children: /* @__PURE__ */ jsxRuntimeExports.jsx(SidebarContent, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Sheet, { open: mobileOpen, onOpenChange: setMobileOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       SheetContent,
@@ -55913,7 +56239,7 @@ var CheckboxTrigger = reactExports.forwardRef(
         role: "checkbox",
         "aria-checked": isIndeterminate(checked) ? "mixed" : checked,
         "aria-required": required,
-        "data-state": getState(checked),
+        "data-state": getState$1(checked),
         "data-disabled": disabled ? "" : void 0,
         disabled,
         value,
@@ -55993,7 +56319,7 @@ var CheckboxIndicator = reactExports.forwardRef(
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           Primitive$1.span,
           {
-            "data-state": getState(context.checked),
+            "data-state": getState$1(context.checked),
             "data-disabled": context.disabled ? "" : void 0,
             ...indicatorProps,
             ref: forwardedRef,
@@ -56005,7 +56331,7 @@ var CheckboxIndicator = reactExports.forwardRef(
   }
 );
 CheckboxIndicator.displayName = INDICATOR_NAME;
-var BUBBLE_INPUT_NAME = "CheckboxBubbleInput";
+var BUBBLE_INPUT_NAME$1 = "CheckboxBubbleInput";
 var CheckboxBubbleInput = reactExports.forwardRef(
   ({ __scopeCheckbox, ...props }, forwardedRef) => {
     const {
@@ -56020,7 +56346,7 @@ var CheckboxBubbleInput = reactExports.forwardRef(
       form,
       bubbleInput,
       setBubbleInput
-    } = useCheckboxContext(BUBBLE_INPUT_NAME, __scopeCheckbox);
+    } = useCheckboxContext(BUBBLE_INPUT_NAME$1, __scopeCheckbox);
     const composedRefs = useComposedRefs(forwardedRef, setBubbleInput);
     const prevChecked = usePrevious(checked);
     const controlSize = useSize(control);
@@ -56072,14 +56398,14 @@ var CheckboxBubbleInput = reactExports.forwardRef(
     );
   }
 );
-CheckboxBubbleInput.displayName = BUBBLE_INPUT_NAME;
+CheckboxBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
 function isFunction(value) {
   return typeof value === "function";
 }
 function isIndeterminate(checked) {
   return checked === "indeterminate";
 }
-function getState(checked) {
+function getState$1(checked) {
   return isIndeterminate(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
 }
 function Checkbox({
@@ -56313,7 +56639,7 @@ function focusFirst(candidates, preventScroll = false) {
 function wrapArray(array, startIndex) {
   return array.map((_2, index2) => array[(startIndex + index2) % array.length]);
 }
-var Root = RovingFocusGroup;
+var Root$1 = RovingFocusGroup;
 var Item = RovingFocusGroupItem;
 var TABS_NAME = "Tabs";
 var [createTabsContext] = createContextScope(TABS_NAME, [
@@ -56371,7 +56697,7 @@ var TabsList$1 = reactExports.forwardRef(
     const context = useTabsContext(TAB_LIST_NAME, __scopeTabs);
     const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Root,
+      Root$1,
       {
         asChild: true,
         ...rovingFocusGroupScope,
@@ -57561,6 +57887,171 @@ function ProfileEditor() {
     }
   );
 }
+var SWITCH_NAME = "Switch";
+var [createSwitchContext] = createContextScope(SWITCH_NAME);
+var [SwitchProvider, useSwitchContext] = createSwitchContext(SWITCH_NAME);
+var Switch$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeSwitch,
+      name,
+      checked: checkedProp,
+      defaultChecked,
+      required,
+      disabled,
+      value = "on",
+      onCheckedChange,
+      form,
+      ...switchProps
+    } = props;
+    const [button, setButton] = reactExports.useState(null);
+    const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
+    const hasConsumerStoppedPropagationRef = reactExports.useRef(false);
+    const isFormControl = button ? form || !!button.closest("form") : true;
+    const [checked, setChecked] = useControllableState({
+      prop: checkedProp,
+      defaultProp: defaultChecked ?? false,
+      onChange: onCheckedChange,
+      caller: SWITCH_NAME
+    });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(SwitchProvider, { scope: __scopeSwitch, checked, disabled, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive$1.button,
+        {
+          type: "button",
+          role: "switch",
+          "aria-checked": checked,
+          "aria-required": required,
+          "data-state": getState(checked),
+          "data-disabled": disabled ? "" : void 0,
+          disabled,
+          value,
+          ...switchProps,
+          ref: composedRefs,
+          onClick: composeEventHandlers(props.onClick, (event) => {
+            setChecked((prevChecked) => !prevChecked);
+            if (isFormControl) {
+              hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+              if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+            }
+          })
+        }
+      ),
+      isFormControl && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        SwitchBubbleInput,
+        {
+          control: button,
+          bubbles: !hasConsumerStoppedPropagationRef.current,
+          name,
+          value,
+          checked,
+          required,
+          disabled,
+          form,
+          style: { transform: "translateX(-100%)" }
+        }
+      )
+    ] });
+  }
+);
+Switch$1.displayName = SWITCH_NAME;
+var THUMB_NAME = "SwitchThumb";
+var SwitchThumb = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeSwitch, ...thumbProps } = props;
+    const context = useSwitchContext(THUMB_NAME, __scopeSwitch);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive$1.span,
+      {
+        "data-state": getState(context.checked),
+        "data-disabled": context.disabled ? "" : void 0,
+        ...thumbProps,
+        ref: forwardedRef
+      }
+    );
+  }
+);
+SwitchThumb.displayName = THUMB_NAME;
+var BUBBLE_INPUT_NAME = "SwitchBubbleInput";
+var SwitchBubbleInput = reactExports.forwardRef(
+  ({
+    __scopeSwitch,
+    control,
+    checked,
+    bubbles = true,
+    ...props
+  }, forwardedRef) => {
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(ref, forwardedRef);
+    const prevChecked = usePrevious(checked);
+    const controlSize = useSize(control);
+    reactExports.useEffect(() => {
+      const input = ref.current;
+      if (!input) return;
+      const inputProto = window.HTMLInputElement.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(
+        inputProto,
+        "checked"
+      );
+      const setChecked = descriptor.set;
+      if (prevChecked !== checked && setChecked) {
+        const event = new Event("click", { bubbles });
+        setChecked.call(input, checked);
+        input.dispatchEvent(event);
+      }
+    }, [prevChecked, checked, bubbles]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        type: "checkbox",
+        "aria-hidden": true,
+        defaultChecked: checked,
+        ...props,
+        tabIndex: -1,
+        ref: composedRefs,
+        style: {
+          ...props.style,
+          ...controlSize,
+          position: "absolute",
+          pointerEvents: "none",
+          opacity: 0,
+          margin: 0
+        }
+      }
+    );
+  }
+);
+SwitchBubbleInput.displayName = BUBBLE_INPUT_NAME;
+function getState(checked) {
+  return checked ? "checked" : "unchecked";
+}
+var Root = Switch$1;
+var Thumb = SwitchThumb;
+function Switch({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root,
+    {
+      "data-slot": "switch",
+      className: cn(
+        "peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Thumb,
+        {
+          "data-slot": "switch-thumb",
+          className: cn(
+            "bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+          )
+        }
+      )
+    }
+  );
+}
 function useMyDevices() {
   const { actor, isFetching } = useActor(createActor);
   return useQuery({
@@ -57599,6 +58090,149 @@ function useGenerateDeviceSyncToken() {
       return result.ok;
     }
   });
+}
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = window.atob(base64);
+  return Uint8Array.from([...rawData].map((c2) => c2.charCodeAt(0)));
+}
+function usePushNotifications() {
+  const { actor } = useActor(createActor);
+  const supported = typeof window !== "undefined" && "Notification" in window && "serviceWorker" in navigator;
+  const [permission, setPermission] = reactExports.useState(() => {
+    var _a3;
+    if (!supported) return "unsupported";
+    return ((_a3 = window.Notification) == null ? void 0 : _a3.permission) ?? "default";
+  });
+  const [subscribed, setSubscribed] = reactExports.useState(false);
+  const [loading, setLoading] = reactExports.useState(false);
+  const [vapidKey, setVapidKey] = reactExports.useState(null);
+  const [preferences, setPreferences] = reactExports.useState({
+    directEnabled: true,
+    groupEnabled: true
+  });
+  const pollRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    if (!actor || !supported) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const key = await actor.getVAPIDPublicKey();
+        if (!cancelled) setVapidKey(key);
+      } catch {
+      }
+      try {
+        const result = await actor.getNotificationPreferences();
+        if (!cancelled && "ok" in result) {
+          setPreferences({
+            directEnabled: result.ok.directMessagesEnabled,
+            groupEnabled: result.ok.groupMessagesEnabled
+          });
+          setSubscribed(
+            result.ok.directMessagesEnabled || result.ok.groupMessagesEnabled
+          );
+        }
+      } catch {
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [actor, supported]);
+  reactExports.useEffect(() => {
+    if (!actor || !supported || permission !== "granted") return;
+    const poll = async () => {
+      if (document.visibilityState !== "hidden") return;
+      try {
+        const result = await actor.getPendingNotifications();
+        if ("ok" in result) {
+          for (const n of result.ok) {
+            const title = n.notifType === "DirectMessage" ? `New message from ${n.senderDisplayName}` : `New message in ${n.groupName ?? "a group"}`;
+            const body = "Tap to view";
+            new window.Notification(title, {
+              body,
+              tag: n.id,
+              icon: "/icons/icon-192.png"
+            });
+          }
+        }
+      } catch {
+      }
+    };
+    pollRef.current = setInterval(poll, 3e4);
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, [actor, supported, permission]);
+  const requestPermission = reactExports.useCallback(async () => {
+    if (!supported || permission !== "default") return;
+    const result = await window.Notification.requestPermission();
+    setPermission(result);
+  }, [supported, permission]);
+  const subscribe2 = reactExports.useCallback(async () => {
+    var _a3, _b3;
+    if (!supported || !actor || !vapidKey) return;
+    setLoading(true);
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const applicationServerKey = urlBase64ToUint8Array(
+        vapidKey
+      );
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey
+      });
+      const json = sub.toJSON();
+      const endpoint = json.endpoint ?? "";
+      const auth = ((_a3 = json.keys) == null ? void 0 : _a3.auth) ?? "";
+      const p256dh = ((_b3 = json.keys) == null ? void 0 : _b3.p256dh) ?? "";
+      await actor.subscribeToPush(endpoint, auth, p256dh);
+      setSubscribed(true);
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  }, [supported, actor, vapidKey]);
+  const unsubscribe = reactExports.useCallback(async () => {
+    if (!supported || !actor) return;
+    setLoading(true);
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.getSubscription();
+      await (sub == null ? void 0 : sub.unsubscribe());
+      await actor.unsubscribeFromPush();
+      setSubscribed(false);
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  }, [supported, actor]);
+  const updatePreferences = reactExports.useCallback(
+    async (dm, group) => {
+      if (!actor) return;
+      setLoading(true);
+      try {
+        await actor.updateNotificationPreferences(dm, group);
+        setPreferences({ directEnabled: dm, groupEnabled: group });
+      } catch {
+      } finally {
+        setLoading(false);
+      }
+    },
+    [actor]
+  );
+  return {
+    supported,
+    permission,
+    subscribed,
+    preferences,
+    loading,
+    requestPermission,
+    subscribe: subscribe2,
+    unsubscribe,
+    updatePreferences
+  };
 }
 function formatFingerprint(bytes) {
   return Array.from(bytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join(":");
@@ -58498,9 +59132,110 @@ function AccessibilitySection() {
     ] })
   ] });
 }
+function NotificationsSection() {
+  const {
+    supported,
+    permission,
+    subscribed,
+    preferences,
+    loading,
+    requestPermission,
+    subscribe: subscribe2,
+    unsubscribe,
+    updatePreferences
+  } = usePushNotifications();
+  const handleMasterToggle = async (enabled) => {
+    if (enabled) {
+      if (permission === "default") await requestPermission();
+      await subscribe2();
+    } else {
+      await unsubscribe();
+    }
+  };
+  const permissionBadge = () => {
+    if (!supported) return /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: "Unsupported" });
+    if (permission === "granted")
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { className: "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30", children: "Granted" });
+    if (permission === "denied")
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "destructive", children: "Denied" });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: "Default" });
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "data-ocid": "settings.notifications_section", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(SectionHeader, { icon: Bell, title: "Notifications" }),
+    supported && permission === "default" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 flex items-start gap-3 p-3.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Bell,
+        {
+          size: 13,
+          className: "text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-blue-800 dark:text-blue-300 leading-relaxed", children: "CharlieSierra stores only notification metadata (event type and timestamp) — never message content. Enable notifications to be alerted when new messages arrive." })
+    ] }),
+    supported && permission === "denied" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 flex items-start gap-3 p-3.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Bell, { size: 13, className: "text-destructive flex-shrink-0 mt-0.5" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-destructive leading-relaxed", children: "Notifications are blocked by your browser. To enable them, update your browser's site permissions for this site, then reload." })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(SettingsCard, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        SettingsRow,
+        {
+          label: "Enable Notifications",
+          description: "Receive alerts for new messages. Only metadata is stored — never message content.",
+          ocid: "settings.notifications.master_toggle",
+          action: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Switch,
+            {
+              checked: subscribed,
+              onCheckedChange: handleMasterToggle,
+              disabled: !supported || permission === "denied" || loading,
+              "data-ocid": "settings.notifications.master_switch"
+            }
+          ),
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1", children: permissionBadge() })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        SettingsRow,
+        {
+          label: "Direct Messages",
+          description: "Notify when you receive a new direct message.",
+          ocid: "settings.notifications.dm_toggle",
+          action: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Switch,
+            {
+              checked: preferences.directEnabled,
+              onCheckedChange: (v2) => updatePreferences(v2, preferences.groupEnabled),
+              disabled: !subscribed || !supported || permission !== "granted" || loading,
+              "data-ocid": "settings.notifications.dm_switch"
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        SettingsRow,
+        {
+          label: "Group Messages",
+          description: "Notify when there is a new message or mention in a group.",
+          ocid: "settings.notifications.group_toggle",
+          action: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Switch,
+            {
+              checked: preferences.groupEnabled,
+              onCheckedChange: (v2) => updatePreferences(preferences.directEnabled, v2),
+              disabled: !subscribed || !supported || permission !== "granted" || loading,
+              "data-ocid": "settings.notifications.group_switch"
+            }
+          )
+        }
+      )
+    ] })
+  ] });
+}
 function SettingsPage() {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { isInstallable, isInstalled, promptInstall, dismissInstall } = usePWAInstall();
   const handleLogout = () => {
     logout();
     navigate({ to: "/login" });
@@ -58521,6 +59256,62 @@ function SettingsPage() {
       /* @__PURE__ */ jsxRuntimeExports.jsx(SectionHeader, { icon: User, title: "Profile" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-card border border-border rounded-lg px-4 py-5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ProfileEditor, {}) })
     ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, {}),
+    (isInstallable || isInstalled) && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "data-ocid": "settings.pwa_section", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(SectionHeader, { icon: Download, title: "App Installation" }),
+      isInstalled ? /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsCard, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-4 flex items-start gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          CircleCheckBig,
+          {
+            size: 18,
+            className: "text-green-500 flex-shrink-0 mt-0.5",
+            "aria-hidden": "true"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-0.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground", children: "App Installed" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "CharlieSierra is installed on this device." })
+        ] })
+      ] }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsCard, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Download,
+            {
+              size: 18,
+              className: "text-muted-foreground flex-shrink-0 mt-0.5",
+              "aria-hidden": "true"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-0.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground", children: "Install CharlieSierra" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Install the app on your device for a faster, offline-capable experience." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 flex-shrink-0", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              size: "sm",
+              onClick: promptInstall,
+              "data-ocid": "settings.pwa.install_button",
+              children: "Install App"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: dismissInstall,
+              "data-ocid": "settings.pwa.dismiss_button",
+              className: "text-xs text-muted-foreground hover:text-foreground transition-colors duration-200",
+              children: "Maybe later"
+            }
+          )
+        ] })
+      ] }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(NotificationsSection, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "data-ocid": "settings.privacy_section", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(SectionHeader, { icon: Shield, title: "Privacy" }),
@@ -58664,25 +59455,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DYPN2Mha.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-BA1-hglk.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-BTTObsvn.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-BtYTV5ND.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-COmLJJVD.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-DBdCCMGj.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CM49WUMX.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-CnMXz5Rn.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-u9AJn5ds.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-uzzrP9n0.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-PIgvj0e1.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DSlcPxe3.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-BoQCtJr7.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-BvlglFWX.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-SyWyIMBB.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,17,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DDzqV5E3.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-yjxk-6NV.js"), true ? __vite__mapDeps([18,3,1,17]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C3JCK54F.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-BlhH17BC.js"), true ? __vite__mapDeps([19,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-CSWyWl8-.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
@@ -58880,99 +59671,99 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(InternetIdentityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) })
 );
 export {
-  useOrgUsers as $,
-  AlertDialog as A,
+  useMyRole as $,
+  SelectContent as A,
   Button as B,
   Compass as C,
-  AlertDialogTrigger as D,
-  AlertDialogContent as E,
-  AlertDialogHeader as F,
-  AlertDialogTitle as G,
-  AlertDialogDescription as H,
+  RetentionPeriod as D,
+  SelectItem as E,
+  AlertDialog as F,
+  AlertDialogTrigger as G,
+  AlertDialogContent as H,
   Input as I,
-  AlertDialogFooter as J,
-  AlertDialogCancel as K,
+  AlertDialogHeader as J,
+  AlertDialogTitle as K,
   Layout as L,
-  AlertDialogAction as M,
-  GroupCreationPermission as N,
+  AlertDialogDescription as M,
+  AlertDialogFooter as N,
   OrgRole as O,
   PasswordPolicy as P,
-  DataExportPermission as Q,
-  RetentionPeriod as R,
+  AlertDialogCancel as Q,
+  React$4 as R,
   Search as S,
   TriangleAlert as T,
   Users as U,
-  Textarea as V,
-  createActor as W,
-  useIsSuperAdmin as X,
-  useMyRole as Y,
-  Shield as Z,
-  useOrgDetails as _,
+  AlertDialogAction as V,
+  GroupCreationPermission as W,
+  DataExportPermission as X,
+  Textarea as Y,
+  createActor as Z,
+  useIsSuperAdmin as _,
   Skeleton as a,
-  composeRefs as a$,
-  useSuspendOrg as a0,
-  useDeleteOrg as a1,
-  ArrowLeft as a2,
-  Trash2 as a3,
-  useOrgs as a4,
-  X as a5,
-  RefreshCw as a6,
-  ChevronDown as a7,
-  useCreateOrg as a8,
-  Dialog as a9,
-  Settings as aA,
-  AuditEventType as aB,
-  ShieldCheck as aC,
-  EmptyState as aD,
-  useExportAuditLogs as aE,
-  Lock as aF,
-  Download as aG,
-  useCallbackRef$1 as aH,
-  useDirection as aI,
-  Root2$3 as aJ,
-  Anchor as aK,
-  Presence as aL,
-  Portal$3 as aM,
-  createPopperScope as aN,
-  createRovingFocusGroupScope as aO,
-  createCollection as aP,
-  hideOthers as aQ,
-  Item as aR,
-  dispatchDiscreteCustomEvent as aS,
-  useFocusGuards as aT,
-  ReactRemoveScroll as aU,
-  FocusScope as aV,
-  DismissableLayer as aW,
-  Root as aX,
-  Content$2 as aY,
-  createSlot$1 as aZ,
-  Arrow as a_,
-  DialogContent as aa,
-  DialogHeader as ab,
-  DialogTitle as ac,
-  DialogDescription as ad,
-  DialogFooter as ae,
-  useUpdateOrg as af,
-  useAllGroups as ag,
-  GroupStatus as ah,
-  useGroupMembers as ai,
-  useRemoveMemberFromGroup as aj,
-  UserMinus as ak,
-  useComposedRefs as al,
-  useControllableState as am,
-  Primitive$1 as an,
-  composeEventHandlers as ao,
-  usePrevious as ap,
-  useSize as aq,
-  createContextScope as ar,
-  useNavigate as as,
-  LoaderCircle as at,
-  Principal$1 as au,
-  useCheckPolicyExpiry as av,
-  useMyOrgs as aw,
-  useAdminAuditLog as ax,
-  UserCheck as ay,
-  MessageSquare as az,
+  useControllableState as a$,
+  Shield as a0,
+  useOrgDetails as a1,
+  useOrgUsers as a2,
+  useSuspendOrg as a3,
+  useDeleteOrg as a4,
+  ArrowLeft as a5,
+  Trash2 as a6,
+  useOrgs as a7,
+  X as a8,
+  RefreshCw as a9,
+  Lock as aA,
+  Download as aB,
+  useCallbackRef$1 as aC,
+  useDirection as aD,
+  Root2$3 as aE,
+  Anchor as aF,
+  Presence as aG,
+  Portal$3 as aH,
+  useComposedRefs as aI,
+  composeEventHandlers as aJ,
+  Primitive$1 as aK,
+  createContextScope as aL,
+  createPopperScope as aM,
+  createRovingFocusGroupScope as aN,
+  createCollection as aO,
+  hideOthers as aP,
+  Item as aQ,
+  dispatchDiscreteCustomEvent as aR,
+  useFocusGuards as aS,
+  ReactRemoveScroll as aT,
+  FocusScope as aU,
+  DismissableLayer as aV,
+  Root$1 as aW,
+  Content$2 as aX,
+  createSlot$1 as aY,
+  Arrow as aZ,
+  composeRefs as a_,
+  ChevronDown as aa,
+  useCreateOrg as ab,
+  Dialog as ac,
+  DialogContent as ad,
+  DialogHeader as ae,
+  DialogTitle as af,
+  DialogDescription as ag,
+  DialogFooter as ah,
+  useUpdateOrg as ai,
+  useAllGroups as aj,
+  GroupStatus as ak,
+  useGroupMembers as al,
+  useRemoveMemberFromGroup as am,
+  UserMinus as an,
+  LoaderCircle as ao,
+  Principal$1 as ap,
+  useCheckPolicyExpiry as aq,
+  useMyOrgs as ar,
+  useAdminAuditLog as as,
+  UserCheck as at,
+  MessageSquare as au,
+  Settings as av,
+  AuditEventType as aw,
+  ShieldCheck as ax,
+  EmptyState as ay,
+  useExportAuditLogs as az,
   useSubmitJoinRequest as b,
   useId as b0,
   useSuspendMember as b1,
@@ -58980,21 +59771,21 @@ export {
   useRemoveMember as b3,
   useInviteUser as b4,
   useUpdateMemberRole as b5,
-  Key as b6,
-  useEnrollUserKeyEscrow as b7,
-  useGetEncryptedEscrowKey as b8,
-  useEscrowStats as b9,
-  useEscrowedUsers as ba,
-  useRecoveryRequests as bb,
-  RecoveryRequestStatus as bc,
-  ChevronUp as bd,
-  EscrowStatus as be,
-  useEscrowGrants as bf,
-  useInitiateKeyRecovery as bg,
-  useApproveKeyRecovery as bh,
-  __vitePreload as bi,
-  useRejectKeyRecovery as bj,
-  React$4 as bk,
+  CircleCheckBig as b6,
+  Key as b7,
+  useEnrollUserKeyEscrow as b8,
+  useGetEncryptedEscrowKey as b9,
+  useEscrowStats as ba,
+  useEscrowedUsers as bb,
+  useRecoveryRequests as bc,
+  RecoveryRequestStatus as bd,
+  ChevronUp as be,
+  EscrowStatus as bf,
+  useEscrowGrants as bg,
+  useInitiateKeyRecovery as bh,
+  useApproveKeyRecovery as bi,
+  __vitePreload as bj,
+  useRejectKeyRecovery as bk,
   useRouterState as bl,
   Menu as bm,
   FileText as bn,
@@ -59014,17 +59805,17 @@ export {
   useAuth as k,
   useQueryClient as l,
   useQuery as m,
-  useMutation as n,
-  Tabs as o,
-  TabsList as p,
-  TabsTrigger as q,
+  useNavigate as n,
+  useMutation as o,
+  Tabs as p,
+  TabsList as q,
   reactExports as r,
-  TabsContent as s,
-  Label as t,
+  TabsTrigger as s,
+  TabsContent as t,
   usePublicGroups as u,
-  Select as v,
-  SelectTrigger as w,
-  SelectValue as x,
-  SelectContent as y,
-  SelectItem as z
+  Label as v,
+  Switch as w,
+  Select as x,
+  SelectTrigger as y,
+  SelectValue as z
 };

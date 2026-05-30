@@ -112,12 +112,12 @@ type RetentionMetadataRecord =
 type Result_9 = 
  variant {
    err: Error;
-   ok: Attachment;
+   ok: RecoveryRequest;
  };
 type Result_8 = 
  variant {
-   err: Error;
-   ok: RecoveryRequest;
+   err: text;
+   ok: text;
  };
 type Result_7 = 
  variant {
@@ -139,15 +139,25 @@ type Result_4 =
    err: Error;
    ok: JoinRequest;
  };
-type Result_31 = 
+type Result_33 = 
  variant {
    err: Error;
    ok: vec EscrowAccessGrant;
  };
-type Result_30 = 
+type Result_32 = 
  variant {
    err: Error;
    ok: EscrowAccessGrant;
+ };
+type Result_31 = 
+ variant {
+   err: Error;
+   ok: ConversationPublic;
+ };
+type Result_30 = 
+ variant {
+   err: Error;
+   ok: ConfigExportBundle;
  };
 type Result_3 = 
  variant {
@@ -156,53 +166,53 @@ type Result_3 =
  };
 type Result_29 = 
  variant {
-   err: text;
+   err: Error;
    ok: text;
  };
 type Result_28 = 
  variant {
    err: Error;
-   ok: ConversationPublic;
+   ok: vec AuditEvent;
  };
 type Result_27 = 
  variant {
    err: Error;
-   ok: ConfigExportBundle;
+   ok: EscrowStatsRecord;
  };
 type Result_26 = 
  variant {
    err: Error;
-   ok: text;
+   ok: vec EscrowedUserRecord;
  };
 type Result_25 = 
  variant {
    err: Error;
-   ok: vec AuditEvent;
- };
-type Result_24 = 
- variant {
-   err: Error;
-   ok: EscrowStatsRecord;
- };
-type Result_23 = 
- variant {
-   err: Error;
-   ok: vec EscrowedUserRecord;
- };
-type Result_22 = 
- variant {
-   err: Error;
    ok: vec JoinRequest;
  };
-type Result_21 = 
+type Result_24 = 
  variant {
    err: text;
    ok: vec GroupMemberRecord;
  };
-type Result_20 = 
+type Result_23 = 
  variant {
    err: Error;
    ok: GroupRetentionPolicy;
+ };
+type Result_22 = 
+ variant {
+   err: Error;
+   ok: vec MessagePublic;
+ };
+type Result_21 = 
+ variant {
+   err: text;
+   ok: vec OrgMembership;
+ };
+type Result_20 = 
+ variant {
+   err: text;
+   ok: opt OrgRole;
  };
 type Result_2 = 
  variant {
@@ -211,53 +221,53 @@ type Result_2 =
  };
 type Result_19 = 
  variant {
-   err: Error;
-   ok: vec MessagePublic;
+   err: text;
+   ok: NotificationPreferences;
  };
 type Result_18 = 
  variant {
    err: text;
-   ok: vec OrgMembership;
+   ok: GetOrgUsersResponse;
  };
 type Result_17 = 
  variant {
    err: text;
-   ok: opt OrgRole;
+   ok: vec PendingNotification;
  };
 type Result_16 = 
- variant {
-   err: text;
-   ok: GetOrgUsersResponse;
- };
-type Result_15 = 
  variant {
    err: Error;
    ok: vec RecoveryRequest;
  };
-type Result_14 = 
+type Result_15 = 
  variant {
    err: Error;
    ok: vec RetentionMetadataRecord;
  };
-type Result_13 = 
+type Result_14 = 
  variant {
    err: text;
    ok: OrgMembership;
  };
-type Result_12 = 
+type Result_13 = 
  variant {
    err: Error;
    ok: vec UserId;
  };
-type Result_11 = 
+type Result_12 = 
  variant {
    err: text;
    ok: GetOrgsResponse;
  };
-type Result_10 = 
+type Result_11 = 
  variant {
    err: Error;
    ok: DeviceRecordPublic;
+ };
+type Result_10 = 
+ variant {
+   err: Error;
+   ok: Attachment;
  };
 type Result_1 = 
  variant {
@@ -337,6 +347,14 @@ type PlatformSettings =
    sessionTimeoutMinutes: nat;
    vetKeysEnabled: bool;
  };
+type PendingNotification = 
+ record {
+   groupName: opt text;
+   id: text;
+   notifType: text;
+   senderDisplayName: text;
+   timestamp: int;
+ };
 type PasswordPolicy = 
  variant {
    basic;
@@ -390,6 +408,11 @@ type OrgMembership =
    userId: UserId;
  };
 type OrgId = text;
+type NotificationPreferences = 
+ record {
+   directMessagesEnabled: bool;
+   groupMessagesEnabled: bool;
+ };
 type MessageType = 
  variant {
    audio;
@@ -825,18 +848,18 @@ service : {
   _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
   addAdmin: (newAdmin: UserId) -> (Result_6);
   addConversationMember: (req: AddMemberRequest) -> (Result_6);
-  addDevice: (req: AddDeviceRequest) -> (Result_10);
+  addDevice: (req: AddDeviceRequest) -> (Result_11);
   adminGetEscrowGrants: (targetUserId: opt UserId, limit: nat, afterGrantId:
-   opt nat) -> (Result_31) query;
+   opt nat) -> (Result_33) query;
   adminGrantEscrowAccess: (targetUserId: UserId, targetDeviceId: text,
-   reason: text) -> (Result_30);
+   reason: text) -> (Result_32);
   approveJoinRequest: (req: JoinRequestActionRequest) -> (Result_6);
-  approveKeyRecovery: (requestId: nat) -> (Result_8);
-  bootstrapSuperAdmin: (targetPrincipal: UserId) -> (Result_29);
+  approveKeyRecovery: (requestId: nat) -> (Result_9);
+  bootstrapSuperAdmin: (targetPrincipal: UserId) -> (Result_8);
   checkPolicyExpiry: (callerOrgId: opt OrgId) -> (vec RetentionPolicy) query;
   clearTypingIndicator: (conversationId: ConversationId) -> ();
-  createDirectConversation: (req: CreateDirectRequest) -> (Result_28);
-  createGroupConversation: (req: CreateGroupRequest) -> (Result_28);
+  createDirectConversation: (req: CreateDirectRequest) -> (Result_31);
+  createGroupConversation: (req: CreateGroupRequest) -> (Result_31);
   createOrg: (req: CreateOrgRequest) -> (Result_3);
   createRetentionPolicy: (req: CreateRetentionPolicyRequest) -> (Result_1);
   deleteAttachment: (attachmentId: AttachmentId) -> (Result_6);
@@ -853,12 +876,12 @@ service : {
                                 err: text;
                                 ok: text;
                               });
-  exportAuditLog: (req: AuditExportRequest) -> (Result_26);
-  exportAuditLogs: (req: ExportAuditLogsRequest) -> (Result_25) query;
-  exportConfigBundle: () -> (Result_27);
-  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_26);
+  exportAuditLog: (req: AuditExportRequest) -> (Result_29);
+  exportAuditLogs: (req: ExportAuditLogsRequest) -> (Result_28) query;
+  exportConfigBundle: () -> (Result_30);
+  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_29);
   getAllGroups: (req: GetAllGroupsRequest) -> (vec GroupAdminRecord);
-  getAuditLog: (req: GetAuditLogRequest) -> (Result_25) query;
+  getAuditLog: (req: GetAuditLogRequest) -> (Result_28) query;
   getCanisterHealth: () ->
    (record {
       cyclesBalance: nat;
@@ -876,28 +899,30 @@ service : {
                                err: text;
                                ok: blob;
                              });
-  getEscrowStats: () -> (Result_24);
-  getEscrowedUsers: (req: GetEscrowedUsersRequest) -> (Result_23);
+  getEscrowStats: () -> (Result_27);
+  getEscrowedUsers: (req: GetEscrowedUsersRequest) -> (Result_26);
   getGlobalRetentionPolicy: () -> (opt RetentionPolicy) query;
   getGroupCompartment: (convId: ConversationId) ->
    (opt CompartmentLabel) query;
-  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_22) query;
-  getGroupMembers: (req: GetGroupMembersRequest) -> (Result_21);
-  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_20) query;
+  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_25) query;
+  getGroupMembers: (req: GetGroupMembersRequest) -> (Result_24);
+  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_23) query;
   getMessageAttachments: (messageId: MessageId) -> (vec Attachment) query;
-  getMessages: (req: GetMessagesRequest) -> (Result_19) query;
+  getMessages: (req: GetMessagesRequest) -> (Result_22) query;
   getMyEscrowStatus: () -> (vec EscrowRecord) query;
-  getMyOrgs: () -> (Result_18) query;
-  getMyRole: (orgId: OrgId) -> (Result_17) query;
+  getMyOrgs: () -> (Result_21) query;
+  getMyRole: (orgId: OrgId) -> (Result_20) query;
+  getNotificationPreferences: () -> (Result_19) query;
   getOrg: (orgId: OrgId) -> (Result_3) query;
   getOrgSettings: (orgId: text) -> (OrgSettings) query;
-  getOrgUsers: (req: GetOrgUsersRequest) -> (Result_16) query;
+  getOrgUsers: (req: GetOrgUsersRequest) -> (Result_18) query;
+  getPendingNotifications: () -> (Result_17);
   getPlatformSettings: () -> (PlatformSettings) query;
-  getRecoveryDetails: (requestId: nat) -> (Result_8);
+  getRecoveryDetails: (requestId: nat) -> (Result_9);
   getRecoveryRequests: (orgId: opt OrgId, statusFilter:
-   opt RecoveryRequestStatus) -> (Result_15);
+   opt RecoveryRequestStatus) -> (Result_16);
   getRetentionMetadata: (req: GetRetentionMetadataRequest) ->
-   (Result_14) query;
+   (Result_15) query;
   getRetentionPolicies: (req: GetRetentionPoliciesRequest) ->
    (vec RetentionPolicy) query;
   getRetentionPolicy: (orgId: OrgId) -> (opt RetentionPolicy) query;
@@ -905,15 +930,17 @@ service : {
    (vec TypingIndicatorPublic) query;
   getUserProfile: (userId: UserId) -> (opt UserProfilePublic) query;
   getUserProfiles: (userIds: vec UserId) -> (vec UserProfilePublic) query;
+  getVAPIDPublicKey: () -> (text) query;
+  hasDataResetBeenPerformed: () -> (bool) query;
   hasSuperAdmin: () -> (bool) query;
   initiateKeyRecovery: (targetUserId: UserId, targetDeviceId: text, reason:
-   text, orgId: opt OrgId) -> (Result_8);
-  inviteUser: (req: InviteUserRequest) -> (Result_13);
+   text, orgId: opt OrgId) -> (Result_9);
+  inviteUser: (req: InviteUserRequest) -> (Result_14);
   isAdminCheck: ("principal": UserId) -> (bool) query;
-  listAdmins: () -> (Result_12) query;
+  listAdmins: () -> (Result_13) query;
   listConversations: () -> (vec ConversationPublic) query;
   listMyDevices: () -> (vec DeviceRecordPublic) query;
-  listOrgs: (req: GetOrgsRequest) -> (Result_11) query;
+  listOrgs: (req: GetOrgsRequest) -> (Result_12) query;
   listPublicGroups: (req: ListPublicGroupsRequest) ->
    (vec PublicGroupSummary) query;
   logPolicyExpiryCheck: () -> ();
@@ -921,14 +948,15 @@ service : {
   markMessageRead: (messageId: MessageId) -> (Result_6);
   reactivateMember: (orgId: OrgId, userId: UserId) -> (Result_2);
   redeemDeviceSyncToken: (token: text, deviceId: text, deviceLabel: text) ->
-   (Result_10);
-  registerAttachment: (req: RegisterAttachmentRequest) -> (Result_9);
+   (Result_11);
+  registerAttachment: (req: RegisterAttachmentRequest) -> (Result_10);
   registerUser: (req: RegisterRequest) -> (Result);
-  rejectKeyRecovery: (requestId: nat) -> (Result_8);
+  rejectKeyRecovery: (requestId: nat) -> (Result_9);
   removeAdmin: (target: UserId) -> (Result_6);
   removeConversationMember: (req: RemoveMemberRequest) -> (Result_6);
   removeMember: (orgId: OrgId, userId: UserId) -> (Result_2);
   removeMemberFromGroup: (req: RemoveMemberFromGroupRequest) -> (Result_2);
+  resetAllTestData: () -> (Result_8);
   revokeDevice: (deviceId: text) -> (Result_6);
   revokeKeyEscrow: (deviceId: text, reason: text) -> (Result_6);
   sendMessage: (req: SendMessageRequest) -> (Result_7);
@@ -938,11 +966,16 @@ service : {
    nodeCount: opt nat, costMult: opt float64) -> (Result_5);
   setTypingIndicator: (conversationId: ConversationId, ttlSeconds: nat) -> ();
   submitJoinRequest: (req: SubmitJoinRequestRequest) -> (Result_4);
+  subscribeToPush: (endpoint: text, authKey: text, p256dh: text) ->
+   (Result_2);
   suspendMember: (req: SuspendUserRequest) -> (Result_2);
   suspendOrg: (orgId: OrgId) -> (Result_2);
   toggleLegalHold: (req: LegalHoldRequest) -> (Result_1);
   touchPresence: () -> ();
+  unsubscribeFromPush: () -> (Result_2);
   updateMemberRole: (req: UpdateMemberRoleRequest) -> (Result_2);
+  updateNotificationPreferences: (directEnabled: bool, groupEnabled: 
+   bool) -> (Result_2);
   updateOrg: (orgId: OrgId, name: text, description: opt text) -> (Result_3);
   updateOrgSettings: (orgId: text, update: OrgSettings) -> (Result_2);
   updatePlatformSettings: (update: PlatformSettings) -> (Result_2);

@@ -7,6 +7,7 @@ import { getLocalAvatarDataUrl, useDisplayName } from "@/hooks/use-profiles";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   Compass,
+  Download,
   LogOut,
   Menu,
   MessageSquare,
@@ -15,7 +16,9 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import usePWAInstall from "../hooks/usePWAInstall";
 import { EncryptedBadge } from "./EncryptedBadge";
+import { OfflineIndicator } from "./OfflineIndicator";
 import { UserAvatar } from "./UserAvatar";
 
 interface LayoutProps {
@@ -67,6 +70,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const location = useLocation();
   const navigate = useNavigate();
   const ownDisplayName = useDisplayName(principal?.toText() ?? null);
+  const { isInstalled, promptInstall } = usePWAInstall();
 
   const handleLogout = () => {
     logout();
@@ -136,6 +140,20 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           © {new Date().getFullYear()} Built with love using caffeine.ai
         </a>
       </div>
+      {!isInstalled && (
+        <div className="px-4 pb-2">
+          <button
+            type="button"
+            onClick={promptInstall}
+            data-ocid="nav.get_the_app_button"
+            aria-label="Install CharlieSierra app"
+            className="flex items-center gap-1.5 px-2 py-1.5 rounded border border-sidebar-border text-muted-foreground hover:text-sidebar-foreground hover:border-muted-foreground text-[10px] transition-colors duration-200 w-full"
+          >
+            <Download size={11} aria-hidden="true" className="shrink-0" />
+            Get the App
+          </button>
+        </div>
+      )}
 
       {isAuthenticated && principal && (
         <div className="px-3 py-4 space-y-3">
@@ -187,6 +205,7 @@ export function Layout({
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
+      <OfflineIndicator />
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-[280px] flex-shrink-0 flex-col border-r border-border">
         <SidebarContent />

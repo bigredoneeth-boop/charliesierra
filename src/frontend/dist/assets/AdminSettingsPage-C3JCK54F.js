@@ -1,7 +1,6 @@
-import { i as useActor, k as useAuth, l as useQueryClient, m as useQuery, O as OrgRole, r as reactExports, n as useMutation, j as jsxRuntimeExports, o as Tabs, p as TabsList, q as TabsTrigger, s as TabsContent, a as Skeleton, t as Label, I as Input, P as PasswordPolicy, v as Select, w as SelectTrigger, x as SelectValue, y as SelectContent, R as RetentionPeriod, z as SelectItem, A as AlertDialog, D as AlertDialogTrigger, B as Button, E as AlertDialogContent, F as AlertDialogHeader, G as AlertDialogTitle, H as AlertDialogDescription, J as AlertDialogFooter, K as AlertDialogCancel, M as AlertDialogAction, d as ue, N as GroupCreationPermission, Q as DataExportPermission, c as Badge, V as Textarea, W as createActor } from "./index-BRuGftaL.js";
-import { A as AdminLayout } from "./AdminLayout-BDDpCrSB.js";
-import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-Dj0kq17T.js";
-import { S as Switch } from "./switch-B55RMrIa.js";
+import { i as useActor, k as useAuth, l as useQueryClient, m as useQuery, O as OrgRole, r as reactExports, R as React, n as useNavigate, o as useMutation, j as jsxRuntimeExports, p as Tabs, q as TabsList, s as TabsTrigger, t as TabsContent, a as Skeleton, v as Label, I as Input, w as Switch, P as PasswordPolicy, x as Select, y as SelectTrigger, z as SelectValue, A as SelectContent, D as RetentionPeriod, E as SelectItem, F as AlertDialog, G as AlertDialogTrigger, B as Button, H as AlertDialogContent, J as AlertDialogHeader, K as AlertDialogTitle, M as AlertDialogDescription, N as AlertDialogFooter, Q as AlertDialogCancel, V as AlertDialogAction, d as ue, W as GroupCreationPermission, X as DataExportPermission, c as Badge, Y as Textarea, Z as createActor } from "./index-Dj8-UVdB.js";
+import { A as AdminLayout } from "./AdminLayout-CR9BmsWz.js";
+import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-7gh68e_y.js";
 function formatCycles(n) {
   if (n >= 1000000000000n) return `${(Number(n) / 1e12).toFixed(1)}T`;
   if (n >= 1000000000n) return `${(Number(n) / 1e9).toFixed(1)}B`;
@@ -63,6 +62,12 @@ function AdminSettingsPage() {
   const [showOrgSaveDialog, setShowOrgSaveDialog] = reactExports.useState(false);
   const [logoUploading, setLogoUploading] = reactExports.useState(false);
   const logoInputRef = reactExports.useRef(null);
+  const [showResetModal, setShowResetModal] = React.useState(false);
+  const [resetConfirmInput, setResetConfirmInput] = React.useState("");
+  const [resetDone, setResetDone] = React.useState(false);
+  const [resetError, setResetError] = React.useState(null);
+  const RESET_PHRASE = "RESET ALL DATA";
+  const navigate = useNavigate();
   const platformQuery = useQuery({
     queryKey: ["platformSettings"],
     queryFn: () => actor.getPlatformSettings(),
@@ -85,6 +90,33 @@ function AdminSettingsPage() {
     queryFn: () => actor.getCanisterHealth(),
     enabled: !!actor && isSuperAdmin,
     retry: 1
+  });
+  const dataResetDoneQuery = useQuery({
+    queryKey: ["hasDataResetBeenPerformed"],
+    queryFn: async () => {
+      const result = await actor.hasDataResetBeenPerformed();
+      return result;
+    },
+    enabled: !!actor && isSuperAdmin
+  });
+  const doResetMutation = useMutation({
+    mutationFn: async () => {
+      const result = await actor.resetAllTestData();
+      if ("err" in result) throw new Error(result.err);
+      return result.ok;
+    },
+    onSuccess: () => {
+      setResetDone(true);
+      setShowResetModal(false);
+      setResetConfirmInput("");
+      queryClient.invalidateQueries({
+        queryKey: ["hasDataResetBeenPerformed"]
+      });
+      setTimeout(() => navigate({ to: "/admin" }), 2e3);
+    },
+    onError: (err) => {
+      setResetError(err.message);
+    }
   });
   const { mutate: savePlatform, isPending: savingPlatform } = useMutation({
     mutationFn: (update) => actor.updatePlatformSettings(update),
@@ -219,6 +251,7 @@ function AdminSettingsPage() {
         /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-52 w-full" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-40 w-full" })
       ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        resetDone && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border border-green-700 rounded-lg bg-green-950/20 p-4 text-green-400 font-semibold", children: "✓ All testing data has been cleared. Your admin roles and organization settings are preserved." }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "border-border bg-card", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { className: "pb-3", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-xs font-semibold uppercase tracking-wider text-foreground", children: "Branding" }),
@@ -595,7 +628,94 @@ function AdminSettingsPage() {
               ] })
             ]
           }
-        ) })
+        ) }),
+        isSuperAdmin && !resetDone && dataResetDoneQuery.data !== true && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 border border-red-700 rounded-lg bg-red-950/20 p-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-lg font-bold text-red-400 mb-4 flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚠" }),
+            " Danger Zone"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-semibold text-gray-100", children: "Reset All Testing Data" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-400 mt-1 max-w-xl", children: "Permanently delete all messages, conversations, file attachments, and non-admin user profiles. Your Super Admin role, organization settings, audit logs, and platform configuration will be preserved. This action is irreversible and can only be performed once." })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  setShowResetModal(true);
+                  setResetError(null);
+                },
+                className: "flex-shrink-0 bg-red-700 hover:bg-red-600 text-white font-bold px-4 py-2 rounded transition-colors",
+                children: "Reset All Testing Data"
+              }
+            )
+          ] })
+        ] }),
+        showResetModal && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black/70", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#0d1117] border border-red-700 rounded-xl shadow-2xl p-8 max-w-lg w-full mx-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold text-red-400 mb-4", children: "Confirm: Permanently Reset All Testing Data" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-red-950/40 border border-red-800 rounded p-4 mb-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-300 text-sm font-semibold", children: "⚠ This will permanently delete ALL messages, conversations, groups, file attachments, and user profiles (except Super Admin). This action is IRREVERSIBLE and can only be performed ONCE. It will be permanently logged in the audit trail." }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "label",
+            {
+              className: "block text-sm text-gray-400 mb-2",
+              htmlFor: "reset-confirm-input",
+              children: [
+                "Type",
+                " ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono font-bold text-red-400", children: "RESET ALL DATA" }),
+                " ",
+                "to confirm:"
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "text",
+              value: resetConfirmInput,
+              onChange: (e) => {
+                setResetConfirmInput(e.target.value);
+                setResetError(null);
+              },
+              placeholder: "RESET ALL DATA",
+              className: "w-full bg-[#161b22] border border-gray-600 rounded px-3 py-2 text-white mb-4 font-mono focus:outline-none focus:border-red-500",
+              id: "reset-confirm-input"
+            }
+          ),
+          resetError && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-400 text-sm mb-4", children: resetError }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3 justify-end", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  setShowResetModal(false);
+                  setResetConfirmInput("");
+                  setResetError(null);
+                },
+                className: "px-4 py-2 rounded border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors",
+                disabled: doResetMutation.isPending,
+                children: "Cancel"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => doResetMutation.mutate(),
+                disabled: resetConfirmInput !== RESET_PHRASE || doResetMutation.isPending,
+                className: "px-4 py-2 rounded bg-red-700 hover:bg-red-600 text-white font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2",
+                children: doResetMutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-spin inline-block", children: "⟳" }),
+                  " ",
+                  "Resetting..."
+                ] }) : "Confirm Reset"
+              }
+            )
+          ] })
+        ] }) })
       ] }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(TabsContent, { value: "org", className: "mt-6 space-y-6", children: [
         isSuperAdmin && /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "border-border bg-card", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "pt-4", children: [

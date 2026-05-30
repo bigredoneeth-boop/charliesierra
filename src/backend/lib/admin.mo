@@ -12,7 +12,7 @@ module {
   public type State = {
     auditLog : Map.Map<Nat, T.AuditEvent>;
     adminPrincipals : Set.Set<Common.UserId>;
-    state : { var nextEventId : Nat; var bootstrapCompleted : Bool };
+    state : { var nextEventId : Nat; var bootstrapCompleted : Bool; var dataResetCompleted : Bool };
   };
 
   /// Append an audit event. Call from other lib modules — never expose raw log writes publicly.

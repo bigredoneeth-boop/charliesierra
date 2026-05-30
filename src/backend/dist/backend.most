@@ -82,9 +82,9 @@ type Conversation__442121514 =
 type DataExportPermission__78218430 =
   {#allMembers; #disabled; #orgAdminsOnly};
 type DataResidency__814192359 = {#apac; #eu; #global; #us};
-type Data__159895909<T> = {var count : Nat__490723111; elements : [var ?T]};
-type Data__791452850<K, V> =
-  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type Data__628993992<T> = {var count : Nat__1040412405; elements : [var ?T]};
+type Data__80296667<K, V> =
+  {var count : Nat__1040412405; kvs : [var ?(K, V)]};
 type DeviceRecord__387655850 =
   {
     deviceId : Text;
@@ -130,10 +130,10 @@ type GroupRetentionPolicy__233071989 =
     enabledBy : ?UserId__158757552;
     retentionEnabled : Bool
   };
-type Internal__667636161<T> =
-  {children : [var ?Node__92254746<T>]; data : Data__159895909<T>};
-type Internal__8484328<K, V> =
-  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Internal__1007892817<T> =
+  {children : [var ?Node__918630472<T>]; data : Data__628993992<T>};
+type Internal__41346355<K, V> =
+  {children : [var ?Node__1000929467<K, V>]; data : Data__80296667<K, V>};
 type InviteStatus__155487868 = {#Accepted; #Expired; #Pending; #Revoked};
 type JoinRequestStatus__965962348 = {#approved; #denied; #pending};
 type JoinRequest__726477487 =
@@ -145,19 +145,19 @@ type JoinRequest__726477487 =
     requesterId : UserId__158757552;
     status : JoinRequestStatus__965962348
   };
-type Leaf__520550824<T> = {data : Data__159895909<T>};
-type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
-type List__415060402<T> = List__790383201<T>;
-type List__790383201<T> =
+type Leaf__693487502<T> = {data : Data__628993992<T>};
+type Leaf__712614010<K, V> = {data : Data__80296667<K, V>};
+type List__529703492<T> =
   {
-    var blockIndex : Nat__490723111;
+    var blockIndex : Nat__1040412405;
     var blocks : [var [var ?T]];
-    var elementIndex : Nat__490723111
+    var elementIndex : Nat__1040412405
   };
-type Map__158565046<K, V> = Map__297112838<K, V>;
-type Map__297112838<K, V> =
-  {var root : Node__46230540<K, V>; var size : Nat__490723111};
-type Map__605269027<K, V> = Map__158565046<K, V>;
+type List__560604548<T> = List__529703492<T>;
+type Map__222667396<K, V> = Map__912772452<K, V>;
+type Map__709709801<K, V> =
+  {var root : Node__1000929467<K, V>; var size : Nat__1040412405};
+type Map__912772452<K, V> = Map__709709801<K, V>;
 type MemberStatus__375090403 = {#Active; #Pending; #Suspended};
 type MessageId__291319400 = Nat;
 type MessagePriority__710871321 = {#high; #normal};
@@ -174,12 +174,14 @@ type Message__714344397 =
     sentAt : Timestamp__301639476;
     ttlSeconds : ?Nat
   };
-type Nat__490723111 = Nat__920180692;
+type Nat__1040412405 = Nat__920180692;
 type Nat__920180692 = Nat;
-type Node__46230540<K, V> =
-  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
-type Node__92254746<T> =
-  {#internal : Internal__667636161<T>; #leaf : Leaf__520550824<T>};
+type Node__1000929467<K, V> =
+  {#internal : Internal__41346355<K, V>; #leaf : Leaf__712614010<K, V>};
+type Node__918630472<T> =
+  {#internal : Internal__1007892817<T>; #leaf : Leaf__693487502<T>};
+type NotificationPreferences__789589615 =
+  {directMessagesEnabled : Bool; groupMessagesEnabled : Bool};
 type OrgId__195627598 = Text;
 type OrgInvite__781467659 =
   {
@@ -228,6 +230,14 @@ type OrgSettings__337404528 =
   };
 type OrgStatus__611067598 = {#Active; #Archived; #Suspended};
 type PasswordPolicy__154415480 = {#basic; #enterprise; #strong};
+type PendingNotification__525714583 =
+  {
+    groupName : ?Text;
+    id : Text;
+    notifType : Text;
+    senderDisplayName : Text;
+    timestamp : Int
+  };
 type PlatformSettings__592001590 =
   {
     auditLogRetentionDays : RetentionPeriodDays__56229840;
@@ -239,6 +249,14 @@ type PlatformSettings__592001590 =
     platformTagline : Text;
     sessionTimeoutMinutes : Nat;
     vetKeysEnabled : Bool
+  };
+type PushSubscriptionRecord__480474545 =
+  {
+    auth : Text;
+    createdAt : Int;
+    var enabled : Bool;
+    endpoint : Text;
+    p256dh : Text
   };
 type ReadReceiptRecord__853033662 =
   {
@@ -283,9 +301,9 @@ type RetentionPolicy__757505855 =
     updatedAt : Timestamp__301639476;
     updatedBy : UserId__158757552
   };
-type Set__532252804<T> = Set__710576254<T>;
-type Set__710576254<T> =
-  {var root : Node__92254746<T>; var size : Nat__490723111};
+type Set__1052415927<T> = Set__310360741<T>;
+type Set__310360741<T> =
+  {var root : Node__918630472<T>; var size : Nat__1040412405};
 type SovereignConfig__682828137 =
   {
     canisters : Text;
@@ -322,102 +340,124 @@ type VetEscrowRecord__210350760 =
 actor {
   stable adminState :
     {
-      adminPrincipals : Set__532252804<UserId__158757552>;
-      auditLog : Map__605269027<Nat, AuditEvent__699314008>;
-      state : {var bootstrapCompleted : Bool; var nextEventId : Nat}
+      adminPrincipals : Set__1052415927<UserId__158757552>;
+      auditLog : Map__222667396<Nat, AuditEvent__699314008>;
+      state :
+        {
+          var bootstrapCompleted : Bool;
+          var dataResetCompleted : Bool;
+          var nextEventId : Nat
+        }
     };
   stable attState :
     {
       attachments :
-        Map__605269027<AttachmentId__640090544, Attachment__831262237>;
+        Map__222667396<AttachmentId__640090544, Attachment__831262237>;
       messageAttachments :
-        Map__605269027<MessageId__291319400, [AttachmentId__640090544]>;
+        Map__222667396<MessageId__291319400, [AttachmentId__640090544]>;
       state : {var nextId : AttachmentId__640090544}
     };
   stable convsState :
     {
       conversations :
-        Map__605269027<ConversationId__966455625, Conversation__442121514>;
-      directIndex : Map__605269027<Text, ConversationId__966455625>;
+        Map__222667396<ConversationId__966455625, Conversation__442121514>;
+      directIndex : Map__222667396<Text, ConversationId__966455625>;
       state : {var nextId : ConversationId__966455625}
     };
   stable devicesState :
     {
       devices :
-        Map__605269027<UserId__158757552,
-                        List__415060402<DeviceRecord__387655850>>;
-      syncTokens : Map__605269027<Text, DeviceSyncToken__919843731>
+        Map__222667396<UserId__158757552,
+                        List__560604548<DeviceRecord__387655850>>;
+      syncTokens : Map__222667396<Text, DeviceSyncToken__919843731>
     };
   stable discoveryState :
     {
       joinRequests :
-        Map__605269027<ConversationId__966455625,
-                        Map__605269027<Text, JoinRequest__726477487>>
+        Map__222667396<ConversationId__966455625,
+                        Map__222667396<Text, JoinRequest__726477487>>
     };
   stable enterpriseState :
     {
-      escrowGrants : Map__605269027<Nat, EscrowAccessGrant__445250214>;
+      escrowGrants : Map__222667396<Nat, EscrowAccessGrant__445250214>;
       escrowRecords :
-        Map__605269027<(UserId__158757552, Text), EscrowRecord__427528100>;
-      recoveryRequests : Map__605269027<Nat, RecoveryRequest__566528485>;
-      retentionMetadata : List__415060402<RetentionMetadataRecord__943494619>;
+        Map__222667396<(UserId__158757552, Text), EscrowRecord__427528100>;
+      recoveryRequests : Map__222667396<Nat, RecoveryRequest__566528485>;
+      retentionMetadata : List__560604548<RetentionMetadataRecord__943494619>;
       retentionPolicies :
-        Map__605269027<ConversationId__966455625,
+        Map__222667396<ConversationId__966455625,
                         GroupRetentionPolicy__233071989>;
       state : {var nextGrantId : Nat; var nextRecoveryRequestId : Nat};
       vetEscrowRecords :
-        Map__605269027<UserId__158757552, VetEscrowRecord__210350760>
+        Map__222667396<UserId__158757552, VetEscrowRecord__210350760>
     };
   stable invites :
     {
-      var root : Node__46230540<Text, OrgInvite__781467659>;
-      var size : Nat__490723111
+      var root : Node__1000929467<Text, OrgInvite__781467659>;
+      var size : Nat__1040412405
     };
   stable memberships :
     {
-      var root : Node__46230540<Text, OrgMembership__162165522>;
-      var size : Nat__490723111
+      var root : Node__1000929467<Text, OrgMembership__162165522>;
+      var size : Nat__1040412405
     };
   stable msgsState :
     {
       conversationMessages :
-        Map__605269027<ConversationId__966455625, [MessageId__291319400]>;
-      messages : Map__605269027<MessageId__291319400, Message__714344397>;
+        Map__222667396<ConversationId__966455625, [MessageId__291319400]>;
+      messages : Map__222667396<MessageId__291319400, Message__714344397>;
       readReceipts :
-        Map__605269027<(MessageId__291319400, UserId__158757552),
+        Map__222667396<(MessageId__291319400, UserId__158757552),
                         ReadReceiptRecord__853033662>;
       receiptsByMessage :
-        Map__605269027<MessageId__291319400,
-                        List__415060402<ReadReceiptRecord__853033662>>;
+        Map__222667396<MessageId__291319400,
+                        List__560604548<ReadReceiptRecord__853033662>>;
       state : {var nextId : MessageId__291319400};
       typingIndicators :
-        Map__605269027<(ConversationId__966455625, UserId__158757552),
+        Map__222667396<(ConversationId__966455625, UserId__158757552),
                         TypingIndicator__500933211>
+    };
+  stable notificationPrefs :
+    {
+      var root :
+        Node__1000929467<Principal, NotificationPreferences__789589615>;
+      var size : Nat__1040412405
     };
   stable orgsData :
     {
-      var root : Node__46230540<OrgId__195627598, OrgRecord__907003018>;
-      var size : Nat__490723111
+      var root : Node__1000929467<OrgId__195627598, OrgRecord__907003018>;
+      var size : Nat__1040412405
+    };
+  stable pendingNotifications :
+    {
+      var root : Node__1000929467<Principal, [PendingNotification__525714583]>;
+      var size : Nat__1040412405
+    };
+  stable pushSubscriptions :
+    {
+      var root :
+        Node__1000929467<Principal, PushSubscriptionRecord__480474545>;
+      var size : Nat__1040412405
     };
   stable retentionState :
     {
-      retentionPolicies : Map__605269027<Text, RetentionPolicy__757505855>;
+      retentionPolicies : Map__222667396<Text, RetentionPolicy__757505855>;
       state : {var nextPolicyId : Nat}
     };
   stable settingsState :
     {
-      orgSettingsMap : Map__605269027<Text, OrgSettings__337404528>;
+      orgSettingsMap : Map__222667396<Text, OrgSettings__337404528>;
       platformSettings : {var value : PlatformSettings__592001590}
     };
   stable sovereignState :
     {
       groupCompartments :
-        Map__605269027<ConversationId__966455625, CompartmentLabel__761974401>;
+        Map__222667396<ConversationId__966455625, CompartmentLabel__761974401>;
       state : {var sovereignConfig : SovereignConfig__682828137}
     };
   stable usersState :
     {
-      profiles : Map__605269027<UserId__158757552, UserProfile__277265826>;
+      profiles : Map__222667396<UserId__158757552, UserProfile__277265826>;
       state : {var nextId : Nat}
     }
 };

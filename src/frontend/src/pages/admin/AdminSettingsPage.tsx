@@ -44,12 +44,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/auth-context";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 /**
  * AdminSettingsPage
  * Full settings control center for Super Admins (Platform Settings)
  * and Org Admins (Organization Settings).
  */
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -132,6 +133,14 @@ export default function AdminSettingsPage() {
   const [logoUploading, setLogoUploading] = useState(false);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
+  // ── Danger Zone state ────────────────────────────────────────────────────
+  const [showResetModal, setShowResetModal] = React.useState(false);
+  const [resetConfirmInput, setResetConfirmInput] = React.useState("");
+  const [resetDone, setResetDone] = React.useState(false);
+  const [resetError, setResetError] = React.useState<string | null>(null);
+  const RESET_PHRASE = "RESET ALL DATA";
+  const navigate = useNavigate();
+
   // ── Queries ───────────────────────────────────────────────────────────────
   const platformQuery = useQuery({
     queryKey: ["platformSettings"],
@@ -159,6 +168,35 @@ export default function AdminSettingsPage() {
     queryFn: () => actor!.getCanisterHealth(),
     enabled: !!actor && isSuperAdmin,
     retry: 1,
+  });
+
+  const dataResetDoneQuery = useQuery({
+    queryKey: ["hasDataResetBeenPerformed"],
+    queryFn: async () => {
+      const result = await actor!.hasDataResetBeenPerformed();
+      return result;
+    },
+    enabled: !!actor && isSuperAdmin,
+  });
+
+  const doResetMutation = useMutation({
+    mutationFn: async () => {
+      const result = await actor!.resetAllTestData();
+      if ("err" in result) throw new Error((result as { err: string }).err);
+      return (result as { ok: string }).ok;
+    },
+    onSuccess: () => {
+      setResetDone(true);
+      setShowResetModal(false);
+      setResetConfirmInput("");
+      queryClient.invalidateQueries({
+        queryKey: ["hasDataResetBeenPerformed"],
+      });
+      setTimeout(() => navigate({ to: "/admin" }), 2000);
+    },
+    onError: (err: Error) => {
+      setResetError(err.message);
+    },
   });
 
   // ── Mutations ─────────────────────────────────────────────────────────────
@@ -313,6 +351,14 @@ export default function AdminSettingsPage() {
                 </div>
               ) : (
                 <>
+                  {/* Reset success banner */}
+                  {resetDone && (
+                    <div className="border border-green-700 rounded-lg bg-green-950/20 p-4 text-green-400 font-semibold">
+                      ✓ All testing data has been cleared. Your admin roles and
+                      organization settings are preserved.
+                    </div>
+                  )}
+
                   {/* Branding card */}
                   <Card className="border-border bg-card">
                     <CardHeader className="pb-3">
@@ -784,6 +830,122 @@ export default function AdminSettingsPage() {
                       </AlertDialogContent>
                     </AlertDialog>
                   </div>
+
+                  {/* Danger Zone */}
+                  {isSuperAdmin &&
+                    !resetDone &&
+                    dataResetDoneQuery.data !== true && (
+                      <div className="mt-8 border border-red-700 rounded-lg bg-red-950/20 p-6">
+                        <h3 className="text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
+                          <span>⚠</span> Danger Zone
+                        </h3>
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="font-semibold text-gray-100">
+                              Reset All Testing Data
+                            </p>
+                            <p className="text-sm text-gray-400 mt-1 max-w-xl">
+                              Permanently delete all messages, conversations,
+                              file attachments, and non-admin user profiles.
+                              Your Super Admin role, organization settings,
+                              audit logs, and platform configuration will be
+                              preserved. This action is irreversible and can
+                              only be performed once.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowResetModal(true);
+                              setResetError(null);
+                            }}
+                            className="flex-shrink-0 bg-red-700 hover:bg-red-600 text-white font-bold px-4 py-2 rounded transition-colors"
+                          >
+                            Reset All Testing Data
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Reset Confirmation Modal */}
+                  {showResetModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+                      <div className="bg-[#0d1117] border border-red-700 rounded-xl shadow-2xl p-8 max-w-lg w-full mx-4">
+                        <h2 className="text-xl font-bold text-red-400 mb-4">
+                          Confirm: Permanently Reset All Testing Data
+                        </h2>
+                        <div className="bg-red-950/40 border border-red-800 rounded p-4 mb-6">
+                          <p className="text-red-300 text-sm font-semibold">
+                            ⚠ This will permanently delete ALL messages,
+                            conversations, groups, file attachments, and user
+                            profiles (except Super Admin). This action is
+                            IRREVERSIBLE and can only be performed ONCE. It will
+                            be permanently logged in the audit trail.
+                          </p>
+                        </div>
+                        <label
+                          className="block text-sm text-gray-400 mb-2"
+                          htmlFor="reset-confirm-input"
+                        >
+                          Type{" "}
+                          <span className="font-mono font-bold text-red-400">
+                            RESET ALL DATA
+                          </span>{" "}
+                          to confirm:
+                        </label>
+                        <input
+                          type="text"
+                          value={resetConfirmInput}
+                          onChange={(e) => {
+                            setResetConfirmInput(e.target.value);
+                            setResetError(null);
+                          }}
+                          placeholder="RESET ALL DATA"
+                          className="w-full bg-[#161b22] border border-gray-600 rounded px-3 py-2 text-white mb-4 font-mono focus:outline-none focus:border-red-500"
+                          id="reset-confirm-input"
+                        />
+                        {resetError && (
+                          <p className="text-red-400 text-sm mb-4">
+                            {resetError}
+                          </p>
+                        )}
+                        <div className="flex gap-3 justify-end">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowResetModal(false);
+                              setResetConfirmInput("");
+                              setResetError(null);
+                            }}
+                            className="px-4 py-2 rounded border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors"
+                            disabled={doResetMutation.isPending}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => doResetMutation.mutate()}
+                            disabled={
+                              resetConfirmInput !== RESET_PHRASE ||
+                              doResetMutation.isPending
+                            }
+                            className="px-4 py-2 rounded bg-red-700 hover:bg-red-600 text-white font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+                          >
+                            {doResetMutation.isPending ? (
+                              <>
+                                <span className="animate-spin inline-block">
+                                  ⟳
+                                </span>{" "}
+                                Resetting...
+                              </>
+                            ) : (
+                              "Confirm Reset"
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </TabsContent>

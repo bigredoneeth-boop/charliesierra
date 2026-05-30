@@ -82,6 +82,26 @@ function useAdminGroups(): ConversationPublic[] {
   );
 }
 
+// ── Push notification permission request (additive, fails silently) ─────────
+// Inline helper used by the effect below
+const _requestPushPermission = async () => {
+  try {
+    if (!("Notification" in window) || !("serviceWorker" in navigator)) return;
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") return;
+    const registration = await navigator.serviceWorker.ready;
+    const existing = await registration.pushManager.getSubscription();
+    if (!existing) {
+      await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: null,
+      });
+    }
+  } catch {
+    // fails silently
+  }
+};
+
 // ── Provider: mounts watchers + exposes badge count via context ────────────
 export function JoinRequestNotifier({
   children,
@@ -89,7 +109,19 @@ export function JoinRequestNotifier({
   children: React.ReactNode;
 }) {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const adminGroups = useAdminGroups();
+
+  // Additive: request push notification permission once authenticated
+  useEffect(() => {
+    if (
+      isAuthenticated &&
+      "Notification" in window &&
+      "serviceWorker" in navigator
+    ) {
+      void _requestPushPermission();
+    }
+  }, [isAuthenticated]);
 
   const [requestsByGroup, setRequestsByGroup] = useState<
     Map<string, JoinRequest[]>

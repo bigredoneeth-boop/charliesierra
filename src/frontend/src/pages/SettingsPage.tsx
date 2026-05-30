@@ -27,6 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import type { ColorBlindMode } from "@/context/accessibility-context";
 import { useAccessibility } from "@/context/accessibility-context";
@@ -42,9 +43,13 @@ import {
   useMyEscrowStatus,
   useRevokeKeyEscrow,
 } from "@/hooks/use-enterprise";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { exportPublicKey, generateECDHKeyPair } from "@/lib/crypto";
 import { useNavigate } from "@tanstack/react-router";
 import {
+  Bell,
+  CheckCircle,
+  Download,
   Globe,
   Key,
   Lock,
@@ -61,6 +66,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import usePWAInstall from "../hooks/usePWAInstall";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -1025,11 +1031,135 @@ function AccessibilitySection() {
   );
 }
 
+// ── Notifications section ────────────────────────────────────────────────────
+
+function NotificationsSection() {
+  const {
+    supported,
+    permission,
+    subscribed,
+    preferences,
+    loading,
+    requestPermission,
+    subscribe,
+    unsubscribe,
+    updatePreferences,
+  } = usePushNotifications();
+
+  const handleMasterToggle = async (enabled: boolean) => {
+    if (enabled) {
+      if (permission === "default") await requestPermission();
+      await subscribe();
+    } else {
+      await unsubscribe();
+    }
+  };
+
+  const permissionBadge = () => {
+    if (!supported) return <Badge variant="secondary">Unsupported</Badge>;
+    if (permission === "granted")
+      return (
+        <Badge className="bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30">
+          Granted
+        </Badge>
+      );
+    if (permission === "denied")
+      return <Badge variant="destructive">Denied</Badge>;
+    return <Badge variant="outline">Default</Badge>;
+  };
+
+  return (
+    <section data-ocid="settings.notifications_section">
+      <SectionHeader icon={Bell} title="Notifications" />
+
+      {supported && permission === "default" && (
+        <div className="mb-4 flex items-start gap-3 p-3.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs">
+          <Bell
+            size={13}
+            className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
+          />
+          <p className="text-blue-800 dark:text-blue-300 leading-relaxed">
+            CharlieSierra stores only notification metadata (event type and
+            timestamp) — never message content. Enable notifications to be
+            alerted when new messages arrive.
+          </p>
+        </div>
+      )}
+
+      {supported && permission === "denied" && (
+        <div className="mb-4 flex items-start gap-3 p-3.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs">
+          <Bell size={13} className="text-destructive flex-shrink-0 mt-0.5" />
+          <p className="text-destructive leading-relaxed">
+            Notifications are blocked by your browser. To enable them, update
+            your browser's site permissions for this site, then reload.
+          </p>
+        </div>
+      )}
+
+      <SettingsCard>
+        <SettingsRow
+          label="Enable Notifications"
+          description="Receive alerts for new messages. Only metadata is stored — never message content."
+          ocid="settings.notifications.master_toggle"
+          action={
+            <Switch
+              checked={subscribed}
+              onCheckedChange={handleMasterToggle}
+              disabled={!supported || permission === "denied" || loading}
+              data-ocid="settings.notifications.master_switch"
+            />
+          }
+        >
+          <div className="mt-1">{permissionBadge()}</div>
+        </SettingsRow>
+
+        <SettingsRow
+          label="Direct Messages"
+          description="Notify when you receive a new direct message."
+          ocid="settings.notifications.dm_toggle"
+          action={
+            <Switch
+              checked={preferences.directEnabled}
+              onCheckedChange={(v) =>
+                updatePreferences(v, preferences.groupEnabled)
+              }
+              disabled={
+                !subscribed || !supported || permission !== "granted" || loading
+              }
+              data-ocid="settings.notifications.dm_switch"
+            />
+          }
+        />
+
+        <SettingsRow
+          label="Group Messages"
+          description="Notify when there is a new message or mention in a group."
+          ocid="settings.notifications.group_toggle"
+          action={
+            <Switch
+              checked={preferences.groupEnabled}
+              onCheckedChange={(v) =>
+                updatePreferences(preferences.directEnabled, v)
+              }
+              disabled={
+                !subscribed || !supported || permission !== "granted" || loading
+              }
+              data-ocid="settings.notifications.group_switch"
+            />
+          }
+        />
+      </SettingsCard>
+    </section>
+  );
+}
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function SettingsPage() {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { isInstallable, isInstalled, promptInstall, dismissInstall } =
+    usePWAInstall();
 
   const handleLogout = () => {
     logout();
@@ -1059,6 +1189,77 @@ export default function SettingsPage() {
             <ProfileEditor />
           </div>
         </section>
+
+        <Separator />
+
+        {/* ── App Installation ─────────────────────────────────────────── */}
+        {(isInstallable || isInstalled) && (
+          <section data-ocid="settings.pwa_section">
+            <SectionHeader icon={Download} title="App Installation" />
+            {isInstalled ? (
+              <SettingsCard>
+                <div className="px-4 py-4 flex items-start gap-3">
+                  <CheckCircle
+                    size={18}
+                    className="text-green-500 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <div className="space-y-0.5">
+                    <p className="text-sm font-medium text-foreground">
+                      App Installed
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      CharlieSierra is installed on this device.
+                    </p>
+                  </div>
+                </div>
+              </SettingsCard>
+            ) : (
+              <SettingsCard>
+                <div className="px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <Download
+                      size={18}
+                      className="text-muted-foreground flex-shrink-0 mt-0.5"
+                      aria-hidden="true"
+                    />
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium text-foreground">
+                        Install CharlieSierra
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Install the app on your device for a faster,
+                        offline-capable experience.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    <Button
+                      size="sm"
+                      onClick={promptInstall}
+                      data-ocid="settings.pwa.install_button"
+                    >
+                      Install App
+                    </Button>
+                    <button
+                      type="button"
+                      onClick={dismissInstall}
+                      data-ocid="settings.pwa.dismiss_button"
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    >
+                      Maybe later
+                    </button>
+                  </div>
+                </div>
+              </SettingsCard>
+            )}
+          </section>
+        )}
+
+        <Separator />
+
+        {/* ── Notifications ───────────────────────────────────────────────── */}
+        <NotificationsSection />
 
         <Separator />
 

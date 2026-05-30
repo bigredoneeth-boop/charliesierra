@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from "url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import environment from "vite-plugin-environment";
+import { VitePWA } from "vite-plugin-pwa";
 
 const ii_url =
   process.env.DFX_NETWORK === "local"
@@ -43,6 +44,37 @@ export default defineConfig({
     environment(["II_URL"]),
     environment(["STORAGE_GATEWAY_URL"]),
     react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'assets/*.png'],
+      manifest: {
+        name: 'CharlieSierra',
+        short_name: 'CS',
+        description: 'Secure encrypted messaging',
+        theme_color: '#1F2937',
+        background_color: '#0F172A',
+        display: 'standalone',
+        start_url: '/',
+        icons: [
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+        ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api/],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/blob\.caffeine\.ai\/.*/i,
+            handler: 'NetworkFirst',
+            options: { cacheName: 'blob-cache', expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 } }
+          }
+        ]
+      }
+    }),
   ],
   resolve: {
     alias: [
