@@ -70,7 +70,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const location = useLocation();
   const navigate = useNavigate();
   const ownDisplayName = useDisplayName(principal?.toText() ?? null);
-  const { isInstalled, promptInstall } = usePWAInstall();
+  const { isInstalled, isInstallable, promptInstall } = usePWAInstall();
 
   const handleLogout = () => {
     logout();
@@ -140,7 +140,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           © {new Date().getFullYear()} Built with love using caffeine.ai
         </a>
       </div>
-      {!isInstalled && (
+      {!isInstalled && isInstallable && (
         <div className="px-4 pb-2">
           <button
             type="button"

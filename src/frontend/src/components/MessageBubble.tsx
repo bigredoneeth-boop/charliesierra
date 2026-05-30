@@ -650,15 +650,25 @@ function ImageAttachment({
         />
       </button>
       {meta.name && (
-        <p className="text-xs opacity-60 mt-1 truncate max-w-[200px]">
-          {meta.name}
-        </p>
+        <div className="flex items-center gap-2 mt-1 max-w-[200px]">
+          <p className="text-xs opacity-60 truncate flex-1">{meta.name}</p>
+          <a
+            href={blobUrl}
+            download={meta.name ?? "image"}
+            className="opacity-70 hover:opacity-100 transition-opacity flex-shrink-0"
+            aria-label={`Download ${meta.name ?? "image"}`}
+            data-ocid="message.download_button"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Download size={14} />
+          </a>
+        </div>
       )}
       {/* Lightbox */}
       {expanded && (
         <button
           type="button"
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out"
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out relative"
           onClick={() => setExpanded(false)}
           aria-label="Close image"
           data-ocid="message.image_lightbox"
@@ -668,6 +678,18 @@ function ImageAttachment({
             alt={meta.name ?? "Image attachment"}
             className="max-w-full max-h-full rounded-lg shadow-2xl object-contain"
           />
+          {/* Download button in lightbox */}
+          <a
+            href={blobUrl}
+            download={meta.name ?? "image"}
+            className="absolute top-4 right-4 flex items-center gap-2 bg-black/60 hover:bg-black/80 text-white text-sm px-3 py-2 rounded-lg transition-colors"
+            aria-label={`Download ${meta.name ?? "image"}`}
+            data-ocid="message.lightbox_download_button"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Download size={16} />
+            <span>Download</span>
+          </a>
         </button>
       )}
     </>

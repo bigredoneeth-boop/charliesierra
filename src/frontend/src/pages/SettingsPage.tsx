@@ -1158,8 +1158,13 @@ function NotificationsSection() {
 export default function SettingsPage() {
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const { isInstallable, isInstalled, promptInstall, dismissInstall } =
-    usePWAInstall();
+  const {
+    isInstallable,
+    isInstalled,
+    promptInstall,
+    dismissInstall,
+    canAutoPrompt,
+  } = usePWAInstall();
 
   const handleLogout = () => {
     logout();
@@ -1239,16 +1244,18 @@ export default function SettingsPage() {
                       onClick={promptInstall}
                       data-ocid="settings.pwa.install_button"
                     >
-                      Install App
+                      {canAutoPrompt ? "Install App" : "How to Install"}
                     </Button>
-                    <button
-                      type="button"
-                      onClick={dismissInstall}
-                      data-ocid="settings.pwa.dismiss_button"
-                      className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    >
-                      Maybe later
-                    </button>
+                    {canAutoPrompt && (
+                      <button
+                        type="button"
+                        onClick={dismissInstall}
+                        data-ocid="settings.pwa.dismiss_button"
+                        className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
+                      >
+                        Maybe later
+                      </button>
+                    )}
                   </div>
                 </div>
               </SettingsCard>

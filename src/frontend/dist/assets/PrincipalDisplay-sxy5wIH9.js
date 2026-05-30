@@ -1,4 +1,4 @@
-import { r as reactExports, j as jsxRuntimeExports, g as Check, h as Copy, f as cn } from "./index-Hc4ZZN7u.js";
+import { r as reactExports, j as jsxRuntimeExports, g as Check, h as Copy, f as cn } from "./index-BdIcgdEl.js";
 function shortenPrincipal(p) {
   if (!p || p.length <= 14) return p;
   return `${p.slice(0, 6)}…${p.slice(-6)}`;

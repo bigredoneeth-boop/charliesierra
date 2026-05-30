@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-gmbuuuEa.js","assets/card-DALwjTEY.js","assets/AdminDashboardPage-BoNnDeaY.js","assets/AdminLayout-CuAzl8OZ.js","assets/PrincipalDisplay-CpeP-OO9.js","assets/user-plus-BY3PPA5y.js","assets/AdminOrganizationsPage-L4cV1t_g.js","assets/AdminStatusBadge-CP1pUqxG.js","assets/ConfirmDialog-C3z3JGxG.js","assets/pencil-B2FmnA86.js","assets/shield-alert-DPM8YWTa.js","assets/AdminUsersPage-CEv3r4HM.js","assets/funnel-Bvq40Yj7.js","assets/AdminGroupsPage-D0QDWKjR.js","assets/AdminAuditPage-DINcbeQy.js","assets/AdminKeyEscrowPage-LCMeF_ov.js","assets/AdminRetentionPoliciesPage-Dc6tdcDg.js","assets/AdminSettingsPage-BhjTJ0Qe.js","assets/AdminBootstrapPage-CvLcIxP5.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-D6kLfY_S.js","assets/card-Dzs56-t1.js","assets/AdminDashboardPage-2N22ZH3s.js","assets/AdminLayout-DgLvkYAI.js","assets/PrincipalDisplay-sxy5wIH9.js","assets/user-plus-CFtbsMqO.js","assets/AdminOrganizationsPage-CaA0_u9N.js","assets/AdminStatusBadge-BbKWJba5.js","assets/ConfirmDialog-NBnG1_rk.js","assets/pencil-Yya2TEZ2.js","assets/shield-alert-CM_1602O.js","assets/AdminUsersPage-CXr_05Zm.js","assets/funnel-B-HpI4dZ.js","assets/AdminGroupsPage-Cq680A0x.js","assets/AdminAuditPage-Ik59FDw1.js","assets/AdminKeyEscrowPage-wlaoxPty.js","assets/AdminRetentionPoliciesPage-DyaM1iQY.js","assets/AdminSettingsPage-D-lLVdTl.js","assets/AdminBootstrapPage-T_j8QL97.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -54058,23 +54058,54 @@ function ImageAttachment({
         )
       }
     ),
-    meta.name && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs opacity-60 mt-1 truncate max-w-[200px]", children: meta.name }),
-    expanded && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    meta.name && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-1 max-w-[200px]", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs opacity-60 truncate flex-1", children: meta.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "a",
+        {
+          href: blobUrl,
+          download: meta.name ?? "image",
+          className: "opacity-70 hover:opacity-100 transition-opacity flex-shrink-0",
+          "aria-label": `Download ${meta.name ?? "image"}`,
+          "data-ocid": "message.download_button",
+          onClick: (e) => e.stopPropagation(),
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 14 })
+        }
+      )
+    ] }),
+    expanded && /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
         type: "button",
-        className: "fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out",
+        className: "fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out relative",
         onClick: () => setExpanded(false),
         "aria-label": "Close image",
         "data-ocid": "message.image_lightbox",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "img",
-          {
-            src: blobUrl,
-            alt: meta.name ?? "Image attachment",
-            className: "max-w-full max-h-full rounded-lg shadow-2xl object-contain"
-          }
-        )
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              src: blobUrl,
+              alt: meta.name ?? "Image attachment",
+              className: "max-w-full max-h-full rounded-lg shadow-2xl object-contain"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "a",
+            {
+              href: blobUrl,
+              download: meta.name ?? "image",
+              className: "absolute top-4 right-4 flex items-center gap-2 bg-black/60 hover:bg-black/80 text-white text-sm px-3 py-2 rounded-lg transition-colors",
+              "aria-label": `Download ${meta.name ?? "image"}`,
+              "data-ocid": "message.lightbox_download_button",
+              onClick: (e) => e.stopPropagation(),
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 16 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Download" })
+              ]
+            }
+          )
+        ]
       }
     )
   ] });
@@ -56076,12 +56107,12 @@ const DISMISS_KEY = "pwa-install-dismissed-at";
 const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1e3;
 function usePWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = reactExports.useState(null);
-  const [isInstallable, setIsInstallable] = reactExports.useState(
-    () => !window.matchMedia("(display-mode: standalone)").matches
-  );
   const [isInstalled, setIsInstalled] = reactExports.useState(
-    () => window.matchMedia("(display-mode: standalone)").matches
+    () => window.matchMedia("(display-mode: standalone)").matches || "standalone" in navigator && navigator.standalone === true
   );
+  const isManuallyInstallable = !isInstalled && "serviceWorker" in navigator && navigator.standalone === void 0 && !window.matchMedia("(display-mode: standalone)").matches;
+  const canAutoPrompt = deferredPrompt !== null;
+  const isInstallable = !isInstalled && (canAutoPrompt || isManuallyInstallable);
   reactExports.useEffect(() => {
     if (isInstalled) return;
     const dismissedAt = localStorage.getItem(DISMISS_KEY);
@@ -56091,11 +56122,9 @@ function usePWAInstall() {
     const onBeforeInstall = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setIsInstallable(true);
     };
     const onAppInstalled = () => {
       setIsInstalled(true);
-      setIsInstallable(false);
       setDeferredPrompt(null);
     };
     window.addEventListener("beforeinstallprompt", onBeforeInstall);
@@ -56106,18 +56135,34 @@ function usePWAInstall() {
     };
   }, [isInstalled]);
   const promptInstall = async () => {
-    if (!deferredPrompt) return;
-    await deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    setDeferredPrompt(null);
-    setIsInstallable(false);
+    if (deferredPrompt) {
+      await deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      setDeferredPrompt(null);
+      return;
+    }
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      alert(
+        'To install CharlieSierra:\n\n1. Tap the Share button (📤) at the bottom of the screen.\n2. Scroll down and tap "Add to Home Screen".\n3. Tap "Add" to confirm.'
+      );
+    } else {
+      alert(
+        'To install CharlieSierra:\n\nOpen your browser menu (⋮ or ☰) and select\n"Install app" or "Add to Home Screen".'
+      );
+    }
   };
   const dismissInstall = () => {
     localStorage.setItem(DISMISS_KEY, String(Date.now()));
-    setIsInstallable(false);
     setDeferredPrompt(null);
   };
-  return { isInstallable, isInstalled, promptInstall, dismissInstall };
+  return {
+    isInstallable,
+    isInstalled,
+    promptInstall,
+    dismissInstall,
+    canAutoPrompt
+  };
 }
 function OfflineIndicator() {
   const [isOnline2, setIsOnline] = reactExports.useState(navigator.onLine);
@@ -56176,7 +56221,7 @@ function SidebarContent({ onNavigate }) {
   const location2 = useLocation();
   const navigate = useNavigate();
   const ownDisplayName = useDisplayName((principal == null ? void 0 : principal.toText()) ?? null);
-  const { isInstalled, promptInstall } = usePWAInstall();
+  const { isInstalled, isInstallable, promptInstall } = usePWAInstall();
   const handleLogout = () => {
     logout();
     navigate({ to: "/login" });
@@ -56235,7 +56280,7 @@ function SidebarContent({ onNavigate }) {
         ]
       }
     ) }),
-    !isInstalled && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    !isInstalled && isInstallable && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
         type: "button",
@@ -59432,7 +59477,13 @@ function NotificationsSection() {
 function SettingsPage() {
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const { isInstallable, isInstalled, promptInstall, dismissInstall } = usePWAInstall();
+  const {
+    isInstallable,
+    isInstalled,
+    promptInstall,
+    dismissInstall,
+    canAutoPrompt
+  } = usePWAInstall();
   const handleLogout = () => {
     logout();
     navigate({ to: "/login" });
@@ -59491,10 +59542,10 @@ function SettingsPage() {
               size: "sm",
               onClick: promptInstall,
               "data-ocid": "settings.pwa.install_button",
-              children: "Install App"
+              children: canAutoPrompt ? "Install App" : "How to Install"
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
+          canAutoPrompt && /* @__PURE__ */ jsxRuntimeExports.jsx(
             "button",
             {
               type: "button",
@@ -59652,25 +59703,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-gmbuuuEa.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-D6kLfY_S.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-BoNnDeaY.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-2N22ZH3s.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-L4cV1t_g.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-CaA0_u9N.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CEv3r4HM.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-D0QDWKjR.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DINcbeQy.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CXr_05Zm.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-Cq680A0x.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-Ik59FDw1.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-LCMeF_ov.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-wlaoxPty.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-Dc6tdcDg.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DyaM1iQY.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BhjTJ0Qe.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-D-lLVdTl.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-CvLcIxP5.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-T_j8QL97.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
