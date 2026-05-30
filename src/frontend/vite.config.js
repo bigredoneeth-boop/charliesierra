@@ -62,7 +62,14 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Only match hashed build output — never glob .png/.svg/.ico from public/
+        // to avoid duplicate manifest entries that trigger Workbox's
+        // "add-to-cache-list-conflicting-entries" warning.
+        globPatterns: ['**/*.{js,css,html,woff2}'],
+        globIgnores: ['**/*.map', '**/node_modules/**'],
+        // Skip adding Workbox's own revision hash to files that already
+        // contain a content hash in their name (e.g. index-abc12345.js).
+        dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api/],
@@ -81,6 +88,14 @@ export default defineConfig({
       {
         find: "declarations",
         replacement: fileURLToPath(new URL("../declarations", import.meta.url)),
+      },
+      // More-specific alias must come before the generic "@" catch-all.
+      // This redirects all `import ... from "@/backend"` through the wrapper
+      // which strips agentOptions when agent is already provided, preventing
+      // the "Detected both agent and agentOptions" console warning.
+      {
+        find: "@/backend",
+        replacement: fileURLToPath(new URL("./src/lib/actor-factory", import.meta.url)),
       },
       {
         find: "@",

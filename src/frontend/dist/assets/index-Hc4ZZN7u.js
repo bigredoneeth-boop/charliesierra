@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-_9gRsL0a.js","assets/card-B6Ne74rA.js","assets/AdminDashboardPage-C_boHQuD.js","assets/AdminLayout-BoQ_DDtx.js","assets/PrincipalDisplay-BSrtJ6VZ.js","assets/user-plus-DHvGLXBU.js","assets/AdminOrganizationsPage-Bo7JLFWK.js","assets/AdminStatusBadge-D4QIAAOB.js","assets/ConfirmDialog-DA3BqFMo.js","assets/pencil-CreQ01FX.js","assets/shield-alert-DBAETXR-.js","assets/AdminUsersPage-ytQHdOET.js","assets/funnel-CoIp9t4u.js","assets/AdminGroupsPage-DBMPn3t7.js","assets/AdminAuditPage-V-8EjXHs.js","assets/AdminKeyEscrowPage-BykXcO3o.js","assets/AdminRetentionPoliciesPage-BcrIpdAz.js","assets/AdminSettingsPage-BU9jZGef.js","assets/AdminBootstrapPage-CzScRDfX.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-gmbuuuEa.js","assets/card-DALwjTEY.js","assets/AdminDashboardPage-BoNnDeaY.js","assets/AdminLayout-CuAzl8OZ.js","assets/PrincipalDisplay-CpeP-OO9.js","assets/user-plus-BY3PPA5y.js","assets/AdminOrganizationsPage-L4cV1t_g.js","assets/AdminStatusBadge-CP1pUqxG.js","assets/ConfirmDialog-C3z3JGxG.js","assets/pencil-B2FmnA86.js","assets/shield-alert-DPM8YWTa.js","assets/AdminUsersPage-CEv3r4HM.js","assets/funnel-Bvq40Yj7.js","assets/AdminGroupsPage-D0QDWKjR.js","assets/AdminAuditPage-DINcbeQy.js","assets/AdminKeyEscrowPage-LCMeF_ov.js","assets/AdminRetentionPoliciesPage-Dc6tdcDg.js","assets/AdminSettingsPage-BhjTJ0Qe.js","assets/AdminBootstrapPage-CvLcIxP5.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -38915,7 +38915,7 @@ function to_candid_variant_n75(_uploadFile, _downloadFile, value) {
 function to_candid_vec_n65(_uploadFile, _downloadFile, value) {
   return value.map((x3) => to_candid_AuditExportEventType_n66(_uploadFile, _downloadFile, x3));
 }
-function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
+function createActor$1(canisterId, _uploadFile, _downloadFile, options = {}) {
   const agent = options.agent || HttpAgent.createSync({
     ...options.agentOptions
   });
@@ -38928,6 +38928,10 @@ function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
     ...options.actorOptions
   });
   return new Backend(actor, _uploadFile, _downloadFile, options.processError);
+}
+function createActor(canisterId, uploadFile, downloadFile, options = {}) {
+  const safeOptions = options.agent ? { ...options, agentOptions: void 0 } : options;
+  return createActor$1(canisterId, uploadFile, downloadFile, safeOptions);
 }
 const AuthContext = reactExports.createContext(null);
 function AuthProvider({ children }) {
@@ -59648,25 +59652,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-_9gRsL0a.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-gmbuuuEa.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-C_boHQuD.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-BoNnDeaY.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-Bo7JLFWK.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-L4cV1t_g.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-ytQHdOET.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-DBMPn3t7.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-V-8EjXHs.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CEv3r4HM.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-D0QDWKjR.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DINcbeQy.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-BykXcO3o.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-LCMeF_ov.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-BcrIpdAz.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-Dc6tdcDg.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BU9jZGef.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BhjTJ0Qe.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-CzScRDfX.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-CvLcIxP5.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
