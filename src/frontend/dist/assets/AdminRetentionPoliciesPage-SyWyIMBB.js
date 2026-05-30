@@ -1,12 +1,13 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index.es-BL4t_d9b.js","assets/index-CCR6Ctxt.js","assets/index-MYrO7ytb.css","assets/AdminLayout-CoUIN4Ho.js","assets/card-BxiiaiFY.js","assets/switch-DUSjQpAQ.js","assets/pencil-Dl2pFHr2.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index.es-BlZT1mOV.js","assets/index-BRuGftaL.js","assets/index-B0G6zx3H.css","assets/AdminLayout-BDDpCrSB.js","assets/ConfirmDialog-DqKdVDfg.js","assets/card-Dj0kq17T.js","assets/switch-B55RMrIa.js","assets/pencil-CNSJZTrw.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-import { e as createLucideIcon, bi as __vitePreload, g as useActor, h as useAuth, r as reactExports, W as useCheckPolicyExpiry, bo as useLogPolicyExpiryCheck, bp as useLogPolicyReportExported, R as RetentionPeriod, d as ue$1, j as jsxRuntimeExports, B as Button, bm as FileText, aq as TriangleAlert, aF as Lock, a3 as Shield, c as Badge, af as Dialog, ag as DialogContent, ah as DialogHeader, ai as DialogTitle, aj as DialogDescription, p as Label, q as Select, s as SelectTrigger, t as SelectValue, v as SelectContent, w as SelectItem, ak as DialogFooter, M as Textarea, N as createActor } from "./index-CCR6Ctxt.js";
-import { u as usePolicyExpiryStore, A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
-import { C as Card, a as CardHeader, c as CardTitle, b as CardContent } from "./card-BxiiaiFY.js";
-import { S as Switch } from "./switch-DUSjQpAQ.js";
-import { P as Pencil } from "./pencil-Dl2pFHr2.js";
+import { e as createLucideIcon, bi as __vitePreload, i as useActor, k as useAuth, r as reactExports, av as useCheckPolicyExpiry, bp as useLogPolicyExpiryCheck, bq as useLogPolicyReportExported, R as RetentionPeriod, d as ue$1, j as jsxRuntimeExports, B as Button, bn as FileText, T as TriangleAlert, Z as Shield, aF as Lock, c as Badge, a9 as Dialog, aa as DialogContent, ab as DialogHeader, ac as DialogTitle, ad as DialogDescription, t as Label, v as Select, w as SelectTrigger, x as SelectValue, y as SelectContent, z as SelectItem, ae as DialogFooter, V as Textarea, W as createActor } from "./index-BRuGftaL.js";
+import { u as usePolicyExpiryStore, A as AdminLayout } from "./AdminLayout-BDDpCrSB.js";
+import { C as ConfirmDialog } from "./ConfirmDialog-DqKdVDfg.js";
+import { C as Card, a as CardHeader, c as CardTitle, b as CardContent } from "./card-Dj0kq17T.js";
+import { S as Switch } from "./switch-B55RMrIa.js";
+import { P as Pencil } from "./pencil-CNSJZTrw.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -10777,7 +10778,7 @@ function(t2) {
   var h2 = l2.getContext("2d");
   h2.fillStyle = "#fff", h2.fillRect(0, 0, l2.width, l2.height);
   var f2 = { ignoreMouse: true, ignoreAnimation: true, ignoreDimensions: true }, d2 = this;
-  return (i.canvg ? Promise.resolve(i.canvg) : __vitePreload(() => import("./index.es-BL4t_d9b.js"), true ? __vite__mapDeps([0,1,2,3,4,5,6]) : void 0)).catch(function(t3) {
+  return (i.canvg ? Promise.resolve(i.canvg) : __vitePreload(() => import("./index.es-BlZT1mOV.js"), true ? __vite__mapDeps([0,1,2,3,4,5,6,7]) : void 0)).catch(function(t3) {
     return Promise.reject(new Error("Could not load canvg: " + t3));
   }).then(function(t3) {
     return t3.default ? t3.default : t3;
@@ -13432,6 +13433,8 @@ function AdminRetentionPoliciesPage() {
   const [legalHoldModalOpen, setLegalHoldModalOpen] = reactExports.useState(false);
   const [legalHoldTarget, setLegalHoldTarget] = reactExports.useState("");
   const [legalHoldReason, setLegalHoldReason] = reactExports.useState("");
+  const [removePolicyConfirm, setRemovePolicyConfirm] = reactExports.useState(null);
+  const [removeLegalHoldConfirm, setRemoveLegalHoldConfirm] = reactExports.useState(null);
   const [formOrgId, setFormOrgId] = reactExports.useState("__global__");
   const [formPeriod, setFormPeriod] = reactExports.useState(
     RetentionPeriod.days90
@@ -13744,7 +13747,7 @@ function AdminRetentionPoliciesPage() {
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-4 flex-wrap", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold tracking-tight", children: "Retention Policy Management" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-0.5", children: "Configure data retention periods and legal hold settings" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-0.5", children: "Manage data retention policies and legal holds across all organizations" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -13753,9 +13756,9 @@ function AdminRetentionPoliciesPage() {
             variant: "outline",
             onClick: generateComplianceReport,
             "data-ocid": "retention.generate_report_button",
-            className: "border-blue-700/30 text-blue-900 hover:bg-blue-50 hover:border-blue-700/60 font-mono text-xs uppercase tracking-wide",
+            className: "gap-1.5 border-primary/30 text-primary hover:bg-primary/5 hover:border-primary/60 font-medium",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "h-3.5 w-3.5 mr-1.5", "aria-hidden": "true" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "h-4 w-4", "aria-hidden": "true" }),
               "Generate Compliance Report"
             ]
           }
@@ -13804,12 +13807,18 @@ function AdminRetentionPoliciesPage() {
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
-        className: "flex items-center gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-amber-800",
+        className: "flex items-center gap-3 rounded-md border border-amber-300 bg-amber-50 px-4 py-3",
         role: "alert",
         "data-ocid": "retention.audit_banner",
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TriangleAlert, { className: "h-5 w-5 shrink-0", "aria-hidden": "true" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "All retention policy changes are audited and immutable" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Shield,
+            {
+              className: "h-5 w-5 shrink-0 text-amber-700",
+              "aria-hidden": "true"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-black", children: "All retention policy changes are audited and immutable. Legal hold restrictions cannot be bypassed." })
         ]
       }
     ),
@@ -13856,7 +13865,7 @@ function AdminRetentionPoliciesPage() {
               "aria-hidden": "true"
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-muted-foreground", children: "No retention policies configured" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-muted-foreground", children: "No retention policies configured. Create one to get started." }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Button,
             {
@@ -13870,7 +13879,7 @@ function AdminRetentionPoliciesPage() {
         ]
       }
     ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-md border", "data-ocid": "retention.table", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-sm", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b bg-muted/40", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "sticky top-0 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b bg-muted/60", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3 text-left font-semibold text-muted-foreground uppercase tracking-wider text-xs", children: "Organization" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3 text-left font-semibold text-muted-foreground uppercase tracking-wider text-xs", children: "Retention Period" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3 text-left font-semibold text-muted-foreground uppercase tracking-wider text-xs", children: "Legal Hold" }),
@@ -13886,12 +13895,26 @@ function AdminRetentionPoliciesPage() {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "tr",
           {
-            className: `border-b last:border-0 transition-colors ${expiringPolicies.some((ep) => ep.id === policy.id) ? "bg-amber-50 hover:bg-amber-100/60" : "hover:bg-muted/20"}`,
+            className: `border-b last:border-0 transition-colors cursor-default ${expiringPolicies.some((ep) => ep.id === policy.id) ? "bg-amber-50/80 hover:bg-amber-100/70" : "hover:bg-muted/30"}`,
             "data-ocid": `retention.item.${idx + 1}`,
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: policy.isGlobal ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "italic text-muted-foreground", children: "Global Default" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: orgName }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 font-medium", children: formatPeriod(policy.period) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: policy.legalHold ? /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "destructive", children: "Active" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: "None" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: policy.legalHold ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Badge,
+                {
+                  variant: "destructive",
+                  className: "font-semibold",
+                  children: "Active"
+                }
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Badge,
+                {
+                  variant: "outline",
+                  className: "text-muted-foreground",
+                  children: "None"
+                }
+              ) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: policy.autoDelete ? /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { className: "bg-amber-100 text-amber-800 border border-amber-300", children: "Enabled" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: "Disabled" }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-muted-foreground", children: formatTs(policy.updatedAt) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: (() => {
@@ -13932,7 +13955,13 @@ function AdminRetentionPoliciesPage() {
                   {
                     variant: "ghost",
                     size: "sm",
-                    onClick: () => openLegalHold(holdTarget),
+                    onClick: () => {
+                      if (policy.legalHold) {
+                        setRemoveLegalHoldConfirm(policy);
+                      } else {
+                        openLegalHold(holdTarget);
+                      }
+                    },
                     "data-ocid": `retention.legal_hold_button.${idx + 1}`,
                     "aria-label": policy.legalHold ? "Remove legal hold" : "Place legal hold",
                     className: policy.legalHold ? "text-destructive hover:text-destructive" : "text-amber-600 hover:text-amber-700",
@@ -14071,6 +14100,78 @@ function AdminRetentionPoliciesPage() {
             )
           ] })
         ] })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ConfirmDialog,
+      {
+        open: removePolicyConfirm !== null,
+        title: "Remove Retention Policy",
+        description: "This policy will be permanently removed. Any data governed by this policy will revert to the global default retention settings. This action is audited.",
+        confirmLabel: "Remove",
+        destructive: true,
+        onCancel: () => setRemovePolicyConfirm(null),
+        onConfirm: async () => {
+          if (!actor || !removePolicyConfirm) return;
+          try {
+            const result = await actor.updateRetentionPolicy({
+              id: removePolicyConfirm.id,
+              period: removePolicyConfirm.period,
+              legalHold: false,
+              autoDelete: false
+            });
+            if (result.__kind__ === "ok") {
+              ue$1.success("Retention policy removed");
+              void fetchData();
+            } else {
+              ue$1.error(`Error: ${result.err}`);
+            }
+          } catch {
+            ue$1.error("Failed to remove policy");
+          } finally {
+            setRemovePolicyConfirm(null);
+          }
+        }
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ConfirmDialog,
+      {
+        open: removeLegalHoldConfirm !== null,
+        title: "Remove Legal Hold",
+        description: "This will release the legal hold on this organization. Data may be subject to automatic deletion according to the retention policy. This action is audited.",
+        confirmLabel: "Remove Hold",
+        destructive: true,
+        onCancel: () => setRemoveLegalHoldConfirm(null),
+        onConfirm: () => {
+          if (removeLegalHoldConfirm) {
+            const holdTargetId = removeLegalHoldConfirm.orgId ?? "";
+            setRemoveLegalHoldConfirm(null);
+            setLegalHoldTarget(holdTargetId);
+            setLegalHoldReason("Admin-initiated hold removal");
+            void (async () => {
+              if (!actor) return;
+              setHoldSaving(true);
+              try {
+                const result = await actor.toggleLegalHold({
+                  orgId: holdTargetId,
+                  hold: false,
+                  reason: "Admin-initiated hold removal via console"
+                });
+                if (result.__kind__ === "ok") {
+                  ue$1.success("Legal hold removed");
+                  void fetchData();
+                } else {
+                  ue$1.error(`Error: ${result.err}`);
+                }
+              } catch {
+                ue$1.error("Failed to remove legal hold");
+              } finally {
+                setHoldSaving(false);
+              }
+            })();
+          }
+        }
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(

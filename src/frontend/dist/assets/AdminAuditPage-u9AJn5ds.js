@@ -1,7 +1,7 @@
-import { e as createLucideIcon, j as jsxRuntimeExports, aD as EmptyState, a4 as ShieldCheck, c as Badge, a as Skeleton, a2 as AuditEventType, r as reactExports, d as ue, a6 as Copy, V as useIsSuperAdmin, X as useMyOrgs, a7 as useMyRole, O as OrgRole, aC as Principal, _ as useAdminAuditLog, aE as useExportAuditLogs, aF as Lock, B as Button, aG as Download, ab as X } from "./index-CCR6Ctxt.js";
-import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
-import { S as ShieldAlert } from "./shield-alert-BPskbdXS.js";
-import { F as Funnel } from "./funnel-CnTl0KvR.js";
+import { e as createLucideIcon, j as jsxRuntimeExports, aD as EmptyState, aC as ShieldCheck, c as Badge, a as Skeleton, aB as AuditEventType, r as reactExports, d as ue, h as Copy, X as useIsSuperAdmin, aw as useMyOrgs, Y as useMyRole, O as OrgRole, au as Principal, ax as useAdminAuditLog, aE as useExportAuditLogs, aF as Lock, B as Button, aG as Download, a5 as X } from "./index-BRuGftaL.js";
+import { A as AdminLayout } from "./AdminLayout-BDDpCrSB.js";
+import { S as ShieldAlert } from "./shield-alert-D78AsEcn.js";
+import { F as Funnel } from "./funnel-CE1pPga4.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -528,293 +528,310 @@ function AdminAuditPage() {
   }
   const inputCls = "h-8 rounded-sm border border-input bg-background px-2 font-mono text-xs text-foreground placeholder:text-muted-foreground/50 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary";
   const hasDraftChanges = fromDate !== appliedFrom || toDate !== appliedTo || eventTypeFilter !== appliedEventType || orgIdFilter !== appliedOrgId || actorFilter !== appliedActor;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     AdminLayout,
     {
       title: "AUDIT LOGS",
       action: /* @__PURE__ */ jsxRuntimeExports.jsxs(
         Button,
         {
-          variant: "outline",
           size: "sm",
           onClick: handleExport,
           disabled: exportMutation.isPending,
           "data-ocid": "admin.audit.export_button",
-          className: "gap-2 font-mono text-xs tracking-widest",
+          className: "gap-2 font-mono text-xs tracking-widest bg-primary hover:bg-primary/90 text-primary-foreground",
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 13 }),
             exportMutation.isPending ? "EXPORTING…" : "EXPORT CSV"
           ]
         }
       ),
-      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
-          {
-            "data-ocid": "admin.audit.immutability_banner",
-            className: "flex items-center gap-3 rounded-sm border border-amber-500/40 bg-amber-500/5 px-4 py-3",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "shrink-0 rounded-sm bg-amber-500/15 p-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { size: 14, className: "text-amber-600 dark:text-amber-400" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs font-semibold tracking-wide text-amber-700 dark:text-amber-400", children: "IMMUTABLE RECORD" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-0.5 font-mono text-[0.65rem] tracking-wide text-amber-600/80 dark:text-amber-500/80", children: "All actions are immutable on the Internet Computer and cannot be altered." })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "ml-auto shrink-0 flex items-center gap-1.5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  ShieldAlert,
-                  {
-                    size: 13,
-                    className: "text-amber-500/60",
-                    "aria-hidden": "true"
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.55rem] tracking-widest text-amber-500/60 uppercase", children: "Read Only" })
-              ] })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "p",
-          {
-            "data-ocid": "admin.audit.status_label",
-            className: "font-mono text-[0.65rem] tracking-widest text-muted-foreground",
-            children: isLoading ? "LOADING EVENTS…" : `${filteredEvents.length}${filteredEvents.length !== 1 ? " EVENTS" : " EVENT"}${hasActiveFilters ? " LOADED (FILTERED)" : " LOADED"}`
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
-          {
-            "data-ocid": "admin.audit.filter_bar",
-            className: "rounded-sm border border-border bg-card p-4 space-y-3",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Funnel, { size: 13, className: "text-muted-foreground shrink-0" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Filters" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Search (Actor or Details)" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "text",
-                    placeholder: "Search by principal or details…",
-                    value: searchText,
-                    onChange: (e) => setSearchText(e.target.value),
-                    "data-ocid": "admin.audit.search_input",
-                    className: `${inputCls} w-full max-w-md`
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-end gap-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "From" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "date",
-                      value: fromDate,
-                      onChange: (e) => setFromDate(e.target.value),
-                      max: toDate || void 0,
-                      "data-ocid": "admin.audit.from_date_input",
-                      className: inputCls
-                    }
-                  )
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "sr-only", "aria-live": "polite", id: "audit-page-desc", children: "Immutable audit trail of all administrative actions" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              "data-ocid": "admin.audit.immutability_banner",
+              role: "alert",
+              className: "flex items-start gap-3 rounded-sm border-2 border-amber-400 bg-amber-50 px-4 py-3.5",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 shrink-0 rounded-sm bg-amber-400/30 p-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldAlert, { size: 16, className: "text-black" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0 flex-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs font-bold tracking-widest text-black uppercase", children: "IMMUTABLE RECORD — READ ONLY" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 font-mono text-[0.68rem] leading-relaxed tracking-wide text-black", children: "All actions are immutable on the Internet Computer and cannot be altered. This audit trail is permanently preserved." })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "To" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "date",
-                      value: toDate,
-                      onChange: (e) => setToDate(e.target.value),
-                      min: fromDate || void 0,
-                      "data-ocid": "admin.audit.to_date_input",
-                      className: inputCls
-                    }
-                  )
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Action Type" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "select",
-                    {
-                      value: eventTypeFilter,
-                      onChange: (e) => setEventTypeFilter(e.target.value),
-                      "data-ocid": "admin.audit.event_type_select",
-                      className: `${inputCls} pr-7`,
-                      children: EVENT_TYPE_OPTIONS.map((opt) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value, children: opt.label }, opt.value))
-                    }
-                  )
-                ] }),
-                canSeeAllOrgs && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "span",
-                    {
-                      id: "org-filter-label",
-                      className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase",
-                      children: "Organization"
-                    }
-                  ),
-                  myOrgs.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                    "select",
-                    {
-                      value: orgIdFilter,
-                      onChange: (e) => setOrgIdFilter(e.target.value),
-                      "data-ocid": "admin.audit.org_select",
-                      "aria-labelledby": "org-filter-label",
-                      className: `${inputCls} pr-7`,
-                      children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "All Organizations" }),
-                        myOrgs.map((m) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: m.orgId, children: m.orgId }, m.orgId))
-                      ]
-                    }
-                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "text",
-                      placeholder: "Org ID…",
-                      value: orgIdFilter,
-                      onChange: (e) => setOrgIdFilter(e.target.value),
-                      "data-ocid": "admin.audit.org_id_input",
-                      "aria-labelledby": "org-filter-label",
-                      className: `${inputCls} w-44`
-                    }
-                  )
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "ml-auto shrink-0 flex items-center gap-1.5 mt-0.5", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { size: 13, className: "text-black/60", "aria-hidden": "true" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.55rem] tracking-widest text-black/60 uppercase", children: "Blockchain Verified" })
+                ] })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] tracking-wider text-muted-foreground uppercase", children: "Immutable audit trail of all administrative actions" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                "data-ocid": "admin.audit.status_label",
+                className: "shrink-0 font-mono text-[0.65rem] tracking-widest text-muted-foreground",
+                children: isLoading ? "LOADING EVENTS…" : `${filteredEvents.length}${filteredEvents.length !== 1 ? " EVENTS" : " EVENT"}${hasActiveFilters ? " (FILTERED)" : ""}`
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              "data-ocid": "admin.audit.filter_bar",
+              className: "rounded-sm border border-border bg-card p-4 space-y-3",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Funnel, { size: 13, className: "text-muted-foreground shrink-0" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Filters" })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Actor" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Search (Actor or Details)" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "input",
                     {
                       type: "text",
-                      placeholder: "Principal…",
-                      value: actorFilter,
-                      onChange: (e) => setActorFilter(e.target.value),
-                      "data-ocid": "admin.audit.actor_input",
-                      className: `${inputCls} w-40`
+                      placeholder: "Search by principal or details…",
+                      value: searchText,
+                      onChange: (e) => setSearchText(e.target.value),
+                      "data-ocid": "admin.audit.search_input",
+                      className: `${inputCls} w-full max-w-md`
                     }
                   )
-                ] })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 pt-1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Button,
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-end gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "From" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "date",
+                        value: fromDate,
+                        onChange: (e) => setFromDate(e.target.value),
+                        max: toDate || void 0,
+                        "data-ocid": "admin.audit.from_date_input",
+                        className: inputCls
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "To" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "date",
+                        value: toDate,
+                        onChange: (e) => setToDate(e.target.value),
+                        min: fromDate || void 0,
+                        "data-ocid": "admin.audit.to_date_input",
+                        className: inputCls
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex flex-col gap-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Action Type" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "select",
+                      {
+                        value: eventTypeFilter,
+                        onChange: (e) => setEventTypeFilter(e.target.value),
+                        "data-ocid": "admin.audit.event_type_select",
+                        className: `${inputCls} pr-7`,
+                        children: EVENT_TYPE_OPTIONS.map((opt) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.value, children: opt.label }, opt.value))
+                      }
+                    )
+                  ] }),
+                  canSeeAllOrgs && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "span",
+                      {
+                        id: "org-filter-label",
+                        className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase",
+                        children: "Organization"
+                      }
+                    ),
+                    myOrgs.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "select",
+                      {
+                        value: orgIdFilter,
+                        onChange: (e) => setOrgIdFilter(e.target.value),
+                        "data-ocid": "admin.audit.org_select",
+                        "aria-labelledby": "org-filter-label",
+                        className: `${inputCls} pr-7`,
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "All Organizations" }),
+                          myOrgs.map((m) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: m.orgId, children: m.orgId }, m.orgId))
+                        ]
+                      }
+                    ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "text",
+                        placeholder: "Org ID…",
+                        value: orgIdFilter,
+                        onChange: (e) => setOrgIdFilter(e.target.value),
+                        "data-ocid": "admin.audit.org_id_input",
+                        "aria-labelledby": "org-filter-label",
+                        className: `${inputCls} w-44`
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] tracking-widest text-muted-foreground uppercase", children: "Actor" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "text",
+                        placeholder: "Principal…",
+                        value: actorFilter,
+                        onChange: (e) => setActorFilter(e.target.value),
+                        "data-ocid": "admin.audit.actor_input",
+                        className: `${inputCls} w-40`
+                      }
+                    )
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 pt-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      type: "button",
+                      size: "sm",
+                      onClick: applyFilters,
+                      disabled: !hasDraftChanges,
+                      "data-ocid": "admin.audit.apply_filters_button",
+                      className: "h-8 gap-1.5 font-mono text-[0.65rem] tracking-widest uppercase",
+                      children: "Apply Filters"
+                    }
+                  ),
+                  (hasActiveFilters || fromDate || toDate || eventTypeFilter || orgIdFilter || actorFilter || searchText) && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    Button,
+                    {
+                      type: "button",
+                      variant: "ghost",
+                      size: "sm",
+                      onClick: clearFilters,
+                      "data-ocid": "admin.audit.clear_filters_button",
+                      className: "h-8 gap-1.5 font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground hover:text-destructive",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(RotateCcw, { size: 11 }),
+                        "Clear All"
+                      ]
+                    }
+                  )
+                ] }),
+                hasActiveFilters && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
                   {
-                    type: "button",
-                    size: "sm",
-                    onClick: applyFilters,
-                    disabled: !hasDraftChanges,
-                    "data-ocid": "admin.audit.apply_filters_button",
-                    className: "h-8 gap-1.5 font-mono text-[0.65rem] tracking-widest uppercase",
-                    children: "Apply Filters"
-                  }
-                ),
-                (hasActiveFilters || fromDate || toDate || eventTypeFilter || orgIdFilter || actorFilter || searchText) && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  Button,
-                  {
-                    type: "button",
-                    variant: "ghost",
-                    size: "sm",
-                    onClick: clearFilters,
-                    "data-ocid": "admin.audit.clear_filters_button",
-                    className: "h-8 gap-1.5 font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground hover:text-destructive",
+                    "data-ocid": "admin.audit.active_filters",
+                    className: "flex flex-wrap gap-1.5 pt-1",
                     children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(RotateCcw, { size: 11 }),
-                      "Clear All"
+                      appliedFrom && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        FilterPill,
+                        {
+                          label: `From: ${appliedFrom}`,
+                          onRemove: () => {
+                            setFromDate("");
+                            setAppliedFrom("");
+                          }
+                        }
+                      ),
+                      appliedTo && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        FilterPill,
+                        {
+                          label: `To: ${appliedTo}`,
+                          onRemove: () => {
+                            setToDate("");
+                            setAppliedTo("");
+                          }
+                        }
+                      ),
+                      appliedEventType && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        FilterPill,
+                        {
+                          label: ((_b = EVENT_TYPE_OPTIONS.find((o) => o.value === appliedEventType)) == null ? void 0 : _b.label) ?? appliedEventType,
+                          onRemove: () => {
+                            setEventTypeFilter("");
+                            setAppliedEventType("");
+                          }
+                        }
+                      ),
+                      appliedOrgId && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        FilterPill,
+                        {
+                          label: `Org: ${appliedOrgId}`,
+                          onRemove: () => {
+                            setOrgIdFilter("");
+                            setAppliedOrgId("");
+                          }
+                        }
+                      ),
+                      appliedActor && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        FilterPill,
+                        {
+                          label: `Actor: ${appliedActor.slice(0, 12)}…`,
+                          onRemove: () => {
+                            setActorFilter("");
+                            setAppliedActor("");
+                          }
+                        }
+                      )
                     ]
                   }
                 )
-              ] }),
-              hasActiveFilters && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              "data-ocid": "admin.audit.table_section",
+              className: "overflow-hidden rounded-sm border border-border bg-card",
+              children: !isLoading && filteredEvents.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 "div",
                 {
-                  "data-ocid": "admin.audit.active_filters",
-                  className: "flex flex-wrap gap-1.5 pt-1",
+                  "data-ocid": "admin.audit.empty_state",
+                  className: "flex flex-col items-center justify-center gap-3 py-16 px-4 text-center",
                   children: [
-                    appliedFrom && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      FilterPill,
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      ShieldAlert,
                       {
-                        label: `From: ${appliedFrom}`,
-                        onRemove: () => {
-                          setFromDate("");
-                          setAppliedFrom("");
-                        }
+                        size: 32,
+                        className: "text-muted-foreground/30",
+                        "aria-hidden": "true"
                       }
                     ),
-                    appliedTo && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      FilterPill,
-                      {
-                        label: `To: ${appliedTo}`,
-                        onRemove: () => {
-                          setToDate("");
-                          setAppliedTo("");
-                        }
-                      }
-                    ),
-                    appliedEventType && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      FilterPill,
-                      {
-                        label: ((_b = EVENT_TYPE_OPTIONS.find((o) => o.value === appliedEventType)) == null ? void 0 : _b.label) ?? appliedEventType,
-                        onRemove: () => {
-                          setEventTypeFilter("");
-                          setAppliedEventType("");
-                        }
-                      }
-                    ),
-                    appliedOrgId && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      FilterPill,
-                      {
-                        label: `Org: ${appliedOrgId}`,
-                        onRemove: () => {
-                          setOrgIdFilter("");
-                          setAppliedOrgId("");
-                        }
-                      }
-                    ),
-                    appliedActor && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      FilterPill,
-                      {
-                        label: `Actor: ${appliedActor.slice(0, 12)}…`,
-                        onRemove: () => {
-                          setActorFilter("");
-                          setAppliedActor("");
-                        }
-                      }
-                    )
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground", children: "No audit logs match your current filters." }),
+                    hasActiveFilters && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.65rem] text-muted-foreground/70", children: "Try clearing filters to see all events." })
                   ]
                 }
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                AuditLogTable,
+                {
+                  events: filteredEvents,
+                  isLoading: isLoading && allEvents.length === 0
+                }
               )
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            "data-ocid": "admin.audit.table_section",
-            className: "overflow-hidden rounded-sm border border-border bg-card",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              AuditLogTable,
-              {
-                events: filteredEvents,
-                isLoading: isLoading && allEvents.length === 0
-              }
-            )
-          }
-        ),
-        (hasMore || isFetching && allEvents.length > 0) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            variant: "outline",
-            size: "sm",
-            onClick: loadMore,
-            disabled: isFetching,
-            "data-ocid": "admin.audit.load_more_button",
-            className: "gap-2 font-mono text-xs tracking-widest uppercase",
-            children: isFetching ? "Loading…" : "Load More"
-          }
-        ) })
-      ] })
+            }
+          ),
+          (hasMore || isFetching && allEvents.length > 0) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              variant: "outline",
+              size: "sm",
+              onClick: loadMore,
+              disabled: isFetching,
+              "data-ocid": "admin.audit.load_more_button",
+              className: "gap-2 font-mono text-xs tracking-widest uppercase",
+              children: isFetching ? "Loading…" : "Load More"
+            }
+          ) })
+        ] })
+      ]
     }
   );
 }

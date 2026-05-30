@@ -1,4 +1,4 @@
-import { e as createLucideIcon, bk as React, r as reactExports, j as jsxRuntimeExports, bl as useRouterState, Q as useNavigate, h as useAuth, f as cn, U as Users, bm as FileText, a1 as Settings, bn as LogOut } from "./index-CCR6Ctxt.js";
+import { e as createLucideIcon, bk as React, r as reactExports, bl as useRouterState, j as jsxRuntimeExports, bm as Menu, as as useNavigate, k as useAuth, Z as Shield, f as cn, U as Users, bn as FileText, aA as Settings, bo as LogOut } from "./index-BRuGftaL.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -6,6 +6,18 @@ import { e as createLucideIcon, bk as React, r as reactExports, j as jsxRuntimeE
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$4 = [
+  ["rect", { width: "20", height: "5", x: "2", y: "3", rx: "1", key: "1wp1u1" }],
+  ["path", { d: "M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8", key: "1s80jp" }],
+  ["path", { d: "M10 12h4", key: "a56b0p" }]
+];
+const Archive = createLucideIcon("archive", __iconNode$4);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$3 = [
   ["path", { d: "M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z", key: "1b4qmf" }],
   ["path", { d: "M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2", key: "i71pzd" }],
   ["path", { d: "M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2", key: "10jefs" }],
@@ -14,28 +26,7 @@ const __iconNode$4 = [
   ["path", { d: "M10 14h4", key: "kelpxr" }],
   ["path", { d: "M10 18h4", key: "1ulq68" }]
 ];
-const Building2 = createLucideIcon("building-2", __iconNode$4);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$3 = [
-  ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
-  [
-    "path",
-    {
-      d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2",
-      key: "116196"
-    }
-  ],
-  ["path", { d: "M12 11h4", key: "1jrz19" }],
-  ["path", { d: "M12 16h4", key: "n85exb" }],
-  ["path", { d: "M8 11h.01", key: "1dfujw" }],
-  ["path", { d: "M8 16h.01", key: "18s6g9" }]
-];
-const ClipboardList = createLucideIcon("clipboard-list", __iconNode$3);
+const Building2 = createLucideIcon("building-2", __iconNode$3);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -126,15 +117,11 @@ const NAV_ITEMS = [
   { label: "Organizations", icon: Building2, path: "/admin/organizations" },
   { label: "Users", icon: Users, path: "/admin/users" },
   { label: "Groups", icon: UsersRound, path: "/admin/groups" },
-  { label: "Audit Logs", icon: ClipboardList, path: "/admin/audit-logs" },
-  {
-    label: "Key Escrow",
-    icon: KeyRound,
-    path: "/admin/key-escrow"
-  },
+  { label: "Audit Logs", icon: FileText, path: "/admin/audit-logs" },
+  { label: "Key Escrow", icon: KeyRound, path: "/admin/key-escrow" },
   {
     label: "Retention Policies",
-    icon: FileText,
+    icon: Archive,
     path: "/admin/retention-policies"
   },
   { label: "Settings", icon: Settings, path: "/admin/settings" }
@@ -143,7 +130,8 @@ function SidebarNavItem({
   item,
   isActive,
   collapsed,
-  badgeCount
+  badgeCount,
+  onClick
 }) {
   const navigate = useNavigate();
   const Icon = item.icon;
@@ -152,12 +140,15 @@ function SidebarNavItem({
     {
       type: "button",
       "data-ocid": `admin.nav.${item.label.toLowerCase().replace(/\s+/g, "_")}`,
-      onClick: () => navigate({ to: item.path }),
+      onClick: () => {
+        navigate({ to: item.path });
+        onClick == null ? void 0 : onClick();
+      },
       className: cn(
-        "group flex w-full items-center gap-3 rounded-sm px-3 py-2.5",
-        "text-sm font-medium transition-colors duration-150",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-        isActive ? "bg-primary/10 text-primary font-semibold" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+        "group relative flex w-full items-center gap-3 rounded px-3 py-2.5",
+        "text-sm font-medium transition-all duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+        isActive ? "bg-blue-600/20 text-blue-300 border-l-2 border-blue-500" : "text-slate-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent",
         collapsed && "justify-center px-2"
       ),
       title: collapsed ? item.label : void 0,
@@ -169,17 +160,16 @@ function SidebarNavItem({
             className: cn(
               "shrink-0",
               collapsed ? "h-5 w-5" : "h-4 w-4",
-              isActive ? "text-primary" : "text-muted-foreground group-hover:text-sidebar-accent-foreground"
+              isActive ? "text-blue-400" : "text-slate-400 group-hover:text-slate-200"
             ),
             "aria-hidden": "true"
           }
         ),
-        !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: item.label }),
-        !collapsed && item.stub && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-auto rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[0.55rem] tracking-widest text-muted-foreground uppercase", children: "SOON" }),
+        !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate flex-1 text-left", children: item.label }),
         !collapsed && !item.stub && badgeCount != null && badgeCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
           "span",
           {
-            className: "ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 font-mono text-[0.55rem] font-bold text-white",
+            className: "ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 font-mono text-[0.55rem] font-bold text-black",
             "aria-label": `${badgeCount} expiring`,
             "data-ocid": "admin.nav.retention_policies.badge",
             children: badgeCount
@@ -188,7 +178,7 @@ function SidebarNavItem({
         collapsed && badgeCount != null && badgeCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
           "span",
           {
-            className: "absolute top-1 right-1 flex h-3 w-3 items-center justify-center rounded-full bg-amber-500",
+            className: "absolute top-1.5 right-1.5 flex h-2 w-2 items-center justify-center rounded-full bg-amber-500",
             "aria-hidden": "true"
           }
         )
@@ -196,21 +186,26 @@ function SidebarNavItem({
     }
   );
 }
-function AdminSidebar({ collapsed }) {
+function AdminSidebar({
+  collapsed,
+  onNavClick
+}) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const navigate = useNavigate();
   const { principal, logout } = useAuth();
   const expiryCount = usePolicyExpiryStore((s) => s.expiryCount);
   const principalText = (principal == null ? void 0 : principal.toText()) ?? "";
-  const principalShort = principalText.length > 16 ? `${principalText.slice(0, 8)}…${principalText.slice(-6)}` : principalText;
+  const principalShort = principalText.length > 12 ? `${principalText.slice(0, 6)}…${principalText.slice(-6)}` : principalText;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "aside",
     {
       className: cn(
-        "flex h-full flex-col border-r border-sidebar-border bg-sidebar",
+        "flex h-full flex-col border-r border-white/10",
+        // Dark navy/charcoal background for government aesthetic
+        "bg-[#0d1117]",
         collapsed ? "w-16" : "w-60",
-        "transition-[width] duration-200"
+        "transition-[width] duration-200 ease-in-out"
       ),
       "aria-label": "Admin navigation",
       children: [
@@ -218,7 +213,7 @@ function AdminSidebar({ collapsed }) {
           "div",
           {
             className: cn(
-              "flex items-center gap-2.5 border-b border-sidebar-border px-4 py-4",
+              "flex items-center gap-3 border-b border-white/10 px-4 py-4",
               collapsed && "justify-center px-2"
             ),
             children: [
@@ -226,32 +221,16 @@ function AdminSidebar({ collapsed }) {
                 "div",
                 {
                   className: cn(
-                    "flex shrink-0 items-center justify-center rounded-sm bg-primary/10 border border-primary/20",
+                    "flex shrink-0 items-center justify-center rounded bg-blue-600/20 border border-blue-500/30",
                     collapsed ? "h-8 w-8" : "h-9 w-9"
                   ),
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                    "svg",
-                    {
-                      className: "h-5 w-5 text-primary",
-                      viewBox: "0 0 24 24",
-                      fill: "none",
-                      stroke: "currentColor",
-                      strokeWidth: "2",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round",
-                      "aria-hidden": "true",
-                      children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("polyline", { points: "9 12 11 14 15 10" })
-                      ]
-                    }
-                  )
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "h-5 w-5 text-blue-400", "aria-hidden": "true" })
                 }
               ),
               !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[0.9rem] font-bold tracking-tight text-foreground leading-tight", children: "CharlieSierra" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] font-semibold tracking-[0.18em] uppercase text-muted-foreground leading-tight", children: "Admin Console" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.5rem] tracking-[0.12em] uppercase text-primary/60 mt-0.5 leading-tight", children: "Communications Secured" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-bold tracking-tight text-white leading-tight", children: "CharlieSierra" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-slate-400 leading-tight", children: "Admin Console" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.5rem] tracking-[0.1em] uppercase text-blue-400/80 mt-0.5 leading-tight", children: "Communications Secured" })
               ] })
             ]
           }
@@ -265,18 +244,19 @@ function AdminSidebar({ collapsed }) {
               item,
               isActive,
               collapsed,
-              badgeCount: badge
+              badgeCount: badge,
+              onClick: onNavClick
             },
             item.path
           );
         }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: cn("border-t border-sidebar-border px-2 py-3 space-y-1"), children: [
-          !collapsed && principalText && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-3 py-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] text-muted-foreground uppercase tracking-widest", children: "Logged in as" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-white/10 px-2 py-3 space-y-1", children: [
+          !collapsed && principalText && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-3 py-1.5 rounded bg-white/5 mx-0.5 mb-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] text-slate-500 uppercase tracking-widest", children: "Logged in as" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "p",
               {
-                className: "font-mono text-[0.65rem] text-sidebar-foreground truncate",
+                className: "font-mono text-[0.65rem] text-slate-300 truncate mt-0.5",
                 title: principalText,
                 children: principalShort
               }
@@ -292,10 +272,10 @@ function AdminSidebar({ collapsed }) {
                 navigate({ to: "/" });
               },
               className: cn(
-                "flex w-full items-center gap-3 rounded-sm px-3 py-2 text-sm",
-                "text-muted-foreground hover:text-destructive hover:bg-destructive/10",
+                "flex w-full items-center gap-3 rounded px-3 py-2 text-sm",
+                "text-slate-400 hover:text-red-400 hover:bg-red-500/10",
                 "transition-colors duration-150",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
                 collapsed && "justify-center px-2"
               ),
               title: collapsed ? "Sign out" : void 0,
@@ -312,43 +292,76 @@ function AdminSidebar({ collapsed }) {
 }
 function AdminLayout({ title, action, children }) {
   const [collapsed, setCollapsed] = reactExports.useState(false);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-screen overflow-hidden bg-background", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(AdminSidebar, { collapsed }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 flex-col overflow-hidden", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "flex shrink-0 items-center gap-4 border-b border-border bg-card px-6 py-3", children: [
+  const [mobileOpen, setMobileOpen] = reactExports.useState(false);
+  const routerState = useRouterState();
+  reactExports.useEffect(() => {
+    setMobileOpen(false);
+  }, [routerState.location.pathname]);
+  reactExports.useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape" && mobileOpen) setMobileOpen(false);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [mobileOpen]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-screen overflow-hidden bg-[#0a0e14]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex flex-col h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminSidebar, { collapsed }) }),
+    mobileOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "dialog",
+      {
+        open: true,
+        className: "fixed inset-0 z-40 md:hidden m-0 p-0 max-w-none max-h-none w-full h-full bg-transparent border-none",
+        "aria-label": "Admin navigation",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "absolute inset-0 bg-black/70 backdrop-blur-sm",
+              onClick: () => setMobileOpen(false),
+              "aria-label": "Close navigation"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-0 top-0 h-full w-60 flex flex-col", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            AdminSidebar,
+            {
+              collapsed: false,
+              onNavClick: () => setMobileOpen(false)
+            }
+          ) })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 flex-col overflow-hidden min-w-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#0d1117] px-4 py-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            "data-ocid": "admin.mobile_menu_button",
+            onClick: () => setMobileOpen(true),
+            className: "rounded p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition-colors md:hidden",
+            "aria-label": "Open navigation menu",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "h-5 w-5", "aria-hidden": "true" })
+          }
+        ),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
             type: "button",
             "data-ocid": "admin.sidebar_toggle",
             onClick: () => setCollapsed((v) => !v),
-            className: "rounded-sm p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors",
+            className: "hidden md:flex rounded p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition-colors",
             "aria-label": collapsed ? "Expand sidebar" : "Collapse sidebar",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "svg",
-              {
-                className: "h-4 w-4",
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round",
-                "aria-hidden": "true",
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "3", y1: "6", x2: "21", y2: "6" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "3", y1: "12", x2: "21", y2: "12" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "3", y1: "18", x2: "21", y2: "18" })
-                ]
-              }
-            )
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "h-4 w-4", "aria-hidden": "true" })
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 items-center justify-between min-w-0", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "font-mono text-xs font-bold tracking-widest text-foreground uppercase leading-tight truncate", children: "CharlieSierra Admin Console" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] tracking-[0.15em] uppercase text-primary/70 leading-tight", children: "Communications Secured" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "font-mono text-xs font-bold tracking-widest text-white uppercase leading-tight truncate", children: "CharlieSierra Admin Console" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.5rem] tracking-[0.15em] uppercase text-blue-400/70 leading-tight", children: "Communications Secured" })
           ] }),
-          title && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-6 hidden sm:block font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground border-l border-border pl-4", children: title }),
+          title && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-6 hidden sm:block font-mono text-[0.6rem] uppercase tracking-widest text-slate-500 border-l border-white/10 pl-4 truncate", children: title }),
           action && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ml-4 shrink-0", children: action })
         ] })
       ] }),
@@ -366,6 +379,5 @@ function AdminLayout({ title, action, children }) {
 export {
   AdminLayout as A,
   Building2 as B,
-  ClipboardList as C,
   usePolicyExpiryStore as u
 };

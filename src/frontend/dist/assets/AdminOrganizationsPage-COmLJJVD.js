@@ -1,8 +1,10 @@
-import { e as createLucideIcon, r as reactExports, V as useIsSuperAdmin, a7 as useMyRole, j as jsxRuntimeExports, a as Skeleton, B as Button, a8 as useOrgDetails, Z as useOrgUsers, a9 as ArrowLeft, aa as Trash2, Y as useOrgs, S as Search, ab as X, ac as RefreshCw, ad as ChevronDown, h as useAuth, ae as useCreateOrg, af as Dialog, ag as DialogContent, ah as DialogHeader, ai as DialogTitle, aj as DialogDescription, p as Label, I as Input, M as Textarea, ak as DialogFooter, a5 as Check, a6 as Copy, f as cn, al as useUpdateOrg, am as useSuspendOrg, an as useDeleteOrg, d as ue } from "./index-CCR6Ctxt.js";
-import { A as AdminLayout, B as Building2 } from "./AdminLayout-CoUIN4Ho.js";
-import { A as AdminStatusBadge } from "./AdminStatusBadge-BghuK8Hk.js";
-import { P as Pencil } from "./pencil-Dl2pFHr2.js";
-import { S as ShieldAlert } from "./shield-alert-BPskbdXS.js";
+import { e as createLucideIcon, r as reactExports, X as useIsSuperAdmin, Y as useMyRole, j as jsxRuntimeExports, Z as Shield, a as Skeleton, B as Button, _ as useOrgDetails, $ as useOrgUsers, a0 as useSuspendOrg, a1 as useDeleteOrg, a2 as ArrowLeft, a3 as Trash2, a4 as useOrgs, S as Search, a5 as X, a6 as RefreshCw, a7 as ChevronDown, k as useAuth, a8 as useCreateOrg, a9 as Dialog, aa as DialogContent, ab as DialogHeader, ac as DialogTitle, ad as DialogDescription, t as Label, I as Input, V as Textarea, ae as DialogFooter, f as cn, af as useUpdateOrg, d as ue, g as Check, h as Copy } from "./index-BRuGftaL.js";
+import { A as AdminLayout, B as Building2 } from "./AdminLayout-BDDpCrSB.js";
+import { A as AdminStatusBadge } from "./AdminStatusBadge-qanklKys.js";
+import { C as ConfirmDialog } from "./ConfirmDialog-DqKdVDfg.js";
+import { P as PrincipalDisplay } from "./PrincipalDisplay-D8D_dUnb.js";
+import { P as Pencil } from "./pencil-CNSJZTrw.js";
+import { S as ShieldAlert } from "./shield-alert-D78AsEcn.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -84,30 +86,6 @@ function IdCell({ id }) {
         type: "button",
         "aria-label": "Copy ID",
         onClick: () => copy(id),
-        className: "opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-muted-foreground hover:text-foreground",
-        children: copied ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-3 w-3 text-green-600" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "h-3 w-3" })
-      }
-    )
-  ] });
-}
-function PrincipalCell({ principal }) {
-  const short = principal.length > 20 ? `${principal.slice(0, 10)}…${principal.slice(-5)}` : principal;
-  const { copy, copied } = useCopyText();
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "group inline-flex items-center gap-1.5", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "span",
-      {
-        className: "font-mono text-xs text-foreground tracking-tight select-all",
-        title: principal,
-        children: short
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        type: "button",
-        "aria-label": "Copy principal",
-        onClick: () => copy(principal),
         className: "opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-muted-foreground hover:text-foreground",
         children: copied ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-3 w-3 text-green-600" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "h-3 w-3" })
       }
@@ -426,160 +404,6 @@ function EditOrgModal({ org, open, onClose }) {
     }
   ) });
 }
-function SuspendOrgDialog({ org, open, onClose }) {
-  const suspendOrg = useSuspendOrg();
-  function handleClose() {
-    suspendOrg.reset();
-    onClose();
-  }
-  async function handleConfirm() {
-    if (!org) return;
-    try {
-      await suspendOrg.mutateAsync(org.id);
-      ue.success(`Organization "${org.name}" suspended.`);
-      handleClose();
-    } catch (err) {
-      ue.error(`Failed to suspend organization: ${String(err)}`);
-    }
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (v) => !v && handleClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    DialogContent,
-    {
-      className: "max-w-sm bg-card border border-border shadow-lg",
-      "data-ocid": "admin.suspend_org.dialog",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-mono text-xs font-bold tracking-widest uppercase text-amber-700", children: "Suspend Organization" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "font-mono text-[0.65rem] text-muted-foreground", children: "This will prevent all members from accessing the organization." })
-        ] }),
-        org && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border", children: org.name }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { className: "gap-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              "data-ocid": "admin.suspend_org.cancel_button",
-              variant: "outline",
-              size: "sm",
-              onClick: handleClose,
-              disabled: suspendOrg.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8",
-              children: "Cancel"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              "data-ocid": "admin.suspend_org.confirm_button",
-              size: "sm",
-              onClick: handleConfirm,
-              disabled: suspendOrg.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-amber-600 hover:bg-amber-700 text-white",
-              children: suspendOrg.isPending ? "Suspending…" : "Confirm Suspend"
-            }
-          )
-        ] })
-      ]
-    }
-  ) });
-}
-function DeleteOrgDialog({
-  org,
-  open,
-  onClose,
-  onDeleted
-}) {
-  const [confirmation, setConfirmation] = reactExports.useState("");
-  const deleteOrg = useDeleteOrg();
-  const isConfirmed = org ? confirmation === org.name : false;
-  function handleClose() {
-    setConfirmation("");
-    deleteOrg.reset();
-    onClose();
-  }
-  async function handleConfirm() {
-    if (!org || !isConfirmed) return;
-    try {
-      await deleteOrg.mutateAsync(org.id);
-      ue.success(`Organization "${org.name}" deleted.`);
-      handleClose();
-      onDeleted();
-    } catch (err) {
-      ue.error(`Failed to delete organization: ${String(err)}`);
-    }
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (v) => !v && handleClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    DialogContent,
-    {
-      className: "max-w-sm bg-card border border-border shadow-lg",
-      "data-ocid": "admin.delete_org.dialog",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-mono text-xs font-bold tracking-widest uppercase text-red-700", children: "Delete Organization" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "font-mono text-[0.65rem] text-muted-foreground", children: "This action is permanent. All data associated with this organization will be irrevocably removed." })
-        ] }),
-        org && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border", children: org.name }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            Label,
-            {
-              htmlFor: "delete-confirmation",
-              className: "font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground",
-              children: [
-                "Type",
-                " ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-destructive font-semibold", children: (org == null ? void 0 : org.name) ?? "" }),
-                " ",
-                "to confirm"
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Input,
-            {
-              id: "delete-confirmation",
-              "data-ocid": "admin.delete_org.confirmation_input",
-              placeholder: (org == null ? void 0 : org.name) ?? "",
-              value: confirmation,
-              onChange: (e) => setConfirmation(e.target.value),
-              className: "font-mono text-sm h-9 rounded-sm bg-background",
-              autoComplete: "off",
-              spellCheck: false
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { className: "gap-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              "data-ocid": "admin.delete_org.cancel_button",
-              variant: "outline",
-              size: "sm",
-              onClick: handleClose,
-              disabled: deleteOrg.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8",
-              children: "Cancel"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              "data-ocid": "admin.delete_org.confirm_button",
-              size: "sm",
-              onClick: handleConfirm,
-              disabled: deleteOrg.isPending || !isConfirmed,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-red-700 hover:bg-red-800 text-white disabled:opacity-40",
-              children: deleteOrg.isPending ? "Deleting…" : "Delete Organization"
-            }
-          )
-        ] })
-      ]
-    }
-  ) });
-}
 function OrgDetailView({ orgId, onBack, canAdmin }) {
   var _a, _b;
   const {
@@ -593,8 +417,31 @@ function OrgDetailView({ orgId, onBack, canAdmin }) {
     afterUserId: void 0
   });
   const [showEdit, setShowEdit] = reactExports.useState(false);
-  const [showSuspend, setShowSuspend] = reactExports.useState(false);
-  const [showDelete, setShowDelete] = reactExports.useState(false);
+  const [suspendDialogOpen, setSuspendDialogOpen] = reactExports.useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = reactExports.useState(false);
+  const suspendOrg = useSuspendOrg();
+  const deleteOrg = useDeleteOrg();
+  async function handleSuspendConfirm() {
+    if (!org) return;
+    try {
+      await suspendOrg.mutateAsync(org.id);
+      ue.success(`Organization "${org.name}" suspended.`);
+      setSuspendDialogOpen(false);
+    } catch (err) {
+      ue.error(`Failed to suspend organization: ${String(err)}`);
+    }
+  }
+  async function handleDeleteConfirm() {
+    if (!org) return;
+    try {
+      await deleteOrg.mutateAsync(org.id);
+      ue.success(`Organization "${org.name}" removed.`);
+      setDeleteDialogOpen(false);
+      onBack();
+    } catch (err) {
+      ue.error(`Failed to remove organization: ${String(err)}`);
+    }
+  }
   if (orgLoading) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "data-ocid": "admin.org_detail.loading_state", className: "space-y-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-48" }),
@@ -694,7 +541,7 @@ function OrgDetailView({ orgId, onBack, canAdmin }) {
           "data-ocid": "admin.org_detail.suspend_button",
           size: "sm",
           variant: "outline",
-          onClick: () => setShowSuspend(true),
+          onClick: () => setSuspendDialogOpen(true),
           disabled: isSuspended,
           className: "font-mono text-[0.65rem] tracking-wider uppercase rounded-sm h-8 gap-1.5 border-amber-600/40 text-amber-700 hover:bg-amber-50 hover:text-amber-800 disabled:opacity-40",
           children: [
@@ -710,11 +557,11 @@ function OrgDetailView({ orgId, onBack, canAdmin }) {
           "data-ocid": "admin.org_detail.delete_button",
           size: "sm",
           variant: "outline",
-          onClick: () => setShowDelete(true),
+          onClick: () => setDeleteDialogOpen(true),
           className: "font-mono text-[0.65rem] tracking-wider uppercase rounded-sm h-8 gap-1.5 border-red-600/40 text-red-700 hover:bg-red-50 hover:text-red-800",
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "h-3.5 w-3.5" }),
-            "Delete"
+            "Remove"
           ]
         }
       )
@@ -766,7 +613,7 @@ function OrgDetailView({ orgId, onBack, canAdmin }) {
                   "data-ocid": `admin.org_detail.members.item.${idx + 1}`,
                   className: "border-b border-border last:border-0 hover:bg-muted/20 transition-colors",
                   children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalCell, { principal: uid }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: uid }) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: m.role }) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminStatusBadge, { status }) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground", children: fmtDate(m.joinedAt) }) })
@@ -788,20 +635,27 @@ function OrgDetailView({ orgId, onBack, canAdmin }) {
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      SuspendOrgDialog,
+      ConfirmDialog,
       {
-        org,
-        open: showSuspend,
-        onClose: () => setShowSuspend(false)
+        open: suspendDialogOpen,
+        onConfirm: handleSuspendConfirm,
+        onCancel: () => setSuspendDialogOpen(false),
+        title: "Suspend Organization",
+        description: "This organization and all associated users will be suspended and unable to access the system. This action is audited.",
+        confirmLabel: "Suspend",
+        destructive: true
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      DeleteOrgDialog,
+      ConfirmDialog,
       {
-        org,
-        open: showDelete,
-        onClose: () => setShowDelete(false),
-        onDeleted: onBack
+        open: deleteDialogOpen,
+        onConfirm: handleDeleteConfirm,
+        onCancel: () => setDeleteDialogOpen(false),
+        title: "Remove Organization",
+        description: "This will permanently remove the organization and all associated data. This action cannot be undone and is permanently audited.",
+        confirmLabel: "Remove",
+        destructive: true
       }
     )
   ] });
@@ -934,7 +788,7 @@ function OrgListView({
             "aria-hidden": "true"
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground", children: searchDebounced ? `No organizations match "${searchDebounced}"` : "No organizations found." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground", children: searchDebounced ? `No organizations match "${searchDebounced}"` : "No organizations have been created yet. Create one to get started." }),
         isSuperAdmin && !searchDebounced && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 font-mono text-[0.65rem] text-muted-foreground/60", children: "Use “New Organization” to create the first one." })
       ] }) }) }) : accumulated.map((org, idx) => {
         const orgIdText = String(org.id);
@@ -1032,6 +886,19 @@ function AdminOrganizationsPage() {
       title: "Organizations",
       action: !selectedOrgId ? headerAction : void 0,
       children: [
+        !selectedOrgId && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground mb-3", children: "Manage multi-tenant organizations and their members" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Shield,
+              {
+                className: "h-4 w-4 shrink-0 text-black mt-0.5",
+                "aria-hidden": "true"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-black leading-relaxed", children: "All organization management actions are audited and immutable." })
+          ] })
+        ] }),
         isCheckingAccess ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {

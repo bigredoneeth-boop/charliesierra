@@ -1,5 +1,6 @@
-import { e as createLucideIcon, r as reactExports, j as jsxRuntimeExports, a4 as ShieldCheck, ab as X, aq as TriangleAlert, aB as LoaderCircle, a3 as Shield, b6 as Key, aF as Lock, aG as Download, ac as RefreshCw, b7 as useEnrollUserKeyEscrow, b8 as useGetEncryptedEscrowKey, b9 as useEscrowStats, ba as useEscrowedUsers, bb as useRecoveryRequests, bc as RecoveryRequestStatus, bd as ChevronUp, ad as ChevronDown, U as Users, a as Skeleton, I as Input, B as Button, d as ue, af as Dialog, ag as DialogContent, ah as DialogHeader, ai as DialogTitle, aj as DialogDescription, ak as DialogFooter, a6 as Copy, be as EscrowStatus, c as Badge, bf as useEscrowGrants, bg as useInitiateKeyRecovery, p as Label, M as Textarea, bh as useApproveKeyRecovery, bi as __vitePreload, bj as useRejectKeyRecovery } from "./index-CCR6Ctxt.js";
-import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
+import { e as createLucideIcon, r as reactExports, j as jsxRuntimeExports, aC as ShieldCheck, a5 as X, T as TriangleAlert, at as LoaderCircle, Z as Shield, b6 as Key, aF as Lock, aG as Download, a6 as RefreshCw, b7 as useEnrollUserKeyEscrow, b8 as useGetEncryptedEscrowKey, b9 as useEscrowStats, ba as useEscrowedUsers, bb as useRecoveryRequests, bc as RecoveryRequestStatus, bd as ChevronUp, a7 as ChevronDown, U as Users, a as Skeleton, I as Input, B as Button, d as ue, a9 as Dialog, aa as DialogContent, ab as DialogHeader, ac as DialogTitle, ad as DialogDescription, ae as DialogFooter, be as EscrowStatus, c as Badge, bf as useEscrowGrants, bg as useInitiateKeyRecovery, t as Label, V as Textarea, bh as useApproveKeyRecovery, bi as __vitePreload, bj as useRejectKeyRecovery } from "./index-BRuGftaL.js";
+import { A as AdminLayout } from "./AdminLayout-BDDpCrSB.js";
+import { P as PrincipalDisplay } from "./PrincipalDisplay-D8D_dUnb.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -823,10 +824,6 @@ async function generateTransportKeyPair() {
     );
   }
 }
-function formatPrincipal(p) {
-  if (p.length <= 16) return p;
-  return `${p.slice(0, 8)}...${p.slice(-4)}`;
-}
 function formatNanoTs(ns) {
   if (ns == null) return "—";
   const ms = Number(ns / 1000000n);
@@ -836,11 +833,6 @@ function formatNanoTs(ns) {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit"
-  });
-}
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    ue.success("Copied to clipboard", { duration: 2e3 });
   });
 }
 function EscrowStatusBadge({ status }) {
@@ -901,21 +893,11 @@ function RecoveryStatusBadge({ status }) {
     }
   );
 }
-function PrincipalCell({ value }) {
-  const text = typeof value.toText === "function" ? value.toText() : String(value);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 font-mono text-xs", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-foreground", title: text, children: formatPrincipal(text) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        type: "button",
-        onClick: () => copyToClipboard(text),
-        "aria-label": "Copy principal",
-        className: "p-0.5 rounded text-muted-foreground hover:text-foreground transition-colors",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { size: 11 })
-      }
-    )
-  ] });
+function principalToString(value) {
+  if (typeof value.toText === "function") {
+    return value.toText();
+  }
+  return String(value);
 }
 function EscrowGrantsSection({
   userId
@@ -955,9 +937,9 @@ function EscrowGrantsSection({
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-2 font-mono text-muted-foreground", children: grant.grantId.toString() }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                PrincipalCell,
+                PrincipalDisplay,
                 {
-                  value: grant.requestingAdmin
+                  principal: principalToString(grant.requestingAdmin)
                 }
               ) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-2 font-mono text-muted-foreground whitespace-nowrap", children: formatNanoTs(grant.grantTimestamp) }),
@@ -1380,7 +1362,8 @@ function AdminKeyEscrowPage() {
     (r) => r.status === RecoveryRequestStatus.pending
   ).length;
   const hasMoreUsers = (escrowedUsersQuery.data ?? []).length === 20;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(AdminLayout, { title: "Key Escrow Management", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(AdminLayout, { title: "KEY ESCROW MANAGEMENT", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] uppercase tracking-wider text-muted-foreground", children: "Manage encrypted key escrow and dual-control recovery operations" }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -1390,8 +1373,9 @@ function AdminKeyEscrowPage() {
             className: "flex w-full items-center justify-between px-4 py-3 text-left",
             onClick: () => setVetKeysExplanationOpen(!vetKeysExplanationOpen),
             "data-ocid": "escrow.vetkeys_explanation.toggle",
+            "aria-expanded": vetKeysExplanationOpen,
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-2 text-sm font-medium text-blue-800 dark:text-blue-200", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-2 text-sm font-semibold text-blue-900 dark:text-blue-200", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "h-4 w-4" }),
                 "How vetKeys Works — ICP Threshold Key Protocol"
               ] }),
@@ -1418,27 +1402,27 @@ function AdminKeyEscrowPage() {
           ] })
         ] }) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800 dark:bg-amber-950/30", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm text-amber-800 dark:text-amber-200", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-2 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs font-medium text-black", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "Security Notice:" }),
-        " Recovery keys are delivered encrypted to the requesting admin's browser via a one-time transport key. They are never stored by the canister or visible to any single node."
+        " Recovery keys are delivered encrypted to the requesting admin’s browser via a one-time transport key. They are never stored by the canister or visible to any single node."
       ] }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "div",
         {
-          className: "flex items-start gap-3 rounded-sm border border-amber-200 bg-amber-50 p-4 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800",
+          className: "flex items-start gap-3 rounded-sm border-2 border-red-400 bg-red-50 p-4",
           role: "alert",
           "data-ocid": "escrow.security_banner",
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              TriangleAlert,
+              Shield,
               {
-                className: "mt-0.5 h-5 w-5 shrink-0 text-amber-500",
+                className: "mt-0.5 h-5 w-5 shrink-0 text-black",
                 "aria-hidden": "true"
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs font-semibold uppercase tracking-widest", children: "Dual Authorization Required" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-0.5 text-xs leading-relaxed", children: "All key recovery operations require dual authorization and are permanently audited. This page is access-controlled and all actions are immutably logged on the Internet Computer." })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs font-bold uppercase tracking-widest text-black", children: "DUAL AUTHORIZATION REQUIRED" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 text-xs font-medium leading-relaxed text-black", children: "All key recovery operations require two authorized administrators and are permanently audited. No single node or administrator can access key material without dual approval." })
             ] })
           ]
         }
@@ -1447,66 +1431,60 @@ function AdminKeyEscrowPage() {
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
-            className: "group rounded-sm border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px",
+            className: "group rounded-sm border border-blue-200 bg-blue-50 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px",
             "data-ocid": "escrow.stats.total_escrowed",
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground", children: "Total Escrowed Users" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-blue-700", children: "Total Escrowed Users" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   Users,
                   {
-                    className: "h-4 w-4 shrink-0 text-muted-foreground/50",
+                    className: "h-4 w-4 shrink-0 text-blue-400",
                     "aria-hidden": "true"
                   }
                 )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-foreground", children: statsQuery.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-16 rounded" }) : ((stats == null ? void 0 : stats.totalEscrowed) ?? 0n).toString() })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-blue-800", children: statsQuery.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-16 rounded" }) : ((stats == null ? void 0 : stats.totalEscrowed) ?? 0n).toString() })
             ]
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
-            className: "group rounded-sm border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px",
+            className: "group rounded-sm border border-amber-200 bg-amber-50 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px",
             "data-ocid": "escrow.stats.pending_recoveries",
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground", children: "Pending Recoveries" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-amber-700", children: "Pending Recovery Requests" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   Clock,
                   {
-                    className: "h-4 w-4 shrink-0 text-muted-foreground/50",
+                    className: "h-4 w-4 shrink-0 text-amber-500",
                     "aria-hidden": "true"
                   }
                 )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "p",
-                {
-                  className: `mt-3 font-mono text-4xl font-bold leading-none tabular-nums ${((stats == null ? void 0 : stats.pendingRecoveries) ?? 0n) > 0n ? "text-amber-600" : "text-foreground"}`,
-                  children: statsQuery.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-12 rounded" }) : ((stats == null ? void 0 : stats.pendingRecoveries) ?? 0n).toString()
-                }
-              )
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-amber-800", children: statsQuery.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-12 rounded" }) : ((stats == null ? void 0 : stats.pendingRecoveries) ?? 0n).toString() })
             ]
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
-            className: "group rounded-sm border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px",
+            className: "group rounded-sm border border-green-200 bg-green-50 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px",
             "data-ocid": "escrow.stats.last_recovery",
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground", children: "Last Recovery Event" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-green-700", children: "Last Recovery Event" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Shield,
+                  ShieldCheck,
                   {
-                    className: "h-4 w-4 shrink-0 text-muted-foreground/50",
+                    className: "h-4 w-4 shrink-0 text-green-500",
                     "aria-hidden": "true"
                   }
                 )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 font-mono text-sm font-semibold leading-snug text-foreground", children: statsQuery.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-32 rounded" }) : formatNanoTs(stats == null ? void 0 : stats.lastRecoveryTimestamp) })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 font-mono text-sm font-semibold leading-snug text-green-800", children: statsQuery.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-32 rounded" }) : formatNanoTs(stats == null ? void 0 : stats.lastRecoveryTimestamp) })
             ]
           }
         )
@@ -1593,7 +1571,7 @@ function AdminKeyEscrowPage() {
                         "aria-hidden": "true"
                       }
                     ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground uppercase tracking-widest", children: searchQuery ? "No users match your search" : "No escrowed users found" })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground uppercase tracking-widest", children: searchQuery ? "No users match your search" : "No users with escrowed keys have been registered." })
                   ]
                 }
               ) }) : filteredUsers.map((user, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -1603,9 +1581,9 @@ function AdminKeyEscrowPage() {
                   "data-ocid": `escrow.users.item.${idx + 1}`,
                   children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      PrincipalCell,
+                      PrincipalDisplay,
                       {
-                        value: user.userId
+                        principal: principalToString(user.userId)
                       }
                     ) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 font-mono text-xs text-muted-foreground", children: user.orgId ?? "—" }),
@@ -1726,7 +1704,7 @@ function AdminKeyEscrowPage() {
                         "aria-hidden": "true"
                       }
                     ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground uppercase tracking-widest", children: "No recovery requests found" })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground uppercase tracking-widest", children: "No pending recovery requests." })
                   ]
                 }
               ) }) : (recoveryRequestsQuery.data ?? []).map((req, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -1740,15 +1718,15 @@ function AdminKeyEscrowPage() {
                       req.id.toString()
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      PrincipalCell,
+                      PrincipalDisplay,
                       {
-                        value: req.targetUserId
+                        principal: principalToString(req.targetUserId)
                       }
                     ) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      PrincipalCell,
+                      PrincipalDisplay,
                       {
-                        value: req.initiatingAdmin
+                        principal: principalToString(req.initiatingAdmin)
                       }
                     ) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 max-w-[200px]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -1838,9 +1816,9 @@ function AdminKeyEscrowPage() {
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] uppercase tracking-widest text-muted-foreground", children: "Principal" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  PrincipalCell,
+                  PrincipalDisplay,
                   {
-                    value: selectedUser.userId
+                    principal: principalToString(selectedUser.userId)
                   }
                 )
               ] }),

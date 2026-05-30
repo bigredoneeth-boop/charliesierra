@@ -1,7 +1,7 @@
 /**
  * AdminStatusBadge
  * Compact, accessible status badge for user, org, and invite statuses.
- * Uses semantic design tokens — no raw color classes.
+ * Active=green, Suspended/Revoked=red, Pending=amber, Archived/Expired=gray.
  */
 import { cn } from "@/lib/utils";
 
@@ -15,23 +15,40 @@ export type AdminStatusValue =
 
 interface AdminStatusBadgeProps {
   status: AdminStatusValue;
-  /** Optional explicit aria-label; defaults to capitalised status text */
+  /** Optional explicit label; defaults to capitalised status text */
   label?: string;
   className?: string;
 }
 
-/** Maps status → Tailwind token classes (semantic only, never raw colors) */
-const STATUS_STYLES: Record<AdminStatusValue, string> = {
-  active:
-    "bg-[oklch(var(--success)/0.15)] text-[oklch(var(--success))] border-[oklch(var(--success)/0.35)]",
-  suspended:
-    "bg-[oklch(var(--destructive)/0.12)] text-[oklch(var(--destructive))] border-[oklch(var(--destructive)/0.35)]",
-  revoked:
-    "bg-[oklch(var(--destructive)/0.12)] text-[oklch(var(--destructive))] border-[oklch(var(--destructive)/0.35)]",
-  pending:
-    "bg-[oklch(var(--warning)/0.15)] text-[oklch(var(--warning-foreground))] border-[oklch(var(--warning)/0.4)]",
-  archived: "bg-muted text-muted-foreground border-border",
-  expired: "bg-muted text-muted-foreground border-border",
+/**
+ * Maps status → concrete Tailwind classes.
+ * Using green/red/amber/gray that work in both light and dark themes.
+ */
+const STATUS_STYLES: Record<AdminStatusValue, { base: string; dot: string }> = {
+  active: {
+    base: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+    dot: "bg-emerald-500",
+  },
+  suspended: {
+    base: "bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-500/30",
+    dot: "bg-rose-500",
+  },
+  revoked: {
+    base: "bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-500/30",
+    dot: "bg-rose-500",
+  },
+  pending: {
+    base: "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
+    dot: "bg-amber-500",
+  },
+  archived: {
+    base: "bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20",
+    dot: "bg-slate-500",
+  },
+  expired: {
+    base: "bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20",
+    dot: "bg-slate-500",
+  },
 };
 
 export function AdminStatusBadge({
@@ -39,19 +56,26 @@ export function AdminStatusBadge({
   label,
   className,
 }: AdminStatusBadgeProps) {
-  const displayLabel = label ?? status.toUpperCase();
+  const displayLabel =
+    label ?? status.charAt(0).toUpperCase() + status.slice(1);
+  const styles = STATUS_STYLES[status];
+
   return (
-    <span
-      aria-label={displayLabel}
+    <output
+      aria-label={`Status: ${displayLabel}`}
       className={cn(
-        "inline-flex items-center rounded-sm border px-2 py-0.5",
-        "font-mono text-[0.65rem] font-semibold tracking-widest uppercase",
-        "select-none whitespace-nowrap",
-        STATUS_STYLES[status],
+        "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5",
+        "font-medium text-xs select-none whitespace-nowrap",
+        styles.base,
         className,
       )}
     >
+      {/* Status dot */}
+      <span
+        className={cn("h-1.5 w-1.5 rounded-full shrink-0", styles.dot)}
+        aria-hidden="true"
+      />
       {displayLabel}
-    </span>
+    </output>
   );
 }

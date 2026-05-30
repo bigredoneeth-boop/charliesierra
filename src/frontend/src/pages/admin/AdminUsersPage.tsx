@@ -18,6 +18,8 @@
 import type { OrgMembership, OrgRecord, OrgRole } from "@/backend";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { PrincipalDisplay } from "@/components/admin/PrincipalDisplay";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -59,9 +61,7 @@ import {
 import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
-  Check,
   ChevronDown,
-  Copy,
   Filter,
   MoreHorizontal,
   RefreshCw,
@@ -71,15 +71,10 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
-
-function truncatePrincipal(p: string): string {
-  if (p.length <= 20) return p;
-  return `${p.slice(0, 8)}…${p.slice(-4)}`;
-}
 
 function relativeTime(ts: bigint | undefined): string {
   if (!ts) return "Never";
@@ -151,53 +146,6 @@ const STATUS_BADGE_VALUE = {
   Suspended: "suspended",
   Pending: "pending",
 } as const;
-
-// ── Copy-to-clipboard hook ────────────────────────────────────────────────────
-
-function useCopyText() {
-  const [copied, setCopied] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const copy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => setCopied(false), 1800);
-    });
-  }, []);
-
-  return { copy, copied };
-}
-
-// ── PrincipalCell ─────────────────────────────────────────────────────────────
-
-function PrincipalCell({ principal }: { principal: { toText(): string } }) {
-  const text = principal.toText();
-  const { copy, copied } = useCopyText();
-
-  return (
-    <span className="group inline-flex items-center gap-1.5 min-w-0">
-      <span
-        className="font-mono text-xs text-foreground tracking-tight select-all"
-        title={text}
-      >
-        {truncatePrincipal(text)}
-      </span>
-      <button
-        type="button"
-        aria-label="Copy principal"
-        onClick={() => copy(text)}
-        className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-muted-foreground hover:text-foreground"
-      >
-        {copied ? (
-          <Check className="h-3 w-3 text-green-600" />
-        ) : (
-          <Copy className="h-3 w-3" />
-        )}
-      </button>
-    </span>
-  );
-}
 
 // ── Assignable roles (not SuperAdmin — global-only) ───────────────────────────
 
@@ -545,7 +493,10 @@ function ChangeRoleModal({ member, open, onClose }: ChangeRoleModalProps) {
           </DialogTitle>
           {member && (
             <DialogDescription className="font-mono text-[0.65rem] text-muted-foreground break-all">
-              {truncatePrincipal(member.userId.toText())}
+              {(([p]) =>
+                p.length > 14 ? `${p.slice(0, 6)}...${p.slice(-6)}` : p)([
+                member.userId.toText(),
+              ])}
             </DialogDescription>
           )}
         </DialogHeader>
@@ -618,292 +569,8 @@ function ChangeRoleModal({ member, open, onClose }: ChangeRoleModalProps) {
   );
 }
 
-// ── Dialog: Suspend Confirm ───────────────────────────────────────────────────
-
-interface SuspendDialogProps {
-  member: OrgMembership | null;
-  open: boolean;
-  onClose: () => void;
-}
-
-function SuspendDialog({ member, open, onClose }: SuspendDialogProps) {
-  const [reason, setReason] = useState("Suspended by admin");
-  const suspend = useSuspendMember();
-
-  function handleClose() {
-    setReason("Suspended by admin");
-    onClose();
-  }
-
-  async function handleConfirm() {
-    if (!member) return;
-    try {
-      await suspend.mutateAsync({
-        orgId: member.orgId,
-        userId: member.userId,
-        reason: reason.trim() || "Suspended by admin",
-      });
-      toast.success("User suspended.");
-      handleClose();
-    } catch (err) {
-      toast.error(
-        `Failed to suspend: ${
-          err instanceof Error ? err.message : String(err)
-        }`,
-      );
-    }
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => !v && handleClose()}>
-      <DialogContent
-        className="max-w-sm bg-card border border-border shadow-lg"
-        data-ocid="admin.users.suspend.dialog"
-      >
-        <DialogHeader>
-          <DialogTitle className="font-mono text-xs font-bold tracking-widest uppercase text-amber-600">
-            Suspend User
-          </DialogTitle>
-          <DialogDescription className="font-mono text-[0.65rem] text-muted-foreground">
-            User access will be revoked until reactivated. This action is
-            audited and immutable.
-          </DialogDescription>
-        </DialogHeader>
-
-        {member && (
-          <p className="font-mono text-xs text-muted-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border">
-            {member.userId.toText()}
-          </p>
-        )}
-
-        <div className="space-y-1.5">
-          <Label
-            htmlFor="suspend-reason"
-            className="font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground"
-          >
-            Reason
-          </Label>
-          <Input
-            id="suspend-reason"
-            data-ocid="admin.users.suspend.reason_input"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            className="font-mono text-sm h-9 rounded-sm bg-background"
-          />
-        </div>
-
-        <DialogFooter className="gap-2 pt-1">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            data-ocid="admin.users.suspend.cancel_button"
-            onClick={handleClose}
-            disabled={suspend.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            data-ocid="admin.users.suspend.confirm_button"
-            onClick={handleConfirm}
-            disabled={suspend.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-amber-600 hover:bg-amber-700 text-white"
-          >
-            {suspend.isPending ? "Suspending…" : "Suspend User"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-// ── Dialog: Reactivate Confirm ────────────────────────────────────────────────
-
-interface ReactivateDialogProps {
-  member: OrgMembership | null;
-  open: boolean;
-  onClose: () => void;
-}
-
-function ReactivateDialog({ member, open, onClose }: ReactivateDialogProps) {
-  const reactivate = useReactivateMember();
-
-  async function handleConfirm() {
-    if (!member) return;
-    try {
-      await reactivate.mutateAsync({
-        orgId: member.orgId,
-        userId: member.userId,
-      });
-      toast.success("User reactivated.");
-      onClose();
-    } catch (err) {
-      toast.error(
-        `Failed to reactivate: ${
-          err instanceof Error ? err.message : String(err)
-        }`,
-      );
-    }
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent
-        className="max-w-sm bg-card border border-border shadow-lg"
-        data-ocid="admin.users.reactivate.dialog"
-      >
-        <DialogHeader>
-          <DialogTitle className="font-mono text-xs font-bold tracking-widest uppercase text-green-700">
-            Reactivate User
-          </DialogTitle>
-          <DialogDescription className="font-mono text-[0.65rem] text-muted-foreground">
-            User access will be restored. This action is audited.
-          </DialogDescription>
-        </DialogHeader>
-
-        {member && (
-          <p className="font-mono text-xs text-muted-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border">
-            {member.userId.toText()}
-          </p>
-        )}
-
-        <DialogFooter className="gap-2 pt-1">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            data-ocid="admin.users.reactivate.cancel_button"
-            onClick={onClose}
-            disabled={reactivate.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            data-ocid="admin.users.reactivate.confirm_button"
-            onClick={handleConfirm}
-            disabled={reactivate.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-green-700 hover:bg-green-800 text-white"
-          >
-            {reactivate.isPending ? "Reactivating…" : "Reactivate User"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-// ── Dialog: Remove Confirm ────────────────────────────────────────────────────
-
-interface RemoveDialogProps {
-  member: OrgMembership | null;
-  open: boolean;
-  onClose: () => void;
-}
-
-function RemoveDialog({ member, open, onClose }: RemoveDialogProps) {
-  const [confirmation, setConfirmation] = useState("");
-  const remove = useRemoveMember();
-  const isConfirmed = confirmation === "REMOVE";
-
-  function handleClose() {
-    setConfirmation("");
-    onClose();
-  }
-
-  async function handleConfirm() {
-    if (!member || !isConfirmed) return;
-    try {
-      await remove.mutateAsync({ orgId: member.orgId, userId: member.userId });
-      toast.success("User removed from organization.");
-      handleClose();
-    } catch (err) {
-      toast.error(
-        `Failed to remove: ${err instanceof Error ? err.message : String(err)}`,
-      );
-    }
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => !v && handleClose()}>
-      <DialogContent
-        className="max-w-sm bg-card border border-border shadow-lg"
-        data-ocid="admin.users.remove.dialog"
-      >
-        <DialogHeader>
-          <DialogTitle className="font-mono text-xs font-bold tracking-widest uppercase text-destructive">
-            Remove User
-          </DialogTitle>
-          <DialogDescription className="font-mono text-[0.65rem] text-muted-foreground">
-            This action is permanent and immutable. The user will be removed
-            from the organization and all access revoked.
-          </DialogDescription>
-        </DialogHeader>
-
-        {member && (
-          <p className="font-mono text-xs text-muted-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border">
-            {member.userId.toText()}
-          </p>
-        )}
-
-        <div className="rounded-sm border border-red-200 bg-red-50 px-3 py-2">
-          <p className="font-mono text-[0.65rem] text-red-700">
-            ⚠ This action cannot be undone. All audit records are preserved.
-          </p>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label
-            htmlFor="remove-confirmation"
-            className="font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground"
-          >
-            Type <span className="text-destructive font-bold">REMOVE</span> to
-            confirm
-          </Label>
-          <Input
-            id="remove-confirmation"
-            data-ocid="admin.users.remove.confirmation_input"
-            placeholder="REMOVE"
-            value={confirmation}
-            onChange={(e) => setConfirmation(e.target.value)}
-            className="font-mono text-sm h-9 rounded-sm bg-background"
-            autoComplete="off"
-            spellCheck={false}
-          />
-        </div>
-
-        <DialogFooter className="gap-2 pt-1">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            data-ocid="admin.users.remove.cancel_button"
-            onClick={handleClose}
-            disabled={remove.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            data-ocid="admin.users.remove.confirm_button"
-            onClick={handleConfirm}
-            disabled={remove.isPending || !isConfirmed}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-red-700 hover:bg-red-800 text-white disabled:opacity-40"
-          >
-            {remove.isPending ? "Removing…" : "Remove User"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
+// ── Suspend / Reactivate / Remove action state ──────────────────────────────
+// (Handled via ConfirmDialog — see bottom of AdminUsersPage)
 
 // ── User Table Row ─────────────────────────────────────────────────────────────
 
@@ -937,7 +604,7 @@ function UserRow({
     >
       {/* Principal */}
       <td className="px-4 py-3">
-        <PrincipalCell principal={member.userId} />
+        <PrincipalDisplay principal={member.userId.toText()} />
       </td>
 
       {/* Email */}
@@ -1027,7 +694,7 @@ function UserRow({
 
               <DropdownMenuSeparator className="bg-border" />
               <DropdownMenuItem
-                data-ocid={`admin.users.delete_button.${index}`}
+                data-ocid={`admin.users.remove_button.${index}`}
                 className="font-mono text-xs cursor-pointer text-destructive focus:text-destructive focus:bg-red-50"
                 onClick={() => onRemove(member)}
               >
@@ -1165,6 +832,9 @@ export default function AdminUsersPage() {
   const [reactivateTarget, setReactivateTarget] =
     useState<OrgMembership | null>(null);
   const [removeTarget, setRemoveTarget] = useState<OrgMembership | null>(null);
+  const suspend = useSuspendMember();
+  const reactivate = useReactivateMember();
+  const remove = useRemoveMember();
 
   // ── Derived loading states ───────────────────────────────────────────────────
   const isCheckingAccess = orgsLoading || roleLoading || superAdminLoading;
@@ -1190,18 +860,24 @@ export default function AdminUsersPage() {
   return (
     <AdminLayout title="USER MANAGEMENT" action={headerAction}>
       <div className="space-y-4">
-        {/* Amber security banner */}
+        {/* Page subtitle */}
+        <p className="font-mono text-xs text-muted-foreground">
+          Manage platform users, roles, and access within organizations
+        </p>
+
+        {/* Security banner */}
         <div
           data-ocid="admin.users.security_banner"
-          className="flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3"
+          className="flex items-start gap-3 rounded-sm border border-amber-400 bg-amber-50 px-4 py-3"
+          style={{ borderLeftWidth: "3px", borderLeftColor: "#d97706" }}
         >
-          <Shield className="h-4 w-4 mt-0.5 text-amber-700 shrink-0" />
-          <p className="font-mono text-[0.7rem] text-amber-900 leading-relaxed">
+          <Shield className="h-4 w-4 mt-0.5 text-amber-600 shrink-0" />
+          <p className="font-mono text-[0.7rem] text-black leading-relaxed">
             <span className="font-bold tracking-wider uppercase">
-              HIGH SECURITY ENVIRONMENT
+              High Security Environment
             </span>{" "}
-            — All actions are audited and immutable. Only Org Admins and Super
-            Admins may access this section.
+            — All user management actions are audited and immutable. Only Org
+            Admins and Super Admins may access this section.
           </p>
         </div>
 
@@ -1439,8 +1115,8 @@ export default function AdminUsersPage() {
                         <Users className="h-8 w-8 text-muted-foreground/40" />
                         <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
                           {searchDebounced || hasActiveFilters
-                            ? "No users match the current filters"
-                            : "No users in this organization"}
+                            ? "No users match your current filters."
+                            : "No users in this organization yet. Invite one to get started."}
                         </p>
                         {!searchDebounced && !hasActiveFilters && (
                           <Button
@@ -1512,22 +1188,85 @@ export default function AdminUsersPage() {
         onClose={() => setChangeRoleMember(null)}
       />
 
-      <SuspendDialog
-        member={suspendTarget}
+      {/* Suspend confirmation */}
+      <ConfirmDialog
         open={!!suspendTarget}
-        onClose={() => setSuspendTarget(null)}
+        title="Suspend User"
+        description="This user will be suspended and will no longer be able to access the system. This action is audited."
+        confirmLabel="Suspend"
+        destructive
+        onCancel={() => setSuspendTarget(null)}
+        onConfirm={async () => {
+          if (!suspendTarget) return;
+          try {
+            await suspend.mutateAsync({
+              orgId: suspendTarget.orgId,
+              userId: suspendTarget.userId,
+              reason: "Suspended by admin",
+            });
+            toast.success("User suspended — action logged to audit trail.");
+          } catch (err) {
+            toast.error(
+              `Failed to suspend: ${err instanceof Error ? err.message : String(err)}`,
+            );
+          } finally {
+            setSuspendTarget(null);
+          }
+        }}
       />
 
-      <ReactivateDialog
-        member={reactivateTarget}
+      {/* Reactivate confirmation */}
+      <ConfirmDialog
         open={!!reactivateTarget}
-        onClose={() => setReactivateTarget(null)}
+        title="Reactivate User"
+        description="This user will be restored to active status. This action is audited."
+        confirmLabel="Reactivate"
+        destructive={false}
+        onCancel={() => setReactivateTarget(null)}
+        onConfirm={async () => {
+          if (!reactivateTarget) return;
+          try {
+            await reactivate.mutateAsync({
+              orgId: reactivateTarget.orgId,
+              userId: reactivateTarget.userId,
+            });
+            toast.success("User reactivated — action logged to audit trail.");
+          } catch (err) {
+            toast.error(
+              `Failed to reactivate: ${err instanceof Error ? err.message : String(err)}`,
+            );
+          } finally {
+            setReactivateTarget(null);
+          }
+        }}
       />
 
-      <RemoveDialog
-        member={removeTarget}
+      {/* Remove confirmation */}
+      <ConfirmDialog
         open={!!removeTarget}
-        onClose={() => setRemoveTarget(null)}
+        title="Remove User"
+        description="This user will be permanently removed from the organization. This action cannot be undone and is permanently audited."
+        confirmLabel="Remove"
+        destructive
+        onCancel={() => setRemoveTarget(null)}
+        onConfirm={async () => {
+          if (!removeTarget) return;
+          try {
+            await remove.mutateAsync({
+              orgId: removeTarget.orgId,
+              userId: removeTarget.userId,
+            });
+            toast.success(
+              "User removed — action permanently logged to audit trail.",
+            );
+          } catch (err) {
+            toast.error(
+              `Failed to remove: ${err instanceof Error ? err.message : String(err)}`,
+            );
+          } finally {
+            setRemoveTarget(null);
+          }
+        }}
       />
     </AdminLayout>
   );

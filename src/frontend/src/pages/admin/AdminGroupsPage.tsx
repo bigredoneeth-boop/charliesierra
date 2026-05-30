@@ -7,15 +7,10 @@
 import type { GroupAdminRecord, GroupMemberRecord, OrgRecord } from "@/backend";
 import { GroupStatus } from "@/backend";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { PrincipalDisplay } from "@/components/admin/PrincipalDisplay";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -28,7 +23,6 @@ import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
   ChevronLeft,
-  Copy,
   RefreshCw,
   Search,
   Shield,
@@ -41,11 +35,6 @@ import { toast } from "sonner";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
-function shortenPrincipal(p: { toText(): string } | string): string {
-  const text = typeof p === "string" ? p : p.toText();
-  return text.length > 16 ? `${text.slice(0, 8)}\u2026${text.slice(-6)}` : text;
-}
-
 function formatTimestamp(ns: bigint): string {
   const ms = Number(ns / BigInt(1_000_000));
   return new Date(ms).toLocaleDateString("en-US", {
@@ -53,38 +42,6 @@ function formatTimestamp(ns: bigint): string {
     month: "short",
     day: "numeric",
   });
-}
-
-function CopyBtn({ text }: { text: string }) {
-  return (
-    <button
-      type="button"
-      aria-label="Copy principal"
-      className="ml-1 text-muted-foreground hover:text-foreground transition-colors"
-      onClick={() => {
-        void navigator.clipboard.writeText(text);
-        toast.success("Copied to clipboard");
-      }}
-    >
-      <Copy className="h-3 w-3" />
-    </button>
-  );
-}
-
-function GroupStatusBadge({ status }: { status: GroupAdminRecord["status"] }) {
-  const isActive = status === GroupStatus.active;
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-sm border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.15em]",
-        isActive
-          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-          : "border-orange-500/40 bg-orange-500/10 text-orange-700 dark:text-orange-400",
-      )}
-    >
-      {isActive ? "Active" : "Suspended"}
-    </span>
-  );
 }
 
 // ── Member side panel ──────────────────────────────────────────────────────────
@@ -103,27 +60,32 @@ function GroupMemberPanel({ group, orgName, onClose }: MemberPanelProps) {
     refetch,
   } = useGroupMembers(group.id);
   const removeMutation = useRemoveMemberFromGroup();
+  const [removeConfirmOpen, setRemoveConfirmOpen] = useState(false);
   const [confirmMember, setConfirmMember] = useState<GroupMemberRecord | null>(
     null,
   );
 
-  const handleForceRemove = useCallback(
-    async (member: GroupMemberRecord) => {
-      try {
-        await removeMutation.mutateAsync({
-          groupId: group.id,
-          memberId: member.userId,
-        });
-        toast.success(`Member removed from ${group.name}`);
-        setConfirmMember(null);
-      } catch (err) {
-        toast.error(
-          err instanceof Error ? err.message : "Failed to remove member",
-        );
-      }
-    },
-    [removeMutation, group.id, group.name],
-  );
+  const handleRequestRemove = useCallback((member: GroupMemberRecord) => {
+    setConfirmMember(member);
+    setRemoveConfirmOpen(true);
+  }, []);
+
+  const handleRemoveConfirm = useCallback(async () => {
+    if (!confirmMember) return;
+    try {
+      await removeMutation.mutateAsync({
+        groupId: group.id,
+        memberId: confirmMember.userId,
+      });
+      toast.success("Member removed — action logged to audit trail");
+      setRemoveConfirmOpen(false);
+      setConfirmMember(null);
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to remove member",
+      );
+    }
+  }, [removeMutation, group.id, confirmMember]);
 
   return (
     <div className="flex h-full flex-col border-l border-border bg-card">
@@ -178,10 +140,7 @@ function GroupMemberPanel({ group, orgName, onClose }: MemberPanelProps) {
           <p className="font-mono text-[0.55rem] uppercase tracking-[0.18em] text-muted-foreground">
             Created By
           </p>
-          <p className="font-mono text-xs text-foreground flex items-center">
-            {shortenPrincipal(group.createdBy)}
-            <CopyBtn text={group.createdBy.toText()} />
-          </p>
+          <PrincipalDisplay principal={group.createdBy.toText()} />
         </div>
       </div>
 
@@ -241,10 +200,7 @@ function GroupMemberPanel({ group, orgName, onClose }: MemberPanelProps) {
                   data-ocid={`groups.panel.member.item.${idx + 1}`}
                 >
                   <td className="px-4 py-2.5">
-                    <span className="flex items-center gap-1 font-mono text-[0.7rem] text-foreground">
-                      {shortenPrincipal(member.userId)}
-                      <CopyBtn text={member.userId.toText()} />
-                    </span>
+                    <PrincipalDisplay principal={member.userId.toText()} />
                   </td>
                   <td className="px-4 py-2.5 text-muted-foreground">
                     {member.displayName ?? "—"}
@@ -257,7 +213,7 @@ function GroupMemberPanel({ group, orgName, onClose }: MemberPanelProps) {
                       variant="ghost"
                       size="sm"
                       className="h-7 px-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => setConfirmMember(member)}
+                      onClick={() => handleRequestRemove(member)}
                       data-ocid={`groups.panel.force_remove.${idx + 1}`}
                     >
                       <UserMinus className="mr-1.5 h-3 w-3" /> Force Remove
@@ -270,45 +226,20 @@ function GroupMemberPanel({ group, orgName, onClose }: MemberPanelProps) {
         )}
       </div>
 
-      <Dialog
-        open={!!confirmMember}
-        onOpenChange={(open) => !open && setConfirmMember(null)}
-      >
-        <DialogContent data-ocid="groups.panel.confirm_remove.dialog">
-          <DialogHeader>
-            <DialogTitle className="font-mono text-sm uppercase tracking-wide">
-              Confirm Force Remove
-            </DialogTitle>
-            <DialogDescription>
-              Remove{" "}
-              <span className="font-mono font-semibold">
-                {confirmMember ? shortenPrincipal(confirmMember.userId) : ""}
-              </span>{" "}
-              from <span className="font-semibold">{group.name}</span>? This
-              action is audited and cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setConfirmMember(null)}
-              data-ocid="groups.panel.confirm_remove.cancel_button"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              disabled={removeMutation.isPending}
-              onClick={() =>
-                confirmMember && void handleForceRemove(confirmMember)
-              }
-              data-ocid="groups.panel.confirm_remove.confirm_button"
-            >
-              {removeMutation.isPending ? "Removing…" : "Force Remove"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDialog
+        open={removeConfirmOpen}
+        onConfirm={() => {
+          void handleRemoveConfirm();
+        }}
+        onCancel={() => {
+          setRemoveConfirmOpen(false);
+          setConfirmMember(null);
+        }}
+        title="Remove Member"
+        description="This member will be immediately removed from the group. This action is audited and cannot be undone."
+        confirmLabel="Remove"
+        destructive={true}
+      />
     </div>
   );
 }
@@ -406,12 +337,12 @@ export default function AdminGroupsPage() {
           )}
         >
           <div
-            className="flex items-center gap-2 border border-amber-500/30 bg-amber-500/5 px-4 py-2.5"
+            className="flex items-center gap-2 border border-amber-500/30 bg-amber-50 px-4 py-2.5"
             style={{ borderLeftWidth: "3px", borderLeftColor: "#d97706" }}
             data-ocid="groups.audit_banner"
           >
             <Shield className="h-3.5 w-3.5 shrink-0 text-amber-600" />
-            <p className="font-mono text-[0.65rem] text-amber-800 dark:text-amber-300">
+            <p className="font-mono text-[0.65rem] text-black">
               All actions are audited and immutable on the Internet Computer.
             </p>
           </div>
@@ -568,12 +499,19 @@ export default function AdminGroupsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground">
-                          {shortenPrincipal(group.createdBy)}
-                          <CopyBtn text={group.createdBy.toText()} />
+                          <PrincipalDisplay
+                            principal={group.createdBy.toText()}
+                          />
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <GroupStatusBadge status={group.status} />
+                        <AdminStatusBadge
+                          status={
+                            group.status === GroupStatus.active
+                              ? "active"
+                              : "suspended"
+                          }
+                        />
                       </td>
                       <td className="px-4 py-3">
                         <Button

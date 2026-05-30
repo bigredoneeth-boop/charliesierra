@@ -12,6 +12,7 @@ import {
   RecoveryRequestStatus,
 } from "@/backend";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { PrincipalDisplay } from "@/components/admin/PrincipalDisplay";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -77,11 +78,6 @@ async function generateTransportKeyPair(): Promise<{
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function formatPrincipal(p: string): string {
-  if (p.length <= 16) return p;
-  return `${p.slice(0, 8)}...${p.slice(-4)}`;
-}
-
 function formatNanoTs(ns: bigint | null | undefined): string {
   if (ns == null) return "—";
   const ms = Number(ns / 1_000_000n);
@@ -91,12 +87,6 @@ function formatNanoTs(ns: bigint | null | undefined): string {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  });
-}
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(() => {
-    toast.success("Copied to clipboard", { duration: 2000 });
   });
 }
 
@@ -173,28 +163,12 @@ function RecoveryStatusBadge({ status }: { status: RecoveryRequestStatus }) {
   );
 }
 
-// ── PrincipalCell ─────────────────────────────────────────────────────────────
-
-function PrincipalCell({ value }: { value: string }) {
-  const text =
-    typeof (value as unknown as { toText?: () => string }).toText === "function"
-      ? (value as unknown as { toText: () => string }).toText()
-      : String(value);
-  return (
-    <div className="flex items-center gap-1.5 font-mono text-xs">
-      <span className="text-foreground" title={text}>
-        {formatPrincipal(text)}
-      </span>
-      <button
-        type="button"
-        onClick={() => copyToClipboard(text)}
-        aria-label="Copy principal"
-        className="p-0.5 rounded text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <Copy size={11} />
-      </button>
-    </div>
-  );
+/** Convert a Principal object or string to a plain string */
+function principalToString(value: unknown): string {
+  if (typeof (value as { toText?: () => string }).toText === "function") {
+    return (value as { toText: () => string }).toText();
+  }
+  return String(value);
 }
 
 // ── EscrowGrantsSection ───────────────────────────────────────────────────────
@@ -259,8 +233,8 @@ function EscrowGrantsSection({
                 {grant.grantId.toString()}
               </td>
               <td className="px-3 py-2">
-                <PrincipalCell
-                  value={grant.requestingAdmin as unknown as string}
+                <PrincipalDisplay
+                  principal={principalToString(grant.requestingAdmin)}
                 />
               </td>
               <td className="px-3 py-2 font-mono text-muted-foreground whitespace-nowrap">
@@ -781,7 +755,13 @@ export function AdminKeyEscrowPage() {
   const hasMoreUsers = (escrowedUsersQuery.data ?? []).length === 20;
 
   return (
-    <AdminLayout title="Key Escrow Management">
+    <AdminLayout title="KEY ESCROW MANAGEMENT">
+      {/* Page subtitle */}
+      <div className="mb-1">
+        <p className="font-mono text-[0.6rem] uppercase tracking-wider text-muted-foreground">
+          Manage encrypted key escrow and dual-control recovery operations
+        </p>
+      </div>
       <div className="space-y-6">
         {/* vetKeys Explanation Panel */}
         <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30">
@@ -790,8 +770,9 @@ export function AdminKeyEscrowPage() {
             className="flex w-full items-center justify-between px-4 py-3 text-left"
             onClick={() => setVetKeysExplanationOpen(!vetKeysExplanationOpen)}
             data-ocid="escrow.vetkeys_explanation.toggle"
+            aria-expanded={vetKeysExplanationOpen}
           >
-            <span className="flex items-center gap-2 text-sm font-medium text-blue-800 dark:text-blue-200">
+            <span className="flex items-center gap-2 text-sm font-semibold text-blue-900 dark:text-blue-200">
               <ShieldCheck className="h-4 w-4" />
               How vetKeys Works — ICP Threshold Key Protocol
             </span>
@@ -833,10 +814,10 @@ export function AdminKeyEscrowPage() {
           )}
         </div>
         {/* Security Notice Banner */}
-        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800 dark:bg-amber-950/30">
-          <p className="text-sm text-amber-800 dark:text-amber-200">
+        <div className="mb-2 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3">
+          <p className="text-xs font-medium text-black">
             <strong>Security Notice:</strong> Recovery keys are delivered
-            encrypted to the requesting admin's browser via a one-time transport
+            encrypted to the requesting admin’s browser via a one-time transport
             key. They are never stored by the canister or visible to any single
             node.
           </p>
@@ -844,22 +825,22 @@ export function AdminKeyEscrowPage() {
 
         {/* ── Security Banner ── */}
         <div
-          className="flex items-start gap-3 rounded-sm border border-amber-200 bg-amber-50 p-4 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800"
+          className="flex items-start gap-3 rounded-sm border-2 border-red-400 bg-red-50 p-4"
           role="alert"
           data-ocid="escrow.security_banner"
         >
-          <AlertTriangle
-            className="mt-0.5 h-5 w-5 shrink-0 text-amber-500"
+          <Shield
+            className="mt-0.5 h-5 w-5 shrink-0 text-black"
             aria-hidden="true"
           />
           <div>
-            <p className="font-mono text-xs font-semibold uppercase tracking-widest">
-              Dual Authorization Required
+            <p className="font-mono text-xs font-bold uppercase tracking-widest text-black">
+              DUAL AUTHORIZATION REQUIRED
             </p>
-            <p className="mt-0.5 text-xs leading-relaxed">
-              All key recovery operations require dual authorization and are
-              permanently audited. This page is access-controlled and all
-              actions are immutably logged on the Internet Computer.
+            <p className="mt-1 text-xs font-medium leading-relaxed text-black">
+              All key recovery operations require two authorized administrators
+              and are permanently audited. No single node or administrator can
+              access key material without dual approval.
             </p>
           </div>
         </div>
@@ -868,19 +849,19 @@ export function AdminKeyEscrowPage() {
         <div className="grid gap-4 sm:grid-cols-3">
           {/* Total Escrowed */}
           <div
-            className="group rounded-sm border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px"
+            className="group rounded-sm border border-blue-200 bg-blue-50 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px"
             data-ocid="escrow.stats.total_escrowed"
           >
             <div className="flex items-start justify-between gap-2">
-              <p className="font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-blue-700">
                 Total Escrowed Users
               </p>
               <Users
-                className="h-4 w-4 shrink-0 text-muted-foreground/50"
+                className="h-4 w-4 shrink-0 text-blue-400"
                 aria-hidden="true"
               />
             </div>
-            <p className="mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-foreground">
+            <p className="mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-blue-800">
               {statsQuery.isLoading ? (
                 <Skeleton className="h-8 w-16 rounded" />
               ) : (
@@ -891,25 +872,19 @@ export function AdminKeyEscrowPage() {
 
           {/* Pending Recoveries */}
           <div
-            className="group rounded-sm border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px"
+            className="group rounded-sm border border-amber-200 bg-amber-50 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px"
             data-ocid="escrow.stats.pending_recoveries"
           >
             <div className="flex items-start justify-between gap-2">
-              <p className="font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                Pending Recoveries
+              <p className="font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-amber-700">
+                Pending Recovery Requests
               </p>
               <Clock
-                className="h-4 w-4 shrink-0 text-muted-foreground/50"
+                className="h-4 w-4 shrink-0 text-amber-500"
                 aria-hidden="true"
               />
             </div>
-            <p
-              className={`mt-3 font-mono text-4xl font-bold leading-none tabular-nums ${
-                (stats?.pendingRecoveries ?? 0n) > 0n
-                  ? "text-amber-600"
-                  : "text-foreground"
-              }`}
-            >
+            <p className="mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-amber-800">
               {statsQuery.isLoading ? (
                 <Skeleton className="h-8 w-12 rounded" />
               ) : (
@@ -920,19 +895,19 @@ export function AdminKeyEscrowPage() {
 
           {/* Last Recovery Event */}
           <div
-            className="group rounded-sm border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px"
+            className="group rounded-sm border border-green-200 bg-green-50 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px"
             data-ocid="escrow.stats.last_recovery"
           >
             <div className="flex items-start justify-between gap-2">
-              <p className="font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-green-700">
                 Last Recovery Event
               </p>
-              <Shield
-                className="h-4 w-4 shrink-0 text-muted-foreground/50"
+              <ShieldCheck
+                className="h-4 w-4 shrink-0 text-green-500"
                 aria-hidden="true"
               />
             </div>
-            <p className="mt-3 font-mono text-sm font-semibold leading-snug text-foreground">
+            <p className="mt-3 font-mono text-sm font-semibold leading-snug text-green-800">
               {statsQuery.isLoading ? (
                 <Skeleton className="h-8 w-32 rounded" />
               ) : (
@@ -1038,7 +1013,7 @@ export function AdminKeyEscrowPage() {
                         <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
                           {searchQuery
                             ? "No users match your search"
-                            : "No escrowed users found"}
+                            : "No users with escrowed keys have been registered."}
                         </p>
                       </td>
                     </tr>
@@ -1050,8 +1025,8 @@ export function AdminKeyEscrowPage() {
                         data-ocid={`escrow.users.item.${idx + 1}`}
                       >
                         <td className="px-4 py-3">
-                          <PrincipalCell
-                            value={user.userId as unknown as string}
+                          <PrincipalDisplay
+                            principal={principalToString(user.userId)}
                           />
                         </td>
                         <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
@@ -1197,7 +1172,7 @@ export function AdminKeyEscrowPage() {
                           aria-hidden="true"
                         />
                         <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                          No recovery requests found
+                          No pending recovery requests.
                         </p>
                       </td>
                     </tr>
@@ -1212,13 +1187,13 @@ export function AdminKeyEscrowPage() {
                           #{req.id.toString()}
                         </td>
                         <td className="px-4 py-3">
-                          <PrincipalCell
-                            value={req.targetUserId as unknown as string}
+                          <PrincipalDisplay
+                            principal={principalToString(req.targetUserId)}
                           />
                         </td>
                         <td className="px-4 py-3">
-                          <PrincipalCell
-                            value={req.initiatingAdmin as unknown as string}
+                          <PrincipalDisplay
+                            principal={principalToString(req.initiatingAdmin)}
                           />
                         </td>
                         <td className="px-4 py-3 max-w-[200px]">
@@ -1318,8 +1293,8 @@ export function AdminKeyEscrowPage() {
                 <p className="font-mono text-[0.55rem] uppercase tracking-widest text-muted-foreground">
                   Principal
                 </p>
-                <PrincipalCell
-                  value={selectedUser.userId as unknown as string}
+                <PrincipalDisplay
+                  principal={principalToString(selectedUser.userId)}
                 />
               </div>
               <div>

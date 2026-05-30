@@ -12,6 +12,7 @@
 import type { AuditEvent, OrgMembership } from "@/backend";
 import { AuditEventType } from "@/backend";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { PrincipalDisplay } from "@/components/admin/PrincipalDisplay";
 import { useAuth } from "@/context/auth-context";
 import {
   useAdminAuditLog,
@@ -26,10 +27,8 @@ import { usePolicyExpiryStore } from "@/stores/policy-expiry-store";
 import { useNavigate } from "@tanstack/react-router";
 import {
   Building2,
-  Check,
   ChevronRight,
   ClipboardList,
-  Copy,
   MessageSquare,
   Settings,
   Shield,
@@ -39,7 +38,7 @@ import {
   Users,
 } from "lucide-react";
 import type React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -358,19 +357,16 @@ function SkeletonCell({ className }: { className?: string }) {
 function SecurityBanner() {
   return (
     <div
-      className="flex items-center gap-3 rounded-sm border border-foreground/20 bg-foreground px-5 py-3"
+      className="flex items-center gap-3 rounded-sm border border-amber-300 bg-amber-50 px-5 py-3"
       role="banner"
       aria-label="Security environment notice"
       data-ocid="dashboard.security_banner"
     >
-      <Shield
-        className="h-4 w-4 shrink-0 text-background/80"
-        aria-hidden="true"
-      />
-      <p className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-background/90">
+      <Shield className="h-4 w-4 shrink-0 text-black/70" aria-hidden="true" />
+      <p className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-black">
         HIGH SECURITY ENVIRONMENT —{" "}
-        <span className="text-background/70 font-normal">
-          All actions are audited and immutable
+        <span className="font-normal">
+          All actions are audited and immutable on the Internet Computer.
         </span>
       </p>
     </div>
@@ -419,47 +415,6 @@ function StatCard({
       <p className="mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-foreground">
         {loading ? <SkeletonCell className="h-8 w-16" /> : value}
       </p>
-    </div>
-  );
-}
-
-// ── Principal copy cell ───────────────────────────────────────────────────────
-function PrincipalCopyCell({ value }: { value: string }) {
-  const compact = compactPrincipal(value);
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(value).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
-  }, [value]);
-
-  return (
-    <div className="flex items-center gap-1.5 font-mono">
-      <span
-        title={value}
-        className="text-[0.7rem] text-foreground cursor-default"
-      >
-        {compact}
-      </span>
-      <button
-        type="button"
-        onClick={handleCopy}
-        aria-label={`Copy principal ${value}`}
-        className={cn(
-          "p-0.5 rounded transition-colors duration-150",
-          copied
-            ? "text-green-600"
-            : "text-muted-foreground/50 hover:text-foreground",
-        )}
-      >
-        {copied ? (
-          <Check width={10} height={10} aria-hidden="true" />
-        ) : (
-          <Copy width={10} height={10} aria-hidden="true" />
-        )}
-      </button>
     </div>
   );
 }
@@ -583,7 +538,7 @@ function RecentActivityTable({
                   className="py-10 text-center font-mono text-xs text-muted-foreground"
                   data-ocid="dashboard.audit.empty_state"
                 >
-                  NO ACTIVITY IN THIS TIME WINDOW
+                  No recent activity to display.
                 </td>
               </tr>
             ) : (
@@ -609,7 +564,7 @@ function RecentActivityTable({
                   >
                     {/* ACTOR */}
                     <td className="py-3 pr-4">
-                      <PrincipalCopyCell value={actor} />
+                      <PrincipalDisplay principal={actor} />
                     </td>
                     {/* ACTION */}
                     <td className="py-3 pr-4">
@@ -626,7 +581,7 @@ function RecentActivityTable({
                     {/* TARGET */}
                     <td className="py-3 pr-4">
                       {target ? (
-                        <PrincipalCopyCell value={target} />
+                        <PrincipalDisplay principal={target} />
                       ) : (
                         <span className="font-mono text-[0.65rem] text-muted-foreground/40">
                           —

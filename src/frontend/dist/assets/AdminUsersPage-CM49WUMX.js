@@ -1,8 +1,10 @@
-import { e as createLucideIcon, r as reactExports, aH as useCallbackRef, aI as useDirection, j as jsxRuntimeExports, aJ as Root2$1, aK as Anchor, aL as Presence, aM as Portal$1, au as useComposedRefs, ax as composeEventHandlers, aw as Primitive, aA as createContextScope, aN as createPopperScope, aO as createRovingFocusGroupScope, aP as createCollection, aQ as hideOthers, aR as Item, aS as dispatchDiscreteCustomEvent, aT as useFocusGuards, aU as ReactRemoveScroll, aV as FocusScope, aW as DismissableLayer, aX as Root, aY as Content, aZ as createSlot, a_ as Arrow, a$ as composeRefs, av as useControllableState, b0 as useId, f as cn, Y as useOrgs, X as useMyOrgs, a7 as useMyRole, V as useIsSuperAdmin, Z as useOrgUsers, a3 as Shield, a as Skeleton, aq as TriangleAlert, S as Search, ab as X, q as Select, s as SelectTrigger, t as SelectValue, v as SelectContent, w as SelectItem, B as Button, ac as RefreshCw, U as Users, ad as ChevronDown, b1 as useInviteUser, af as Dialog, ag as DialogContent, ah as DialogHeader, ai as DialogTitle, aj as DialogDescription, p as Label$1, I as Input, ak as DialogFooter, b2 as useUpdateMemberRole, b3 as useSuspendMember, b4 as useReactivateMember, b5 as useRemoveMember, a5 as Check, a6 as Copy, d as ue } from "./index-CCR6Ctxt.js";
-import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
-import { A as AdminStatusBadge } from "./AdminStatusBadge-BghuK8Hk.js";
-import { F as Funnel } from "./funnel-CnTl0KvR.js";
-import { U as UserPlus } from "./user-plus-BUicnfJB.js";
+import { e as createLucideIcon, r as reactExports, aH as useCallbackRef, aI as useDirection, j as jsxRuntimeExports, aJ as Root2$1, aK as Anchor, aL as Presence, aM as Portal$1, al as useComposedRefs, ao as composeEventHandlers, an as Primitive, ar as createContextScope, aN as createPopperScope, aO as createRovingFocusGroupScope, aP as createCollection, aQ as hideOthers, aR as Item, aS as dispatchDiscreteCustomEvent, aT as useFocusGuards, aU as ReactRemoveScroll, aV as FocusScope, aW as DismissableLayer, aX as Root, aY as Content, aZ as createSlot, a_ as Arrow, a$ as composeRefs, am as useControllableState, b0 as useId, f as cn, a4 as useOrgs, aw as useMyOrgs, Y as useMyRole, X as useIsSuperAdmin, $ as useOrgUsers, b1 as useSuspendMember, b2 as useReactivateMember, b3 as useRemoveMember, Z as Shield, a as Skeleton, T as TriangleAlert, S as Search, a5 as X, v as Select, w as SelectTrigger, x as SelectValue, y as SelectContent, z as SelectItem, B as Button, a6 as RefreshCw, U as Users, a7 as ChevronDown, d as ue, b4 as useInviteUser, a9 as Dialog, aa as DialogContent, ab as DialogHeader, ac as DialogTitle, ad as DialogDescription, t as Label$1, I as Input, ae as DialogFooter, b5 as useUpdateMemberRole } from "./index-BRuGftaL.js";
+import { A as AdminLayout } from "./AdminLayout-BDDpCrSB.js";
+import { A as AdminStatusBadge } from "./AdminStatusBadge-qanklKys.js";
+import { C as ConfirmDialog } from "./ConfirmDialog-DqKdVDfg.js";
+import { P as PrincipalDisplay } from "./PrincipalDisplay-D8D_dUnb.js";
+import { F as Funnel } from "./funnel-CE1pPga4.js";
+import { U as UserPlus } from "./user-plus-zq1tHvNN.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -1108,10 +1110,6 @@ function DropdownMenuSeparator({
     }
   );
 }
-function truncatePrincipal(p) {
-  if (p.length <= 20) return p;
-  return `${p.slice(0, 8)}…${p.slice(-4)}`;
-}
 function relativeTime(ts) {
   if (!ts) return "Never";
   try {
@@ -1168,42 +1166,6 @@ const STATUS_BADGE_VALUE = {
   Suspended: "suspended",
   Pending: "pending"
 };
-function useCopyText() {
-  const [copied, setCopied] = reactExports.useState(false);
-  const timerRef = reactExports.useRef(null);
-  const copy = reactExports.useCallback((text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => setCopied(false), 1800);
-    });
-  }, []);
-  return { copy, copied };
-}
-function PrincipalCell({ principal }) {
-  const text = principal.toText();
-  const { copy, copied } = useCopyText();
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "group inline-flex items-center gap-1.5 min-w-0", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "span",
-      {
-        className: "font-mono text-xs text-foreground tracking-tight select-all",
-        title: text,
-        children: truncatePrincipal(text)
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        type: "button",
-        "aria-label": "Copy principal",
-        onClick: () => copy(text),
-        className: "opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-muted-foreground hover:text-foreground",
-        children: copied ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-3 w-3 text-green-600" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "h-3 w-3" })
-      }
-    )
-  ] });
-}
 const ASSIGNABLE_ROLES = [
   { value: "OrgAdmin", label: "Org Admin" },
   { value: "Auditor", label: "Auditor" },
@@ -1510,7 +1472,9 @@ function ChangeRoleModal({ member, open, onClose }) {
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-mono text-xs font-bold tracking-widest text-foreground uppercase", children: "Change Role" }),
-          member && /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "font-mono text-[0.65rem] text-muted-foreground break-all", children: truncatePrincipal(member.userId.toText()) })
+          member && /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "font-mono text-[0.65rem] text-muted-foreground break-all", children: (([p]) => p.length > 14 ? `${p.slice(0, 6)}...${p.slice(-6)}` : p)([
+            member.userId.toText()
+          ]) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3 py-1", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
@@ -1586,240 +1550,6 @@ function ChangeRoleModal({ member, open, onClose }) {
     }
   ) });
 }
-function SuspendDialog({ member, open, onClose }) {
-  const [reason, setReason] = reactExports.useState("Suspended by admin");
-  const suspend = useSuspendMember();
-  function handleClose() {
-    setReason("Suspended by admin");
-    onClose();
-  }
-  async function handleConfirm() {
-    if (!member) return;
-    try {
-      await suspend.mutateAsync({
-        orgId: member.orgId,
-        userId: member.userId,
-        reason: reason.trim() || "Suspended by admin"
-      });
-      ue.success("User suspended.");
-      handleClose();
-    } catch (err) {
-      ue.error(
-        `Failed to suspend: ${err instanceof Error ? err.message : String(err)}`
-      );
-    }
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (v) => !v && handleClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    DialogContent,
-    {
-      className: "max-w-sm bg-card border border-border shadow-lg",
-      "data-ocid": "admin.users.suspend.dialog",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-mono text-xs font-bold tracking-widest uppercase text-amber-600", children: "Suspend User" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "font-mono text-[0.65rem] text-muted-foreground", children: "User access will be revoked until reactivated. This action is audited and immutable." })
-        ] }),
-        member && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border", children: member.userId.toText() }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Label$1,
-            {
-              htmlFor: "suspend-reason",
-              className: "font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground",
-              children: "Reason"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Input,
-            {
-              id: "suspend-reason",
-              "data-ocid": "admin.users.suspend.reason_input",
-              value: reason,
-              onChange: (e) => setReason(e.target.value),
-              className: "font-mono text-sm h-9 rounded-sm bg-background"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { className: "gap-2 pt-1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              variant: "outline",
-              size: "sm",
-              "data-ocid": "admin.users.suspend.cancel_button",
-              onClick: handleClose,
-              disabled: suspend.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8",
-              children: "Cancel"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              size: "sm",
-              "data-ocid": "admin.users.suspend.confirm_button",
-              onClick: handleConfirm,
-              disabled: suspend.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-amber-600 hover:bg-amber-700 text-white",
-              children: suspend.isPending ? "Suspending…" : "Suspend User"
-            }
-          )
-        ] })
-      ]
-    }
-  ) });
-}
-function ReactivateDialog({ member, open, onClose }) {
-  const reactivate = useReactivateMember();
-  async function handleConfirm() {
-    if (!member) return;
-    try {
-      await reactivate.mutateAsync({
-        orgId: member.orgId,
-        userId: member.userId
-      });
-      ue.success("User reactivated.");
-      onClose();
-    } catch (err) {
-      ue.error(
-        `Failed to reactivate: ${err instanceof Error ? err.message : String(err)}`
-      );
-    }
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (v) => !v && onClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    DialogContent,
-    {
-      className: "max-w-sm bg-card border border-border shadow-lg",
-      "data-ocid": "admin.users.reactivate.dialog",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-mono text-xs font-bold tracking-widest uppercase text-green-700", children: "Reactivate User" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "font-mono text-[0.65rem] text-muted-foreground", children: "User access will be restored. This action is audited." })
-        ] }),
-        member && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border", children: member.userId.toText() }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { className: "gap-2 pt-1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              variant: "outline",
-              size: "sm",
-              "data-ocid": "admin.users.reactivate.cancel_button",
-              onClick: onClose,
-              disabled: reactivate.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8",
-              children: "Cancel"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              size: "sm",
-              "data-ocid": "admin.users.reactivate.confirm_button",
-              onClick: handleConfirm,
-              disabled: reactivate.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-green-700 hover:bg-green-800 text-white",
-              children: reactivate.isPending ? "Reactivating…" : "Reactivate User"
-            }
-          )
-        ] })
-      ]
-    }
-  ) });
-}
-function RemoveDialog({ member, open, onClose }) {
-  const [confirmation, setConfirmation] = reactExports.useState("");
-  const remove = useRemoveMember();
-  const isConfirmed = confirmation === "REMOVE";
-  function handleClose() {
-    setConfirmation("");
-    onClose();
-  }
-  async function handleConfirm() {
-    if (!member || !isConfirmed) return;
-    try {
-      await remove.mutateAsync({ orgId: member.orgId, userId: member.userId });
-      ue.success("User removed from organization.");
-      handleClose();
-    } catch (err) {
-      ue.error(
-        `Failed to remove: ${err instanceof Error ? err.message : String(err)}`
-      );
-    }
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (v) => !v && handleClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    DialogContent,
-    {
-      className: "max-w-sm bg-card border border-border shadow-lg",
-      "data-ocid": "admin.users.remove.dialog",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-mono text-xs font-bold tracking-widest uppercase text-destructive", children: "Remove User" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "font-mono text-[0.65rem] text-muted-foreground", children: "This action is permanent and immutable. The user will be removed from the organization and all access revoked." })
-        ] }),
-        member && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border", children: member.userId.toText() }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-sm border border-red-200 bg-red-50 px-3 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.65rem] text-red-700", children: "⚠ This action cannot be undone. All audit records are preserved." }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            Label$1,
-            {
-              htmlFor: "remove-confirmation",
-              className: "font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground",
-              children: [
-                "Type ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-destructive font-bold", children: "REMOVE" }),
-                " to confirm"
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Input,
-            {
-              id: "remove-confirmation",
-              "data-ocid": "admin.users.remove.confirmation_input",
-              placeholder: "REMOVE",
-              value: confirmation,
-              onChange: (e) => setConfirmation(e.target.value),
-              className: "font-mono text-sm h-9 rounded-sm bg-background",
-              autoComplete: "off",
-              spellCheck: false
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { className: "gap-2 pt-1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              variant: "outline",
-              size: "sm",
-              "data-ocid": "admin.users.remove.cancel_button",
-              onClick: handleClose,
-              disabled: remove.isPending,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8",
-              children: "Cancel"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "button",
-              size: "sm",
-              "data-ocid": "admin.users.remove.confirm_button",
-              onClick: handleConfirm,
-              disabled: remove.isPending || !isConfirmed,
-              className: "font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-red-700 hover:bg-red-800 text-white disabled:opacity-40",
-              children: remove.isPending ? "Removing…" : "Remove User"
-            }
-          )
-        ] })
-      ]
-    }
-  ) });
-}
 function UserRow({
   member,
   index,
@@ -1838,7 +1568,7 @@ function UserRow({
       "data-ocid": `admin.users.item.${index}`,
       className: "border-b border-border hover:bg-muted/30 transition-colors duration-100",
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalCell, { principal: member.userId }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: member.userId.toText() }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground", children: member.email ?? "—" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           "span",
@@ -1901,7 +1631,7 @@ function UserRow({
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   DropdownMenuItem,
                   {
-                    "data-ocid": `admin.users.delete_button.${index}`,
+                    "data-ocid": `admin.users.remove_button.${index}`,
                     className: "font-mono text-xs cursor-pointer text-destructive focus:text-destructive focus:bg-red-50",
                     onClick: () => onRemove(member),
                     children: "Remove User"
@@ -2003,6 +1733,9 @@ function AdminUsersPage() {
   );
   const [reactivateTarget, setReactivateTarget] = reactExports.useState(null);
   const [removeTarget, setRemoveTarget] = reactExports.useState(null);
+  const suspend = useSuspendMember();
+  const reactivate = useReactivateMember();
+  const remove = useRemoveMember();
   const isCheckingAccess = orgsLoading || roleLoading || superAdminLoading;
   const isFirstLoad = pageLoading && accumulated.length === 0;
   const isLoadingMore = pageLoading && accumulated.length > 0;
@@ -2023,17 +1756,19 @@ function AdminUsersPage() {
   ) : void 0;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(AdminLayout, { title: "USER MANAGEMENT", action: headerAction, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground", children: "Manage platform users, roles, and access within organizations" }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "div",
         {
           "data-ocid": "admin.users.security_banner",
-          className: "flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3",
+          className: "flex items-start gap-3 rounded-sm border border-amber-400 bg-amber-50 px-4 py-3",
+          style: { borderLeftWidth: "3px", borderLeftColor: "#d97706" },
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "h-4 w-4 mt-0.5 text-amber-700 shrink-0" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-[0.7rem] text-amber-900 leading-relaxed", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-bold tracking-wider uppercase", children: "HIGH SECURITY ENVIRONMENT" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "h-4 w-4 mt-0.5 text-amber-600 shrink-0" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-[0.7rem] text-black leading-relaxed", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-bold tracking-wider uppercase", children: "High Security Environment" }),
               " ",
-              "— All actions are audited and immutable. Only Org Admins and Super Admins may access this section."
+              "— All user management actions are audited and immutable. Only Org Admins and Super Admins may access this section."
             ] })
           ]
         }
@@ -2240,7 +1975,7 @@ function AdminUsersPage() {
                 className: "flex flex-col items-center justify-center gap-3 py-16 text-center",
                 children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { className: "h-8 w-8 text-muted-foreground/40" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground uppercase tracking-widest", children: searchDebounced || hasActiveFilters ? "No users match the current filters" : "No users in this organization" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs text-muted-foreground uppercase tracking-widest", children: searchDebounced || hasActiveFilters ? "No users match your current filters." : "No users in this organization yet. Invite one to get started." }),
                   !searchDebounced && !hasActiveFilters && /* @__PURE__ */ jsxRuntimeExports.jsxs(
                     Button,
                     {
@@ -2309,27 +2044,87 @@ function AdminUsersPage() {
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      SuspendDialog,
+      ConfirmDialog,
       {
-        member: suspendTarget,
         open: !!suspendTarget,
-        onClose: () => setSuspendTarget(null)
+        title: "Suspend User",
+        description: "This user will be suspended and will no longer be able to access the system. This action is audited.",
+        confirmLabel: "Suspend",
+        destructive: true,
+        onCancel: () => setSuspendTarget(null),
+        onConfirm: async () => {
+          if (!suspendTarget) return;
+          try {
+            await suspend.mutateAsync({
+              orgId: suspendTarget.orgId,
+              userId: suspendTarget.userId,
+              reason: "Suspended by admin"
+            });
+            ue.success("User suspended — action logged to audit trail.");
+          } catch (err) {
+            ue.error(
+              `Failed to suspend: ${err instanceof Error ? err.message : String(err)}`
+            );
+          } finally {
+            setSuspendTarget(null);
+          }
+        }
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ReactivateDialog,
+      ConfirmDialog,
       {
-        member: reactivateTarget,
         open: !!reactivateTarget,
-        onClose: () => setReactivateTarget(null)
+        title: "Reactivate User",
+        description: "This user will be restored to active status. This action is audited.",
+        confirmLabel: "Reactivate",
+        destructive: false,
+        onCancel: () => setReactivateTarget(null),
+        onConfirm: async () => {
+          if (!reactivateTarget) return;
+          try {
+            await reactivate.mutateAsync({
+              orgId: reactivateTarget.orgId,
+              userId: reactivateTarget.userId
+            });
+            ue.success("User reactivated — action logged to audit trail.");
+          } catch (err) {
+            ue.error(
+              `Failed to reactivate: ${err instanceof Error ? err.message : String(err)}`
+            );
+          } finally {
+            setReactivateTarget(null);
+          }
+        }
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      RemoveDialog,
+      ConfirmDialog,
       {
-        member: removeTarget,
         open: !!removeTarget,
-        onClose: () => setRemoveTarget(null)
+        title: "Remove User",
+        description: "This user will be permanently removed from the organization. This action cannot be undone and is permanently audited.",
+        confirmLabel: "Remove",
+        destructive: true,
+        onCancel: () => setRemoveTarget(null),
+        onConfirm: async () => {
+          if (!removeTarget) return;
+          try {
+            await remove.mutateAsync({
+              orgId: removeTarget.orgId,
+              userId: removeTarget.userId
+            });
+            ue.success(
+              "User removed — action permanently logged to audit trail."
+            );
+          } catch (err) {
+            ue.error(
+              `Failed to remove: ${err instanceof Error ? err.message : String(err)}`
+            );
+          } finally {
+            setRemoveTarget(null);
+          }
+        }
       }
     )
   ] });

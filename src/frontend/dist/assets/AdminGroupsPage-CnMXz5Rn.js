@@ -1,5 +1,8 @@
-import { e as createLucideIcon, r as reactExports, Y as useOrgs, ao as useAllGroups, ap as GroupStatus, j as jsxRuntimeExports, a3 as Shield, S as Search, I as Input, a as Skeleton, aq as TriangleAlert, B as Button, ac as RefreshCw, U as Users, f as cn, a6 as Copy, d as ue, ar as useGroupMembers, as as useRemoveMemberFromGroup, ab as X, at as UserMinus, af as Dialog, ag as DialogContent, ah as DialogHeader, ai as DialogTitle, aj as DialogDescription, ak as DialogFooter } from "./index-CCR6Ctxt.js";
-import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
+import { e as createLucideIcon, r as reactExports, a4 as useOrgs, ag as useAllGroups, ah as GroupStatus, j as jsxRuntimeExports, Z as Shield, S as Search, I as Input, a as Skeleton, T as TriangleAlert, B as Button, a6 as RefreshCw, U as Users, f as cn, ai as useGroupMembers, aj as useRemoveMemberFromGroup, d as ue, a5 as X, ak as UserMinus } from "./index-BRuGftaL.js";
+import { A as AdminLayout } from "./AdminLayout-BDDpCrSB.js";
+import { A as AdminStatusBadge } from "./AdminStatusBadge-qanklKys.js";
+import { C as ConfirmDialog } from "./ConfirmDialog-DqKdVDfg.js";
+import { P as PrincipalDisplay } from "./PrincipalDisplay-D8D_dUnb.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -8,10 +11,6 @@ import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
  */
 const __iconNode = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
 const ChevronLeft = createLucideIcon("chevron-left", __iconNode);
-function shortenPrincipal(p) {
-  const text = typeof p === "string" ? p : p.toText();
-  return text.length > 16 ? `${text.slice(0, 8)}…${text.slice(-6)}` : text;
-}
 function formatTimestamp(ns) {
   const ms = Number(ns / BigInt(1e6));
   return new Date(ms).toLocaleDateString("en-US", {
@@ -19,34 +18,6 @@ function formatTimestamp(ns) {
     month: "short",
     day: "numeric"
   });
-}
-function CopyBtn({ text }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "button",
-    {
-      type: "button",
-      "aria-label": "Copy principal",
-      className: "ml-1 text-muted-foreground hover:text-foreground transition-colors",
-      onClick: () => {
-        void navigator.clipboard.writeText(text);
-        ue.success("Copied to clipboard");
-      },
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "h-3 w-3" })
-    }
-  );
-}
-function GroupStatusBadge({ status }) {
-  const isActive = status === GroupStatus.active;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "span",
-    {
-      className: cn(
-        "inline-flex items-center rounded-sm border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.15em]",
-        isActive ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : "border-orange-500/40 bg-orange-500/10 text-orange-700 dark:text-orange-400"
-      ),
-      children: isActive ? "Active" : "Suspended"
-    }
-  );
 }
 function GroupMemberPanel({ group, orgName, onClose }) {
   const {
@@ -56,26 +27,30 @@ function GroupMemberPanel({ group, orgName, onClose }) {
     refetch
   } = useGroupMembers(group.id);
   const removeMutation = useRemoveMemberFromGroup();
+  const [removeConfirmOpen, setRemoveConfirmOpen] = reactExports.useState(false);
   const [confirmMember, setConfirmMember] = reactExports.useState(
     null
   );
-  const handleForceRemove = reactExports.useCallback(
-    async (member) => {
-      try {
-        await removeMutation.mutateAsync({
-          groupId: group.id,
-          memberId: member.userId
-        });
-        ue.success(`Member removed from ${group.name}`);
-        setConfirmMember(null);
-      } catch (err) {
-        ue.error(
-          err instanceof Error ? err.message : "Failed to remove member"
-        );
-      }
-    },
-    [removeMutation, group.id, group.name]
-  );
+  const handleRequestRemove = reactExports.useCallback((member) => {
+    setConfirmMember(member);
+    setRemoveConfirmOpen(true);
+  }, []);
+  const handleRemoveConfirm = reactExports.useCallback(async () => {
+    if (!confirmMember) return;
+    try {
+      await removeMutation.mutateAsync({
+        groupId: group.id,
+        memberId: confirmMember.userId
+      });
+      ue.success("Member removed — action logged to audit trail");
+      setRemoveConfirmOpen(false);
+      setConfirmMember(null);
+    } catch (err) {
+      ue.error(
+        err instanceof Error ? err.message : "Failed to remove member"
+      );
+    }
+  }, [removeMutation, group.id, confirmMember]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full flex-col border-l border-border bg-card", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-border px-4 py-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
@@ -117,10 +92,7 @@ function GroupMemberPanel({ group, orgName, onClose }) {
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] uppercase tracking-[0.18em] text-muted-foreground", children: "Created By" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-xs text-foreground flex items-center", children: [
-          shortenPrincipal(group.createdBy),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CopyBtn, { text: group.createdBy.toText() })
-        ] })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: group.createdBy.toText() })
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto", children: [
@@ -169,10 +141,7 @@ function GroupMemberPanel({ group, orgName, onClose }) {
             className: "border-b border-border hover:bg-muted/20 transition-colors",
             "data-ocid": `groups.panel.member.item.${idx + 1}`,
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1 font-mono text-[0.7rem] text-foreground", children: [
-                shortenPrincipal(member.userId),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(CopyBtn, { text: member.userId.toText() })
-              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: member.userId.toText() }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5 text-muted-foreground", children: member.displayName ?? "—" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5 font-mono text-[0.7rem] text-muted-foreground", children: formatTimestamp(member.joinedAt) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-2.5 text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -181,7 +150,7 @@ function GroupMemberPanel({ group, orgName, onClose }) {
                   variant: "ghost",
                   size: "sm",
                   className: "h-7 px-2 text-destructive hover:bg-destructive/10 hover:text-destructive",
-                  onClick: () => setConfirmMember(member),
+                  onClick: () => handleRequestRemove(member),
                   "data-ocid": `groups.panel.force_remove.${idx + 1}`,
                   children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(UserMinus, { className: "mr-1.5 h-3 w-3" }),
@@ -196,45 +165,20 @@ function GroupMemberPanel({ group, orgName, onClose }) {
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Dialog,
+      ConfirmDialog,
       {
-        open: !!confirmMember,
-        onOpenChange: (open) => !open && setConfirmMember(null),
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { "data-ocid": "groups.panel.confirm_remove.dialog", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-mono text-sm uppercase tracking-wide", children: "Confirm Force Remove" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogDescription, { children: [
-              "Remove",
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono font-semibold", children: confirmMember ? shortenPrincipal(confirmMember.userId) : "" }),
-              " ",
-              "from ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold", children: group.name }),
-              "? This action is audited and cannot be undone."
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { className: "gap-2", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Button,
-              {
-                variant: "outline",
-                onClick: () => setConfirmMember(null),
-                "data-ocid": "groups.panel.confirm_remove.cancel_button",
-                children: "Cancel"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Button,
-              {
-                variant: "destructive",
-                disabled: removeMutation.isPending,
-                onClick: () => confirmMember && void handleForceRemove(confirmMember),
-                "data-ocid": "groups.panel.confirm_remove.confirm_button",
-                children: removeMutation.isPending ? "Removing…" : "Force Remove"
-              }
-            )
-          ] })
-        ] })
+        open: removeConfirmOpen,
+        onConfirm: () => {
+          void handleRemoveConfirm();
+        },
+        onCancel: () => {
+          setRemoveConfirmOpen(false);
+          setConfirmMember(null);
+        },
+        title: "Remove Member",
+        description: "This member will be immediately removed from the group. This action is audited and cannot be undone.",
+        confirmLabel: "Remove",
+        destructive: true
       }
     )
   ] });
@@ -324,12 +268,12 @@ function AdminGroupsPage() {
               /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 "div",
                 {
-                  className: "flex items-center gap-2 border border-amber-500/30 bg-amber-500/5 px-4 py-2.5",
+                  className: "flex items-center gap-2 border border-amber-500/30 bg-amber-50 px-4 py-2.5",
                   style: { borderLeftWidth: "3px", borderLeftColor: "#d97706" },
                   "data-ocid": "groups.audit_banner",
                   children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "h-3.5 w-3.5 shrink-0 text-amber-600" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.65rem] text-amber-800 dark:text-amber-300", children: "All actions are audited and immutable on the Internet Computer." })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.65rem] text-black", children: "All actions are audited and immutable on the Internet Computer." })
                   ]
                 }
               ),
@@ -457,11 +401,18 @@ function AdminGroupsPage() {
                           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-muted-foreground", children: getOrgName(group.orgId) }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 font-mono text-foreground", children: Number(group.memberCount) }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 font-mono text-[0.7rem] text-muted-foreground", children: formatTimestamp(group.createdAt) }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground", children: [
-                            shortenPrincipal(group.createdBy),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(CopyBtn, { text: group.createdBy.toText() })
-                          ] }) }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(GroupStatusBadge, { status: group.status }) }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            PrincipalDisplay,
+                            {
+                              principal: group.createdBy.toText()
+                            }
+                          ) }) }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            AdminStatusBadge,
+                            {
+                              status: group.status === GroupStatus.active ? "active" : "suspended"
+                            }
+                          ) }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
                             Button,
                             {

@@ -1,27 +1,30 @@
 /**
  * AdminLayout
  * Full-page sidebar + main content shell for the Admin Console.
- * - Fixed 240 px sidebar on desktop, icon-only on mobile (≤ md breakpoint)
- * - Government-military aesthetic: no decorative elements, clean borders, monospace labels
- * - Active nav item highlighted with primary color token
+ * - Fixed 240 px sidebar on desktop with dark background
+ * - Collapsible to icon-only mode; mobile overlay hamburger menu
+ * - Government-military aesthetic: high-contrast, no decorative elements
  */
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
 import { usePolicyExpiryStore } from "@/stores/policy-expiry-store";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import {
+  Archive,
   Building2,
-  ClipboardList,
   FileText,
   KeyRound,
   LayoutDashboard,
   LogOut,
+  Menu,
   Settings,
+  Shield,
   Users,
   UsersRound,
+  X,
 } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // ── Nav item definition ───────────────────────────────────────────────────────
 interface NavItem {
@@ -37,15 +40,11 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Organizations", icon: Building2, path: "/admin/organizations" },
   { label: "Users", icon: Users, path: "/admin/users" },
   { label: "Groups", icon: UsersRound, path: "/admin/groups" },
-  { label: "Audit Logs", icon: ClipboardList, path: "/admin/audit-logs" },
-  {
-    label: "Key Escrow",
-    icon: KeyRound,
-    path: "/admin/key-escrow",
-  },
+  { label: "Audit Logs", icon: FileText, path: "/admin/audit-logs" },
+  { label: "Key Escrow", icon: KeyRound, path: "/admin/key-escrow" },
   {
     label: "Retention Policies",
-    icon: FileText,
+    icon: Archive,
     path: "/admin/retention-policies",
   },
   { label: "Settings", icon: Settings, path: "/admin/settings" },
@@ -57,11 +56,13 @@ function SidebarNavItem({
   isActive,
   collapsed,
   badgeCount,
+  onClick,
 }: {
   item: NavItem;
   isActive: boolean;
   collapsed: boolean;
   badgeCount?: number;
+  onClick?: () => void;
 }) {
   const navigate = useNavigate();
   const Icon = item.icon;
@@ -69,14 +70,17 @@ function SidebarNavItem({
     <button
       type="button"
       data-ocid={`admin.nav.${item.label.toLowerCase().replace(/\s+/g, "_")}`}
-      onClick={() => navigate({ to: item.path })}
+      onClick={() => {
+        navigate({ to: item.path });
+        onClick?.();
+      }}
       className={cn(
-        "group flex w-full items-center gap-3 rounded-sm px-3 py-2.5",
-        "text-sm font-medium transition-colors duration-150",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+        "group relative flex w-full items-center gap-3 rounded px-3 py-2.5",
+        "text-sm font-medium transition-all duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
         isActive
-          ? "bg-primary/10 text-primary font-semibold"
-          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+          ? "bg-blue-600/20 text-blue-300 border-l-2 border-blue-500"
+          : "text-slate-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent",
         collapsed && "justify-center px-2",
       )}
       title={collapsed ? item.label : undefined}
@@ -87,20 +91,17 @@ function SidebarNavItem({
           "shrink-0",
           collapsed ? "h-5 w-5" : "h-4 w-4",
           isActive
-            ? "text-primary"
-            : "text-muted-foreground group-hover:text-sidebar-accent-foreground",
+            ? "text-blue-400"
+            : "text-slate-400 group-hover:text-slate-200",
         )}
         aria-hidden="true"
       />
-      {!collapsed && <span className="truncate">{item.label}</span>}
-      {!collapsed && item.stub && (
-        <span className="ml-auto rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[0.55rem] tracking-widest text-muted-foreground uppercase">
-          SOON
-        </span>
+      {!collapsed && (
+        <span className="truncate flex-1 text-left">{item.label}</span>
       )}
       {!collapsed && !item.stub && badgeCount != null && badgeCount > 0 && (
         <span
-          className="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 font-mono text-[0.55rem] font-bold text-white"
+          className="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 font-mono text-[0.55rem] font-bold text-black"
           aria-label={`${badgeCount} expiring`}
           data-ocid="admin.nav.retention_policies.badge"
         >
@@ -109,7 +110,7 @@ function SidebarNavItem({
       )}
       {collapsed && badgeCount != null && badgeCount > 0 && (
         <span
-          className="absolute top-1 right-1 flex h-3 w-3 items-center justify-center rounded-full bg-amber-500"
+          className="absolute top-1.5 right-1.5 flex h-2 w-2 items-center justify-center rounded-full bg-amber-500"
           aria-hidden="true"
         />
       )}
@@ -118,7 +119,13 @@ function SidebarNavItem({
 }
 
 // ── Sidebar ───────────────────────────────────────────────────────────────────
-function AdminSidebar({ collapsed }: { collapsed: boolean }) {
+function AdminSidebar({
+  collapsed,
+  onNavClick,
+}: {
+  collapsed: boolean;
+  onNavClick?: () => void;
+}) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const navigate = useNavigate();
@@ -127,56 +134,45 @@ function AdminSidebar({ collapsed }: { collapsed: boolean }) {
 
   const principalText = principal?.toText() ?? "";
   const principalShort =
-    principalText.length > 16
-      ? `${principalText.slice(0, 8)}…${principalText.slice(-6)}`
+    principalText.length > 12
+      ? `${principalText.slice(0, 6)}…${principalText.slice(-6)}`
       : principalText;
 
   return (
     <aside
       className={cn(
-        "flex h-full flex-col border-r border-sidebar-border bg-sidebar",
+        "flex h-full flex-col border-r border-white/10",
+        // Dark navy/charcoal background for government aesthetic
+        "bg-[#0d1117]",
         collapsed ? "w-16" : "w-60",
-        "transition-[width] duration-200",
+        "transition-[width] duration-200 ease-in-out",
       )}
       aria-label="Admin navigation"
     >
       {/* Branding header */}
       <div
         className={cn(
-          "flex items-center gap-2.5 border-b border-sidebar-border px-4 py-4",
+          "flex items-center gap-3 border-b border-white/10 px-4 py-4",
           collapsed && "justify-center px-2",
         )}
       >
-        {/* Shield logo mark */}
         <div
           className={cn(
-            "flex shrink-0 items-center justify-center rounded-sm bg-primary/10 border border-primary/20",
+            "flex shrink-0 items-center justify-center rounded bg-blue-600/20 border border-blue-500/30",
             collapsed ? "h-8 w-8" : "h-9 w-9",
           )}
         >
-          <svg
-            className="h-5 w-5 text-primary"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            <polyline points="9 12 11 14 15 10" />
-          </svg>
+          <Shield className="h-5 w-5 text-blue-400" aria-hidden="true" />
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <p className="text-[0.9rem] font-bold tracking-tight text-foreground leading-tight">
+            <p className="text-sm font-bold tracking-tight text-white leading-tight">
               CharlieSierra
             </p>
-            <p className="font-mono text-[0.55rem] font-semibold tracking-[0.18em] uppercase text-muted-foreground leading-tight">
+            <p className="font-mono text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-slate-400 leading-tight">
               Admin Console
             </p>
-            <p className="font-mono text-[0.5rem] tracking-[0.12em] uppercase text-primary/60 mt-0.5 leading-tight">
+            <p className="font-mono text-[0.5rem] tracking-[0.1em] uppercase text-blue-400/80 mt-0.5 leading-tight">
               Communications Secured
             </p>
           </div>
@@ -186,7 +182,6 @@ function AdminSidebar({ collapsed }: { collapsed: boolean }) {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5">
         {NAV_ITEMS.map((item) => {
-          // Active if exact match for dashboard, prefix match for others
           const isActive =
             item.path === "/admin"
               ? currentPath === "/admin" || currentPath === "/admin/"
@@ -200,20 +195,21 @@ function AdminSidebar({ collapsed }: { collapsed: boolean }) {
               isActive={isActive}
               collapsed={collapsed}
               badgeCount={badge}
+              onClick={onNavClick}
             />
           );
         })}
       </nav>
 
       {/* Footer: principal + logout */}
-      <div className={cn("border-t border-sidebar-border px-2 py-3 space-y-1")}>
+      <div className="border-t border-white/10 px-2 py-3 space-y-1">
         {!collapsed && principalText && (
-          <div className="px-3 py-1">
-            <p className="font-mono text-[0.6rem] text-muted-foreground uppercase tracking-widest">
+          <div className="px-3 py-1.5 rounded bg-white/5 mx-0.5 mb-1">
+            <p className="font-mono text-[0.55rem] text-slate-500 uppercase tracking-widest">
               Logged in as
             </p>
             <p
-              className="font-mono text-[0.65rem] text-sidebar-foreground truncate"
+              className="font-mono text-[0.65rem] text-slate-300 truncate mt-0.5"
               title={principalText}
             >
               {principalShort}
@@ -228,10 +224,10 @@ function AdminSidebar({ collapsed }: { collapsed: boolean }) {
             navigate({ to: "/" });
           }}
           className={cn(
-            "flex w-full items-center gap-3 rounded-sm px-3 py-2 text-sm",
-            "text-muted-foreground hover:text-destructive hover:bg-destructive/10",
+            "flex w-full items-center gap-3 rounded px-3 py-2 text-sm",
+            "text-slate-400 hover:text-red-400 hover:bg-red-500/10",
             "transition-colors duration-150",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
             collapsed && "justify-center px-2",
           )}
           title={collapsed ? "Sign out" : undefined}
@@ -254,53 +250,93 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ title, action, children }: AdminLayoutProps) {
-  // Collapse sidebar on narrow viewports by default
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Close mobile menu on route change
+  const routerState = useRouterState();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional route-change side-effect
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [routerState.location.pathname]);
+
+  // Close mobile menu on Escape
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileOpen) setMobileOpen(false);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [mobileOpen]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Sidebar */}
-      <AdminSidebar collapsed={collapsed} />
+    <div className="flex h-screen overflow-hidden bg-[#0a0e14]">
+      {/* ── Desktop sidebar ── */}
+      <div className="hidden md:flex flex-col h-full">
+        <AdminSidebar collapsed={collapsed} />
+      </div>
 
-      {/* Main area */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      {/* ── Mobile overlay ── */}
+      {mobileOpen && (
+        <dialog
+          open
+          className="fixed inset-0 z-40 md:hidden m-0 p-0 max-w-none max-h-none w-full h-full bg-transparent border-none"
+          aria-label="Admin navigation"
+        >
+          {/* Backdrop */}
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close navigation"
+          />
+          {/* Drawer */}
+          <div className="absolute left-0 top-0 h-full w-60 flex flex-col">
+            <AdminSidebar
+              collapsed={false}
+              onNavClick={() => setMobileOpen(false)}
+            />
+          </div>
+        </dialog>
+      )}
+
+      {/* ── Main area ── */}
+      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
         {/* Top header bar */}
-        <header className="flex shrink-0 items-center gap-4 border-b border-border bg-card px-6 py-3">
-          {/* Collapse toggle */}
+        <header className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#0d1117] px-4 py-3">
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            data-ocid="admin.mobile_menu_button"
+            onClick={() => setMobileOpen(true)}
+            className="rounded p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition-colors md:hidden"
+            aria-label="Open navigation menu"
+          >
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          </button>
+
+          {/* Desktop collapse toggle */}
           <button
             type="button"
             data-ocid="admin.sidebar_toggle"
             onClick={() => setCollapsed((v) => !v)}
-            className="rounded-sm p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            className="hidden md:flex rounded p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              aria-hidden="true"
-            >
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
+            <Menu className="h-4 w-4" aria-hidden="true" />
           </button>
 
           <div className="flex flex-1 items-center justify-between min-w-0">
             <div className="min-w-0">
-              <h1 className="font-mono text-xs font-bold tracking-widest text-foreground uppercase leading-tight truncate">
+              <h1 className="font-mono text-xs font-bold tracking-widest text-white uppercase leading-tight truncate">
                 CharlieSierra Admin Console
               </h1>
-              <p className="font-mono text-[0.55rem] tracking-[0.15em] uppercase text-primary/70 leading-tight">
+              <p className="font-mono text-[0.5rem] tracking-[0.15em] uppercase text-blue-400/70 leading-tight">
                 Communications Secured
               </p>
             </div>
-            {/* Page section label */}
             {title && (
-              <span className="ml-6 hidden sm:block font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground border-l border-border pl-4">
+              <span className="ml-6 hidden sm:block font-mono text-[0.6rem] uppercase tracking-widest text-slate-500 border-l border-white/10 pl-4 truncate">
                 {title}
               </span>
             )}

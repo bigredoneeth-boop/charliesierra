@@ -1,14 +1,36 @@
-import { e as createLucideIcon, Q as useNavigate, h as useAuth, V as useIsSuperAdmin, W as useCheckPolicyExpiry, X as useMyOrgs, Y as useOrgs, Z as useOrgUsers, _ as useAdminAuditLog, r as reactExports, j as jsxRuntimeExports, U as Users, $ as UserCheck, a0 as MessageSquare, a1 as Settings, a2 as AuditEventType, a3 as Shield, f as cn, a4 as ShieldCheck, a5 as Check, a6 as Copy } from "./index-CCR6Ctxt.js";
-import { u as usePolicyExpiryStore, A as AdminLayout, B as Building2, C as ClipboardList } from "./AdminLayout-CoUIN4Ho.js";
-import { U as UserPlus } from "./user-plus-BUicnfJB.js";
+import { e as createLucideIcon, as as useNavigate, k as useAuth, X as useIsSuperAdmin, av as useCheckPolicyExpiry, aw as useMyOrgs, a4 as useOrgs, $ as useOrgUsers, ax as useAdminAuditLog, r as reactExports, j as jsxRuntimeExports, U as Users, ay as UserCheck, az as MessageSquare, aA as Settings, aB as AuditEventType, Z as Shield, f as cn, aC as ShieldCheck } from "./index-BRuGftaL.js";
+import { u as usePolicyExpiryStore, A as AdminLayout, B as Building2 } from "./AdminLayout-BDDpCrSB.js";
+import { P as PrincipalDisplay } from "./PrincipalDisplay-D8D_dUnb.js";
+import { U as UserPlus } from "./user-plus-zq1tHvNN.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode);
+const __iconNode$1 = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$1);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode = [
+  ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
+  [
+    "path",
+    {
+      d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2",
+      key: "116196"
+    }
+  ],
+  ["path", { d: "M12 11h4", key: "1jrz19" }],
+  ["path", { d: "M12 16h4", key: "n85exb" }],
+  ["path", { d: "M8 11h.01", key: "1dfujw" }],
+  ["path", { d: "M8 16h.01", key: "18s6g9" }]
+];
+const ClipboardList = createLucideIcon("clipboard-list", __iconNode);
 const TIME_FILTERS = [
   { value: "24h", label: "Last 24h" },
   { value: "7d", label: "Last 7 days" },
@@ -275,22 +297,16 @@ function SecurityBanner() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
-      className: "flex items-center gap-3 rounded-sm border border-foreground/20 bg-foreground px-5 py-3",
+      className: "flex items-center gap-3 rounded-sm border border-amber-300 bg-amber-50 px-5 py-3",
       role: "banner",
       "aria-label": "Security environment notice",
       "data-ocid": "dashboard.security_banner",
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Shield,
-          {
-            className: "h-4 w-4 shrink-0 text-background/80",
-            "aria-hidden": "true"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-background/90", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "h-4 w-4 shrink-0 text-black/70", "aria-hidden": "true" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-black", children: [
           "HIGH SECURITY ENVIRONMENT —",
           " ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-background/70 font-normal", children: "All actions are audited and immutable" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-normal", children: "All actions are audited and immutable on the Internet Computer." })
         ] })
       ]
     }
@@ -330,39 +346,6 @@ function StatCard({
       ]
     }
   );
-}
-function PrincipalCopyCell({ value }) {
-  const compact = compactPrincipal(value);
-  const [copied, setCopied] = reactExports.useState(false);
-  const handleCopy = reactExports.useCallback(() => {
-    navigator.clipboard.writeText(value).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
-  }, [value]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 font-mono", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "span",
-      {
-        title: value,
-        className: "text-[0.7rem] text-foreground cursor-default",
-        children: compact
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        type: "button",
-        onClick: handleCopy,
-        "aria-label": `Copy principal ${value}`,
-        className: cn(
-          "p-0.5 rounded transition-colors duration-150",
-          copied ? "text-green-600" : "text-muted-foreground/50 hover:text-foreground"
-        ),
-        children: copied ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { width: 10, height: 10, "aria-hidden": "true" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { width: 10, height: 10, "aria-hidden": "true" })
-      }
-    )
-  ] });
 }
 function RecentActivityTable({
   events,
@@ -457,7 +440,7 @@ function RecentActivityTable({
           colSpan: 5,
           className: "py-10 text-center font-mono text-xs text-muted-foreground",
           "data-ocid": "dashboard.audit.empty_state",
-          children: "NO ACTIVITY IN THIS TIME WINDOW"
+          children: "No recent activity to display."
         }
       ) }) : filtered.map((ev, i) => {
         const actor = principalText(ev.actorPrincipal);
@@ -472,7 +455,7 @@ function RecentActivityTable({
               i % 2 === 0 ? "bg-muted/15" : "bg-transparent"
             ),
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalCopyCell, { value: actor }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: actor }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "span",
                 {
@@ -484,7 +467,7 @@ function RecentActivityTable({
                   children: meta.label
                 }
               ) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: target ? /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalCopyCell, { value: target }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.65rem] text-muted-foreground/40", children: "—" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: target ? /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: target }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.65rem] text-muted-foreground/40", children: "—" }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "td",
                 {

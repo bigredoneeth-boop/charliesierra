@@ -21,6 +21,8 @@ import type {
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import type { AdminStatusValue } from "@/components/admin/AdminStatusBadge";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { PrincipalDisplay } from "@/components/admin/PrincipalDisplay";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -57,6 +59,7 @@ import {
   Plus,
   RefreshCw,
   Search,
+  Shield,
   ShieldAlert,
   Trash2,
   X,
@@ -172,38 +175,7 @@ function IdCell({ id }: { id: string }) {
   );
 }
 
-// ── Principal Cell (for members) ───────────────────────────────────────────────
-
-function PrincipalCell({ principal }: { principal: string }) {
-  const short =
-    principal.length > 20
-      ? `${principal.slice(0, 10)}…${principal.slice(-5)}`
-      : principal;
-  const { copy, copied } = useCopyText();
-
-  return (
-    <span className="group inline-flex items-center gap-1.5">
-      <span
-        className="font-mono text-xs text-foreground tracking-tight select-all"
-        title={principal}
-      >
-        {short}
-      </span>
-      <button
-        type="button"
-        aria-label="Copy principal"
-        onClick={() => copy(principal)}
-        className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-muted-foreground hover:text-foreground"
-      >
-        {copied ? (
-          <Check className="h-3 w-3 text-green-600" />
-        ) : (
-          <Copy className="h-3 w-3" />
-        )}
-      </button>
-    </span>
-  );
-}
+// ── Principal Cell (for members) — replaced by shared PrincipalDisplay
 
 const PAGE_SIZE = BigInt(25);
 
@@ -557,190 +529,6 @@ function EditOrgModal({ org, open, onClose }: EditOrgModalProps) {
   );
 }
 
-// ── Suspend Organization Dialog ───────────────────────────────────────────────
-interface SuspendOrgDialogProps {
-  org: OrgRecord | null;
-  open: boolean;
-  onClose: () => void;
-}
-
-function SuspendOrgDialog({ org, open, onClose }: SuspendOrgDialogProps) {
-  const suspendOrg = useSuspendOrg();
-
-  function handleClose() {
-    suspendOrg.reset();
-    onClose();
-  }
-
-  async function handleConfirm() {
-    if (!org) return;
-    try {
-      await suspendOrg.mutateAsync(org.id);
-      toast.success(`Organization "${org.name}" suspended.`);
-      handleClose();
-    } catch (err) {
-      toast.error(`Failed to suspend organization: ${String(err)}`);
-    }
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => !v && handleClose()}>
-      <DialogContent
-        className="max-w-sm bg-card border border-border shadow-lg"
-        data-ocid="admin.suspend_org.dialog"
-      >
-        <DialogHeader>
-          <DialogTitle className="font-mono text-xs font-bold tracking-widest uppercase text-amber-700">
-            Suspend Organization
-          </DialogTitle>
-          <DialogDescription className="font-mono text-[0.65rem] text-muted-foreground">
-            This will prevent all members from accessing the organization.
-          </DialogDescription>
-        </DialogHeader>
-
-        {org && (
-          <p className="font-mono text-xs text-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border">
-            {org.name}
-          </p>
-        )}
-
-        <DialogFooter className="gap-2">
-          <Button
-            type="button"
-            data-ocid="admin.suspend_org.cancel_button"
-            variant="outline"
-            size="sm"
-            onClick={handleClose}
-            disabled={suspendOrg.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            data-ocid="admin.suspend_org.confirm_button"
-            size="sm"
-            onClick={handleConfirm}
-            disabled={suspendOrg.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-amber-600 hover:bg-amber-700 text-white"
-          >
-            {suspendOrg.isPending ? "Suspending…" : "Confirm Suspend"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-// ── Delete Organization Dialog ────────────────────────────────────────────────
-interface DeleteOrgDialogProps {
-  org: OrgRecord | null;
-  open: boolean;
-  onClose: () => void;
-  onDeleted: () => void;
-}
-
-function DeleteOrgDialog({
-  org,
-  open,
-  onClose,
-  onDeleted,
-}: DeleteOrgDialogProps) {
-  const [confirmation, setConfirmation] = useState("");
-  const deleteOrg = useDeleteOrg();
-  const isConfirmed = org ? confirmation === org.name : false;
-
-  function handleClose() {
-    setConfirmation("");
-    deleteOrg.reset();
-    onClose();
-  }
-
-  async function handleConfirm() {
-    if (!org || !isConfirmed) return;
-    try {
-      await deleteOrg.mutateAsync(org.id);
-      toast.success(`Organization "${org.name}" deleted.`);
-      handleClose();
-      onDeleted();
-    } catch (err) {
-      toast.error(`Failed to delete organization: ${String(err)}`);
-    }
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => !v && handleClose()}>
-      <DialogContent
-        className="max-w-sm bg-card border border-border shadow-lg"
-        data-ocid="admin.delete_org.dialog"
-      >
-        <DialogHeader>
-          <DialogTitle className="font-mono text-xs font-bold tracking-widest uppercase text-red-700">
-            Delete Organization
-          </DialogTitle>
-          <DialogDescription className="font-mono text-[0.65rem] text-muted-foreground">
-            This action is permanent. All data associated with this organization
-            will be irrevocably removed.
-          </DialogDescription>
-        </DialogHeader>
-
-        {org && (
-          <p className="font-mono text-xs text-foreground break-all bg-muted rounded-sm px-3 py-2 border border-border">
-            {org.name}
-          </p>
-        )}
-
-        <div className="space-y-1.5">
-          <Label
-            htmlFor="delete-confirmation"
-            className="font-mono text-[0.65rem] tracking-widest uppercase text-muted-foreground"
-          >
-            Type{" "}
-            <span className="text-destructive font-semibold">
-              {org?.name ?? ""}
-            </span>{" "}
-            to confirm
-          </Label>
-          <Input
-            id="delete-confirmation"
-            data-ocid="admin.delete_org.confirmation_input"
-            placeholder={org?.name ?? ""}
-            value={confirmation}
-            onChange={(e) => setConfirmation(e.target.value)}
-            className="font-mono text-sm h-9 rounded-sm bg-background"
-            autoComplete="off"
-            spellCheck={false}
-          />
-        </div>
-
-        <DialogFooter className="gap-2">
-          <Button
-            type="button"
-            data-ocid="admin.delete_org.cancel_button"
-            variant="outline"
-            size="sm"
-            onClick={handleClose}
-            disabled={deleteOrg.isPending}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            data-ocid="admin.delete_org.confirm_button"
-            size="sm"
-            onClick={handleConfirm}
-            disabled={deleteOrg.isPending || !isConfirmed}
-            className="font-mono text-xs tracking-wider uppercase rounded-sm h-8 bg-red-700 hover:bg-red-800 text-white disabled:opacity-40"
-          >
-            {deleteOrg.isPending ? "Deleting…" : "Delete Organization"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 // ── Organization Detail View ───────────────────────────────────────────────────
 interface OrgDetailViewProps {
   orgId: OrgId;
@@ -761,8 +549,34 @@ function OrgDetailView({ orgId, onBack, canAdmin }: OrgDetailViewProps) {
   });
 
   const [showEdit, setShowEdit] = useState(false);
-  const [showSuspend, setShowSuspend] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [suspendDialogOpen, setSuspendDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const suspendOrg = useSuspendOrg();
+  const deleteOrg = useDeleteOrg();
+
+  async function handleSuspendConfirm() {
+    if (!org) return;
+    try {
+      await suspendOrg.mutateAsync(org.id);
+      toast.success(`Organization "${org.name}" suspended.`);
+      setSuspendDialogOpen(false);
+    } catch (err) {
+      toast.error(`Failed to suspend organization: ${String(err)}`);
+    }
+  }
+
+  async function handleDeleteConfirm() {
+    if (!org) return;
+    try {
+      await deleteOrg.mutateAsync(org.id);
+      toast.success(`Organization "${org.name}" removed.`);
+      setDeleteDialogOpen(false);
+      onBack();
+    } catch (err) {
+      toast.error(`Failed to remove organization: ${String(err)}`);
+    }
+  }
 
   if (orgLoading) {
     return (
@@ -882,7 +696,7 @@ function OrgDetailView({ orgId, onBack, canAdmin }: OrgDetailViewProps) {
             data-ocid="admin.org_detail.suspend_button"
             size="sm"
             variant="outline"
-            onClick={() => setShowSuspend(true)}
+            onClick={() => setSuspendDialogOpen(true)}
             disabled={isSuspended}
             className="font-mono text-[0.65rem] tracking-wider uppercase rounded-sm h-8 gap-1.5 border-amber-600/40 text-amber-700 hover:bg-amber-50 hover:text-amber-800 disabled:opacity-40"
           >
@@ -894,11 +708,11 @@ function OrgDetailView({ orgId, onBack, canAdmin }: OrgDetailViewProps) {
             data-ocid="admin.org_detail.delete_button"
             size="sm"
             variant="outline"
-            onClick={() => setShowDelete(true)}
+            onClick={() => setDeleteDialogOpen(true)}
             className="font-mono text-[0.65rem] tracking-wider uppercase rounded-sm h-8 gap-1.5 border-red-600/40 text-red-700 hover:bg-red-50 hover:text-red-800"
           >
             <Trash2 className="h-3.5 w-3.5" />
-            Delete
+            Remove
           </Button>
         </div>
       )}
@@ -966,7 +780,7 @@ function OrgDetailView({ orgId, onBack, canAdmin }: OrgDetailViewProps) {
                       className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors"
                     >
                       <td className="px-4 py-2.5">
-                        <PrincipalCell principal={uid} />
+                        <PrincipalDisplay principal={uid} />
                       </td>
                       <td className="px-4 py-2.5">
                         <RoleBadge role={m.role} />
@@ -994,16 +808,23 @@ function OrgDetailView({ orgId, onBack, canAdmin }: OrgDetailViewProps) {
         open={showEdit}
         onClose={() => setShowEdit(false)}
       />
-      <SuspendOrgDialog
-        org={org}
-        open={showSuspend}
-        onClose={() => setShowSuspend(false)}
+      <ConfirmDialog
+        open={suspendDialogOpen}
+        onConfirm={handleSuspendConfirm}
+        onCancel={() => setSuspendDialogOpen(false)}
+        title="Suspend Organization"
+        description="This organization and all associated users will be suspended and unable to access the system. This action is audited."
+        confirmLabel="Suspend"
+        destructive={true}
       />
-      <DeleteOrgDialog
-        org={org}
-        open={showDelete}
-        onClose={() => setShowDelete(false)}
-        onDeleted={onBack}
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteDialogOpen(false)}
+        title="Remove Organization"
+        description="This will permanently remove the organization and all associated data. This action cannot be undone and is permanently audited."
+        confirmLabel="Remove"
+        destructive={true}
       />
     </div>
   );
@@ -1171,7 +992,7 @@ function OrgListView({
                     <p className="font-mono text-xs text-muted-foreground">
                       {searchDebounced
                         ? `No organizations match "${searchDebounced}"`
-                        : "No organizations found."}
+                        : "No organizations have been created yet. Create one to get started."}
                     </p>
                     {isSuperAdmin && !searchDebounced && (
                       <p className="mt-1 font-mono text-[0.65rem] text-muted-foreground/60">
@@ -1317,6 +1138,26 @@ export default function AdminOrganizationsPage() {
       title="Organizations"
       action={!selectedOrgId ? headerAction : undefined}
     >
+      {!selectedOrgId && (
+        <>
+          {/* Page subtitle */}
+          <p className="font-mono text-xs text-muted-foreground mb-3">
+            Manage multi-tenant organizations and their members
+          </p>
+
+          {/* Security banner */}
+          <div className="flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3 mb-4">
+            <Shield
+              className="h-4 w-4 shrink-0 text-black mt-0.5"
+              aria-hidden="true"
+            />
+            <p className="font-mono text-xs text-black leading-relaxed">
+              All organization management actions are audited and immutable.
+            </p>
+          </div>
+        </>
+      )}
+
       {isCheckingAccess ? (
         <div
           data-ocid="admin.organizations.loading_state"

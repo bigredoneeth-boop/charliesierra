@@ -1,23 +1,25 @@
 {
-  "overview": "CharlieSierra is a decentralized, end-to-end encrypted secure messaging platform for government and military use, with a full Admin Console for managing organizations, users, groups, audit logs, key escrow, retention policies, and platform settings.",
+  "overview": "CharlieSierra Admin Console — a secure, multi-tenant government/military-grade admin panel for managing organizations, users, groups, audit logs, key escrow, and retention policies on the Internet Computer.",
   "features": [
-    "End-to-end encrypted messaging",
-    "Admin Console with role-based access control",
+    "Protected admin route with role-based access control",
     "Multi-tenant organization management",
-    "Platform and organization settings control panel",
-    "Immutable audit logs",
-    "Key escrow with dual-control recovery",
-    "Retention policy management with legal hold",
-    "Logo upload and org branding"
+    "Full user lifecycle management (invite, roles, suspend, remove)",
+    "Immutable audit log viewer with filters and CSV export",
+    "vetKeys-powered dual-control key escrow and recovery",
+    "Retention policy management with legal hold and compliance PDF export",
+    "Platform and organization settings with security controls",
+    "Government/military aesthetic with high-contrast professional design"
   ],
-  "category": "secure-messaging",
+  "category": "admin-console",
   "tags": [
+    "admin",
     "security",
     "government",
     "military",
-    "encrypted",
-    "admin-console",
+    "rbac",
+    "audit",
+    "key-escrow",
     "internet-computer"
   ],
-  "last_updated": "2026-05-28T00:18:58.280Z"
+  "last_updated": "2026-05-29T00:00:32.286Z"
 }

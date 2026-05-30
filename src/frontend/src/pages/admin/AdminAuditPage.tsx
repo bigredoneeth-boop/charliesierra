@@ -316,57 +316,62 @@ export default function AdminAuditPage() {
       title="AUDIT LOGS"
       action={
         <Button
-          variant="outline"
           size="sm"
           onClick={handleExport}
           disabled={exportMutation.isPending}
           data-ocid="admin.audit.export_button"
-          className="gap-2 font-mono text-xs tracking-widest"
+          className="gap-2 font-mono text-xs tracking-widest bg-primary hover:bg-primary/90 text-primary-foreground"
         >
           <Download size={13} />
           {exportMutation.isPending ? "EXPORTING…" : "EXPORT CSV"}
         </Button>
       }
     >
+      {/* Page subtitle */}
+      <p className="sr-only" aria-live="polite" id="audit-page-desc">
+        Immutable audit trail of all administrative actions
+      </p>
       <div className="space-y-4">
         {/* Immutability banner */}
         <div
           data-ocid="admin.audit.immutability_banner"
-          className="flex items-center gap-3 rounded-sm border border-amber-500/40 bg-amber-500/5 px-4 py-3"
+          role="alert"
+          className="flex items-start gap-3 rounded-sm border-2 border-amber-400 bg-amber-50 px-4 py-3.5"
         >
-          <div className="shrink-0 rounded-sm bg-amber-500/15 p-1.5">
-            <Lock size={14} className="text-amber-600 dark:text-amber-400" />
+          <div className="mt-0.5 shrink-0 rounded-sm bg-amber-400/30 p-1.5">
+            <ShieldAlert size={16} className="text-black" />
           </div>
-          <div className="min-w-0">
-            <p className="font-mono text-xs font-semibold tracking-wide text-amber-700 dark:text-amber-400">
-              IMMUTABLE RECORD
+          <div className="min-w-0 flex-1">
+            <p className="font-mono text-xs font-bold tracking-widest text-black uppercase">
+              IMMUTABLE RECORD — READ ONLY
             </p>
-            <p className="mt-0.5 font-mono text-[0.65rem] tracking-wide text-amber-600/80 dark:text-amber-500/80">
+            <p className="mt-1 font-mono text-[0.68rem] leading-relaxed tracking-wide text-black">
               All actions are immutable on the Internet Computer and cannot be
-              altered.
+              altered. This audit trail is permanently preserved.
             </p>
           </div>
-          <div className="ml-auto shrink-0 flex items-center gap-1.5">
-            <ShieldAlert
-              size={13}
-              className="text-amber-500/60"
-              aria-hidden="true"
-            />
-            <span className="font-mono text-[0.55rem] tracking-widest text-amber-500/60 uppercase">
-              Read Only
+          <div className="ml-auto shrink-0 flex items-center gap-1.5 mt-0.5">
+            <Lock size={13} className="text-black/60" aria-hidden="true" />
+            <span className="font-mono text-[0.55rem] tracking-widest text-black/60 uppercase">
+              Blockchain Verified
             </span>
           </div>
         </div>
 
-        {/* Status line */}
-        <p
-          data-ocid="admin.audit.status_label"
-          className="font-mono text-[0.65rem] tracking-widest text-muted-foreground"
-        >
-          {isLoading
-            ? "LOADING EVENTS…"
-            : `${filteredEvents.length}${filteredEvents.length !== 1 ? " EVENTS" : " EVENT"}${hasActiveFilters ? " LOADED (FILTERED)" : " LOADED"}`}
-        </p>
+        {/* Page subtitle + status line */}
+        <div className="flex items-center justify-between gap-4">
+          <p className="font-mono text-[0.6rem] tracking-wider text-muted-foreground uppercase">
+            Immutable audit trail of all administrative actions
+          </p>
+          <p
+            data-ocid="admin.audit.status_label"
+            className="shrink-0 font-mono text-[0.65rem] tracking-widest text-muted-foreground"
+          >
+            {isLoading
+              ? "LOADING EVENTS…"
+              : `${filteredEvents.length}${filteredEvents.length !== 1 ? " EVENTS" : " EVENT"}${hasActiveFilters ? " (FILTERED)" : ""}`}
+          </p>
+        </div>
 
         {/* Filter bar */}
         <div
@@ -593,10 +598,31 @@ export default function AdminAuditPage() {
           data-ocid="admin.audit.table_section"
           className="overflow-hidden rounded-sm border border-border bg-card"
         >
-          <AuditLogTable
-            events={filteredEvents}
-            isLoading={isLoading && allEvents.length === 0}
-          />
+          {!isLoading && filteredEvents.length === 0 ? (
+            <div
+              data-ocid="admin.audit.empty_state"
+              className="flex flex-col items-center justify-center gap-3 py-16 px-4 text-center"
+            >
+              <ShieldAlert
+                size={32}
+                className="text-muted-foreground/30"
+                aria-hidden="true"
+              />
+              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                No audit logs match your current filters.
+              </p>
+              {hasActiveFilters && (
+                <p className="font-mono text-[0.65rem] text-muted-foreground/70">
+                  Try clearing filters to see all events.
+                </p>
+              )}
+            </div>
+          ) : (
+            <AuditLogTable
+              events={filteredEvents}
+              isLoading={isLoading && allEvents.length === 0}
+            />
+          )}
         </div>
 
         {/* Load More */}

@@ -245,38 +245,34 @@ export default function AdminSettingsPage() {
       <div className="p-6 max-w-4xl mx-auto space-y-6">
         {/* Page header */}
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            Settings
-          </h1>
+          <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Manage platform and organization configuration
+            Configure platform-wide security settings and organization defaults
           </p>
         </div>
 
         {/* Audit warning banner */}
         <div
           data-ocid="settings.audit_banner"
-          className="flex items-start gap-3 rounded-lg border border-amber-700/50 bg-amber-900/20 px-4 py-3"
+          className="flex items-start gap-3 rounded-md border border-amber-300 bg-amber-50 px-4 py-3"
         >
           <svg
             aria-hidden="true"
-            className="mt-0.5 h-5 w-5 shrink-0 text-amber-400"
+            className="mt-0.5 h-5 w-5 shrink-0 text-amber-700"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
             <path
               clipRule="evenodd"
-              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+              d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
               fillRule="evenodd"
             />
           </svg>
           <div>
-            <p className="text-sm font-semibold text-amber-100">
-              Security Notice
-            </p>
-            <p className="mt-0.5 text-xs text-amber-200">
-              All changes are audited and immutable. Actions cannot be undone on
-              the Internet Computer.
+            <p className="text-sm font-semibold text-black">Security Notice</p>
+            <p className="mt-0.5 text-xs text-black">
+              All settings changes are audited and immutable. Changes take
+              effect immediately across the platform.
             </p>
           </div>
         </div>
@@ -289,7 +285,12 @@ export default function AdminSettingsPage() {
                 value="platform"
                 className="data-[state=active]:bg-muted data-[state=active]:text-foreground text-muted-foreground"
               >
-                Platform Settings
+                <span className="flex items-center gap-1.5">
+                  Platform Settings
+                  <span className="hidden sm:inline text-[0.65rem] font-normal opacity-60">
+                    (Super Admin Only)
+                  </span>
+                </span>
               </TabsTrigger>
             )}
             <TabsTrigger
@@ -654,7 +655,9 @@ export default function AdminSettingsPage() {
                         System Health
                       </CardTitle>
                       <CardDescription className="text-xs">
-                        Read-only canister status and resource metrics
+                        <CardDescription className="text-xs">
+                          Read-only canister status and resource metrics
+                        </CardDescription>
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -716,14 +719,39 @@ export default function AdminSettingsPage() {
                           data-ocid="settings.save_platform_button"
                           type="button"
                           disabled={savingPlatform}
+                          className="min-w-[180px]"
                           onClick={() => {
                             if (validatePlatform())
                               setShowPlatformSaveDialog(true);
                           }}
                         >
-                          {savingPlatform
-                            ? "Saving..."
-                            : "Save Platform Settings"}
+                          {savingPlatform ? (
+                            <span className="flex items-center gap-2">
+                              <svg
+                                className="animate-spin h-4 w-4"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                />
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8v8z"
+                                />
+                              </svg>
+                              Saving...
+                            </span>
+                          ) : (
+                            "Save Platform Settings"
+                          )}
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -745,9 +773,12 @@ export default function AdminSettingsPage() {
                             data-ocid="settings.platform_save_dialog.confirm_button"
                             onClick={() => {
                               if (platformForm) savePlatform(platformForm);
+                              toast.success(
+                                "Settings saved successfully — change logged to audit trail",
+                              );
                             }}
                           >
-                            Confirm
+                            Confirm & Save
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
@@ -1167,11 +1198,38 @@ export default function AdminSettingsPage() {
                         data-ocid="settings.save_org_button"
                         type="button"
                         disabled={savingOrg}
+                        className="min-w-[200px]"
                         onClick={() => {
                           if (validateOrg()) setShowOrgSaveDialog(true);
                         }}
                       >
-                        {savingOrg ? "Saving..." : "Save Organization Settings"}
+                        {savingOrg ? (
+                          <span className="flex items-center gap-2">
+                            <svg
+                              className="animate-spin h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              aria-hidden="true"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v8z"
+                              />
+                            </svg>
+                            Saving...
+                          </span>
+                        ) : (
+                          "Save Organization Settings"
+                        )}
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -1193,9 +1251,12 @@ export default function AdminSettingsPage() {
                           data-ocid="settings.org_save_dialog.confirm_button"
                           onClick={() => {
                             if (orgForm) saveOrg(orgForm);
+                            toast.success(
+                              "Settings saved successfully — change logged to audit trail",
+                            );
                           }}
                         >
-                          Confirm
+                          Confirm & Save
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

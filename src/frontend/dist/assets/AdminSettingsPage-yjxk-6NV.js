@@ -1,7 +1,7 @@
-import { g as useActor, h as useAuth, i as useQueryClient, k as useQuery, O as OrgRole, r as reactExports, l as useMutation, j as jsxRuntimeExports, T as Tabs, m as TabsList, n as TabsTrigger, o as TabsContent, a as Skeleton, p as Label, I as Input, P as PasswordPolicy, q as Select, s as SelectTrigger, t as SelectValue, v as SelectContent, R as RetentionPeriod, w as SelectItem, A as AlertDialog, x as AlertDialogTrigger, B as Button, y as AlertDialogContent, z as AlertDialogHeader, D as AlertDialogTitle, E as AlertDialogDescription, F as AlertDialogFooter, G as AlertDialogCancel, H as AlertDialogAction, J as GroupCreationPermission, K as DataExportPermission, c as Badge, M as Textarea, d as ue, N as createActor } from "./index-CCR6Ctxt.js";
-import { A as AdminLayout } from "./AdminLayout-CoUIN4Ho.js";
-import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-BxiiaiFY.js";
-import { S as Switch } from "./switch-DUSjQpAQ.js";
+import { i as useActor, k as useAuth, l as useQueryClient, m as useQuery, O as OrgRole, r as reactExports, n as useMutation, j as jsxRuntimeExports, o as Tabs, p as TabsList, q as TabsTrigger, s as TabsContent, a as Skeleton, t as Label, I as Input, P as PasswordPolicy, v as Select, w as SelectTrigger, x as SelectValue, y as SelectContent, R as RetentionPeriod, z as SelectItem, A as AlertDialog, D as AlertDialogTrigger, B as Button, E as AlertDialogContent, F as AlertDialogHeader, G as AlertDialogTitle, H as AlertDialogDescription, J as AlertDialogFooter, K as AlertDialogCancel, M as AlertDialogAction, d as ue, N as GroupCreationPermission, Q as DataExportPermission, c as Badge, V as Textarea, W as createActor } from "./index-BRuGftaL.js";
+import { A as AdminLayout } from "./AdminLayout-BDDpCrSB.js";
+import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-Dj0kq17T.js";
+import { S as Switch } from "./switch-B55RMrIa.js";
 function formatCycles(n) {
   if (n >= 1000000000000n) return `${(Number(n) / 1e12).toFixed(1)}T`;
   if (n >= 1000000000n) return `${(Number(n) / 1e9).toFixed(1)}B`;
@@ -157,35 +157,35 @@ function AdminSettingsPage() {
   const defaultTab = isSuperAdmin ? "platform" : "org";
   return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminLayout, { title: "Settings", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 max-w-4xl mx-auto space-y-6", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-white tracking-tight", children: "Settings" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-1", children: "Manage platform and organization configuration" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold tracking-tight", children: "Settings" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm mt-1", children: "Configure platform-wide security settings and organization defaults" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
         "data-ocid": "settings.audit_banner",
-        className: "flex items-start gap-3 rounded-lg border border-amber-700/50 bg-amber-900/20 px-4 py-3",
+        className: "flex items-start gap-3 rounded-md border border-amber-300 bg-amber-50 px-4 py-3",
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "svg",
             {
               "aria-hidden": "true",
-              className: "mt-0.5 h-5 w-5 shrink-0 text-amber-400",
+              className: "mt-0.5 h-5 w-5 shrink-0 text-amber-700",
               fill: "currentColor",
               viewBox: "0 0 20 20",
               children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "path",
                 {
                   clipRule: "evenodd",
-                  d: "M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z",
+                  d: "M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z",
                   fillRule: "evenodd"
                 }
               )
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-amber-100", children: "Security Notice" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-0.5 text-xs text-amber-200", children: "All changes are audited and immutable. Actions cannot be undone on the Internet Computer." })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-black", children: "Security Notice" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-0.5 text-xs text-black", children: "All settings changes are audited and immutable. Changes take effect immediately across the platform." })
           ] })
         ]
       }
@@ -198,7 +198,10 @@ function AdminSettingsPage() {
             "data-ocid": "settings.platform_tab",
             value: "platform",
             className: "data-[state=active]:bg-muted data-[state=active]:text-foreground text-muted-foreground",
-            children: "Platform Settings"
+            children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5", children: [
+              "Platform Settings",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline text-[0.65rem] font-normal opacity-60", children: "(Super Admin Only)" })
+            ] })
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -481,7 +484,7 @@ function AdminSettingsPage() {
         /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "border-border bg-card", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { className: "pb-3", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-xs font-semibold uppercase tracking-wider text-foreground", children: "System Health" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(CardDescription, { className: "text-xs", children: "Read-only canister status and resource metrics" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CardDescription, { className: "text-xs", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardDescription, { className: "text-xs", children: "Read-only canister status and resource metrics" }) })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { children: healthQuery.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-3 gap-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-16" }),
@@ -528,11 +531,44 @@ function AdminSettingsPage() {
                   "data-ocid": "settings.save_platform_button",
                   type: "button",
                   disabled: savingPlatform,
+                  className: "min-w-[180px]",
                   onClick: () => {
                     if (validatePlatform())
                       setShowPlatformSaveDialog(true);
                   },
-                  children: savingPlatform ? "Saving..." : "Save Platform Settings"
+                  children: savingPlatform ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "svg",
+                      {
+                        className: "animate-spin h-4 w-4",
+                        viewBox: "0 0 24 24",
+                        fill: "none",
+                        "aria-hidden": "true",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "circle",
+                            {
+                              className: "opacity-25",
+                              cx: "12",
+                              cy: "12",
+                              r: "10",
+                              stroke: "currentColor",
+                              strokeWidth: "4"
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "path",
+                            {
+                              className: "opacity-75",
+                              fill: "currentColor",
+                              d: "M4 12a8 8 0 018-8v8z"
+                            }
+                          )
+                        ]
+                      }
+                    ),
+                    "Saving..."
+                  ] }) : "Save Platform Settings"
                 }
               ) }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogContent, { children: [
@@ -548,8 +584,11 @@ function AdminSettingsPage() {
                       "data-ocid": "settings.platform_save_dialog.confirm_button",
                       onClick: () => {
                         if (platformForm) savePlatform(platformForm);
+                        ue.success(
+                          "Settings saved successfully — change logged to audit trail"
+                        );
                       },
-                      children: "Confirm"
+                      children: "Confirm & Save"
                     }
                   )
                 ] })
@@ -877,10 +916,43 @@ function AdminSettingsPage() {
                     "data-ocid": "settings.save_org_button",
                     type: "button",
                     disabled: savingOrg,
+                    className: "min-w-[200px]",
                     onClick: () => {
                       if (validateOrg()) setShowOrgSaveDialog(true);
                     },
-                    children: savingOrg ? "Saving..." : "Save Organization Settings"
+                    children: savingOrg ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "svg",
+                        {
+                          className: "animate-spin h-4 w-4",
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          "aria-hidden": "true",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "circle",
+                              {
+                                className: "opacity-25",
+                                cx: "12",
+                                cy: "12",
+                                r: "10",
+                                stroke: "currentColor",
+                                strokeWidth: "4"
+                              }
+                            ),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "path",
+                              {
+                                className: "opacity-75",
+                                fill: "currentColor",
+                                d: "M4 12a8 8 0 018-8v8z"
+                              }
+                            )
+                          ]
+                        }
+                      ),
+                      "Saving..."
+                    ] }) : "Save Organization Settings"
                   }
                 ) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertDialogContent, { children: [
@@ -896,8 +968,11 @@ function AdminSettingsPage() {
                         "data-ocid": "settings.org_save_dialog.confirm_button",
                         onClick: () => {
                           if (orgForm) saveOrg(orgForm);
+                          ue.success(
+                            "Settings saved successfully — change logged to audit trail"
+                          );
                         },
-                        children: "Confirm"
+                        children: "Confirm & Save"
                       }
                     )
                   ] })

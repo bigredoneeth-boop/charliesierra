@@ -1,6 +1,7 @@
 import type { OrgRecord, RetentionPolicy } from "@/backend";
 import { RetentionPeriod, createActor } from "@/backend";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -115,6 +116,12 @@ export default function AdminRetentionPoliciesPage() {
   const [legalHoldModalOpen, setLegalHoldModalOpen] = useState(false);
   const [legalHoldTarget, setLegalHoldTarget] = useState("");
   const [legalHoldReason, setLegalHoldReason] = useState("");
+
+  // Confirm dialogs for destructive actions
+  const [removePolicyConfirm, setRemovePolicyConfirm] =
+    useState<RetentionPolicy | null>(null);
+  const [removeLegalHoldConfirm, setRemoveLegalHoldConfirm] =
+    useState<RetentionPolicy | null>(null);
 
   // Form state
   const [formOrgId, setFormOrgId] = useState<string>("__global__");
@@ -486,7 +493,8 @@ export default function AdminRetentionPoliciesPage() {
               Retention Policy Management
             </h1>
             <p className="text-muted-foreground text-sm mt-0.5">
-              Configure data retention periods and legal hold settings
+              Manage data retention policies and legal holds across all
+              organizations
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -494,9 +502,9 @@ export default function AdminRetentionPoliciesPage() {
               variant="outline"
               onClick={generateComplianceReport}
               data-ocid="retention.generate_report_button"
-              className="border-blue-700/30 text-blue-900 hover:bg-blue-50 hover:border-blue-700/60 font-mono text-xs uppercase tracking-wide"
+              className="gap-1.5 border-primary/30 text-primary hover:bg-primary/5 hover:border-primary/60 font-medium"
             >
-              <FileText className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
+              <FileText className="h-4 w-4" aria-hidden="true" />
               Generate Compliance Report
             </Button>
             <Button onClick={openCreate} data-ocid="retention.create_button">
@@ -536,13 +544,17 @@ export default function AdminRetentionPoliciesPage() {
 
         {/* Audit immutability banner */}
         <div
-          className="flex items-center gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-amber-800"
+          className="flex items-center gap-3 rounded-md border border-amber-300 bg-amber-50 px-4 py-3"
           role="alert"
           data-ocid="retention.audit_banner"
         >
-          <AlertTriangle className="h-5 w-5 shrink-0" aria-hidden="true" />
-          <span className="text-sm font-medium">
-            All retention policy changes are audited and immutable
+          <Shield
+            className="h-5 w-5 shrink-0 text-amber-700"
+            aria-hidden="true"
+          />
+          <span className="text-sm font-medium text-black">
+            All retention policy changes are audited and immutable. Legal hold
+            restrictions cannot be bypassed.
           </span>
         </div>
 
@@ -603,7 +615,7 @@ export default function AdminRetentionPoliciesPage() {
               aria-hidden="true"
             />
             <p className="text-sm font-medium text-muted-foreground">
-              No retention policies configured
+              No retention policies configured. Create one to get started.
             </p>
             <Button
               variant="outline"
@@ -618,8 +630,8 @@ export default function AdminRetentionPoliciesPage() {
           <div className="rounded-md border" data-ocid="retention.table">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b bg-muted/40">
+                <thead className="sticky top-0 z-10">
+                  <tr className="border-b bg-muted/60">
                     <th className="px-4 py-3 text-left font-semibold text-muted-foreground uppercase tracking-wider text-xs">
                       Organization
                     </th>
@@ -660,10 +672,10 @@ export default function AdminRetentionPoliciesPage() {
                     return (
                       <tr
                         key={policy.id}
-                        className={`border-b last:border-0 transition-colors ${
+                        className={`border-b last:border-0 transition-colors cursor-default ${
                           expiringPolicies.some((ep) => ep.id === policy.id)
-                            ? "bg-amber-50 hover:bg-amber-100/60"
-                            : "hover:bg-muted/20"
+                            ? "bg-amber-50/80 hover:bg-amber-100/70"
+                            : "hover:bg-muted/30"
                         }`}
                         data-ocid={`retention.item.${idx + 1}`}
                       >
@@ -682,9 +694,19 @@ export default function AdminRetentionPoliciesPage() {
                         </td>
                         <td className="px-4 py-3">
                           {policy.legalHold ? (
-                            <Badge variant="destructive">Active</Badge>
+                            <Badge
+                              variant="destructive"
+                              className="font-semibold"
+                            >
+                              Active
+                            </Badge>
                           ) : (
-                            <Badge variant="outline">None</Badge>
+                            <Badge
+                              variant="outline"
+                              className="text-muted-foreground"
+                            >
+                              None
+                            </Badge>
                           )}
                         </td>
                         <td className="px-4 py-3">
@@ -743,7 +765,13 @@ export default function AdminRetentionPoliciesPage() {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => openLegalHold(holdTarget)}
+                                onClick={() => {
+                                  if (policy.legalHold) {
+                                    setRemoveLegalHoldConfirm(policy);
+                                  } else {
+                                    openLegalHold(holdTarget);
+                                  }
+                                }}
                                 data-ocid={`retention.legal_hold_button.${idx + 1}`}
                                 aria-label={
                                   policy.legalHold
@@ -925,6 +953,76 @@ export default function AdminRetentionPoliciesPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* ── Remove Policy Confirm Dialog ──────────────────────────────── */}
+        <ConfirmDialog
+          open={removePolicyConfirm !== null}
+          title="Remove Retention Policy"
+          description="This policy will be permanently removed. Any data governed by this policy will revert to the global default retention settings. This action is audited."
+          confirmLabel="Remove"
+          destructive
+          onCancel={() => setRemovePolicyConfirm(null)}
+          onConfirm={async () => {
+            if (!actor || !removePolicyConfirm) return;
+            try {
+              const result = await actor.updateRetentionPolicy({
+                id: removePolicyConfirm.id,
+                period: removePolicyConfirm.period,
+                legalHold: false,
+                autoDelete: false,
+              });
+              if (result.__kind__ === "ok") {
+                toast.success("Retention policy removed");
+                void fetchData();
+              } else {
+                toast.error(`Error: ${result.err}`);
+              }
+            } catch {
+              toast.error("Failed to remove policy");
+            } finally {
+              setRemovePolicyConfirm(null);
+            }
+          }}
+        />
+
+        {/* ── Remove Legal Hold Confirm Dialog ─────────────────────────────── */}
+        <ConfirmDialog
+          open={removeLegalHoldConfirm !== null}
+          title="Remove Legal Hold"
+          description="This will release the legal hold on this organization. Data may be subject to automatic deletion according to the retention policy. This action is audited."
+          confirmLabel="Remove Hold"
+          destructive
+          onCancel={() => setRemoveLegalHoldConfirm(null)}
+          onConfirm={() => {
+            if (removeLegalHoldConfirm) {
+              const holdTargetId = removeLegalHoldConfirm.orgId ?? "";
+              setRemoveLegalHoldConfirm(null);
+              setLegalHoldTarget(holdTargetId);
+              setLegalHoldReason("Admin-initiated hold removal");
+              void (async () => {
+                if (!actor) return;
+                setHoldSaving(true);
+                try {
+                  const result = await actor.toggleLegalHold({
+                    orgId: holdTargetId,
+                    hold: false,
+                    reason: "Admin-initiated hold removal via console",
+                  });
+                  if (result.__kind__ === "ok") {
+                    toast.success("Legal hold removed");
+                    void fetchData();
+                  } else {
+                    toast.error(`Error: ${result.err}`);
+                  }
+                } catch {
+                  toast.error("Failed to remove legal hold");
+                } finally {
+                  setHoldSaving(false);
+                }
+              })();
+            }
+          }}
+        />
 
         {/* ── Legal Hold Modal ─────────────────────────────────────────────── */}
         <Dialog
