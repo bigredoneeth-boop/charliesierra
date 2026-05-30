@@ -44,6 +44,7 @@ import {
   deriveGroupKey,
   exportPublicKey,
   getKeyFingerprint,
+  toCleanUint8Array,
 } from "@/lib/crypto";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -539,6 +540,9 @@ export default function ChatPage() {
     clearConversationKey,
     getGroupKeyFingerprint,
     decryptFromConv,
+    missingKeyConvIds,
+    clearMissingKeyConvId,
+    isKeyReady,
   } = useCrypto();
   const myPrincipal = principal?.toText() ?? "";
   const connection = useConnection();
@@ -671,6 +675,65 @@ export default function ChatPage() {
     lastDerivedPeerKey.current = "";
   }, [convId]);
 
+  // Re-derivation on missing key: when decryptFromConv marks a convId as missing,
+  // re-run the key exchange for the current conversation so decryption unblocks.
+  useEffect(() => {
+    if (!convId || !conv) return;
+    const convIdStr = convId.toString();
+    if (!missingKeyConvIds.has(convIdStr)) return;
+
+    console.log(
+      `[E2EE KEYDERIVE] Missing key detected for convId=${convIdStr} — triggering re-derivation`,
+    );
+
+    if (conv.kind === ConversationKind.direct) {
+      // For 1:1 chats, reset the derived-key guard so the peer-profile effect
+      // will re-run and call deriveAndStoreKey on the next render cycle.
+      lastDerivedPeerKey.current = "";
+      // Also clear the guard immediately so it re-fires even if peerProfiles
+      // hasn't changed by re-deriving directly when a peer key is available.
+      if (peerProfiles.length > 0) {
+        const peer = peerProfiles[0];
+        if (peer.ecdhPublicKey.length > 0) {
+          const freshPeerKeyBytes = toCleanUint8Array(peer.ecdhPublicKey);
+          deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then((key) => {
+            if (key) {
+              console.log(
+                `[E2EE KEYDERIVE] Re-derivation succeeded for convId=${convIdStr}`,
+              );
+              clearMissingKeyConvId(convIdStr);
+            }
+          });
+        }
+      }
+    } else if (conv.kind === ConversationKind.group) {
+      const memberStrings = conv.members.map((m) => m.toText()).sort();
+      const fingerprint = memberStrings.join(",");
+      deriveGroupKey(memberStrings)
+        .then((key) => {
+          setGroupConversationKey(convIdStr, key, fingerprint);
+          console.log(
+            `[E2EE KEYDERIVE] Group re-derivation succeeded for convId=${convIdStr}`,
+          );
+          clearMissingKeyConvId(convIdStr);
+        })
+        .catch((err) => {
+          console.error(
+            `[E2EE KEYDERIVE] Group re-derivation failed for convId=${convIdStr}:`,
+            err,
+          );
+        });
+    }
+  }, [
+    missingKeyConvIds,
+    convId,
+    conv,
+    peerProfiles,
+    deriveAndStoreKey,
+    setGroupConversationKey,
+    clearMissingKeyConvId,
+  ]);
+
   useEffect(() => {
     if (!conv || convId === null) return;
     const convIdStr = convId.toString();
@@ -696,10 +759,16 @@ export default function ChatPage() {
             peer.ecdhPublicKey.slice(0, 8),
           ).join(",");
 
-          // PRIMARY GUARD: if we already processed this exact fingerprint,
-          // skip entirely — even if getConversationKey() hasn't stored the key
-          // yet (async in-flight). This prevents the loop caused by polling.
-          if (lastDerivedPeerKey.current === keyFingerprint) {
+          // PRIMARY GUARD: if we already processed this exact fingerprint AND
+          // the key is actually ready, skip entirely. If the key was lost
+          // (e.g. PWA context switch) we re-derive even for the same fingerprint.
+          if (
+            lastDerivedPeerKey.current === keyFingerprint &&
+            isKeyReady(convIdStr)
+          ) {
+            console.log(
+              `[E2EE ChatPage] skipping re-derive for convId=${convIdStr} — key already present with same fingerprint`,
+            );
             return;
           }
 
@@ -717,29 +786,29 @@ export default function ChatPage() {
 
           // Always use a fresh buffer copy of the peer's ecdhPublicKey so Candid
           // buffer offsets don't corrupt the WebCrypto key import.
-          const freshPeerKeyBytes = new Uint8Array(
-            peer.ecdhPublicKey.buffer.slice(
-              peer.ecdhPublicKey.byteOffset,
-              peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength,
-            ),
-          );
+          const freshPeerKeyBytes = toCleanUint8Array(peer.ecdhPublicKey);
           deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(async (key) => {
             if (!key) {
               console.error(
                 `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`,
               );
-            } else if (keyPair) {
-              const myPubBytes = await exportPublicKey(keyPair.publicKey);
-              const myFp = Array.from(myPubBytes.slice(0, 8))
-                .map((b) => b.toString(16).padStart(2, "0"))
-                .join("");
-              const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8))
-                .map((b) => b.toString(16).padStart(2, "0"))
-                .join("");
-              const sharedFp = await getKeyFingerprint(key);
+            } else {
               console.log(
-                `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`,
+                `[E2EE] Key derivation complete for convId=${convIdStr}, key is now ready`,
               );
+              if (keyPair) {
+                const myPubBytes = await exportPublicKey(keyPair.publicKey);
+                const myFp = Array.from(myPubBytes.slice(0, 8))
+                  .map((b) => b.toString(16).padStart(2, "0"))
+                  .join("");
+                const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8))
+                  .map((b) => b.toString(16).padStart(2, "0"))
+                  .join("");
+                const sharedFp = await getKeyFingerprint(key);
+                console.log(
+                  `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`,
+                );
+              }
             }
           });
         }
@@ -811,6 +880,7 @@ export default function ChatPage() {
     setGroupConversationKey,
     clearConversationKey,
     getGroupKeyFingerprint,
+    isKeyReady,
   ]);
 
   const allProfiles = peerProfiles;
@@ -907,6 +977,7 @@ export default function ChatPage() {
 
       <MessageInput
         conversationId={convId}
+        isKeyReady={isKeyReady(convId.toString())}
         onMessageSent={() => {
           queryClient.invalidateQueries({
             queryKey: ["messages", convId.toString()],

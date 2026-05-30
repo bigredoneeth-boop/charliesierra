@@ -10,6 +10,31 @@ const KEY_STORE = "keypairs";
 const IV_LENGTH = 12; // 12 bytes for AES-GCM
 
 export const CONV_KEY_PREFIX = "convkey_";
+// ── Safe Uint8Array normalization ────────────────────────────────────────────
+
+/**
+ * Convert any byte-like value coming out of IndexedDB deserialization into a
+ * fresh, zero-offset Uint8Array before any WebCrypto call.
+ *
+ * Rules:
+ *  - Uint8Array with byteOffset !== 0  → slice(0) to allocate a fresh buffer
+ *  - Uint8Array with byteOffset === 0  → return as-is (already safe)
+ *  - ArrayBuffer                        → wrap with new Uint8Array()
+ *  - Plain number[] from JSON/IDB       → Uint8Array.from() (element-by-element copy)
+ *
+ * NEVER apply Uint8Array.from() to a Uint8Array — it re-copies element-by-element
+ * which is wasteful and was previously confused with the number-array fix.
+ */
+export function toCleanUint8Array(val: unknown): Uint8Array {
+  if (val instanceof Uint8Array) {
+    return val.byteOffset !== 0 ? val.slice(0) : val;
+  }
+  if (val instanceof ArrayBuffer) {
+    return new Uint8Array(val);
+  }
+  // Plain number array from IndexedDB JSON deserialization
+  return Uint8Array.from(val as number[]);
+}
 
 // ── IndexedDB helpers ───────────────────────────────────────────────────────
 
@@ -387,14 +412,20 @@ export async function wrapKeyBytes(
  */
 export async function unwrapKeyBytes(
   wrapKey: CryptoKey,
-  wrapped: Uint8Array,
+  wrapped: unknown,
   name?: string,
 ): Promise<Uint8Array> {
   try {
-    if (wrapped.length < IV_LENGTH + 1)
-      throw new Error("wrapped blob too small");
-    const iv = wrapped.slice(0, IV_LENGTH);
-    const ct = wrapped.slice(IV_LENGTH);
+    // CRITICAL FIX: toCleanUint8Array handles all three cases:
+    //  - Uint8Array with non-zero byteOffset (V8 byteOffset bug)
+    //  - ArrayBuffer (direct buffer reference)
+    //  - Plain number[] from IndexedDB JSON deserialization
+    // This replaces the previous ad-hoc Uint8Array.from() call which was
+    // only correct for the number-array case.
+    const clean = toCleanUint8Array(wrapped);
+    if (clean.length < IV_LENGTH + 1) throw new Error("wrapped blob too small");
+    const iv = clean.slice(0, IV_LENGTH);
+    const ct = clean.slice(IV_LENGTH);
     const plain = await crypto.subtle.decrypt(
       { name: "AES-GCM", iv },
       wrapKey,

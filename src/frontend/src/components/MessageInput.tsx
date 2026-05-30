@@ -23,6 +23,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 interface MessageInputProps {
   conversationId: ConversationId;
   onMessageSent?: () => void;
+  isKeyReady?: boolean;
 }
 
 const TYPING_TTL = 5n; // 5 seconds typing TTL
@@ -34,17 +35,23 @@ function getPriorityKey(convId: string) {
 export function MessageInput({
   conversationId,
   onMessageSent,
+  isKeyReady = true,
 }: MessageInputProps) {
-  const { encryptForConv } = useCrypto();
+  const { encryptForConv, isRestoringKeys, getConversationKey } = useCrypto();
   const { backend } = useBackend();
   const connection = useConnection();
   const { queueMessage } = useOfflineQueue();
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showAttachment, setShowAttachment] = useState(false);
   const [showVoice, setShowVoice] = useState(false);
   const convIdStr = conversationId.toString();
+  // keyReady: true once the conversation key is in memory AND key restoration is done
+  // _keyReady: exported for consumers that want a fine-grained "key in memory" guard.
+  // Currently the send button uses canSend which already factors in isRestoringKeys.
+  const _keyReady = !isRestoringKeys && !!getConversationKey(convIdStr);
 
   // Priority — persisted per conversation
   const [priority, setPriority] = useState<MessagePriority>(() => {
@@ -106,6 +113,7 @@ export function MessageInput({
   useEffect(() => {
     return () => {
       if (typingTimeout.current) clearTimeout(typingTimeout.current);
+      if (retryTimer.current) clearTimeout(retryTimer.current);
       clearTypingIndicator();
     };
   }, [clearTypingIndicator]);
@@ -134,8 +142,19 @@ export function MessageInput({
         conversationId.toString(),
         trimmed,
       );
-      if (!encrypted)
-        throw new Error("Encryption key not ready. Try again in a moment.");
+      if (!encrypted) {
+        // Schedule an auto-retry in 1500ms so the race between re-derivation
+        // and send resolves without the user having to click again.
+        if (retryTimer.current) clearTimeout(retryTimer.current);
+        retryTimer.current = setTimeout(() => {
+          retryTimer.current = null;
+          // Only retry if the user hasn't cleared the input
+          if (text.trim()) {
+            handleSend();
+          }
+        }, 1500);
+        throw new Error("Encryption key not ready. Retrying automatically...");
+      }
       console.log(
         `[E2EE INPUT] plaintext=${plaintextBytes} bytes, encrypted blob=${encrypted.byteLength} bytes`,
       );
@@ -211,7 +230,10 @@ export function MessageInput({
     [handleSend],
   );
 
-  const canSend = text.trim().length > 0 && !sending;
+  // canSend controls the Send button. When isRestoringKeys is true, show a
+  // loading state instead of allowing sends that will immediately fail.
+  const canSend =
+    text.trim().length > 0 && !sending && !isRestoringKeys && isKeyReady;
 
   return (
     <div className="bg-card border-t border-border px-3 py-2.5 flex-shrink-0">
@@ -227,6 +249,14 @@ export function MessageInput({
             }}
           />
         </div>
+      )}
+
+      {/* Key restoration notice — shown while startup key loading is in progress */}
+      {isRestoringKeys && (
+        <p className="text-[10px] text-muted-foreground mb-1.5 px-1 flex items-center gap-1">
+          <Loader2 size={10} className="animate-spin" />
+          Loading encryption keys…
+        </p>
       )}
 
       {/* Offline notice */}
@@ -322,7 +352,7 @@ export function MessageInput({
             data-ocid="message.submit_button"
             aria-label={connection.isOnline ? "Send message" : "Queue message"}
           >
-            {sending ? (
+            {sending || isRestoringKeys ? (
               <Loader2 size={16} className="animate-spin" />
             ) : (
               <Send size={16} />

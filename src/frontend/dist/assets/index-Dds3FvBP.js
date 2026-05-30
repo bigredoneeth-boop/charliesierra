@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-BA1-hglk.js","assets/card-7gh68e_y.js","assets/AdminDashboardPage-BtYTV5ND.js","assets/AdminLayout-CR9BmsWz.js","assets/PrincipalDisplay-xEgaOtnB.js","assets/user-plus-DtTLaKfK.js","assets/AdminOrganizationsPage-DBdCCMGj.js","assets/AdminStatusBadge-BmO8xPN-.js","assets/ConfirmDialog-B4D4JX0S.js","assets/pencil-DHMnYz-9.js","assets/shield-alert-CYLUM9rQ.js","assets/AdminUsersPage-uzzrP9n0.js","assets/funnel-DY2jR4lM.js","assets/AdminGroupsPage-PIgvj0e1.js","assets/AdminAuditPage-DSlcPxe3.js","assets/AdminKeyEscrowPage-BvlglFWX.js","assets/AdminRetentionPoliciesPage-DDzqV5E3.js","assets/AdminSettingsPage-C3JCK54F.js","assets/AdminBootstrapPage-CSWyWl8-.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-_9gRsL0a.js","assets/card-B6Ne74rA.js","assets/AdminDashboardPage-C_boHQuD.js","assets/AdminLayout-BoQ_DDtx.js","assets/PrincipalDisplay-BSrtJ6VZ.js","assets/user-plus-DHvGLXBU.js","assets/AdminOrganizationsPage-Bo7JLFWK.js","assets/AdminStatusBadge-D4QIAAOB.js","assets/ConfirmDialog-DA3BqFMo.js","assets/pencil-CreQ01FX.js","assets/shield-alert-DBAETXR-.js","assets/AdminUsersPage-ytQHdOET.js","assets/funnel-CoIp9t4u.js","assets/AdminGroupsPage-DBMPn3t7.js","assets/AdminAuditPage-V-8EjXHs.js","assets/AdminKeyEscrowPage-BykXcO3o.js","assets/AdminRetentionPoliciesPage-BcrIpdAz.js","assets/AdminSettingsPage-BU9jZGef.js","assets/AdminBootstrapPage-CzScRDfX.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -38979,6 +38979,15 @@ const DB_VERSION$1 = 1;
 const KEY_STORE = "keypairs";
 const IV_LENGTH = 12;
 const CONV_KEY_PREFIX = "convkey_";
+function toCleanUint8Array(val) {
+  if (val instanceof Uint8Array) {
+    return val.byteOffset !== 0 ? val.slice(0) : val;
+  }
+  if (val instanceof ArrayBuffer) {
+    return new Uint8Array(val);
+  }
+  return Uint8Array.from(val);
+}
 function openDB$1() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME$1, DB_VERSION$1);
@@ -39221,10 +39230,10 @@ async function wrapKeyBytes(wrapKey, rawBytes) {
 }
 async function unwrapKeyBytes(wrapKey, wrapped, name) {
   try {
-    if (wrapped.length < IV_LENGTH + 1)
-      throw new Error("wrapped blob too small");
-    const iv = wrapped.slice(0, IV_LENGTH);
-    const ct2 = wrapped.slice(IV_LENGTH);
+    const clean2 = toCleanUint8Array(wrapped);
+    if (clean2.length < IV_LENGTH + 1) throw new Error("wrapped blob too small");
+    const iv = clean2.slice(0, IV_LENGTH);
+    const ct2 = clean2.slice(IV_LENGTH);
     const plain = await crypto.subtle.decrypt(
       { name: "AES-GCM", iv },
       wrapKey,
@@ -39281,6 +39290,7 @@ const crypto$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProp
   importAESKey,
   importPublicKey,
   loadOrCreateKeyPair,
+  toCleanUint8Array,
   unwrapKeyBytes,
   wrapKeyBytes
 }, Symbol.toStringTag, { value: "Module" }));
@@ -39289,9 +39299,24 @@ function CryptoProvider({ children }) {
   const { principal } = useAuth();
   const [keyPair, setKeyPair] = reactExports.useState(null);
   const [isReady, setIsReady] = reactExports.useState(false);
+  const [isRestoringKeys, setIsRestoringKeys] = reactExports.useState(true);
   const [isNewKeyPair, setIsNewKeyPair] = reactExports.useState(false);
   const convKeys = reactExports.useRef(/* @__PURE__ */ new Map());
   const groupKeyFingerprints = reactExports.useRef(/* @__PURE__ */ new Map());
+  const [missingKeyConvIds, setMissingKeyConvIds] = reactExports.useState(
+    /* @__PURE__ */ new Set()
+  );
+  const derivingConvIds = reactExports.useRef(/* @__PURE__ */ new Set());
+  const [keyReadyConvIds, setKeyReadyConvIds] = reactExports.useState(
+    /* @__PURE__ */ new Set()
+  );
+  const clearMissingKeyConvId = reactExports.useCallback((convId) => {
+    setMissingKeyConvIds((prev) => {
+      const next = new Set(prev);
+      next.delete(convId);
+      return next;
+    });
+  }, []);
   const persistConvKey = reactExports.useCallback(
     async (principalText, convId, key, fingerprint) => {
       try {
@@ -39323,6 +39348,7 @@ function CryptoProvider({ children }) {
       return;
     }
     const principalText = principal.toText();
+    setIsRestoringKeys(true);
     (async () => {
       try {
         const { keyPair: kp, isNew } = await loadOrCreateKeyPair(principalText);
@@ -39337,10 +39363,19 @@ function CryptoProvider({ children }) {
           }).catch(() => {
           });
         }
+        const isPWA = window.matchMedia("(display-mode: standalone)").matches;
+        const kp2 = await exportPublicKey(kp.publicKey);
+        const fp2 = Array.from(kp2.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+        console.log(
+          `[E2EE INIT] Principal: ${principalText}, keyFp: ${fp2}, context: ${isPWA ? "PWA" : "browser"}`
+        );
         let restoredCount = 0;
         try {
           const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
           const allEntries = await dbGetKeysWithPrefix(prefix2);
+          console.log(
+            `[E2EE RESTORE] Restoring ${allEntries.length} conversation keys from IndexedDB`
+          );
           let wrapKey = null;
           if (allEntries.length > 0) {
             try {
@@ -39361,9 +39396,9 @@ function CryptoProvider({ children }) {
                 let rawBytes = null;
                 let fingerprint;
                 if (stored instanceof Uint8Array) {
-                  rawBytes = stored.slice(0);
+                  rawBytes = toCleanUint8Array(stored);
                 } else if (Array.isArray(stored.wrapped)) {
-                  const wrappedArr = new Uint8Array(
+                  const wrappedArr = toCleanUint8Array(
                     stored.wrapped
                   );
                   if (wrapKey) {
@@ -39381,11 +39416,7 @@ function CryptoProvider({ children }) {
                   fingerprint = stored.fingerprint;
                 } else if (stored.raw) {
                   const legacy = stored;
-                  rawBytes = legacy.raw instanceof Uint8Array ? legacy.raw.slice(0) : new Uint8Array(
-                    Object.values(
-                      legacy.raw
-                    )
-                  );
+                  rawBytes = toCleanUint8Array(legacy.raw);
                   fingerprint = legacy.fingerprint;
                 }
                 if (!rawBytes || rawBytes.length === 0) return;
@@ -39397,18 +39428,28 @@ function CryptoProvider({ children }) {
                 restoredCount++;
                 const fpLog = fingerprint || "none";
                 console.log(
-                  `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`
+                  `[E2EE RESTORE] Key for convId=${convId} restored successfully (fingerprint=${fpLog})`
                 );
               } catch (err) {
                 console.error(
-                  `[E2EE KEYSTORE] Failed to restore key for convId=${convId}:`,
-                  err
+                  `[E2EE RESTORE] Key for convId=${convId} failed: ${err instanceof Error ? err.message : String(err)}`
                 );
+                try {
+                  await dbSet(entry.key, null);
+                  console.log(
+                    `[E2EE KEYSTORE] Removed corrupted key for ${entry.key} — will re-derive`
+                  );
+                } catch (delErr) {
+                  console.warn(
+                    "[E2EE KEYSTORE] Failed to remove corrupted key:",
+                    delErr
+                  );
+                }
               }
             })
           );
           console.log(
-            `[E2EE KEYSTORE] Restored ${restoredCount} conversation keys from storage on startup`
+            `[E2EE RESTORE] Restoring ${restoredCount} conversation keys from IndexedDB — complete`
           );
         } catch (err) {
           console.error("[E2EE KEYSTORE] Startup restoration failed:", err);
@@ -39416,6 +39457,7 @@ function CryptoProvider({ children }) {
       } catch (err) {
         console.error("[E2EE KEYSTORE] Startup restoration failed:", err);
       } finally {
+        setIsRestoringKeys(false);
         setIsReady(true);
       }
     })();
@@ -39467,17 +39509,19 @@ function CryptoProvider({ children }) {
   );
   const deriveAndStoreKey = reactExports.useCallback(
     async (convId, theirPublicKeyBytes) => {
+      console.log(
+        `[E2EE] deriveAndStoreKey called for convId=${convId}, ownKey ready: ${!!(keyPair == null ? void 0 : keyPair.privateKey)}`
+      );
+      derivingConvIds.current.add(convId);
       if (!(keyPair == null ? void 0 : keyPair.privateKey)) {
-        console.error(
-          `[E2EE] deriveAndStoreKey: no local privateKey for convId=${convId}`
+        console.log(
+          `[E2EE] deriveAndStoreKey: own keyPair not ready for convId=${convId} — will not derive`
         );
+        derivingConvIds.current.delete(convId);
         return null;
       }
       try {
-        const freshKeyBytes = new Uint8Array(theirPublicKeyBytes.length);
-        for (let i = 0; i < theirPublicKeyBytes.length; i++) {
-          freshKeyBytes[i] = theirPublicKeyBytes[i];
-        }
+        const freshKeyBytes = toCleanUint8Array(theirPublicKeyBytes);
         const peerPubFp = Array.from(freshKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
         console.log(
           `[E2EE] deriveAndStoreKey: importing peer public key, byteLength=${freshKeyBytes.byteLength}, fingerprint(first8)=${peerPubFp}, convId=${convId}`
@@ -39506,6 +39550,13 @@ function CryptoProvider({ children }) {
           `[E2EE] deriveAndStoreKey: ECDH shared key derived, fingerprint=${sharedFp}, convId=${convId}`
         );
         convKeys.current.set(convId, sharedKey);
+        console.log(
+          `[E2EE] deriveAndStoreKey: key stored in memory for convId=${convId}`
+        );
+        setKeyReadyConvIds((prev) => /* @__PURE__ */ new Set([...prev, convId]));
+        console.log(
+          `[E2EE] Derived and stored shared key for convId=${convId}`
+        );
         if (principal) {
           persistConvKey(principal.toText(), convId, sharedKey).catch(() => {
           });
@@ -39519,6 +39570,8 @@ function CryptoProvider({ children }) {
           err
         );
         return null;
+      } finally {
+        derivingConvIds.current.delete(convId);
       }
     },
     [keyPair, principal, persistConvKey]
@@ -39526,6 +39579,7 @@ function CryptoProvider({ children }) {
   const encryptForConv = reactExports.useCallback(
     async (convId, text) => {
       const key = convKeys.current.get(convId);
+      console.log(`[E2EE ENCRYPT] convId=${convId} key present: ${!!key}`);
       if (!key) return null;
       try {
         const plaintextBytes = new TextEncoder().encode(text);
@@ -39552,21 +39606,17 @@ function CryptoProvider({ children }) {
             let rawBytes = null;
             let fingerprint;
             if (stored instanceof Uint8Array) {
-              rawBytes = stored.slice(0);
+              rawBytes = toCleanUint8Array(stored);
             } else if (Array.isArray(stored.wrapped)) {
               const wrapKey = await deriveStorageWrapKey(principalText);
-              const wrappedArr = new Uint8Array(
+              const wrappedArr = toCleanUint8Array(
                 stored.wrapped
               );
-              rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr);
+              rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr, dbKey);
               fingerprint = stored.fingerprint;
             } else if (stored.raw) {
               const legacy = stored;
-              rawBytes = legacy.raw instanceof Uint8Array ? legacy.raw.slice(0) : new Uint8Array(
-                Object.values(
-                  legacy.raw
-                )
-              );
+              rawBytes = toCleanUint8Array(legacy.raw);
               fingerprint = legacy.fingerprint;
             }
             if (rawBytes && rawBytes.length > 0) {
@@ -39586,12 +39636,34 @@ function CryptoProvider({ children }) {
             `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
             err
           );
+          if (principal) {
+            const principalText2 = principal.toText();
+            const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
+            try {
+              await dbSet(dbKeyToRemove, null);
+              console.log(
+                `[E2EE KEYSTORE] Removed corrupted lazy key for ${dbKeyToRemove} — will re-derive`
+              );
+            } catch {
+            }
+          }
+          setMissingKeyConvIds((prev) => {
+            const next = new Set(prev);
+            next.add(convId);
+            return next;
+          });
+          return null;
         }
       }
       if (!key) {
         console.log(
           `[E2EE KEYSTORE] No stored key for convId=${convId} - performing exchange`
         );
+        setMissingKeyConvIds((prev) => {
+          const next = new Set(prev);
+          next.add(convId);
+          return next;
+        });
         return null;
       }
       console.log(
@@ -39605,6 +39677,50 @@ function CryptoProvider({ children }) {
           `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.length} bytes, keyFp=${keyFp}`,
           err
         );
+        console.warn(
+          `[E2EE KEYSTORE] Key fingerprint ${keyFp} does not match stored key — triggering re-exchange for convId=${convId}`
+        );
+        let keyIsValid = false;
+        try {
+          await crypto.subtle.exportKey("raw", key);
+          keyIsValid = true;
+        } catch {
+        }
+        if (keyIsValid) {
+          console.log(
+            `[E2EE EVICT] convId=${convId} — key export test passed (skipping IndexedDB delete, keeping key)`
+          );
+          console.log(
+            `[E2EE] Key eviction triggered for convId=${convId} — keeping in-memory key, clearing ready state only`
+          );
+          setKeyReadyConvIds((prev) => {
+            const next = new Set(prev);
+            next.delete(convId);
+            return next;
+          });
+        } else {
+          console.log(
+            `[E2EE EVICT] convId=${convId} — key export test failed, evicting from IndexedDB`
+          );
+          console.log(
+            `[E2EE] Key eviction triggered for convId=${convId} — keeping in-memory key, clearing ready state only`
+          );
+          if (principal) {
+            const dbKeyEvict = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+            dbSet(dbKeyEvict, null).catch(() => {
+            });
+          }
+          setKeyReadyConvIds((prev) => {
+            const next = new Set(prev);
+            next.delete(convId);
+            return next;
+          });
+        }
+        setMissingKeyConvIds((prev) => {
+          const next = new Set(prev);
+          next.add(convId);
+          return next;
+        });
         return null;
       }
     },
@@ -39628,8 +39744,11 @@ function CryptoProvider({ children }) {
       value: {
         keyPair,
         isReady,
+        isRestoringKeys,
         isNewKeyPair,
         setIsNewKeyPair,
+        missingKeyConvIds,
+        clearMissingKeyConvId,
         getConversationKey,
         setConversationKey,
         setGroupConversationKey,
@@ -39638,7 +39757,9 @@ function CryptoProvider({ children }) {
         deriveAndStoreKey,
         encryptForConv,
         decryptFromConv,
-        decryptOwnDisplayName
+        decryptOwnDisplayName,
+        isDerivingKey: (convId) => derivingConvIds.current.has(convId),
+        isKeyReady: (convId) => keyReadyConvIds.has(convId) || convKeys.current.has(convId)
       },
       children
     }
@@ -53220,18 +53341,21 @@ function getPriorityKey(convId) {
 }
 function MessageInput({
   conversationId,
-  onMessageSent
+  onMessageSent,
+  isKeyReady = true
 }) {
-  const { encryptForConv } = useCrypto();
+  const { encryptForConv, isRestoringKeys, getConversationKey } = useCrypto();
   const { backend } = useBackend();
   const connection = useConnection();
   const { queueMessage } = useOfflineQueue();
   const [text, setText] = reactExports.useState("");
   const [sending, setSending] = reactExports.useState(false);
   const [error, setError] = reactExports.useState(null);
+  const retryTimer = reactExports.useRef(null);
   const [showAttachment, setShowAttachment] = reactExports.useState(false);
   const [showVoice, setShowVoice] = reactExports.useState(false);
   const convIdStr = conversationId.toString();
+  !isRestoringKeys && !!getConversationKey(convIdStr);
   const [priority, setPriority] = reactExports.useState(() => {
     try {
       const stored = localStorage.getItem(getPriorityKey(convIdStr));
@@ -53281,6 +53405,7 @@ function MessageInput({
   reactExports.useEffect(() => {
     return () => {
       if (typingTimeout.current) clearTimeout(typingTimeout.current);
+      if (retryTimer.current) clearTimeout(retryTimer.current);
       clearTypingIndicator();
     };
   }, [clearTypingIndicator]);
@@ -53307,8 +53432,16 @@ function MessageInput({
         conversationId.toString(),
         trimmed
       );
-      if (!encrypted)
-        throw new Error("Encryption key not ready. Try again in a moment.");
+      if (!encrypted) {
+        if (retryTimer.current) clearTimeout(retryTimer.current);
+        retryTimer.current = setTimeout(() => {
+          retryTimer.current = null;
+          if (text.trim()) {
+            handleSend();
+          }
+        }, 1500);
+        throw new Error("Encryption key not ready. Retrying automatically...");
+      }
       console.log(
         `[E2EE INPUT] plaintext=${plaintextBytes} bytes, encrypted blob=${encrypted.byteLength} bytes`
       );
@@ -53369,7 +53502,7 @@ function MessageInput({
     },
     [handleSend]
   );
-  const canSend = text.trim().length > 0 && !sending;
+  const canSend = text.trim().length > 0 && !sending && !isRestoringKeys && isKeyReady;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-t border-border px-3 py-2.5 flex-shrink-0", children: [
     showVoice && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       VoiceNoteRecorder,
@@ -53382,6 +53515,10 @@ function MessageInput({
         }
       }
     ) }),
+    isRestoringKeys && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[10px] text-muted-foreground mb-1.5 px-1 flex items-center gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 10, className: "animate-spin" }),
+      "Loading encryption keys…"
+    ] }),
     !connection.isOnline && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-amber-600 dark:text-amber-400 mb-1.5 px-1", children: "You’re offline — message will be queued and sent when reconnected." }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-end gap-2", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -53451,7 +53588,7 @@ function MessageInput({
           className: "flex-shrink-0 h-9 w-9 p-0 rounded-xl",
           "data-ocid": "message.submit_button",
           "aria-label": connection.isOnline ? "Send message" : "Queue message",
-          children: sending ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 16, className: "animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 16 })
+          children: sending || isRestoringKeys ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 16, className: "animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 16 })
         }
       )
     ] }),
@@ -55273,7 +55410,10 @@ function ChatPage() {
     setGroupConversationKey,
     clearConversationKey,
     getGroupKeyFingerprint,
-    decryptFromConv
+    decryptFromConv,
+    missingKeyConvIds,
+    clearMissingKeyConvId,
+    isKeyReady
   } = useCrypto();
   const myPrincipal = (principal == null ? void 0 : principal.toText()) ?? "";
   const connection = useConnection();
@@ -55370,6 +55510,54 @@ function ChatPage() {
     lastDerivedPeerKey.current = "";
   }, [convId]);
   reactExports.useEffect(() => {
+    if (!convId || !conv) return;
+    const convIdStr = convId.toString();
+    if (!missingKeyConvIds.has(convIdStr)) return;
+    console.log(
+      `[E2EE KEYDERIVE] Missing key detected for convId=${convIdStr} — triggering re-derivation`
+    );
+    if (conv.kind === ConversationKind.direct) {
+      lastDerivedPeerKey.current = "";
+      if (peerProfiles.length > 0) {
+        const peer = peerProfiles[0];
+        if (peer.ecdhPublicKey.length > 0) {
+          const freshPeerKeyBytes = toCleanUint8Array(peer.ecdhPublicKey);
+          deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then((key) => {
+            if (key) {
+              console.log(
+                `[E2EE KEYDERIVE] Re-derivation succeeded for convId=${convIdStr}`
+              );
+              clearMissingKeyConvId(convIdStr);
+            }
+          });
+        }
+      }
+    } else if (conv.kind === ConversationKind.group) {
+      const memberStrings = conv.members.map((m2) => m2.toText()).sort();
+      const fingerprint = memberStrings.join(",");
+      deriveGroupKey(memberStrings).then((key) => {
+        setGroupConversationKey(convIdStr, key, fingerprint);
+        console.log(
+          `[E2EE KEYDERIVE] Group re-derivation succeeded for convId=${convIdStr}`
+        );
+        clearMissingKeyConvId(convIdStr);
+      }).catch((err) => {
+        console.error(
+          `[E2EE KEYDERIVE] Group re-derivation failed for convId=${convIdStr}:`,
+          err
+        );
+      });
+    }
+  }, [
+    missingKeyConvIds,
+    convId,
+    conv,
+    peerProfiles,
+    deriveAndStoreKey,
+    setGroupConversationKey,
+    clearMissingKeyConvId
+  ]);
+  reactExports.useEffect(() => {
     if (!conv || convId === null) return;
     const convIdStr = convId.toString();
     if (conv.kind === ConversationKind.direct) {
@@ -55386,7 +55574,10 @@ function ChatPage() {
           const keyFingerprint = Array.from(
             peer.ecdhPublicKey.slice(0, 8)
           ).join(",");
-          if (lastDerivedPeerKey.current === keyFingerprint) {
+          if (lastDerivedPeerKey.current === keyFingerprint && isKeyReady(convIdStr)) {
+            console.log(
+              `[E2EE ChatPage] skipping re-derive for convId=${convIdStr} — key already present with same fingerprint`
+            );
             return;
           }
           lastDerivedPeerKey.current = keyFingerprint;
@@ -55396,25 +55587,25 @@ function ChatPage() {
               `[E2EE KEYSTORE] No key found for convId=${convIdStr} - performing exchange`
             );
           }
-          const freshPeerKeyBytes = new Uint8Array(
-            peer.ecdhPublicKey.buffer.slice(
-              peer.ecdhPublicKey.byteOffset,
-              peer.ecdhPublicKey.byteOffset + peer.ecdhPublicKey.byteLength
-            )
-          );
+          const freshPeerKeyBytes = toCleanUint8Array(peer.ecdhPublicKey);
           deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then(async (key) => {
             if (!key) {
               console.error(
                 `[E2EE KEYDERIVE] conversationId=${convIdStr}: deriveAndStoreKey returned null`
               );
-            } else if (keyPair) {
-              const myPubBytes = await exportPublicKey(keyPair.publicKey);
-              const myFp = Array.from(myPubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-              const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-              const sharedFp = await getKeyFingerprint(key);
+            } else {
               console.log(
-                `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`
+                `[E2EE] Key derivation complete for convId=${convIdStr}, key is now ready`
               );
+              if (keyPair) {
+                const myPubBytes = await exportPublicKey(keyPair.publicKey);
+                const myFp = Array.from(myPubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+                const peerFp = Array.from(freshPeerKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+                const sharedFp = await getKeyFingerprint(key);
+                console.log(
+                  `[E2EE KEYDERIVE] conversationId=${convIdStr}, peerKey fingerprint=${peerFp}, myKey fingerprint=${myFp}, sharedKey fingerprint=${sharedFp}`
+                );
+              }
             }
           });
         }
@@ -55460,7 +55651,8 @@ function ChatPage() {
     getConversationKey,
     setGroupConversationKey,
     clearConversationKey,
-    getGroupKeyFingerprint
+    getGroupKeyFingerprint,
+    isKeyReady
   ]);
   const allProfiles = peerProfiles;
   const isGroup = (conv == null ? void 0 : conv.kind) === ConversationKind.group;
@@ -55558,6 +55750,7 @@ function ChatPage() {
       MessageInput,
       {
         conversationId: convId,
+        isKeyReady: isKeyReady(convId.toString()),
         onMessageSent: () => {
           queryClient2.invalidateQueries({
             queryKey: ["messages", convId.toString()]
@@ -59455,25 +59648,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-BA1-hglk.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-_9gRsL0a.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-BtYTV5ND.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-C_boHQuD.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-DBdCCMGj.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-Bo7JLFWK.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-uzzrP9n0.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-PIgvj0e1.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DSlcPxe3.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-ytQHdOET.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-DBMPn3t7.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-V-8EjXHs.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-BvlglFWX.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-BykXcO3o.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DDzqV5E3.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-BcrIpdAz.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C3JCK54F.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BU9jZGef.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-CSWyWl8-.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-CzScRDfX.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
