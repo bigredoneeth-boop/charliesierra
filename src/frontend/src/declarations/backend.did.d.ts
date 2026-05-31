@@ -467,43 +467,39 @@ export type Result_15 = { 'ok' : Array<RetentionMetadataRecord> } |
   { 'err' : Error };
 export type Result_16 = { 'ok' : Array<RecoveryRequest> } |
   { 'err' : Error };
-export type Result_17 = { 'ok' : Array<PendingNotification> } |
+export type Result_17 = { 'ok' : GetOrgUsersResponse } |
   { 'err' : string };
-export type Result_18 = { 'ok' : GetOrgUsersResponse } |
+export type Result_18 = { 'ok' : [] | [OrgRole] } |
   { 'err' : string };
-export type Result_19 = { 'ok' : NotificationPreferences } |
+export type Result_19 = { 'ok' : Array<OrgMembership> } |
   { 'err' : string };
 export type Result_2 = { 'ok' : null } |
   { 'err' : string };
-export type Result_20 = { 'ok' : [] | [OrgRole] } |
+export type Result_20 = { 'ok' : Array<MessagePublic> } |
+  { 'err' : Error };
+export type Result_21 = { 'ok' : GroupRetentionPolicy } |
+  { 'err' : Error };
+export type Result_22 = { 'ok' : Array<GroupMemberRecord> } |
   { 'err' : string };
-export type Result_21 = { 'ok' : Array<OrgMembership> } |
-  { 'err' : string };
-export type Result_22 = { 'ok' : Array<MessagePublic> } |
+export type Result_23 = { 'ok' : Array<JoinRequest> } |
   { 'err' : Error };
-export type Result_23 = { 'ok' : GroupRetentionPolicy } |
+export type Result_24 = { 'ok' : Array<EscrowedUserRecord> } |
   { 'err' : Error };
-export type Result_24 = { 'ok' : Array<GroupMemberRecord> } |
-  { 'err' : string };
-export type Result_25 = { 'ok' : Array<JoinRequest> } |
+export type Result_25 = { 'ok' : EscrowStatsRecord } |
   { 'err' : Error };
-export type Result_26 = { 'ok' : Array<EscrowedUserRecord> } |
+export type Result_26 = { 'ok' : Array<AuditEvent> } |
   { 'err' : Error };
-export type Result_27 = { 'ok' : EscrowStatsRecord } |
+export type Result_27 = { 'ok' : string } |
   { 'err' : Error };
-export type Result_28 = { 'ok' : Array<AuditEvent> } |
+export type Result_28 = { 'ok' : ConfigExportBundle } |
   { 'err' : Error };
-export type Result_29 = { 'ok' : string } |
+export type Result_29 = { 'ok' : ConversationPublic } |
   { 'err' : Error };
 export type Result_3 = { 'ok' : OrgRecord } |
   { 'err' : string };
-export type Result_30 = { 'ok' : ConfigExportBundle } |
+export type Result_30 = { 'ok' : EscrowAccessGrant } |
   { 'err' : Error };
-export type Result_31 = { 'ok' : ConversationPublic } |
-  { 'err' : Error };
-export type Result_32 = { 'ok' : EscrowAccessGrant } |
-  { 'err' : Error };
-export type Result_33 = { 'ok' : Array<EscrowAccessGrant> } |
+export type Result_31 = { 'ok' : Array<EscrowAccessGrant> } |
   { 'err' : Error };
 export type Result_4 = { 'ok' : JoinRequest } |
   { 'err' : Error };
@@ -633,16 +629,16 @@ export interface _SERVICE {
   'addDevice' : ActorMethod<[AddDeviceRequest], Result_11>,
   'adminGetEscrowGrants' : ActorMethod<
     [[] | [UserId], bigint, [] | [bigint]],
-    Result_33
+    Result_31
   >,
-  'adminGrantEscrowAccess' : ActorMethod<[UserId, string, string], Result_32>,
+  'adminGrantEscrowAccess' : ActorMethod<[UserId, string, string], Result_30>,
   'approveJoinRequest' : ActorMethod<[JoinRequestActionRequest], Result_6>,
   'approveKeyRecovery' : ActorMethod<[bigint], Result_9>,
   'bootstrapSuperAdmin' : ActorMethod<[UserId], Result_8>,
   'checkPolicyExpiry' : ActorMethod<[[] | [OrgId]], Array<RetentionPolicy>>,
   'clearTypingIndicator' : ActorMethod<[ConversationId], undefined>,
-  'createDirectConversation' : ActorMethod<[CreateDirectRequest], Result_31>,
-  'createGroupConversation' : ActorMethod<[CreateGroupRequest], Result_31>,
+  'createDirectConversation' : ActorMethod<[CreateDirectRequest], Result_29>,
+  'createGroupConversation' : ActorMethod<[CreateGroupRequest], Result_29>,
   'createOrg' : ActorMethod<[CreateOrgRequest], Result_3>,
   'createRetentionPolicy' : ActorMethod<
     [CreateRetentionPolicyRequest],
@@ -664,12 +660,12 @@ export interface _SERVICE {
     { 'ok' : string } |
       { 'err' : string }
   >,
-  'exportAuditLog' : ActorMethod<[AuditExportRequest], Result_29>,
-  'exportAuditLogs' : ActorMethod<[ExportAuditLogsRequest], Result_28>,
-  'exportConfigBundle' : ActorMethod<[], Result_30>,
-  'generateDeviceSyncToken' : ActorMethod<[Uint8Array], Result_29>,
+  'exportAuditLog' : ActorMethod<[AuditExportRequest], Result_27>,
+  'exportAuditLogs' : ActorMethod<[ExportAuditLogsRequest], Result_26>,
+  'exportConfigBundle' : ActorMethod<[], Result_28>,
+  'generateDeviceSyncToken' : ActorMethod<[Uint8Array], Result_27>,
   'getAllGroups' : ActorMethod<[GetAllGroupsRequest], Array<GroupAdminRecord>>,
-  'getAuditLog' : ActorMethod<[GetAuditLogRequest], Result_28>,
+  'getAuditLog' : ActorMethod<[GetAuditLogRequest], Result_26>,
   'getCanisterHealth' : ActorMethod<
     [],
     {
@@ -690,26 +686,26 @@ export interface _SERVICE {
     { 'ok' : Uint8Array } |
       { 'err' : string }
   >,
-  'getEscrowStats' : ActorMethod<[], Result_27>,
-  'getEscrowedUsers' : ActorMethod<[GetEscrowedUsersRequest], Result_26>,
+  'getEscrowStats' : ActorMethod<[], Result_25>,
+  'getEscrowedUsers' : ActorMethod<[GetEscrowedUsersRequest], Result_24>,
   'getGlobalRetentionPolicy' : ActorMethod<[], [] | [RetentionPolicy]>,
   'getGroupCompartment' : ActorMethod<
     [ConversationId],
     [] | [CompartmentLabel]
   >,
-  'getGroupJoinRequests' : ActorMethod<[ConversationId], Result_25>,
-  'getGroupMembers' : ActorMethod<[GetGroupMembersRequest], Result_24>,
-  'getGroupRetentionPolicy' : ActorMethod<[ConversationId], Result_23>,
+  'getGroupJoinRequests' : ActorMethod<[ConversationId], Result_23>,
+  'getGroupMembers' : ActorMethod<[GetGroupMembersRequest], Result_22>,
+  'getGroupRetentionPolicy' : ActorMethod<[ConversationId], Result_21>,
   'getMessageAttachments' : ActorMethod<[MessageId], Array<Attachment>>,
-  'getMessages' : ActorMethod<[GetMessagesRequest], Result_22>,
+  'getMessages' : ActorMethod<[GetMessagesRequest], Result_20>,
   'getMyEscrowStatus' : ActorMethod<[], Array<EscrowRecord>>,
-  'getMyOrgs' : ActorMethod<[], Result_21>,
-  'getMyRole' : ActorMethod<[OrgId], Result_20>,
-  'getNotificationPreferences' : ActorMethod<[], Result_19>,
+  'getMyOrgs' : ActorMethod<[], Result_19>,
+  'getMyRole' : ActorMethod<[OrgId], Result_18>,
+  'getNotificationPreferences' : ActorMethod<[], NotificationPreferences>,
   'getOrg' : ActorMethod<[OrgId], Result_3>,
   'getOrgSettings' : ActorMethod<[string], OrgSettings>,
-  'getOrgUsers' : ActorMethod<[GetOrgUsersRequest], Result_18>,
-  'getPendingNotifications' : ActorMethod<[], Result_17>,
+  'getOrgUsers' : ActorMethod<[GetOrgUsersRequest], Result_17>,
+  'getPendingNotifications' : ActorMethod<[], Array<PendingNotification>>,
   'getPlatformSettings' : ActorMethod<[], PlatformSettings>,
   'getRecoveryDetails' : ActorMethod<[bigint], Result_9>,
   'getRecoveryRequests' : ActorMethod<
@@ -754,6 +750,7 @@ export interface _SERVICE {
   'reactivateMember' : ActorMethod<[OrgId, UserId], Result_2>,
   'redeemDeviceSyncToken' : ActorMethod<[string, string, string], Result_11>,
   'registerAttachment' : ActorMethod<[RegisterAttachmentRequest], Result_10>,
+  'registerPushSubscription' : ActorMethod<[string, string, string], Result_2>,
   'registerUser' : ActorMethod<[RegisterRequest], Result>,
   'rejectKeyRecovery' : ActorMethod<[bigint], Result_9>,
   'removeAdmin' : ActorMethod<[UserId], Result_6>,
@@ -767,6 +764,10 @@ export interface _SERVICE {
   'revokeDevice' : ActorMethod<[string], Result_6>,
   'revokeKeyEscrow' : ActorMethod<[string, string], Result_6>,
   'sendMessage' : ActorMethod<[SendMessageRequest], Result_7>,
+  'sendPushToUser' : ActorMethod<
+    [Principal, string, string, string],
+    undefined
+  >,
   'setGroupCompartment' : ActorMethod<
     [ConversationId, CompartmentLabel],
     Result_6
@@ -777,14 +778,15 @@ export interface _SERVICE {
   >,
   'setTypingIndicator' : ActorMethod<[ConversationId, bigint], undefined>,
   'submitJoinRequest' : ActorMethod<[SubmitJoinRequestRequest], Result_4>,
-  'subscribeToPush' : ActorMethod<[string, string, string], Result_2>,
+  'subscribeToPush' : ActorMethod<[string, string, string], undefined>,
   'suspendMember' : ActorMethod<[SuspendUserRequest], Result_2>,
   'suspendOrg' : ActorMethod<[OrgId], Result_2>,
   'toggleLegalHold' : ActorMethod<[LegalHoldRequest], Result_1>,
   'touchPresence' : ActorMethod<[], undefined>,
-  'unsubscribeFromPush' : ActorMethod<[], Result_2>,
+  'unregisterPushSubscription' : ActorMethod<[], Result_2>,
+  'unsubscribeFromPush' : ActorMethod<[], undefined>,
   'updateMemberRole' : ActorMethod<[UpdateMemberRoleRequest], Result_2>,
-  'updateNotificationPreferences' : ActorMethod<[boolean, boolean], Result_2>,
+  'updateNotificationPreferences' : ActorMethod<[boolean, boolean], undefined>,
   'updateOrg' : ActorMethod<[OrgId, string, [] | [string]], Result_3>,
   'updateOrgSettings' : ActorMethod<[string, OrgSettings], Result_2>,
   'updatePlatformSettings' : ActorMethod<[PlatformSettings], Result_2>,

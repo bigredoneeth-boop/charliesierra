@@ -154,8 +154,8 @@ module {
 
   public func getRetentionPolicies(
     s      : State,
-    caller : Common.UserId,
-    req    : RetentionTypes.GetRetentionPoliciesRequest,
+    _caller : Common.UserId,
+    req     : RetentionTypes.GetRetentionPoliciesRequest,
   ) : [RetentionTypes.RetentionPolicy] {
     // SuperAdmins see all; others see only policies for orgs they can access.
     // Since we don't have memberships in scope, any authenticated call is allowed;

@@ -487,27 +487,21 @@ export const mockBackend: backendInterface = {
   _immutableObjectStorageCreateCertificate: async (_blobHash: string): Promise<_ImmutableObjectStorageCreateCertificateResult> => ({ method: "", blob_hash: "" }),
   _immutableObjectStorageRefillCashier: async (_refillInformation: import('../backend')._ImmutableObjectStorageRefillInformation | null): Promise<_ImmutableObjectStorageRefillResult> => ({}),
   _immutableObjectStorageUpdateGatewayPrincipals: async (): Promise<void> => undefined,
-  getNotificationPreferences: async () => ({
-    __kind__: "ok" as const,
-    ok: { directMessagesEnabled: true, groupMessagesEnabled: true },
-  }),
-  getPendingNotifications: async () => ({
-    __kind__: "ok" as const,
-    ok: [] as Array<{ id: string; notifType: string; senderDisplayName: string; groupName?: string; timestamp: bigint }>,
-  }),
+  getNotificationPreferences: async () => ({ directMessagesEnabled: true, groupMessagesEnabled: true }),
+  getPendingNotifications: async () => [] as Array<{ id: string; notifType: string; senderDisplayName: string; groupName?: string; timestamp: bigint }>,
   getVAPIDPublicKey: async () => "",
-  subscribeToPush: async (_endpoint: string, _auth: string, _p256dh: string) => ({
+  subscribeToPush: async (_endpoint: string, _auth: string, _p256dh: string): Promise<void> => undefined,
+  unsubscribeFromPush: async (): Promise<void> => undefined,
+  updateNotificationPreferences: async (_dm: boolean, _group: boolean): Promise<void> => undefined,
+  registerPushSubscription: async (_endpoint: string, _p256dh: string, _auth: string) => ({
     __kind__: "ok" as const,
     ok: null,
   }),
-  unsubscribeFromPush: async () => ({
+  unregisterPushSubscription: async () => ({
     __kind__: "ok" as const,
     ok: null,
   }),
-  updateNotificationPreferences: async (_dm: boolean, _group: boolean) => ({
-    __kind__: "ok" as const,
-    ok: null,
-  }),
+  sendPushToUser: async (_targetPrincipal: unknown, _senderName: string, _messageType: string, _convId: string): Promise<void> => undefined,
   hasDataResetBeenPerformed: async (): Promise<boolean> => false,
   resetAllTestData: async (): Promise<{ __kind__: 'ok'; ok: string } | { __kind__: 'err'; err: string }> => ({
     __kind__: 'ok',

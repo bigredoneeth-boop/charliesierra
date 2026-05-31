@@ -32,6 +32,7 @@ import SettingsLib "lib/settings";
 import SettingsMixin "mixins/settings-api";
 import NotificationsMixin "mixins/notifications-api";
 import NotifTypes "types/notifications";
+import Migration "migration";
 
 
 
@@ -49,6 +50,7 @@ import NotifTypes "types/notifications";
 
 
 
+(with migration = Migration.run)
 actor self {
   // ── Stable state slices ──────────────────────────────────────────────────────
 
@@ -143,10 +145,11 @@ actor self {
   let memberships : Map.Map<Text, OrgTypes.OrgMembership>          = Map.empty();
   let invites     : Map.Map<Text, OrgTypes.OrgInvite>              = Map.empty();
 
-  // Notifications — push subscriptions, preferences, and pending triggers
+  // Notifications — push subscriptions, preferences, pending triggers, and VAPID state
   let pushSubscriptions    : Map.Map<Principal, NotifTypes.PushSubscriptionRecord> = Map.empty();
   let notificationPrefs    : Map.Map<Principal, NotifTypes.NotificationPreferences> = Map.empty();
   let pendingNotifications : Map.Map<Principal, [NotifTypes.PendingNotification]>   = Map.empty();
+  let vapidState           : { var value : ?NotifTypes.VapidState } = { var value = null };
 
   // Bootstrap: add the canister's own principal as the first admin so the deployer
   // (who is the controller) can call addAdmin to grant themselves or others access.
@@ -161,7 +164,7 @@ actor self {
   include MixinObjectStorage();
   include UsersMixin(usersState);
   include ConvsMixin(convsState, msgsState);
-  include MsgsMixin(msgsState, convsState, enterpriseState, pushSubscriptions, notificationPrefs, pendingNotifications);
+  include MsgsMixin(msgsState, convsState, enterpriseState, pushSubscriptions, notificationPrefs, pendingNotifications, Principal.fromActor(self));
   include AttMixin(attState);
   include AdminMixin(adminState, memberships, usersState, convsState, msgsState, attState, invites);
   include EnterpriseMixin(adminState, enterpriseState, convsState);
@@ -173,6 +176,6 @@ actor self {
   include OrgsMixin(adminState, orgsData, memberships, invites);
   include GroupsAdminMixin(adminState, convsState, memberships);
   include RetentionMixin(adminState, retentionState);
-  include NotificationsMixin(pushSubscriptions, notificationPrefs, pendingNotifications);
+  include NotificationsMixin(pushSubscriptions, notificationPrefs, pendingNotifications, vapidState, adminState);
   include SettingsMixin(adminState, settingsState, memberships);
 };

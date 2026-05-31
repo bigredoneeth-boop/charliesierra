@@ -46,6 +46,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'assets/*.png'],
       manifest: {
         name: 'CharlieSierra',
@@ -62,11 +63,14 @@ export default defineConfig({
         ]
       },
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
         // Only match hashed build output — never glob .png/.svg/.ico from public/
         // to avoid duplicate manifest entries that trigger Workbox's
         // "add-to-cache-list-conflicting-entries" warning.
         globPatterns: ['**/*.{js,css,html,woff2}'],
-        globIgnores: ['**/*.map', '**/node_modules/**'],
+        // Exclude sw-custom.ts and any map/node_modules files from precache
+        globIgnores: ['**/*.map', '**/node_modules/**', '**/sw-custom*'],
         // Skip adding Workbox's own revision hash to files that already
         // contain a content hash in their name (e.g. index-abc12345.js).
         dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
@@ -80,6 +84,9 @@ export default defineConfig({
             options: { cacheName: 'blob-cache', expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 } }
           }
         ]
+      },
+      devOptions: {
+        enabled: false,
       }
     }),
   ],

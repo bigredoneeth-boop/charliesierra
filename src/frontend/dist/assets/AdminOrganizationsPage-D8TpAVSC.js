@@ -1,10 +1,10 @@
-import { e as createLucideIcon, r as reactExports, _ as useIsSuperAdmin, $ as useMyRole, j as jsxRuntimeExports, a0 as Shield, a as Skeleton, B as Button, a1 as useOrgDetails, a2 as useOrgUsers, a3 as useSuspendOrg, a4 as useDeleteOrg, a5 as ArrowLeft, a6 as Trash2, a7 as useOrgs, S as Search, a8 as X, a9 as RefreshCw, aa as ChevronDown, k as useAuth, ab as useCreateOrg, ac as Dialog, ad as DialogContent, ae as DialogHeader, af as DialogTitle, ag as DialogDescription, v as Label, I as Input, Y as Textarea, ah as DialogFooter, f as cn, ai as useUpdateOrg, d as ue, g as Check, h as Copy } from "./index-VhQ0hTMn.js";
-import { A as AdminLayout, B as Building2 } from "./AdminLayout-CRUcyGDY.js";
-import { A as AdminStatusBadge } from "./AdminStatusBadge-CFp7q-0P.js";
-import { C as ConfirmDialog } from "./ConfirmDialog-BaKonypv.js";
-import { P as PrincipalDisplay } from "./PrincipalDisplay-DCe4tF3S.js";
-import { P as Pencil } from "./pencil-l1Wap02-.js";
-import { S as ShieldAlert } from "./shield-alert-DSkTeysB.js";
+import { e as createLucideIcon, r as reactExports, _ as useIsSuperAdmin, $ as useMyRole, j as jsxRuntimeExports, a0 as Shield, a as Skeleton, B as Button, a1 as useOrgDetails, a2 as useOrgUsers, a3 as useSuspendOrg, a4 as useDeleteOrg, a5 as ArrowLeft, a6 as Trash2, a7 as useOrgs, S as Search, a8 as X, a9 as RefreshCw, aa as ChevronDown, k as useAuth, ab as useCreateOrg, ac as Dialog, ad as DialogContent, ae as DialogHeader, af as DialogTitle, ag as DialogDescription, v as Label, I as Input, Y as Textarea, ah as DialogFooter, f as cn, ai as useUpdateOrg, d as ue, g as Check, h as Copy } from "./index-DwKKOR6D.js";
+import { A as AdminLayout, B as Building2 } from "./AdminLayout-D2txHq0E.js";
+import { A as AdminStatusBadge } from "./AdminStatusBadge-oofOTbmC.js";
+import { C as ConfirmDialog } from "./ConfirmDialog-Gv0d7_1q.js";
+import { P as PrincipalDisplay } from "./PrincipalDisplay-rQvDPiaT.js";
+import { P as Pencil } from "./pencil-7uTvXtDc.js";
+import { S as ShieldAlert } from "./shield-alert-DrkZJ_V_.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *

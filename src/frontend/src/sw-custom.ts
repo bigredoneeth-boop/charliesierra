@@ -1,11 +1,162 @@
-// Push notification handler module — registered separately from the generated SW.
-// This file is intentionally minimal: push event handling is done via
-// the Notifications API in usePushNotifications.ts (polling-based approach).
-// No workbox injection needed here since vite-plugin-pwa uses generateSW strategy.
+/// <reference lib="webworker" />
+declare const self: ServiceWorkerGlobalScope;
 
-// Bump this version to force browsers with stale cached bundles (e.g. after a
-// PWA install with old crypto code) to fetch the new bundle on next load.
-const SW_VERSION = "2.0.0";
-console.log("[SW] CharlieSierra Service Worker version", SW_VERSION);
+const SW_VERSION = "cs-sw-v5";
+console.log(`[CharlieSierra SW] ${SW_VERSION} loading`);
+
+// Auth state received from the main page via postMessage
+let swCanisterId: string | null = null;
+let _swDelegationChain: string | null = null;
+
+self.addEventListener("install", (_event) => {
+  console.log("[CharlieSierra SW] Installing...");
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  console.log("[CharlieSierra SW] Activated");
+  event.waitUntil(self.clients.claim());
+});
+
+// Receive auth info and notification relay from the main page
+self.addEventListener("message", (event) => {
+  if (!event.data) return;
+  const { type } = event.data as { type: string; [key: string]: unknown };
+
+  if (type === "CS_SET_AUTH") {
+    const {
+      canisterId,
+      icHost: _icHost,
+      delegationChain,
+      pushActive,
+    } = event.data as {
+      canisterId?: string;
+      icHost?: string;
+      delegationChain?: string;
+      pushActive?: boolean;
+    };
+    swCanisterId = canisterId || "wqf45-4qaaa-aaaau-agubq-cai";
+    _swDelegationChain = delegationChain || null;
+    console.log(
+      "[CharlieSierra SW] Auth received, canisterId:",
+      swCanisterId,
+      "pushActive:",
+      pushActive,
+    );
+  } else if (type === "CS_CLEAR_AUTH") {
+    swCanisterId = null;
+    _swDelegationChain = null;
+  } else if (type === "CS_SHOW_NOTIFICATION") {
+    const { title, body, tag, data } = event.data as {
+      title?: string;
+      body?: string;
+      tag?: string;
+      data?: { url?: string; convId?: string };
+    };
+    // Only show if no visible client (page handles foreground case)
+    self.clients
+      .matchAll({ type: "window" })
+      .then((clients) => {
+        const hasVisible = clients.some(
+          (c) => (c as WindowClient).visibilityState === "visible",
+        );
+        if (hasVisible) return;
+        self.registration
+          .showNotification(title || "New message", {
+            body: body || "New message",
+            icon: "/icon-192x192.png",
+            badge: "/icon-192x192.png",
+            tag: tag || "cs-notification",
+            requireInteraction: false,
+            data: data || { url: "/" },
+          })
+          .catch(() => {});
+      })
+      .catch(() => {});
+  }
+});
+
+// ── Real Web Push event handler ──────────────────────────────────────────────
+// This fires when the browser delivers a push message, even when the app
+// is fully closed. The payload must include: title, body, convId (optional).
+self.addEventListener("push", (event) => {
+  interface PushPayload {
+    title?: string;
+    body?: string;
+    convId?: string;
+  }
+
+  let payload: PushPayload = {};
+  if (event.data) {
+    try {
+      payload = event.data.json() as PushPayload;
+    } catch {
+      try {
+        // Fallback: treat as plain text title
+        payload = { title: event.data.text() };
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  const title = payload.title || "CharlieSierra";
+  const body = payload.body || "New message";
+  const convId = payload.convId || "";
+  // Use convId as the tag so duplicate notifications for the same
+  // conversation are replaced rather than stacked.
+  const tag = convId ? `cs-conv-${convId}` : "cs-push";
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body,
+      icon: "/icon-192x192.png",
+      badge: "/icon-192x192.png",
+      tag,
+      requireInteraction: false,
+      data: { convId, url: "/" },
+    }),
+  );
+});
+
+// ── Notification click handler ────────────────────────────────────────────────
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const notifData = event.notification.data as
+    | { convId?: string; url?: string }
+    | undefined;
+  const convId = notifData?.convId || "";
+  const targetUrl = notifData?.url || "/";
+
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then(async (windowClients) => {
+        // Find an existing app window to focus
+        for (const client of windowClients) {
+          if (
+            client.url.startsWith(self.location.origin) &&
+            "focus" in client
+          ) {
+            const wc = client as WindowClient;
+            const focusedClient = await wc.focus();
+            // Tell the focused page to navigate to the conversation
+            if (convId) {
+              focusedClient.postMessage({
+                type: "CS_OPEN_CONVERSATION",
+                convId,
+              });
+            }
+            return;
+          }
+        }
+        // No existing window — open a new one
+        if (self.clients.openWindow) {
+          await self.clients.openWindow(targetUrl);
+        }
+      }),
+  );
+});
 
 export {};

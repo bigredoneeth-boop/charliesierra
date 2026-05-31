@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-4BTbdbNJ.js","assets/card-DN049-Mk.js","assets/AdminDashboardPage-Cecnfq3p.js","assets/AdminLayout-CRUcyGDY.js","assets/PrincipalDisplay-DCe4tF3S.js","assets/user-plus-C-X2qj5-.js","assets/AdminOrganizationsPage-Cqgyrq1K.js","assets/AdminStatusBadge-CFp7q-0P.js","assets/ConfirmDialog-BaKonypv.js","assets/pencil-l1Wap02-.js","assets/shield-alert-DSkTeysB.js","assets/AdminUsersPage-BcfDdGfR.js","assets/funnel-DcYohU64.js","assets/AdminGroupsPage-CuZgWjLi.js","assets/AdminAuditPage-CxhDOzVr.js","assets/AdminKeyEscrowPage-uTrWo3Fs.js","assets/AdminRetentionPoliciesPage-5FOeMYuy.js","assets/AdminSettingsPage-C0kpZYEq.js","assets/AdminBootstrapPage-DbSSOgZX.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-Ddfswg4f.js","assets/card-B5SNr1t_.js","assets/AdminDashboardPage-J0QWBmJN.js","assets/AdminLayout-D2txHq0E.js","assets/PrincipalDisplay-rQvDPiaT.js","assets/user-plus-DmT3PvrM.js","assets/AdminOrganizationsPage-D8TpAVSC.js","assets/AdminStatusBadge-oofOTbmC.js","assets/ConfirmDialog-Gv0d7_1q.js","assets/pencil-7uTvXtDc.js","assets/shield-alert-DrkZJ_V_.js","assets/AdminUsersPage-CnunmmXw.js","assets/funnel-DAd-T7cd.js","assets/AdminGroupsPage-BApXGuDF.js","assets/AdminAuditPage-BJf9eOUv.js","assets/AdminKeyEscrowPage-AISw0JzL.js","assets/AdminRetentionPoliciesPage-DKvYJ4cp.js","assets/AdminSettingsPage-BOtwocRI.js","assets/AdminBootstrapPage-05ZFBCLQ.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -33847,11 +33847,11 @@ const EscrowAccessGrant = Record({
   "requestingAdmin": UserId,
   "targetUserId": UserId
 });
-const Result_33 = Variant({
+const Result_31 = Variant({
   "ok": Vec(EscrowAccessGrant),
   "err": Error$1
 });
-const Result_32 = Variant({
+const Result_30 = Variant({
   "ok": EscrowAccessGrant,
   "err": Error$1
 });
@@ -33916,7 +33916,7 @@ const ConversationPublic = Record({
   "discoverable": Bool,
   "encryptedName": Opt(Vec(Nat8))
 });
-const Result_31 = Variant({
+const Result_29 = Variant({
   "ok": ConversationPublic,
   "err": Error$1
 });
@@ -33996,7 +33996,7 @@ const AuditExportRequest = Record({
   "startDate": Opt(Timestamp),
   "format": AuditExportFormat
 });
-const Result_29 = Variant({ "ok": Text, "err": Error$1 });
+const Result_27 = Variant({ "ok": Text, "err": Error$1 });
 const AuditEventType$1 = Variant({
   "legalHoldRemoved": Null,
   "memberSuspended": Null,
@@ -34054,7 +34054,7 @@ const AuditEvent = Record({
   "actorPrincipal": UserId,
   "eventType": AuditEventType$1
 });
-const Result_28 = Variant({
+const Result_26 = Variant({
   "ok": Vec(AuditEvent),
   "err": Error$1
 });
@@ -34086,7 +34086,7 @@ const ConfigExportBundle = Record({
   ),
   "residencyLabel": DataResidency
 });
-const Result_30 = Variant({
+const Result_28 = Variant({
   "ok": ConfigExportBundle,
   "err": Error$1
 });
@@ -34126,7 +34126,7 @@ const EscrowStatsRecord = Record({
   "lastRecoveryTimestamp": Opt(Timestamp),
   "totalEscrowed": Nat
 });
-const Result_27 = Variant({
+const Result_25 = Variant({
   "ok": EscrowStatsRecord,
   "err": Error$1
 });
@@ -34148,7 +34148,7 @@ const EscrowedUserRecord = Record({
   "escrowStatus": EscrowStatus$1,
   "lastBackedUp": Opt(Timestamp)
 });
-const Result_26 = Variant({
+const Result_24 = Variant({
   "ok": Vec(EscrowedUserRecord),
   "err": Error$1
 });
@@ -34165,7 +34165,7 @@ const JoinRequest = Record({
   "message": Opt(Text),
   "requesterId": UserId
 });
-const Result_25 = Variant({
+const Result_23 = Variant({
   "ok": Vec(JoinRequest),
   "err": Error$1
 });
@@ -34177,11 +34177,11 @@ const GroupMemberRecord = Record({
   "userId": UserId,
   "joinedAt": Timestamp
 });
-const Result_24 = Variant({
+const Result_22 = Variant({
   "ok": Vec(GroupMemberRecord),
   "err": Text
 });
-const Result_23 = Variant({
+const Result_21 = Variant({
   "ok": GroupRetentionPolicy,
   "err": Error$1
 });
@@ -34227,7 +34227,7 @@ const MessagePublic = Record({
   "priority": Opt(MessagePriority$1),
   "readBy": Vec(ReadReceipt)
 });
-const Result_22 = Variant({
+const Result_20 = Variant({
   "ok": Vec(MessagePublic),
   "err": Error$1
 });
@@ -34263,21 +34263,17 @@ const OrgMembership = Record({
   "email": Opt(Text),
   "lastActive": Opt(Timestamp)
 });
-const Result_21 = Variant({
+const Result_19 = Variant({
   "ok": Vec(OrgMembership),
   "err": Text
 });
-const Result_20 = Variant({
+const Result_18 = Variant({
   "ok": Opt(OrgRole$1),
   "err": Text
 });
 const NotificationPreferences = Record({
   "groupMessagesEnabled": Bool,
   "directMessagesEnabled": Bool
-});
-const Result_19 = Variant({
-  "ok": NotificationPreferences,
-  "err": Text
 });
 const GroupCreationPermission$1 = Variant({
   "orgAdminsOnly": Null,
@@ -34317,7 +34313,7 @@ const GetOrgUsersResponse = Record({
   "hasMore": Bool,
   "members": Vec(OrgMembership)
 });
-const Result_18 = Variant({
+const Result_17 = Variant({
   "ok": GetOrgUsersResponse,
   "err": Text
 });
@@ -34327,10 +34323,6 @@ const PendingNotification = Record({
   "senderDisplayName": Text,
   "timestamp": Int,
   "groupName": Opt(Text)
-});
-const Result_17 = Variant({
-  "ok": Vec(PendingNotification),
-  "err": Text
 });
 const PasswordPolicy$1 = Variant({
   "strong": Null,
@@ -34516,12 +34508,12 @@ Service({
   "addDevice": Func([AddDeviceRequest], [Result_11], []),
   "adminGetEscrowGrants": Func(
     [Opt(UserId), Nat, Opt(Nat)],
-    [Result_33],
+    [Result_31],
     ["query"]
   ),
   "adminGrantEscrowAccess": Func(
     [UserId, Text, Text],
-    [Result_32],
+    [Result_30],
     []
   ),
   "approveJoinRequest": Func([JoinRequestActionRequest], [Result_6], []),
@@ -34533,8 +34525,8 @@ Service({
     ["query"]
   ),
   "clearTypingIndicator": Func([ConversationId], [], []),
-  "createDirectConversation": Func([CreateDirectRequest], [Result_31], []),
-  "createGroupConversation": Func([CreateGroupRequest], [Result_31], []),
+  "createDirectConversation": Func([CreateDirectRequest], [Result_29], []),
+  "createGroupConversation": Func([CreateGroupRequest], [Result_29], []),
   "createOrg": Func([CreateOrgRequest], [Result_3], []),
   "createRetentionPolicy": Func(
     [CreateRetentionPolicyRequest],
@@ -34558,20 +34550,20 @@ Service({
     [Variant({ "ok": Text, "err": Text })],
     []
   ),
-  "exportAuditLog": Func([AuditExportRequest], [Result_29], []),
+  "exportAuditLog": Func([AuditExportRequest], [Result_27], []),
   "exportAuditLogs": Func(
     [ExportAuditLogsRequest],
-    [Result_28],
+    [Result_26],
     ["query"]
   ),
-  "exportConfigBundle": Func([], [Result_30], []),
-  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_29], []),
+  "exportConfigBundle": Func([], [Result_28], []),
+  "generateDeviceSyncToken": Func([Vec(Nat8)], [Result_27], []),
   "getAllGroups": Func(
     [GetAllGroupsRequest],
     [Vec(GroupAdminRecord)],
     []
   ),
-  "getAuditLog": Func([GetAuditLogRequest], [Result_28], ["query"]),
+  "getAuditLog": Func([GetAuditLogRequest], [Result_26], ["query"]),
   "getCanisterHealth": Func(
     [],
     [
@@ -34599,8 +34591,8 @@ Service({
     [Variant({ "ok": Vec(Nat8), "err": Text })],
     []
   ),
-  "getEscrowStats": Func([], [Result_27], []),
-  "getEscrowedUsers": Func([GetEscrowedUsersRequest], [Result_26], []),
+  "getEscrowStats": Func([], [Result_25], []),
+  "getEscrowedUsers": Func([GetEscrowedUsersRequest], [Result_24], []),
   "getGlobalRetentionPolicy": Func(
     [],
     [Opt(RetentionPolicy)],
@@ -34611,11 +34603,11 @@ Service({
     [Opt(CompartmentLabel)],
     ["query"]
   ),
-  "getGroupJoinRequests": Func([ConversationId], [Result_25], ["query"]),
-  "getGroupMembers": Func([GetGroupMembersRequest], [Result_24], []),
+  "getGroupJoinRequests": Func([ConversationId], [Result_23], ["query"]),
+  "getGroupMembers": Func([GetGroupMembersRequest], [Result_22], []),
   "getGroupRetentionPolicy": Func(
     [ConversationId],
-    [Result_23],
+    [Result_21],
     ["query"]
   ),
   "getMessageAttachments": Func(
@@ -34623,15 +34615,19 @@ Service({
     [Vec(Attachment)],
     ["query"]
   ),
-  "getMessages": Func([GetMessagesRequest], [Result_22], ["query"]),
+  "getMessages": Func([GetMessagesRequest], [Result_20], ["query"]),
   "getMyEscrowStatus": Func([], [Vec(EscrowRecord)], ["query"]),
-  "getMyOrgs": Func([], [Result_21], ["query"]),
-  "getMyRole": Func([OrgId], [Result_20], ["query"]),
-  "getNotificationPreferences": Func([], [Result_19], ["query"]),
+  "getMyOrgs": Func([], [Result_19], ["query"]),
+  "getMyRole": Func([OrgId], [Result_18], ["query"]),
+  "getNotificationPreferences": Func(
+    [],
+    [NotificationPreferences],
+    ["query"]
+  ),
   "getOrg": Func([OrgId], [Result_3], ["query"]),
   "getOrgSettings": Func([Text], [OrgSettings], ["query"]),
-  "getOrgUsers": Func([GetOrgUsersRequest], [Result_18], ["query"]),
-  "getPendingNotifications": Func([], [Result_17], []),
+  "getOrgUsers": Func([GetOrgUsersRequest], [Result_17], ["query"]),
+  "getPendingNotifications": Func([], [Vec(PendingNotification)], []),
   "getPlatformSettings": Func([], [PlatformSettings], ["query"]),
   "getRecoveryDetails": Func([Nat], [Result_9], []),
   "getRecoveryRequests": Func(
@@ -34669,7 +34665,7 @@ Service({
     [Vec(UserProfilePublic)],
     ["query"]
   ),
-  "getVAPIDPublicKey": Func([], [Text], ["query"]),
+  "getVAPIDPublicKey": Func([], [Text], []),
   "hasDataResetBeenPerformed": Func([], [Bool], ["query"]),
   "hasSuperAdmin": Func([], [Bool], ["query"]),
   "initiateKeyRecovery": Func(
@@ -34698,6 +34694,11 @@ Service({
     []
   ),
   "registerAttachment": Func([RegisterAttachmentRequest], [Result_10], []),
+  "registerPushSubscription": Func(
+    [Text, Text, Text],
+    [Result_2],
+    []
+  ),
   "registerUser": Func([RegisterRequest], [Result], []),
   "rejectKeyRecovery": Func([Nat], [Result_9], []),
   "removeAdmin": Func([UserId], [Result_6], []),
@@ -34712,6 +34713,11 @@ Service({
   "revokeDevice": Func([Text], [Result_6], []),
   "revokeKeyEscrow": Func([Text, Text], [Result_6], []),
   "sendMessage": Func([SendMessageRequest], [Result_7], []),
+  "sendPushToUser": Func(
+    [Principal2, Text, Text, Text],
+    [],
+    []
+  ),
   "setGroupCompartment": Func(
     [ConversationId, CompartmentLabel],
     [Result_6],
@@ -34729,18 +34735,15 @@ Service({
   ),
   "setTypingIndicator": Func([ConversationId, Nat], [], []),
   "submitJoinRequest": Func([SubmitJoinRequestRequest], [Result_4], []),
-  "subscribeToPush": Func([Text, Text, Text], [Result_2], []),
+  "subscribeToPush": Func([Text, Text, Text], [], []),
   "suspendMember": Func([SuspendUserRequest], [Result_2], []),
   "suspendOrg": Func([OrgId], [Result_2], []),
   "toggleLegalHold": Func([LegalHoldRequest], [Result_1], []),
   "touchPresence": Func([], [], []),
-  "unsubscribeFromPush": Func([], [Result_2], []),
+  "unregisterPushSubscription": Func([], [Result_2], []),
+  "unsubscribeFromPush": Func([], [], []),
   "updateMemberRole": Func([UpdateMemberRoleRequest], [Result_2], []),
-  "updateNotificationPreferences": Func(
-    [Bool, Bool],
-    [Result_2],
-    []
-  ),
+  "updateNotificationPreferences": Func([Bool, Bool], [], []),
   "updateOrg": Func([OrgId, Text, Opt(Text)], [Result_3], []),
   "updateOrgSettings": Func([Text, OrgSettings], [Result_2], []),
   "updatePlatformSettings": Func([PlatformSettings], [Result_2], []),
@@ -34805,11 +34808,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "requestingAdmin": UserId2,
     "targetUserId": UserId2
   });
-  const Result_332 = IDL2.Variant({
+  const Result_312 = IDL2.Variant({
     "ok": IDL2.Vec(EscrowAccessGrant2),
     "err": Error2
   });
-  const Result_322 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
+  const Result_302 = IDL2.Variant({ "ok": EscrowAccessGrant2, "err": Error2 });
   const DenialReason2 = IDL2.Text;
   const JoinRequestActionRequest2 = IDL2.Record({
     "denialReason": IDL2.Opt(DenialReason2),
@@ -34871,7 +34874,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "discoverable": IDL2.Bool,
     "encryptedName": IDL2.Opt(IDL2.Vec(IDL2.Nat8))
   });
-  const Result_312 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
+  const Result_292 = IDL2.Variant({ "ok": ConversationPublic2, "err": Error2 });
   const CreateGroupRequest2 = IDL2.Record({
     "initialMembers": IDL2.Vec(UserId2),
     "displayName": IDL2.Opt(IDL2.Text),
@@ -34898,7 +34901,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "memberCount": IDL2.Nat,
     "description": IDL2.Text
   });
-  const Result_34 = IDL2.Variant({ "ok": OrgRecord2, "err": IDL2.Text });
+  const Result_32 = IDL2.Variant({ "ok": OrgRecord2, "err": IDL2.Text });
   const CreateRetentionPolicyRequest2 = IDL2.Record({
     "orgId": IDL2.Opt(OrgId2),
     "period": RetentionPeriod2,
@@ -34945,7 +34948,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "startDate": IDL2.Opt(Timestamp2),
     "format": AuditExportFormat2
   });
-  const Result_292 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
+  const Result_272 = IDL2.Variant({ "ok": IDL2.Text, "err": Error2 });
   const AuditEventType2 = IDL2.Variant({
     "legalHoldRemoved": IDL2.Null,
     "memberSuspended": IDL2.Null,
@@ -35003,7 +35006,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "actorPrincipal": UserId2,
     "eventType": AuditEventType2
   });
-  const Result_282 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
+  const Result_262 = IDL2.Variant({ "ok": IDL2.Vec(AuditEvent2), "err": Error2 });
   const CompartmentLabel2 = IDL2.Variant({
     "classified": IDL2.Null,
     "unclassified": IDL2.Null
@@ -35034,7 +35037,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     ),
     "residencyLabel": DataResidency2
   });
-  const Result_302 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
+  const Result_282 = IDL2.Variant({ "ok": ConfigExportBundle2, "err": Error2 });
   const GetAllGroupsRequest2 = IDL2.Record({ "orgId": IDL2.Opt(OrgId2) });
   const GroupStatus2 = IDL2.Variant({
     "active": IDL2.Null,
@@ -35071,7 +35074,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "lastRecoveryTimestamp": IDL2.Opt(Timestamp2),
     "totalEscrowed": IDL2.Nat
   });
-  const Result_272 = IDL2.Variant({ "ok": EscrowStatsRecord2, "err": Error2 });
+  const Result_252 = IDL2.Variant({ "ok": EscrowStatsRecord2, "err": Error2 });
   const GetEscrowedUsersRequest2 = IDL2.Record({
     "orgId": IDL2.Opt(OrgId2),
     "limit": IDL2.Nat,
@@ -35090,7 +35093,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "escrowStatus": EscrowStatus2,
     "lastBackedUp": IDL2.Opt(Timestamp2)
   });
-  const Result_262 = IDL2.Variant({
+  const Result_242 = IDL2.Variant({
     "ok": IDL2.Vec(EscrowedUserRecord2),
     "err": Error2
   });
@@ -35107,18 +35110,18 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "message": IDL2.Opt(IDL2.Text),
     "requesterId": UserId2
   });
-  const Result_252 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
+  const Result_232 = IDL2.Variant({ "ok": IDL2.Vec(JoinRequest2), "err": Error2 });
   const GetGroupMembersRequest2 = IDL2.Record({ "groupId": ConversationId2 });
   const GroupMemberRecord2 = IDL2.Record({
     "displayName": IDL2.Opt(IDL2.Text),
     "userId": UserId2,
     "joinedAt": Timestamp2
   });
-  const Result_242 = IDL2.Variant({
+  const Result_222 = IDL2.Variant({
     "ok": IDL2.Vec(GroupMemberRecord2),
     "err": IDL2.Text
   });
-  const Result_232 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
+  const Result_212 = IDL2.Variant({ "ok": GroupRetentionPolicy2, "err": Error2 });
   const MessageId2 = IDL2.Nat;
   const Attachment2 = IDL2.Record({
     "id": AttachmentId2,
@@ -35158,7 +35161,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "priority": IDL2.Opt(MessagePriority2),
     "readBy": IDL2.Vec(ReadReceipt2)
   });
-  const Result_222 = IDL2.Variant({
+  const Result_202 = IDL2.Variant({
     "ok": IDL2.Vec(MessagePublic2),
     "err": Error2
   });
@@ -35194,18 +35197,14 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "email": IDL2.Opt(IDL2.Text),
     "lastActive": IDL2.Opt(Timestamp2)
   });
-  const Result_212 = IDL2.Variant({
+  const Result_192 = IDL2.Variant({
     "ok": IDL2.Vec(OrgMembership2),
     "err": IDL2.Text
   });
-  const Result_202 = IDL2.Variant({ "ok": IDL2.Opt(OrgRole2), "err": IDL2.Text });
+  const Result_182 = IDL2.Variant({ "ok": IDL2.Opt(OrgRole2), "err": IDL2.Text });
   const NotificationPreferences2 = IDL2.Record({
     "groupMessagesEnabled": IDL2.Bool,
     "directMessagesEnabled": IDL2.Bool
-  });
-  const Result_192 = IDL2.Variant({
-    "ok": NotificationPreferences2,
-    "err": IDL2.Text
   });
   const GroupCreationPermission2 = IDL2.Variant({
     "orgAdminsOnly": IDL2.Null,
@@ -35245,7 +35244,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "hasMore": IDL2.Bool,
     "members": IDL2.Vec(OrgMembership2)
   });
-  const Result_182 = IDL2.Variant({
+  const Result_172 = IDL2.Variant({
     "ok": GetOrgUsersResponse2,
     "err": IDL2.Text
   });
@@ -35255,10 +35254,6 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "senderDisplayName": IDL2.Text,
     "timestamp": IDL2.Int,
     "groupName": IDL2.Opt(IDL2.Text)
-  });
-  const Result_172 = IDL2.Variant({
-    "ok": IDL2.Vec(PendingNotification2),
-    "err": IDL2.Text
   });
   const PasswordPolicy2 = IDL2.Variant({
     "strong": IDL2.Null,
@@ -35436,12 +35431,12 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "addDevice": IDL2.Func([AddDeviceRequest2], [Result_112], []),
     "adminGetEscrowGrants": IDL2.Func(
       [IDL2.Opt(UserId2), IDL2.Nat, IDL2.Opt(IDL2.Nat)],
-      [Result_332],
+      [Result_312],
       ["query"]
     ),
     "adminGrantEscrowAccess": IDL2.Func(
       [UserId2, IDL2.Text, IDL2.Text],
-      [Result_322],
+      [Result_302],
       []
     ),
     "approveJoinRequest": IDL2.Func([JoinRequestActionRequest2], [Result_62], []),
@@ -35455,11 +35450,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "clearTypingIndicator": IDL2.Func([ConversationId2], [], []),
     "createDirectConversation": IDL2.Func(
       [CreateDirectRequest2],
-      [Result_312],
+      [Result_292],
       []
     ),
-    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_312], []),
-    "createOrg": IDL2.Func([CreateOrgRequest2], [Result_34], []),
+    "createGroupConversation": IDL2.Func([CreateGroupRequest2], [Result_292], []),
+    "createOrg": IDL2.Func([CreateOrgRequest2], [Result_32], []),
     "createRetentionPolicy": IDL2.Func(
       [CreateRetentionPolicyRequest2],
       [Result_110],
@@ -35482,20 +35477,20 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Variant({ "ok": IDL2.Text, "err": IDL2.Text })],
       []
     ),
-    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_292], []),
+    "exportAuditLog": IDL2.Func([AuditExportRequest2], [Result_272], []),
     "exportAuditLogs": IDL2.Func(
       [ExportAuditLogsRequest2],
-      [Result_282],
+      [Result_262],
       ["query"]
     ),
-    "exportConfigBundle": IDL2.Func([], [Result_302], []),
-    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_292], []),
+    "exportConfigBundle": IDL2.Func([], [Result_282], []),
+    "generateDeviceSyncToken": IDL2.Func([IDL2.Vec(IDL2.Nat8)], [Result_272], []),
     "getAllGroups": IDL2.Func(
       [GetAllGroupsRequest2],
       [IDL2.Vec(GroupAdminRecord2)],
       []
     ),
-    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_282], ["query"]),
+    "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_262], ["query"]),
     "getCanisterHealth": IDL2.Func(
       [],
       [
@@ -35523,8 +35518,8 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Variant({ "ok": IDL2.Vec(IDL2.Nat8), "err": IDL2.Text })],
       []
     ),
-    "getEscrowStats": IDL2.Func([], [Result_272], []),
-    "getEscrowedUsers": IDL2.Func([GetEscrowedUsersRequest2], [Result_262], []),
+    "getEscrowStats": IDL2.Func([], [Result_252], []),
+    "getEscrowedUsers": IDL2.Func([GetEscrowedUsersRequest2], [Result_242], []),
     "getGlobalRetentionPolicy": IDL2.Func(
       [],
       [IDL2.Opt(RetentionPolicy2)],
@@ -35535,11 +35530,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Opt(CompartmentLabel2)],
       ["query"]
     ),
-    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_252], ["query"]),
-    "getGroupMembers": IDL2.Func([GetGroupMembersRequest2], [Result_242], []),
+    "getGroupJoinRequests": IDL2.Func([ConversationId2], [Result_232], ["query"]),
+    "getGroupMembers": IDL2.Func([GetGroupMembersRequest2], [Result_222], []),
     "getGroupRetentionPolicy": IDL2.Func(
       [ConversationId2],
-      [Result_232],
+      [Result_212],
       ["query"]
     ),
     "getMessageAttachments": IDL2.Func(
@@ -35547,15 +35542,23 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Vec(Attachment2)],
       ["query"]
     ),
-    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_222], ["query"]),
+    "getMessages": IDL2.Func([GetMessagesRequest2], [Result_202], ["query"]),
     "getMyEscrowStatus": IDL2.Func([], [IDL2.Vec(EscrowRecord2)], ["query"]),
-    "getMyOrgs": IDL2.Func([], [Result_212], ["query"]),
-    "getMyRole": IDL2.Func([OrgId2], [Result_202], ["query"]),
-    "getNotificationPreferences": IDL2.Func([], [Result_192], ["query"]),
-    "getOrg": IDL2.Func([OrgId2], [Result_34], ["query"]),
+    "getMyOrgs": IDL2.Func([], [Result_192], ["query"]),
+    "getMyRole": IDL2.Func([OrgId2], [Result_182], ["query"]),
+    "getNotificationPreferences": IDL2.Func(
+      [],
+      [NotificationPreferences2],
+      ["query"]
+    ),
+    "getOrg": IDL2.Func([OrgId2], [Result_32], ["query"]),
     "getOrgSettings": IDL2.Func([IDL2.Text], [OrgSettings2], ["query"]),
-    "getOrgUsers": IDL2.Func([GetOrgUsersRequest2], [Result_182], ["query"]),
-    "getPendingNotifications": IDL2.Func([], [Result_172], []),
+    "getOrgUsers": IDL2.Func([GetOrgUsersRequest2], [Result_172], ["query"]),
+    "getPendingNotifications": IDL2.Func(
+      [],
+      [IDL2.Vec(PendingNotification2)],
+      []
+    ),
     "getPlatformSettings": IDL2.Func([], [PlatformSettings2], ["query"]),
     "getRecoveryDetails": IDL2.Func([IDL2.Nat], [Result_92], []),
     "getRecoveryRequests": IDL2.Func(
@@ -35593,7 +35596,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [IDL2.Vec(UserProfilePublic2)],
       ["query"]
     ),
-    "getVAPIDPublicKey": IDL2.Func([], [IDL2.Text], ["query"]),
+    "getVAPIDPublicKey": IDL2.Func([], [IDL2.Text], []),
     "hasDataResetBeenPerformed": IDL2.Func([], [IDL2.Bool], ["query"]),
     "hasSuperAdmin": IDL2.Func([], [IDL2.Bool], ["query"]),
     "initiateKeyRecovery": IDL2.Func(
@@ -35630,6 +35633,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [Result_102],
       []
     ),
+    "registerPushSubscription": IDL2.Func(
+      [IDL2.Text, IDL2.Text, IDL2.Text],
+      [Result_210],
+      []
+    ),
     "registerUser": IDL2.Func([RegisterRequest2], [Result2], []),
     "rejectKeyRecovery": IDL2.Func([IDL2.Nat], [Result_92], []),
     "removeAdmin": IDL2.Func([UserId2], [Result_62], []),
@@ -35648,6 +35656,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "revokeDevice": IDL2.Func([IDL2.Text], [Result_62], []),
     "revokeKeyEscrow": IDL2.Func([IDL2.Text, IDL2.Text], [Result_62], []),
     "sendMessage": IDL2.Func([SendMessageRequest2], [Result_72], []),
+    "sendPushToUser": IDL2.Func(
+      [IDL2.Principal, IDL2.Text, IDL2.Text, IDL2.Text],
+      [],
+      []
+    ),
     "setGroupCompartment": IDL2.Func(
       [ConversationId2, CompartmentLabel2],
       [Result_62],
@@ -35665,25 +35678,18 @@ const idlFactory = ({ IDL: IDL2 }) => {
     ),
     "setTypingIndicator": IDL2.Func([ConversationId2, IDL2.Nat], [], []),
     "submitJoinRequest": IDL2.Func([SubmitJoinRequestRequest2], [Result_42], []),
-    "subscribeToPush": IDL2.Func(
-      [IDL2.Text, IDL2.Text, IDL2.Text],
-      [Result_210],
-      []
-    ),
+    "subscribeToPush": IDL2.Func([IDL2.Text, IDL2.Text, IDL2.Text], [], []),
     "suspendMember": IDL2.Func([SuspendUserRequest2], [Result_210], []),
     "suspendOrg": IDL2.Func([OrgId2], [Result_210], []),
     "toggleLegalHold": IDL2.Func([LegalHoldRequest2], [Result_110], []),
     "touchPresence": IDL2.Func([], [], []),
-    "unsubscribeFromPush": IDL2.Func([], [Result_210], []),
+    "unregisterPushSubscription": IDL2.Func([], [Result_210], []),
+    "unsubscribeFromPush": IDL2.Func([], [], []),
     "updateMemberRole": IDL2.Func([UpdateMemberRoleRequest2], [Result_210], []),
-    "updateNotificationPreferences": IDL2.Func(
-      [IDL2.Bool, IDL2.Bool],
-      [Result_210],
-      []
-    ),
+    "updateNotificationPreferences": IDL2.Func([IDL2.Bool, IDL2.Bool], [], []),
     "updateOrg": IDL2.Func(
       [OrgId2, IDL2.Text, IDL2.Opt(IDL2.Text)],
-      [Result_34],
+      [Result_32],
       []
     ),
     "updateOrgSettings": IDL2.Func([IDL2.Text, OrgSettings2], [Result_210], []),
@@ -35966,28 +35972,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n14(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2));
-        return from_candid_Result_33_n16(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_31_n16(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.adminGetEscrowGrants(to_candid_opt_n14(this._uploadFile, this._downloadFile, arg0), arg1, to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2));
-      return from_candid_Result_33_n16(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_31_n16(this._uploadFile, this._downloadFile, result);
     }
   }
   async adminGrantEscrowAccess(arg0, arg1, arg2) {
     if (this.processError) {
       try {
         const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-        return from_candid_Result_32_n18(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_30_n18(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.adminGrantEscrowAccess(arg0, arg1, arg2);
-      return from_candid_Result_32_n18(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_30_n18(this._uploadFile, this._downloadFile, result);
     }
   }
   async approveJoinRequest(arg0) {
@@ -36064,28 +36070,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.createDirectConversation(arg0);
-        return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_29_n39(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.createDirectConversation(arg0);
-      return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_29_n39(this._uploadFile, this._downloadFile, result);
     }
   }
   async createGroupConversation(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n47(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_29_n39(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.createGroupConversation(to_candid_CreateGroupRequest_n47(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_31_n39(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_29_n39(this._uploadFile, this._downloadFile, result);
     }
   }
   async createOrg(arg0) {
@@ -36246,56 +36252,56 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n63(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_27_n70(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.exportAuditLog(to_candid_AuditExportRequest_n63(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_27_n70(this._uploadFile, this._downloadFile, result);
     }
   }
   async exportAuditLogs(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.exportAuditLogs(to_candid_ExportAuditLogsRequest_n72(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_26_n76(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.exportAuditLogs(to_candid_ExportAuditLogsRequest_n72(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_26_n76(this._uploadFile, this._downloadFile, result);
     }
   }
   async exportConfigBundle() {
     if (this.processError) {
       try {
         const result = await this.actor.exportConfigBundle();
-        return from_candid_Result_30_n83(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_28_n83(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.exportConfigBundle();
-      return from_candid_Result_30_n83(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_28_n83(this._uploadFile, this._downloadFile, result);
     }
   }
   async generateDeviceSyncToken(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.generateDeviceSyncToken(arg0);
-        return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_27_n70(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.generateDeviceSyncToken(arg0);
-      return from_candid_Result_29_n70(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_27_n70(this._uploadFile, this._downloadFile, result);
     }
   }
   async getAllGroups(arg0) {
@@ -36316,14 +36322,14 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_26_n76(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_28_n76(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_26_n76(this._uploadFile, this._downloadFile, result);
     }
   }
   async getCanisterHealth() {
@@ -36400,28 +36406,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getEscrowStats();
-        return from_candid_Result_27_n112(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_25_n112(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getEscrowStats();
-      return from_candid_Result_27_n112(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_25_n112(this._uploadFile, this._downloadFile, result);
     }
   }
   async getEscrowedUsers(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n116(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_26_n118(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_24_n118(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n116(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_26_n118(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_24_n118(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGlobalRetentionPolicy() {
@@ -36456,42 +36462,42 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupJoinRequests(arg0);
-        return from_candid_Result_25_n127(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_23_n127(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupJoinRequests(arg0);
-      return from_candid_Result_25_n127(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_23_n127(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupMembers(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupMembers(arg0);
-        return from_candid_Result_24_n134(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_22_n134(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupMembers(arg0);
-      return from_candid_Result_24_n134(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_22_n134(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupRetentionPolicy(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupRetentionPolicy(arg0);
-        return from_candid_Result_23_n139(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_21_n139(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupRetentionPolicy(arg0);
-      return from_candid_Result_23_n139(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_21_n139(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMessageAttachments(arg0) {
@@ -36512,14 +36518,14 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n141(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_22_n143(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_20_n143(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n141(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_22_n143(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_20_n143(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyEscrowStatus() {
@@ -36540,42 +36546,42 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getMyOrgs();
-        return from_candid_Result_21_n156(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_19_n156(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyOrgs();
-      return from_candid_Result_21_n156(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_19_n156(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyRole(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getMyRole(arg0);
-        return from_candid_Result_20_n165(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_18_n165(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyRole(arg0);
-      return from_candid_Result_20_n165(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_18_n165(this._uploadFile, this._downloadFile, result);
     }
   }
   async getNotificationPreferences() {
     if (this.processError) {
       try {
         const result = await this.actor.getNotificationPreferences();
-        return from_candid_Result_19_n168(this._uploadFile, this._downloadFile, result);
+        return result;
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getNotificationPreferences();
-      return from_candid_Result_19_n168(this._uploadFile, this._downloadFile, result);
+      return result;
     }
   }
   async getOrg(arg0) {
@@ -36596,56 +36602,56 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getOrgSettings(arg0);
-        return from_candid_OrgSettings_n170(this._uploadFile, this._downloadFile, result);
+        return from_candid_OrgSettings_n168(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getOrgSettings(arg0);
-      return from_candid_OrgSettings_n170(this._uploadFile, this._downloadFile, result);
+      return from_candid_OrgSettings_n168(this._uploadFile, this._downloadFile, result);
     }
   }
   async getOrgUsers(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n178(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_18_n180(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n176(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_17_n178(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n178(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_18_n180(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n176(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_17_n178(this._uploadFile, this._downloadFile, result);
     }
   }
   async getPendingNotifications() {
     if (this.processError) {
       try {
         const result = await this.actor.getPendingNotifications();
-        return from_candid_Result_17_n184(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n182(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getPendingNotifications();
-      return from_candid_Result_17_n184(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n182(this._uploadFile, this._downloadFile, result);
     }
   }
   async getPlatformSettings() {
     if (this.processError) {
       try {
         const result = await this.actor.getPlatformSettings();
-        return from_candid_PlatformSettings_n189(this._uploadFile, this._downloadFile, result);
+        return from_candid_PlatformSettings_n185(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getPlatformSettings();
-      return from_candid_PlatformSettings_n189(this._uploadFile, this._downloadFile, result);
+      return from_candid_PlatformSettings_n185(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRecoveryDetails(arg0) {
@@ -36665,42 +36671,42 @@ class Backend {
   async getRecoveryRequests(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n193(this._uploadFile, this._downloadFile, arg1));
-        return from_candid_Result_16_n196(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n189(this._uploadFile, this._downloadFile, arg1));
+        return from_candid_Result_16_n192(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n193(this._uploadFile, this._downloadFile, arg1));
-      return from_candid_Result_16_n196(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n189(this._uploadFile, this._downloadFile, arg1));
+      return from_candid_Result_16_n192(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRetentionMetadata(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n199(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_15_n201(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n195(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_15_n197(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n199(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_15_n201(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n195(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_15_n197(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRetentionPolicies(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n203(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n199(this._uploadFile, this._downloadFile, arg0));
         return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n203(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n199(this._uploadFile, this._downloadFile, arg0));
       return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
     }
   }
@@ -36736,28 +36742,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfile(arg0);
-        return from_candid_opt_n204(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n200(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfile(arg0);
-      return from_candid_opt_n204(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n200(this._uploadFile, this._downloadFile, result);
     }
   }
   async getUserProfiles(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfiles(arg0);
-        return from_candid_vec_n207(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n203(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfiles(arg0);
-      return from_candid_vec_n207(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n203(this._uploadFile, this._downloadFile, result);
     }
   }
   async getVAPIDPublicKey() {
@@ -36819,15 +36825,15 @@ class Backend {
   async inviteUser(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n208(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_14_n212(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n204(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_14_n208(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n208(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_14_n212(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.inviteUser(to_candid_InviteUserRequest_n204(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_14_n208(this._uploadFile, this._downloadFile, result);
     }
   }
   async isAdminCheck(arg0) {
@@ -36848,28 +36854,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.listAdmins();
-        return from_candid_Result_13_n214(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_13_n210(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.listAdmins();
-      return from_candid_Result_13_n214(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_13_n210(this._uploadFile, this._downloadFile, result);
     }
   }
   async listConversations() {
     if (this.processError) {
       try {
         const result = await this.actor.listConversations();
-        return from_candid_vec_n216(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n212(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.listConversations();
-      return from_candid_vec_n216(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n212(this._uploadFile, this._downloadFile, result);
     }
   }
   async listMyDevices() {
@@ -36889,29 +36895,29 @@ class Backend {
   async listOrgs(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n217(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_12_n219(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n213(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_12_n215(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n217(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_12_n219(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.listOrgs(to_candid_GetOrgsRequest_n213(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_12_n215(this._uploadFile, this._downloadFile, result);
     }
   }
   async listPublicGroups(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n224(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_vec_n226(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n220(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_vec_n222(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n224(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_vec_n226(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.listPublicGroups(to_candid_ListPublicGroupsRequest_n220(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_vec_n222(this._uploadFile, this._downloadFile, result);
     }
   }
   async logPolicyExpiryCheck() {
@@ -36988,28 +36994,42 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.registerAttachment(arg0);
-        return from_candid_Result_10_n229(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_10_n225(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.registerAttachment(arg0);
-      return from_candid_Result_10_n229(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_10_n225(this._uploadFile, this._downloadFile, result);
     }
   }
-  async registerUser(arg0) {
+  async registerPushSubscription(arg0, arg1, arg2) {
     if (this.processError) {
       try {
-        const result = await this.actor.registerUser(to_candid_RegisterRequest_n231(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.registerPushSubscription(arg0, arg1, arg2);
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.registerUser(to_candid_RegisterRequest_n231(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.registerPushSubscription(arg0, arg1, arg2);
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async registerUser(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.registerUser(to_candid_RegisterRequest_n227(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n229(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.registerUser(to_candid_RegisterRequest_n227(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n229(this._uploadFile, this._downloadFile, result);
     }
   }
   async rejectKeyRecovery(arg0) {
@@ -37127,43 +37147,57 @@ class Backend {
   async sendMessage(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n235(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_7_n241(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n231(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_7_n237(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n235(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_7_n241(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.sendMessage(to_candid_SendMessageRequest_n231(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_7_n237(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async sendPushToUser(arg0, arg1, arg2, arg3) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.sendPushToUser(arg0, arg1, arg2, arg3);
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.sendPushToUser(arg0, arg1, arg2, arg3);
+      return result;
     }
   }
   async setGroupCompartment(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n243(this._uploadFile, this._downloadFile, arg1));
+        const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n239(this._uploadFile, this._downloadFile, arg1));
         return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n243(this._uploadFile, this._downloadFile, arg1));
+      const result = await this.actor.setGroupCompartment(arg0, to_candid_CompartmentLabel_n239(this._uploadFile, this._downloadFile, arg1));
       return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async setSovereignConfig(arg0, arg1, arg2, arg3) {
     if (this.processError) {
       try {
-        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n245(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n247(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n248(this._uploadFile, this._downloadFile, arg3));
-        return from_candid_Result_5_n249(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n241(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n243(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n244(this._uploadFile, this._downloadFile, arg3));
+        return from_candid_Result_5_n245(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n245(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n247(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n248(this._uploadFile, this._downloadFile, arg3));
-      return from_candid_Result_5_n249(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.setSovereignConfig(to_candid_DataResidency_n241(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n243(this._uploadFile, this._downloadFile, arg1), to_candid_opt_n15(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n244(this._uploadFile, this._downloadFile, arg3));
+      return from_candid_Result_5_n245(this._uploadFile, this._downloadFile, result);
     }
   }
   async setTypingIndicator(arg0, arg1) {
@@ -37183,29 +37217,29 @@ class Backend {
   async submitJoinRequest(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n251(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_4_n253(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n247(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_4_n249(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n251(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_4_n253(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.submitJoinRequest(to_candid_SubmitJoinRequestRequest_n247(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_4_n249(this._uploadFile, this._downloadFile, result);
     }
   }
   async subscribeToPush(arg0, arg1, arg2) {
     if (this.processError) {
       try {
         const result = await this.actor.subscribeToPush(arg0, arg1, arg2);
-        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+        return result;
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.subscribeToPush(arg0, arg1, arg2);
-      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      return result;
     }
   }
   async suspendMember(arg0) {
@@ -37264,31 +37298,45 @@ class Backend {
       return result;
     }
   }
+  async unregisterPushSubscription() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.unregisterPushSubscription();
+        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.unregisterPushSubscription();
+      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+    }
+  }
   async unsubscribeFromPush() {
     if (this.processError) {
       try {
         const result = await this.actor.unsubscribeFromPush();
-        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+        return result;
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.unsubscribeFromPush();
-      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      return result;
     }
   }
   async updateMemberRole(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n255(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n251(this._uploadFile, this._downloadFile, arg0));
         return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n255(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.updateMemberRole(to_candid_UpdateMemberRoleRequest_n251(this._uploadFile, this._downloadFile, arg0));
       return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
@@ -37296,84 +37344,84 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.updateNotificationPreferences(arg0, arg1);
-        return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+        return result;
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.updateNotificationPreferences(arg0, arg1);
-      return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
+      return result;
     }
   }
   async updateOrg(arg0, arg1, arg2) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n257(this._uploadFile, this._downloadFile, arg2));
+        const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n253(this._uploadFile, this._downloadFile, arg2));
         return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n257(this._uploadFile, this._downloadFile, arg2));
+      const result = await this.actor.updateOrg(arg0, arg1, to_candid_opt_n253(this._uploadFile, this._downloadFile, arg2));
       return from_candid_Result_3_n49(this._uploadFile, this._downloadFile, result);
     }
   }
   async updateOrgSettings(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n258(this._uploadFile, this._downloadFile, arg1));
+        const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n254(this._uploadFile, this._downloadFile, arg1));
         return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n258(this._uploadFile, this._downloadFile, arg1));
+      const result = await this.actor.updateOrgSettings(arg0, to_candid_OrgSettings_n254(this._uploadFile, this._downloadFile, arg1));
       return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async updatePlatformSettings(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n265(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n261(this._uploadFile, this._downloadFile, arg0));
         return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n265(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.updatePlatformSettings(to_candid_PlatformSettings_n261(this._uploadFile, this._downloadFile, arg0));
       return from_candid_Result_2_n61(this._uploadFile, this._downloadFile, result);
     }
   }
   async updateRetentionPolicy(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n269(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n265(this._uploadFile, this._downloadFile, arg0));
         return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n269(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.updateRetentionPolicy(to_candid_UpdateRetentionPolicyRequest_n265(this._uploadFile, this._downloadFile, arg0));
       return from_candid_Result_1_n59(this._uploadFile, this._downloadFile, result);
     }
   }
   async updateUserProfile(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n271(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n267(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_n229(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n271(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_n233(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.updateUserProfile(to_candid_UpdateProfileRequest_n267(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_n229(this._uploadFile, this._downloadFile, result);
     }
   }
   async uploadFile(arg0, arg1) {
@@ -37409,8 +37457,8 @@ function from_candid_ConversationKind_n44(_uploadFile, _downloadFile, value) {
 function from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, value) {
   return from_candid_record_n42(_uploadFile, _downloadFile, value);
 }
-function from_candid_DataExportPermission_n174(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n175(_uploadFile, _downloadFile, value);
+function from_candid_DataExportPermission_n172(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n173(_uploadFile, _downloadFile, value);
 }
 function from_candid_DataResidency_n95(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n96(_uploadFile, _downloadFile, value);
@@ -37430,17 +37478,17 @@ function from_candid_EscrowStatus_n123(_uploadFile, _downloadFile, value) {
 function from_candid_EscrowedUserRecord_n121(_uploadFile, _downloadFile, value) {
   return from_candid_record_n122(_uploadFile, _downloadFile, value);
 }
-function from_candid_GetOrgUsersResponse_n182(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n183(_uploadFile, _downloadFile, value);
+function from_candid_GetOrgUsersResponse_n180(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n181(_uploadFile, _downloadFile, value);
 }
-function from_candid_GetOrgsResponse_n221(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n222(_uploadFile, _downloadFile, value);
+function from_candid_GetOrgsResponse_n217(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n218(_uploadFile, _downloadFile, value);
 }
 function from_candid_GroupAdminRecord_n100(_uploadFile, _downloadFile, value) {
   return from_candid_record_n101(_uploadFile, _downloadFile, value);
 }
-function from_candid_GroupCreationPermission_n172(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n173(_uploadFile, _downloadFile, value);
+function from_candid_GroupCreationPermission_n170(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n171(_uploadFile, _downloadFile, value);
 }
 function from_candid_GroupMemberRecord_n137(_uploadFile, _downloadFile, value) {
   return from_candid_record_n138(_uploadFile, _downloadFile, value);
@@ -37478,23 +37526,23 @@ function from_candid_OrgRecord_n51(_uploadFile, _downloadFile, value) {
 function from_candid_OrgRole_n163(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n164(_uploadFile, _downloadFile, value);
 }
-function from_candid_OrgSettings_n170(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n171(_uploadFile, _downloadFile, value);
+function from_candid_OrgSettings_n168(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n169(_uploadFile, _downloadFile, value);
 }
 function from_candid_OrgStatus_n53(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n54(_uploadFile, _downloadFile, value);
 }
-function from_candid_PasswordPolicy_n191(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n192(_uploadFile, _downloadFile, value);
+function from_candid_PasswordPolicy_n187(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n188(_uploadFile, _downloadFile, value);
 }
-function from_candid_PendingNotification_n187(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n188(_uploadFile, _downloadFile, value);
+function from_candid_PendingNotification_n183(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n184(_uploadFile, _downloadFile, value);
 }
-function from_candid_PlatformSettings_n189(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n190(_uploadFile, _downloadFile, value);
+function from_candid_PlatformSettings_n185(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n186(_uploadFile, _downloadFile, value);
 }
-function from_candid_PublicGroupSummary_n227(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n228(_uploadFile, _downloadFile, value);
+function from_candid_PublicGroupSummary_n223(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n224(_uploadFile, _downloadFile, value);
 }
 function from_candid_RecoveryRequestStatus_n26(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n27(_uploadFile, _downloadFile, value);
@@ -37502,98 +37550,92 @@ function from_candid_RecoveryRequestStatus_n26(_uploadFile, _downloadFile, value
 function from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, value) {
   return from_candid_record_n25(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_10_n229(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n230(_uploadFile, _downloadFile, value);
+function from_candid_Result_10_n225(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n226(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_11_n12(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n13(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_12_n219(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n220(_uploadFile, _downloadFile, value);
+function from_candid_Result_12_n215(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n216(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_13_n214(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n215(_uploadFile, _downloadFile, value);
+function from_candid_Result_13_n210(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n211(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_14_n212(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n213(_uploadFile, _downloadFile, value);
+function from_candid_Result_14_n208(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n209(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_15_n201(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n202(_uploadFile, _downloadFile, value);
+function from_candid_Result_15_n197(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n198(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_16_n196(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n197(_uploadFile, _downloadFile, value);
+function from_candid_Result_16_n192(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n193(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_17_n184(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n185(_uploadFile, _downloadFile, value);
+function from_candid_Result_17_n178(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n179(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_18_n180(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n181(_uploadFile, _downloadFile, value);
+function from_candid_Result_18_n165(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n166(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_19_n168(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n169(_uploadFile, _downloadFile, value);
+function from_candid_Result_19_n156(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n157(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_1_n59(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n60(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_20_n165(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n166(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_21_n156(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n157(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_22_n143(_uploadFile, _downloadFile, value) {
+function from_candid_Result_20_n143(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n144(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_23_n139(_uploadFile, _downloadFile, value) {
+function from_candid_Result_21_n139(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n140(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_24_n134(_uploadFile, _downloadFile, value) {
+function from_candid_Result_22_n134(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n135(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_25_n127(_uploadFile, _downloadFile, value) {
+function from_candid_Result_23_n127(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n128(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_26_n118(_uploadFile, _downloadFile, value) {
+function from_candid_Result_24_n118(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n119(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_27_n112(_uploadFile, _downloadFile, value) {
+function from_candid_Result_25_n112(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n113(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_28_n76(_uploadFile, _downloadFile, value) {
+function from_candid_Result_26_n76(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n77(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_29_n70(_uploadFile, _downloadFile, value) {
+function from_candid_Result_27_n70(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n71(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_28_n83(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n84(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_29_n39(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n40(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_2_n61(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n62(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_30_n83(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n84(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_31_n39(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n40(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_32_n18(_uploadFile, _downloadFile, value) {
+function from_candid_Result_30_n18(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n19(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_33_n16(_uploadFile, _downloadFile, value) {
+function from_candid_Result_31_n16(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n17(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_3_n49(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n50(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_4_n253(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n254(_uploadFile, _downloadFile, value);
-}
-function from_candid_Result_5_n249(_uploadFile, _downloadFile, value) {
+function from_candid_Result_4_n249(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n250(_uploadFile, _downloadFile, value);
+}
+function from_candid_Result_5_n245(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n246(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_6_n8(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n9(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_7_n241(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n242(_uploadFile, _downloadFile, value);
+function from_candid_Result_7_n237(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n238(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_8_n31(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n32(_uploadFile, _downloadFile, value);
@@ -37601,10 +37643,10 @@ function from_candid_Result_8_n31(_uploadFile, _downloadFile, value) {
 function from_candid_Result_9_n22(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n23(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_n233(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n234(_uploadFile, _downloadFile, value);
+function from_candid_Result_n229(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n230(_uploadFile, _downloadFile, value);
 }
-function from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value) {
+function from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n38(_uploadFile, _downloadFile, value);
 }
 function from_candid_RetentionPeriod_n37(_uploadFile, _downloadFile, value) {
@@ -37616,8 +37658,8 @@ function from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, value) {
 function from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value) {
   return from_candid_record_n108(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n206(_uploadFile, _downloadFile, value);
+function from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n202(_uploadFile, _downloadFile, value);
 }
 function from_candid__ImmutableObjectStorageRefillResult_n4(_uploadFile, _downloadFile, value) {
   return from_candid_record_n5(_uploadFile, _downloadFile, value);
@@ -37643,11 +37685,11 @@ function from_candid_opt_n150(_uploadFile, _downloadFile, value) {
 function from_candid_opt_n167(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : from_candid_OrgRole_n163(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n176(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n174(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n204(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n200(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, value[0]);
 }
 function from_candid_opt_n28(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
@@ -37763,27 +37805,27 @@ function from_candid_record_n160(_uploadFile, _downloadFile, value) {
     lastActive: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastActive))
   };
 }
-function from_candid_record_n171(_uploadFile, _downloadFile, value) {
+function from_candid_record_n169(_uploadFile, _downloadFile, value) {
   return {
     legalHoldReason: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.legalHoldReason)),
     orgId: value.orgId,
     logoStorageKey: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoStorageKey)),
-    groupCreationPermission: from_candid_GroupCreationPermission_n172(_uploadFile, _downloadFile, value.groupCreationPermission),
-    dataExportPermission: from_candid_DataExportPermission_n174(_uploadFile, _downloadFile, value.dataExportPermission),
+    groupCreationPermission: from_candid_GroupCreationPermission_n170(_uploadFile, _downloadFile, value.groupCreationPermission),
+    dataExportPermission: from_candid_DataExportPermission_n172(_uploadFile, _downloadFile, value.dataExportPermission),
     defaultInviteRole: value.defaultInviteRole,
     logoUrl: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoUrl)),
     legalHoldEnabled: value.legalHoldEnabled,
-    messageRetentionDays: record_opt_to_undefined(from_candid_opt_n176(_uploadFile, _downloadFile, value.messageRetentionDays))
+    messageRetentionDays: record_opt_to_undefined(from_candid_opt_n174(_uploadFile, _downloadFile, value.messageRetentionDays))
   };
 }
-function from_candid_record_n183(_uploadFile, _downloadFile, value) {
+function from_candid_record_n181(_uploadFile, _downloadFile, value) {
   return {
     total: value.total,
     hasMore: value.hasMore,
     members: from_candid_vec_n158(_uploadFile, _downloadFile, value.members)
   };
 }
-function from_candid_record_n188(_uploadFile, _downloadFile, value) {
+function from_candid_record_n184(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     notifType: value.notifType,
@@ -37792,20 +37834,20 @@ function from_candid_record_n188(_uploadFile, _downloadFile, value) {
     groupName: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.groupName))
   };
 }
-function from_candid_record_n190(_uploadFile, _downloadFile, value) {
+function from_candid_record_n186(_uploadFile, _downloadFile, value) {
   return {
-    defaultRetentionDays: from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value.defaultRetentionDays),
+    defaultRetentionDays: from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value.defaultRetentionDays),
     keyEscrowEnabled: value.keyEscrowEnabled,
     vetKeysEnabled: value.vetKeysEnabled,
     sessionTimeoutMinutes: value.sessionTimeoutMinutes,
     platformTagline: value.platformTagline,
-    auditLogRetentionDays: from_candid_RetentionPeriodDays_n177(_uploadFile, _downloadFile, value.auditLogRetentionDays),
+    auditLogRetentionDays: from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value.auditLogRetentionDays),
     mfaEnforced: value.mfaEnforced,
-    passwordPolicy: from_candid_PasswordPolicy_n191(_uploadFile, _downloadFile, value.passwordPolicy),
+    passwordPolicy: from_candid_PasswordPolicy_n187(_uploadFile, _downloadFile, value.passwordPolicy),
     platformName: value.platformName
   };
 }
-function from_candid_record_n206(_uploadFile, _downloadFile, value) {
+function from_candid_record_n202(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     ecdhPublicKey: value.ecdhPublicKey,
@@ -37815,13 +37857,13 @@ function from_candid_record_n206(_uploadFile, _downloadFile, value) {
     lastSeen: value.lastSeen
   };
 }
-function from_candid_record_n222(_uploadFile, _downloadFile, value) {
+function from_candid_record_n218(_uploadFile, _downloadFile, value) {
   return {
     total: value.total,
-    orgs: from_candid_vec_n223(_uploadFile, _downloadFile, value.orgs)
+    orgs: from_candid_vec_n219(_uploadFile, _downloadFile, value.orgs)
   };
 }
-function from_candid_record_n228(_uploadFile, _downloadFile, value) {
+function from_candid_record_n224(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     name: value.name,
@@ -38044,15 +38086,6 @@ function from_candid_variant_n166(_uploadFile, _downloadFile, value) {
     err: value.err
   } : value;
 }
-function from_candid_variant_n169(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: value.ok
-  } : "err" in value ? {
-    __kind__: "err",
-    err: value.err
-  } : value;
-}
 function from_candid_variant_n17(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
@@ -38062,29 +38095,23 @@ function from_candid_variant_n17(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n173(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n171(_uploadFile, _downloadFile, value) {
   return "orgAdminsOnly" in value ? "orgAdminsOnly" : "allMembers" in value ? "allMembers" : value;
 }
-function from_candid_variant_n175(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n173(_uploadFile, _downloadFile, value) {
   return "orgAdminsOnly" in value ? "orgAdminsOnly" : "disabled" in value ? "disabled" : "allMembers" in value ? "allMembers" : value;
 }
-function from_candid_variant_n181(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n179(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_GetOrgUsersResponse_n182(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_GetOrgUsersResponse_n180(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
   } : value;
 }
-function from_candid_variant_n185(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_vec_n186(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: value.err
-  } : value;
+function from_candid_variant_n188(_uploadFile, _downloadFile, value) {
+  return "strong" in value ? "strong" : "enterprise" in value ? "enterprise" : "basic" in value ? "basic" : value;
 }
 function from_candid_variant_n19(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
@@ -38095,19 +38122,16 @@ function from_candid_variant_n19(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n192(_uploadFile, _downloadFile, value) {
-  return "strong" in value ? "strong" : "enterprise" in value ? "enterprise" : "basic" in value ? "basic" : value;
-}
-function from_candid_variant_n197(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n193(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n198(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n194(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n202(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n198(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -38116,7 +38140,7 @@ function from_candid_variant_n202(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n213(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n209(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_OrgMembership_n159(_uploadFile, _downloadFile, value.ok)
@@ -38125,7 +38149,7 @@ function from_candid_variant_n213(_uploadFile, _downloadFile, value) {
     err: value.err
   } : value;
 }
-function from_candid_variant_n215(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n211(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -38134,13 +38158,22 @@ function from_candid_variant_n215(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n220(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n216(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_GetOrgsResponse_n221(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_GetOrgsResponse_n217(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
+  } : value;
+}
+function from_candid_variant_n226(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: value.ok
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
 function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
@@ -38155,22 +38188,13 @@ function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n230(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: value.ok
+    ok: from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n234(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
-  } : value;
-}
-function from_candid_variant_n242(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n238(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_MessagePublic_n146(_uploadFile, _downloadFile, value.ok)
@@ -38179,7 +38203,7 @@ function from_candid_variant_n242(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n250(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n246(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value.ok)
@@ -38188,7 +38212,7 @@ function from_candid_variant_n250(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n254(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n250(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_JoinRequest_n130(_uploadFile, _downloadFile, value.ok)
@@ -38317,23 +38341,23 @@ function from_candid_vec_n153(_uploadFile, _downloadFile, value) {
 function from_candid_vec_n158(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_OrgMembership_n159(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n186(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_PendingNotification_n187(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n182(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_PendingNotification_n183(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n198(_uploadFile, _downloadFile, value) {
+function from_candid_vec_n194(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n207(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_UserProfilePublic_n205(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n203(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n216(_uploadFile, _downloadFile, value) {
+function from_candid_vec_n212(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n223(_uploadFile, _downloadFile, value) {
+function from_candid_vec_n219(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_OrgRecord_n51(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n226(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_PublicGroupSummary_n227(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n222(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_PublicGroupSummary_n223(_uploadFile, _downloadFile, x3));
 }
 function from_candid_vec_n34(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, x3));
@@ -38362,8 +38386,8 @@ function to_candid_AuditExportFormat_n68(_uploadFile, _downloadFile, value) {
 function to_candid_AuditExportRequest_n63(_uploadFile, _downloadFile, value) {
   return to_candid_record_n64(_uploadFile, _downloadFile, value);
 }
-function to_candid_CompartmentLabel_n243(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n244(_uploadFile, _downloadFile, value);
+function to_candid_CompartmentLabel_n239(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n240(_uploadFile, _downloadFile, value);
 }
 function to_candid_CreateGroupRequest_n47(_uploadFile, _downloadFile, value) {
   return to_candid_record_n48(_uploadFile, _downloadFile, value);
@@ -38371,11 +38395,11 @@ function to_candid_CreateGroupRequest_n47(_uploadFile, _downloadFile, value) {
 function to_candid_CreateRetentionPolicyRequest_n55(_uploadFile, _downloadFile, value) {
   return to_candid_record_n56(_uploadFile, _downloadFile, value);
 }
-function to_candid_DataExportPermission_n262(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n263(_uploadFile, _downloadFile, value);
+function to_candid_DataExportPermission_n258(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n259(_uploadFile, _downloadFile, value);
 }
-function to_candid_DataResidency_n245(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n246(_uploadFile, _downloadFile, value);
+function to_candid_DataResidency_n241(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n242(_uploadFile, _downloadFile, value);
 }
 function to_candid_ExportAuditLogsRequest_n72(_uploadFile, _downloadFile, value) {
   return to_candid_record_n73(_uploadFile, _downloadFile, value);
@@ -38392,74 +38416,74 @@ function to_candid_GetEscrowedUsersRequest_n116(_uploadFile, _downloadFile, valu
 function to_candid_GetMessagesRequest_n141(_uploadFile, _downloadFile, value) {
   return to_candid_record_n142(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetOrgUsersRequest_n178(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n179(_uploadFile, _downloadFile, value);
+function to_candid_GetOrgUsersRequest_n176(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n177(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetOrgsRequest_n217(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n218(_uploadFile, _downloadFile, value);
+function to_candid_GetOrgsRequest_n213(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n214(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetRetentionMetadataRequest_n199(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n200(_uploadFile, _downloadFile, value);
+function to_candid_GetRetentionMetadataRequest_n195(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n196(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetRetentionPoliciesRequest_n203(_uploadFile, _downloadFile, value) {
+function to_candid_GetRetentionPoliciesRequest_n199(_uploadFile, _downloadFile, value) {
   return to_candid_record_n98(_uploadFile, _downloadFile, value);
 }
-function to_candid_GroupCreationPermission_n260(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n261(_uploadFile, _downloadFile, value);
+function to_candid_GroupCreationPermission_n256(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n257(_uploadFile, _downloadFile, value);
 }
-function to_candid_InviteUserRequest_n208(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n209(_uploadFile, _downloadFile, value);
+function to_candid_InviteUserRequest_n204(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n205(_uploadFile, _downloadFile, value);
 }
 function to_candid_JoinRequestActionRequest_n20(_uploadFile, _downloadFile, value) {
   return to_candid_record_n21(_uploadFile, _downloadFile, value);
 }
-function to_candid_ListPublicGroupsRequest_n224(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n225(_uploadFile, _downloadFile, value);
+function to_candid_ListPublicGroupsRequest_n220(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n221(_uploadFile, _downloadFile, value);
 }
-function to_candid_MessagePriority_n239(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n240(_uploadFile, _downloadFile, value);
+function to_candid_MessagePriority_n235(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n236(_uploadFile, _downloadFile, value);
 }
-function to_candid_MessageType_n237(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n238(_uploadFile, _downloadFile, value);
+function to_candid_MessageType_n233(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n234(_uploadFile, _downloadFile, value);
 }
-function to_candid_OrgRole_n210(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n211(_uploadFile, _downloadFile, value);
+function to_candid_OrgRole_n206(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n207(_uploadFile, _downloadFile, value);
 }
-function to_candid_OrgSettings_n258(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n259(_uploadFile, _downloadFile, value);
+function to_candid_OrgSettings_n254(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n255(_uploadFile, _downloadFile, value);
 }
-function to_candid_PasswordPolicy_n267(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n268(_uploadFile, _downloadFile, value);
+function to_candid_PasswordPolicy_n263(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n264(_uploadFile, _downloadFile, value);
 }
-function to_candid_PlatformSettings_n265(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n266(_uploadFile, _downloadFile, value);
+function to_candid_PlatformSettings_n261(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n262(_uploadFile, _downloadFile, value);
 }
-function to_candid_RecoveryRequestStatus_n194(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n195(_uploadFile, _downloadFile, value);
+function to_candid_RecoveryRequestStatus_n190(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n191(_uploadFile, _downloadFile, value);
 }
-function to_candid_RegisterRequest_n231(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n232(_uploadFile, _downloadFile, value);
+function to_candid_RegisterRequest_n227(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n228(_uploadFile, _downloadFile, value);
 }
-function to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value) {
+function to_candid_RetentionPeriodDays_n260(_uploadFile, _downloadFile, value) {
   return to_candid_variant_n58(_uploadFile, _downloadFile, value);
 }
 function to_candid_RetentionPeriod_n57(_uploadFile, _downloadFile, value) {
   return to_candid_variant_n58(_uploadFile, _downloadFile, value);
 }
-function to_candid_SendMessageRequest_n235(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n236(_uploadFile, _downloadFile, value);
+function to_candid_SendMessageRequest_n231(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n232(_uploadFile, _downloadFile, value);
 }
-function to_candid_SubmitJoinRequestRequest_n251(_uploadFile, _downloadFile, value) {
+function to_candid_SubmitJoinRequestRequest_n247(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n248(_uploadFile, _downloadFile, value);
+}
+function to_candid_UpdateMemberRoleRequest_n251(_uploadFile, _downloadFile, value) {
   return to_candid_record_n252(_uploadFile, _downloadFile, value);
 }
-function to_candid_UpdateMemberRoleRequest_n255(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n256(_uploadFile, _downloadFile, value);
+function to_candid_UpdateProfileRequest_n267(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n268(_uploadFile, _downloadFile, value);
 }
-function to_candid_UpdateProfileRequest_n271(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n272(_uploadFile, _downloadFile, value);
-}
-function to_candid_UpdateRetentionPolicyRequest_n269(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n270(_uploadFile, _downloadFile, value);
+function to_candid_UpdateRetentionPolicyRequest_n265(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n266(_uploadFile, _downloadFile, value);
 }
 function to_candid__ImmutableObjectStorageRefillInformation_n2(_uploadFile, _downloadFile, value) {
   return to_candid_record_n3(_uploadFile, _downloadFile, value);
@@ -38473,16 +38497,16 @@ function to_candid_opt_n14(_uploadFile, _downloadFile, value) {
 function to_candid_opt_n15(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_opt_n193(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(to_candid_RecoveryRequestStatus_n194(_uploadFile, _downloadFile, value));
+function to_candid_opt_n189(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(to_candid_RecoveryRequestStatus_n190(_uploadFile, _downloadFile, value));
 }
-function to_candid_opt_n247(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n243(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_opt_n248(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n244(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_opt_n257(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n253(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
 function to_candid_opt_n33(_uploadFile, _downloadFile, value) {
@@ -38513,7 +38537,7 @@ function to_candid_record_n142(_uploadFile, _downloadFile, value) {
     conversationId: value.conversationId
   };
 }
-function to_candid_record_n179(_uploadFile, _downloadFile, value) {
+function to_candid_record_n177(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId ? candid_some(value.orgId) : candid_none(),
     search: value.search ? candid_some(value.search) : candid_none(),
@@ -38521,7 +38545,7 @@ function to_candid_record_n179(_uploadFile, _downloadFile, value) {
     afterUserId: value.afterUserId ? candid_some(value.afterUserId) : candid_none()
   };
 }
-function to_candid_record_n200(_uploadFile, _downloadFile, value) {
+function to_candid_record_n196(_uploadFile, _downloadFile, value) {
   return {
     endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
     limit: value.limit,
@@ -38530,10 +38554,10 @@ function to_candid_record_n200(_uploadFile, _downloadFile, value) {
     startDate: value.startDate ? candid_some(value.startDate) : candid_none()
   };
 }
-function to_candid_record_n209(_uploadFile, _downloadFile, value) {
+function to_candid_record_n205(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId,
-    role: to_candid_OrgRole_n210(_uploadFile, _downloadFile, value.role),
+    role: to_candid_OrgRole_n206(_uploadFile, _downloadFile, value.role),
     email: value.email ? candid_some(value.email) : candid_none(),
     principalId: value.principalId
   };
@@ -38545,76 +38569,76 @@ function to_candid_record_n21(_uploadFile, _downloadFile, value) {
     conversationId: value.conversationId
   };
 }
-function to_candid_record_n218(_uploadFile, _downloadFile, value) {
+function to_candid_record_n214(_uploadFile, _downloadFile, value) {
   return {
     search: value.search ? candid_some(value.search) : candid_none(),
     limit: value.limit,
     afterOrgId: value.afterOrgId ? candid_some(value.afterOrgId) : candid_none()
   };
 }
-function to_candid_record_n225(_uploadFile, _downloadFile, value) {
+function to_candid_record_n221(_uploadFile, _downloadFile, value) {
   return {
     offset: value.offset,
     limit: value.limit,
     category: value.category ? candid_some(value.category) : candid_none()
   };
 }
-function to_candid_record_n232(_uploadFile, _downloadFile, value) {
+function to_candid_record_n228(_uploadFile, _downloadFile, value) {
   return {
     ecdhPublicKey: value.ecdhPublicKey,
     encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
     encryptedDisplayName: value.encryptedDisplayName
   };
 }
-function to_candid_record_n236(_uploadFile, _downloadFile, value) {
+function to_candid_record_n232(_uploadFile, _downloadFile, value) {
   return {
     ttlSeconds: value.ttlSeconds ? candid_some(value.ttlSeconds) : candid_none(),
     encryptedContent: value.encryptedContent,
-    messageType: to_candid_MessageType_n237(_uploadFile, _downloadFile, value.messageType),
+    messageType: to_candid_MessageType_n233(_uploadFile, _downloadFile, value.messageType),
     conversationId: value.conversationId,
-    priority: value.priority ? candid_some(to_candid_MessagePriority_n239(_uploadFile, _downloadFile, value.priority)) : candid_none()
+    priority: value.priority ? candid_some(to_candid_MessagePriority_n235(_uploadFile, _downloadFile, value.priority)) : candid_none()
   };
 }
-function to_candid_record_n252(_uploadFile, _downloadFile, value) {
+function to_candid_record_n248(_uploadFile, _downloadFile, value) {
   return {
     conversationId: value.conversationId,
     message: value.message ? candid_some(value.message) : candid_none()
   };
 }
-function to_candid_record_n256(_uploadFile, _downloadFile, value) {
+function to_candid_record_n252(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId,
     userId: value.userId,
-    newRole: to_candid_OrgRole_n210(_uploadFile, _downloadFile, value.newRole)
+    newRole: to_candid_OrgRole_n206(_uploadFile, _downloadFile, value.newRole)
   };
 }
-function to_candid_record_n259(_uploadFile, _downloadFile, value) {
+function to_candid_record_n255(_uploadFile, _downloadFile, value) {
   return {
     legalHoldReason: value.legalHoldReason ? candid_some(value.legalHoldReason) : candid_none(),
     orgId: value.orgId,
     logoStorageKey: value.logoStorageKey ? candid_some(value.logoStorageKey) : candid_none(),
-    groupCreationPermission: to_candid_GroupCreationPermission_n260(_uploadFile, _downloadFile, value.groupCreationPermission),
-    dataExportPermission: to_candid_DataExportPermission_n262(_uploadFile, _downloadFile, value.dataExportPermission),
+    groupCreationPermission: to_candid_GroupCreationPermission_n256(_uploadFile, _downloadFile, value.groupCreationPermission),
+    dataExportPermission: to_candid_DataExportPermission_n258(_uploadFile, _downloadFile, value.dataExportPermission),
     defaultInviteRole: value.defaultInviteRole,
     logoUrl: value.logoUrl ? candid_some(value.logoUrl) : candid_none(),
     legalHoldEnabled: value.legalHoldEnabled,
-    messageRetentionDays: value.messageRetentionDays ? candid_some(to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value.messageRetentionDays)) : candid_none()
+    messageRetentionDays: value.messageRetentionDays ? candid_some(to_candid_RetentionPeriodDays_n260(_uploadFile, _downloadFile, value.messageRetentionDays)) : candid_none()
   };
 }
-function to_candid_record_n266(_uploadFile, _downloadFile, value) {
+function to_candid_record_n262(_uploadFile, _downloadFile, value) {
   return {
-    defaultRetentionDays: to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value.defaultRetentionDays),
+    defaultRetentionDays: to_candid_RetentionPeriodDays_n260(_uploadFile, _downloadFile, value.defaultRetentionDays),
     keyEscrowEnabled: value.keyEscrowEnabled,
     vetKeysEnabled: value.vetKeysEnabled,
     sessionTimeoutMinutes: value.sessionTimeoutMinutes,
     platformTagline: value.platformTagline,
-    auditLogRetentionDays: to_candid_RetentionPeriodDays_n264(_uploadFile, _downloadFile, value.auditLogRetentionDays),
+    auditLogRetentionDays: to_candid_RetentionPeriodDays_n260(_uploadFile, _downloadFile, value.auditLogRetentionDays),
     mfaEnforced: value.mfaEnforced,
-    passwordPolicy: to_candid_PasswordPolicy_n267(_uploadFile, _downloadFile, value.passwordPolicy),
+    passwordPolicy: to_candid_PasswordPolicy_n263(_uploadFile, _downloadFile, value.passwordPolicy),
     platformName: value.platformName
   };
 }
-function to_candid_record_n270(_uploadFile, _downloadFile, value) {
+function to_candid_record_n266(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     period: value.period ? candid_some(to_candid_RetentionPeriod_n57(_uploadFile, _downloadFile, value.period)) : candid_none(),
@@ -38622,7 +38646,7 @@ function to_candid_record_n270(_uploadFile, _downloadFile, value) {
     autoDelete: value.autoDelete ? candid_some(value.autoDelete) : candid_none()
   };
 }
-function to_candid_record_n272(_uploadFile, _downloadFile, value) {
+function to_candid_record_n268(_uploadFile, _downloadFile, value) {
   return {
     ecdhPublicKey: value.ecdhPublicKey ? candid_some(value.ecdhPublicKey) : candid_none(),
     encryptedAvatarKey: value.encryptedAvatarKey ? candid_some(value.encryptedAvatarKey) : candid_none(),
@@ -38675,7 +38699,7 @@ function to_candid_record_n98(_uploadFile, _downloadFile, value) {
     orgId: value.orgId ? candid_some(value.orgId) : candid_none()
   };
 }
-function to_candid_variant_n195(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n191(_uploadFile, _downloadFile, value) {
   return value == "pending" ? {
     pending: null
   } : value == "completed" ? {
@@ -38686,7 +38710,7 @@ function to_candid_variant_n195(_uploadFile, _downloadFile, value) {
     rejected: null
   } : value;
 }
-function to_candid_variant_n211(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n207(_uploadFile, _downloadFile, value) {
   return value == "OrgAdmin" ? {
     OrgAdmin: null
   } : value == "Auditor" ? {
@@ -38697,7 +38721,7 @@ function to_candid_variant_n211(_uploadFile, _downloadFile, value) {
     StandardUser: null
   } : value;
 }
-function to_candid_variant_n238(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n234(_uploadFile, _downloadFile, value) {
   return value == "audio" ? {
     audio: null
   } : value == "video" ? {
@@ -38710,21 +38734,21 @@ function to_candid_variant_n238(_uploadFile, _downloadFile, value) {
     image: null
   } : value;
 }
-function to_candid_variant_n240(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n236(_uploadFile, _downloadFile, value) {
   return value == "normal" ? {
     normal: null
   } : value == "high" ? {
     high: null
   } : value;
 }
-function to_candid_variant_n244(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n240(_uploadFile, _downloadFile, value) {
   return value == "classified" ? {
     classified: null
   } : value == "unclassified" ? {
     unclassified: null
   } : value;
 }
-function to_candid_variant_n246(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n242(_uploadFile, _downloadFile, value) {
   return value == "eu" ? {
     eu: null
   } : value == "us" ? {
@@ -38735,14 +38759,14 @@ function to_candid_variant_n246(_uploadFile, _downloadFile, value) {
     global: null
   } : value;
 }
-function to_candid_variant_n261(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n257(_uploadFile, _downloadFile, value) {
   return value == "orgAdminsOnly" ? {
     orgAdminsOnly: null
   } : value == "allMembers" ? {
     allMembers: null
   } : value;
 }
-function to_candid_variant_n263(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n259(_uploadFile, _downloadFile, value) {
   return value == "orgAdminsOnly" ? {
     orgAdminsOnly: null
   } : value == "disabled" ? {
@@ -38751,7 +38775,7 @@ function to_candid_variant_n263(_uploadFile, _downloadFile, value) {
     allMembers: null
   } : value;
 }
-function to_candid_variant_n268(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n264(_uploadFile, _downloadFile, value) {
   return value == "strong" ? {
     strong: null
   } : value == "enterprise" ? {
@@ -58562,6 +58586,61 @@ function useGenerateDeviceSyncToken() {
     }
   });
 }
+const IDB_NAME = "cs_push";
+const IDB_STORE = "subscription";
+const IDB_KEY = "active";
+function openPushDb() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => {
+      req.result.createObjectStore(IDB_STORE);
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function saveSubscriptionToIdb(endpoint) {
+  try {
+    const db = await openPushDb();
+    const tx = db.transaction(IDB_STORE, "readwrite");
+    const stored = { endpoint, storedAt: Date.now() };
+    tx.objectStore(IDB_STORE).put(stored, IDB_KEY);
+    await new Promise((res, rej) => {
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+    db.close();
+  } catch {
+  }
+}
+async function loadSubscriptionFromIdb() {
+  try {
+    const db = await openPushDb();
+    const tx = db.transaction(IDB_STORE, "readonly");
+    const result = await new Promise((res, rej) => {
+      const req = tx.objectStore(IDB_STORE).get(IDB_KEY);
+      req.onsuccess = () => res(req.result ?? null);
+      req.onerror = () => rej(req.error);
+    });
+    db.close();
+    return result;
+  } catch {
+    return null;
+  }
+}
+async function clearSubscriptionFromIdb() {
+  try {
+    const db = await openPushDb();
+    const tx = db.transaction(IDB_STORE, "readwrite");
+    tx.objectStore(IDB_STORE).delete(IDB_KEY);
+    await new Promise((res, rej) => {
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+    db.close();
+  } catch {
+  }
+}
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -58570,13 +58649,14 @@ function urlBase64ToUint8Array(base64String) {
 }
 function usePushNotifications() {
   const { actor } = useActor(createActor);
-  const supported = typeof window !== "undefined" && "Notification" in window && "serviceWorker" in navigator;
+  const supported = typeof window !== "undefined" && "Notification" in window && "serviceWorker" in navigator && "PushManager" in window;
   const [permission, setPermission] = reactExports.useState(() => {
     var _a3;
     if (!supported) return "unsupported";
     return ((_a3 = window.Notification) == null ? void 0 : _a3.permission) ?? "default";
   });
   const [subscribed, setSubscribed] = reactExports.useState(false);
+  const [pushSubscriptionActive, setPushSubscriptionActive] = reactExports.useState(false);
   const [loading, setLoading] = reactExports.useState(false);
   const [vapidKey, setVapidKey] = reactExports.useState(null);
   const [preferences, setPreferences] = reactExports.useState({
@@ -58588,6 +58668,7 @@ function usePushNotifications() {
     if (!actor || !supported) return;
     let cancelled = false;
     (async () => {
+      var _a3, _b3;
       try {
         const key = await actor.getVAPIDPublicKey();
         if (!cancelled) setVapidKey(key);
@@ -58595,14 +58676,47 @@ function usePushNotifications() {
       }
       try {
         const result = await actor.getNotificationPreferences();
-        if (!cancelled && "ok" in result) {
+        if (!cancelled) {
           setPreferences({
-            directEnabled: result.ok.directMessagesEnabled,
-            groupEnabled: result.ok.groupMessagesEnabled
+            directEnabled: result.directMessagesEnabled,
+            groupEnabled: result.groupMessagesEnabled
           });
           setSubscribed(
-            result.ok.directMessagesEnabled || result.ok.groupMessagesEnabled
+            result.directMessagesEnabled || result.groupMessagesEnabled
           );
+        }
+      } catch {
+      }
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        let existingSub = await reg.pushManager.getSubscription();
+        if (existingSub) {
+          const expired = existingSub.expirationTime != null && existingSub.expirationTime < Date.now();
+          if (expired) {
+            console.log(
+              "[CS Push] Subscription expired — unsubscribing and re-registering"
+            );
+            await existingSub.unsubscribe();
+            existingSub = null;
+          }
+        }
+        if (existingSub && !cancelled) {
+          const stored = await loadSubscriptionFromIdb();
+          if (!stored || stored.endpoint !== existingSub.endpoint) {
+            const json = existingSub.toJSON();
+            const endpoint = json.endpoint ?? "";
+            const auth = ((_a3 = json.keys) == null ? void 0 : _a3.auth) ?? "";
+            const p256dh = ((_b3 = json.keys) == null ? void 0 : _b3.p256dh) ?? "";
+            try {
+              await actor.subscribeToPush(endpoint, auth, p256dh);
+              await saveSubscriptionToIdb(endpoint);
+            } catch {
+            }
+          }
+          if (!cancelled) {
+            setPushSubscriptionActive(true);
+            setSubscribed(true);
+          }
         }
       } catch {
       }
@@ -58612,30 +58726,86 @@ function usePushNotifications() {
     };
   }, [actor, supported]);
   reactExports.useEffect(() => {
-    if (!actor || !supported || permission !== "granted") return;
+    if (!actor || !supported) return;
+    const sendAuth = (pushActive) => {
+      if (!navigator.serviceWorker.controller) return;
+      navigator.serviceWorker.controller.postMessage({
+        type: "CS_SET_AUTH",
+        canisterId: "wqf45-4qaaa-aaaau-agubq-cai",
+        icHost: "https://icp0.io",
+        pushActive
+      });
+    };
+    sendAuth(pushSubscriptionActive);
+    const onControllerChange = () => {
+      sendAuth(pushSubscriptionActive);
+    };
+    navigator.serviceWorker.addEventListener(
+      "controllerchange",
+      onControllerChange
+    );
+    return () => {
+      navigator.serviceWorker.removeEventListener(
+        "controllerchange",
+        onControllerChange
+      );
+    };
+  }, [actor, supported, pushSubscriptionActive]);
+  reactExports.useEffect(() => {
+    if (!actor || !supported || permission !== "granted" || pushSubscriptionActive) {
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+      return;
+    }
+    let retryTimeout = null;
     const poll = async () => {
-      if (document.visibilityState !== "hidden") return;
       try {
         const result = await actor.getPendingNotifications();
-        if ("ok" in result) {
-          for (const n of result.ok) {
-            const title = n.notifType === "DirectMessage" ? `New message from ${n.senderDisplayName}` : `New message in ${n.groupName ?? "a group"}`;
-            const body = "Tap to view";
-            new window.Notification(title, {
-              body,
-              tag: n.id,
-              icon: "/icons/icon-192.png"
+        for (const n of result) {
+          const notificationTitle = n.notifType === "DirectMessage" ? `New message from ${n.senderDisplayName}` : `New message in ${n.groupName ?? "a group"}`;
+          const notifBody = "New message";
+          const notifTag = `cs-conv-${n.id}`;
+          if (navigator.serviceWorker.controller && Notification.permission === "granted") {
+            navigator.serviceWorker.controller.postMessage({
+              type: "CS_SHOW_NOTIFICATION",
+              title: notificationTitle,
+              body: notifBody,
+              tag: notifTag,
+              data: { url: "/", convId: n.id }
+            });
+          }
+          if (document.visibilityState === "visible" && Notification.permission === "granted") {
+            new window.Notification(notificationTitle, {
+              body: notifBody,
+              tag: notifTag,
+              icon: "/icon-192x192.png"
             });
           }
         }
+        if (retryTimeout) {
+          clearTimeout(retryTimeout);
+          retryTimeout = null;
+        }
       } catch {
+        if (!retryTimeout) {
+          retryTimeout = setTimeout(() => {
+            retryTimeout = null;
+            poll().catch(() => {
+            });
+          }, 5e3);
+        }
       }
     };
-    pollRef.current = setInterval(poll, 3e4);
+    pollRef.current = setInterval(poll, 15e3);
+    poll().catch(() => {
+    });
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
+      if (retryTimeout) clearTimeout(retryTimeout);
     };
-  }, [actor, supported, permission]);
+  }, [actor, supported, permission, pushSubscriptionActive]);
   const requestPermission = reactExports.useCallback(async () => {
     if (!supported || permission !== "default") return;
     const result = await window.Notification.requestPermission();
@@ -58659,8 +58829,11 @@ function usePushNotifications() {
       const auth = ((_a3 = json.keys) == null ? void 0 : _a3.auth) ?? "";
       const p256dh = ((_b3 = json.keys) == null ? void 0 : _b3.p256dh) ?? "";
       await actor.subscribeToPush(endpoint, auth, p256dh);
+      await saveSubscriptionToIdb(endpoint);
+      setPushSubscriptionActive(true);
       setSubscribed(true);
-    } catch {
+    } catch (err) {
+      console.error("[CS Push] Subscribe failed:", err);
     } finally {
       setLoading(false);
     }
@@ -58671,10 +58844,13 @@ function usePushNotifications() {
     try {
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
-      await (sub == null ? void 0 : sub.unsubscribe());
+      if (sub) await sub.unsubscribe();
       await actor.unsubscribeFromPush();
+      await clearSubscriptionFromIdb();
+      setPushSubscriptionActive(false);
       setSubscribed(false);
-    } catch {
+    } catch (err) {
+      console.error("[CS Push] Unsubscribe failed:", err);
     } finally {
       setLoading(false);
     }
@@ -58686,17 +58862,22 @@ function usePushNotifications() {
       try {
         await actor.updateNotificationPreferences(dm, group);
         setPreferences({ directEnabled: dm, groupEnabled: group });
+        if (!dm && !group) {
+          await unsubscribe();
+          return;
+        }
       } catch {
       } finally {
         setLoading(false);
       }
     },
-    [actor]
+    [actor, unsubscribe]
   );
   return {
     supported,
     permission,
     subscribed,
+    pushSubscriptionActive,
     preferences,
     loading,
     requestPermission,
@@ -59608,6 +59789,7 @@ function NotificationsSection() {
     supported,
     permission,
     subscribed,
+    pushSubscriptionActive,
     preferences,
     loading,
     requestPermission,
@@ -59631,6 +59813,19 @@ function NotificationsSection() {
       return /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "destructive", children: "Denied" });
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: "Default" });
   };
+  const deliveryBadge = () => {
+    if (!subscribed || permission !== "granted") return null;
+    if (pushSubscriptionActive) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30 gap-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block w-1.5 h-1.5 rounded-full bg-green-500" }),
+        "Push Active"
+      ] });
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { variant: "secondary", className: "gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block w-1.5 h-1.5 rounded-full bg-muted-foreground/60" }),
+      "Fallback polling"
+    ] });
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "data-ocid": "settings.notifications_section", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SectionHeader, { icon: Bell, title: "Notifications" }),
     supported && permission === "default" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 flex items-start gap-3 p-3.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs", children: [
@@ -59641,7 +59836,7 @@ function NotificationsSection() {
           className: "text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
         }
       ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-blue-800 dark:text-blue-300 leading-relaxed", children: "CharlieSierra stores only notification metadata (event type and timestamp) — never message content. Enable notifications to be alerted when new messages arrive." })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-blue-800 dark:text-blue-300 leading-relaxed", children: "Enable notifications to get alerts for new messages even when CharlieSierra is closed." })
     ] }),
     supported && permission === "denied" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 flex items-start gap-3 p-3.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Bell, { size: 13, className: "text-destructive flex-shrink-0 mt-0.5" }),
@@ -59663,7 +59858,10 @@ function NotificationsSection() {
               "data-ocid": "settings.notifications.master_switch"
             }
           ),
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1", children: permissionBadge() })
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 flex items-center gap-2", children: [
+            permissionBadge(),
+            deliveryBadge()
+          ] })
         }
       ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -59943,25 +60141,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-4BTbdbNJ.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Ddfswg4f.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-Cecnfq3p.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-J0QWBmJN.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-Cqgyrq1K.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-D8TpAVSC.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-BcfDdGfR.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-CuZgWjLi.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-CxhDOzVr.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CnunmmXw.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-BApXGuDF.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-BJf9eOUv.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-uTrWo3Fs.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-AISw0JzL.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-5FOeMYuy.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DKvYJ4cp.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C0kpZYEq.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BOtwocRI.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-DbSSOgZX.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-05ZFBCLQ.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})

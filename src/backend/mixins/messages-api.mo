@@ -6,6 +6,7 @@ import EnterpriseLib "../lib/enterprise";
 import NotifLib "../lib/notifications";
 import NotifTypes "../types/notifications";
 import Principal "mo:core/Principal";
+import Nat "mo:core/Nat";
 import Map "mo:core/Map";
 
 mixin (
@@ -15,7 +16,12 @@ mixin (
   pushSubscriptions    : Map.Map<Principal, NotifTypes.PushSubscriptionRecord>,
   notificationPrefs    : Map.Map<Principal, NotifTypes.NotificationPreferences>,
   pendingNotifications : Map.Map<Principal, [NotifTypes.PendingNotification]>,
+  selfPrincipal        : Principal,
 ) {
+
+  // Actor self-reference for firing real Web Push (fire-and-forget)
+  type PushActor = actor { sendPushToUser : (Principal, Text, Text, Text) -> async () };
+  let pushActor : PushActor = actor(selfPrincipal.toText());
 
   func isMember(userId : Common.UserId, convId : Common.ConversationId) : Bool {
     switch (convsState.conversations.get(convId)) {
@@ -34,13 +40,12 @@ mixin (
     req : T.SendMessageRequest
   ) : async Common.Result<T.MessagePublic, Common.Error> {
     let result = MsgsLib.sendMessage(msgsState, caller, req, isMember);
-    // Post-send hooks: retention metadata + push notification triggers
+    // Post-send hooks: retention metadata + notification triggers
     switch (result) {
       case (#ok(msg)) {
         switch (convsState.conversations.get(req.conversationId)) {
           case (?conv) {
             if (conv.kind == #group) {
-              // Retention metadata hook
               EnterpriseLib.maybeRecordRetentionMetadata(
                 enterpriseState,
                 msg.id,
@@ -48,26 +53,32 @@ mixin (
                 caller,
                 conv.members,
               );
-              // Enqueue push notification trigger for each group member (except sender)
               let senderText = caller.toText();
+              let convIdText = req.conversationId.toText();
               for (member in conv.members.values()) {
                 if (not Principal.equal(member, caller)) {
+                  // Polling fallback queue
                   NotifLib.enqueueNotificationForUser(
                     pushSubscriptions,
                     notificationPrefs,
                     pendingNotifications,
                     member,
                     "GroupMessage",
-                    senderText,   // display name is encrypted client-side; pass principal text as placeholder
-                    conv.displayName, // plaintext discovery name or null
+                    senderText,
+                    conv.displayName,
                   );
+                  // Real Web Push (fire-and-forget async)
+                  if (NotifLib.isPushEnabled(pushSubscriptions, notificationPrefs, member, "GroupMessage")) {
+                    ignore pushActor.sendPushToUser(member, senderText, "GroupMessage", convIdText);
+                  };
                 };
               };
             } else {
-              // Direct message: notify the peer
               let senderText = caller.toText();
+              let convIdText = req.conversationId.toText();
               for (member in conv.members.values()) {
                 if (not Principal.equal(member, caller)) {
+                  // Polling fallback queue
                   NotifLib.enqueueNotificationForUser(
                     pushSubscriptions,
                     notificationPrefs,
@@ -77,6 +88,10 @@ mixin (
                     senderText,
                     null,
                   );
+                  // Real Web Push (fire-and-forget async)
+                  if (NotifLib.isPushEnabled(pushSubscriptions, notificationPrefs, member, "DirectMessage")) {
+                    ignore pushActor.sendPushToUser(member, senderText, "DirectMessage", convIdText);
+                  };
                 };
               };
             };

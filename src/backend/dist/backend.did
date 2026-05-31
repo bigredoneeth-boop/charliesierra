@@ -139,25 +139,15 @@ type Result_4 =
    err: Error;
    ok: JoinRequest;
  };
-type Result_33 = 
+type Result_31 = 
  variant {
    err: Error;
    ok: vec EscrowAccessGrant;
  };
-type Result_32 = 
- variant {
-   err: Error;
-   ok: EscrowAccessGrant;
- };
-type Result_31 = 
- variant {
-   err: Error;
-   ok: ConversationPublic;
- };
 type Result_30 = 
  variant {
    err: Error;
-   ok: ConfigExportBundle;
+   ok: EscrowAccessGrant;
  };
 type Result_3 = 
  variant {
@@ -167,52 +157,52 @@ type Result_3 =
 type Result_29 = 
  variant {
    err: Error;
-   ok: text;
+   ok: ConversationPublic;
  };
 type Result_28 = 
  variant {
    err: Error;
-   ok: vec AuditEvent;
+   ok: ConfigExportBundle;
  };
 type Result_27 = 
  variant {
    err: Error;
-   ok: EscrowStatsRecord;
+   ok: text;
  };
 type Result_26 = 
  variant {
    err: Error;
-   ok: vec EscrowedUserRecord;
+   ok: vec AuditEvent;
  };
 type Result_25 = 
  variant {
    err: Error;
-   ok: vec JoinRequest;
+   ok: EscrowStatsRecord;
  };
 type Result_24 = 
  variant {
-   err: text;
-   ok: vec GroupMemberRecord;
+   err: Error;
+   ok: vec EscrowedUserRecord;
  };
 type Result_23 = 
  variant {
    err: Error;
-   ok: GroupRetentionPolicy;
+   ok: vec JoinRequest;
  };
 type Result_22 = 
  variant {
-   err: Error;
-   ok: vec MessagePublic;
+   err: text;
+   ok: vec GroupMemberRecord;
  };
 type Result_21 = 
  variant {
-   err: text;
-   ok: vec OrgMembership;
+   err: Error;
+   ok: GroupRetentionPolicy;
  };
 type Result_20 = 
  variant {
-   err: text;
-   ok: opt OrgRole;
+   err: Error;
+   ok: vec MessagePublic;
  };
 type Result_2 = 
  variant {
@@ -222,17 +212,17 @@ type Result_2 =
 type Result_19 = 
  variant {
    err: text;
-   ok: NotificationPreferences;
+   ok: vec OrgMembership;
  };
 type Result_18 = 
  variant {
    err: text;
-   ok: GetOrgUsersResponse;
+   ok: opt OrgRole;
  };
 type Result_17 = 
  variant {
    err: text;
-   ok: vec PendingNotification;
+   ok: GetOrgUsersResponse;
  };
 type Result_16 = 
  variant {
@@ -850,16 +840,16 @@ service : {
   addConversationMember: (req: AddMemberRequest) -> (Result_6);
   addDevice: (req: AddDeviceRequest) -> (Result_11);
   adminGetEscrowGrants: (targetUserId: opt UserId, limit: nat, afterGrantId:
-   opt nat) -> (Result_33) query;
+   opt nat) -> (Result_31) query;
   adminGrantEscrowAccess: (targetUserId: UserId, targetDeviceId: text,
-   reason: text) -> (Result_32);
+   reason: text) -> (Result_30);
   approveJoinRequest: (req: JoinRequestActionRequest) -> (Result_6);
   approveKeyRecovery: (requestId: nat) -> (Result_9);
   bootstrapSuperAdmin: (targetPrincipal: UserId) -> (Result_8);
   checkPolicyExpiry: (callerOrgId: opt OrgId) -> (vec RetentionPolicy) query;
   clearTypingIndicator: (conversationId: ConversationId) -> ();
-  createDirectConversation: (req: CreateDirectRequest) -> (Result_31);
-  createGroupConversation: (req: CreateGroupRequest) -> (Result_31);
+  createDirectConversation: (req: CreateDirectRequest) -> (Result_29);
+  createGroupConversation: (req: CreateGroupRequest) -> (Result_29);
   createOrg: (req: CreateOrgRequest) -> (Result_3);
   createRetentionPolicy: (req: CreateRetentionPolicyRequest) -> (Result_1);
   deleteAttachment: (attachmentId: AttachmentId) -> (Result_6);
@@ -876,12 +866,12 @@ service : {
                                 err: text;
                                 ok: text;
                               });
-  exportAuditLog: (req: AuditExportRequest) -> (Result_29);
-  exportAuditLogs: (req: ExportAuditLogsRequest) -> (Result_28) query;
-  exportConfigBundle: () -> (Result_30);
-  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_29);
+  exportAuditLog: (req: AuditExportRequest) -> (Result_27);
+  exportAuditLogs: (req: ExportAuditLogsRequest) -> (Result_26) query;
+  exportConfigBundle: () -> (Result_28);
+  generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_27);
   getAllGroups: (req: GetAllGroupsRequest) -> (vec GroupAdminRecord);
-  getAuditLog: (req: GetAuditLogRequest) -> (Result_28) query;
+  getAuditLog: (req: GetAuditLogRequest) -> (Result_26) query;
   getCanisterHealth: () ->
    (record {
       cyclesBalance: nat;
@@ -899,24 +889,24 @@ service : {
                                err: text;
                                ok: blob;
                              });
-  getEscrowStats: () -> (Result_27);
-  getEscrowedUsers: (req: GetEscrowedUsersRequest) -> (Result_26);
+  getEscrowStats: () -> (Result_25);
+  getEscrowedUsers: (req: GetEscrowedUsersRequest) -> (Result_24);
   getGlobalRetentionPolicy: () -> (opt RetentionPolicy) query;
   getGroupCompartment: (convId: ConversationId) ->
    (opt CompartmentLabel) query;
-  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_25) query;
-  getGroupMembers: (req: GetGroupMembersRequest) -> (Result_24);
-  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_23) query;
+  getGroupJoinRequests: (conversationId: ConversationId) -> (Result_23) query;
+  getGroupMembers: (req: GetGroupMembersRequest) -> (Result_22);
+  getGroupRetentionPolicy: (convId: ConversationId) -> (Result_21) query;
   getMessageAttachments: (messageId: MessageId) -> (vec Attachment) query;
-  getMessages: (req: GetMessagesRequest) -> (Result_22) query;
+  getMessages: (req: GetMessagesRequest) -> (Result_20) query;
   getMyEscrowStatus: () -> (vec EscrowRecord) query;
-  getMyOrgs: () -> (Result_21) query;
-  getMyRole: (orgId: OrgId) -> (Result_20) query;
-  getNotificationPreferences: () -> (Result_19) query;
+  getMyOrgs: () -> (Result_19) query;
+  getMyRole: (orgId: OrgId) -> (Result_18) query;
+  getNotificationPreferences: () -> (NotificationPreferences) query;
   getOrg: (orgId: OrgId) -> (Result_3) query;
   getOrgSettings: (orgId: text) -> (OrgSettings) query;
-  getOrgUsers: (req: GetOrgUsersRequest) -> (Result_18) query;
-  getPendingNotifications: () -> (Result_17);
+  getOrgUsers: (req: GetOrgUsersRequest) -> (Result_17) query;
+  getPendingNotifications: () -> (vec PendingNotification);
   getPlatformSettings: () -> (PlatformSettings) query;
   getRecoveryDetails: (requestId: nat) -> (Result_9);
   getRecoveryRequests: (orgId: opt OrgId, statusFilter:
@@ -930,7 +920,7 @@ service : {
    (vec TypingIndicatorPublic) query;
   getUserProfile: (userId: UserId) -> (opt UserProfilePublic) query;
   getUserProfiles: (userIds: vec UserId) -> (vec UserProfilePublic) query;
-  getVAPIDPublicKey: () -> (text) query;
+  getVAPIDPublicKey: () -> (text);
   hasDataResetBeenPerformed: () -> (bool) query;
   hasSuperAdmin: () -> (bool) query;
   initiateKeyRecovery: (targetUserId: UserId, targetDeviceId: text, reason:
@@ -950,6 +940,8 @@ service : {
   redeemDeviceSyncToken: (token: text, deviceId: text, deviceLabel: text) ->
    (Result_11);
   registerAttachment: (req: RegisterAttachmentRequest) -> (Result_10);
+  registerPushSubscription: (endpoint: text, p256dh: text, auth: text) ->
+   (Result_2);
   registerUser: (req: RegisterRequest) -> (Result);
   rejectKeyRecovery: (requestId: nat) -> (Result_9);
   removeAdmin: (target: UserId) -> (Result_6);
@@ -960,22 +952,24 @@ service : {
   revokeDevice: (deviceId: text) -> (Result_6);
   revokeKeyEscrow: (deviceId: text, reason: text) -> (Result_6);
   sendMessage: (req: SendMessageRequest) -> (Result_7);
+  sendPushToUser: (targetPrincipal: principal, senderName: text, messageType:
+   text, convId: text) -> ();
   setGroupCompartment: (convId: ConversationId, compartment:
    CompartmentLabel) -> (Result_6);
   setSovereignConfig: (residency: DataResidency, subnet: opt principal,
    nodeCount: opt nat, costMult: opt float64) -> (Result_5);
   setTypingIndicator: (conversationId: ConversationId, ttlSeconds: nat) -> ();
   submitJoinRequest: (req: SubmitJoinRequestRequest) -> (Result_4);
-  subscribeToPush: (endpoint: text, authKey: text, p256dh: text) ->
-   (Result_2);
+  subscribeToPush: (endpoint: text, auth: text, p256dh: text) -> ();
   suspendMember: (req: SuspendUserRequest) -> (Result_2);
   suspendOrg: (orgId: OrgId) -> (Result_2);
   toggleLegalHold: (req: LegalHoldRequest) -> (Result_1);
   touchPresence: () -> ();
-  unsubscribeFromPush: () -> (Result_2);
+  unregisterPushSubscription: () -> (Result_2);
+  unsubscribeFromPush: () -> ();
   updateMemberRole: (req: UpdateMemberRoleRequest) -> (Result_2);
   updateNotificationPreferences: (directEnabled: bool, groupEnabled: 
-   bool) -> (Result_2);
+   bool) -> ();
   updateOrg: (orgId: OrgId, name: text, description: opt text) -> (Result_3);
   updateOrgSettings: (orgId: text, update: OrgSettings) -> (Result_2);
   updatePlatformSettings: (update: PlatformSettings) -> (Result_2);

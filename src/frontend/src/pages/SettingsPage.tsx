@@ -1039,6 +1039,7 @@ function NotificationsSection() {
     supported,
     permission,
     subscribed,
+    pushSubscriptionActive,
     preferences,
     loading,
     requestPermission,
@@ -1069,6 +1070,25 @@ function NotificationsSection() {
     return <Badge variant="outline">Default</Badge>;
   };
 
+  /** Badge showing push delivery mode */
+  const deliveryBadge = () => {
+    if (!subscribed || permission !== "granted") return null;
+    if (pushSubscriptionActive) {
+      return (
+        <Badge className="bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30 gap-1">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500" />
+          Push Active
+        </Badge>
+      );
+    }
+    return (
+      <Badge variant="secondary" className="gap-1">
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-muted-foreground/60" />
+        Fallback polling
+      </Badge>
+    );
+  };
+
   return (
     <section data-ocid="settings.notifications_section">
       <SectionHeader icon={Bell} title="Notifications" />
@@ -1080,9 +1100,8 @@ function NotificationsSection() {
             className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
           />
           <p className="text-blue-800 dark:text-blue-300 leading-relaxed">
-            CharlieSierra stores only notification metadata (event type and
-            timestamp) — never message content. Enable notifications to be
-            alerted when new messages arrive.
+            Enable notifications to get alerts for new messages even when
+            CharlieSierra is closed.
           </p>
         </div>
       )}
@@ -1111,7 +1130,10 @@ function NotificationsSection() {
             />
           }
         >
-          <div className="mt-1">{permissionBadge()}</div>
+          <div className="mt-1 flex items-center gap-2">
+            {permissionBadge()}
+            {deliveryBadge()}
+          </div>
         </SettingsRow>
 
         <SettingsRow
