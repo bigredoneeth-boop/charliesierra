@@ -16,7 +16,14 @@ import { useUserProfiles } from "@/hooks/use-profiles";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 interface MessageListProps {
   conversationId: ConversationId;
@@ -126,7 +133,7 @@ function DecryptedQueuedBubble({
   );
 }
 
-export function MessageList({
+export const MessageList = memo(function MessageList({
   conversationId,
   profiles,
   isGroup = false,
@@ -319,7 +326,11 @@ export function MessageList({
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 flex flex-col"
+      className="flex-1 overflow-y-auto overscroll-contain chat-scroll px-4 py-3 flex flex-col"
+      style={{
+        WebkitOverflowScrolling: "touch" as unknown as undefined,
+        touchAction: "pan-y",
+      }}
       data-ocid="messages.list"
     >
       {/* Infinite scroll sentinel */}
@@ -390,4 +401,4 @@ export function MessageList({
       <div ref={bottomRef} className="h-1" />
     </div>
   );
-}
+});

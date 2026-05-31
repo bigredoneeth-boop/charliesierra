@@ -63,9 +63,11 @@ const loginRoute = createRoute({
 // ── Protected layout route ───────────────────────────────────────────────────
 function ProtectedLayout() {
   return (
-    <OnboardingGate>
-      <Outlet />
-    </OnboardingGate>
+    <div className="app-shell">
+      <OnboardingGate>
+        <Outlet />
+      </OnboardingGate>
+    </div>
   );
 }
 
@@ -135,17 +137,19 @@ const notFoundRoute = createRoute({
 // ── Admin layout wrapper ─────────────────────────────────────────────────────
 function AdminGuard() {
   return (
-    <AdminAccessGate>
-      <Suspense
-        fallback={
-          <div className="fixed inset-0 flex items-center justify-center bg-background">
-            <LoadingSpinner size={36} />
-          </div>
-        }
-      >
-        <Outlet />
-      </Suspense>
-    </AdminAccessGate>
+    <div className="app-shell">
+      <AdminAccessGate>
+        <Suspense
+          fallback={
+            <div className="fixed inset-0 flex items-center justify-center bg-background">
+              <LoadingSpinner size={36} />
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
+      </AdminAccessGate>
+    </div>
   );
 }
 

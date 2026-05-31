@@ -34,7 +34,7 @@ export default function LoginPage() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="page-scroll bg-background flex flex-col min-h-screen">
       {/* Header bar */}
       <header className="flex items-center gap-3 px-6 h-14 border-b border-border bg-card flex-shrink-0" />
 

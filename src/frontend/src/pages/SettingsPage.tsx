@@ -1,5 +1,6 @@
 import { DisappearingMessageSettings } from "@/components/DisappearingMessageSettings";
 import { Layout } from "@/components/Layout";
+import { PWAInstallModal } from "@/components/PWAInstallModal";
 import { ProfileEditor } from "@/components/ProfileEditor";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
@@ -1164,6 +1165,9 @@ export default function SettingsPage() {
     promptInstall,
     dismissInstall,
     canAutoPrompt,
+    browserInstallType,
+    showInstructionModal,
+    closeInstructionModal,
   } = usePWAInstall();
 
   const handleLogout = () => {
@@ -1262,6 +1266,11 @@ export default function SettingsPage() {
             )}
           </section>
         )}
+        <PWAInstallModal
+          open={showInstructionModal}
+          onClose={closeInstructionModal}
+          browserInstallType={browserInstallType}
+        />
 
         <Separator />
 

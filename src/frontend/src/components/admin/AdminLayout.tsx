@@ -11,12 +11,14 @@ import { usePolicyExpiryStore } from "@/stores/policy-expiry-store";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Archive,
+  ArrowLeft,
   Building2,
   FileText,
   KeyRound,
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquare,
   Settings,
   Shield,
   Users,
@@ -252,6 +254,7 @@ interface AdminLayoutProps {
 export function AdminLayout({ title, action, children }: AdminLayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Close mobile menu on route change
   const routerState = useRouterState();
@@ -270,7 +273,7 @@ export function AdminLayout({ title, action, children }: AdminLayoutProps) {
   }, [mobileOpen]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0a0e14]">
+    <div className="flex h-dvh overflow-hidden bg-[#0a0e14]">
       {/* ── Desktop sidebar ── */}
       <div className="hidden md:flex flex-col h-full">
         <AdminSidebar collapsed={collapsed} />
@@ -301,7 +304,7 @@ export function AdminLayout({ title, action, children }: AdminLayoutProps) {
       )}
 
       {/* ── Main area ── */}
-      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
+      <div className="flex flex-1 flex-col min-w-0">
         {/* Top header bar */}
         <header className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#0d1117] px-4 py-3">
           {/* Mobile hamburger */}
@@ -324,6 +327,24 @@ export function AdminLayout({ title, action, children }: AdminLayoutProps) {
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <Menu className="h-4 w-4" aria-hidden="true" />
+          </button>
+
+          {/* Return to Chat */}
+          <button
+            type="button"
+            data-ocid="admin.return_to_chat_button"
+            onClick={() => navigate({ to: "/app/conversations" })}
+            className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-slate-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-150 border border-transparent hover:border-blue-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            aria-label="Return to Chat"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <span className="hidden sm:inline font-mono text-[0.6rem] font-semibold uppercase tracking-widest">
+              Return to Chat
+            </span>
+            <MessageSquare
+              className="h-3 w-3 shrink-0 hidden sm:block opacity-60"
+              aria-hidden="true"
+            />
           </button>
 
           <div className="flex flex-1 items-center justify-between min-w-0">

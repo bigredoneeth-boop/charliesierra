@@ -1,4 +1,4 @@
-import { e as createLucideIcon, R as React, r as reactExports, bl as useRouterState, j as jsxRuntimeExports, bm as Menu, n as useNavigate, k as useAuth, a0 as Shield, f as cn, U as Users, bn as FileText, av as Settings, bo as LogOut } from "./index-BdIcgdEl.js";
+import { e as createLucideIcon, R as React, r as reactExports, n as useNavigate, bm as useRouterState, j as jsxRuntimeExports, bn as Menu, a5 as ArrowLeft, au as MessageSquare, k as useAuth, a0 as Shield, f as cn, U as Users, bo as FileText, av as Settings, bp as LogOut } from "./index-VhQ0hTMn.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -293,6 +293,7 @@ function AdminSidebar({
 function AdminLayout({ title, action, children }) {
   const [collapsed, setCollapsed] = reactExports.useState(false);
   const [mobileOpen, setMobileOpen] = reactExports.useState(false);
+  const navigate = useNavigate();
   const routerState = useRouterState();
   reactExports.useEffect(() => {
     setMobileOpen(false);
@@ -304,7 +305,7 @@ function AdminLayout({ title, action, children }) {
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, [mobileOpen]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-screen overflow-hidden bg-[#0a0e14]", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-dvh overflow-hidden bg-[#0a0e14]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex flex-col h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminSidebar, { collapsed }) }),
     mobileOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "dialog",
@@ -332,7 +333,7 @@ function AdminLayout({ title, action, children }) {
         ]
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 flex-col overflow-hidden min-w-0", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 flex-col min-w-0", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#0d1117] px-4 py-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
@@ -354,6 +355,27 @@ function AdminLayout({ title, action, children }) {
             className: "hidden md:flex rounded p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition-colors",
             "aria-label": collapsed ? "Expand sidebar" : "Collapse sidebar",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "h-4 w-4", "aria-hidden": "true" })
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            type: "button",
+            "data-ocid": "admin.return_to_chat_button",
+            onClick: () => navigate({ to: "/app/conversations" }),
+            className: "flex items-center gap-1.5 rounded px-2.5 py-1.5 text-slate-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-150 border border-transparent hover:border-blue-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+            "aria-label": "Return to Chat",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeft, { className: "h-3.5 w-3.5 shrink-0", "aria-hidden": "true" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline font-mono text-[0.6rem] font-semibold uppercase tracking-widest", children: "Return to Chat" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                MessageSquare,
+                {
+                  className: "h-3 w-3 shrink-0 hidden sm:block opacity-60",
+                  "aria-hidden": "true"
+                }
+              )
+            ]
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 items-center justify-between min-w-0", children: [

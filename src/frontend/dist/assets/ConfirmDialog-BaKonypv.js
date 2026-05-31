@@ -1,4 +1,4 @@
-import { r as reactExports, j as jsxRuntimeExports, T as TriangleAlert, f as cn, B as Button } from "./index-BdIcgdEl.js";
+import { r as reactExports, j as jsxRuntimeExports, T as TriangleAlert, f as cn, B as Button } from "./index-VhQ0hTMn.js";
 function ConfirmDialog({
   open,
   title = "Are you sure?",

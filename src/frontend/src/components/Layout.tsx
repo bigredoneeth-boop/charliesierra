@@ -1,3 +1,4 @@
+import { PWAInstallModal } from "@/components/PWAInstallModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -70,7 +71,14 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const location = useLocation();
   const navigate = useNavigate();
   const ownDisplayName = useDisplayName(principal?.toText() ?? null);
-  const { isInstalled, isInstallable, promptInstall } = usePWAInstall();
+  const {
+    isInstalled,
+    isInstallable,
+    promptInstall,
+    browserInstallType,
+    showInstructionModal,
+    closeInstructionModal,
+  } = usePWAInstall();
 
   const handleLogout = () => {
     logout();
@@ -152,6 +160,11 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             <Download size={11} aria-hidden="true" className="shrink-0" />
             Get the App
           </button>
+          <PWAInstallModal
+            open={showInstructionModal}
+            onClose={closeInstructionModal}
+            browserInstallType={browserInstallType}
+          />
         </div>
       )}
 
@@ -204,7 +217,7 @@ export function Layout({
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-dvh overflow-hidden bg-background">
       <OfflineIndicator />
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-[280px] flex-shrink-0 flex-col border-r border-border">
@@ -259,7 +272,7 @@ export function Layout({
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto bg-background flex flex-col">
+        <main className="flex-1 overflow-y-auto bg-background flex flex-col">
           <div className="flex-1">{children}</div>
           <footer className="py-2 px-4 border-t border-border text-center flex-shrink-0">
             <p className="text-xs text-muted-foreground">

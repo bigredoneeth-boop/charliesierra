@@ -1,24 +1,58 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+export type BrowserInstallType =
+  | "auto"
+  | "edge"
+  | "chrome"
+  | "ios"
+  | "android"
+  | "generic";
+
 interface UsePWAInstallResult {
   isInstallable: boolean;
   isInstalled: boolean;
   canAutoPrompt: boolean;
+  browserInstallType: BrowserInstallType;
+  showInstructionModal: boolean;
   promptInstall: () => Promise<void>;
   dismissInstall: () => void;
+  closeInstructionModal: () => void;
 }
 
 const DISMISS_KEY = "pwa-install-dismissed-at";
 const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
+function detectBrowserInstallType(): BrowserInstallType {
+  const ua = navigator.userAgent;
+  const isIOS =
+    /iPad|iPhone|iPod/.test(ua) &&
+    !(window as Window & { MSStream?: unknown }).MSStream;
+  const isAndroid = /Android/.test(ua);
+  if (isIOS) return "ios";
+  if (isAndroid) return "android";
+  if (/Edg\//.test(ua)) return "edge";
+  if (/Chrome\//.test(ua) && !/Chromium\//.test(ua)) return "chrome";
+  return "generic";
+}
+
+function isDismissed(): boolean {
+  const dismissedAt = localStorage.getItem(DISMISS_KEY);
+  return !!(
+    dismissedAt &&
+    Date.now() - Number.parseInt(dismissedAt, 10) < DISMISS_TTL_MS
+  );
+}
+
 export default function usePWAInstall(): UsePWAInstallResult {
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
+  const [dismissed, setDismissed] = useState(() => isDismissed());
+  const [showInstructionModal, setShowInstructionModal] = useState(false);
   const [isInstalled, setIsInstalled] = useState(
     () =>
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -26,31 +60,28 @@ export default function usePWAInstall(): UsePWAInstallResult {
         (navigator as { standalone?: boolean }).standalone === true),
   );
 
-  // Browsers that support PWA install but don't fire beforeinstallprompt
-  // (e.g. Safari on iOS, some Chromium builds)
-  const isManuallyInstallable =
-    !isInstalled &&
-    "serviceWorker" in navigator &&
-    (navigator as { standalone?: boolean }).standalone === undefined &&
-    !window.matchMedia("(display-mode: standalone)").matches;
-
+  const browserInstallType = detectBrowserInstallType();
   const canAutoPrompt = deferredPrompt !== null;
 
-  // isInstallable: show the button if any install path is available
+  // On desktop (Edge/Chrome/generic desktop) always show the install button
+  // so users can access manual install instructions even when beforeinstallprompt
+  // hasn't fired yet. On mobile the existing behavior is preserved.
+  const isDesktop =
+    browserInstallType === "edge" ||
+    browserInstallType === "chrome" ||
+    browserInstallType === "generic";
+
   const isInstallable =
-    !isInstalled && (canAutoPrompt || isManuallyInstallable);
+    !isInstalled &&
+    !dismissed &&
+    (canAutoPrompt ||
+      isDesktop ||
+      // iOS / Android — only show when service worker available
+      ("serviceWorker" in navigator &&
+        (navigator as { standalone?: boolean }).standalone === undefined));
 
   useEffect(() => {
     if (isInstalled) return;
-
-    // Check if dismissed recently
-    const dismissedAt = localStorage.getItem(DISMISS_KEY);
-    if (
-      dismissedAt &&
-      Date.now() - Number.parseInt(dismissedAt, 10) < DISMISS_TTL_MS
-    ) {
-      return;
-    }
 
     const onBeforeInstall = (e: Event) => {
       e.preventDefault();
@@ -71,45 +102,36 @@ export default function usePWAInstall(): UsePWAInstallResult {
     };
   }, [isInstalled]);
 
-  const promptInstall = async (): Promise<void> => {
+  const promptInstall = useCallback(async (): Promise<void> => {
     if (deferredPrompt) {
-      // Chrome/Edge: use the native prompt
+      // Native install dialog (Chrome/Edge when criteria are met)
       await deferredPrompt.prompt();
       await deferredPrompt.userChoice;
       setDeferredPrompt(null);
       return;
     }
+    // No native prompt — show browser-specific instruction modal
+    setShowInstructionModal(true);
+  }, [deferredPrompt]);
 
-    // Manual install path (Safari iOS, some Chromium builds)
-    const isIOS =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-      !(window as Window & { MSStream?: unknown }).MSStream;
-    if (isIOS) {
-      alert(
-        "To install CharlieSierra:\n\n" +
-          "1. Tap the Share button (\u{1F4E4}) at the bottom of the screen.\n" +
-          '2. Scroll down and tap "Add to Home Screen".\n' +
-          '3. Tap "Add" to confirm.',
-      );
-    } else {
-      alert(
-        "To install CharlieSierra:\n\n" +
-          "Open your browser menu (⋮ or ☰) and select\n" +
-          '"Install app" or "Add to Home Screen".',
-      );
-    }
-  };
-
-  const dismissInstall = (): void => {
+  const dismissInstall = useCallback((): void => {
     localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    setDismissed(true);
     setDeferredPrompt(null);
-  };
+  }, []);
+
+  const closeInstructionModal = useCallback((): void => {
+    setShowInstructionModal(false);
+  }, []);
 
   return {
     isInstallable,
     isInstalled,
+    canAutoPrompt,
+    browserInstallType,
+    showInstructionModal,
     promptInstall,
     dismissInstall,
-    canAutoPrompt,
+    closeInstructionModal,
   };
 }

@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-D6kLfY_S.js","assets/card-Dzs56-t1.js","assets/AdminDashboardPage-2N22ZH3s.js","assets/AdminLayout-DgLvkYAI.js","assets/PrincipalDisplay-sxy5wIH9.js","assets/user-plus-CFtbsMqO.js","assets/AdminOrganizationsPage-CaA0_u9N.js","assets/AdminStatusBadge-BbKWJba5.js","assets/ConfirmDialog-NBnG1_rk.js","assets/pencil-Yya2TEZ2.js","assets/shield-alert-CM_1602O.js","assets/AdminUsersPage-CXr_05Zm.js","assets/funnel-B-HpI4dZ.js","assets/AdminGroupsPage-Cq680A0x.js","assets/AdminAuditPage-Ik59FDw1.js","assets/AdminKeyEscrowPage-wlaoxPty.js","assets/AdminRetentionPoliciesPage-DyaM1iQY.js","assets/AdminSettingsPage-D-lLVdTl.js","assets/AdminBootstrapPage-T_j8QL97.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-4BTbdbNJ.js","assets/card-DN049-Mk.js","assets/AdminDashboardPage-Cecnfq3p.js","assets/AdminLayout-CRUcyGDY.js","assets/PrincipalDisplay-DCe4tF3S.js","assets/user-plus-C-X2qj5-.js","assets/AdminOrganizationsPage-Cqgyrq1K.js","assets/AdminStatusBadge-CFp7q-0P.js","assets/ConfirmDialog-BaKonypv.js","assets/pencil-l1Wap02-.js","assets/shield-alert-DSkTeysB.js","assets/AdminUsersPage-BcfDdGfR.js","assets/funnel-DcYohU64.js","assets/AdminGroupsPage-CuZgWjLi.js","assets/AdminAuditPage-CxhDOzVr.js","assets/AdminKeyEscrowPage-uTrWo3Fs.js","assets/AdminRetentionPoliciesPage-5FOeMYuy.js","assets/AdminSettingsPage-C0kpZYEq.js","assets/AdminBootstrapPage-DbSSOgZX.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -28334,7 +28334,7 @@ function useId(deterministicId) {
   useLayoutEffect2(() => {
     setId((reactId) => reactId ?? String(count$1++));
   }, [deterministicId]);
-  return deterministicId || (id ? `radix-${id}` : "");
+  return id ? `radix-${id}` : "";
 }
 const sides = ["top", "right", "bottom", "left"];
 const min = Math.min;
@@ -45890,29 +45890,29 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$R = [
+const __iconNode$U = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$R);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$U);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$Q = [
+const __iconNode$T = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$Q);
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$T);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$P = [
+const __iconNode$S = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -45922,42 +45922,79 @@ const __iconNode$P = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$P);
+const Bell = createLucideIcon("bell", __iconNode$S);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$O = [
+const __iconNode$R = [
   ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
   ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
 ];
-const CheckCheck = createLucideIcon("check-check", __iconNode$O);
+const CheckCheck = createLucideIcon("check-check", __iconNode$R);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$N = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$N);
+const __iconNode$Q = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$Q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$M = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$M);
+const __iconNode$P = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$P);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$L = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$L);
+const __iconNode$O = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$O);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$N = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+  ["line", { x1: "21.17", x2: "12", y1: "8", y2: "8", key: "a0cw5f" }],
+  ["line", { x1: "3.95", x2: "8.54", y1: "6.06", y2: "14", key: "1kftof" }],
+  ["line", { x1: "10.88", x2: "15.46", y1: "21.94", y2: "14", key: "1ymyh8" }]
+];
+const Chrome = createLucideIcon("chrome", __iconNode$N);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$M = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+];
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$M);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$L = [
+  ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+  ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+];
+const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$L);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45965,29 +46002,6 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$L);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$K = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$K);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$J = [
-  ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
-  ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
-];
-const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$J);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$I = [
   [
     "path",
     {
@@ -45997,7 +46011,30 @@ const __iconNode$I = [
   ],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Compass = createLucideIcon("compass", __iconNode$I);
+const Compass = createLucideIcon("compass", __iconNode$K);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$J = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$J);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$I = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$I);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46005,10 +46042,11 @@ const Compass = createLucideIcon("compass", __iconNode$I);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$H = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$H);
+const Download = createLucideIcon("download", __iconNode$H);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46016,11 +46054,11 @@ const Copy = createLucideIcon("copy", __iconNode$H);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$G = [
-  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
-  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
-  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+  ["circle", { cx: "12", cy: "12", r: "1", key: "41hilf" }],
+  ["circle", { cx: "19", cy: "12", r: "1", key: "1wjl8i" }],
+  ["circle", { cx: "5", cy: "12", r: "1", key: "1pcz8c" }]
 ];
-const Database = createLucideIcon("database", __iconNode$G);
+const Ellipsis = createLucideIcon("ellipsis", __iconNode$G);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46028,11 +46066,13 @@ const Database = createLucideIcon("database", __iconNode$G);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$F = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const Download = createLucideIcon("download", __iconNode$F);
+const FileText = createLucideIcon("file-text", __iconNode$F);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46040,13 +46080,11 @@ const Download = createLucideIcon("download", __iconNode$F);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$E = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
 ];
-const FileText = createLucideIcon("file-text", __iconNode$E);
+const Globe = createLucideIcon("globe", __iconNode$E);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46054,18 +46092,6 @@ const FileText = createLucideIcon("file-text", __iconNode$E);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$D = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
-];
-const Globe = createLucideIcon("globe", __iconNode$D);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$C = [
   ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
   [
     "path",
@@ -46075,7 +46101,21 @@ const __iconNode$C = [
     }
   ]
 ];
-const House = createLucideIcon("house", __iconNode$C);
+const House = createLucideIcon("house", __iconNode$D);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$C = [
+  ["path", { d: "M16 5h6", key: "1vod17" }],
+  ["path", { d: "M19 2v6", key: "4bpg5p" }],
+  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
+];
+const ImagePlus = createLucideIcon("image-plus", __iconNode$C);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46083,13 +46123,11 @@ const House = createLucideIcon("house", __iconNode$C);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$B = [
-  ["path", { d: "M16 5h6", key: "1vod17" }],
-  ["path", { d: "M19 2v6", key: "4bpg5p" }],
-  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
 ];
-const ImagePlus = createLucideIcon("image-plus", __iconNode$B);
+const Image = createLucideIcon("image", __iconNode$B);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46097,31 +46135,30 @@ const ImagePlus = createLucideIcon("image-plus", __iconNode$B);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$A = [
-  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
-];
-const Image = createLucideIcon("image", __iconNode$A);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$z = [
   ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
   ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
   ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
 ];
-const Key = createLucideIcon("key", __iconNode$z);
+const Key = createLucideIcon("key", __iconNode$A);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$y = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$y);
+const __iconNode$z = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$z);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$y = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+];
+const Lock = createLucideIcon("lock", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46129,10 +46166,11 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$y);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$x = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const Lock = createLucideIcon("lock", __iconNode$x);
+const LogOut = createLucideIcon("log-out", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46140,11 +46178,11 @@ const Lock = createLucideIcon("lock", __iconNode$x);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$w = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$w);
+const Menu = createLucideIcon("menu", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46152,11 +46190,9 @@ const LogOut = createLucideIcon("log-out", __iconNode$w);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$v = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
+  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$v);
+const MessageSquare = createLucideIcon("message-square", __iconNode$v);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46164,16 +46200,6 @@ const Menu = createLucideIcon("menu", __iconNode$v);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$u = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
-];
-const MessageSquare = createLucideIcon("message-square", __iconNode$u);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$t = [
   ["line", { x1: "2", x2: "22", y1: "2", y2: "22", key: "a6p6uj" }],
   ["path", { d: "M18.89 13.23A7.12 7.12 0 0 0 19 12v-2", key: "80xlxr" }],
   ["path", { d: "M5 10v2a7 7 0 0 0 12 5", key: "p2k8kg" }],
@@ -46181,7 +46207,19 @@ const __iconNode$t = [
   ["path", { d: "M9 9v3a3 3 0 0 0 5.12 2.12", key: "r2i35w" }],
   ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
 ];
-const MicOff = createLucideIcon("mic-off", __iconNode$t);
+const MicOff = createLucideIcon("mic-off", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [
+  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
+  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
+  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+];
+const Mic = createLucideIcon("mic", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46189,11 +46227,11 @@ const MicOff = createLucideIcon("mic-off", __iconNode$t);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$s = [
-  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
-  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
-  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
+  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
+  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
 ];
-const Mic = createLucideIcon("mic", __iconNode$s);
+const Monitor = createLucideIcon("monitor", __iconNode$s);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46201,11 +46239,9 @@ const Mic = createLucideIcon("mic", __iconNode$s);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$r = [
-  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
-  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
-  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
+  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
 ];
-const Monitor = createLucideIcon("monitor", __iconNode$r);
+const Moon = createLucideIcon("moon", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46213,16 +46249,6 @@ const Monitor = createLucideIcon("monitor", __iconNode$r);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$q = [
-  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
-];
-const Moon = createLucideIcon("moon", __iconNode$q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$p = [
   ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
   [
     "path",
@@ -46232,15 +46258,28 @@ const __iconNode$p = [
     }
   ]
 ];
-const Paperclip = createLucideIcon("paperclip", __iconNode$p);
+const Paperclip = createLucideIcon("paperclip", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$o = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
-const Play = createLucideIcon("play", __iconNode$o);
+const __iconNode$p = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
+const Play = createLucideIcon("play", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46248,12 +46287,10 @@ const Play = createLucideIcon("play", __iconNode$o);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$n = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
 ];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$n);
+const Search = createLucideIcon("search", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46261,10 +46298,16 @@ const RefreshCw = createLucideIcon("refresh-cw", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+  [
+    "path",
+    {
+      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+      key: "1ffxy3"
+    }
+  ],
+  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
 ];
-const Search = createLucideIcon("search", __iconNode$m);
+const Send = createLucideIcon("send", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46275,13 +46318,13 @@ const __iconNode$l = [
   [
     "path",
     {
-      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-      key: "1ffxy3"
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
     }
   ],
-  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Send = createLucideIcon("send", __iconNode$l);
+const Settings = createLucideIcon("settings", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46289,16 +46332,13 @@ const Send = createLucideIcon("send", __iconNode$l);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$k = [
-  [
-    "path",
-    {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }],
+  ["circle", { cx: "6", cy: "12", r: "3", key: "w7nqdw" }],
+  ["circle", { cx: "18", cy: "19", r: "3", key: "1xt0gg" }],
+  ["line", { x1: "8.59", x2: "15.42", y1: "13.51", y2: "17.49", key: "47mynk" }],
+  ["line", { x1: "15.41", x2: "8.59", y1: "6.51", y2: "10.49", key: "1n3mei" }]
 ];
-const Settings = createLucideIcon("settings", __iconNode$k);
+const Share2 = createLucideIcon("share-2", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -54583,7 +54623,7 @@ function DecryptedQueuedBubble({
     }
   );
 }
-function MessageList({
+const MessageList = reactExports.memo(function MessageList2({
   conversationId,
   profiles,
   isGroup = false,
@@ -54736,7 +54776,11 @@ function MessageList({
     {
       ref: scrollRef,
       onScroll: handleScroll2,
-      className: "flex-1 overflow-y-auto overscroll-contain px-4 py-3 flex flex-col",
+      className: "flex-1 overflow-y-auto overscroll-contain chat-scroll px-4 py-3 flex flex-col",
+      style: {
+        WebkitOverflowScrolling: "touch",
+        touchAction: "pan-y"
+      },
       "data-ocid": "messages.list",
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: topRef, className: "py-1", children: loadingOlder && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 16, className: "animate-spin text-muted-foreground" }) }) }),
@@ -54788,7 +54832,7 @@ function MessageList({
       ]
     }
   );
-}
+});
 function OfflineBanner({
   connection,
   queueDepth,
@@ -56072,6 +56116,162 @@ function EmptyState({
     }
   );
 }
+function EdgeInstructions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Ellipsis, { size: 16, className: "text-primary" }),
+      text: "Click the ⋯ (Settings and more) button in the top-right corner of Edge."
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: 'Hover over "Apps" in the dropdown menu.'
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: '"Install this site as an app" — click it to install CharlieSierra.'
+    }
+  ].map((step, i) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: static list
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center text-xs font-bold text-primary", children: i + 1 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2 pt-0.5", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 mt-0.5", children: step.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-foreground", children: step.text })
+      ] })
+    ] }, i)
+  )) });
+}
+function ChromeInstructions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Chrome, { size: 16, className: "text-primary" }),
+      text: "Look for the install icon (⊞) in the address bar — click it to install immediately."
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Ellipsis, { size: 16, className: "text-primary" }),
+      text: "Alternatively, click the ⋮ menu in the top-right corner."
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: '"Save and share" → "Install page as app" → confirm to install CharlieSierra.'
+    }
+  ].map((step, i) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: static list
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center text-xs font-bold text-primary", children: i + 1 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2 pt-0.5", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 mt-0.5", children: step.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-foreground", children: step.text })
+      ] })
+    ] }, i)
+  )) });
+}
+function IOSInstructions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Share2, { size: 16, className: "text-primary" }),
+      text: "Tap the Share button (📤) at the bottom of Safari."
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: `"Add to Home Screen" — scroll down if you don't see it.`
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: 'Tap "Add" in the top-right corner to confirm.'
+    }
+  ].map((step, i) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: static list
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center text-xs font-bold text-primary", children: i + 1 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2 pt-0.5", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 mt-0.5", children: step.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-foreground", children: step.text })
+      ] })
+    ] }, i)
+  )) });
+}
+function AndroidInstructions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Ellipsis, { size: 16, className: "text-primary" }),
+      text: "Tap the ⋮ menu in the top-right corner of Chrome."
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: '"Add to Home Screen" or "Install App" — tap it.'
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: 'Tap "Add" or "Install" to confirm and find CharlieSierra on your home screen.'
+    }
+  ].map((step, i) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: static list
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center text-xs font-bold text-primary", children: i + 1 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2 pt-0.5", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 mt-0.5", children: step.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-foreground", children: step.text })
+      ] })
+    ] }, i)
+  )) });
+}
+function GenericInstructions() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Globe, { size: 16, className: "text-primary" }),
+      text: "Open your browser menu (⋮ or ☰ button)."
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: 'Look for "Install app", "Install this site as an app", or "Add to Home Screen".'
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: "Confirm the installation to get CharlieSierra as a standalone app."
+    }
+  ].map((step, i) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: static list
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center text-xs font-bold text-primary", children: i + 1 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2 pt-0.5", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-shrink-0 mt-0.5", children: step.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-foreground", children: step.text })
+      ] })
+    ] }, i)
+  )) });
+}
+const BROWSER_TITLES = {
+  edge: "Install in Microsoft Edge",
+  chrome: "Install in Chrome",
+  ios: "Install on iOS",
+  android: "Install on Android",
+  generic: "Install CharlieSierra",
+  auto: "Install CharlieSierra"
+};
+function PWAInstallModal({
+  open,
+  onClose,
+  browserInstallType
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (o2) => !o2 && onClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-md", "data-ocid": "pwa.install_modal", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogTitle, { className: "flex items-center gap-2 text-base", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 18, className: "text-primary", "aria-hidden": "true" }),
+        BROWSER_TITLES[browserInstallType]
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "text-xs text-muted-foreground", children: "Follow these steps to install CharlieSierra as a standalone app on your device." })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-2", children: [
+      browserInstallType === "edge" && /* @__PURE__ */ jsxRuntimeExports.jsx(EdgeInstructions, {}),
+      browserInstallType === "chrome" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChromeInstructions, {}),
+      browserInstallType === "ios" && /* @__PURE__ */ jsxRuntimeExports.jsx(IOSInstructions, {}),
+      browserInstallType === "android" && /* @__PURE__ */ jsxRuntimeExports.jsx(AndroidInstructions, {}),
+      (browserInstallType === "generic" || browserInstallType === "auto") && /* @__PURE__ */ jsxRuntimeExports.jsx(GenericInstructions, {})
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-muted-foreground border-t border-border pt-3 mt-1", children: "Once installed, CharlieSierra runs in its own window with offline support and faster load times." })
+  ] }) });
+}
 const STORAGE_KEY = "cs_theme";
 function getInitialDark() {
   try {
@@ -56105,20 +56305,34 @@ function ThemeToggle({ size: size2 = "md", className = "" }) {
 }
 const DISMISS_KEY = "pwa-install-dismissed-at";
 const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1e3;
+function detectBrowserInstallType() {
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const isAndroid = /Android/.test(ua);
+  if (isIOS) return "ios";
+  if (isAndroid) return "android";
+  if (/Edg\//.test(ua)) return "edge";
+  if (/Chrome\//.test(ua) && !/Chromium\//.test(ua)) return "chrome";
+  return "generic";
+}
+function isDismissed() {
+  const dismissedAt = localStorage.getItem(DISMISS_KEY);
+  return !!(dismissedAt && Date.now() - Number.parseInt(dismissedAt, 10) < DISMISS_TTL_MS);
+}
 function usePWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = reactExports.useState(null);
+  const [dismissed, setDismissed] = reactExports.useState(() => isDismissed());
+  const [showInstructionModal, setShowInstructionModal] = reactExports.useState(false);
   const [isInstalled, setIsInstalled] = reactExports.useState(
     () => window.matchMedia("(display-mode: standalone)").matches || "standalone" in navigator && navigator.standalone === true
   );
-  const isManuallyInstallable = !isInstalled && "serviceWorker" in navigator && navigator.standalone === void 0 && !window.matchMedia("(display-mode: standalone)").matches;
+  const browserInstallType = detectBrowserInstallType();
   const canAutoPrompt = deferredPrompt !== null;
-  const isInstallable = !isInstalled && (canAutoPrompt || isManuallyInstallable);
+  const isDesktop = browserInstallType === "edge" || browserInstallType === "chrome" || browserInstallType === "generic";
+  const isInstallable = !isInstalled && !dismissed && (canAutoPrompt || isDesktop || // iOS / Android — only show when service worker available
+  "serviceWorker" in navigator && navigator.standalone === void 0);
   reactExports.useEffect(() => {
     if (isInstalled) return;
-    const dismissedAt = localStorage.getItem(DISMISS_KEY);
-    if (dismissedAt && Date.now() - Number.parseInt(dismissedAt, 10) < DISMISS_TTL_MS) {
-      return;
-    }
     const onBeforeInstall = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -56134,34 +56348,32 @@ function usePWAInstall() {
       window.removeEventListener("appinstalled", onAppInstalled);
     };
   }, [isInstalled]);
-  const promptInstall = async () => {
+  const promptInstall = reactExports.useCallback(async () => {
     if (deferredPrompt) {
       await deferredPrompt.prompt();
       await deferredPrompt.userChoice;
       setDeferredPrompt(null);
       return;
     }
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS) {
-      alert(
-        'To install CharlieSierra:\n\n1. Tap the Share button (📤) at the bottom of the screen.\n2. Scroll down and tap "Add to Home Screen".\n3. Tap "Add" to confirm.'
-      );
-    } else {
-      alert(
-        'To install CharlieSierra:\n\nOpen your browser menu (⋮ or ☰) and select\n"Install app" or "Add to Home Screen".'
-      );
-    }
-  };
-  const dismissInstall = () => {
+    setShowInstructionModal(true);
+  }, [deferredPrompt]);
+  const dismissInstall = reactExports.useCallback(() => {
     localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    setDismissed(true);
     setDeferredPrompt(null);
-  };
+  }, []);
+  const closeInstructionModal = reactExports.useCallback(() => {
+    setShowInstructionModal(false);
+  }, []);
   return {
     isInstallable,
     isInstalled,
+    canAutoPrompt,
+    browserInstallType,
+    showInstructionModal,
     promptInstall,
     dismissInstall,
-    canAutoPrompt
+    closeInstructionModal
   };
 }
 function OfflineIndicator() {
@@ -56221,7 +56433,14 @@ function SidebarContent({ onNavigate }) {
   const location2 = useLocation();
   const navigate = useNavigate();
   const ownDisplayName = useDisplayName((principal == null ? void 0 : principal.toText()) ?? null);
-  const { isInstalled, isInstallable, promptInstall } = usePWAInstall();
+  const {
+    isInstalled,
+    isInstallable,
+    promptInstall,
+    browserInstallType,
+    showInstructionModal,
+    closeInstructionModal
+  } = usePWAInstall();
   const handleLogout = () => {
     logout();
     navigate({ to: "/login" });
@@ -56280,20 +56499,30 @@ function SidebarContent({ onNavigate }) {
         ]
       }
     ) }),
-    !isInstalled && isInstallable && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
-      {
-        type: "button",
-        onClick: promptInstall,
-        "data-ocid": "nav.get_the_app_button",
-        "aria-label": "Install CharlieSierra app",
-        className: "flex items-center gap-1.5 px-2 py-1.5 rounded border border-sidebar-border text-muted-foreground hover:text-sidebar-foreground hover:border-muted-foreground text-[10px] transition-colors duration-200 w-full",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 11, "aria-hidden": "true", className: "shrink-0" }),
-          "Get the App"
-        ]
-      }
-    ) }),
+    !isInstalled && isInstallable && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 pb-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          onClick: promptInstall,
+          "data-ocid": "nav.get_the_app_button",
+          "aria-label": "Install CharlieSierra app",
+          className: "flex items-center gap-1.5 px-2 py-1.5 rounded border border-sidebar-border text-muted-foreground hover:text-sidebar-foreground hover:border-muted-foreground text-[10px] transition-colors duration-200 w-full",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 11, "aria-hidden": "true", className: "shrink-0" }),
+            "Get the App"
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        PWAInstallModal,
+        {
+          open: showInstructionModal,
+          onClose: closeInstructionModal,
+          browserInstallType
+        }
+      )
+    ] }),
     isAuthenticated && principal && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-3 py-4 space-y-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 px-2", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -56338,7 +56567,7 @@ function Layout({
     const isDark = stored ? stored === "dark" : false;
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-screen overflow-hidden bg-background", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-dvh overflow-hidden bg-background", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(OfflineIndicator, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "hidden md:flex w-[280px] flex-shrink-0 flex-col border-r border-border", children: /* @__PURE__ */ jsxRuntimeExports.jsx(SidebarContent, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Sheet, { open: mobileOpen, onOpenChange: setMobileOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -56375,7 +56604,7 @@ function Layout({
           headerRight
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 overflow-auto bg-background flex flex-col", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 overflow-y-auto bg-background flex flex-col", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1", children }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("footer", { className: "py-2 px-4 border-t border-border text-center flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-muted-foreground", children: [
           "To report a bug, email",
@@ -57682,7 +57911,7 @@ function LoginPage() {
       navigate({ to: "/app/conversations" });
     }
   }, [isAuthenticated, navigate]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background flex flex-col", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "page-scroll bg-background flex flex-col min-h-screen", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("header", { className: "flex items-center gap-3 px-6 h-14 border-b border-border bg-card flex-shrink-0" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-center px-4 py-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-md space-y-10", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-4", children: [
@@ -59482,7 +59711,10 @@ function SettingsPage() {
     isInstalled,
     promptInstall,
     dismissInstall,
-    canAutoPrompt
+    canAutoPrompt,
+    browserInstallType,
+    showInstructionModal,
+    closeInstructionModal
   } = usePWAInstall();
   const handleLogout = () => {
     logout();
@@ -59558,6 +59790,14 @@ function SettingsPage() {
         ] })
       ] }) })
     ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      PWAInstallModal,
+      {
+        open: showInstructionModal,
+        onClose: closeInstructionModal,
+        browserInstallType
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(NotificationsSection, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, {}),
@@ -59703,25 +59943,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-D6kLfY_S.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-4BTbdbNJ.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-2N22ZH3s.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-Cecnfq3p.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-CaA0_u9N.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-Cqgyrq1K.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CXr_05Zm.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-Cq680A0x.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-Ik59FDw1.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-BcfDdGfR.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-CuZgWjLi.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-CxhDOzVr.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-wlaoxPty.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-uTrWo3Fs.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DyaM1iQY.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-5FOeMYuy.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-D-lLVdTl.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C0kpZYEq.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-T_j8QL97.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-DbSSOgZX.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
@@ -59737,7 +59977,7 @@ const loginRoute = createRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(LoginPage, {})
 });
 function ProtectedLayout() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(OnboardingGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "app-shell", children: /* @__PURE__ */ jsxRuntimeExports.jsx(OnboardingGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }) });
 }
 const appRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -59792,13 +60032,13 @@ const notFoundRoute = createRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(NotFoundPage, {})
 });
 function AdminGuard() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminAccessGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "app-shell", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminAccessGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     reactExports.Suspense,
     {
       fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-background", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36 }) }),
       children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
     }
-  ) });
+  ) }) });
 }
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -60017,31 +60257,32 @@ export {
   useSuspendMember as b1,
   useReactivateMember as b2,
   useRemoveMember as b3,
-  useInviteUser as b4,
-  useUpdateMemberRole as b5,
-  CircleCheckBig as b6,
-  Key as b7,
-  useEnrollUserKeyEscrow as b8,
-  useGetEncryptedEscrowKey as b9,
-  useEscrowStats as ba,
-  useEscrowedUsers as bb,
-  useRecoveryRequests as bc,
-  RecoveryRequestStatus as bd,
-  ChevronUp as be,
-  EscrowStatus as bf,
-  useEscrowGrants as bg,
-  useInitiateKeyRecovery as bh,
-  useApproveKeyRecovery as bi,
-  __vitePreload as bj,
-  useRejectKeyRecovery as bk,
-  useRouterState as bl,
-  Menu as bm,
-  FileText as bn,
-  LogOut as bo,
-  useLogPolicyExpiryCheck as bp,
-  useLogPolicyReportExported as bq,
-  commonjsGlobal as br,
-  getDefaultExportFromCjs as bs,
+  Ellipsis as b4,
+  useInviteUser as b5,
+  useUpdateMemberRole as b6,
+  CircleCheckBig as b7,
+  Key as b8,
+  useEnrollUserKeyEscrow as b9,
+  useGetEncryptedEscrowKey as ba,
+  useEscrowStats as bb,
+  useEscrowedUsers as bc,
+  useRecoveryRequests as bd,
+  RecoveryRequestStatus as be,
+  ChevronUp as bf,
+  EscrowStatus as bg,
+  useEscrowGrants as bh,
+  useInitiateKeyRecovery as bi,
+  useApproveKeyRecovery as bj,
+  __vitePreload as bk,
+  useRejectKeyRecovery as bl,
+  useRouterState as bm,
+  Menu as bn,
+  FileText as bo,
+  LogOut as bp,
+  useLogPolicyExpiryCheck as bq,
+  useLogPolicyReportExported as br,
+  commonjsGlobal as bs,
+  getDefaultExportFromCjs as bt,
   Badge as c,
   ue as d,
   createLucideIcon as e,
