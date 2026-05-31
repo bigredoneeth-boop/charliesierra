@@ -32,7 +32,6 @@ import SettingsLib "lib/settings";
 import SettingsMixin "mixins/settings-api";
 import NotificationsMixin "mixins/notifications-api";
 import NotifTypes "types/notifications";
-import Migration "migration";
 
 
 
@@ -50,7 +49,8 @@ import Migration "migration";
 
 
 
-(with migration = Migration.run)
+
+
 actor self {
   // ── Stable state slices ──────────────────────────────────────────────────────
 

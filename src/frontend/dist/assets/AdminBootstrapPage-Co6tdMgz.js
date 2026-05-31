@@ -1,5 +1,5 @@
-import { e as createLucideIcon, i as useActor, n as useNavigate, r as reactExports, j as jsxRuntimeExports, ao as LoaderCircle, a0 as Shield, v as Label, I as Input, B as Button, ap as Principal, Z as createActor } from "./index-DwKKOR6D.js";
-import { S as ShieldAlert } from "./shield-alert-DrkZJ_V_.js";
+import { e as createLucideIcon, i as useActor, n as useNavigate, r as reactExports, j as jsxRuntimeExports, ao as LoaderCircle, a0 as Shield, v as Label, I as Input, B as Button, ap as Principal, Z as createActor } from "./index-DEgtFyNG.js";
+import { S as ShieldAlert } from "./shield-alert-B6kiPR6f.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *

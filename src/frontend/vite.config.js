@@ -47,6 +47,15 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
+      // scope: '/' ensures the SW controls the entire origin
+      // updateViaCache: 'none' forces Android Chrome to always check for a
+      // fresh SW from the network — never served from HTTP cache.
+      // Without these, Android may silently use a stale SW that lacks the
+      // push event handler, causing push notifications to go undelivered.
+      scope: '/',
+      // Forces Android Chrome to always fetch the SW from the network,
+      // never from HTTP cache, so push handler updates are never missed.
+      updateViaCache: 'none',
       includeAssets: ['favicon.ico', 'assets/*.png'],
       manifest: {
         name: 'CharlieSierra',

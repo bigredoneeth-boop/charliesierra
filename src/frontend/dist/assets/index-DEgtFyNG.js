@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-Ddfswg4f.js","assets/card-B5SNr1t_.js","assets/AdminDashboardPage-J0QWBmJN.js","assets/AdminLayout-D2txHq0E.js","assets/PrincipalDisplay-rQvDPiaT.js","assets/user-plus-DmT3PvrM.js","assets/AdminOrganizationsPage-D8TpAVSC.js","assets/AdminStatusBadge-oofOTbmC.js","assets/ConfirmDialog-Gv0d7_1q.js","assets/pencil-7uTvXtDc.js","assets/shield-alert-DrkZJ_V_.js","assets/AdminUsersPage-CnunmmXw.js","assets/funnel-DAd-T7cd.js","assets/AdminGroupsPage-BApXGuDF.js","assets/AdminAuditPage-BJf9eOUv.js","assets/AdminKeyEscrowPage-AISw0JzL.js","assets/AdminRetentionPoliciesPage-DKvYJ4cp.js","assets/AdminSettingsPage-BOtwocRI.js","assets/AdminBootstrapPage-05ZFBCLQ.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-CWYXeh7j.js","assets/card-DYXE1L0a.js","assets/AdminDashboardPage-7xtw6-2a.js","assets/AdminLayout-B_rLyZiX.js","assets/PrincipalDisplay-DzsrkDaI.js","assets/user-plus-BQjjM7q4.js","assets/AdminOrganizationsPage-CAgmeiuZ.js","assets/AdminStatusBadge-C4FRjhkx.js","assets/ConfirmDialog-BzeufjA3.js","assets/pencil-DFmD-Ryb.js","assets/shield-alert-B6kiPR6f.js","assets/AdminUsersPage-BnjpmXa_.js","assets/funnel-xWZLjtUf.js","assets/AdminGroupsPage-GILUbWWV.js","assets/AdminAuditPage-DvGFJ3eL.js","assets/AdminKeyEscrowPage-DvWzen1s.js","assets/AdminRetentionPoliciesPage-RxUa1mCu.js","assets/AdminSettingsPage-CbbEDCy2.js","assets/AdminBootstrapPage-Co6tdMgz.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -10196,17 +10196,17 @@ _verifyQuerySignatures = new WeakMap();
 requestAndRetryQuery_fn = async function(args) {
   var _a3, _b3;
   const { ecid, transformedRequest, body, requestId, backoff: backoff2, tries } = args;
-  const delay = tries === 0 ? 0 : backoff2.next();
+  const delay2 = tries === 0 ? 0 : backoff2.next();
   this.log.print(`fetching "/api/v2/canister/${ecid.toString()}/query" with tries:`, {
     tries,
     backoff: backoff2,
-    delay
+    delay: delay2
   });
-  if (delay === null) {
+  if (delay2 === null) {
     throw UnknownError.fromCode(new TimeoutWaitingForResponseErrorCode(`Backoff strategy exhausted after ${tries} attempts.`, requestId));
   }
-  if (delay > 0) {
-    await new Promise((resolve) => setTimeout(resolve, delay));
+  if (delay2 > 0) {
+    await new Promise((resolve) => setTimeout(resolve, delay2));
   }
   let response;
   try {
@@ -10266,12 +10266,12 @@ requestAndRetryQuery_fn = async function(args) {
 };
 requestAndRetry_fn = async function(args) {
   const { requestFn, backoff: backoff2, tries } = args;
-  const delay = tries === 0 ? 0 : backoff2.next();
-  if (delay === null) {
+  const delay2 = tries === 0 ? 0 : backoff2.next();
+  if (delay2 === null) {
     throw ProtocolError.fromCode(new TimeoutWaitingForResponseErrorCode(`Retry strategy exhausted after ${tries} attempts.`));
   }
-  if (delay > 0) {
-    await new Promise((resolve) => setTimeout(resolve, delay));
+  if (delay2 > 0) {
+    await new Promise((resolve) => setTimeout(resolve, delay2));
   }
   let response;
   let responseBodyBytes = new Uint8Array();
@@ -10795,9 +10795,9 @@ async function withRetry(operation) {
         }
         throw error;
       }
-      const delay = Math.min(BASE_DELAY_MS * 2 ** attempt + Math.random() * 1e3, MAX_DELAY_MS);
-      console.warn(`Request failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): ${lastError.message}. Retrying in ${Math.round(delay)}ms...`);
-      await new Promise((resolve) => setTimeout(resolve, delay));
+      const delay2 = Math.min(BASE_DELAY_MS * 2 ** attempt + Math.random() * 1e3, MAX_DELAY_MS);
+      console.warn(`Request failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): ${lastError.message}. Retrying in ${Math.round(delay2)}ms...`);
+      await new Promise((resolve) => setTimeout(resolve, delay2));
     }
   }
   throw lastError || new Error("Unknown error occurred during retry attempts");
@@ -11344,9 +11344,9 @@ var defaultTimeoutProvider = {
   // replace the global setTimeout (like tests) won't work since we'll already
   // have a hard reference to the original implementation at the time when this
   // file was imported.
-  setTimeout: (callback, delay) => setTimeout(callback, delay),
+  setTimeout: (callback, delay2) => setTimeout(callback, delay2),
   clearTimeout: (timeoutId) => clearTimeout(timeoutId),
-  setInterval: (callback, delay) => setInterval(callback, delay),
+  setInterval: (callback, delay2) => setInterval(callback, delay2),
   clearInterval: (intervalId) => clearInterval(intervalId)
 };
 var TimeoutManager = (_c = class {
@@ -11364,14 +11364,14 @@ var TimeoutManager = (_c = class {
   setTimeoutProvider(provider) {
     __privateSet(this, _provider, provider);
   }
-  setTimeout(callback, delay) {
-    return __privateGet(this, _provider).setTimeout(callback, delay);
+  setTimeout(callback, delay2) {
+    return __privateGet(this, _provider).setTimeout(callback, delay2);
   }
   clearTimeout(timeoutId) {
     __privateGet(this, _provider).clearTimeout(timeoutId);
   }
-  setInterval(callback, delay) {
-    return __privateGet(this, _provider).setInterval(callback, delay);
+  setInterval(callback, delay2) {
+    return __privateGet(this, _provider).setInterval(callback, delay2);
   }
   clearInterval(intervalId) {
     __privateGet(this, _provider).clearInterval(intervalId);
@@ -11872,7 +11872,7 @@ function createRetryer(config) {
       }
       const retry = config.retry ?? (environmentManager.isServer() ? 0 : 3);
       const retryDelay = config.retryDelay ?? defaultRetryDelay;
-      const delay = typeof retryDelay === "function" ? retryDelay(failureCount, error) : retryDelay;
+      const delay2 = typeof retryDelay === "function" ? retryDelay(failureCount, error) : retryDelay;
       const shouldRetry = retry === true || typeof retry === "number" && failureCount < retry || typeof retry === "function" && retry(failureCount, error);
       if (isRetryCancelled || !shouldRetry) {
         reject(error);
@@ -11880,7 +11880,7 @@ function createRetryer(config) {
       }
       failureCount++;
       (_a3 = config.onFail) == null ? void 0 : _a3.call(config, failureCount, error);
-      sleep(delay).then(() => {
+      sleep(delay2).then(() => {
         return canContinue() ? void 0 : pause();
       }).then(() => {
         if (isRetryCancelled) {
@@ -49615,14 +49615,14 @@ var addUnlinkedScrollListener = (node, handler = () => {
   })();
   return () => window.cancelAnimationFrame(rAF);
 };
-function useDebounceCallback(callback, delay) {
+function useDebounceCallback(callback, delay2) {
   const handleCallback = useCallbackRef$1(callback);
   const debounceTimerRef = reactExports.useRef(0);
   reactExports.useEffect(() => () => window.clearTimeout(debounceTimerRef.current), []);
   return reactExports.useCallback(() => {
     window.clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = window.setTimeout(handleCallback, delay);
-  }, [handleCallback, delay]);
+    debounceTimerRef.current = window.setTimeout(handleCallback, delay2);
+  }, [handleCallback, delay2]);
 }
 function useResizeObserver(element, onResize) {
   const handleResize = useCallbackRef$1(onResize);
@@ -53065,10 +53065,10 @@ class ConnectionMonitor {
   }
   scheduleReconnect() {
     if (this.state === "paused") return;
-    const delay = BACKOFF_STEPS_MS[Math.min(this.backoffStep, BACKOFF_STEPS_MS.length - 1)];
+    const delay2 = BACKOFF_STEPS_MS[Math.min(this.backoffStep, BACKOFF_STEPS_MS.length - 1)];
     this.setState("reconnecting");
     this.emit("reconnecting");
-    this.reconnectTimer = setTimeout(() => this.attemptReconnect(), delay);
+    this.reconnectTimer = setTimeout(() => this.attemptReconnect(), delay2);
   }
   attemptReconnect() {
     if (navigator.onLine) {
@@ -53751,12 +53751,12 @@ function useDecryptedContent(message, conversationId, _isMine) {
     let cancelled = false;
     const RETRY_DELAYS = [0, 500];
     let cumulativeDelay = 0;
-    const attempts = RETRY_DELAYS.map((delay, index2) => {
-      cumulativeDelay += delay;
+    const attempts = RETRY_DELAYS.map((delay2, index2) => {
+      cumulativeDelay += delay2;
       return { attempt: index2 + 1, delay: cumulativeDelay };
     });
     const timers = [];
-    for (const { attempt, delay } of attempts) {
+    for (const { attempt, delay: delay2 } of attempts) {
       const t = setTimeout(async () => {
         if (cancelled) return;
         console.log(
@@ -53782,7 +53782,7 @@ function useDecryptedContent(message, conversationId, _isMine) {
           );
           setFailed(true);
         }
-      }, delay);
+      }, delay2);
       timers.push(t);
     }
     return () => {
@@ -53802,8 +53802,8 @@ function useAttachmentMeta(message, conversationId) {
     const RETRY_DELAYS = [0, 500, 500, 1e3, 2e3];
     let cumulative = 0;
     const timers = [];
-    for (const delay of RETRY_DELAYS) {
-      cumulative += delay;
+    for (const delay2 of RETRY_DELAYS) {
+      cumulative += delay2;
       const t = setTimeout(async () => {
         if (cancelled) return;
         const raw = message.encryptedContent;
@@ -53871,8 +53871,8 @@ function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStora
     let cumulative = 0;
     const timers = [];
     for (let attemptIndex = 0; attemptIndex < KEY_POLL_DELAYS.length; attemptIndex++) {
-      const delay = KEY_POLL_DELAYS[attemptIndex];
-      cumulative += delay;
+      const delay2 = KEY_POLL_DELAYS[attemptIndex];
+      cumulative += delay2;
       const t = setTimeout(async () => {
         if (cancelled || doneRef.current) return;
         const convKey = getConversationKey(conversationId);
@@ -58642,10 +58642,21 @@ async function clearSubscriptionFromIdb() {
   }
 }
 function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const stripped = base64String.replace(/=+$/, "");
+  const padding = "=".repeat((4 - stripped.length % 4) % 4);
+  const base64 = (stripped + padding).replace(/-/g, "+").replace(/_/g, "/");
   const rawData = window.atob(base64);
-  return Uint8Array.from([...rawData].map((c2) => c2.charCodeAt(0)));
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+function isAndroidDevice() {
+  return /Android/i.test(navigator.userAgent);
+}
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 function usePushNotifications() {
   const { actor } = useActor(createActor);
@@ -58759,6 +58770,12 @@ function usePushNotifications() {
       }
       return;
     }
+    const pollInterval = isAndroidDevice() ? 2e4 : 15e3;
+    if (isAndroidDevice()) {
+      console.log(
+        "[CS Push] Android push unavailable — starting fallback polling every 20s"
+      );
+    }
     let retryTimeout = null;
     const poll = async () => {
       try {
@@ -58798,7 +58815,7 @@ function usePushNotifications() {
         }
       }
     };
-    pollRef.current = setInterval(poll, 15e3);
+    pollRef.current = setInterval(poll, pollInterval);
     poll().catch(() => {
     });
     return () => {
@@ -58815,25 +58832,81 @@ function usePushNotifications() {
     var _a3, _b3;
     if (!supported || !actor || !vapidKey) return;
     setLoading(true);
+    const onAndroid = isAndroidDevice();
+    if (onAndroid) {
+      console.log(
+        `Push permission status on Android: ${Notification.permission}`
+      );
+    }
+    const MAX_RETRIES2 = 3;
+    const RETRY_DELAY_MS = 2e3;
+    let lastError = null;
     try {
       const reg = await navigator.serviceWorker.ready;
       const applicationServerKey = urlBase64ToUint8Array(
         vapidKey
       );
-      const sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey
-      });
+      let sub = null;
+      for (let attempt = 1; attempt <= MAX_RETRIES2; attempt++) {
+        try {
+          const existing = await reg.pushManager.getSubscription();
+          if (existing) {
+            console.log(
+              `[CS Push] Clearing stale subscription before attempt ${attempt}`
+            );
+            await existing.unsubscribe();
+          }
+          sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey
+          });
+          lastError = null;
+          break;
+        } catch (err) {
+          lastError = err;
+          console.error(
+            `[CS Push] Subscribe attempt ${attempt}/${MAX_RETRIES2} failed:`,
+            err
+          );
+          if (onAndroid) {
+            console.error(
+              `[CS Push] Android subscribe attempt ${attempt} failed:`,
+              err
+            );
+          }
+          if (attempt < MAX_RETRIES2) {
+            console.log(
+              `[CS Push] Retrying in ${RETRY_DELAY_MS}ms... (attempt ${attempt + 1}/${MAX_RETRIES2})`
+            );
+            await delay(RETRY_DELAY_MS);
+          }
+        }
+      }
+      if (!sub) {
+        console.error("[CS Push] All subscribe attempts failed:", lastError);
+        if (onAndroid) {
+          console.error(
+            "[CS Push] Android push subscription failed after all retries:",
+            lastError
+          );
+        }
+        return;
+      }
       const json = sub.toJSON();
       const endpoint = json.endpoint ?? "";
       const auth = ((_a3 = json.keys) == null ? void 0 : _a3.auth) ?? "";
       const p256dh = ((_b3 = json.keys) == null ? void 0 : _b3.p256dh) ?? "";
       await actor.subscribeToPush(endpoint, auth, p256dh);
       await saveSubscriptionToIdb(endpoint);
+      if (onAndroid) {
+        console.log("Push subscription successful on Android");
+      } else {
+        console.log("[CS Push] Push subscription successful");
+      }
       setPushSubscriptionActive(true);
       setSubscribed(true);
     } catch (err) {
-      console.error("[CS Push] Subscribe failed:", err);
+      console.error("[CS Push] Subscribe failed (outer):", err);
     } finally {
       setLoading(false);
     }
@@ -60141,25 +60214,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Ddfswg4f.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-CWYXeh7j.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-J0QWBmJN.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-7xtw6-2a.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-D8TpAVSC.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-CAgmeiuZ.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CnunmmXw.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-BApXGuDF.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-BJf9eOUv.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-BnjpmXa_.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-GILUbWWV.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DvGFJ3eL.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-AISw0JzL.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-DvWzen1s.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DKvYJ4cp.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-RxUa1mCu.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BOtwocRI.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-CbbEDCy2.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-05ZFBCLQ.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-Co6tdMgz.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})

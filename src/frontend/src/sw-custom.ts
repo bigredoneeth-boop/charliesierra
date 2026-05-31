@@ -1,8 +1,12 @@
 /// <reference lib="webworker" />
 declare const self: ServiceWorkerGlobalScope;
 
-const SW_VERSION = "cs-sw-v5";
+const SW_VERSION = "cs-sw-v6";
 console.log(`[CharlieSierra SW] ${SW_VERSION} loading`);
+
+// Detect Android at SW scope — navigator is available in modern SW context
+const isAndroid =
+  typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
 
 // Auth state received from the main page via postMessage
 let swCanisterId: string | null = null;
@@ -10,11 +14,18 @@ let _swDelegationChain: string | null = null;
 
 self.addEventListener("install", (_event) => {
   console.log("[CharlieSierra SW] Installing...");
+  // skipWaiting ensures new SW takes control immediately on Android
+  // without requiring the user to close and reopen the tab/PWA
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   console.log("[CharlieSierra SW] Activated");
+  if (isAndroid) {
+    console.log("[SW] Service worker activated on Android");
+  }
+  // clients.claim() ensures the SW controls all open tabs immediately
+  // — critical for Android Chrome so push events are handled straight away
   event.waitUntil(self.clients.claim());
 });
 
@@ -79,7 +90,14 @@ self.addEventListener("message", (event) => {
 // ── Real Web Push event handler ──────────────────────────────────────────────
 // This fires when the browser delivers a push message, even when the app
 // is fully closed. The payload must include: title, body, convId (optional).
+// event.waitUntil() is MANDATORY — Android kills the notification if the
+// promise chain is not held open for the full showNotification() call.
 self.addEventListener("push", (event) => {
+  console.log("[SW] Push event received");
+  if (isAndroid) {
+    console.log("[SW] Push event received on Android");
+  }
+
   interface PushPayload {
     title?: string;
     body?: string;
@@ -107,15 +125,36 @@ self.addEventListener("push", (event) => {
   // conversation are replaced rather than stacked.
   const tag = convId ? `cs-conv-${convId}` : "cs-push";
 
+  // Android-compatible notification options.
+  // vibration: pulse pattern (ms on, ms off, ms on) — Android only, ignored on desktop.
+  // requireInteraction: false so Android doesn't pin the notification persistently.
+  // badge: small monochrome icon shown in Android status bar.
+  const notificationOptions: NotificationOptions = {
+    body,
+    icon: "/icon-192x192.png",
+    badge: "/icon-192x192.png",
+    tag,
+    requireInteraction: false,
+    data: { convId, url: "/" },
+    // @ts-expect-error — vibration is a valid Web Notification option on Android Chrome
+    // but not yet in all TypeScript lib definitions
+    vibration: [200, 100, 200],
+  };
+
+  // Always wrap in event.waitUntil() — Android will kill the notification
+  // before showNotification() resolves if there is no open promise.
   event.waitUntil(
-    self.registration.showNotification(title, {
-      body,
-      icon: "/icon-192x192.png",
-      badge: "/icon-192x192.png",
-      tag,
-      requireInteraction: false,
-      data: { convId, url: "/" },
-    }),
+    self.registration
+      .showNotification(title, notificationOptions)
+      .then(() => {
+        console.log("[SW] showNotification called");
+        if (isAndroid) {
+          console.log("[SW] showNotification called on Android");
+        }
+      })
+      .catch((err: unknown) => {
+        console.error("[SW] showNotification failed:", err);
+      }),
   );
 });
 

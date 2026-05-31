@@ -96,11 +96,32 @@ async function clearSubscriptionFromIdb(): Promise<void> {
   }
 }
 
+// Android Chrome requires correct base64url → Uint8Array conversion.
+// The padding calculation must handle strings whose length % 4 == 0
+// (no padding needed) as well as 2 or 3 remainder cases.
+// An incorrect conversion silently produces a wrong applicationServerKey
+// that Android rejects without a useful error message.
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  // Strip any existing padding first so we don't double-pad
+  const stripped = base64String.replace(/=+$/, "");
+  const padding = "=".repeat((4 - (stripped.length % 4)) % 4);
+  const base64 = (stripped + padding).replace(/-/g, "+").replace(/_/g, "/");
   const rawData = window.atob(base64);
-  return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+// Returns true when running on an Android device
+function isAndroidDevice(): boolean {
+  return /Android/i.test(navigator.userAgent);
+}
+
+// Delay helper for retry logic
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function usePushNotifications(): UsePushNotificationsResult {
@@ -242,6 +263,8 @@ export function usePushNotifications(): UsePushNotificationsResult {
   }, [actor, supported, pushSubscriptionActive]);
 
   // ── Fallback polling — only active when push subscription is NOT available ─
+  // On Android, prefer real push. Only start polling if push subscription
+  // failed on Android (20-second interval); non-Android uses 15 seconds.
   useEffect(() => {
     // Skip polling entirely when a real push subscription is active
     if (
@@ -255,6 +278,15 @@ export function usePushNotifications(): UsePushNotificationsResult {
         pollRef.current = null;
       }
       return;
+    }
+
+    // Use a longer interval on Android since real push is strongly preferred
+    // and polling is only a last-resort fallback there.
+    const pollInterval = isAndroidDevice() ? 20_000 : 15_000;
+    if (isAndroidDevice()) {
+      console.log(
+        "[CS Push] Android push unavailable — starting fallback polling every 20s",
+      );
     }
 
     let retryTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -311,7 +343,7 @@ export function usePushNotifications(): UsePushNotificationsResult {
       }
     };
 
-    pollRef.current = setInterval(poll, 15_000);
+    pollRef.current = setInterval(poll, pollInterval);
     poll().catch(() => {});
 
     return () => {
@@ -329,17 +361,82 @@ export function usePushNotifications(): UsePushNotificationsResult {
   const subscribe = useCallback(async () => {
     if (!supported || !actor || !vapidKey) return;
     setLoading(true);
+
+    const onAndroid = isAndroidDevice();
+
+    // Log permission status on Android for debugging
+    if (onAndroid) {
+      console.log(
+        `Push permission status on Android: ${Notification.permission}`,
+      );
+    }
+
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY_MS = 2000;
+    let lastError: unknown = null;
+
     try {
       const reg = await navigator.serviceWorker.ready;
       const applicationServerKey = urlBase64ToUint8Array(
         vapidKey,
       ) as BufferSource;
 
-      // Subscribe via the browser's PushManager (real Web Push)
-      const sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey,
-      });
+      let sub: PushSubscription | null = null;
+
+      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          // Unsubscribe any stale subscription before retrying.
+          // A stale sub on Android causes subscribe() to fail with
+          // "Registration failed - no sender id" or DOMException.
+          const existing = await reg.pushManager.getSubscription();
+          if (existing) {
+            console.log(
+              `[CS Push] Clearing stale subscription before attempt ${attempt}`,
+            );
+            await existing.unsubscribe();
+          }
+
+          // Subscribe via the browser's PushManager (real Web Push)
+          sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey,
+          });
+
+          // Success — break out of retry loop
+          lastError = null;
+          break;
+        } catch (err) {
+          lastError = err;
+          console.error(
+            `[CS Push] Subscribe attempt ${attempt}/${MAX_RETRIES} failed:`,
+            err,
+          );
+          if (onAndroid) {
+            console.error(
+              `[CS Push] Android subscribe attempt ${attempt} failed:`,
+              err,
+            );
+          }
+          if (attempt < MAX_RETRIES) {
+            console.log(
+              `[CS Push] Retrying in ${RETRY_DELAY_MS}ms... (attempt ${attempt + 1}/${MAX_RETRIES})`,
+            );
+            await delay(RETRY_DELAY_MS);
+          }
+        }
+      }
+
+      if (!sub) {
+        console.error("[CS Push] All subscribe attempts failed:", lastError);
+        if (onAndroid) {
+          console.error(
+            "[CS Push] Android push subscription failed after all retries:",
+            lastError,
+          );
+        }
+        // Fall through — pushSubscriptionActive stays false, polling will handle it
+        return;
+      }
 
       const json = sub.toJSON();
       const endpoint = json.endpoint ?? "";
@@ -351,10 +448,16 @@ export function usePushNotifications(): UsePushNotificationsResult {
       // Persist locally for expiration checks on next load
       await saveSubscriptionToIdb(endpoint);
 
+      if (onAndroid) {
+        console.log("Push subscription successful on Android");
+      } else {
+        console.log("[CS Push] Push subscription successful");
+      }
+
       setPushSubscriptionActive(true);
       setSubscribed(true);
     } catch (err) {
-      console.error("[CS Push] Subscribe failed:", err);
+      console.error("[CS Push] Subscribe failed (outer):", err);
     } finally {
       setLoading(false);
     }
