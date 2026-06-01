@@ -968,6 +968,7 @@ export default function ChatPage() {
       {isGroup && <RetentionBanner convId={convId} isAdmin={isAdmin} />}
 
       <MessageList
+        key={String(convId)}
         conversationId={convId}
         profiles={allProfiles}
         isGroup={isGroup}

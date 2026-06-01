@@ -1172,6 +1172,18 @@ function NotificationsSection() {
           }
         />
       </SettingsCard>
+
+      <div className="mt-3 flex items-start gap-3 p-3.5 rounded-lg bg-muted/60 border border-border text-xs">
+        <Bell
+          size={13}
+          className="text-muted-foreground flex-shrink-0 mt-0.5"
+        />
+        <p className="text-muted-foreground leading-relaxed">
+          Notifications are delivered through your browser. For the best
+          experience, install the app using the{" "}
+          <strong className="text-foreground">Get the App</strong> button.
+        </p>
+      </div>
     </section>
   );
 }

@@ -192,6 +192,11 @@ export const MessageList = memo(function MessageList({
     });
   }, [messageIdsKey, messages]);
 
+  // Scroll to most recent message when opening a thread (mount / conversation switch)
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "instant", block: "end" });
+  }, []);
+
   // Auto-scroll on new messages when at bottom — only fires when count changes
   const allMessagesCount = allMessages.length;
   useEffect(() => {

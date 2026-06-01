@@ -104,13 +104,17 @@ self.addEventListener("push", (event) => {
     convId?: string;
   }
 
+  // ── Parse payload with robust fallback ─────────────────────────────────────
+  // If the push payload is missing or malformed, we MUST still show a
+  // notification with our own title/body/icon. If we don't, Chrome on
+  // Android falls back to a generic "CS — Tap to copy the URL for this app"
+  // notification which looks unprofessional.
   let payload: PushPayload = {};
   if (event.data) {
     try {
       payload = event.data.json() as PushPayload;
     } catch {
       try {
-        // Fallback: treat as plain text title
         payload = { title: event.data.text() };
       } catch {
         /* ignore */
@@ -119,22 +123,24 @@ self.addEventListener("push", (event) => {
   }
 
   const title = payload.title || "CharlieSierra";
-  const body = payload.body || "New message";
+  const body = payload.body || "You have a new message";
   const convId = payload.convId || "";
-  // Use convId as the tag so duplicate notifications for the same
-  // conversation are replaced rather than stacked.
   const tag = convId ? `cs-conv-${convId}` : "cs-push";
 
-  // Android-compatible notification options.
-  // vibration: pulse pattern (ms on, ms off, ms on) — Android only, ignored on desktop.
-  // requireInteraction: false so Android doesn't pin the notification persistently.
-  // badge: small monochrome icon shown in Android status bar.
+  // Android-specific notification options.
+  // silent: false  → plays the default notification sound.
+  // renotify: false → does not vibrate again when a notification with the
+  //                    same tag is replaced.
+  // requireInteraction: false → Android won't pin the notification.
+  // vibration: pulse pattern (ms on, ms off, ms on) — Android only.
+  // badge: small monochrome icon shown in the Android status bar.
   const notificationOptions: NotificationOptions = {
     body,
     icon: "/icon-192x192.png",
     badge: "/icon-192x192.png",
     tag,
     requireInteraction: false,
+    silent: false,
     data: { convId, url: "/" },
     // @ts-expect-error — vibration is a valid Web Notification option on Android Chrome
     // but not yet in all TypeScript lib definitions
@@ -187,7 +193,7 @@ self.addEventListener("notificationclick", (event) => {
                 convId,
               });
             }
-            return;
+            return focusedClient;
           }
         }
         // No existing window — open a new one

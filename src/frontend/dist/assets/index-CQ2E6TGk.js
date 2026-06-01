@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-CWYXeh7j.js","assets/card-DYXE1L0a.js","assets/AdminDashboardPage-7xtw6-2a.js","assets/AdminLayout-B_rLyZiX.js","assets/PrincipalDisplay-DzsrkDaI.js","assets/user-plus-BQjjM7q4.js","assets/AdminOrganizationsPage-CAgmeiuZ.js","assets/AdminStatusBadge-C4FRjhkx.js","assets/ConfirmDialog-BzeufjA3.js","assets/pencil-DFmD-Ryb.js","assets/shield-alert-B6kiPR6f.js","assets/AdminUsersPage-BnjpmXa_.js","assets/funnel-xWZLjtUf.js","assets/AdminGroupsPage-GILUbWWV.js","assets/AdminAuditPage-DvGFJ3eL.js","assets/AdminKeyEscrowPage-DvWzen1s.js","assets/AdminRetentionPoliciesPage-RxUa1mCu.js","assets/AdminSettingsPage-CbbEDCy2.js","assets/AdminBootstrapPage-Co6tdMgz.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-hA3PomsR.js","assets/card-BUgO7aH3.js","assets/AdminDashboardPage-Drq13m9p.js","assets/AdminLayout-WW-shEEN.js","assets/PrincipalDisplay-DvlymRRN.js","assets/user-plus-Do0CbSG6.js","assets/AdminOrganizationsPage-Bc57g9te.js","assets/AdminStatusBadge-DuFauPBV.js","assets/ConfirmDialog-BqTeBMNy.js","assets/pencil-BGnAW92p.js","assets/shield-alert-VbXTjIM9.js","assets/AdminUsersPage-D5zWMTfp.js","assets/funnel-QA6hTyS2.js","assets/AdminGroupsPage-CLgcX7sV.js","assets/AdminAuditPage-BXPzhv_3.js","assets/AdminKeyEscrowPage-C38qGQU8.js","assets/AdminRetentionPoliciesPage-DiAk49Pg.js","assets/AdminSettingsPage-BwSvPr3g.js","assets/AdminBootstrapPage-DuysSkMc.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -54689,6 +54689,10 @@ const MessageList = reactExports.memo(function MessageList2({
       return [...prev, ...newMsgs].sort((a2, b2) => Number(a2.sentAt - b2.sentAt));
     });
   }, [messageIdsKey, messages]);
+  reactExports.useEffect(() => {
+    var _a3;
+    (_a3 = bottomRef.current) == null ? void 0 : _a3.scrollIntoView({ behavior: "instant", block: "end" });
+  }, []);
   const allMessagesCount = allMessages.length;
   reactExports.useEffect(() => {
     var _a3;
@@ -55847,7 +55851,8 @@ function ChatPage() {
         isGroup,
         onRetryQueued: retryMessage,
         onDeleteQueued: deleteQueuedMessage
-      }
+      },
+      String(convId)
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       MessageInput,
@@ -59971,6 +59976,21 @@ function NotificationsSection() {
           )
         }
       )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3 flex items-start gap-3 p-3.5 rounded-lg bg-muted/60 border border-border text-xs", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Bell,
+        {
+          size: 13,
+          className: "text-muted-foreground flex-shrink-0 mt-0.5"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground leading-relaxed", children: [
+        "Notifications are delivered through your browser. For the best experience, install the app using the",
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { className: "text-foreground", children: "Get the App" }),
+        " button."
+      ] })
     ] })
   ] });
 }
@@ -60214,25 +60234,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-CWYXeh7j.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-hA3PomsR.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-7xtw6-2a.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-Drq13m9p.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-CAgmeiuZ.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-Bc57g9te.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-BnjpmXa_.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-GILUbWWV.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DvGFJ3eL.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-D5zWMTfp.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-CLgcX7sV.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-BXPzhv_3.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-DvWzen1s.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-C38qGQU8.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-RxUa1mCu.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DiAk49Pg.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-CbbEDCy2.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BwSvPr3g.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-Co6tdMgz.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-DuysSkMc.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
