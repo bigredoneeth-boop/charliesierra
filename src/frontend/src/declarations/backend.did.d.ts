@@ -665,6 +665,11 @@ export interface _SERVICE {
   'exportConfigBundle' : ActorMethod<[], Result_28>,
   'generateDeviceSyncToken' : ActorMethod<[Uint8Array], Result_27>,
   'getAllGroups' : ActorMethod<[GetAllGroupsRequest], Array<GroupAdminRecord>>,
+  /**
+   * / Return all registered user profiles so clients can populate their local
+   * / display-name search cache. Explicit wrapper required for Candid .did exposure.
+   */
+  'getAllUserProfiles' : ActorMethod<[], Array<UserProfilePublic>>,
   'getAuditLog' : ActorMethod<[GetAuditLogRequest], Result_26>,
   'getCanisterHealth' : ActorMethod<
     [],

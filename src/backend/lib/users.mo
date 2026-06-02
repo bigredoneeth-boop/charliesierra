@@ -103,6 +103,14 @@ module {
     };
   };
 
+  /// Return all registered user profiles — used by the frontend to populate
+  /// the local display-name search cache on fresh devices.
+  public func getAllProfiles(
+    s : State,
+  ) : [T.UserProfilePublic] {
+    s.profiles.values().map(toPublic).toArray();
+  };
+
   /// Convert internal profile to public (strip var fields).
   public func toPublic(profile : T.UserProfile) : T.UserProfilePublic {
     {

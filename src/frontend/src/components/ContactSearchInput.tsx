@@ -2,7 +2,13 @@ import { createActor } from "@/backend";
 import type { UserId, UserProfilePublic } from "@/backend";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Input } from "@/components/ui/input";
-import { DISPLAY_NAME_PREFIX, shortPrincipal } from "@/hooks/use-profiles";
+import {
+  DISPLAY_NAME_PREFIX,
+  getLocalDisplayName,
+  setLocalDisplayName,
+  shortPrincipal,
+} from "@/hooks/use-profiles";
+import { decryptMessage, deriveDisplayNameKey } from "@/lib/crypto";
 import { parseIcError } from "@/utils/ic-errors";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { Principal } from "@icp-sdk/core/principal";
@@ -47,8 +53,12 @@ export function ContactSearchInput({
   const pendingLookupRef = useRef<string | null>(null);
   // Track a pending name search query that was attempted while actor was null
   const pendingNameQueryRef = useRef<string | null>(null);
+  // Incremented after async population of display-name cache completes
+  const [cachePopulated, setCachePopulated] = useState(0);
 
-  // Build an index of all locally-cached display names on mount
+  // Build an index of all locally-cached display names.
+  // Re-runs whenever cachePopulated changes so async population is reflected.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: cachePopulated is used as an intentional refresh trigger
   const cachedContacts = useMemo<CachedContact[]>(() => {
     const results: CachedContact[] = [];
     try {
@@ -69,7 +79,7 @@ export function ContactSearchInput({
       // localStorage unavailable
     }
     return results;
-  }, []);
+  }, [cachePopulated]);
 
   const searchByName = useCallback(
     (text: string) => {
@@ -176,6 +186,60 @@ export function ContactSearchInput({
       setProfile(null);
     }
   }, [actor, isFetching, lookupByPrincipal, searchByName]);
+
+  // ── Async population of display-name cache from backend ───────────────────
+  // When the actor becomes available, fetch all user profiles and decrypt their
+  // encryptedDisplayName blobs. Each decrypted name is stored in localStorage so
+  // the cachedContacts memo (and therefore searchByName) can find them.
+  useEffect(() => {
+    if (!actor || isFetching) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const profiles = await actor.getAllUserProfiles();
+        if (cancelled || !profiles || profiles.length === 0) return;
+        let storedCount = 0;
+        await Promise.all(
+          profiles.map(async (profile) => {
+            try {
+              const principalText = profile.id.toText();
+              // Skip if already cached locally
+              if (getLocalDisplayName(principalText)) return;
+              if (
+                !profile.encryptedDisplayName ||
+                profile.encryptedDisplayName.length === 0
+              )
+                return;
+              const key = await deriveDisplayNameKey(profile.id);
+              const decrypted = await decryptMessage(
+                key,
+                new Uint8Array(profile.encryptedDisplayName).slice(0),
+              );
+              if (decrypted?.trim()) {
+                setLocalDisplayName(principalText, decrypted);
+                storedCount++;
+              }
+            } catch {
+              // Ignore per-profile decryption failures
+            }
+          }),
+        );
+        if (!cancelled && storedCount > 0) {
+          setCachePopulated((n) => n + 1);
+        }
+      } catch (err) {
+        // Graceful fallback: if getAllUserProfiles fails, localStorage-only
+        // search continues to work exactly as before.
+        console.warn(
+          "[ContactSearch] getAllUserProfiles failed — falling back to local cache:",
+          err,
+        );
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [actor, isFetching]);
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);

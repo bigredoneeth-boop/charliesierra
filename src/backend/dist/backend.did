@@ -871,6 +871,9 @@ service : {
   exportConfigBundle: () -> (Result_28);
   generateDeviceSyncToken: (devicePublicKey: blob) -> (Result_27);
   getAllGroups: (req: GetAllGroupsRequest) -> (vec GroupAdminRecord);
+  /// Return all registered user profiles so clients can populate their local
+  /// display-name search cache. Explicit wrapper required for Candid .did exposure.
+  getAllUserProfiles: () -> (vec UserProfilePublic) query;
   getAuditLog: (req: GetAuditLogRequest) -> (Result_26) query;
   getCanisterHealth: () ->
    (record {

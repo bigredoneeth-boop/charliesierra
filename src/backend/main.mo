@@ -32,6 +32,7 @@ import SettingsLib "lib/settings";
 import SettingsMixin "mixins/settings-api";
 import NotificationsMixin "mixins/notifications-api";
 import NotifTypes "types/notifications";
+import T "types/users";
 
 
 
@@ -158,6 +159,12 @@ actor self {
   sovereignState.state.sovereignConfig := {
     sovereignState.state.sovereignConfig with
     canisters = Principal.fromActor(self).toText();
+  };
+
+  /// Return all registered user profiles so clients can populate their local
+  /// display-name search cache. Explicit wrapper required for Candid .did exposure.
+  public query func getAllUserProfiles() : async [T.UserProfilePublic] {
+    UsersLib.getAllProfiles(usersState);
   };
 
   // ── Mixin composition ──────────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-hA3PomsR.js","assets/card-BUgO7aH3.js","assets/AdminDashboardPage-Drq13m9p.js","assets/AdminLayout-WW-shEEN.js","assets/PrincipalDisplay-DvlymRRN.js","assets/user-plus-Do0CbSG6.js","assets/AdminOrganizationsPage-Bc57g9te.js","assets/AdminStatusBadge-DuFauPBV.js","assets/ConfirmDialog-BqTeBMNy.js","assets/pencil-BGnAW92p.js","assets/shield-alert-VbXTjIM9.js","assets/AdminUsersPage-D5zWMTfp.js","assets/funnel-QA6hTyS2.js","assets/AdminGroupsPage-CLgcX7sV.js","assets/AdminAuditPage-BXPzhv_3.js","assets/AdminKeyEscrowPage-C38qGQU8.js","assets/AdminRetentionPoliciesPage-DiAk49Pg.js","assets/AdminSettingsPage-BwSvPr3g.js","assets/AdminBootstrapPage-DuysSkMc.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-BCDt8xOg.js","assets/card-CyuJK5M8.js","assets/AdminDashboardPage-BnVNVtgM.js","assets/AdminLayout-BBzwThUk.js","assets/PrincipalDisplay-CVK9sSRK.js","assets/user-plus-C9x5N-ME.js","assets/AdminOrganizationsPage-6kYj2W8E.js","assets/AdminStatusBadge-CelMwIwm.js","assets/ConfirmDialog-BJdLLOxv.js","assets/pencil-jK3dEdJb.js","assets/shield-alert-xfH2Sxjg.js","assets/AdminUsersPage-CxzjRi4R.js","assets/funnel-9exsfYAz.js","assets/AdminGroupsPage-BwVII4bF.js","assets/AdminAuditPage-sL3bR012.js","assets/AdminKeyEscrowPage-Ba5bN0cZ.js","assets/AdminRetentionPoliciesPage-REhh9OPf.js","assets/AdminSettingsPage-9fdabLS-.js","assets/AdminBootstrapPage-Cgdg1pcI.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -34104,6 +34104,15 @@ const GroupAdminRecord = Record({
   "createdBy": UserId,
   "memberCount": Nat
 });
+const EcdhPublicKey = Vec(Nat8);
+const UserProfilePublic = Record({
+  "id": UserId,
+  "ecdhPublicKey": EcdhPublicKey,
+  "encryptedAvatarKey": Opt(Text),
+  "encryptedDisplayName": Vec(Nat8),
+  "registeredAt": Timestamp,
+  "lastSeen": Timestamp
+});
 const GetAuditLogRequest = Record({
   "afterTimestamp": Opt(Timestamp),
   "limit": Nat,
@@ -34370,15 +34379,6 @@ const TypingIndicatorPublic = Record({
   "userId": UserId,
   "conversationId": ConversationId
 });
-const EcdhPublicKey = Vec(Nat8);
-const UserProfilePublic = Record({
-  "id": UserId,
-  "ecdhPublicKey": EcdhPublicKey,
-  "encryptedAvatarKey": Opt(Text),
-  "encryptedDisplayName": Vec(Nat8),
-  "registeredAt": Timestamp,
-  "lastSeen": Timestamp
-});
 const InviteUserRequest = Record({
   "orgId": OrgId,
   "role": OrgRole$1,
@@ -34563,6 +34563,7 @@ Service({
     [Vec(GroupAdminRecord)],
     []
   ),
+  "getAllUserProfiles": Func([], [Vec(UserProfilePublic)], ["query"]),
   "getAuditLog": Func([GetAuditLogRequest], [Result_26], ["query"]),
   "getCanisterHealth": Func(
     [],
@@ -35052,6 +35053,15 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "createdBy": UserId2,
     "memberCount": IDL2.Nat
   });
+  const EcdhPublicKey2 = IDL2.Vec(IDL2.Nat8);
+  const UserProfilePublic2 = IDL2.Record({
+    "id": UserId2,
+    "ecdhPublicKey": EcdhPublicKey2,
+    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
+    "encryptedDisplayName": IDL2.Vec(IDL2.Nat8),
+    "registeredAt": Timestamp2,
+    "lastSeen": Timestamp2
+  });
   const GetAuditLogRequest2 = IDL2.Record({
     "afterTimestamp": IDL2.Opt(Timestamp2),
     "limit": IDL2.Nat,
@@ -35299,15 +35309,6 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "userId": UserId2,
     "conversationId": ConversationId2
   });
-  const EcdhPublicKey2 = IDL2.Vec(IDL2.Nat8);
-  const UserProfilePublic2 = IDL2.Record({
-    "id": UserId2,
-    "ecdhPublicKey": EcdhPublicKey2,
-    "encryptedAvatarKey": IDL2.Opt(IDL2.Text),
-    "encryptedDisplayName": IDL2.Vec(IDL2.Nat8),
-    "registeredAt": Timestamp2,
-    "lastSeen": Timestamp2
-  });
   const InviteUserRequest2 = IDL2.Record({
     "orgId": OrgId2,
     "role": OrgRole2,
@@ -35489,6 +35490,11 @@ const idlFactory = ({ IDL: IDL2 }) => {
       [GetAllGroupsRequest2],
       [IDL2.Vec(GroupAdminRecord2)],
       []
+    ),
+    "getAllUserProfiles": IDL2.Func(
+      [],
+      [IDL2.Vec(UserProfilePublic2)],
+      ["query"]
     ),
     "getAuditLog": IDL2.Func([GetAuditLogRequest2], [Result_262], ["query"]),
     "getCanisterHealth": IDL2.Func(
@@ -36318,17 +36324,31 @@ class Backend {
       return from_candid_vec_n99(this._uploadFile, this._downloadFile, result);
     }
   }
+  async getAllUserProfiles() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getAllUserProfiles();
+        return from_candid_vec_n104(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getAllUserProfiles();
+      return from_candid_vec_n104(this._uploadFile, this._downloadFile, result);
+    }
+  }
   async getAuditLog(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n107(this._uploadFile, this._downloadFile, arg0));
         return from_candid_Result_26_n76(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n104(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.getAuditLog(to_candid_GetAuditLogRequest_n107(this._uploadFile, this._downloadFile, arg0));
       return from_candid_Result_26_n76(this._uploadFile, this._downloadFile, result);
     }
   }
@@ -36350,154 +36370,154 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getConversation(arg0);
-        return from_candid_opt_n106(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n109(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getConversation(arg0);
-      return from_candid_opt_n106(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n109(this._uploadFile, this._downloadFile, result);
     }
   }
   async getDeploymentInfo() {
     if (this.processError) {
       try {
         const result = await this.actor.getDeploymentInfo();
-        return from_candid_SovereignConfig_n107(this._uploadFile, this._downloadFile, result);
+        return from_candid_SovereignConfig_n110(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getDeploymentInfo();
-      return from_candid_SovereignConfig_n107(this._uploadFile, this._downloadFile, result);
+      return from_candid_SovereignConfig_n110(this._uploadFile, this._downloadFile, result);
     }
   }
   async getEncryptedEscrowKey(arg0, arg1) {
     if (this.processError) {
       try {
         const result = await this.actor.getEncryptedEscrowKey(arg0, arg1);
-        return from_candid_variant_n111(this._uploadFile, this._downloadFile, result);
+        return from_candid_variant_n114(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getEncryptedEscrowKey(arg0, arg1);
-      return from_candid_variant_n111(this._uploadFile, this._downloadFile, result);
+      return from_candid_variant_n114(this._uploadFile, this._downloadFile, result);
     }
   }
   async getEscrowPublicKey() {
     if (this.processError) {
       try {
         const result = await this.actor.getEscrowPublicKey();
-        return from_candid_variant_n111(this._uploadFile, this._downloadFile, result);
+        return from_candid_variant_n114(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getEscrowPublicKey();
-      return from_candid_variant_n111(this._uploadFile, this._downloadFile, result);
+      return from_candid_variant_n114(this._uploadFile, this._downloadFile, result);
     }
   }
   async getEscrowStats() {
     if (this.processError) {
       try {
         const result = await this.actor.getEscrowStats();
-        return from_candid_Result_25_n112(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_25_n115(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getEscrowStats();
-      return from_candid_Result_25_n112(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_25_n115(this._uploadFile, this._downloadFile, result);
     }
   }
   async getEscrowedUsers(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n116(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_24_n118(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n119(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_24_n121(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n116(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_24_n118(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getEscrowedUsers(to_candid_GetEscrowedUsersRequest_n119(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_24_n121(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGlobalRetentionPolicy() {
     if (this.processError) {
       try {
         const result = await this.actor.getGlobalRetentionPolicy();
-        return from_candid_opt_n125(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n128(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGlobalRetentionPolicy();
-      return from_candid_opt_n125(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n128(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupCompartment(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupCompartment(arg0);
-        return from_candid_opt_n126(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n129(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupCompartment(arg0);
-      return from_candid_opt_n126(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n129(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupJoinRequests(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupJoinRequests(arg0);
-        return from_candid_Result_23_n127(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_23_n130(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupJoinRequests(arg0);
-      return from_candid_Result_23_n127(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_23_n130(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupMembers(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupMembers(arg0);
-        return from_candid_Result_22_n134(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_22_n137(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupMembers(arg0);
-      return from_candid_Result_22_n134(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_22_n137(this._uploadFile, this._downloadFile, result);
     }
   }
   async getGroupRetentionPolicy(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getGroupRetentionPolicy(arg0);
-        return from_candid_Result_21_n139(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_21_n142(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getGroupRetentionPolicy(arg0);
-      return from_candid_Result_21_n139(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_21_n142(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMessageAttachments(arg0) {
@@ -36517,57 +36537,57 @@ class Backend {
   async getMessages(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n141(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_20_n143(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n144(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_20_n146(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n141(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_20_n143(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getMessages(to_candid_GetMessagesRequest_n144(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_20_n146(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyEscrowStatus() {
     if (this.processError) {
       try {
         const result = await this.actor.getMyEscrowStatus();
-        return from_candid_vec_n153(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n156(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyEscrowStatus();
-      return from_candid_vec_n153(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n156(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyOrgs() {
     if (this.processError) {
       try {
         const result = await this.actor.getMyOrgs();
-        return from_candid_Result_19_n156(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_19_n159(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyOrgs();
-      return from_candid_Result_19_n156(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_19_n159(this._uploadFile, this._downloadFile, result);
     }
   }
   async getMyRole(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getMyRole(arg0);
-        return from_candid_Result_18_n165(this._uploadFile, this._downloadFile, result);
+        return from_candid_Result_18_n168(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getMyRole(arg0);
-      return from_candid_Result_18_n165(this._uploadFile, this._downloadFile, result);
+      return from_candid_Result_18_n168(this._uploadFile, this._downloadFile, result);
     }
   }
   async getNotificationPreferences() {
@@ -36602,56 +36622,56 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getOrgSettings(arg0);
-        return from_candid_OrgSettings_n168(this._uploadFile, this._downloadFile, result);
+        return from_candid_OrgSettings_n171(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getOrgSettings(arg0);
-      return from_candid_OrgSettings_n168(this._uploadFile, this._downloadFile, result);
+      return from_candid_OrgSettings_n171(this._uploadFile, this._downloadFile, result);
     }
   }
   async getOrgUsers(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n176(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_17_n178(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n179(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_17_n181(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n176(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_17_n178(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getOrgUsers(to_candid_GetOrgUsersRequest_n179(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_17_n181(this._uploadFile, this._downloadFile, result);
     }
   }
   async getPendingNotifications() {
     if (this.processError) {
       try {
         const result = await this.actor.getPendingNotifications();
-        return from_candid_vec_n182(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n185(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getPendingNotifications();
-      return from_candid_vec_n182(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n185(this._uploadFile, this._downloadFile, result);
     }
   }
   async getPlatformSettings() {
     if (this.processError) {
       try {
         const result = await this.actor.getPlatformSettings();
-        return from_candid_PlatformSettings_n185(this._uploadFile, this._downloadFile, result);
+        return from_candid_PlatformSettings_n188(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getPlatformSettings();
-      return from_candid_PlatformSettings_n185(this._uploadFile, this._downloadFile, result);
+      return from_candid_PlatformSettings_n188(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRecoveryDetails(arg0) {
@@ -36671,42 +36691,42 @@ class Backend {
   async getRecoveryRequests(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n189(this._uploadFile, this._downloadFile, arg1));
-        return from_candid_Result_16_n192(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n192(this._uploadFile, this._downloadFile, arg1));
+        return from_candid_Result_16_n195(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n189(this._uploadFile, this._downloadFile, arg1));
-      return from_candid_Result_16_n192(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getRecoveryRequests(to_candid_opt_n33(this._uploadFile, this._downloadFile, arg0), to_candid_opt_n192(this._uploadFile, this._downloadFile, arg1));
+      return from_candid_Result_16_n195(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRetentionMetadata(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n195(this._uploadFile, this._downloadFile, arg0));
-        return from_candid_Result_15_n197(this._uploadFile, this._downloadFile, result);
+        const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n198(this._uploadFile, this._downloadFile, arg0));
+        return from_candid_Result_15_n200(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n195(this._uploadFile, this._downloadFile, arg0));
-      return from_candid_Result_15_n197(this._uploadFile, this._downloadFile, result);
+      const result = await this.actor.getRetentionMetadata(to_candid_GetRetentionMetadataRequest_n198(this._uploadFile, this._downloadFile, arg0));
+      return from_candid_Result_15_n200(this._uploadFile, this._downloadFile, result);
     }
   }
   async getRetentionPolicies(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n199(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n202(this._uploadFile, this._downloadFile, arg0));
         return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n199(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.getRetentionPolicies(to_candid_GetRetentionPoliciesRequest_n202(this._uploadFile, this._downloadFile, arg0));
       return from_candid_vec_n34(this._uploadFile, this._downloadFile, result);
     }
   }
@@ -36714,14 +36734,14 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getRetentionPolicy(arg0);
-        return from_candid_opt_n125(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n128(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getRetentionPolicy(arg0);
-      return from_candid_opt_n125(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n128(this._uploadFile, this._downloadFile, result);
     }
   }
   async getTypingIndicators(arg0) {
@@ -36742,28 +36762,28 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfile(arg0);
-        return from_candid_opt_n200(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n203(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfile(arg0);
-      return from_candid_opt_n200(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n203(this._uploadFile, this._downloadFile, result);
     }
   }
   async getUserProfiles(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfiles(arg0);
-        return from_candid_vec_n203(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n104(this._uploadFile, this._downloadFile, result);
       } catch (e) {
         this.processError(e);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfiles(arg0);
-      return from_candid_vec_n203(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n104(this._uploadFile, this._downloadFile, result);
     }
   }
   async getVAPIDPublicKey() {
@@ -37457,8 +37477,8 @@ function from_candid_ConversationKind_n44(_uploadFile, _downloadFile, value) {
 function from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, value) {
   return from_candid_record_n42(_uploadFile, _downloadFile, value);
 }
-function from_candid_DataExportPermission_n172(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n173(_uploadFile, _downloadFile, value);
+function from_candid_DataExportPermission_n175(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n176(_uploadFile, _downloadFile, value);
 }
 function from_candid_DataResidency_n95(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n96(_uploadFile, _downloadFile, value);
@@ -37466,20 +37486,20 @@ function from_candid_DataResidency_n95(_uploadFile, _downloadFile, value) {
 function from_candid_Error_n10(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n11(_uploadFile, _downloadFile, value);
 }
-function from_candid_EscrowRecord_n154(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n155(_uploadFile, _downloadFile, value);
+function from_candid_EscrowRecord_n157(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n158(_uploadFile, _downloadFile, value);
 }
-function from_candid_EscrowStatsRecord_n114(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n115(_uploadFile, _downloadFile, value);
+function from_candid_EscrowStatsRecord_n117(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n118(_uploadFile, _downloadFile, value);
 }
-function from_candid_EscrowStatus_n123(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n124(_uploadFile, _downloadFile, value);
+function from_candid_EscrowStatus_n126(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n127(_uploadFile, _downloadFile, value);
 }
-function from_candid_EscrowedUserRecord_n121(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n122(_uploadFile, _downloadFile, value);
+function from_candid_EscrowedUserRecord_n124(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n125(_uploadFile, _downloadFile, value);
 }
-function from_candid_GetOrgUsersResponse_n180(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n181(_uploadFile, _downloadFile, value);
+function from_candid_GetOrgUsersResponse_n183(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n184(_uploadFile, _downloadFile, value);
 }
 function from_candid_GetOrgsResponse_n217(_uploadFile, _downloadFile, value) {
   return from_candid_record_n218(_uploadFile, _downloadFile, value);
@@ -37487,11 +37507,11 @@ function from_candid_GetOrgsResponse_n217(_uploadFile, _downloadFile, value) {
 function from_candid_GroupAdminRecord_n100(_uploadFile, _downloadFile, value) {
   return from_candid_record_n101(_uploadFile, _downloadFile, value);
 }
-function from_candid_GroupCreationPermission_n170(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n171(_uploadFile, _downloadFile, value);
+function from_candid_GroupCreationPermission_n173(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n174(_uploadFile, _downloadFile, value);
 }
-function from_candid_GroupMemberRecord_n137(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n138(_uploadFile, _downloadFile, value);
+function from_candid_GroupMemberRecord_n140(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n141(_uploadFile, _downloadFile, value);
 }
 function from_candid_GroupRetentionPolicy_n93(_uploadFile, _downloadFile, value) {
   return from_candid_record_n94(_uploadFile, _downloadFile, value);
@@ -37499,47 +37519,47 @@ function from_candid_GroupRetentionPolicy_n93(_uploadFile, _downloadFile, value)
 function from_candid_GroupStatus_n102(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n103(_uploadFile, _downloadFile, value);
 }
-function from_candid_JoinRequestStatus_n132(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n133(_uploadFile, _downloadFile, value);
+function from_candid_JoinRequestStatus_n135(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n136(_uploadFile, _downloadFile, value);
 }
-function from_candid_JoinRequest_n130(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n131(_uploadFile, _downloadFile, value);
+function from_candid_JoinRequest_n133(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n134(_uploadFile, _downloadFile, value);
 }
-function from_candid_MemberStatus_n161(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n162(_uploadFile, _downloadFile, value);
+function from_candid_MemberStatus_n164(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n165(_uploadFile, _downloadFile, value);
 }
-function from_candid_MessagePriority_n151(_uploadFile, _downloadFile, value) {
+function from_candid_MessagePriority_n154(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n155(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessagePublic_n149(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n150(_uploadFile, _downloadFile, value);
+}
+function from_candid_MessageType_n151(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n152(_uploadFile, _downloadFile, value);
 }
-function from_candid_MessagePublic_n146(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n147(_uploadFile, _downloadFile, value);
-}
-function from_candid_MessageType_n148(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n149(_uploadFile, _downloadFile, value);
-}
-function from_candid_OrgMembership_n159(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n160(_uploadFile, _downloadFile, value);
+function from_candid_OrgMembership_n162(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n163(_uploadFile, _downloadFile, value);
 }
 function from_candid_OrgRecord_n51(_uploadFile, _downloadFile, value) {
   return from_candid_record_n52(_uploadFile, _downloadFile, value);
 }
-function from_candid_OrgRole_n163(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n164(_uploadFile, _downloadFile, value);
+function from_candid_OrgRole_n166(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n167(_uploadFile, _downloadFile, value);
 }
-function from_candid_OrgSettings_n168(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n169(_uploadFile, _downloadFile, value);
+function from_candid_OrgSettings_n171(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n172(_uploadFile, _downloadFile, value);
 }
 function from_candid_OrgStatus_n53(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n54(_uploadFile, _downloadFile, value);
 }
-function from_candid_PasswordPolicy_n187(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n188(_uploadFile, _downloadFile, value);
+function from_candid_PasswordPolicy_n190(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n191(_uploadFile, _downloadFile, value);
 }
-function from_candid_PendingNotification_n183(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n184(_uploadFile, _downloadFile, value);
+function from_candid_PendingNotification_n186(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n187(_uploadFile, _downloadFile, value);
 }
-function from_candid_PlatformSettings_n185(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n186(_uploadFile, _downloadFile, value);
+function from_candid_PlatformSettings_n188(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n189(_uploadFile, _downloadFile, value);
 }
 function from_candid_PublicGroupSummary_n223(_uploadFile, _downloadFile, value) {
   return from_candid_record_n224(_uploadFile, _downloadFile, value);
@@ -37565,41 +37585,41 @@ function from_candid_Result_13_n210(_uploadFile, _downloadFile, value) {
 function from_candid_Result_14_n208(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n209(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_15_n197(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n198(_uploadFile, _downloadFile, value);
+function from_candid_Result_15_n200(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n201(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_16_n192(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n193(_uploadFile, _downloadFile, value);
+function from_candid_Result_16_n195(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n196(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_17_n178(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n179(_uploadFile, _downloadFile, value);
+function from_candid_Result_17_n181(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n182(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_18_n165(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n166(_uploadFile, _downloadFile, value);
+function from_candid_Result_18_n168(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n169(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_19_n156(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n157(_uploadFile, _downloadFile, value);
+function from_candid_Result_19_n159(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n160(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_1_n59(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n60(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_20_n143(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n144(_uploadFile, _downloadFile, value);
+function from_candid_Result_20_n146(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n147(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_21_n139(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n140(_uploadFile, _downloadFile, value);
+function from_candid_Result_21_n142(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n143(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_22_n134(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n135(_uploadFile, _downloadFile, value);
+function from_candid_Result_22_n137(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n138(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_23_n127(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n128(_uploadFile, _downloadFile, value);
+function from_candid_Result_23_n130(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n131(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_24_n118(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n119(_uploadFile, _downloadFile, value);
+function from_candid_Result_24_n121(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n122(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_25_n112(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n113(_uploadFile, _downloadFile, value);
+function from_candid_Result_25_n115(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n116(_uploadFile, _downloadFile, value);
 }
 function from_candid_Result_26_n76(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n77(_uploadFile, _downloadFile, value);
@@ -37646,7 +37666,7 @@ function from_candid_Result_9_n22(_uploadFile, _downloadFile, value) {
 function from_candid_Result_n229(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n230(_uploadFile, _downloadFile, value);
 }
-function from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value) {
+function from_candid_RetentionPeriodDays_n178(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n38(_uploadFile, _downloadFile, value);
 }
 function from_candid_RetentionPeriod_n37(_uploadFile, _downloadFile, value) {
@@ -37655,41 +37675,41 @@ function from_candid_RetentionPeriod_n37(_uploadFile, _downloadFile, value) {
 function from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, value) {
   return from_candid_record_n36(_uploadFile, _downloadFile, value);
 }
-function from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n108(_uploadFile, _downloadFile, value);
+function from_candid_SovereignConfig_n110(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n111(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n202(_uploadFile, _downloadFile, value);
+function from_candid_UserProfilePublic_n105(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n106(_uploadFile, _downloadFile, value);
 }
 function from_candid__ImmutableObjectStorageRefillResult_n4(_uploadFile, _downloadFile, value) {
   return from_candid_record_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n106(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n109(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n109(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n112(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n110(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n113(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n125(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n128(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : from_candid_RetentionPolicy_n35(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n126(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n129(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : from_candid_CompartmentLabel_n89(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n150(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_MessagePriority_n151(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n153(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_MessagePriority_n154(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n167(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_OrgRole_n163(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n170(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_OrgRole_n166(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n174(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n177(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_RetentionPeriodDays_n178(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n200(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n203(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_UserProfilePublic_n105(_uploadFile, _downloadFile, value[0]);
 }
 function from_candid_opt_n28(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
@@ -37723,35 +37743,45 @@ function from_candid_record_n101(_uploadFile, _downloadFile, value) {
     memberCount: value.memberCount
   };
 }
-function from_candid_record_n108(_uploadFile, _downloadFile, value) {
+function from_candid_record_n106(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    ecdhPublicKey: value.ecdhPublicKey,
+    encryptedAvatarKey: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.encryptedAvatarKey)),
+    encryptedDisplayName: value.encryptedDisplayName,
+    registeredAt: value.registeredAt,
+    lastSeen: value.lastSeen
+  };
+}
+function from_candid_record_n111(_uploadFile, _downloadFile, value) {
   return {
     lastUpdated: value.lastUpdated,
-    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n109(_uploadFile, _downloadFile, value.subnetPrincipal)),
+    subnetPrincipal: record_opt_to_undefined(from_candid_opt_n112(_uploadFile, _downloadFile, value.subnetPrincipal)),
     canisters: value.canisters,
     nodeCount: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.nodeCount)),
-    cyclesCostMultiplier: record_opt_to_undefined(from_candid_opt_n110(_uploadFile, _downloadFile, value.cyclesCostMultiplier)),
+    cyclesCostMultiplier: record_opt_to_undefined(from_candid_opt_n113(_uploadFile, _downloadFile, value.cyclesCostMultiplier)),
     residencyLabel: from_candid_DataResidency_n95(_uploadFile, _downloadFile, value.residencyLabel)
   };
 }
-function from_candid_record_n115(_uploadFile, _downloadFile, value) {
+function from_candid_record_n118(_uploadFile, _downloadFile, value) {
   return {
     pendingRecoveries: value.pendingRecoveries,
     lastRecoveryTimestamp: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastRecoveryTimestamp)),
     totalEscrowed: value.totalEscrowed
   };
 }
-function from_candid_record_n122(_uploadFile, _downloadFile, value) {
+function from_candid_record_n125(_uploadFile, _downloadFile, value) {
   return {
     orgId: record_opt_to_undefined(from_candid_opt_n28(_uploadFile, _downloadFile, value.orgId)),
     deviceCount: value.deviceCount,
     userId: value.userId,
-    escrowStatus: from_candid_EscrowStatus_n123(_uploadFile, _downloadFile, value.escrowStatus),
+    escrowStatus: from_candid_EscrowStatus_n126(_uploadFile, _downloadFile, value.escrowStatus),
     lastBackedUp: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastBackedUp))
   };
 }
-function from_candid_record_n131(_uploadFile, _downloadFile, value) {
+function from_candid_record_n134(_uploadFile, _downloadFile, value) {
   return {
-    status: from_candid_JoinRequestStatus_n132(_uploadFile, _downloadFile, value.status),
+    status: from_candid_JoinRequestStatus_n135(_uploadFile, _downloadFile, value.status),
     requestId: value.requestId,
     createdAt: value.createdAt,
     conversationId: value.conversationId,
@@ -37759,14 +37789,14 @@ function from_candid_record_n131(_uploadFile, _downloadFile, value) {
     requesterId: value.requesterId
   };
 }
-function from_candid_record_n138(_uploadFile, _downloadFile, value) {
+function from_candid_record_n141(_uploadFile, _downloadFile, value) {
   return {
     displayName: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.displayName)),
     userId: value.userId,
     joinedAt: value.joinedAt
   };
 }
-function from_candid_record_n147(_uploadFile, _downloadFile, value) {
+function from_candid_record_n150(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     ttlSeconds: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.ttlSeconds)),
@@ -37774,13 +37804,13 @@ function from_candid_record_n147(_uploadFile, _downloadFile, value) {
     isDeleted: value.isDeleted,
     sender: value.sender,
     sentAt: value.sentAt,
-    messageType: from_candid_MessageType_n148(_uploadFile, _downloadFile, value.messageType),
+    messageType: from_candid_MessageType_n151(_uploadFile, _downloadFile, value.messageType),
     conversationId: value.conversationId,
-    priority: record_opt_to_undefined(from_candid_opt_n150(_uploadFile, _downloadFile, value.priority)),
+    priority: record_opt_to_undefined(from_candid_opt_n153(_uploadFile, _downloadFile, value.priority)),
     readBy: value.readBy
   };
 }
-function from_candid_record_n155(_uploadFile, _downloadFile, value) {
+function from_candid_record_n158(_uploadFile, _downloadFile, value) {
   return {
     devicePublicKeyFingerprint: value.devicePublicKeyFingerprint,
     userId: value.userId,
@@ -37793,39 +37823,39 @@ function from_candid_record_n155(_uploadFile, _downloadFile, value) {
     revokedReason: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.revokedReason))
   };
 }
-function from_candid_record_n160(_uploadFile, _downloadFile, value) {
+function from_candid_record_n163(_uploadFile, _downloadFile, value) {
   return {
-    status: from_candid_MemberStatus_n161(_uploadFile, _downloadFile, value.status),
+    status: from_candid_MemberStatus_n164(_uploadFile, _downloadFile, value.status),
     orgId: value.orgId,
     userId: value.userId,
     joinedAt: value.joinedAt,
-    role: from_candid_OrgRole_n163(_uploadFile, _downloadFile, value.role),
+    role: from_candid_OrgRole_n166(_uploadFile, _downloadFile, value.role),
     invitedBy: value.invitedBy,
     email: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.email)),
     lastActive: record_opt_to_undefined(from_candid_opt_n30(_uploadFile, _downloadFile, value.lastActive))
   };
 }
-function from_candid_record_n169(_uploadFile, _downloadFile, value) {
+function from_candid_record_n172(_uploadFile, _downloadFile, value) {
   return {
     legalHoldReason: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.legalHoldReason)),
     orgId: value.orgId,
     logoStorageKey: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoStorageKey)),
-    groupCreationPermission: from_candid_GroupCreationPermission_n170(_uploadFile, _downloadFile, value.groupCreationPermission),
-    dataExportPermission: from_candid_DataExportPermission_n172(_uploadFile, _downloadFile, value.dataExportPermission),
+    groupCreationPermission: from_candid_GroupCreationPermission_n173(_uploadFile, _downloadFile, value.groupCreationPermission),
+    dataExportPermission: from_candid_DataExportPermission_n175(_uploadFile, _downloadFile, value.dataExportPermission),
     defaultInviteRole: value.defaultInviteRole,
     logoUrl: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.logoUrl)),
     legalHoldEnabled: value.legalHoldEnabled,
-    messageRetentionDays: record_opt_to_undefined(from_candid_opt_n174(_uploadFile, _downloadFile, value.messageRetentionDays))
-  };
-}
-function from_candid_record_n181(_uploadFile, _downloadFile, value) {
-  return {
-    total: value.total,
-    hasMore: value.hasMore,
-    members: from_candid_vec_n158(_uploadFile, _downloadFile, value.members)
+    messageRetentionDays: record_opt_to_undefined(from_candid_opt_n177(_uploadFile, _downloadFile, value.messageRetentionDays))
   };
 }
 function from_candid_record_n184(_uploadFile, _downloadFile, value) {
+  return {
+    total: value.total,
+    hasMore: value.hasMore,
+    members: from_candid_vec_n161(_uploadFile, _downloadFile, value.members)
+  };
+}
+function from_candid_record_n187(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     notifType: value.notifType,
@@ -37834,27 +37864,17 @@ function from_candid_record_n184(_uploadFile, _downloadFile, value) {
     groupName: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.groupName))
   };
 }
-function from_candid_record_n186(_uploadFile, _downloadFile, value) {
+function from_candid_record_n189(_uploadFile, _downloadFile, value) {
   return {
-    defaultRetentionDays: from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value.defaultRetentionDays),
+    defaultRetentionDays: from_candid_RetentionPeriodDays_n178(_uploadFile, _downloadFile, value.defaultRetentionDays),
     keyEscrowEnabled: value.keyEscrowEnabled,
     vetKeysEnabled: value.vetKeysEnabled,
     sessionTimeoutMinutes: value.sessionTimeoutMinutes,
     platformTagline: value.platformTagline,
-    auditLogRetentionDays: from_candid_RetentionPeriodDays_n175(_uploadFile, _downloadFile, value.auditLogRetentionDays),
+    auditLogRetentionDays: from_candid_RetentionPeriodDays_n178(_uploadFile, _downloadFile, value.auditLogRetentionDays),
     mfaEnforced: value.mfaEnforced,
-    passwordPolicy: from_candid_PasswordPolicy_n187(_uploadFile, _downloadFile, value.passwordPolicy),
+    passwordPolicy: from_candid_PasswordPolicy_n190(_uploadFile, _downloadFile, value.passwordPolicy),
     platformName: value.platformName
-  };
-}
-function from_candid_record_n202(_uploadFile, _downloadFile, value) {
-  return {
-    id: value.id,
-    ecdhPublicKey: value.ecdhPublicKey,
-    encryptedAvatarKey: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.encryptedAvatarKey)),
-    encryptedDisplayName: value.encryptedDisplayName,
-    registeredAt: value.registeredAt,
-    lastSeen: value.lastSeen
   };
 }
 function from_candid_record_n218(_uploadFile, _downloadFile, value) {
@@ -37978,7 +37998,7 @@ function from_candid_variant_n103(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n11(_uploadFile, _downloadFile, value) {
   return "forbidden" in value ? Error.forbidden : "alreadyExists" in value ? Error.alreadyExists : "invalidInput" in value ? Error.invalidInput : "notFound" in value ? Error.notFound : "unauthorized" in value ? Error.unauthorized : value;
 }
-function from_candid_variant_n111(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n114(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -37987,35 +38007,26 @@ function from_candid_variant_n111(_uploadFile, _downloadFile, value) {
     err: value.err
   } : value;
 }
-function from_candid_variant_n113(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n116(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_EscrowStatsRecord_n114(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_EscrowStatsRecord_n117(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n119(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n122(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n120(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n123(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n124(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n127(_uploadFile, _downloadFile, value) {
   return "active" in value ? "active" : "revoked" in value ? "revoked" : "recovered" in value ? "recovered" : "pendingRecovery" in value ? "pendingRecovery" : value;
-}
-function from_candid_variant_n128(_uploadFile, _downloadFile, value) {
-  return "ok" in value ? {
-    __kind__: "ok",
-    ok: from_candid_vec_n129(_uploadFile, _downloadFile, value.ok)
-  } : "err" in value ? {
-    __kind__: "err",
-    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
-  } : value;
 }
 function from_candid_variant_n13(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
@@ -38026,19 +38037,28 @@ function from_candid_variant_n13(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n133(_uploadFile, _downloadFile, value) {
-  return "pending" in value ? "pending" : "denied" in value ? "denied" : "approved" in value ? "approved" : value;
-}
-function from_candid_variant_n135(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n131(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n136(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n132(_uploadFile, _downloadFile, value.ok)
+  } : "err" in value ? {
+    __kind__: "err",
+    err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
+  } : value;
+}
+function from_candid_variant_n136(_uploadFile, _downloadFile, value) {
+  return "pending" in value ? "pending" : "denied" in value ? "denied" : "approved" in value ? "approved" : value;
+}
+function from_candid_variant_n138(_uploadFile, _downloadFile, value) {
+  return "ok" in value ? {
+    __kind__: "ok",
+    ok: from_candid_vec_n139(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
   } : value;
 }
-function from_candid_variant_n140(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n143(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: from_candid_GroupRetentionPolicy_n93(_uploadFile, _downloadFile, value.ok)
@@ -38047,40 +38067,40 @@ function from_candid_variant_n140(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n144(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n147(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n145(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n148(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n149(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n152(_uploadFile, _downloadFile, value) {
   return "audio" in value ? "audio" : "video" in value ? "video" : "file" in value ? "file" : "text" in value ? "text" : "image" in value ? "image" : value;
 }
-function from_candid_variant_n152(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n155(_uploadFile, _downloadFile, value) {
   return "normal" in value ? "normal" : "high" in value ? "high" : value;
 }
-function from_candid_variant_n157(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n160(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n158(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n161(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
   } : value;
 }
-function from_candid_variant_n162(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n165(_uploadFile, _downloadFile, value) {
   return "Active" in value ? "Active" : "Suspended" in value ? "Suspended" : "Pending" in value ? "Pending" : value;
 }
-function from_candid_variant_n164(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n167(_uploadFile, _downloadFile, value) {
   return "OrgAdmin" in value ? "OrgAdmin" : "Auditor" in value ? "Auditor" : "SuperAdmin" in value ? "SuperAdmin" : "StandardUser" in value ? "StandardUser" : value;
 }
-function from_candid_variant_n166(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n169(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_opt_n167(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_opt_n170(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
@@ -38095,23 +38115,20 @@ function from_candid_variant_n17(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n171(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n174(_uploadFile, _downloadFile, value) {
   return "orgAdminsOnly" in value ? "orgAdminsOnly" : "allMembers" in value ? "allMembers" : value;
 }
-function from_candid_variant_n173(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n176(_uploadFile, _downloadFile, value) {
   return "orgAdminsOnly" in value ? "orgAdminsOnly" : "disabled" in value ? "disabled" : "allMembers" in value ? "allMembers" : value;
 }
-function from_candid_variant_n179(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n182(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_GetOrgUsersResponse_n180(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_GetOrgUsersResponse_n183(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
   } : value;
-}
-function from_candid_variant_n188(_uploadFile, _downloadFile, value) {
-  return "strong" in value ? "strong" : "enterprise" in value ? "enterprise" : "basic" in value ? "basic" : value;
 }
 function from_candid_variant_n19(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
@@ -38122,16 +38139,19 @@ function from_candid_variant_n19(_uploadFile, _downloadFile, value) {
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n193(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n191(_uploadFile, _downloadFile, value) {
+  return "strong" in value ? "strong" : "enterprise" in value ? "enterprise" : "basic" in value ? "basic" : value;
+}
+function from_candid_variant_n196(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_vec_n194(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_vec_n197(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
   } : value;
 }
-function from_candid_variant_n198(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n201(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
     ok: value.ok
@@ -38143,7 +38163,7 @@ function from_candid_variant_n198(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n209(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_OrgMembership_n159(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_OrgMembership_n162(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: value.err
@@ -38188,7 +38208,7 @@ function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n230(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_UserProfilePublic_n105(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
@@ -38197,7 +38217,7 @@ function from_candid_variant_n230(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n238(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_MessagePublic_n146(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_MessagePublic_n149(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
@@ -38206,7 +38226,7 @@ function from_candid_variant_n238(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n246(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_SovereignConfig_n107(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_SovereignConfig_n110(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
@@ -38215,7 +38235,7 @@ function from_candid_variant_n246(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n250(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
     __kind__: "ok",
-    ok: from_candid_JoinRequest_n130(_uploadFile, _downloadFile, value.ok)
+    ok: from_candid_JoinRequest_n133(_uploadFile, _downloadFile, value.ok)
   } : "err" in value ? {
     __kind__: "err",
     err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
@@ -38323,32 +38343,32 @@ function from_candid_variant_n90(_uploadFile, _downloadFile, value) {
 function from_candid_variant_n96(_uploadFile, _downloadFile, value) {
   return "eu" in value ? "eu" : "us" in value ? "us" : "apac" in value ? "apac" : "global" in value ? "global" : value;
 }
-function from_candid_vec_n120(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_EscrowedUserRecord_n121(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n104(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_UserProfilePublic_n105(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n129(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_JoinRequest_n130(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n123(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_EscrowedUserRecord_n124(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n136(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_GroupMemberRecord_n137(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n132(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_JoinRequest_n133(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n145(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_MessagePublic_n146(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n139(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_GroupMemberRecord_n140(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n153(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_EscrowRecord_n154(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n148(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_MessagePublic_n149(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n158(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_OrgMembership_n159(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n156(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_EscrowRecord_n157(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n182(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_PendingNotification_n183(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n161(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_OrgMembership_n162(_uploadFile, _downloadFile, x3));
 }
-function from_candid_vec_n194(_uploadFile, _downloadFile, value) {
+function from_candid_vec_n185(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_PendingNotification_n186(_uploadFile, _downloadFile, x3));
+}
+function from_candid_vec_n197(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_RecoveryRequest_n24(_uploadFile, _downloadFile, x3));
-}
-function from_candid_vec_n203(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_UserProfilePublic_n201(_uploadFile, _downloadFile, x3));
 }
 function from_candid_vec_n212(_uploadFile, _downloadFile, value) {
   return value.map((x3) => from_candid_ConversationPublic_n41(_uploadFile, _downloadFile, x3));
@@ -38407,25 +38427,25 @@ function to_candid_ExportAuditLogsRequest_n72(_uploadFile, _downloadFile, value)
 function to_candid_GetAllGroupsRequest_n97(_uploadFile, _downloadFile, value) {
   return to_candid_record_n98(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetAuditLogRequest_n104(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n105(_uploadFile, _downloadFile, value);
+function to_candid_GetAuditLogRequest_n107(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n108(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetEscrowedUsersRequest_n116(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n117(_uploadFile, _downloadFile, value);
+function to_candid_GetEscrowedUsersRequest_n119(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n120(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetMessagesRequest_n141(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n142(_uploadFile, _downloadFile, value);
+function to_candid_GetMessagesRequest_n144(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n145(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetOrgUsersRequest_n176(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n177(_uploadFile, _downloadFile, value);
+function to_candid_GetOrgUsersRequest_n179(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n180(_uploadFile, _downloadFile, value);
 }
 function to_candid_GetOrgsRequest_n213(_uploadFile, _downloadFile, value) {
   return to_candid_record_n214(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetRetentionMetadataRequest_n195(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n196(_uploadFile, _downloadFile, value);
+function to_candid_GetRetentionMetadataRequest_n198(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n199(_uploadFile, _downloadFile, value);
 }
-function to_candid_GetRetentionPoliciesRequest_n199(_uploadFile, _downloadFile, value) {
+function to_candid_GetRetentionPoliciesRequest_n202(_uploadFile, _downloadFile, value) {
   return to_candid_record_n98(_uploadFile, _downloadFile, value);
 }
 function to_candid_GroupCreationPermission_n256(_uploadFile, _downloadFile, value) {
@@ -38458,8 +38478,8 @@ function to_candid_PasswordPolicy_n263(_uploadFile, _downloadFile, value) {
 function to_candid_PlatformSettings_n261(_uploadFile, _downloadFile, value) {
   return to_candid_record_n262(_uploadFile, _downloadFile, value);
 }
-function to_candid_RecoveryRequestStatus_n190(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n191(_uploadFile, _downloadFile, value);
+function to_candid_RecoveryRequestStatus_n193(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n194(_uploadFile, _downloadFile, value);
 }
 function to_candid_RegisterRequest_n227(_uploadFile, _downloadFile, value) {
   return to_candid_record_n228(_uploadFile, _downloadFile, value);
@@ -38497,8 +38517,8 @@ function to_candid_opt_n14(_uploadFile, _downloadFile, value) {
 function to_candid_opt_n15(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_opt_n189(_uploadFile, _downloadFile, value) {
-  return value === null ? candid_none() : candid_some(to_candid_RecoveryRequestStatus_n190(_uploadFile, _downloadFile, value));
+function to_candid_opt_n192(_uploadFile, _downloadFile, value) {
+  return value === null ? candid_none() : candid_some(to_candid_RecoveryRequestStatus_n193(_uploadFile, _downloadFile, value));
 }
 function to_candid_opt_n243(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
@@ -38512,7 +38532,7 @@ function to_candid_opt_n253(_uploadFile, _downloadFile, value) {
 function to_candid_opt_n33(_uploadFile, _downloadFile, value) {
   return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_record_n105(_uploadFile, _downloadFile, value) {
+function to_candid_record_n108(_uploadFile, _downloadFile, value) {
   return {
     afterTimestamp: value.afterTimestamp ? candid_some(value.afterTimestamp) : candid_none(),
     limit: value.limit,
@@ -38523,21 +38543,21 @@ function to_candid_record_n105(_uploadFile, _downloadFile, value) {
     afterEventId: value.afterEventId ? candid_some(value.afterEventId) : candid_none()
   };
 }
-function to_candid_record_n117(_uploadFile, _downloadFile, value) {
+function to_candid_record_n120(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId ? candid_some(value.orgId) : candid_none(),
     limit: value.limit,
     afterUserId: value.afterUserId ? candid_some(value.afterUserId) : candid_none()
   };
 }
-function to_candid_record_n142(_uploadFile, _downloadFile, value) {
+function to_candid_record_n145(_uploadFile, _downloadFile, value) {
   return {
     beforeMessageId: value.beforeMessageId ? candid_some(value.beforeMessageId) : candid_none(),
     limit: value.limit,
     conversationId: value.conversationId
   };
 }
-function to_candid_record_n177(_uploadFile, _downloadFile, value) {
+function to_candid_record_n180(_uploadFile, _downloadFile, value) {
   return {
     orgId: value.orgId ? candid_some(value.orgId) : candid_none(),
     search: value.search ? candid_some(value.search) : candid_none(),
@@ -38545,7 +38565,7 @@ function to_candid_record_n177(_uploadFile, _downloadFile, value) {
     afterUserId: value.afterUserId ? candid_some(value.afterUserId) : candid_none()
   };
 }
-function to_candid_record_n196(_uploadFile, _downloadFile, value) {
+function to_candid_record_n199(_uploadFile, _downloadFile, value) {
   return {
     endDate: value.endDate ? candid_some(value.endDate) : candid_none(),
     limit: value.limit,
@@ -38699,7 +38719,7 @@ function to_candid_record_n98(_uploadFile, _downloadFile, value) {
     orgId: value.orgId ? candid_some(value.orgId) : candid_none()
   };
 }
-function to_candid_variant_n191(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n194(_uploadFile, _downloadFile, value) {
   return value == "pending" ? {
     pending: null
   } : value == "completed" ? {
@@ -50195,6 +50215,7 @@ function ContactSearchInput({
   const dropdownRef = reactExports.useRef(null);
   const pendingLookupRef = reactExports.useRef(null);
   const pendingNameQueryRef = reactExports.useRef(null);
+  const [cachePopulated, setCachePopulated] = reactExports.useState(0);
   const cachedContacts = reactExports.useMemo(() => {
     const results = [];
     try {
@@ -50213,7 +50234,7 @@ function ContactSearchInput({
     } catch {
     }
     return results;
-  }, []);
+  }, [cachePopulated]);
   const searchByName = reactExports.useCallback(
     (text) => {
       const q2 = text.trim().toLowerCase();
@@ -50303,6 +50324,48 @@ function ContactSearchInput({
       setProfile(null);
     }
   }, [actor, isFetching, lookupByPrincipal, searchByName]);
+  reactExports.useEffect(() => {
+    if (!actor || isFetching) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const profiles = await actor.getAllUserProfiles();
+        if (cancelled || !profiles || profiles.length === 0) return;
+        let storedCount = 0;
+        await Promise.all(
+          profiles.map(async (profile2) => {
+            try {
+              const principalText = profile2.id.toText();
+              if (getLocalDisplayName(principalText)) return;
+              if (!profile2.encryptedDisplayName || profile2.encryptedDisplayName.length === 0)
+                return;
+              const key = await deriveDisplayNameKey(profile2.id);
+              const decrypted = await decryptMessage(
+                key,
+                new Uint8Array(profile2.encryptedDisplayName).slice(0)
+              );
+              if (decrypted == null ? void 0 : decrypted.trim()) {
+                setLocalDisplayName(principalText, decrypted);
+                storedCount++;
+              }
+            } catch {
+            }
+          })
+        );
+        if (!cancelled && storedCount > 0) {
+          setCachePopulated((n) => n + 1);
+        }
+      } catch (err) {
+        console.warn(
+          "[ContactSearch] getAllUserProfiles failed — falling back to local cache:",
+          err
+        );
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [actor, isFetching]);
   reactExports.useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     const trimmed = value.trim();
@@ -54671,6 +54734,12 @@ const MessageList = reactExports.memo(function MessageList2({
   const [loadingOlder, setLoadingOlder] = reactExports.useState(false);
   const [allMessages, setAllMessages] = reactExports.useState([]);
   const prevLenRef = reactExports.useRef(0);
+  const hasScrolledToBottomRef = reactExports.useRef(false);
+  const prevConvIdRef = reactExports.useRef(conversationId.toString());
+  if (prevConvIdRef.current !== conversationId.toString()) {
+    prevConvIdRef.current = conversationId.toString();
+    hasScrolledToBottomRef.current = false;
+  }
   const myQueued = pendingMessages.filter(
     (m2) => m2.conversationId === conversationId.toString() && m2.status !== "delivered"
   );
@@ -54689,16 +54758,28 @@ const MessageList = reactExports.memo(function MessageList2({
       return [...prev, ...newMsgs].sort((a2, b2) => Number(a2.sentAt - b2.sentAt));
     });
   }, [messageIdsKey, messages]);
-  reactExports.useEffect(() => {
-    var _a3;
-    (_a3 = bottomRef.current) == null ? void 0 : _a3.scrollIntoView({ behavior: "instant", block: "end" });
-  }, []);
   const allMessagesCount = allMessages.length;
   reactExports.useEffect(() => {
     var _a3;
+    if (allMessagesCount === 0) return;
+    if (!hasScrolledToBottomRef.current) {
+      const doScroll = () => {
+        requestAnimationFrame(() => {
+          const el = scrollRef.current;
+          const bottom = bottomRef.current;
+          if (el && bottom) {
+            el.scrollTop = el.scrollHeight;
+            bottom.scrollIntoView({ behavior: "instant", block: "end" });
+          }
+          hasScrolledToBottomRef.current = true;
+        });
+      };
+      requestAnimationFrame(doScroll);
+      return;
+    }
     if (isAtBottom && allMessagesCount !== prevLenRef.current) {
       (_a3 = bottomRef.current) == null ? void 0 : _a3.scrollIntoView({
-        behavior: prevLenRef.current === 0 ? "instant" : "smooth"
+        behavior: "smooth"
       });
     }
     prevLenRef.current = allMessagesCount;
@@ -60234,25 +60315,25 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-hA3PomsR.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-BCDt8xOg.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-Drq13m9p.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
+  () => __vitePreload(() => import("./AdminDashboardPage-BnVNVtgM.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
 );
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-Bc57g9te.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-6kYj2W8E.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-D5zWMTfp.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-CLgcX7sV.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-BXPzhv_3.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CxzjRi4R.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-BwVII4bF.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-sL3bR012.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-C38qGQU8.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-Ba5bN0cZ.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DiAk49Pg.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-REhh9OPf.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-BwSvPr3g.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-9fdabLS-.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-DuysSkMc.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-Cgdg1pcI.js"), true ? __vite__mapDeps([18,10]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})

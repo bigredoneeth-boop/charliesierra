@@ -162,6 +162,14 @@ export const MessageList = memo(function MessageList({
   const [loadingOlder, setLoadingOlder] = useState(false);
   const [allMessages, setAllMessages] = useState<MessagePublic[]>([]);
   const prevLenRef = useRef(0);
+  const hasScrolledToBottomRef = useRef(false);
+  const prevConvIdRef = useRef(conversationId.toString());
+
+  // Reset scroll flag when conversation changes
+  if (prevConvIdRef.current !== conversationId.toString()) {
+    prevConvIdRef.current = conversationId.toString();
+    hasScrolledToBottomRef.current = false;
+  }
 
   // Filter queued messages for this conversation
   const myQueued = pendingMessages.filter(
@@ -193,16 +201,37 @@ export const MessageList = memo(function MessageList({
   }, [messageIdsKey, messages]);
 
   // Scroll to most recent message when opening a thread (mount / conversation switch)
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "instant", block: "end" });
-  }, []);
+  // REMOVED: empty-dep-array effect that fires before messages are in DOM.
+  // The robust initial scroll is handled in the allMessagesCount effect below.
 
   // Auto-scroll on new messages when at bottom — only fires when count changes
   const allMessagesCount = allMessages.length;
   useEffect(() => {
+    if (allMessagesCount === 0) return;
+
+    // Robust initial scroll-to-bottom: only once per conversation open,
+    // after messages have actually rendered into the DOM.
+    if (!hasScrolledToBottomRef.current) {
+      const doScroll = () => {
+        requestAnimationFrame(() => {
+          const el = scrollRef.current;
+          const bottom = bottomRef.current;
+          if (el && bottom) {
+            el.scrollTop = el.scrollHeight;
+            bottom.scrollIntoView({ behavior: "instant", block: "end" });
+          }
+          hasScrolledToBottomRef.current = true;
+        });
+      };
+      // Double rAF guarantees layout is complete before scrolling.
+      requestAnimationFrame(doScroll);
+      return;
+    }
+
+    // Subsequent messages: only auto-scroll if user was already near bottom
     if (isAtBottom && allMessagesCount !== prevLenRef.current) {
       bottomRef.current?.scrollIntoView({
-        behavior: prevLenRef.current === 0 ? "instant" : "smooth",
+        behavior: "smooth",
       });
     }
     prevLenRef.current = allMessagesCount;

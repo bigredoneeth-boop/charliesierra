@@ -838,6 +838,11 @@ export interface backendInterface {
     exportConfigBundle(): Promise<Result_28>;
     generateDeviceSyncToken(devicePublicKey: Uint8Array): Promise<Result_27>;
     getAllGroups(req: GetAllGroupsRequest): Promise<Array<GroupAdminRecord>>;
+    /**
+     * / Return all registered user profiles so clients can populate their local
+     * / display-name search cache. Explicit wrapper required for Candid .did exposure.
+     */
+    getAllUserProfiles(): Promise<Array<UserProfilePublic>>;
     getAuditLog(req: GetAuditLogRequest): Promise<Result_26>;
     getCanisterHealth(): Promise<{
         memoryCapacity: bigint;

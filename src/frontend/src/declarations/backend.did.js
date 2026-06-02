@@ -316,6 +316,15 @@ export const GroupAdminRecord = IDL.Record({
   'createdBy' : UserId,
   'memberCount' : IDL.Nat,
 });
+export const EcdhPublicKey = IDL.Vec(IDL.Nat8);
+export const UserProfilePublic = IDL.Record({
+  'id' : UserId,
+  'ecdhPublicKey' : EcdhPublicKey,
+  'encryptedAvatarKey' : IDL.Opt(IDL.Text),
+  'encryptedDisplayName' : IDL.Vec(IDL.Nat8),
+  'registeredAt' : Timestamp,
+  'lastSeen' : Timestamp,
+});
 export const GetAuditLogRequest = IDL.Record({
   'afterTimestamp' : IDL.Opt(Timestamp),
   'limit' : IDL.Nat,
@@ -582,15 +591,6 @@ export const TypingIndicatorPublic = IDL.Record({
   'userId' : UserId,
   'conversationId' : ConversationId,
 });
-export const EcdhPublicKey = IDL.Vec(IDL.Nat8);
-export const UserProfilePublic = IDL.Record({
-  'id' : UserId,
-  'ecdhPublicKey' : EcdhPublicKey,
-  'encryptedAvatarKey' : IDL.Opt(IDL.Text),
-  'encryptedDisplayName' : IDL.Vec(IDL.Nat8),
-  'registeredAt' : Timestamp,
-  'lastSeen' : Timestamp,
-});
 export const InviteUserRequest = IDL.Record({
   'orgId' : OrgId,
   'role' : OrgRole,
@@ -776,6 +776,7 @@ export const idlService = IDL.Service({
       [IDL.Vec(GroupAdminRecord)],
       [],
     ),
+  'getAllUserProfiles' : IDL.Func([], [IDL.Vec(UserProfilePublic)], ['query']),
   'getAuditLog' : IDL.Func([GetAuditLogRequest], [Result_26], ['query']),
   'getCanisterHealth' : IDL.Func(
       [],
@@ -1268,6 +1269,15 @@ export const idlFactory = ({ IDL }) => {
     'createdBy' : UserId,
     'memberCount' : IDL.Nat,
   });
+  const EcdhPublicKey = IDL.Vec(IDL.Nat8);
+  const UserProfilePublic = IDL.Record({
+    'id' : UserId,
+    'ecdhPublicKey' : EcdhPublicKey,
+    'encryptedAvatarKey' : IDL.Opt(IDL.Text),
+    'encryptedDisplayName' : IDL.Vec(IDL.Nat8),
+    'registeredAt' : Timestamp,
+    'lastSeen' : Timestamp,
+  });
   const GetAuditLogRequest = IDL.Record({
     'afterTimestamp' : IDL.Opt(Timestamp),
     'limit' : IDL.Nat,
@@ -1515,15 +1525,6 @@ export const idlFactory = ({ IDL }) => {
     'userId' : UserId,
     'conversationId' : ConversationId,
   });
-  const EcdhPublicKey = IDL.Vec(IDL.Nat8);
-  const UserProfilePublic = IDL.Record({
-    'id' : UserId,
-    'ecdhPublicKey' : EcdhPublicKey,
-    'encryptedAvatarKey' : IDL.Opt(IDL.Text),
-    'encryptedDisplayName' : IDL.Vec(IDL.Nat8),
-    'registeredAt' : Timestamp,
-    'lastSeen' : Timestamp,
-  });
   const InviteUserRequest = IDL.Record({
     'orgId' : OrgId,
     'role' : OrgRole,
@@ -1706,6 +1707,11 @@ export const idlFactory = ({ IDL }) => {
         [GetAllGroupsRequest],
         [IDL.Vec(GroupAdminRecord)],
         [],
+      ),
+    'getAllUserProfiles' : IDL.Func(
+        [],
+        [IDL.Vec(UserProfilePublic)],
+        ['query'],
       ),
     'getAuditLog' : IDL.Func([GetAuditLogRequest], [Result_26], ['query']),
     'getCanisterHealth' : IDL.Func(

@@ -507,4 +507,5 @@ export const mockBackend: backendInterface = {
     __kind__: 'ok',
     ok: 'Test data reset successfully',
   }),
+  getAllUserProfiles: async () => [aliceProfile, bobProfile],
 };
