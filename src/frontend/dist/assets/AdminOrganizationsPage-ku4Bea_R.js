@@ -1,10 +1,8 @@
-import { e as createLucideIcon, r as reactExports, _ as useIsSuperAdmin, $ as useMyRole, j as jsxRuntimeExports, a0 as Shield, a as Skeleton, B as Button, a1 as useOrgDetails, a2 as useOrgUsers, a3 as useSuspendOrg, a4 as useDeleteOrg, a5 as ArrowLeft, a6 as Trash2, a7 as useOrgs, S as Search, a8 as X, a9 as RefreshCw, aa as ChevronDown, k as useAuth, ab as useCreateOrg, ac as Dialog, ad as DialogContent, ae as DialogHeader, af as DialogTitle, ag as DialogDescription, v as Label, I as Input, Y as Textarea, ah as DialogFooter, f as cn, ai as useUpdateOrg, d as ue, g as Check, h as Copy } from "./index-CoxTzi7h.js";
-import { A as AdminLayout, B as Building2 } from "./AdminLayout-BBzwThUk.js";
-import { A as AdminStatusBadge } from "./AdminStatusBadge-CelMwIwm.js";
-import { C as ConfirmDialog } from "./ConfirmDialog-BJdLLOxv.js";
-import { P as PrincipalDisplay } from "./PrincipalDisplay-CVK9sSRK.js";
-import { P as Pencil } from "./pencil-jK3dEdJb.js";
-import { S as ShieldAlert } from "./shield-alert-xfH2Sxjg.js";
+import { f as createLucideIcon, r as reactExports, Z as useIsSuperAdmin, _ as useMyRole, j as jsxRuntimeExports, A as AdminLayout, $ as Shield, a as Skeleton, B as Button, a0 as useOrgDetails, a1 as useOrgUsers, a2 as useSuspendOrg, a3 as useDeleteOrg, a4 as ArrowLeft, a5 as Building2, a6 as Trash2, a7 as PrincipalDisplay, a8 as useOrgs, S as Search, a9 as X, aa as RefreshCw, ab as ChevronDown, h as useAuth, ac as useCreateOrg, ad as Dialog, ae as DialogContent, af as DialogHeader, ag as DialogTitle, ah as DialogDescription, s as Label, I as Input, X as Textarea, ai as DialogFooter, e as cn, aj as useUpdateOrg, d as ue, ak as Check, al as Copy } from "./index-sYvNRfuw.js";
+import { A as AdminStatusBadge } from "./AdminStatusBadge-D_QdF9I0.js";
+import { C as ConfirmDialog } from "./ConfirmDialog-7ykLrmRA.js";
+import { P as Pencil } from "./pencil-BAmab5s2.js";
+import { S as ShieldAlert } from "./shield-alert-CB87cWob.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *

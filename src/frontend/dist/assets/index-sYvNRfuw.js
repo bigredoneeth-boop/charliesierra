@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-BCDt8xOg.js","assets/card-CyuJK5M8.js","assets/AdminDashboardPage-BnVNVtgM.js","assets/AdminLayout-BBzwThUk.js","assets/PrincipalDisplay-CVK9sSRK.js","assets/user-plus-C9x5N-ME.js","assets/AdminOrganizationsPage-6kYj2W8E.js","assets/AdminStatusBadge-CelMwIwm.js","assets/ConfirmDialog-BJdLLOxv.js","assets/pencil-jK3dEdJb.js","assets/shield-alert-xfH2Sxjg.js","assets/AdminUsersPage-CxzjRi4R.js","assets/funnel-9exsfYAz.js","assets/AdminGroupsPage-BwVII4bF.js","assets/AdminAuditPage-sL3bR012.js","assets/AdminKeyEscrowPage-Ba5bN0cZ.js","assets/AdminRetentionPoliciesPage-REhh9OPf.js","assets/AdminSettingsPage-9fdabLS-.js","assets/AdminBootstrapPage-Cgdg1pcI.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-Cqt2BpR7.js","assets/card-ey6R8cFg.js","assets/AdminOrganizationsPage-ku4Bea_R.js","assets/AdminStatusBadge-D_QdF9I0.js","assets/ConfirmDialog-7ykLrmRA.js","assets/pencil-BAmab5s2.js","assets/shield-alert-CB87cWob.js","assets/AdminUsersPage-Opy8sJS9.js","assets/funnel-CCrWuhil.js","assets/AdminGroupsPage-JL4cgcdH.js","assets/AdminAuditPage-BOfUnMLb.js","assets/AdminRetentionPoliciesPage-CdKQiprL.js","assets/AdminSettingsPage-C0sYzI6C.js","assets/AdminBootstrapPage-DwcMrMJ6.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -546,11 +546,11 @@ function bytesToHex(bytes) {
   abytes(bytes);
   if (hasHexBuiltin)
     return bytes.toHex();
-  let hex = "";
+  let hex2 = "";
   for (let i = 0; i < bytes.length; i++) {
-    hex += hexes[bytes[i]];
+    hex2 += hexes[bytes[i]];
   }
-  return hex;
+  return hex2;
 }
 const asciis = { _0: 48, _9: 57, A: 65, F: 70, a: 97, f: 102 };
 function asciiToBase16(ch) {
@@ -562,21 +562,21 @@ function asciiToBase16(ch) {
     return ch - (asciis.a - 10);
   return;
 }
-function hexToBytes(hex) {
-  if (typeof hex !== "string")
-    throw new Error("hex string expected, got " + typeof hex);
+function hexToBytes(hex2) {
+  if (typeof hex2 !== "string")
+    throw new Error("hex string expected, got " + typeof hex2);
   if (hasHexBuiltin)
-    return Uint8Array.fromHex(hex);
-  const hl = hex.length;
+    return Uint8Array.fromHex(hex2);
+  const hl = hex2.length;
   const al = hl / 2;
   if (hl % 2)
     throw new Error("hex string expected, got unpadded hex of length " + hl);
   const array = new Uint8Array(al);
   for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
-    const n1 = asciiToBase16(hex.charCodeAt(hi));
-    const n2 = asciiToBase16(hex.charCodeAt(hi + 1));
+    const n1 = asciiToBase16(hex2.charCodeAt(hi));
+    const n2 = asciiToBase16(hex2.charCodeAt(hi + 1));
     if (n1 === void 0 || n2 === void 0) {
-      const char = hex[hi] + hex[hi + 1];
+      const char = hex2[hi] + hex2[hi + 1];
       throw new Error('hex string expected, got non-hex character "' + char + '" at index ' + hi);
     }
     array[ai] = n1 * 16 + n2;
@@ -1186,8 +1186,8 @@ let Principal$1 = class Principal {
     }
     throw new Error(`Impossible to convert ${JSON.stringify(other)} to Principal.`);
   }
-  static fromHex(hex) {
-    return new this(hexToBytes(hex));
+  static fromHex(hex2) {
+    return new this(hexToBytes(hex2));
   }
   static fromText(text) {
     let maybePrincipal = text;
@@ -2097,14 +2097,14 @@ function iexp2(n) {
 function eob() {
   throw new Error("unexpected end of buffer");
 }
-function safeRead(pipe, num) {
-  if (pipe.byteLength < num) {
+function safeRead(pipe2, num) {
+  if (pipe2.byteLength < num) {
     eob();
   }
-  return pipe.read(num);
+  return pipe2.read(num);
 }
-function safeReadUint8(pipe) {
-  const byte = pipe.readUint8();
+function safeReadUint8(pipe2) {
+  const byte = pipe2.readUint8();
   if (byte === void 0) {
     eob();
   }
@@ -2118,25 +2118,25 @@ function lebEncode(value) {
     throw new Error("Cannot leb encode negative values.");
   }
   const byteLength = (value === BigInt(0) ? 0 : ilog2(value)) + 1;
-  const pipe = new PipeArrayBuffer(new Uint8Array(byteLength), 0);
+  const pipe2 = new PipeArrayBuffer(new Uint8Array(byteLength), 0);
   while (true) {
     const i = Number(value & BigInt(127));
     value /= BigInt(128);
     if (value === BigInt(0)) {
-      pipe.write(new Uint8Array([i]));
+      pipe2.write(new Uint8Array([i]));
       break;
     } else {
-      pipe.write(new Uint8Array([i | 128]));
+      pipe2.write(new Uint8Array([i | 128]));
     }
   }
-  return pipe.buffer;
+  return pipe2.buffer;
 }
-function lebDecode(pipe) {
+function lebDecode(pipe2) {
   let weight = BigInt(1);
   let value = BigInt(0);
   let byte;
   do {
-    byte = safeReadUint8(pipe);
+    byte = safeReadUint8(pipe2);
     value += BigInt(byte & 127).valueOf() * weight;
     weight *= BigInt(128);
   } while (byte >= 128);
@@ -2151,15 +2151,15 @@ function slebEncode(value) {
     value = -value - BigInt(1);
   }
   const byteLength = (value === BigInt(0) ? 0 : ilog2(value)) + 1;
-  const pipe = new PipeArrayBuffer(new Uint8Array(byteLength), 0);
+  const pipe2 = new PipeArrayBuffer(new Uint8Array(byteLength), 0);
   while (true) {
     const i = getLowerBytes(value);
     value /= BigInt(128);
     if (isNeg && value === BigInt(0) && (i & 64) !== 0 || !isNeg && value === BigInt(0) && (i & 64) === 0) {
-      pipe.write(new Uint8Array([i]));
+      pipe2.write(new Uint8Array([i]));
       break;
     } else {
-      pipe.write(new Uint8Array([i | 128]));
+      pipe2.write(new Uint8Array([i | 128]));
     }
   }
   function getLowerBytes(num) {
@@ -2170,20 +2170,20 @@ function slebEncode(value) {
       return Number(bytes);
     }
   }
-  return pipe.buffer;
+  return pipe2.buffer;
 }
-function slebDecode(pipe) {
-  const pipeView = new Uint8Array(pipe.buffer);
+function slebDecode(pipe2) {
+  const pipeView = new Uint8Array(pipe2.buffer);
   let len = 0;
   for (; len < pipeView.byteLength; len++) {
     if (pipeView[len] < 128) {
       if ((pipeView[len] & 64) === 0) {
-        return lebDecode(pipe);
+        return lebDecode(pipe2);
       }
       break;
     }
   }
-  const bytes = new Uint8Array(safeRead(pipe, len + 1));
+  const bytes = new Uint8Array(safeRead(pipe2, len + 1));
   let value = BigInt(0);
   for (let i = bytes.byteLength - 1; i >= 0; i--) {
     value = value * BigInt(128) + BigInt(128 - (bytes[i] & 127) - 1);
@@ -2198,41 +2198,41 @@ function writeUIntLE(value, byteLength) {
 }
 function writeIntLE(value, byteLength) {
   value = BigInt(value);
-  const pipe = new PipeArrayBuffer(new Uint8Array(Math.min(1, byteLength)), 0);
+  const pipe2 = new PipeArrayBuffer(new Uint8Array(Math.min(1, byteLength)), 0);
   let i = 0;
   let mul = BigInt(256);
   let sub = BigInt(0);
   let byte = Number(value % mul);
-  pipe.write(new Uint8Array([byte]));
+  pipe2.write(new Uint8Array([byte]));
   while (++i < byteLength) {
     if (value < 0 && sub === BigInt(0) && byte !== 0) {
       sub = BigInt(1);
     }
     byte = Number((value / mul - sub) % BigInt(256));
-    pipe.write(new Uint8Array([byte]));
+    pipe2.write(new Uint8Array([byte]));
     mul *= BigInt(256);
   }
-  return pipe.buffer;
+  return pipe2.buffer;
 }
-function readUIntLE(pipe, byteLength) {
+function readUIntLE(pipe2, byteLength) {
   if (byteLength <= 0 || !Number.isInteger(byteLength)) {
     throw new Error("Byte length must be a positive integer");
   }
-  let val = BigInt(safeReadUint8(pipe));
+  let val = BigInt(safeReadUint8(pipe2));
   let mul = BigInt(1);
   let i = 0;
   while (++i < byteLength) {
     mul *= BigInt(256);
-    const byte = BigInt(safeReadUint8(pipe));
+    const byte = BigInt(safeReadUint8(pipe2));
     val = val + mul * byte;
   }
   return val;
 }
-function readIntLE(pipe, byteLength) {
+function readIntLE(pipe2, byteLength) {
   if (byteLength <= 0 || !Number.isInteger(byteLength)) {
     throw new Error("Byte length must be a positive integer");
   }
-  let val = readUIntLE(pipe, byteLength);
+  let val = readUIntLE(pipe2, byteLength);
   const mul = BigInt(2) ** (BigInt(8) * BigInt(byteLength - 1) + BigInt(7));
   if (val >= mul) {
     val -= mul * BigInt(2);
@@ -3720,25 +3720,25 @@ function decode$2(retTypes, bytes) {
   if (magic !== magicNumber) {
     throw new Error("Wrong magic number: " + JSON.stringify(magic));
   }
-  function readTypeTable(pipe) {
+  function readTypeTable(pipe2) {
     const typeTable = [];
-    const len = Number(lebDecode(pipe));
+    const len = Number(lebDecode(pipe2));
     for (let i = 0; i < len; i++) {
-      const ty = Number(slebDecode(pipe));
+      const ty = Number(slebDecode(pipe2));
       switch (ty) {
         case IDLTypeIds.Opt:
         case IDLTypeIds.Vector: {
-          const t = Number(slebDecode(pipe));
+          const t = Number(slebDecode(pipe2));
           typeTable.push([ty, t]);
           break;
         }
         case IDLTypeIds.Record:
         case IDLTypeIds.Variant: {
           const fields = [];
-          let objectLength = Number(lebDecode(pipe));
+          let objectLength = Number(lebDecode(pipe2));
           let prevHash;
           while (objectLength--) {
-            const hash = Number(lebDecode(pipe));
+            const hash = Number(lebDecode(pipe2));
             if (hash >= Math.pow(2, 32)) {
               throw new Error("field id out of 32-bit range");
             }
@@ -3746,7 +3746,7 @@ function decode$2(retTypes, bytes) {
               throw new Error("field id collision or not sorted");
             }
             prevHash = hash;
-            const t = Number(slebDecode(pipe));
+            const t = Number(slebDecode(pipe2));
             fields.push([hash, t]);
           }
           typeTable.push([ty, fields]);
@@ -3754,19 +3754,19 @@ function decode$2(retTypes, bytes) {
         }
         case IDLTypeIds.Func: {
           const args = [];
-          let argLength = Number(lebDecode(pipe));
+          let argLength = Number(lebDecode(pipe2));
           while (argLength--) {
-            args.push(Number(slebDecode(pipe)));
+            args.push(Number(slebDecode(pipe2)));
           }
           const returnValues = [];
-          let returnValuesLength = Number(lebDecode(pipe));
+          let returnValuesLength = Number(lebDecode(pipe2));
           while (returnValuesLength--) {
-            returnValues.push(Number(slebDecode(pipe)));
+            returnValues.push(Number(slebDecode(pipe2)));
           }
           const annotations = [];
-          let annotationLength = Number(lebDecode(pipe));
+          let annotationLength = Number(lebDecode(pipe2));
           while (annotationLength--) {
-            const annotation = Number(lebDecode(pipe));
+            const annotation = Number(lebDecode(pipe2));
             switch (annotation) {
               case 1: {
                 annotations.push("query");
@@ -3788,12 +3788,12 @@ function decode$2(retTypes, bytes) {
           break;
         }
         case IDLTypeIds.Service: {
-          let servLength = Number(lebDecode(pipe));
+          let servLength = Number(lebDecode(pipe2));
           const methods = [];
           while (servLength--) {
-            const nameLength = Number(lebDecode(pipe));
-            const funcName = new TextDecoder().decode(safeRead(pipe, nameLength));
-            const funcType = slebDecode(pipe);
+            const nameLength = Number(lebDecode(pipe2));
+            const funcName = new TextDecoder().decode(safeRead(pipe2, nameLength));
+            const funcType = slebDecode(pipe2);
             methods.push([funcName, funcType]);
           }
           typeTable.push([ty, methods]);
@@ -3804,9 +3804,9 @@ function decode$2(retTypes, bytes) {
       }
     }
     const rawList = [];
-    const length = Number(lebDecode(pipe));
+    const length = Number(lebDecode(pipe2));
     for (let i = 0; i < length; i++) {
-      rawList.push(Number(slebDecode(pipe)));
+      rawList.push(Number(slebDecode(pipe2)));
     }
     return [typeTable, rawList];
   }
@@ -4791,10 +4791,10 @@ function _abytes2(value, length, title = "") {
   }
   return value;
 }
-function hexToNumber(hex) {
-  if (typeof hex !== "string")
-    throw new Error("hex string expected, got " + typeof hex);
-  return hex === "" ? _0n$7 : BigInt("0x" + hex);
+function hexToNumber(hex2) {
+  if (typeof hex2 !== "string")
+    throw new Error("hex string expected, got " + typeof hex2);
+  return hex2 === "" ? _0n$7 : BigInt("0x" + hex2);
 }
 function bytesToNumberBE(bytes) {
   return hexToNumber(bytesToHex(bytes));
@@ -4809,16 +4809,16 @@ function numberToBytesBE(n, len) {
 function numberToBytesLE(n, len) {
   return numberToBytesBE(n, len).reverse();
 }
-function ensureBytes(title, hex, expectedLength) {
+function ensureBytes(title, hex2, expectedLength) {
   let res;
-  if (typeof hex === "string") {
+  if (typeof hex2 === "string") {
     try {
-      res = hexToBytes(hex);
+      res = hexToBytes(hex2);
     } catch (e) {
       throw new Error(title + " must be hex string or Uint8Array, cause: " + e);
     }
-  } else if (isBytes(hex)) {
-    res = Uint8Array.from(hex);
+  } else if (isBytes(hex2)) {
+    res = Uint8Array.from(hex2);
   } else {
     throw new Error(title + " must be hex string or Uint8Array");
   }
@@ -4895,12 +4895,12 @@ function pow2(x3, power, modulo) {
   }
   return res;
 }
-function invert(number, modulo) {
-  if (number === _0n$6)
+function invert(number2, modulo) {
+  if (number2 === _0n$6)
     throw new Error("invert: expected non-zero number");
   if (modulo <= _0n$6)
     throw new Error("invert: expected positive modulus, got " + modulo);
-  let a2 = mod(number, modulo);
+  let a2 = mod(number2, modulo);
   let b2 = modulo;
   let x3 = _0n$6, u = _1n$7;
   while (a2 !== _0n$6) {
@@ -5236,13 +5236,13 @@ function calcWOpts(W2, scalarBits) {
   const windows = Math.ceil(scalarBits / W2) + 1;
   const windowSize = 2 ** (W2 - 1);
   const maxNumber = 2 ** W2;
-  const mask = bitMask(W2);
+  const mask2 = bitMask(W2);
   const shiftBy = BigInt(W2);
-  return { windows, windowSize, mask, maxNumber, shiftBy };
+  return { windows, windowSize, mask: mask2, maxNumber, shiftBy };
 }
 function calcOffsets(n, window2, wOpts) {
-  const { windowSize, mask, maxNumber, shiftBy } = wOpts;
-  let wbits = Number(n & mask);
+  const { windowSize, mask: mask2, maxNumber, shiftBy } = wOpts;
+  let wbits = Number(n & mask2);
   let nextN = n >> shiftBy;
   if (wbits > windowSize) {
     wbits -= maxNumber;
@@ -5858,8 +5858,8 @@ function weierstrassN(params, extraOpts = {}) {
       P2.assertValidity();
       return P2;
     }
-    static fromHex(hex) {
-      return Point.fromBytes(ensureBytes("pointHex", hex));
+    static fromHex(hex2) {
+      return Point.fromBytes(ensureBytes("pointHex", hex2));
     }
     get x() {
       return this.toAffine().x;
@@ -7402,21 +7402,21 @@ const bls12_381_CURVE_G2 = {
 const COMPZERO = setMask(Fp$1.toBytes(_0n$1), { infinity: true, compressed: true });
 function parseMask(bytes) {
   bytes = bytes.slice();
-  const mask = bytes[0] & 224;
-  const compressed = !!(mask >> 7 & 1);
-  const infinity = !!(mask >> 6 & 1);
-  const sort = !!(mask >> 5 & 1);
+  const mask2 = bytes[0] & 224;
+  const compressed = !!(mask2 >> 7 & 1);
+  const infinity = !!(mask2 >> 6 & 1);
+  const sort = !!(mask2 >> 5 & 1);
   bytes[0] &= 31;
   return { compressed, infinity, sort, value: bytes };
 }
-function setMask(bytes, mask) {
+function setMask(bytes, mask2) {
   if (bytes[0] & 224)
     throw new Error("setMask: non-empty mask");
-  if (mask.compressed)
+  if (mask2.compressed)
     bytes[0] |= 128;
-  if (mask.infinity)
+  if (mask2.infinity)
     bytes[0] |= 64;
-  if (mask.sort)
+  if (mask2.sort)
     bytes[0] |= 32;
   return bytes;
 }
@@ -7477,8 +7477,8 @@ function pointG1FromBytes(bytes) {
     throw new Error("invalid G1 point: expected 48/96 bytes");
   }
 }
-function signatureG1FromBytes(hex) {
-  const { infinity, sort, value } = parseMask(ensureBytes("signatureHex", hex, 48));
+function signatureG1FromBytes(hex2) {
+  const { infinity, sort, value } = parseMask(ensureBytes("signatureHex", hex2, 48));
   const P2 = Fp$1.ORDER;
   const Point = bls12_381.G1.Point;
   const compressedValue = bytesToNumberBE(value);
@@ -7566,9 +7566,9 @@ function pointG2FromBytes(bytes) {
     throw new Error("invalid G2 point: expected 96/192 bytes");
   }
 }
-function signatureG2FromBytes(hex) {
+function signatureG2FromBytes(hex2) {
   const { ORDER: P2 } = Fp$1;
-  const { infinity, sort, value } = parseMask(ensureBytes("signatureHex", hex));
+  const { infinity, sort, value } = parseMask(ensureBytes("signatureHex", hex2));
   const Point = bls12_381.G2.Point;
   const half = value.length / 2;
   if (half !== 48 && half !== 96)
@@ -7634,8 +7634,8 @@ const bls12_381 = bls({
         abytes(bytes);
         return signatureG1FromBytes(bytes);
       },
-      fromHex(hex) {
-        return signatureG1FromBytes(hex);
+      fromHex(hex2) {
+        return signatureG1FromBytes(hex2);
       },
       toBytes(point) {
         return signatureG1ToBytes(point);
@@ -7691,8 +7691,8 @@ const bls12_381 = bls({
         abytes(bytes);
         return signatureG2FromBytes(bytes);
       },
-      fromHex(hex) {
-        return signatureG2FromBytes(hex);
+      fromHex(hex2) {
+        return signatureG2FromBytes(hex2);
       },
       toBytes(point) {
         return signatureG2ToBytes(point);
@@ -9358,10 +9358,10 @@ class Observable {
     this.observers.push(func);
   }
   unsubscribe(func) {
-    this.observers = this.observers.filter((observer) => observer !== func);
+    this.observers = this.observers.filter((observer2) => observer2 !== func);
   }
   notify(data, ...rest) {
-    this.observers.forEach((observer) => observer(data, ...rest));
+    this.observers.forEach((observer2) => observer2(data, ...rest));
   }
 }
 class ObservableLog extends Observable {
@@ -9583,8 +9583,8 @@ const _HttpAgent = class _HttpAgent {
       }
       const { status, signatures = [], requestId } = queryResponse;
       for (const sig of signatures) {
-        const { timestamp, identity } = sig;
-        const nodeId = Principal$1.fromUint8Array(identity).toText();
+        const { timestamp, identity: identity2 } = sig;
+        const nodeId = Principal$1.fromUint8Array(identity2).toText();
         let hash;
         if (status === QueryResponseStatus.Replied) {
           const { reply } = queryResponse;
@@ -9734,16 +9734,16 @@ const _HttpAgent = class _HttpAgent {
    * @param identity - (Optional) The identity to use for the call. If not provided, the agent's current identity will be used.
    * @returns A promise that resolves to the response of the call, including the request ID and response details.
    */
-  async call(canisterId, options, identity) {
+  async call(canisterId, options, identity2) {
     const callSync = options.callSync ?? true;
-    const id = await (identity ?? __privateGet(this, _identity));
-    if (!id) {
+    const id2 = await (identity2 ?? __privateGet(this, _identity));
+    if (!id2) {
       throw ExternalError.fromCode(new IdentityInvalidErrorCode());
     }
     const canister = Principal$1.from(canisterId);
     const ecid = options.effectiveCanisterId ? Principal$1.from(options.effectiveCanisterId) : canister;
     await __privateMethod(this, _HttpAgent_instances, asyncGuard_fn).call(this, ecid);
-    const sender = id.getPrincipal();
+    const sender = id2.getPrincipal();
     const ingress_expiry = calculateIngressExpiry(__privateGet(this, _maxIngressExpiryInMinutes), __privateGet(this, _timeDiffMsecs));
     const submit = {
       request_type: SubmitRequestType.Call,
@@ -9777,7 +9777,7 @@ const _HttpAgent = class _HttpAgent {
     function toNonce(buf) {
       return Object.assign(buf, { __nonce__: void 0 });
     }
-    transformedRequest = await id.transformRequest(transformedRequest);
+    transformedRequest = await id2.transformRequest(transformedRequest);
     const body = encode$1(transformedRequest.body);
     const backoff2 = __privateGet(this, _backoffStrategy).call(this);
     const requestId = requestIdOf(submit);
@@ -9822,10 +9822,10 @@ const _HttpAgent = class _HttpAgent {
             ...options,
             // disable v3 api
             callSync: false
-          }, identity);
+          }, identity2);
         } else if (error.hasCode(IngressExpiryInvalidErrorCode) && !__privateGet(this, _hasSyncedTime)) {
           await this.syncTime(canister);
-          return this.call(canister, options, identity);
+          return this.call(canister, options, identity2);
         } else {
           error.code.requestContext = {
             requestId,
@@ -9842,19 +9842,19 @@ const _HttpAgent = class _HttpAgent {
       throw callError;
     }
   }
-  async query(canisterId, fields, identity) {
+  async query(canisterId, fields, identity2) {
     const backoff2 = __privateGet(this, _backoffStrategy).call(this);
     const ecid = fields.effectiveCanisterId ? Principal$1.from(fields.effectiveCanisterId) : Principal$1.from(canisterId);
     await __privateMethod(this, _HttpAgent_instances, asyncGuard_fn).call(this, ecid);
     this.log.print(`ecid ${ecid.toString()}`);
     this.log.print(`canisterId ${canisterId.toString()}`);
     let transformedRequest;
-    const id = await (identity ?? __privateGet(this, _identity));
-    if (!id) {
+    const id2 = await (identity2 ?? __privateGet(this, _identity));
+    if (!id2) {
       throw ExternalError.fromCode(new IdentityInvalidErrorCode());
     }
     const canister = Principal$1.from(canisterId);
-    const sender = id.getPrincipal();
+    const sender = id2.getPrincipal();
     const ingressExpiry = calculateIngressExpiry(__privateGet(this, _maxIngressExpiryInMinutes), __privateGet(this, _timeDiffMsecs));
     const request2 = {
       request_type: ReadRequestType.Query,
@@ -9876,7 +9876,7 @@ const _HttpAgent = class _HttpAgent {
       endpoint: Endpoint.Query,
       body: request2
     });
-    transformedRequest = await id.transformRequest(transformedRequest);
+    transformedRequest = await id2.transformRequest(transformedRequest);
     const body = encode$1(transformedRequest.body);
     const args = {
       canister: canister.toText(),
@@ -9936,13 +9936,13 @@ const _HttpAgent = class _HttpAgent {
       throw queryError;
     }
   }
-  async createReadStateRequest(fields, identity) {
+  async createReadStateRequest(fields, identity2) {
     await __privateMethod(this, _HttpAgent_instances, asyncGuard_fn).call(this);
-    const id = await (identity ?? __privateGet(this, _identity));
-    if (!id) {
+    const id2 = await (identity2 ?? __privateGet(this, _identity));
+    if (!id2) {
       throw ExternalError.fromCode(new IdentityInvalidErrorCode());
     }
-    const sender = id.getPrincipal();
+    const sender = id2.getPrincipal();
     const transformedRequest = await this._transform({
       request: {
         method: "POST",
@@ -9959,7 +9959,7 @@ const _HttpAgent = class _HttpAgent {
         ingress_expiry: calculateIngressExpiry(__privateGet(this, _maxIngressExpiryInMinutes), __privateGet(this, _timeDiffMsecs))
       }
     });
-    return id.transformRequest(transformedRequest);
+    return id2.transformRequest(transformedRequest);
   }
   async readState(canisterId, fields, _identity2, request2) {
     await __privateMethod(this, _HttpAgent_instances, rootKeyGuard_fn).call(this);
@@ -9980,11 +9980,11 @@ const _HttpAgent = class _HttpAgent {
       requestId = requestIdOf(transformedRequest);
     } else {
       requestId = getRequestId(fields);
-      const identity = await __privateGet(this, _identity);
-      if (!identity) {
+      const identity2 = await __privateGet(this, _identity);
+      if (!identity2) {
         throw ExternalError.fromCode(new IdentityInvalidErrorCode());
       }
-      transformedRequest = await this.createReadStateRequest(fields, identity);
+      transformedRequest = await this.createReadStateRequest(fields, identity2);
     }
     this.log.print(`fetching "/api/v2/canister/${canister}/read_state" with request:`, transformedRequest);
     const backoff2 = __privateGet(this, _backoffStrategy).call(this);
@@ -10124,8 +10124,8 @@ const _HttpAgent = class _HttpAgent {
   invalidateIdentity() {
     __privateSet(this, _identity, null);
   }
-  replaceIdentity(identity) {
-    __privateSet(this, _identity, Promise.resolve(identity));
+  replaceIdentity(identity2) {
+    __privateSet(this, _identity, Promise.resolve(identity2));
   }
   async fetchSubnetKeys(canisterId) {
     const effectiveCanisterId = Principal$1.from(canisterId);
@@ -10919,8 +10919,8 @@ class BlobHashTree {
   }
   static async build(chunkHashes, headers = {}) {
     if (chunkHashes.length === 0) {
-      const hex = "8b8e620f084e48da0be2287fd12c5aaa4dbe14b468fd2e360f48d741fe7628a0";
-      const bytes = new TextEncoder().encode(hex);
+      const hex2 = "8b8e620f084e48da0be2287fd12c5aaa4dbe14b468fd2e360f48d741fe7628a0";
+      const bytes = new TextEncoder().encode(hex2);
       chunkHashes.push(new YHash(bytes));
     }
     let level = chunkHashes.map((hash) => ({
@@ -12020,7 +12020,7 @@ var Query = (_f = class extends Removable {
   }
   isActive() {
     return this.observers.some(
-      (observer) => resolveEnabled(observer.options.enabled, this) !== false
+      (observer2) => resolveEnabled(observer2.options.enabled, this) !== false
     );
   }
   isDisabled() {
@@ -12035,7 +12035,7 @@ var Query = (_f = class extends Removable {
   isStatic() {
     if (this.getObserversCount() > 0) {
       return this.observers.some(
-        (observer) => resolveStaleTime(observer.options.staleTime, this) === "static"
+        (observer2) => resolveStaleTime(observer2.options.staleTime, this) === "static"
       );
     }
     return false;
@@ -12043,7 +12043,7 @@ var Query = (_f = class extends Removable {
   isStale() {
     if (this.getObserversCount() > 0) {
       return this.observers.some(
-        (observer) => observer.getCurrentResult().isStale
+        (observer2) => observer2.getCurrentResult().isStale
       );
     }
     return this.state.data === void 0 || this.state.isInvalidated;
@@ -12062,26 +12062,26 @@ var Query = (_f = class extends Removable {
   }
   onFocus() {
     var _a3;
-    const observer = this.observers.find((x3) => x3.shouldFetchOnWindowFocus());
-    observer == null ? void 0 : observer.refetch({ cancelRefetch: false });
+    const observer2 = this.observers.find((x3) => x3.shouldFetchOnWindowFocus());
+    observer2 == null ? void 0 : observer2.refetch({ cancelRefetch: false });
     (_a3 = __privateGet(this, _retryer)) == null ? void 0 : _a3.continue();
   }
   onOnline() {
     var _a3;
-    const observer = this.observers.find((x3) => x3.shouldFetchOnReconnect());
-    observer == null ? void 0 : observer.refetch({ cancelRefetch: false });
+    const observer2 = this.observers.find((x3) => x3.shouldFetchOnReconnect());
+    observer2 == null ? void 0 : observer2.refetch({ cancelRefetch: false });
     (_a3 = __privateGet(this, _retryer)) == null ? void 0 : _a3.continue();
   }
-  addObserver(observer) {
-    if (!this.observers.includes(observer)) {
-      this.observers.push(observer);
+  addObserver(observer2) {
+    if (!this.observers.includes(observer2)) {
+      this.observers.push(observer2);
       this.clearGcTimeout();
-      __privateGet(this, _cache).notify({ type: "observerAdded", query: this, observer });
+      __privateGet(this, _cache).notify({ type: "observerAdded", query: this, observer: observer2 });
     }
   }
-  removeObserver(observer) {
-    if (this.observers.includes(observer)) {
-      this.observers = this.observers.filter((x3) => x3 !== observer);
+  removeObserver(observer2) {
+    if (this.observers.includes(observer2)) {
+      this.observers = this.observers.filter((x3) => x3 !== observer2);
       if (!this.observers.length) {
         if (__privateGet(this, _retryer)) {
           if (__privateGet(this, _abortSignalConsumed) || __privateMethod(this, _Query_instances, isInitialPausedFetch_fn).call(this)) {
@@ -12092,7 +12092,7 @@ var Query = (_f = class extends Removable {
         }
         this.scheduleGc();
       }
-      __privateGet(this, _cache).notify({ type: "observerRemoved", query: this, observer });
+      __privateGet(this, _cache).notify({ type: "observerRemoved", query: this, observer: observer2 });
     }
   }
   getObserversCount() {
@@ -12120,9 +12120,9 @@ var Query = (_f = class extends Removable {
       this.setOptions(options);
     }
     if (!this.options.queryFn) {
-      const observer = this.observers.find((x3) => x3.options.queryFn);
-      if (observer) {
-        this.setOptions(observer.options);
+      const observer2 = this.observers.find((x3) => x3.options.queryFn);
+      if (observer2) {
+        this.setOptions(observer2.options);
       }
     }
     const abortController = new AbortController();
@@ -12316,8 +12316,8 @@ var Query = (_f = class extends Removable {
   };
   this.state = reducer(this.state);
   notifyManager.batch(() => {
-    this.observers.forEach((observer) => {
-      observer.onQueryUpdate();
+    this.observers.forEach((observer2) => {
+      observer2.onQueryUpdate();
     });
     __privateGet(this, _cache).notify({ query: this, type: "updated", action });
   });
@@ -12722,8 +12722,8 @@ var QueryObserver = (_g = class extends Subscribable {
   if (environmentManager.isServer() || __privateGet(this, _currentResult).isStale || !isValidTimeout(staleTime)) {
     return;
   }
-  const time = timeUntilStale(__privateGet(this, _currentResult).dataUpdatedAt, staleTime);
-  const timeout2 = time + 1;
+  const time2 = timeUntilStale(__privateGet(this, _currentResult).dataUpdatedAt, staleTime);
+  const timeout2 = time2 + 1;
   __privateSet(this, _staleTimeoutId, timeoutManager.setTimeout(() => {
     if (!__privateGet(this, _currentResult).isStale) {
       this.updateResult();
@@ -12799,8 +12799,8 @@ function shouldFetchOptionally(query, prevQuery, options, prevOptions) {
 function isStale(query, options) {
   return resolveEnabled(options.enabled, query) !== false && query.isStaleByTime(resolveStaleTime(options.staleTime, query));
 }
-function shouldAssignObserverCurrentProperties(observer, optimisticResult) {
-  if (!shallowEqualObjects(observer.getCurrentResult(), optimisticResult)) {
+function shouldAssignObserverCurrentProperties(observer2, optimisticResult) {
+  if (!shallowEqualObjects(observer2.getCurrentResult(), optimisticResult)) {
     return true;
   }
   return false;
@@ -12931,24 +12931,24 @@ var Mutation = (_h = class extends Removable {
   get meta() {
     return this.options.meta;
   }
-  addObserver(observer) {
-    if (!__privateGet(this, _observers).includes(observer)) {
-      __privateGet(this, _observers).push(observer);
+  addObserver(observer2) {
+    if (!__privateGet(this, _observers).includes(observer2)) {
+      __privateGet(this, _observers).push(observer2);
       this.clearGcTimeout();
       __privateGet(this, _mutationCache).notify({
         type: "observerAdded",
         mutation: this,
-        observer
+        observer: observer2
       });
     }
   }
-  removeObserver(observer) {
-    __privateSet(this, _observers, __privateGet(this, _observers).filter((x3) => x3 !== observer));
+  removeObserver(observer2) {
+    __privateSet(this, _observers, __privateGet(this, _observers).filter((x3) => x3 !== observer2));
     this.scheduleGc();
     __privateGet(this, _mutationCache).notify({
       type: "observerRemoved",
       mutation: this,
-      observer
+      observer: observer2
     });
   }
   optionalRemove() {
@@ -13168,8 +13168,8 @@ var Mutation = (_h = class extends Removable {
   };
   this.state = reducer(this.state);
   notifyManager.batch(() => {
-    __privateGet(this, _observers).forEach((observer) => {
-      observer.onMutationUpdate(action);
+    __privateGet(this, _observers).forEach((observer2) => {
+      observer2.onMutationUpdate(action);
     });
     __privateGet(this, _mutationCache).notify({
       mutation: this,
@@ -13916,7 +13916,7 @@ var userProvidedKeyEscapeRegex = /\/+/g;
 function getElementKey(element, index2) {
   return "object" === typeof element && null !== element && null != element.key ? escape("" + element.key) : index2.toString(36);
 }
-function noop$1$1() {
+function noop$1$2() {
 }
 function resolveThenable(thenable) {
   switch (thenable.status) {
@@ -13925,7 +13925,7 @@ function resolveThenable(thenable) {
     case "rejected":
       throw thenable.reason;
     default:
-      switch ("string" === typeof thenable.status ? thenable.then(noop$1$1, noop$1$1) : (thenable.status = "pending", thenable.then(
+      switch ("string" === typeof thenable.status ? thenable.then(noop$1$2, noop$1$2) : (thenable.status = "pending", thenable.then(
         function(fulfilledValue) {
           "pending" === thenable.status && (thenable.status = "fulfilled", thenable.value = fulfilledValue);
         },
@@ -14213,28 +14213,28 @@ react_production.useDebugValue = function() {
 react_production.useDeferredValue = function(value, initialValue) {
   return ReactSharedInternals$2.H.useDeferredValue(value, initialValue);
 };
-react_production.useEffect = function(create, createDeps, update) {
+react_production.useEffect = function(create2, createDeps, update) {
   var dispatcher = ReactSharedInternals$2.H;
   if ("function" === typeof update)
     throw Error(
       "useEffect CRUD overload is not enabled in this build of React."
     );
-  return dispatcher.useEffect(create, createDeps);
+  return dispatcher.useEffect(create2, createDeps);
 };
 react_production.useId = function() {
   return ReactSharedInternals$2.H.useId();
 };
-react_production.useImperativeHandle = function(ref, create, deps) {
-  return ReactSharedInternals$2.H.useImperativeHandle(ref, create, deps);
+react_production.useImperativeHandle = function(ref, create2, deps) {
+  return ReactSharedInternals$2.H.useImperativeHandle(ref, create2, deps);
 };
-react_production.useInsertionEffect = function(create, deps) {
-  return ReactSharedInternals$2.H.useInsertionEffect(create, deps);
+react_production.useInsertionEffect = function(create2, deps) {
+  return ReactSharedInternals$2.H.useInsertionEffect(create2, deps);
 };
-react_production.useLayoutEffect = function(create, deps) {
-  return ReactSharedInternals$2.H.useLayoutEffect(create, deps);
+react_production.useLayoutEffect = function(create2, deps) {
+  return ReactSharedInternals$2.H.useLayoutEffect(create2, deps);
 };
-react_production.useMemo = function(create, deps) {
-  return ReactSharedInternals$2.H.useMemo(create, deps);
+react_production.useMemo = function(create2, deps) {
+  return ReactSharedInternals$2.H.useMemo(create2, deps);
 };
 react_production.useOptimistic = function(passthrough, reducer) {
   return ReactSharedInternals$2.H.useOptimistic(passthrough, reducer);
@@ -14347,7 +14347,7 @@ var ensureSuspenseTimers = (defaultedOptions) => {
 };
 var willFetch = (result, isRestoring) => result.isLoading && result.isFetching && !isRestoring;
 var shouldSuspend = (defaultedOptions, result) => (defaultedOptions == null ? void 0 : defaultedOptions.suspense) && result.isPending;
-var fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) => observer.fetchOptimistic(defaultedOptions).catch(() => {
+var fetchOptimistic = (defaultedOptions, observer2, errorResetBoundary) => observer2.fetchOptimistic(defaultedOptions).catch(() => {
   errorResetBoundary.clearReset();
 });
 function useBaseQuery(options, Observer, queryClient2) {
@@ -14366,31 +14366,31 @@ function useBaseQuery(options, Observer, queryClient2) {
   ensurePreventErrorBoundaryRetry(defaultedOptions, errorResetBoundary, query);
   useClearResetErrorBoundary(errorResetBoundary);
   const isNewCacheEntry = !client2.getQueryCache().get(defaultedOptions.queryHash);
-  const [observer] = reactExports.useState(
+  const [observer2] = reactExports.useState(
     () => new Observer(
       client2,
       defaultedOptions
     )
   );
-  const result = observer.getOptimisticResult(defaultedOptions);
+  const result = observer2.getOptimisticResult(defaultedOptions);
   const shouldSubscribe = !isRestoring && options.subscribed !== false;
   reactExports.useSyncExternalStore(
     reactExports.useCallback(
       (onStoreChange) => {
-        const unsubscribe = shouldSubscribe ? observer.subscribe(notifyManager.batchCalls(onStoreChange)) : noop$7;
-        observer.updateResult();
+        const unsubscribe = shouldSubscribe ? observer2.subscribe(notifyManager.batchCalls(onStoreChange)) : noop$7;
+        observer2.updateResult();
         return unsubscribe;
       },
-      [observer, shouldSubscribe]
+      [observer2, shouldSubscribe]
     ),
-    () => observer.getCurrentResult(),
-    () => observer.getCurrentResult()
+    () => observer2.getCurrentResult(),
+    () => observer2.getCurrentResult()
   );
   reactExports.useEffect(() => {
-    observer.setOptions(defaultedOptions);
-  }, [defaultedOptions, observer]);
+    observer2.setOptions(defaultedOptions);
+  }, [defaultedOptions, observer2]);
   if (shouldSuspend(defaultedOptions, result)) {
-    throw fetchOptimistic(defaultedOptions, observer, errorResetBoundary);
+    throw fetchOptimistic(defaultedOptions, observer2, errorResetBoundary);
   }
   if (getHasError({
     result,
@@ -14409,51 +14409,51 @@ function useBaseQuery(options, Observer, queryClient2) {
   if (defaultedOptions.experimental_prefetchInRender && !environmentManager.isServer() && willFetch(result, isRestoring)) {
     const promise = isNewCacheEntry ? (
       // Fetch immediately on render in order to ensure `.promise` is resolved even if the component is unmounted
-      fetchOptimistic(defaultedOptions, observer, errorResetBoundary)
+      fetchOptimistic(defaultedOptions, observer2, errorResetBoundary)
     ) : (
       // subscribe to the "cache promise" so that we can finalize the currentThenable once data comes in
       query == null ? void 0 : query.promise
     );
     promise == null ? void 0 : promise.catch(noop$7).finally(() => {
-      observer.updateResult();
+      observer2.updateResult();
     });
   }
-  return !defaultedOptions.notifyOnChangeProps ? observer.trackResult(result) : result;
+  return !defaultedOptions.notifyOnChangeProps ? observer2.trackResult(result) : result;
 }
 function useQuery(options, queryClient2) {
   return useBaseQuery(options, QueryObserver);
 }
 function useMutation(options, queryClient2) {
   const client2 = useQueryClient();
-  const [observer] = reactExports.useState(
+  const [observer2] = reactExports.useState(
     () => new MutationObserver$1(
       client2,
       options
     )
   );
   reactExports.useEffect(() => {
-    observer.setOptions(options);
-  }, [observer, options]);
+    observer2.setOptions(options);
+  }, [observer2, options]);
   const result = reactExports.useSyncExternalStore(
     reactExports.useCallback(
-      (onStoreChange) => observer.subscribe(notifyManager.batchCalls(onStoreChange)),
-      [observer]
+      (onStoreChange) => observer2.subscribe(notifyManager.batchCalls(onStoreChange)),
+      [observer2]
     ),
-    () => observer.getCurrentResult(),
-    () => observer.getCurrentResult()
+    () => observer2.getCurrentResult(),
+    () => observer2.getCurrentResult()
   );
   const mutate = reactExports.useCallback(
     (variables, mutateOptions) => {
-      observer.mutate(variables, mutateOptions).catch(noop$7);
+      observer2.mutate(variables, mutateOptions).catch(noop$7);
     },
-    [observer]
+    [observer2]
   );
-  if (result.error && shouldThrowError(observer.options.throwOnError, [result.error])) {
+  if (result.error && shouldThrowError(observer2.options.throwOnError, [result.error])) {
     throw result.error;
   }
   return { ...result, mutate, mutateAsync: result.mutate };
 }
-function isObject(value) {
+function isObject$1(value) {
   return value !== null && typeof value === "object";
 }
 const _Ed25519PublicKey = class _Ed25519PublicKey {
@@ -14476,9 +14476,9 @@ const _Ed25519PublicKey = class _Ed25519PublicKey {
     if (typeof maybeKey === "string") {
       const key = hexToBytes(maybeKey);
       return this.fromRaw(key);
-    } else if (isObject(maybeKey)) {
+    } else if (isObject$1(maybeKey)) {
       const key = maybeKey;
-      if (isObject(key) && Object.hasOwnProperty.call(key, "__derEncodedPublicKey__")) {
+      if (isObject$1(key) && Object.hasOwnProperty.call(key, "__derEncodedPublicKey__")) {
         return this.fromDer(key);
       } else if (ArrayBuffer.isView(key)) {
         const view = key;
@@ -15301,7 +15301,7 @@ replaceTraps((oldTraps) => ({
 const AUTH_DB_NAME = "auth-client-db";
 const OBJECT_STORE_NAME = "ic-keyval";
 const _openDbStore = async (dbName = AUTH_DB_NAME, storeName = OBJECT_STORE_NAME, version) => {
-  if (isBrowser && (localStorage == null ? void 0 : localStorage.getItem(KEY_STORAGE_DELEGATION))) {
+  if (isBrowser$2 && (localStorage == null ? void 0 : localStorage.getItem(KEY_STORAGE_DELEGATION))) {
     localStorage.removeItem(KEY_STORAGE_DELEGATION);
     localStorage.removeItem(KEY_STORAGE_KEY);
   }
@@ -15377,7 +15377,7 @@ const KEY_STORAGE_KEY = "identity";
 const KEY_STORAGE_DELEGATION = "delegation";
 const KEY_VECTOR = "iv";
 const DB_VERSION$2 = 1;
-const isBrowser = typeof window !== "undefined";
+const isBrowser$2 = typeof window !== "undefined";
 class LocalStorage {
   constructor(prefix2 = "ic-", _localStorage) {
     __publicField(this, "prefix");
@@ -15508,7 +15508,7 @@ class AuthClient {
       key = options.identity;
     } else {
       let maybeIdentityStorage = await storage.get(KEY_STORAGE_KEY);
-      if (!maybeIdentityStorage && isBrowser) {
+      if (!maybeIdentityStorage && isBrowser$2) {
         try {
           const fallbackLocalStorage = new LocalStorage();
           const localChain = await fallbackLocalStorage.get(KEY_STORAGE_DELEGATION);
@@ -15540,7 +15540,7 @@ class AuthClient {
         }
       }
     }
-    let identity = new AnonymousIdentity();
+    let identity2 = new AnonymousIdentity();
     let chain2 = null;
     if (key) {
       try {
@@ -15549,7 +15549,7 @@ class AuthClient {
           throw new Error("Delegation chain is incorrectly stored. A delegation chain should be stored as a string.");
         }
         if (options.identity) {
-          identity = options.identity;
+          identity2 = options.identity;
         } else if (chainStorage) {
           chain2 = DelegationChain.fromJSON(chainStorage);
           if (!isDelegationValid(chain2)) {
@@ -15557,9 +15557,9 @@ class AuthClient {
             key = null;
           } else {
             if ("toDer" in key) {
-              identity = PartialDelegationIdentity.fromDelegation(key, chain2);
+              identity2 = PartialDelegationIdentity.fromDelegation(key, chain2);
             } else {
-              identity = DelegationIdentity.fromDelegation(key, chain2);
+              identity2 = DelegationIdentity.fromDelegation(key, chain2);
             }
           }
         }
@@ -15587,7 +15587,7 @@ class AuthClient {
         await storage.set(KEY_STORAGE_KEY, key.getKeyPair());
       }
     }
-    return new this(identity, key, chain2, storage, idleManager, options);
+    return new this(identity2, key, chain2, storage, idleManager, options);
   }
   _registerDefaultIdleCallback() {
     var _a3, _b3;
@@ -15778,7 +15778,7 @@ const index$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   LocalStorage
 }, Symbol.toStringTag, { value: "Module" }));
 const ONE_HOUR_IN_NANOSECONDS = BigInt(36e11);
-const DEFAULT_IDENTITY_PROVIDER = "https://id.ai";
+const DEFAULT_IDENTITY_PROVIDER = "https://id.ai/authorize";
 const InternetIdentityReactContext = reactExports.createContext(void 0);
 async function createAuthClient(createOptions) {
   const config = await loadConfig();
@@ -15809,7 +15809,7 @@ const useInternetIdentity = () => {
 };
 function InternetIdentityProvider({ children, createOptions }) {
   const [authClient, setAuthClient] = reactExports.useState(void 0);
-  const [identity, setIdentity] = reactExports.useState(void 0);
+  const [identity2, setIdentity] = reactExports.useState(void 0);
   const [loginStatus, setStatus] = reactExports.useState("initializing");
   const [loginError, setError] = reactExports.useState(void 0);
   const setErrorMessage = reactExports.useCallback((message) => {
@@ -15899,7 +15899,7 @@ function InternetIdentityProvider({ children, createOptions }) {
     };
   }, [createOptions, authClient]);
   const value = reactExports.useMemo(() => ({
-    identity,
+    identity: identity2,
     login,
     clear,
     loginStatus,
@@ -15908,9 +15908,9 @@ function InternetIdentityProvider({ children, createOptions }) {
     isLoggingIn: loginStatus === "logging-in",
     isLoginSuccess: loginStatus === "success",
     isLoginError: loginStatus === "loginError",
-    isAuthenticated: !!identity && !identity.getPrincipal().isAnonymous(),
+    isAuthenticated: !!identity2 && !identity2.getPrincipal().isAnonymous(),
     loginError
-  }), [identity, login, clear, loginStatus, loginError]);
+  }), [identity2, login, clear, loginStatus, loginError]);
   return reactExports.createElement(InternetIdentityReactContext.Provider, {
     value,
     children
@@ -15921,17 +15921,17 @@ function hasAccessControl(actor) {
 }
 const ACTOR_QUERY_KEY = "actor";
 function useActor(createActor2) {
-  const { identity, isAuthenticated } = useInternetIdentity();
+  const { identity: identity2, isAuthenticated } = useInternetIdentity();
   const queryClient2 = useQueryClient();
   const actorQuery = useQuery({
-    queryKey: [ACTOR_QUERY_KEY, identity == null ? void 0 : identity.getPrincipal().toString()],
+    queryKey: [ACTOR_QUERY_KEY, identity2 == null ? void 0 : identity2.getPrincipal().toString()],
     queryFn: async () => {
       if (!isAuthenticated) {
         return await createActorWithConfig(createActor2);
       }
       const actorOptions = {
         agentOptions: {
-          identity
+          identity: identity2
         }
       };
       const actor = await createActorWithConfig(createActor2, actorOptions);
@@ -16635,7 +16635,7 @@ function popHostContext(fiber) {
   contextFiberStackCursor.current === fiber && (pop(contextStackCursor), pop(contextFiberStackCursor));
   hostTransitionProviderCursor.current === fiber && (pop(hostTransitionProviderCursor), HostTransitionContext._currentValue = sharedNotPendingObject);
 }
-var hasOwnProperty = Object.prototype.hasOwnProperty, scheduleCallback$3 = Scheduler.unstable_scheduleCallback, cancelCallback$1 = Scheduler.unstable_cancelCallback, shouldYield = Scheduler.unstable_shouldYield, requestPaint = Scheduler.unstable_requestPaint, now = Scheduler.unstable_now, getCurrentPriorityLevel = Scheduler.unstable_getCurrentPriorityLevel, ImmediatePriority = Scheduler.unstable_ImmediatePriority, UserBlockingPriority = Scheduler.unstable_UserBlockingPriority, NormalPriority$1 = Scheduler.unstable_NormalPriority, LowPriority = Scheduler.unstable_LowPriority, IdlePriority = Scheduler.unstable_IdlePriority, log$1 = Scheduler.log, unstable_setDisableYieldValue = Scheduler.unstable_setDisableYieldValue, rendererID = null, injectedHook = null;
+var hasOwnProperty = Object.prototype.hasOwnProperty, scheduleCallback$3 = Scheduler.unstable_scheduleCallback, cancelCallback$1 = Scheduler.unstable_cancelCallback, shouldYield = Scheduler.unstable_shouldYield, requestPaint = Scheduler.unstable_requestPaint, now$1 = Scheduler.unstable_now, getCurrentPriorityLevel = Scheduler.unstable_getCurrentPriorityLevel, ImmediatePriority = Scheduler.unstable_ImmediatePriority, UserBlockingPriority = Scheduler.unstable_UserBlockingPriority, NormalPriority$1 = Scheduler.unstable_NormalPriority, LowPriority = Scheduler.unstable_LowPriority, IdlePriority = Scheduler.unstable_IdlePriority, log$1 = Scheduler.log, unstable_setDisableYieldValue = Scheduler.unstable_setDisableYieldValue, rendererID = null, injectedHook = null;
 function setIsStrictModeForDevtools(newIsStrictMode) {
   "function" === typeof log$1 && unstable_setDisableYieldValue(newIsStrictMode);
   if (injectedHook && "function" === typeof injectedHook.setStrictMode)
@@ -17081,9 +17081,9 @@ function describeNativeComponentFrame(fn, construct) {
           if (1 !== RunInRootFrame || 1 !== namePropDescriptor) {
             do
               if (RunInRootFrame--, namePropDescriptor--, 0 > namePropDescriptor || sampleLines[RunInRootFrame] !== controlLines[namePropDescriptor]) {
-                var frame = "\n" + sampleLines[RunInRootFrame].replace(" at new ", " at ");
-                fn.displayName && frame.includes("<anonymous>") && (frame = frame.replace("<anonymous>", fn.displayName));
-                return frame;
+                var frame2 = "\n" + sampleLines[RunInRootFrame].replace(" at new ", " at ");
+                fn.displayName && frame2.includes("<anonymous>") && (frame2 = frame2.replace("<anonymous>", fn.displayName));
+                return frame2;
               }
             while (1 <= RunInRootFrame && 0 <= namePropDescriptor);
           }
@@ -18324,7 +18324,7 @@ function prepareToHydrateHostInstance(fiber) {
       listenToNonDelegatedEvent("invalid", instance), initTextarea(instance, props.value, props.defaultValue, props.children), track(instance);
   }
   type = props.children;
-  "string" !== typeof type && "number" !== typeof type && "bigint" !== typeof type || instance.textContent === "" + type || true === props.suppressHydrationWarning || checkForUnmatchedText(instance.textContent, type) ? (null != props.popover && (listenToNonDelegatedEvent("beforetoggle", instance), listenToNonDelegatedEvent("toggle", instance)), null != props.onScroll && listenToNonDelegatedEvent("scroll", instance), null != props.onScrollEnd && listenToNonDelegatedEvent("scrollend", instance), null != props.onClick && (instance.onclick = noop$1), instance = true) : instance = false;
+  "string" !== typeof type && "number" !== typeof type && "bigint" !== typeof type || instance.textContent === "" + type || true === props.suppressHydrationWarning || checkForUnmatchedText(instance.textContent, type) ? (null != props.popover && (listenToNonDelegatedEvent("beforetoggle", instance), listenToNonDelegatedEvent("toggle", instance)), null != props.onScroll && listenToNonDelegatedEvent("scroll", instance), null != props.onScrollEnd && listenToNonDelegatedEvent("scrollend", instance), null != props.onClick && (instance.onclick = noop$1$1), instance = true) : instance = false;
   instance || throwOnHydrationMismatch(fiber);
 }
 function popToNextHostParent(fiber) {
@@ -19168,8 +19168,8 @@ function updateSyncExternalStore(subscribe2, getSnapshot, getServerSnapshot) {
   );
   snapshotChanged && (hook.memoizedState = getServerSnapshot, didReceiveUpdate = true);
   hook = hook.queue;
-  var create = subscribeToStore.bind(null, fiber, hook, subscribe2);
-  updateEffectImpl(2048, 8, create, [subscribe2]);
+  var create2 = subscribeToStore.bind(null, fiber, hook, subscribe2);
+  updateEffectImpl(2048, 8, create2, [subscribe2]);
   if (hook.getSnapshot !== getSnapshot || snapshotChanged || null !== workInProgressHook && workInProgressHook.memoizedState.tag & 1) {
     fiber.flags |= 2048;
     pushSimpleEffect(
@@ -19457,12 +19457,12 @@ function rerenderActionState(action) {
   currentStateHook.memoizedState = action;
   return [stateHook, dispatch, false];
 }
-function pushSimpleEffect(tag, inst, create, createDeps) {
-  tag = { tag, create, deps: createDeps, inst, next: null };
+function pushSimpleEffect(tag, inst, create2, createDeps) {
+  tag = { tag, create: create2, deps: createDeps, inst, next: null };
   inst = currentlyRenderingFiber.updateQueue;
   null === inst && (inst = createFunctionComponentUpdateQueue(), currentlyRenderingFiber.updateQueue = inst);
-  create = inst.lastEffect;
-  null === create ? inst.lastEffect = tag.next = tag : (createDeps = create.next, create.next = tag, tag.next = createDeps, inst.lastEffect = tag);
+  create2 = inst.lastEffect;
+  null === create2 ? inst.lastEffect = tag.next = tag : (createDeps = create2.next, create2.next = tag, tag.next = createDeps, inst.lastEffect = tag);
   return tag;
 }
 function createEffectInstance() {
@@ -19471,56 +19471,56 @@ function createEffectInstance() {
 function updateRef() {
   return updateWorkInProgressHook().memoizedState;
 }
-function mountEffectImpl(fiberFlags, hookFlags, create, createDeps) {
+function mountEffectImpl(fiberFlags, hookFlags, create2, createDeps) {
   var hook = mountWorkInProgressHook();
   createDeps = void 0 === createDeps ? null : createDeps;
   currentlyRenderingFiber.flags |= fiberFlags;
   hook.memoizedState = pushSimpleEffect(
     1 | hookFlags,
     createEffectInstance(),
-    create,
+    create2,
     createDeps
   );
 }
-function updateEffectImpl(fiberFlags, hookFlags, create, deps) {
+function updateEffectImpl(fiberFlags, hookFlags, create2, deps) {
   var hook = updateWorkInProgressHook();
   deps = void 0 === deps ? null : deps;
   var inst = hook.memoizedState.inst;
-  null !== currentHook && null !== deps && areHookInputsEqual(deps, currentHook.memoizedState.deps) ? hook.memoizedState = pushSimpleEffect(hookFlags, inst, create, deps) : (currentlyRenderingFiber.flags |= fiberFlags, hook.memoizedState = pushSimpleEffect(
+  null !== currentHook && null !== deps && areHookInputsEqual(deps, currentHook.memoizedState.deps) ? hook.memoizedState = pushSimpleEffect(hookFlags, inst, create2, deps) : (currentlyRenderingFiber.flags |= fiberFlags, hook.memoizedState = pushSimpleEffect(
     1 | hookFlags,
     inst,
-    create,
+    create2,
     deps
   ));
 }
-function mountEffect(create, createDeps) {
-  mountEffectImpl(8390656, 8, create, createDeps);
+function mountEffect(create2, createDeps) {
+  mountEffectImpl(8390656, 8, create2, createDeps);
 }
-function updateEffect(create, createDeps) {
-  updateEffectImpl(2048, 8, create, createDeps);
+function updateEffect(create2, createDeps) {
+  updateEffectImpl(2048, 8, create2, createDeps);
 }
-function updateInsertionEffect(create, deps) {
-  return updateEffectImpl(4, 2, create, deps);
+function updateInsertionEffect(create2, deps) {
+  return updateEffectImpl(4, 2, create2, deps);
 }
-function updateLayoutEffect(create, deps) {
-  return updateEffectImpl(4, 4, create, deps);
+function updateLayoutEffect(create2, deps) {
+  return updateEffectImpl(4, 4, create2, deps);
 }
-function imperativeHandleEffect(create, ref) {
+function imperativeHandleEffect(create2, ref) {
   if ("function" === typeof ref) {
-    create = create();
-    var refCleanup = ref(create);
+    create2 = create2();
+    var refCleanup = ref(create2);
     return function() {
       "function" === typeof refCleanup ? refCleanup() : ref(null);
     };
   }
   if (null !== ref && void 0 !== ref)
-    return create = create(), ref.current = create, function() {
+    return create2 = create2(), ref.current = create2, function() {
       ref.current = null;
     };
 }
-function updateImperativeHandle(ref, create, deps) {
+function updateImperativeHandle(ref, create2, deps) {
   deps = null !== deps && void 0 !== deps ? deps.concat([ref]) : null;
-  updateEffectImpl(4, 4, imperativeHandleEffect.bind(null, create, ref), deps);
+  updateEffectImpl(4, 4, imperativeHandleEffect.bind(null, create2, ref), deps);
 }
 function mountDebugValue() {
 }
@@ -19808,20 +19808,20 @@ var ContextOnlyDispatcher = {
   },
   useContext: readContext,
   useEffect: mountEffect,
-  useImperativeHandle: function(ref, create, deps) {
+  useImperativeHandle: function(ref, create2, deps) {
     deps = null !== deps && void 0 !== deps ? deps.concat([ref]) : null;
     mountEffectImpl(
       4194308,
       4,
-      imperativeHandleEffect.bind(null, create, ref),
+      imperativeHandleEffect.bind(null, create2, ref),
       deps
     );
   },
-  useLayoutEffect: function(create, deps) {
-    return mountEffectImpl(4194308, 4, create, deps);
+  useLayoutEffect: function(create2, deps) {
+    return mountEffectImpl(4194308, 4, create2, deps);
   },
-  useInsertionEffect: function(create, deps) {
-    mountEffectImpl(4, 2, create, deps);
+  useInsertionEffect: function(create2, deps) {
+    mountEffectImpl(4, 2, create2, deps);
   },
   useMemo: function(nextCreate, deps) {
     var hook = mountWorkInProgressHook();
@@ -22126,7 +22126,7 @@ function completeWork(current, workInProgress2, renderLanes2) {
               }
               current = current.sibling;
             }
-          null !== type.tail && now() > workInProgressRootRenderTargetTime && (workInProgress2.flags |= 128, newProps = true, cutOffTailIfNeeded(type, false), workInProgress2.lanes = 4194304);
+          null !== type.tail && now$1() > workInProgressRootRenderTargetTime && (workInProgress2.flags |= 128, newProps = true, cutOffTailIfNeeded(type, false), workInProgress2.lanes = 4194304);
         }
       else {
         if (!newProps)
@@ -22134,11 +22134,11 @@ function completeWork(current, workInProgress2, renderLanes2) {
             if (workInProgress2.flags |= 128, newProps = true, current = current.updateQueue, workInProgress2.updateQueue = current, scheduleRetryEffect(workInProgress2, current), cutOffTailIfNeeded(type, true), null === type.tail && "hidden" === type.tailMode && !cache$127.alternate && !isHydrating)
               return bubbleProperties(workInProgress2), null;
           } else
-            2 * now() - type.renderingStartTime > workInProgressRootRenderTargetTime && 536870912 !== renderLanes2 && (workInProgress2.flags |= 128, newProps = true, cutOffTailIfNeeded(type, false), workInProgress2.lanes = 4194304);
+            2 * now$1() - type.renderingStartTime > workInProgressRootRenderTargetTime && 536870912 !== renderLanes2 && (workInProgress2.flags |= 128, newProps = true, cutOffTailIfNeeded(type, false), workInProgress2.lanes = 4194304);
         type.isBackwards ? (cache$127.sibling = workInProgress2.child, workInProgress2.child = cache$127) : (current = type.last, null !== current ? current.sibling = cache$127 : workInProgress2.child = cache$127, type.last = cache$127);
       }
       if (null !== type.tail)
-        return workInProgress2 = type.tail, type.rendering = workInProgress2, type.tail = workInProgress2.sibling, type.renderingStartTime = now(), workInProgress2.sibling = null, current = suspenseStackCursor.current, push(suspenseStackCursor, newProps ? current & 1 | 2 : current & 1), workInProgress2;
+        return workInProgress2 = type.tail, type.rendering = workInProgress2, type.tail = workInProgress2.sibling, type.renderingStartTime = now$1(), workInProgress2.sibling = null, current = suspenseStackCursor.current, push(suspenseStackCursor, newProps ? current & 1 | 2 : current & 1), workInProgress2;
       bubbleProperties(workInProgress2);
       return null;
     case 22:
@@ -22234,8 +22234,8 @@ function commitHookEffectListMount(flags, finishedWork) {
       do {
         if ((updateQueue.tag & flags) === flags) {
           lastEffect = void 0;
-          var create = updateQueue.create, inst = updateQueue.inst;
-          lastEffect = create();
+          var create2 = updateQueue.create, inst = updateQueue.inst;
+          lastEffect = create2();
           inst.destroy = lastEffect;
         }
         updateQueue = updateQueue.next;
@@ -22388,7 +22388,7 @@ function getHostSibling(fiber) {
 function insertOrAppendPlacementNodeIntoContainer(node, before, parent) {
   var tag = node.tag;
   if (5 === tag || 6 === tag)
-    node = node.stateNode, before ? (9 === parent.nodeType ? parent.body : "HTML" === parent.nodeName ? parent.ownerDocument.body : parent).insertBefore(node, before) : (before = 9 === parent.nodeType ? parent.body : "HTML" === parent.nodeName ? parent.ownerDocument.body : parent, before.appendChild(node), parent = parent._reactRootContainer, null !== parent && void 0 !== parent || null !== before.onclick || (before.onclick = noop$1));
+    node = node.stateNode, before ? (9 === parent.nodeType ? parent.body : "HTML" === parent.nodeName ? parent.ownerDocument.body : parent).insertBefore(node, before) : (before = 9 === parent.nodeType ? parent.body : "HTML" === parent.nodeName ? parent.ownerDocument.body : parent, before.appendChild(node), parent = parent._reactRootContainer, null !== parent && void 0 !== parent || null !== before.onclick || (before.onclick = noop$1$1));
   else if (4 !== tag && (27 === tag && isSingletonScope(node.type) && (parent = node.stateNode, before = null), node = node.child, null !== node))
     for (insertOrAppendPlacementNodeIntoContainer(node, before, parent), node = node.sibling; null !== node; )
       insertOrAppendPlacementNodeIntoContainer(node, before, parent), node = node.sibling;
@@ -23051,7 +23051,7 @@ function commitMutationEffectsOnFiber(finishedWork, root2) {
     case 13:
       recursivelyTraverseMutationEffects(root2, finishedWork);
       commitReconciliationEffects(finishedWork);
-      finishedWork.child.flags & 8192 && null !== finishedWork.memoizedState !== (null !== current && null !== current.memoizedState) && (globalMostRecentFallbackTime = now());
+      finishedWork.child.flags & 8192 && null !== finishedWork.memoizedState !== (null !== current && null !== current.memoizedState) && (globalMostRecentFallbackTime = now$1());
       flags & 4 && (flags = finishedWork.updateQueue, null !== flags && (finishedWork.updateQueue = null, attachSuspenseRetryListeners(finishedWork, flags)));
       break;
     case 22:
@@ -23371,9 +23371,9 @@ function commitPassiveMountOnFiber(finishedRoot, finishedWork, committedLanes, c
         );
         finishedRoot = finishedWork.stateNode;
         try {
-          var _finishedWork$memoize2 = finishedWork.memoizedProps, id = _finishedWork$memoize2.id, onPostCommit = _finishedWork$memoize2.onPostCommit;
+          var _finishedWork$memoize2 = finishedWork.memoizedProps, id2 = _finishedWork$memoize2.id, onPostCommit = _finishedWork$memoize2.onPostCommit;
           "function" === typeof onPostCommit && onPostCommit(
-            id,
+            id2,
             null === finishedWork.alternate ? "mount" : "update",
             finishedRoot.passiveEffectDuration,
             -0
@@ -23401,7 +23401,7 @@ function commitPassiveMountOnFiber(finishedRoot, finishedWork, committedLanes, c
       break;
     case 22:
       _finishedWork$memoize2 = finishedWork.stateNode;
-      id = finishedWork.alternate;
+      id2 = finishedWork.alternate;
       null !== finishedWork.memoizedState ? _finishedWork$memoize2._visibility & 2 ? recursivelyTraversePassiveMountEffects(
         finishedRoot,
         finishedWork,
@@ -23419,7 +23419,7 @@ function commitPassiveMountOnFiber(finishedRoot, finishedWork, committedLanes, c
         committedTransitions,
         0 !== (finishedWork.subtreeFlags & 10256)
       ));
-      flags & 2048 && commitOffscreenPassiveMountEffects(id, finishedWork);
+      flags & 2048 && commitOffscreenPassiveMountEffects(id2, finishedWork);
       break;
     case 24:
       recursivelyTraversePassiveMountEffects(
@@ -23801,7 +23801,7 @@ function performWorkOnRoot(root$jscomp$0, lanes, forceSync) {
           default:
             throw Error(formatProdErrorMessage(329));
         }
-        if ((lanes & 62914560) === lanes && (exitStatus = globalMostRecentFallbackTime + 300 - now(), 10 < exitStatus)) {
+        if ((lanes & 62914560) === lanes && (exitStatus = globalMostRecentFallbackTime + 300 - now$1(), 10 < exitStatus)) {
           markRootSuspended(
             shouldTimeSlice,
             lanes,
@@ -24064,7 +24064,7 @@ function renderRootConcurrent(root2, lanes) {
   var prevExecutionContext = executionContext;
   executionContext |= 2;
   var prevDispatcher = pushDispatcher(), prevAsyncDispatcher = pushAsyncDispatcher();
-  workInProgressRoot !== root2 || workInProgressRootRenderLanes !== lanes ? (workInProgressTransitions = null, workInProgressRootRenderTargetTime = now() + 500, prepareFreshStack(root2, lanes)) : workInProgressRootIsPrerendering = checkIfRootIsPrerendering(
+  workInProgressRoot !== root2 || workInProgressRootRenderLanes !== lanes ? (workInProgressTransitions = null, workInProgressRootRenderTargetTime = now$1() + 500, prepareFreshStack(root2, lanes)) : workInProgressRootIsPrerendering = checkIfRootIsPrerendering(
     root2,
     lanes
   );
@@ -24565,7 +24565,7 @@ function pingSuspendedRoot(root2, wakeable, pingedLanes) {
   null !== pingCache && pingCache.delete(wakeable);
   root2.pingedLanes |= root2.suspendedLanes & pingedLanes;
   root2.warmLanes &= ~pingedLanes;
-  workInProgressRoot === root2 && (workInProgressRootRenderLanes & pingedLanes) === pingedLanes && (4 === workInProgressRootExitStatus || 3 === workInProgressRootExitStatus && (workInProgressRootRenderLanes & 62914560) === workInProgressRootRenderLanes && 300 > now() - globalMostRecentFallbackTime ? 0 === (executionContext & 2) && prepareFreshStack(root2, 0) : workInProgressRootPingedLanes |= pingedLanes, workInProgressSuspendedRetryLanes === workInProgressRootRenderLanes && (workInProgressSuspendedRetryLanes = 0));
+  workInProgressRoot === root2 && (workInProgressRootRenderLanes & pingedLanes) === pingedLanes && (4 === workInProgressRootExitStatus || 3 === workInProgressRootExitStatus && (workInProgressRootRenderLanes & 62914560) === workInProgressRootRenderLanes && 300 > now$1() - globalMostRecentFallbackTime ? 0 === (executionContext & 2) && prepareFreshStack(root2, 0) : workInProgressRootPingedLanes |= pingedLanes, workInProgressSuspendedRetryLanes === workInProgressRootRenderLanes && (workInProgressSuspendedRetryLanes = 0));
   ensureRootIsScheduled(root2);
 }
 function retryTimedOutBoundary(boundaryFiber, retryLane) {
@@ -24642,7 +24642,7 @@ function processRootScheduleInMicrotask() {
   mightHavePendingSyncWork = didScheduleMicrotask = false;
   var syncTransitionLanes = 0;
   0 !== currentEventTransitionLane && (shouldAttemptEagerTransition() && (syncTransitionLanes = currentEventTransitionLane), currentEventTransitionLane = 0);
-  for (var currentTime = now(), prev = null, root2 = firstScheduledRoot; null !== root2; ) {
+  for (var currentTime = now$1(), prev = null, root2 = firstScheduledRoot; null !== root2; ) {
     var next = root2.next, nextLanes = scheduleTaskForRootDuringMicrotask(root2, currentTime);
     if (0 === nextLanes)
       root2.next = null, null === prev ? firstScheduledRoot = next : prev.next = next, null === next && (lastScheduledRoot = prev);
@@ -24714,7 +24714,7 @@ function performWorkOnRootViaSchedulerTask(root2, didTimeout) {
   );
   if (0 === workInProgressRootRenderLanes$jscomp$0) return null;
   performWorkOnRoot(root2, workInProgressRootRenderLanes$jscomp$0, didTimeout);
-  scheduleTaskForRootDuringMicrotask(root2, now());
+  scheduleTaskForRootDuringMicrotask(root2, now$1());
   return null != root2.callbackNode && root2.callbackNode === originalCallbackNode ? performWorkOnRootViaSchedulerTask.bind(null, root2) : null;
 }
 function performSyncWorkOnRoot(root2, lanes) {
@@ -25313,7 +25313,7 @@ function checkForUnmatchedText(serverText, clientText) {
   clientText = normalizeMarkupForTextOrAttribute(clientText);
   return normalizeMarkupForTextOrAttribute(serverText) === clientText ? true : false;
 }
-function noop$1() {
+function noop$1$1() {
 }
 function setProp(domElement, tag, key, value, props, prevValue) {
   switch (key) {
@@ -25393,7 +25393,7 @@ function setProp(domElement, tag, key, value, props, prevValue) {
       domElement.setAttribute(key, value);
       break;
     case "onClick":
-      null != value && (domElement.onclick = noop$1);
+      null != value && (domElement.onclick = noop$1$1);
       break;
     case "onScroll":
       null != value && listenToNonDelegatedEvent("scroll", domElement);
@@ -25602,7 +25602,7 @@ function setPropOnCustomElement(domElement, tag, key, value, props, prevValue) {
       null != value && listenToNonDelegatedEvent("scrollend", domElement);
       break;
     case "onClick":
-      null != value && (domElement.onclick = noop$1);
+      null != value && (domElement.onclick = noop$1$1);
       break;
     case "suppressContentEditableWarning":
     case "suppressHydrationWarning":
@@ -26957,7 +26957,7 @@ function dispatchEvent(domEventName, eventSystemFlags, targetContainer, nativeEv
                     lanes &= ~lane;
                   }
                   ensureRootIsScheduled(fiber);
-                  0 === (executionContext & 6) && (workInProgressRootRenderTargetTime = now() + 500, flushSyncWorkAcrossRoots_impl(0));
+                  0 === (executionContext & 6) && (workInProgressRootRenderTargetTime = now$1() + 500, flushSyncWorkAcrossRoots_impl(0));
                 }
               }
               break;
@@ -27866,18 +27866,18 @@ function composeEventHandlers(originalEventHandler, ourEventHandler, { checkForD
     }
   };
 }
-function setRef(ref, value) {
+function setRef$1(ref, value) {
   if (typeof ref === "function") {
     return ref(value);
   } else if (ref !== null && ref !== void 0) {
     ref.current = value;
   }
 }
-function composeRefs(...refs) {
+function composeRefs$1(...refs) {
   return (node) => {
     let hasCleanup = false;
     const cleanups = refs.map((ref) => {
-      const cleanup = setRef(ref, node);
+      const cleanup = setRef$1(ref, node);
       if (!hasCleanup && typeof cleanup == "function") {
         hasCleanup = true;
       }
@@ -27890,15 +27890,15 @@ function composeRefs(...refs) {
           if (typeof cleanup == "function") {
             cleanup();
           } else {
-            setRef(refs[i], null);
+            setRef$1(refs[i], null);
           }
         }
       };
     }
   };
 }
-function useComposedRefs(...refs) {
-  return reactExports.useCallback(composeRefs(...refs), refs);
+function useComposedRefs$1(...refs) {
+  return reactExports.useCallback(composeRefs$1(...refs), refs);
 }
 function createContext2(rootComponentName, defaultContext) {
   const Context = reactExports.createContext(defaultContext);
@@ -28007,7 +28007,7 @@ function createSlotClone$1(ownerName) {
       const childrenRef = getElementRef$2(children);
       const props2 = mergeProps$1(slotProps, children.props);
       if (children.type !== reactExports.Fragment) {
-        props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
+        props2.ref = forwardedRef ? composeRefs$1(forwardedRef, childrenRef) : childrenRef;
       }
       return reactExports.cloneElement(children, props2);
     }
@@ -28149,7 +28149,7 @@ var DismissableLayer = reactExports.forwardRef(
     const [node, setNode] = reactExports.useState(null);
     const ownerDocument = (node == null ? void 0 : node.ownerDocument) ?? (globalThis == null ? void 0 : globalThis.document);
     const [, force] = reactExports.useState({});
-    const composedRefs = useComposedRefs(forwardedRef, (node2) => setNode(node2));
+    const composedRefs = useComposedRefs$1(forwardedRef, (node2) => setNode(node2));
     const layers = Array.from(context.layers);
     const [highestLayerWithOutsidePointerEventsDisabled] = [...context.layersWithOutsidePointerEventsDisabled].slice(-1);
     const highestLayerWithOutsidePointerEventsDisabledIndex = layers.indexOf(highestLayerWithOutsidePointerEventsDisabled);
@@ -28235,7 +28235,7 @@ var BRANCH_NAME = "DismissableLayerBranch";
 var DismissableLayerBranch = reactExports.forwardRef((props, forwardedRef) => {
   const context = reactExports.useContext(DismissableLayerContext);
   const ref = reactExports.useRef(null);
-  const composedRefs = useComposedRefs(forwardedRef, ref);
+  const composedRefs = useComposedRefs$1(forwardedRef, ref);
   reactExports.useEffect(() => {
     const node = ref.current;
     if (node) {
@@ -28330,11 +28330,11 @@ var useLayoutEffect2 = (globalThis == null ? void 0 : globalThis.document) ? rea
 var useReactId = React$5[" useId ".trim().toString()] || (() => void 0);
 var count$1 = 0;
 function useId(deterministicId) {
-  const [id, setId] = reactExports.useState(useReactId());
+  const [id2, setId] = reactExports.useState(useReactId());
   useLayoutEffect2(() => {
     setId((reactId) => reactId ?? String(count$1++));
   }, [deterministicId]);
-  return id ? `radix-${id}` : "";
+  return id2 ? `radix-${id2}` : "";
 }
 const sides = ["top", "right", "bottom", "left"];
 const min = Math.min;
@@ -28351,7 +28351,7 @@ const oppositeSideMap = {
   bottom: "top",
   top: "bottom"
 };
-function clamp$1(start, value, end) {
+function clamp$2(start, value, end) {
   return max(start, min(value, end));
 }
 function evaluate(value, param) {
@@ -28708,7 +28708,7 @@ const arrow$3 = (options) => ({
     const min$1 = minPadding;
     const max2 = clientSize - arrowDimensions[length] - maxPadding;
     const center = clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
-    const offset2 = clamp$1(min$1, center, max2);
+    const offset2 = clamp$2(min$1, center, max2);
     const shouldAddOffset = !middlewareData.arrow && getAlignment(placement) != null && center !== offset2 && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
     const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max2 : 0;
     return {
@@ -29007,14 +29007,14 @@ const shift$2 = function(options) {
         const maxSide = mainAxis === "y" ? "bottom" : "right";
         const min2 = mainAxisCoord + overflow[minSide];
         const max2 = mainAxisCoord - overflow[maxSide];
-        mainAxisCoord = clamp$1(min2, mainAxisCoord, max2);
+        mainAxisCoord = clamp$2(min2, mainAxisCoord, max2);
       }
       if (checkCrossAxis) {
         const minSide = crossAxis === "y" ? "top" : "left";
         const maxSide = crossAxis === "y" ? "bottom" : "right";
         const min2 = crossAxisCoord + overflow[minSide];
         const max2 = crossAxisCoord - overflow[maxSide];
-        crossAxisCoord = clamp$1(min2, crossAxisCoord, max2);
+        crossAxisCoord = clamp$2(min2, crossAxisCoord, max2);
       }
       const limitedCoords = limiter.fn({
         ...state,
@@ -29207,7 +29207,7 @@ function isElement(value) {
   }
   return value instanceof Element || value instanceof getWindow(value).Element;
 }
-function isHTMLElement(value) {
+function isHTMLElement$1(value) {
   if (!hasWindow()) {
     return false;
   }
@@ -29225,7 +29225,7 @@ function isOverflowElement(element) {
     overflowX,
     overflowY,
     display
-  } = getComputedStyle$1(element);
+  } = getComputedStyle$2(element);
   return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && display !== "inline" && display !== "contents";
 }
 function isTableElement(element) {
@@ -29249,12 +29249,12 @@ const containRe = /paint|layout|strict|content/;
 const isNotNone = (value) => !!value && value !== "none";
 let isWebKitValue;
 function isContainingBlock(elementOrCss) {
-  const css = isElement(elementOrCss) ? getComputedStyle$1(elementOrCss) : elementOrCss;
+  const css = isElement(elementOrCss) ? getComputedStyle$2(elementOrCss) : elementOrCss;
   return isNotNone(css.transform) || isNotNone(css.translate) || isNotNone(css.scale) || isNotNone(css.rotate) || isNotNone(css.perspective) || !isWebKit() && (isNotNone(css.backdropFilter) || isNotNone(css.filter)) || willChangeRe.test(css.willChange || "") || containRe.test(css.contain || "");
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
-  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+  while (isHTMLElement$1(currentNode) && !isLastTraversableNode(currentNode)) {
     if (isContainingBlock(currentNode)) {
       return currentNode;
     } else if (isTopLayer(currentNode)) {
@@ -29273,7 +29273,7 @@ function isWebKit() {
 function isLastTraversableNode(node) {
   return /^(html|body|#document)$/.test(getNodeName(node));
 }
-function getComputedStyle$1(element) {
+function getComputedStyle$2(element) {
   return getWindow(element).getComputedStyle(element);
 }
 function getNodeScroll(element) {
@@ -29306,7 +29306,7 @@ function getNearestOverflowAncestor(node) {
   if (isLastTraversableNode(parentNode)) {
     return node.ownerDocument ? node.ownerDocument.body : node.body;
   }
-  if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+  if (isHTMLElement$1(parentNode) && isOverflowElement(parentNode)) {
     return parentNode;
   }
   return getNearestOverflowAncestor(parentNode);
@@ -29333,10 +29333,10 @@ function getFrameElement(win) {
   return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
 }
 function getCssDimensions(element) {
-  const css = getComputedStyle$1(element);
+  const css = getComputedStyle$2(element);
   let width = parseFloat(css.width) || 0;
   let height = parseFloat(css.height) || 0;
-  const hasOffset = isHTMLElement(element);
+  const hasOffset = isHTMLElement$1(element);
   const offsetWidth = hasOffset ? element.offsetWidth : width;
   const offsetHeight = hasOffset ? element.offsetHeight : height;
   const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
@@ -29355,7 +29355,7 @@ function unwrapElement(element) {
 }
 function getScale(element) {
   const domElement = unwrapElement(element);
-  if (!isHTMLElement(domElement)) {
+  if (!isHTMLElement$1(domElement)) {
     return createCoords(1);
   }
   const rect = domElement.getBoundingClientRect();
@@ -29406,21 +29406,21 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   }
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
-  let scale = createCoords(1);
+  let scale2 = createCoords(1);
   if (includeScale) {
     if (offsetParent) {
       if (isElement(offsetParent)) {
-        scale = getScale(offsetParent);
+        scale2 = getScale(offsetParent);
       }
     } else {
-      scale = getScale(element);
+      scale2 = getScale(element);
     }
   }
   const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
-  let x3 = (clientRect.left + visualOffsets.x) / scale.x;
-  let y2 = (clientRect.top + visualOffsets.y) / scale.y;
-  let width = clientRect.width / scale.x;
-  let height = clientRect.height / scale.y;
+  let x3 = (clientRect.left + visualOffsets.x) / scale2.x;
+  let y2 = (clientRect.top + visualOffsets.y) / scale2.y;
+  let width = clientRect.width / scale2.x;
+  let height = clientRect.height / scale2.y;
   if (domElement) {
     const win = getWindow(domElement);
     const offsetWin = offsetParent && isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
@@ -29429,7 +29429,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
-      const css = getComputedStyle$1(currentIFrame);
+      const css = getComputedStyle$2(currentIFrame);
       const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
       const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
       x3 *= iframeScale.x;
@@ -29482,26 +29482,26 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
     scrollLeft: 0,
     scrollTop: 0
   };
-  let scale = createCoords(1);
+  let scale2 = createCoords(1);
   const offsets = createCoords(0);
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  const isOffsetParentAnElement = isHTMLElement$1(offsetParent);
   if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
     if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
       scroll = getNodeScroll(offsetParent);
     }
     if (isOffsetParentAnElement) {
       const offsetRect = getBoundingClientRect(offsetParent);
-      scale = getScale(offsetParent);
+      scale2 = getScale(offsetParent);
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     }
   }
   const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
   return {
-    width: rect.width * scale.x,
-    height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
+    width: rect.width * scale2.x,
+    height: rect.height * scale2.y,
+    x: rect.x * scale2.x - scroll.scrollLeft * scale2.x + offsets.x + htmlOffset.x,
+    y: rect.y * scale2.y - scroll.scrollTop * scale2.y + offsets.y + htmlOffset.y
   };
 }
 function getClientRects(element) {
@@ -29515,7 +29515,7 @@ function getDocumentRect(element) {
   const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
   let x3 = -scroll.scrollLeft + getWindowScrollBarX(element);
   const y2 = -scroll.scrollTop;
-  if (getComputedStyle$1(body).direction === "rtl") {
+  if (getComputedStyle$2(body).direction === "rtl") {
     x3 += max(html.clientWidth, body.clientWidth) - width;
   }
   return {
@@ -29567,11 +29567,11 @@ function getInnerBoundingClientRect(element, strategy) {
   const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
-  const width = element.clientWidth * scale.x;
-  const height = element.clientHeight * scale.y;
-  const x3 = left * scale.x;
-  const y2 = top * scale.y;
+  const scale2 = isHTMLElement$1(element) ? getScale(element) : createCoords(1);
+  const width = element.clientWidth * scale2.x;
+  const height = element.clientHeight * scale2.y;
+  const x3 = left * scale2.x;
+  const y2 = top * scale2.y;
   return {
     width,
     height,
@@ -29603,7 +29603,7 @@ function hasFixedPositionAncestor(element, stopNode) {
   if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) {
     return false;
   }
-  return getComputedStyle$1(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
+  return getComputedStyle$2(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
 }
 function getClippingElementAncestors(element, cache) {
   const cachedResult = cache.get(element);
@@ -29612,10 +29612,10 @@ function getClippingElementAncestors(element, cache) {
   }
   let result = getOverflowAncestors(element, [], false).filter((el) => isElement(el) && getNodeName(el) !== "body");
   let currentContainingBlockComputedStyle = null;
-  const elementIsFixed = getComputedStyle$1(element).position === "fixed";
+  const elementIsFixed = getComputedStyle$2(element).position === "fixed";
   let currentNode = elementIsFixed ? getParentNode(element) : element;
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    const computedStyle = getComputedStyle$1(currentNode);
+    const computedStyle = getComputedStyle$2(currentNode);
     const currentNodeIsContaining = isContainingBlock(currentNode);
     if (!currentNodeIsContaining && computedStyle.position === "fixed") {
       currentContainingBlockComputedStyle = null;
@@ -29670,7 +29670,7 @@ function getDimensions(element) {
   };
 }
 function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  const isOffsetParentAnElement = isHTMLElement$1(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
   const isFixed = strategy === "fixed";
   const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
@@ -29708,10 +29708,10 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
   };
 }
 function isStaticPositioned(element) {
-  return getComputedStyle$1(element).position === "static";
+  return getComputedStyle$2(element).position === "static";
 }
 function getTrueOffsetParent(element, polyfill2) {
-  if (!isHTMLElement(element) || getComputedStyle$1(element).position === "fixed") {
+  if (!isHTMLElement$1(element) || getComputedStyle$2(element).position === "fixed") {
     return null;
   }
   if (polyfill2) {
@@ -29728,7 +29728,7 @@ function getOffsetParent(element, polyfill2) {
   if (isTopLayer(element)) {
     return win;
   }
-  if (!isHTMLElement(element)) {
+  if (!isHTMLElement$1(element)) {
     let svgOffsetParent = getParentNode(element);
     while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
       if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
@@ -29762,7 +29762,7 @@ const getElementRects = async function(data) {
   };
 };
 function isRTL(element) {
-  return getComputedStyle$1(element).direction === "rtl";
+  return getComputedStyle$2(element).direction === "rtl";
 }
 const platform = {
   convertOffsetParentRelativeRectToViewportRelativeRect,
@@ -29946,9 +29946,9 @@ const computePosition = (reference, floating, options) => {
   });
 };
 var isClient = typeof document !== "undefined";
-var noop = function noop2() {
+var noop$1 = function noop() {
 };
-var index = isClient ? reactExports.useLayoutEffect : noop;
+var index = isClient ? reactExports.useLayoutEffect : noop$1;
 function deepEqual$1(a2, b2) {
   if (a2 === b2) {
     return true;
@@ -30318,7 +30318,7 @@ var PopperAnchor = reactExports.forwardRef(
     const { __scopePopper, virtualRef, ...anchorProps } = props;
     const context = usePopperContext(ANCHOR_NAME, __scopePopper);
     const ref = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, ref);
+    const composedRefs = useComposedRefs$1(forwardedRef, ref);
     const anchorRef = reactExports.useRef(null);
     reactExports.useEffect(() => {
       const previousAnchor = anchorRef.current;
@@ -30354,7 +30354,7 @@ var PopperContent = reactExports.forwardRef(
     } = props;
     const context = usePopperContext(CONTENT_NAME$5, __scopePopper);
     const [content, setContent] = reactExports.useState(null);
-    const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
+    const composedRefs = useComposedRefs$1(forwardedRef, (node) => setContent(node));
     const [arrow$12, setArrow] = reactExports.useState(null);
     const arrowSize = useSize(arrow$12);
     const arrowWidth = (arrowSize == null ? void 0 : arrowSize.width) ?? 0;
@@ -30365,7 +30365,7 @@ var PopperContent = reactExports.forwardRef(
     const hasExplicitBoundaries = boundary.length > 0;
     const detectOverflowOptions = {
       padding: collisionPadding,
-      boundary: boundary.filter(isNotNull),
+      boundary: boundary.filter(isNotNull$1),
       // with `strategy: 'fixed'`, this is the only way to get it to respect boundaries
       altBoundary: hasExplicitBoundaries
     };
@@ -30531,7 +30531,7 @@ var PopperArrow = reactExports.forwardRef(function PopperArrow2(props, forwarded
   );
 });
 PopperArrow.displayName = ARROW_NAME$2;
-function isNotNull(value) {
+function isNotNull$1(value) {
   return value !== null;
 }
 var transformOrigin = (options) => ({
@@ -30592,14 +30592,14 @@ function useStateMachine$1(initialState, machine) {
 }
 var Presence = (props) => {
   const { present, children } = props;
-  const presence = usePresence$1(present);
+  const presence = usePresence$2(present);
   const child = typeof children === "function" ? children({ present: presence.isPresent }) : reactExports.Children.only(children);
-  const ref = useComposedRefs(presence.ref, getElementRef$1(child));
+  const ref = useComposedRefs$1(presence.ref, getElementRef$1(child));
   const forceMount = typeof children === "function";
   return forceMount || presence.isPresent ? reactExports.cloneElement(child, { ref }) : null;
 };
 Presence.displayName = "Presence";
-function usePresence$1(present) {
+function usePresence$2(present) {
   const [node, setNode] = reactExports.useState();
   const stylesRef = reactExports.useRef(null);
   const prevPresentRef = reactExports.useRef(present);
@@ -30952,7 +30952,7 @@ var TooltipTrigger$1 = reactExports.forwardRef(
     const providerContext = useTooltipProviderContext(TRIGGER_NAME$5, __scopeTooltip);
     const popperScope = usePopperScope$1(__scopeTooltip);
     const ref = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, ref, context.onTriggerChange);
+    const composedRefs = useComposedRefs$1(forwardedRef, ref, context.onTriggerChange);
     const isPointerDownRef = reactExports.useRef(false);
     const hasPointerMoveOpenedRef = reactExports.useRef(false);
     const handlePointerUp = reactExports.useCallback(() => isPointerDownRef.current = false, []);
@@ -31017,7 +31017,7 @@ var TooltipContentHoverable = reactExports.forwardRef((props, forwardedRef) => {
   const context = useTooltipContext(CONTENT_NAME$4, props.__scopeTooltip);
   const providerContext = useTooltipProviderContext(CONTENT_NAME$4, props.__scopeTooltip);
   const ref = reactExports.useRef(null);
-  const composedRefs = useComposedRefs(forwardedRef, ref);
+  const composedRefs = useComposedRefs$1(forwardedRef, ref);
   const [pointerGraceArea, setPointerGraceArea] = reactExports.useState(null);
   const { trigger, onClose } = context;
   const content = ref.current;
@@ -31590,15 +31590,15 @@ function twJoin() {
   }
   return string;
 }
-const toValue$1 = (mix) => {
-  if (typeof mix === "string") {
-    return mix;
+const toValue$1 = (mix2) => {
+  if (typeof mix2 === "string") {
+    return mix2;
   }
   let resolvedValue;
   let string = "";
-  for (let k2 = 0; k2 < mix.length; k2++) {
-    if (mix[k2]) {
-      if (resolvedValue = toValue$1(mix[k2])) {
+  for (let k2 = 0; k2 < mix2.length; k2++) {
+    if (mix2[k2]) {
+      if (resolvedValue = toValue$1(mix2[k2])) {
         string && (string += " ");
         string += resolvedValue;
       }
@@ -31700,7 +31700,7 @@ const getDefaultConfig = () => {
   const opacity = fromTheme("opacity");
   const padding = fromTheme("padding");
   const saturate = fromTheme("saturate");
-  const scale = fromTheme("scale");
+  const scale2 = fromTheme("scale");
   const sepia = fromTheme("sepia");
   const skew = fromTheme("skew");
   const space = fromTheme("space");
@@ -33355,21 +33355,21 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/scale
        */
       scale: [{
-        scale: [scale]
+        scale: [scale2]
       }],
       /**
        * Scale X
        * @see https://tailwindcss.com/docs/scale
        */
       "scale-x": [{
-        "scale-x": [scale]
+        "scale-x": [scale2]
       }],
       /**
        * Scale Y
        * @see https://tailwindcss.com/docs/scale
        */
       "scale-y": [{
-        "scale-y": [scale]
+        "scale-y": [scale2]
       }],
       /**
        * Rotate
@@ -38979,13 +38979,13 @@ function createActor(canisterId, uploadFile, downloadFile, options = {}) {
 }
 const AuthContext = reactExports.createContext(null);
 function AuthProvider({ children }) {
-  const { identity, login, clear, loginStatus } = useInternetIdentity();
+  const { identity: identity2, login, clear, loginStatus } = useInternetIdentity();
   const { actor } = useActor(createActor);
   const [isRegistered, setIsRegistered] = reactExports.useState(null);
   const registrationAttempted = reactExports.useRef(false);
-  const isAuthenticated = loginStatus === "success" && !!identity;
+  const isAuthenticated = loginStatus === "success" && !!identity2;
   const isLoading = loginStatus === "logging-in" || loginStatus === "initializing";
-  const principal = (identity == null ? void 0 : identity.getPrincipal()) ?? null;
+  const principal = (identity2 == null ? void 0 : identity2.getPrincipal()) ?? null;
   reactExports.useEffect(() => {
     if (!isAuthenticated || !actor || !principal || registrationAttempted.current)
       return;
@@ -39007,7 +39007,7 @@ function AuthProvider({ children }) {
       value: {
         isAuthenticated,
         principal,
-        identity: identity ?? null,
+        identity: identity2 ?? null,
         login,
         logout,
         isLoading,
@@ -39246,9 +39246,9 @@ async function deriveDisplayNameKey(principal) {
     ["encrypt", "decrypt"]
   );
 }
-async function deriveStorageWrapKey(principalText) {
+async function deriveStorageWrapKey(principalText2) {
   try {
-    const seed = new TextEncoder().encode(`keystore:${principalText}`);
+    const seed = new TextEncoder().encode(`keystore:${principalText2}`);
     const hashBuffer = await crypto.subtle.digest("SHA-256", seed);
     return crypto.subtle.importKey(
       "raw",
@@ -39366,12 +39366,12 @@ function CryptoProvider({ children }) {
     });
   }, []);
   const persistConvKey = reactExports.useCallback(
-    async (principalText, convId, key, fingerprint) => {
+    async (principalText2, convId, key, fingerprint) => {
       try {
         const rawBytes = await exportKey(key);
-        const wrapKey = await deriveStorageWrapKey(principalText);
+        const wrapKey = await deriveStorageWrapKey(principalText2);
         const wrapped = await wrapKeyBytes(wrapKey, rawBytes);
-        const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
+        const dbKey = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
         await dbSet(dbKey, {
           wrapped: Array.from(wrapped),
           fingerprint: fingerprint || ""
@@ -39395,18 +39395,18 @@ function CryptoProvider({ children }) {
       groupKeyFingerprints.current.clear();
       return;
     }
-    const principalText = principal.toText();
+    const principalText2 = principal.toText();
     setIsRestoringKeys(true);
     (async () => {
       try {
-        const { keyPair: kp, isNew } = await loadOrCreateKeyPair(principalText);
+        const { keyPair: kp, isNew } = await loadOrCreateKeyPair(principalText2);
         setKeyPair(kp);
         setIsNewKeyPair(isNew);
         if (isNew) {
           exportPublicKey(kp.publicKey).then((pubBytes) => {
             const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
             console.log(
-              `[E2EE KEYS] NEW key pair generated for ${principalText}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`
+              `[E2EE KEYS] NEW key pair generated for ${principalText2}. Public key fingerprint (first 8 bytes): ${fp}. Profile MUST be updated to publish this key before encrypted messages will work.`
             );
           }).catch(() => {
           });
@@ -39415,11 +39415,11 @@ function CryptoProvider({ children }) {
         const kp2 = await exportPublicKey(kp.publicKey);
         const fp2 = Array.from(kp2.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
         console.log(
-          `[E2EE INIT] Principal: ${principalText}, keyFp: ${fp2}, context: ${isPWA ? "PWA" : "browser"}`
+          `[E2EE INIT] Principal: ${principalText2}, keyFp: ${fp2}, context: ${isPWA ? "PWA" : "browser"}`
         );
         let restoredCount = 0;
         try {
-          const prefix2 = `${CONV_KEY_PREFIX}${principalText}:`;
+          const prefix2 = `${CONV_KEY_PREFIX}${principalText2}:`;
           const allEntries = await dbGetKeysWithPrefix(prefix2);
           console.log(
             `[E2EE RESTORE] Restoring ${allEntries.length} conversation keys from IndexedDB`
@@ -39427,7 +39427,7 @@ function CryptoProvider({ children }) {
           let wrapKey = null;
           if (allEntries.length > 0) {
             try {
-              wrapKey = await deriveStorageWrapKey(principalText);
+              wrapKey = await deriveStorageWrapKey(principalText2);
             } catch (wkErr) {
               console.error(
                 "[E2EE KEYSTORE] Cannot restore keys — wrap key derivation failed:",
@@ -39646,8 +39646,8 @@ function CryptoProvider({ children }) {
     async (convId, blob) => {
       let key = convKeys.current.get(convId);
       if (!key && principal) {
-        const principalText = principal.toText();
-        const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
+        const principalText2 = principal.toText();
+        const dbKey = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
         try {
           const stored = await dbGet(dbKey);
           if (stored) {
@@ -39656,7 +39656,7 @@ function CryptoProvider({ children }) {
             if (stored instanceof Uint8Array) {
               rawBytes = toCleanUint8Array(stored);
             } else if (Array.isArray(stored.wrapped)) {
-              const wrapKey = await deriveStorageWrapKey(principalText);
+              const wrapKey = await deriveStorageWrapKey(principalText2);
               const wrappedArr = toCleanUint8Array(
                 stored.wrapped
               );
@@ -39685,8 +39685,8 @@ function CryptoProvider({ children }) {
             err
           );
           if (principal) {
-            const principalText2 = principal.toText();
-            const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
+            const principalText22 = principal.toText();
+            const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText22}:${convId}`;
             try {
               await dbSet(dbKeyToRemove, null);
               console.log(
@@ -39818,801 +39818,51 @@ function useCrypto() {
   if (!ctx) throw new Error("useCrypto must be used within CryptoProvider");
   return ctx;
 }
-function LoadingSpinner({
-  size: size2 = 24,
-  className = "",
-  label = "Loading…",
-  fullScreen = false
-}) {
-  const spinner = /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "svg",
-    {
-      width: size2,
-      height: size2,
-      viewBox: "0 0 24 24",
-      fill: "none",
-      xmlns: "http://www.w3.org/2000/svg",
-      className: `animate-spin text-primary ${className}`,
-      "aria-hidden": "true",
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "circle",
-          {
-            className: "opacity-25",
-            cx: "12",
-            cy: "12",
-            r: "10",
-            stroke: "currentColor",
-            strokeWidth: "3"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "path",
-          {
-            className: "opacity-75",
-            fill: "currentColor",
-            d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-          }
-        )
-      ]
+const createStoreImpl = (createState2) => {
+  let state;
+  const listeners = /* @__PURE__ */ new Set();
+  const setState = (partial, replace) => {
+    const nextState = typeof partial === "function" ? partial(state) : partial;
+    if (!Object.is(nextState, state)) {
+      const previousState = state;
+      state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
+      listeners.forEach((listener) => listener(state, previousState));
     }
-  );
-  if (fullScreen) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full w-full min-h-[200px]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
-      spinner,
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: label })
-    ] }) });
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center", "aria-label": label, children: spinner });
-}
-var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-var use = React$5[" use ".trim().toString()];
-function isPromiseLike(value) {
-  return typeof value === "object" && value !== null && "then" in value;
-}
-function isLazyComponent(element) {
-  return element != null && typeof element === "object" && "$$typeof" in element && element.$$typeof === REACT_LAZY_TYPE && "_payload" in element && isPromiseLike(element._payload);
-}
-// @__NO_SIDE_EFFECTS__
-function createSlot(ownerName) {
-  const SlotClone = /* @__PURE__ */ createSlotClone(ownerName);
-  const Slot2 = reactExports.forwardRef((props, forwardedRef) => {
-    let { children, ...slotProps } = props;
-    if (isLazyComponent(children) && typeof use === "function") {
-      children = use(children._payload);
-    }
-    const childrenArray = reactExports.Children.toArray(children);
-    const slottable = childrenArray.find(isSlottable);
-    if (slottable) {
-      const newElement = slottable.props.children;
-      const newChildren = childrenArray.map((child) => {
-        if (child === slottable) {
-          if (reactExports.Children.count(newElement) > 1) return reactExports.Children.only(null);
-          return reactExports.isValidElement(newElement) ? newElement.props.children : null;
-        } else {
-          return child;
-        }
-      });
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
-  });
-  Slot2.displayName = `${ownerName}.Slot`;
-  return Slot2;
-}
-var Slot$2 = /* @__PURE__ */ createSlot("Slot");
-// @__NO_SIDE_EFFECTS__
-function createSlotClone(ownerName) {
-  const SlotClone = reactExports.forwardRef((props, forwardedRef) => {
-    let { children, ...slotProps } = props;
-    if (isLazyComponent(children) && typeof use === "function") {
-      children = use(children._payload);
-    }
-    if (reactExports.isValidElement(children)) {
-      const childrenRef = getElementRef(children);
-      const props2 = mergeProps(slotProps, children.props);
-      if (children.type !== reactExports.Fragment) {
-        props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
-      }
-      return reactExports.cloneElement(children, props2);
-    }
-    return reactExports.Children.count(children) > 1 ? reactExports.Children.only(null) : null;
-  });
-  SlotClone.displayName = `${ownerName}.SlotClone`;
-  return SlotClone;
-}
-var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
-function isSlottable(child) {
-  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
-}
-function mergeProps(slotProps, childProps) {
-  const overrideProps = { ...childProps };
-  for (const propName in childProps) {
-    const slotPropValue = slotProps[propName];
-    const childPropValue = childProps[propName];
-    const isHandler = /^on[A-Z]/.test(propName);
-    if (isHandler) {
-      if (slotPropValue && childPropValue) {
-        overrideProps[propName] = (...args) => {
-          const result = childPropValue(...args);
-          slotPropValue(...args);
-          return result;
-        };
-      } else if (slotPropValue) {
-        overrideProps[propName] = slotPropValue;
-      }
-    } else if (propName === "style") {
-      overrideProps[propName] = { ...slotPropValue, ...childPropValue };
-    } else if (propName === "className") {
-      overrideProps[propName] = [slotPropValue, childPropValue].filter(Boolean).join(" ");
-    }
-  }
-  return { ...slotProps, ...overrideProps };
-}
-function getElementRef(element) {
-  var _a3, _b3;
-  let getter = (_a3 = Object.getOwnPropertyDescriptor(element.props, "ref")) == null ? void 0 : _a3.get;
-  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.ref;
-  }
-  getter = (_b3 = Object.getOwnPropertyDescriptor(element, "ref")) == null ? void 0 : _b3.get;
-  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.props.ref;
-  }
-  return element.props.ref || element.ref;
-}
-const falsyToString = (value) => typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
-const cx = clsx;
-const cva = (base, config) => (props) => {
-  var _config_compoundVariants;
-  if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
-  const { variants, defaultVariants } = config;
-  const getVariantClassNames = Object.keys(variants).map((variant) => {
-    const variantProp = props === null || props === void 0 ? void 0 : props[variant];
-    const defaultVariantProp = defaultVariants === null || defaultVariants === void 0 ? void 0 : defaultVariants[variant];
-    if (variantProp === null) return null;
-    const variantKey = falsyToString(variantProp) || falsyToString(defaultVariantProp);
-    return variants[variant][variantKey];
-  });
-  const propsWithoutUndefined = props && Object.entries(props).reduce((acc, param) => {
-    let [key, value] = param;
-    if (value === void 0) {
-      return acc;
-    }
-    acc[key] = value;
-    return acc;
-  }, {});
-  const getCompoundVariantClassNames = config === null || config === void 0 ? void 0 : (_config_compoundVariants = config.compoundVariants) === null || _config_compoundVariants === void 0 ? void 0 : _config_compoundVariants.reduce((acc, param) => {
-    let { class: cvClass, className: cvClassName, ...compoundVariantOptions } = param;
-    return Object.entries(compoundVariantOptions).every((param2) => {
-      let [key, value] = param2;
-      return Array.isArray(value) ? value.includes({
-        ...defaultVariants,
-        ...propsWithoutUndefined
-      }[key]) : {
-        ...defaultVariants,
-        ...propsWithoutUndefined
-      }[key] === value;
-    }) ? [
-      ...acc,
-      cvClass,
-      cvClassName
-    ] : acc;
-  }, []);
-  return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+  };
+  const getState2 = () => state;
+  const getInitialState = () => initialState;
+  const subscribe2 = (listener) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  };
+  const api = { setState, getState: getState2, getInitialState, subscribe: subscribe2 };
+  const initialState = state = createState2(setState, getState2, api);
+  return api;
 };
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline: "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline"
-      },
-      size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9"
-      }
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default"
-    }
-  }
-);
-function Button({
-  className,
-  variant,
-  size: size2,
-  asChild = false,
-  ...props
-}) {
-  const Comp = asChild ? Slot$2 : "button";
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Comp,
-    {
-      "data-slot": "button",
-      className: cn(buttonVariants({ variant, size: size2, className })),
-      ...props
-    }
+const createStore = (createState2) => createState2 ? createStoreImpl(createState2) : createStoreImpl;
+const identity = (arg) => arg;
+function useStore$1(api, selector = identity) {
+  const slice = React$4.useSyncExternalStore(
+    api.subscribe,
+    React$4.useCallback(() => selector(api.getState()), [api, selector]),
+    React$4.useCallback(() => selector(api.getInitialState()), [api, selector])
   );
+  React$4.useDebugValue(slice);
+  return slice;
 }
-const STALE = 3e4;
-function useMyOrgs() {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "my-orgs"],
-    queryFn: async () => {
-      if (!actor) return [];
-      const res = await actor.getMyOrgs();
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useMyRole(orgId) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "my-role", orgId],
-    queryFn: async () => {
-      if (!actor || !orgId) return null;
-      const res = await actor.getMyRole(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching && !!orgId,
-    staleTime: STALE
-  });
-}
-function useOrgs(req) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: [
-      "admin",
-      "orgs",
-      req.limit.toString(),
-      req.afterOrgId,
-      req.search ?? ""
-    ],
-    queryFn: async () => {
-      if (!actor) return { total: BigInt(0), orgs: [] };
-      const res = await actor.listOrgs({
-        limit: req.limit,
-        afterOrgId: req.afterOrgId,
-        search: req.search ?? void 0
-      });
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useOrgDetails(orgId) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "org", orgId],
-    queryFn: async () => {
-      if (!actor || !orgId) return null;
-      const res = await actor.getOrg(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching && !!orgId,
-    staleTime: STALE
-  });
-}
-function useOrgUsers(req) {
-  var _a3, _b3;
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: [
-      "admin",
-      "org-users",
-      req == null ? void 0 : req.orgId,
-      req == null ? void 0 : req.limit.toString(),
-      (_b3 = (_a3 = req == null ? void 0 : req.afterUserId) == null ? void 0 : _a3.toText) == null ? void 0 : _b3.call(_a3),
-      (req == null ? void 0 : req.search) ?? null
-    ],
-    queryFn: async () => {
-      if (!actor || !req)
-        return { total: BigInt(0), hasMore: false, members: [] };
-      const res = await actor.getOrgUsers(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching && !!req,
-    staleTime: STALE
-  });
-}
-function useAdminAuditLog(req) {
-  var _a3;
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: [
-      "admin",
-      "audit-log",
-      req.limit.toString(),
-      req.filterEventType,
-      (_a3 = req.afterEventId) == null ? void 0 : _a3.toString()
-    ],
-    queryFn: async () => {
-      if (!actor) return [];
-      const res = await actor.getAuditLog(req);
-      if (res.__kind__ === "err") throw new Error(String(res.err));
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useAllGroups(req) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "groups", req.orgId ?? null],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getAllGroups(req);
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useGroupMembers(groupId) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "group-members", groupId.toString()],
-    queryFn: async () => {
-      if (!actor) return [];
-      const res = await actor.getGroupMembers({ groupId });
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useRemoveMemberFromGroup() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.removeMemberFromGroup(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: (_data, req) => {
-      void qc.invalidateQueries({
-        queryKey: ["admin", "group-members", req.groupId.toString()]
-      });
-      void qc.invalidateQueries({ queryKey: ["admin", "groups"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useIsSuperAdmin() {
-  const { actor, isFetching } = useActor(createActor);
-  const { principal } = useAuth();
-  return useQuery({
-    queryKey: ["admin", "is-super-admin", principal == null ? void 0 : principal.toText()],
-    queryFn: async () => {
-      if (!actor || !principal) return false;
-      const res = await actor.listAdmins();
-      if (res.__kind__ === "err") return false;
-      return res.ok.some((p2) => p2.toText() === principal.toText());
-    },
-    enabled: !!actor && !isFetching && !!principal,
-    staleTime: STALE
-  });
-}
-function useCreateOrg() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.createOrg(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
-    }
-  });
-}
-function useInviteUser() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.inviteUser(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: (_data, req) => {
-      void qc.invalidateQueries({
-        queryKey: ["admin", "org-users", req.orgId]
-      });
-    }
-  });
-}
-function useUpdateMemberRole() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.updateMemberRole(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: (_data, req) => {
-      void qc.invalidateQueries({
-        queryKey: ["admin", "org-users", req.orgId]
-      });
-    }
-  });
-}
-function useSuspendMember() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.suspendMember(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: (_data, req) => {
-      void qc.invalidateQueries({
-        queryKey: ["admin", "org-users", req.orgId]
-      });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useRemoveMember() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ orgId, userId }) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.removeMember(orgId, userId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: (_data, { orgId }) => {
-      void qc.invalidateQueries({ queryKey: ["admin", "org-users", orgId] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useReactivateMember() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ orgId, userId }) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.reactivateMember(orgId, userId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: (_data, { orgId }) => {
-      void qc.invalidateQueries({ queryKey: ["admin", "org-users", orgId] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useUpdateOrg() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      orgId,
-      name,
-      description
-    }) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.updateOrg(orgId, name, description);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: (_data, { orgId }) => {
-      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "org", orgId] });
-      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
-    }
-  });
-}
-function useSuspendOrg() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (orgId) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.suspendOrg(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useDeleteOrg() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (orgId) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.deleteOrg(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useHasSuperAdmin() {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "has-super-admin"],
-    queryFn: async () => {
-      if (!actor) return false;
-      return actor.hasSuperAdmin();
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useExportAuditLogs() {
-  const { actor } = useActor(createActor);
-  return useMutation({
-    mutationFn: async (req) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.exportAuditLogs(req);
-      if (res.__kind__ === "err") throw new Error(String(res.err));
-      return res.ok;
-    }
-  });
-}
-function useEscrowStats() {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "escrow-stats"],
-    queryFn: async () => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.getEscrowStats();
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useEscrowedUsers(req) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: [
-      "admin",
-      "escrowed-users",
-      req.orgId ?? null,
-      req.afterUserId ?? null,
-      req.limit.toString()
-    ],
-    queryFn: async () => {
-      if (!actor) return [];
-      const res = await actor.getEscrowedUsers(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useRecoveryRequests(orgId, statusFilter) {
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "recovery-requests", orgId, statusFilter],
-    queryFn: async () => {
-      if (!actor) return [];
-      const res = await actor.getRecoveryRequests(
-        null,
-        statusFilter ?? null
-      );
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useEscrowGrants(targetUserId) {
-  var _a3;
-  const { actor, isFetching } = useActor(createActor);
-  return useQuery({
-    queryKey: ["admin", "escrow-grants", (_a3 = targetUserId == null ? void 0 : targetUserId.toText) == null ? void 0 : _a3.call(targetUserId)],
-    queryFn: async () => {
-      if (!actor) return [];
-      const res = await actor.adminGetEscrowGrants(
-        targetUserId ?? null,
-        50n,
-        null
-      );
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: STALE
-  });
-}
-function useInitiateKeyRecovery() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      targetUserId,
-      targetDeviceId,
-      reason,
-      orgId
-    }) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.initiateKeyRecovery(
-        targetUserId,
-        targetDeviceId,
-        reason,
-        orgId ?? null
-      );
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useApproveKeyRecovery() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (requestId) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.approveKeyRecovery(requestId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useCheckPolicyExpiry() {
-  const { actor, isFetching } = useActor(createActor);
-  const { principal } = useAuth();
-  return useQuery({
-    queryKey: ["admin", "policy-expiry", principal == null ? void 0 : principal.toText()],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.checkPolicyExpiry(null);
-    },
-    enabled: !!actor && !isFetching,
-    staleTime: 6e4,
-    refetchInterval: 6e4
-  });
-}
-function useLogPolicyReportExported() {
-  const { actor } = useActor(createActor);
-  return useMutation({
-    mutationFn: async (orgFilter) => {
-      if (!actor) throw new Error("Actor not ready");
-      await actor.logPolicyReportExported(orgFilter ?? null);
-    }
-  });
-}
-function useLogPolicyExpiryCheck() {
-  const { actor } = useActor(createActor);
-  return useMutation({
-    mutationFn: async () => {
-      if (!actor) throw new Error("Actor not ready");
-      await actor.logPolicyExpiryCheck();
-    }
-  });
-}
-function useRejectKeyRecovery() {
-  const { actor } = useActor(createActor);
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (requestId) => {
-      if (!actor) throw new Error("Actor not ready");
-      const res = await actor.rejectKeyRecovery(requestId);
-      if (res.__kind__ === "err") throw new Error(res.err);
-      return res.ok;
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
-      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
-    }
-  });
-}
-function useEnrollUserKeyEscrow() {
-  const queryClient2 = useQueryClient();
-  const { actor } = useActor(createActor);
-  return useMutation({
-    mutationFn: async (_principalId) => {
-      if (!actor) throw new Error("Actor not ready");
-      const fn = actor.enrollUserKeyEscrow;
-      if (typeof fn !== "function") {
-        throw new Error(
-          "vetKeys enrollment not yet available in canister bindings. Please redeploy and run pnpm bindgen."
-        );
-      }
-      const result = await fn.call(actor);
-      if ("err" in result && result.err !== void 0)
-        throw new Error(result.err);
-      return result.ok ?? "Enrolled";
-    },
-    onSuccess: () => {
-      void queryClient2.invalidateQueries({
-        queryKey: ["admin", "escrowed-users"]
-      });
-    }
-  });
-}
-function useGetEncryptedEscrowKey() {
-  const { actor } = useActor(createActor);
-  return useMutation({
-    mutationFn: async ({
-      targetPrincipal,
-      transportPublicKey
-    }) => {
-      if (!actor) throw new Error("Actor not ready");
-      const { Principal: Principal3 } = await __vitePreload(async () => {
-        const { Principal: Principal4 } = await Promise.resolve().then(() => index$3);
-        return { Principal: Principal4 };
-      }, true ? void 0 : void 0);
-      const fn = actor.getEncryptedEscrowKey;
-      if (typeof fn !== "function") {
-        throw new Error(
-          "getEncryptedEscrowKey not available in canister bindings."
-        );
-      }
-      const result = await fn.call(
-        actor,
-        Principal3.fromText(targetPrincipal),
-        transportPublicKey
-      );
-      if ("err" in result && result.err !== void 0)
-        throw new Error(result.err);
-      if (!result.ok) throw new Error("No key data returned");
-      return result.ok;
-    }
-  });
-}
+const createImpl = (createState2) => {
+  const api = createStore(createState2);
+  const useBoundStore = (selector) => useStore$1(api, selector);
+  Object.assign(useBoundStore, api);
+  return useBoundStore;
+};
+const create = (createState2) => createState2 ? createImpl(createState2) : createImpl;
+const usePolicyExpiryStore = create((set) => ({
+  expiryCount: 0,
+  setExpiryCount: (count2) => set({ expiryCount: count2 })
+}));
 var prefix = "Invariant failed";
-function invariant(condition, message) {
+function invariant$1(condition, message) {
   if (condition) {
     return;
   }
@@ -42087,7 +41337,7 @@ function processRouteTree({
     childRoutes.forEach((childRoute, i) => {
       initRoute == null ? void 0 : initRoute(childRoute, i);
       const existingRoute = routesById[childRoute.id];
-      invariant(
+      invariant$1(
         !existingRoute,
         `Duplicate routes found with id: ${String(childRoute.id)}`
       );
@@ -42487,11 +41737,11 @@ const _handleNotFound = (inner, err) => {
   if (!routeCursor.options.notFoundComponent && ((_a3 = inner.router.options) == null ? void 0 : _a3.defaultNotFoundComponent)) {
     routeCursor.options.notFoundComponent = inner.router.options.defaultNotFoundComponent;
   }
-  invariant(
+  invariant$1(
     routeCursor.options.notFoundComponent
   );
   const matchForRoute = inner.matches.find((m2) => m2.routeId === routeCursor.id);
-  invariant(matchForRoute, "Could not find match for route: " + routeCursor.id);
+  invariant$1(matchForRoute, "Could not find match for route: " + routeCursor.id);
   inner.updateMatch(matchForRoute.id, (prev) => ({
     ...prev,
     status: "notFound",
@@ -43298,8 +42548,8 @@ class RouterCore {
         parseCache: this.parsePathnameCache
       });
     };
-    this.cancelMatch = (id) => {
-      const match = this.getMatch(id);
+    this.cancelMatch = (id2) => {
+      const match = this.getMatch(id2);
       if (!match) return;
       match.abortController.abort();
       clearTimeout(match._nonReactive.pendingTimeout);
@@ -43750,15 +43000,15 @@ class RouterCore {
         fn();
       }
     };
-    this.updateMatch = (id, updater) => {
+    this.updateMatch = (id2, updater) => {
       var _a3;
-      const matchesKey = ((_a3 = this.state.pendingMatches) == null ? void 0 : _a3.some((d2) => d2.id === id)) ? "pendingMatches" : this.state.matches.some((d2) => d2.id === id) ? "matches" : this.state.cachedMatches.some((d2) => d2.id === id) ? "cachedMatches" : "";
+      const matchesKey = ((_a3 = this.state.pendingMatches) == null ? void 0 : _a3.some((d2) => d2.id === id2)) ? "pendingMatches" : this.state.matches.some((d2) => d2.id === id2) ? "matches" : this.state.cachedMatches.some((d2) => d2.id === id2) ? "cachedMatches" : "";
       if (matchesKey) {
         this.__store.setState((s2) => {
           var _a22;
           return {
             ...s2,
-            [matchesKey]: (_a22 = s2[matchesKey]) == null ? void 0 : _a22.map((d2) => d2.id === id ? updater(d2) : d2)
+            [matchesKey]: (_a22 = s2[matchesKey]) == null ? void 0 : _a22.map((d2) => d2.id === id2 ? updater(d2) : d2)
           };
         });
       }
@@ -43803,13 +43053,13 @@ class RouterCore {
       return redirect2;
     };
     this.clearCache = (opts) => {
-      const filter = opts == null ? void 0 : opts.filter;
-      if (filter !== void 0) {
+      const filter2 = opts == null ? void 0 : opts.filter;
+      if (filter2 !== void 0) {
         this.__store.setState((s2) => {
           return {
             ...s2,
             cachedMatches: s2.cachedMatches.filter(
-              (m2) => !filter(m2)
+              (m2) => !filter2(m2)
             )
           };
         });
@@ -43823,7 +43073,7 @@ class RouterCore {
       }
     };
     this.clearExpiredCache = () => {
-      const filter = (d2) => {
+      const filter2 = (d2) => {
         const route = this.looseRoutesById[d2.routeId];
         if (!route.options.loader) {
           return true;
@@ -43834,7 +43084,7 @@ class RouterCore {
         const gcEligible = Date.now() - d2.updatedAt >= gcTime;
         return gcEligible;
       };
-      this.clearCache({ filter });
+      this.clearCache({ filter: filter2 });
     };
     this.loadRouteChunk = loadRouteChunk;
     this.preloadRoute = async (opts) => {
@@ -43869,11 +43119,11 @@ class RouterCore {
           matches,
           location: next,
           preload: true,
-          updateMatch: (id, updater) => {
-            if (activeMatchIds.has(id)) {
-              matches = matches.map((d2) => d2.id === id ? updater(d2) : d2);
+          updateMatch: (id2, updater) => {
+            if (activeMatchIds.has(id2)) {
+              matches = matches.map((d2) => d2.id === id2 ? updater(d2) : d2);
             } else {
-              this.updateMatch(id, updater);
+              this.updateMatch(id2, updater);
             }
           }
         });
@@ -44353,7 +43603,7 @@ class BaseRoute {
       if (isRoot) {
         this._path = rootRouteId;
       } else if (!this.parentRoute) {
-        invariant(
+        invariant$1(
           false
         );
       }
@@ -44362,19 +43612,19 @@ class BaseRoute {
         path = trimPathLeft(path);
       }
       const customId = (options2 == null ? void 0 : options2.id) || path;
-      let id = isRoot ? rootRouteId : joinPaths([
+      let id2 = isRoot ? rootRouteId : joinPaths([
         this.parentRoute.id === rootRouteId ? "" : this.parentRoute.id,
         customId
       ]);
       if (path === rootRouteId) {
         path = "/";
       }
-      if (id !== rootRouteId) {
-        id = joinPaths(["/", id]);
+      if (id2 !== rootRouteId) {
+        id2 = joinPaths(["/", id2]);
       }
-      const fullPath = id === rootRouteId ? "/" : joinPaths([this.parentRoute.fullPath, path]);
+      const fullPath = id2 === rootRouteId ? "/" : joinPaths([this.parentRoute.fullPath, path]);
       this._path = path;
-      this._id = id;
+      this._id = id2;
       this._fullPath = fullPath;
       this._to = fullPath;
     };
@@ -44772,7 +44022,7 @@ function useMatch(opts) {
       const match = state.matches.find(
         (d2) => opts.from ? opts.from === d2.routeId : d2.id === nearestMatchId
       );
-      invariant(
+      invariant$1(
         !((opts.shouldThrow ?? true) && !match),
         `Could not find ${opts.from ? `an active match from "${opts.from}"` : "a nearest match!"}`
       );
@@ -44859,12 +44109,12 @@ function useIntersectionObserver(ref, callback, intersectionObserverOptions2 = {
     if (!ref.current || options.disabled || typeof IntersectionObserver !== "function") {
       return;
     }
-    const observer = new IntersectionObserver(([entry]) => {
+    const observer2 = new IntersectionObserver(([entry]) => {
       callback(entry);
     }, intersectionObserverOptions2);
-    observer.observe(ref.current);
+    observer2.observe(ref.current);
     return () => {
-      observer.disconnect();
+      observer2.disconnect();
     };
   }, [callback, intersectionObserverOptions2, options.disabled, ref]);
 }
@@ -45081,19 +44331,19 @@ function useLinkProps(options, forwardedRef) {
       if (timeoutMap.has(eventTarget)) {
         return;
       }
-      const id = setTimeout(() => {
+      const id2 = setTimeout(() => {
         timeoutMap.delete(eventTarget);
         doPreload();
       }, preloadDelay);
-      timeoutMap.set(eventTarget, id);
+      timeoutMap.set(eventTarget, id2);
     }
   };
   const handleLeave = (e) => {
     if (disabled || !preload3 || !preloadDelay) return;
     const eventTarget = e.target;
-    const id = timeoutMap.get(eventTarget);
-    if (id) {
-      clearTimeout(id);
+    const id2 = timeoutMap.get(eventTarget);
+    if (id2) {
+      clearTimeout(id2);
       timeoutMap.delete(eventTarget);
     }
   };
@@ -45347,11 +44597,11 @@ class LazyRoute {
     this.$$typeof = Symbol.for("react.memo");
   }
 }
-function createLazyFileRoute(id) {
-  if (typeof id === "object") {
-    return new LazyRoute(id);
+function createLazyFileRoute(id2) {
+  if (typeof id2 === "object") {
+    return new LazyRoute(id2);
   }
-  return (opts) => new LazyRoute({ id, ...opts });
+  return (opts) => new LazyRoute({ id: id2, ...opts });
 }
 function Transitioner() {
   const router2 = useRouter();
@@ -45532,7 +44782,7 @@ const Match = reactExports.memo(function MatchImpl({
   const matchState = useRouterState({
     select: (s2) => {
       const match = s2.matches.find((d2) => d2.id === matchId);
-      invariant(
+      invariant$1(
         match
       );
       return {
@@ -45684,11 +44934,11 @@ const MatchInner = reactExports.memo(function MatchInnerImpl({
     throw (_c2 = router2.getMatch(match.id)) == null ? void 0 : _c2._nonReactive.loadPromise;
   }
   if (match.status === "notFound") {
-    invariant(isNotFound(match.error));
+    invariant$1(isNotFound(match.error));
     return renderRouteNotFound(router2, route, match.error);
   }
   if (match.status === "redirected") {
-    invariant(isRedirect(match.error));
+    invariant$1(isRedirect(match.error));
     throw (_d2 = router2.getMatch(match.id)) == null ? void 0 : _d2._nonReactive.loadPromise;
   }
   if (match.status === "error") {
@@ -45723,7 +44973,7 @@ const Outlet = reactExports.memo(function OutletImpl() {
     select: (s2) => {
       const matches = s2.matches;
       const parentMatch = matches.find((d2) => d2.id === matchId);
-      invariant(
+      invariant$1(
         parentMatch
       );
       return parentMatch.globalNotFound;
@@ -45879,7 +45129,7 @@ var defaultAttributes = {
  */
 const Icon$1 = reactExports.forwardRef(
   ({
-    color = "currentColor",
+    color: color2 = "currentColor",
     size: size2 = 24,
     strokeWidth = 2,
     absoluteStrokeWidth,
@@ -45894,7 +45144,7 @@ const Icon$1 = reactExports.forwardRef(
       ...defaultAttributes,
       width: size2,
       height: size2,
-      stroke: color,
+      stroke: color2,
       strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size2) : strokeWidth,
       className: mergeClasses("lucide", className),
       ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
@@ -45934,29 +45184,41 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$U = [
+const __iconNode$10 = [
+  ["rect", { width: "20", height: "5", x: "2", y: "3", rx: "1", key: "1wp1u1" }],
+  ["path", { d: "M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8", key: "1s80jp" }],
+  ["path", { d: "M10 12h4", key: "a56b0p" }]
+];
+const Archive = createLucideIcon("archive", __iconNode$10);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$$ = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$U);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$$);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$T = [
+const __iconNode$_ = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$T);
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$_);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$S = [
+const __iconNode$Z = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -45966,7 +45228,80 @@ const __iconNode$S = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$S);
+const Bell = createLucideIcon("bell", __iconNode$Z);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$Y = [
+  ["path", { d: "M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z", key: "1b4qmf" }],
+  ["path", { d: "M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2", key: "i71pzd" }],
+  ["path", { d: "M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2", key: "10jefs" }],
+  ["path", { d: "M10 6h4", key: "1itunk" }],
+  ["path", { d: "M10 10h4", key: "tcdvrf" }],
+  ["path", { d: "M10 14h4", key: "kelpxr" }],
+  ["path", { d: "M10 18h4", key: "1ulq68" }]
+];
+const Building2 = createLucideIcon("building-2", __iconNode$Y);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$X = [
+  ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
+  ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
+];
+const CheckCheck = createLucideIcon("check-check", __iconNode$X);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$W = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$W);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$V = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$V);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$U = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$U);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$T = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$T);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$S = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+  ["line", { x1: "21.17", x2: "12", y1: "8", y2: "8", key: "a0cw5f" }],
+  ["line", { x1: "3.95", x2: "8.54", y1: "6.06", y2: "14", key: "1kftof" }],
+  ["line", { x1: "10.88", x2: "15.46", y1: "21.94", y2: "14", key: "1ymyh8" }]
+];
+const Chrome = createLucideIcon("chrome", __iconNode$S);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45974,78 +45309,50 @@ const Bell = createLucideIcon("bell", __iconNode$S);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$R = [
-  ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
-  ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
-];
-const CheckCheck = createLucideIcon("check-check", __iconNode$R);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$Q = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$Q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$P = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$P);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$O = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$O);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$N = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
-  ["line", { x1: "21.17", x2: "12", y1: "8", y2: "8", key: "a0cw5f" }],
-  ["line", { x1: "3.95", x2: "8.54", y1: "6.06", y2: "14", key: "1kftof" }],
-  ["line", { x1: "10.88", x2: "15.46", y1: "21.94", y2: "14", key: "1ymyh8" }]
-];
-const Chrome = createLucideIcon("chrome", __iconNode$N);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$M = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
   ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
 ];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$M);
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$R);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$L = [
+const __iconNode$Q = [
   ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
   ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
 ];
-const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$L);
+const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$Q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$K = [
+const __iconNode$P = [
+  ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
+  [
+    "path",
+    {
+      d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2",
+      key: "116196"
+    }
+  ],
+  ["path", { d: "M12 11h4", key: "1jrz19" }],
+  ["path", { d: "M12 16h4", key: "n85exb" }],
+  ["path", { d: "M8 11h.01", key: "1dfujw" }],
+  ["path", { d: "M8 16h.01", key: "18s6g9" }]
+];
+const ClipboardList = createLucideIcon("clipboard-list", __iconNode$P);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$O = [
   [
     "path",
     {
@@ -46055,7 +45362,54 @@ const __iconNode$K = [
   ],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Compass = createLucideIcon("compass", __iconNode$K);
+const Compass = createLucideIcon("compass", __iconNode$O);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$N = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$N);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$M = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$M);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$L = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$L);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$K = [
+  ["circle", { cx: "12", cy: "12", r: "1", key: "41hilf" }],
+  ["circle", { cx: "19", cy: "12", r: "1", key: "1wjl8i" }],
+  ["circle", { cx: "5", cy: "12", r: "1", key: "1pcz8c" }]
+];
+const Ellipsis = createLucideIcon("ellipsis", __iconNode$K);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46063,10 +45417,13 @@ const Compass = createLucideIcon("compass", __iconNode$K);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$J = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$J);
+const FileText = createLucideIcon("file-text", __iconNode$J);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46074,11 +45431,11 @@ const Copy = createLucideIcon("copy", __iconNode$J);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$I = [
-  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
-  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
-  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
 ];
-const Database = createLucideIcon("database", __iconNode$I);
+const Globe = createLucideIcon("globe", __iconNode$I);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46086,56 +45443,6 @@ const Database = createLucideIcon("database", __iconNode$I);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$H = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
-];
-const Download = createLucideIcon("download", __iconNode$H);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$G = [
-  ["circle", { cx: "12", cy: "12", r: "1", key: "41hilf" }],
-  ["circle", { cx: "19", cy: "12", r: "1", key: "1wjl8i" }],
-  ["circle", { cx: "5", cy: "12", r: "1", key: "1pcz8c" }]
-];
-const Ellipsis = createLucideIcon("ellipsis", __iconNode$G);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$F = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
-];
-const FileText = createLucideIcon("file-text", __iconNode$F);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$E = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
-];
-const Globe = createLucideIcon("globe", __iconNode$E);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$D = [
   ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
   [
     "path",
@@ -46145,7 +45452,62 @@ const __iconNode$D = [
     }
   ]
 ];
-const House = createLucideIcon("house", __iconNode$D);
+const House = createLucideIcon("house", __iconNode$H);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$G = [
+  ["path", { d: "M16 5h6", key: "1vod17" }],
+  ["path", { d: "M19 2v6", key: "4bpg5p" }],
+  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
+];
+const ImagePlus = createLucideIcon("image-plus", __iconNode$G);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$F = [
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+];
+const Image = createLucideIcon("image", __iconNode$F);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$E = [
+  [
+    "path",
+    {
+      d: "M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z",
+      key: "1s6t7t"
+    }
+  ],
+  ["circle", { cx: "16.5", cy: "7.5", r: ".5", fill: "currentColor", key: "w0ekpg" }]
+];
+const KeyRound = createLucideIcon("key-round", __iconNode$E);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$D = [
+  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
+  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
+  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
+];
+const Key = createLucideIcon("key", __iconNode$D);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46153,25 +45515,20 @@ const House = createLucideIcon("house", __iconNode$D);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$C = [
-  ["path", { d: "M16 5h6", key: "1vod17" }],
-  ["path", { d: "M19 2v6", key: "4bpg5p" }],
-  ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
+  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
 ];
-const ImagePlus = createLucideIcon("image-plus", __iconNode$C);
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$C);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$B = [
-  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-  ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-  ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
-];
-const Image = createLucideIcon("image", __iconNode$B);
+const __iconNode$B = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$B);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46179,19 +45536,22 @@ const Image = createLucideIcon("image", __iconNode$B);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$A = [
-  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
-  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
-  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
 ];
-const Key = createLucideIcon("key", __iconNode$A);
+const Lock = createLucideIcon("lock", __iconNode$A);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$z = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$z);
+const __iconNode$z = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$z);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46199,10 +45559,11 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$z);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$y = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const Lock = createLucideIcon("lock", __iconNode$y);
+const Menu = createLucideIcon("menu", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46210,11 +45571,9 @@ const Lock = createLucideIcon("lock", __iconNode$y);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$x = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$x);
+const MessageSquare = createLucideIcon("message-square", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46222,28 +45581,6 @@ const LogOut = createLucideIcon("log-out", __iconNode$x);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$w = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$w);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$v = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
-];
-const MessageSquare = createLucideIcon("message-square", __iconNode$v);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$u = [
   ["line", { x1: "2", x2: "22", y1: "2", y2: "22", key: "a6p6uj" }],
   ["path", { d: "M18.89 13.23A7.12 7.12 0 0 0 19 12v-2", key: "80xlxr" }],
   ["path", { d: "M5 10v2a7 7 0 0 0 12 5", key: "p2k8kg" }],
@@ -46251,7 +45588,31 @@ const __iconNode$u = [
   ["path", { d: "M9 9v3a3 3 0 0 0 5.12 2.12", key: "r2i35w" }],
   ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
 ];
-const MicOff = createLucideIcon("mic-off", __iconNode$u);
+const MicOff = createLucideIcon("mic-off", __iconNode$w);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$v = [
+  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
+  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
+  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+];
+const Mic = createLucideIcon("mic", __iconNode$v);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$u = [
+  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
+  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
+  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
+];
+const Monitor = createLucideIcon("monitor", __iconNode$u);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46259,11 +45620,9 @@ const MicOff = createLucideIcon("mic-off", __iconNode$u);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$t = [
-  ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
-  ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
-  ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
+  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
 ];
-const Mic = createLucideIcon("mic", __iconNode$t);
+const Moon = createLucideIcon("moon", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46271,28 +45630,6 @@ const Mic = createLucideIcon("mic", __iconNode$t);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$s = [
-  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
-  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
-  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
-];
-const Monitor = createLucideIcon("monitor", __iconNode$s);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$r = [
-  ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
-];
-const Moon = createLucideIcon("moon", __iconNode$r);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$q = [
   ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
   [
     "path",
@@ -46302,15 +45639,39 @@ const __iconNode$q = [
     }
   ]
 ];
-const Paperclip = createLucideIcon("paperclip", __iconNode$q);
+const Paperclip = createLucideIcon("paperclip", __iconNode$s);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$p = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
-const Play = createLucideIcon("play", __iconNode$p);
+const __iconNode$r = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
+const Play = createLucideIcon("play", __iconNode$r);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$p);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46318,30 +45679,6 @@ const Play = createLucideIcon("play", __iconNode$p);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$o = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$o);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$n = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
-];
-const Search = createLucideIcon("search", __iconNode$n);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$m = [
   [
     "path",
     {
@@ -46351,7 +45688,38 @@ const __iconNode$m = [
   ],
   ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
 ];
-const Send = createLucideIcon("send", __iconNode$m);
+const Send = createLucideIcon("send", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Settings = createLucideIcon("settings", __iconNode$n);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$m = [
+  ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }],
+  ["circle", { cx: "6", cy: "12", r: "3", key: "w7nqdw" }],
+  ["circle", { cx: "18", cy: "19", r: "3", key: "1xt0gg" }],
+  ["line", { x1: "8.59", x2: "15.42", y1: "13.51", y2: "17.49", key: "47mynk" }],
+  ["line", { x1: "15.41", x2: "8.59", y1: "6.51", y2: "10.49", key: "1n3mei" }]
+];
+const Share2 = createLucideIcon("share-2", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46362,13 +45730,13 @@ const __iconNode$l = [
   [
     "path",
     {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
     }
   ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const Settings = createLucideIcon("settings", __iconNode$l);
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46376,37 +45744,6 @@ const Settings = createLucideIcon("settings", __iconNode$l);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$k = [
-  ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }],
-  ["circle", { cx: "6", cy: "12", r: "3", key: "w7nqdw" }],
-  ["circle", { cx: "18", cy: "19", r: "3", key: "1xt0gg" }],
-  ["line", { x1: "8.59", x2: "15.42", y1: "13.51", y2: "17.49", key: "47mynk" }],
-  ["line", { x1: "15.41", x2: "8.59", y1: "6.51", y2: "10.49", key: "1n3mei" }]
-];
-const Share2 = createLucideIcon("share-2", __iconNode$k);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$j = [
-  [
-    "path",
-    {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
-    }
-  ],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
-];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$j);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$i = [
   ["path", { d: "m2 2 20 20", key: "1ooewy" }],
   [
     "path",
@@ -46423,14 +45760,14 @@ const __iconNode$i = [
     }
   ]
 ];
-const ShieldOff = createLucideIcon("shield-off", __iconNode$i);
+const ShieldOff = createLucideIcon("shield-off", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$h = [
+const __iconNode$j = [
   [
     "path",
     {
@@ -46439,25 +45776,25 @@ const __iconNode$h = [
     }
   ]
 ];
-const Shield = createLucideIcon("shield", __iconNode$h);
+const Shield = createLucideIcon("shield", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$g = [
+const __iconNode$i = [
   ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
   ["path", { d: "M12 18h.01", key: "mhygvu" }]
 ];
-const Smartphone = createLucideIcon("smartphone", __iconNode$g);
+const Smartphone = createLucideIcon("smartphone", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$f = [
+const __iconNode$h = [
   ["path", { d: "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7", key: "1m0v6g" }],
   [
     "path",
@@ -46467,24 +45804,24 @@ const __iconNode$f = [
     }
   ]
 ];
-const SquarePen = createLucideIcon("square-pen", __iconNode$f);
+const SquarePen = createLucideIcon("square-pen", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$e = [
+const __iconNode$g = [
   ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
 ];
-const Square = createLucideIcon("square", __iconNode$e);
+const Square = createLucideIcon("square", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$d = [
+const __iconNode$f = [
   ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
@@ -46495,7 +45832,33 @@ const __iconNode$d = [
   ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
   ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
 ];
-const Sun = createLucideIcon("sun", __iconNode$d);
+const Sun = createLucideIcon("sun", __iconNode$f);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$e = [
+  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
+  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
+  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
+];
+const Timer = createLucideIcon("timer", __iconNode$e);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$d = [
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+];
+const Trash2 = createLucideIcon("trash-2", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46503,32 +45866,6 @@ const Sun = createLucideIcon("sun", __iconNode$d);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$c = [
-  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
-  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
-  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
-];
-const Timer = createLucideIcon("timer", __iconNode$c);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$b = [
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
-];
-const Trash2 = createLucideIcon("trash-2", __iconNode$b);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$a = [
   [
     "path",
     {
@@ -46539,7 +45876,31 @@ const __iconNode$a = [
   ["path", { d: "M12 9v4", key: "juzpu7" }],
   ["path", { d: "M12 17h.01", key: "p32p05" }]
 ];
-const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$a);
+const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$c);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$b = [
+  ["path", { d: "M12 3v12", key: "1x0j5s" }],
+  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
+];
+const Upload = createLucideIcon("upload", __iconNode$b);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$a = [
+  ["path", { d: "m16 11 2 2 4-4", key: "9rsbq5" }],
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+];
+const UserCheck = createLucideIcon("user-check", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46547,11 +45908,11 @@ const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$a);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$9 = [
-  ["path", { d: "M12 3v12", key: "1x0j5s" }],
-  ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
+  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
 ];
-const Upload = createLucideIcon("upload", __iconNode$9);
+const UserMinus = createLucideIcon("user-minus", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46559,11 +45920,12 @@ const Upload = createLucideIcon("upload", __iconNode$9);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$8 = [
-  ["path", { d: "m16 11 2 2 4-4", key: "9rsbq5" }],
   ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
+  ["line", { x1: "19", x2: "19", y1: "8", y2: "14", key: "1bvyxn" }],
+  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
 ];
-const UserCheck = createLucideIcon("user-check", __iconNode$8);
+const UserPlus = createLucideIcon("user-plus", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46571,11 +45933,10 @@ const UserCheck = createLucideIcon("user-check", __iconNode$8);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$7 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
-  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
+  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
+  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
 ];
-const UserMinus = createLucideIcon("user-minus", __iconNode$7);
+const User = createLucideIcon("user", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46583,10 +45944,11 @@ const UserMinus = createLucideIcon("user-minus", __iconNode$7);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$6 = [
-  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
-  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
+  ["path", { d: "M18 21a8 8 0 0 0-16 0", key: "3ypg7q" }],
+  ["circle", { cx: "10", cy: "8", r: "5", key: "o932ke" }],
+  ["path", { d: "M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3", key: "10s06x" }]
 ];
-const User = createLucideIcon("user", __iconNode$6);
+const UsersRound = createLucideIcon("users-round", __iconNode$6);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46673,6 +46035,1946 @@ const __iconNode = [
   ]
 ];
 const Zap = createLucideIcon("zap", __iconNode);
+const NAV_ITEMS$1 = [
+  { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
+  { label: "Organizations", icon: Building2, path: "/admin/organizations" },
+  { label: "Users", icon: Users, path: "/admin/users" },
+  { label: "Groups", icon: UsersRound, path: "/admin/groups" },
+  { label: "Audit Logs", icon: FileText, path: "/admin/audit-logs" },
+  { label: "Key Escrow", icon: KeyRound, path: "/admin/key-escrow" },
+  {
+    label: "Retention Policies",
+    icon: Archive,
+    path: "/admin/retention-policies"
+  },
+  { label: "Settings", icon: Settings, path: "/admin/settings" }
+];
+function SidebarNavItem({
+  item,
+  isActive,
+  collapsed,
+  badgeCount,
+  onClick
+}) {
+  const navigate = useNavigate();
+  const Icon2 = item.icon;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      type: "button",
+      "data-ocid": `admin.nav.${item.label.toLowerCase().replace(/\s+/g, "_")}`,
+      onClick: () => {
+        navigate({ to: item.path });
+        onClick == null ? void 0 : onClick();
+      },
+      className: cn(
+        "group relative flex w-full items-center gap-3 rounded px-3 py-2.5",
+        "text-sm font-medium transition-all duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+        isActive ? "bg-blue-600/20 text-blue-300 border-l-2 border-blue-500" : "text-slate-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent",
+        collapsed && "justify-center px-2"
+      ),
+      title: collapsed ? item.label : void 0,
+      "aria-current": isActive ? "page" : void 0,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Icon2,
+          {
+            className: cn(
+              "shrink-0",
+              collapsed ? "h-5 w-5" : "h-4 w-4",
+              isActive ? "text-blue-400" : "text-slate-400 group-hover:text-slate-200"
+            ),
+            "aria-hidden": "true"
+          }
+        ),
+        !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate flex-1 text-left", children: item.label }),
+        !collapsed && !item.stub && badgeCount != null && badgeCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 font-mono text-[0.55rem] font-bold text-black",
+            "aria-label": `${badgeCount} expiring`,
+            "data-ocid": "admin.nav.retention_policies.badge",
+            children: badgeCount
+          }
+        ),
+        collapsed && badgeCount != null && badgeCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "absolute top-1.5 right-1.5 flex h-2 w-2 items-center justify-center rounded-full bg-amber-500",
+            "aria-hidden": "true"
+          }
+        )
+      ]
+    }
+  );
+}
+function AdminSidebar({
+  collapsed,
+  onNavClick
+}) {
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
+  const navigate = useNavigate();
+  const { principal, logout } = useAuth();
+  const expiryCount = usePolicyExpiryStore((s2) => s2.expiryCount);
+  const principalText2 = (principal == null ? void 0 : principal.toText()) ?? "";
+  const principalShort = principalText2.length > 12 ? `${principalText2.slice(0, 6)}…${principalText2.slice(-6)}` : principalText2;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "aside",
+    {
+      className: cn(
+        "flex h-full flex-col border-r border-white/10",
+        // Dark navy/charcoal background for government aesthetic
+        "bg-[#0d1117]",
+        collapsed ? "w-16" : "w-60",
+        "transition-[width] duration-200 ease-in-out"
+      ),
+      "aria-label": "Admin navigation",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: cn(
+              "flex items-center gap-3 border-b border-white/10 px-4 py-4",
+              collapsed && "justify-center px-2"
+            ),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "div",
+                {
+                  className: cn(
+                    "flex shrink-0 items-center justify-center rounded bg-blue-600/20 border border-blue-500/30",
+                    collapsed ? "h-8 w-8" : "h-9 w-9"
+                  ),
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "h-5 w-5 text-blue-400", "aria-hidden": "true" })
+                }
+              ),
+              !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-bold tracking-tight text-white leading-tight", children: "CharlieSierra" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-slate-400 leading-tight", children: "Admin Console" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.5rem] tracking-[0.1em] uppercase text-blue-400/80 mt-0.5 leading-tight", children: "Communications Secured" })
+              ] })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex-1 overflow-y-auto px-2 py-3 space-y-0.5", children: NAV_ITEMS$1.map((item) => {
+          const isActive = item.path === "/admin" ? currentPath === "/admin" || currentPath === "/admin/" : currentPath.startsWith(item.path);
+          const badge = item.path === "/admin/retention-policies" ? expiryCount : void 0;
+          return /* @__PURE__ */ jsxRuntimeExports.jsx(
+            SidebarNavItem,
+            {
+              item,
+              isActive,
+              collapsed,
+              badgeCount: badge,
+              onClick: onNavClick
+            },
+            item.path
+          );
+        }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-white/10 px-2 py-3 space-y-1", children: [
+          !collapsed && principalText2 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-3 py-1.5 rounded bg-white/5 mx-0.5 mb-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] text-slate-500 uppercase tracking-widest", children: "Logged in as" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                className: "font-mono text-[0.65rem] text-slate-300 truncate mt-0.5",
+                title: principalText2,
+                children: principalShort
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              "data-ocid": "admin.logout_button",
+              onClick: () => {
+                logout();
+                navigate({ to: "/" });
+              },
+              className: cn(
+                "flex w-full items-center gap-3 rounded px-3 py-2 text-sm",
+                "text-slate-400 hover:text-red-400 hover:bg-red-500/10",
+                "transition-colors duration-150",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+                collapsed && "justify-center px-2"
+              ),
+              title: collapsed ? "Sign out" : void 0,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { className: "h-4 w-4 shrink-0", "aria-hidden": "true" }),
+                !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Sign out" })
+              ]
+            }
+          )
+        ] })
+      ]
+    }
+  );
+}
+function AdminLayout({ title, action, children }) {
+  const [collapsed, setCollapsed] = reactExports.useState(false);
+  const [mobileOpen, setMobileOpen] = reactExports.useState(false);
+  const navigate = useNavigate();
+  const routerState = useRouterState();
+  reactExports.useEffect(() => {
+    setMobileOpen(false);
+  }, [routerState.location.pathname]);
+  reactExports.useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape" && mobileOpen) setMobileOpen(false);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [mobileOpen]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-dvh overflow-hidden bg-[#0a0e14]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex flex-col h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminSidebar, { collapsed }) }),
+    mobileOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "dialog",
+      {
+        open: true,
+        className: "fixed inset-0 z-40 md:hidden m-0 p-0 max-w-none max-h-none w-full h-full bg-transparent border-none",
+        "aria-label": "Admin navigation",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "absolute inset-0 bg-black/70 backdrop-blur-sm",
+              onClick: () => setMobileOpen(false),
+              "aria-label": "Close navigation"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-0 top-0 h-full w-60 flex flex-col", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            AdminSidebar,
+            {
+              collapsed: false,
+              onNavClick: () => setMobileOpen(false)
+            }
+          ) })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 flex-col min-w-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#0d1117] px-4 py-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            "data-ocid": "admin.mobile_menu_button",
+            onClick: () => setMobileOpen(true),
+            className: "rounded p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition-colors md:hidden",
+            "aria-label": "Open navigation menu",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "h-5 w-5", "aria-hidden": "true" })
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            "data-ocid": "admin.sidebar_toggle",
+            onClick: () => setCollapsed((v2) => !v2),
+            className: "hidden md:flex rounded p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition-colors",
+            "aria-label": collapsed ? "Expand sidebar" : "Collapse sidebar",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "h-4 w-4", "aria-hidden": "true" })
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            type: "button",
+            "data-ocid": "admin.return_to_chat_button",
+            onClick: () => navigate({ to: "/app/conversations" }),
+            className: "flex items-center gap-1.5 rounded px-2.5 py-1.5 text-slate-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-150 border border-transparent hover:border-blue-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+            "aria-label": "Return to Chat",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeft, { className: "h-3.5 w-3.5 shrink-0", "aria-hidden": "true" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline font-mono text-[0.6rem] font-semibold uppercase tracking-widest", children: "Return to Chat" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                MessageSquare,
+                {
+                  className: "h-3 w-3 shrink-0 hidden sm:block opacity-60",
+                  "aria-hidden": "true"
+                }
+              )
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 items-center justify-between min-w-0", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "font-mono text-xs font-bold tracking-widest text-white uppercase leading-tight truncate", children: "CharlieSierra Admin Console" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.5rem] tracking-[0.15em] uppercase text-blue-400/70 leading-tight", children: "Communications Secured" })
+          ] }),
+          title && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-6 hidden sm:block font-mono text-[0.6rem] uppercase tracking-widest text-slate-500 border-l border-white/10 pl-4 truncate", children: title }),
+          action && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ml-4 shrink-0", children: action })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "main",
+        {
+          className: "flex-1 overflow-y-auto bg-background p-6",
+          id: "admin-main",
+          children
+        }
+      )
+    ] })
+  ] });
+}
+function shortenPrincipal(p2) {
+  if (!p2 || p2.length <= 14) return p2;
+  return `${p2.slice(0, 6)}…${p2.slice(-6)}`;
+}
+function PrincipalDisplay({
+  principal,
+  className,
+  showTooltip = true
+}) {
+  const [copied, setCopied] = reactExports.useState(false);
+  const handleCopy = reactExports.useCallback(async () => {
+    if (!principal) return;
+    try {
+      await navigator.clipboard.writeText(principal);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2e3);
+    } catch {
+      const el = document.createElement("textarea");
+      el.value = principal;
+      el.style.position = "fixed";
+      el.style.opacity = "0";
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2e3);
+    }
+  }, [principal]);
+  if (!principal) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground italic", children: "—" });
+  }
+  const short = shortenPrincipal(principal);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "span",
+    {
+      className: cn("inline-flex items-center gap-1.5", className),
+      "data-ocid": "principal.display",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "font-mono text-xs text-foreground",
+            title: showTooltip ? principal : void 0,
+            "aria-label": `Principal: ${principal}`,
+            children: short
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            "data-ocid": "principal.copy_button",
+            onClick: handleCopy,
+            className: cn(
+              "inline-flex h-4 w-4 items-center justify-center rounded",
+              "text-muted-foreground hover:text-foreground",
+              "transition-colors duration-150",
+              "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary",
+              copied && "text-emerald-500"
+            ),
+            "aria-label": copied ? "Copied!" : `Copy principal: ${principal}`,
+            title: copied ? "Copied!" : "Copy to clipboard",
+            children: copied ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-3 w-3", "aria-hidden": "true" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "h-3 w-3", "aria-hidden": "true" })
+          }
+        )
+      ]
+    }
+  );
+}
+const STALE = 3e4;
+function useMyOrgs() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "my-orgs"],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getMyOrgs();
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useMyRole(orgId) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "my-role", orgId],
+    queryFn: async () => {
+      if (!actor || !orgId) return null;
+      const res = await actor.getMyRole(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching && !!orgId,
+    staleTime: STALE
+  });
+}
+function useOrgs(req) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "orgs",
+      req.limit.toString(),
+      req.afterOrgId,
+      req.search ?? ""
+    ],
+    queryFn: async () => {
+      if (!actor) return { total: BigInt(0), orgs: [] };
+      const res = await actor.listOrgs({
+        limit: req.limit,
+        afterOrgId: req.afterOrgId,
+        search: req.search ?? void 0
+      });
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useOrgDetails(orgId) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "org", orgId],
+    queryFn: async () => {
+      if (!actor || !orgId) return null;
+      const res = await actor.getOrg(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching && !!orgId,
+    staleTime: STALE
+  });
+}
+function useOrgUsers(req) {
+  var _a3, _b3;
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "org-users",
+      req == null ? void 0 : req.orgId,
+      req == null ? void 0 : req.limit.toString(),
+      (_b3 = (_a3 = req == null ? void 0 : req.afterUserId) == null ? void 0 : _a3.toText) == null ? void 0 : _b3.call(_a3),
+      (req == null ? void 0 : req.search) ?? null
+    ],
+    queryFn: async () => {
+      if (!actor || !req)
+        return { total: BigInt(0), hasMore: false, members: [] };
+      const res = await actor.getOrgUsers(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching && !!req,
+    staleTime: STALE
+  });
+}
+function useAdminAuditLog(req) {
+  var _a3;
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "audit-log",
+      req.limit.toString(),
+      req.filterEventType,
+      (_a3 = req.afterEventId) == null ? void 0 : _a3.toString()
+    ],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getAuditLog(req);
+      if (res.__kind__ === "err") throw new Error(String(res.err));
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useAllGroups(req) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "groups", req.orgId ?? null],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllGroups(req);
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useGroupMembers(groupId) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "group-members", groupId.toString()],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getGroupMembers({ groupId });
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useRemoveMemberFromGroup() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.removeMemberFromGroup(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "group-members", req.groupId.toString()]
+      });
+      void qc.invalidateQueries({ queryKey: ["admin", "groups"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useIsSuperAdmin() {
+  const { actor, isFetching } = useActor(createActor);
+  const { principal } = useAuth();
+  return useQuery({
+    queryKey: ["admin", "is-super-admin", principal == null ? void 0 : principal.toText()],
+    queryFn: async () => {
+      if (!actor || !principal) return false;
+      const res = await actor.listAdmins();
+      if (res.__kind__ === "err") return false;
+      return res.ok.some((p2) => p2.toText() === principal.toText());
+    },
+    enabled: !!actor && !isFetching && !!principal,
+    staleTime: STALE
+  });
+}
+function useCreateOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.createOrg(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
+    }
+  });
+}
+function useInviteUser() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.inviteUser(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "org-users", req.orgId]
+      });
+    }
+  });
+}
+function useUpdateMemberRole() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.updateMemberRole(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "org-users", req.orgId]
+      });
+    }
+  });
+}
+function useSuspendMember() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.suspendMember(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, req) => {
+      void qc.invalidateQueries({
+        queryKey: ["admin", "org-users", req.orgId]
+      });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useRemoveMember() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ orgId, userId }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.removeMember(orgId, userId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, { orgId }) => {
+      void qc.invalidateQueries({ queryKey: ["admin", "org-users", orgId] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useReactivateMember() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ orgId, userId }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.reactivateMember(orgId, userId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, { orgId }) => {
+      void qc.invalidateQueries({ queryKey: ["admin", "org-users", orgId] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useUpdateOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      orgId,
+      name,
+      description
+    }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.updateOrg(orgId, name, description);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: (_data, { orgId }) => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "org", orgId] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
+    }
+  });
+}
+function useSuspendOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (orgId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.suspendOrg(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useDeleteOrg() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (orgId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.deleteOrg(orgId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "my-orgs"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useHasSuperAdmin() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "has-super-admin"],
+    queryFn: async () => {
+      if (!actor) return false;
+      return actor.hasSuperAdmin();
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useExportAuditLogs() {
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async (req) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.exportAuditLogs(req);
+      if (res.__kind__ === "err") throw new Error(String(res.err));
+      return res.ok;
+    }
+  });
+}
+function useEscrowStats() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "escrow-stats"],
+    queryFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.getEscrowStats();
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useEscrowedUsers(req) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: [
+      "admin",
+      "escrowed-users",
+      req.orgId ?? null,
+      req.afterUserId ?? null,
+      req.limit.toString()
+    ],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getEscrowedUsers(req);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useRecoveryRequests(orgId, statusFilter) {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "recovery-requests", orgId, statusFilter],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.getRecoveryRequests(
+        null,
+        statusFilter ?? null
+      );
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useEscrowGrants(targetUserId) {
+  var _a3;
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "escrow-grants", (_a3 = targetUserId == null ? void 0 : targetUserId.toText) == null ? void 0 : _a3.call(targetUserId)],
+    queryFn: async () => {
+      if (!actor) return [];
+      const res = await actor.adminGetEscrowGrants(
+        targetUserId ?? null,
+        50n,
+        null
+      );
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useInitiateKeyRecovery() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      targetUserId,
+      targetDeviceId,
+      reason,
+      orgId
+    }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.initiateKeyRecovery(
+        targetUserId,
+        targetDeviceId,
+        reason,
+        orgId ?? null
+      );
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useApproveKeyRecovery() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (requestId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.approveKeyRecovery(requestId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useCheckPolicyExpiry() {
+  const { actor, isFetching } = useActor(createActor);
+  const { principal } = useAuth();
+  return useQuery({
+    queryKey: ["admin", "policy-expiry", principal == null ? void 0 : principal.toText()],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.checkPolicyExpiry(null);
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: 6e4,
+    refetchInterval: 6e4
+  });
+}
+function useLogPolicyReportExported() {
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async (orgFilter) => {
+      if (!actor) throw new Error("Actor not ready");
+      await actor.logPolicyReportExported(orgFilter ?? null);
+    }
+  });
+}
+function useLogPolicyExpiryCheck() {
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      await actor.logPolicyExpiryCheck();
+    }
+  });
+}
+function useRejectKeyRecovery() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (requestId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.rejectKeyRecovery(requestId);
+      if (res.__kind__ === "err") throw new Error(res.err);
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "recovery-requests"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "escrow-stats"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function useEnrollUserKeyEscrow() {
+  const queryClient2 = useQueryClient();
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async (_principalId) => {
+      if (!actor) throw new Error("Actor not ready");
+      const fn = actor.enrollUserKeyEscrow;
+      if (typeof fn !== "function") {
+        throw new Error(
+          "vetKeys enrollment not yet available in canister bindings. Please redeploy and run pnpm bindgen."
+        );
+      }
+      const result = await fn.call(actor);
+      if ("err" in result && result.err !== void 0)
+        throw new Error(result.err);
+      return result.ok ?? "Enrolled";
+    },
+    onSuccess: () => {
+      void queryClient2.invalidateQueries({
+        queryKey: ["admin", "escrowed-users"]
+      });
+    }
+  });
+}
+function useGetEncryptedEscrowKey() {
+  const { actor } = useActor(createActor);
+  return useMutation({
+    mutationFn: async ({
+      targetPrincipal,
+      transportPublicKey
+    }) => {
+      if (!actor) throw new Error("Actor not ready");
+      const { Principal: Principal3 } = await __vitePreload(async () => {
+        const { Principal: Principal4 } = await Promise.resolve().then(() => index$3);
+        return { Principal: Principal4 };
+      }, true ? void 0 : void 0);
+      const fn = actor.getEncryptedEscrowKey;
+      if (typeof fn !== "function") {
+        throw new Error(
+          "getEncryptedEscrowKey not available in canister bindings."
+        );
+      }
+      const result = await fn.call(
+        actor,
+        Principal3.fromText(targetPrincipal),
+        transportPublicKey
+      );
+      if ("err" in result && result.err !== void 0)
+        throw new Error(result.err);
+      if (!result.ok) throw new Error("No key data returned");
+      return result.ok;
+    }
+  });
+}
+const TIME_FILTERS = [
+  { value: "24h", label: "Last 24h" },
+  { value: "7d", label: "Last 7 days" },
+  { value: "all", label: "All" }
+];
+const EVENT_TYPE_META = {
+  [AuditEventType.userRegistered]: {
+    label: "User Registered",
+    className: "bg-blue-500/10 text-blue-700 border-blue-500/30"
+  },
+  [AuditEventType.messageSent]: {
+    label: "Message Sent",
+    className: "bg-green-500/10 text-green-700 border-green-500/30"
+  },
+  [AuditEventType.callInitiated]: {
+    label: "Call Initiated",
+    className: "bg-purple-500/10 text-purple-700 border-purple-500/30"
+  },
+  [AuditEventType.memberAdded]: {
+    label: "Member Added",
+    className: "bg-teal-500/10 text-teal-700 border-teal-500/30"
+  },
+  [AuditEventType.memberRemoved]: {
+    label: "Member Removed",
+    className: "bg-orange-500/10 text-orange-700 border-orange-500/30"
+  },
+  [AuditEventType.memberRoleChanged]: {
+    label: "Role Changed",
+    className: "bg-teal-500/10 text-teal-700 border-teal-500/30"
+  },
+  [AuditEventType.memberSuspended]: {
+    label: "Member Suspended",
+    className: "bg-orange-500/10 text-orange-700 border-orange-500/30"
+  },
+  [AuditEventType.orgCreated]: {
+    label: "Org Created",
+    className: "bg-blue-500/10 text-blue-700 border-blue-500/30"
+  },
+  [AuditEventType.adminAction]: {
+    label: "Admin Action",
+    className: "bg-red-500/10 text-red-700 border-red-500/30"
+  },
+  [AuditEventType.userRemoved]: {
+    label: "User Removed",
+    className: "bg-orange-500/10 text-orange-700 border-orange-500/30"
+  },
+  [AuditEventType.retentionEnabled]: {
+    label: "Retention On",
+    className: "bg-yellow-500/10 text-yellow-700 border-yellow-500/30"
+  },
+  [AuditEventType.retentionDisabled]: {
+    label: "Retention Off",
+    className: "bg-yellow-500/10 text-yellow-700 border-yellow-500/30"
+  },
+  [AuditEventType.escrowEnrolled]: {
+    label: "Escrow Enrolled",
+    className: "bg-indigo-500/10 text-indigo-700 border-indigo-500/30"
+  },
+  [AuditEventType.escrowRevoked]: {
+    label: "Escrow Revoked",
+    className: "bg-rose-500/10 text-rose-700 border-rose-500/30"
+  },
+  [AuditEventType.escrowAccessGranted]: {
+    label: "Escrow Access",
+    className: "bg-rose-500/10 text-rose-700 border-rose-500/30"
+  },
+  [AuditEventType.auditLogExported]: {
+    label: "Log Exported",
+    className: "bg-slate-500/10 text-slate-700 border-slate-500/30"
+  },
+  [AuditEventType.messageQueueDrained]: {
+    label: "Queue Drained",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30"
+  },
+  [AuditEventType.priorityMessageSent]: {
+    label: "Priority Sent",
+    className: "bg-orange-500/10 text-orange-700 border-orange-500/30"
+  },
+  [AuditEventType.sovereignConfigUpdated]: {
+    label: "Sovereign Updated",
+    className: "bg-cyan-500/10 text-cyan-700 border-cyan-500/30"
+  },
+  [AuditEventType.compartmentAssigned]: {
+    label: "Compartment Assigned",
+    className: "bg-violet-500/10 text-violet-700 border-violet-500/30"
+  },
+  [AuditEventType.userInvited]: {
+    label: "User Invited",
+    className: "bg-sky-500/10 text-sky-700 border-sky-500/30"
+  },
+  [AuditEventType.orgDeleted]: {
+    label: "Org Deleted",
+    className: "bg-red-500/10 text-red-700 border-red-500/30"
+  },
+  [AuditEventType.memberReactivated]: {
+    label: "Member Reactivated",
+    className: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30"
+  },
+  [AuditEventType.orgSuspended]: {
+    label: "Org Suspended",
+    className: "bg-orange-500/10 text-orange-700 border-orange-500/30"
+  },
+  [AuditEventType.groupMemberRemoved]: {
+    label: "Group Member Removed",
+    className: "bg-rose-500/10 text-rose-700 border-rose-500/30"
+  },
+  [AuditEventType.orgUpdated]: {
+    label: "Org Updated",
+    className: "bg-cyan-500/10 text-cyan-700 border-cyan-500/30"
+  },
+  [AuditEventType.keyRecoveryInitiated]: {
+    label: "Recovery Initiated",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30"
+  },
+  [AuditEventType.keyRecoveryApproved]: {
+    label: "Recovery Approved",
+    className: "bg-green-500/10 text-green-700 border-green-500/30"
+  },
+  [AuditEventType.keyRecoveryRejected]: {
+    label: "Recovery Rejected",
+    className: "bg-neutral-500/10 text-neutral-600 border-neutral-500/30"
+  },
+  [AuditEventType.policyReportExported]: {
+    label: "Report Exported",
+    className: "bg-blue-500/10 text-blue-700 border-blue-500/30"
+  },
+  [AuditEventType.policyExpiryCheckPerformed]: {
+    label: "Expiry Check",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30"
+  },
+  [AuditEventType.legalHoldPlaced]: {
+    label: "Legal Hold Placed",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30"
+  },
+  [AuditEventType.legalHoldRemoved]: {
+    label: "Legal Hold Removed",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30"
+  },
+  [AuditEventType.retentionPolicyCreated]: {
+    label: "Retention Policy Created",
+    className: "bg-teal-500/10 text-teal-700 border-teal-500/30"
+  },
+  [AuditEventType.retentionPolicyUpdated]: {
+    label: "Retention Policy Updated",
+    className: "bg-teal-500/10 text-teal-700 border-teal-500/30"
+  },
+  [AuditEventType.platformSettingsUpdated]: {
+    label: "Platform Settings Updated",
+    className: "bg-cyan-500/10 text-cyan-700 border-cyan-500/30"
+  },
+  [AuditEventType.orgSettingsUpdated]: {
+    label: "Org Settings Updated",
+    className: "bg-cyan-500/10 text-cyan-700 border-cyan-500/30"
+  },
+  [AuditEventType.keyRecoveryCompleted]: {
+    label: "Key Recovery Completed",
+    className: "bg-amber-500/10 text-amber-700 border-amber-500/30"
+  },
+  [AuditEventType.keyEscrowEnrolled]: {
+    label: "Key Escrow Enrolled",
+    className: "bg-blue-500/10 text-blue-700 border-blue-500/30"
+  }
+};
+function principalText(p2) {
+  if (!p2) return "";
+  if (typeof p2.toText === "function") {
+    return p2.toText();
+  }
+  return String(p2);
+}
+function compactPrincipal(p2) {
+  if (p2.length <= 16) return p2;
+  return `${p2.slice(0, 8)}...${p2.slice(-6)}`;
+}
+function isoTimestamp(ts) {
+  const ms = Number(ts / BigInt(1e6));
+  return new Date(ms).toISOString();
+}
+function relativeTime$1(ts) {
+  const ms = Number(ts / BigInt(1e6));
+  const diffMs = Date.now() - ms;
+  const diffSec = Math.floor(diffMs / 1e3);
+  if (diffSec < 60) return `${diffSec}s ago`;
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  const diffDay = Math.floor(diffHr / 24);
+  return `${diffDay}d ago`;
+}
+function filterByWindow(events2, filter2) {
+  if (filter2 === "all") return events2;
+  const windowMs = filter2 === "24h" ? 24 * 60 * 60 * 1e3 : 7 * 24 * 60 * 60 * 1e3;
+  const cutoff = BigInt(Date.now() - windowMs) * BigInt(1e6);
+  return events2.filter((e) => e.timestamp >= cutoff);
+}
+function countActiveUsers(events2) {
+  const cutoff = BigInt(Date.now() - 24 * 60 * 60 * 1e3) * BigInt(1e6);
+  const recent = events2.filter((e) => e.timestamp >= cutoff);
+  const uniq = new Set(recent.map((e) => principalText(e.actorPrincipal)));
+  return uniq.size;
+}
+function countMessages7d(events2) {
+  const cutoff = BigInt(Date.now() - 7 * 24 * 60 * 60 * 1e3) * BigInt(1e6);
+  return events2.filter(
+    (e) => e.timestamp >= cutoff && String(e.eventType) === AuditEventType.messageSent
+  ).length;
+}
+function SecurityStatusCard() {
+  const checkTime = (/* @__PURE__ */ new Date()).toLocaleString();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: cn(
+        "group rounded-sm border border-green-200 dark:border-green-800",
+        "bg-green-50 dark:bg-green-950/30 p-5 shadow-sm",
+        "transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-green-300 dark:hover:border-green-700"
+      ),
+      "data-ocid": "dashboard.stats.security_status",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-green-700 dark:text-green-400", children: "Security Status" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            ShieldCheck,
+            {
+              size: 28,
+              className: "shrink-0 text-green-600 dark:text-green-400 transition-colors duration-200 group-hover:text-green-500",
+              "aria-hidden": "true"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-2 flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              className: "h-2 w-2 rounded-full bg-green-500 animate-pulse shrink-0",
+              "aria-hidden": "true"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-2xl font-bold text-green-700 dark:text-green-300 leading-none tracking-wide", children: "SECURE" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3 space-y-0.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.55rem] uppercase tracking-widest text-green-600/70 dark:text-green-400/70", children: "Last System Check" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] text-green-700 dark:text-green-400 tabular-nums", children: checkTime })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 inline-flex items-center gap-1 rounded-sm border border-green-300/60 dark:border-green-700/60 bg-green-100/60 dark:bg-green-900/40 px-1.5 py-0.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.55rem] font-semibold uppercase tracking-widest text-green-700 dark:text-green-400", children: "All Clear" }) })
+      ]
+    }
+  );
+}
+function SkeletonCell({ className }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "span",
+    {
+      className: cn(
+        "inline-block animate-pulse rounded-sm bg-muted",
+        className
+      ),
+      "aria-hidden": "true"
+    }
+  );
+}
+function SecurityBanner() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "flex items-center gap-3 rounded-sm border border-amber-300 bg-amber-50 px-5 py-3",
+      role: "banner",
+      "aria-label": "Security environment notice",
+      "data-ocid": "dashboard.security_banner",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "h-4 w-4 shrink-0 text-black/70", "aria-hidden": "true" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-black", children: [
+          "HIGH SECURITY ENVIRONMENT —",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-normal", children: "All actions are audited and immutable on the Internet Computer." })
+        ] })
+      ]
+    }
+  );
+}
+function StatCard({
+  label,
+  value,
+  icon: Icon2,
+  loading,
+  accent,
+  ...rest
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: cn(
+        "group rounded-sm border border-border bg-card p-5 shadow-sm",
+        "transition-all duration-200 hover:shadow-md hover:-translate-y-px hover:border-border/80"
+      ),
+      ...rest,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground", children: label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Icon2,
+            {
+              className: cn(
+                "h-3.5 w-3.5 shrink-0 transition-colors duration-200",
+                accent ?? "text-muted-foreground/50 group-hover:text-muted-foreground/70"
+              ),
+              "aria-hidden": "true"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 font-mono text-4xl font-bold leading-none tabular-nums text-foreground", children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx(SkeletonCell, { className: "h-8 w-16" }) : value })
+      ]
+    }
+  );
+}
+function RecentActivityTable({
+  events: events2,
+  loading,
+  error,
+  onViewAll
+}) {
+  const [timeFilter, setTimeFilter] = reactExports.useState("7d");
+  if (error) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "rounded-sm border border-destructive/50 bg-destructive/5 px-4 py-3",
+        "data-ocid": "dashboard.audit.error_state",
+        role: "alert",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-xs text-destructive", children: [
+          "ERROR — ",
+          error
+        ] })
+      }
+    );
+  }
+  const filtered = filterByWindow(events2, timeFilter).slice(0, 10);
+  const COLS = ["ACTOR", "ACTION", "TARGET", "TIMESTAMP", "IP"];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "data-ocid": "dashboard.audit.section", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "mb-3 flex items-center justify-between gap-2",
+        "data-ocid": "dashboard.audit.filter_row",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("fieldset", { className: "flex gap-1.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("legend", { className: "sr-only", children: "Time filter" }),
+            TIME_FILTERS.map(({ value, label }) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                "data-ocid": `dashboard.audit.filter.${value}`,
+                onClick: () => setTimeFilter(value),
+                className: cn(
+                  "rounded-sm border px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-widest",
+                  "transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary",
+                  timeFilter === value ? "border-foreground/40 bg-foreground text-background" : "border-border bg-card text-muted-foreground hover:border-border/80 hover:text-foreground"
+                ),
+                children: label
+              },
+              value
+            ))
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: onViewAll,
+              "data-ocid": "dashboard.audit.view_all_button",
+              className: "font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors duration-150",
+              children: "View all →"
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", "data-ocid": "dashboard.audit.table", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full min-w-[600px] border-collapse text-xs", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "border-b border-border", children: COLS.map((h2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "th",
+        {
+          className: "py-3 pr-4 text-left font-mono text-[0.6rem] font-semibold uppercase tracking-widest text-muted-foreground last:pr-0",
+          children: h2
+        },
+        h2
+      )) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: loading ? ["sk1", "sk2", "sk3", "sk4", "sk5"].map((sid, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "tr",
+        {
+          className: cn(
+            "border-b border-border/50",
+            i % 2 === 0 ? "bg-muted/15" : "bg-transparent"
+          ),
+          children: ["sc0", "sc1", "sc2", "sc3", "sc4"].map(
+            (sid2, ci) => /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2.5 pr-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              SkeletonCell,
+              {
+                className: `h-3 ${["w-28", "w-24", "w-20", "w-16", "w-8"][ci]}`
+              }
+            ) }, sid2)
+          )
+        },
+        sid
+      )) : filtered.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "td",
+        {
+          colSpan: 5,
+          className: "py-10 text-center font-mono text-xs text-muted-foreground",
+          "data-ocid": "dashboard.audit.empty_state",
+          children: "No recent activity to display."
+        }
+      ) }) : filtered.map((ev, i) => {
+        const actor = principalText(ev.actorPrincipal);
+        const target = ev.targetPrincipal ? principalText(ev.targetPrincipal) : ev.orgId ? String(ev.orgId) : null;
+        const meta = EVENT_TYPE_META[String(ev.eventType)] ?? EVENT_TYPE_META[AuditEventType.adminAction];
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "tr",
+          {
+            "data-ocid": `dashboard.audit.item.${i + 1}`,
+            className: cn(
+              "border-b border-border/40 transition-colors duration-150 hover:bg-muted/40 cursor-default",
+              i % 2 === 0 ? "bg-muted/15" : "bg-transparent"
+            ),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: actor }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  className: cn(
+                    "inline-block rounded-sm border px-1.5 py-0.5",
+                    "font-mono text-[0.6rem] font-medium uppercase tracking-wider",
+                    meta.className
+                  ),
+                  children: meta.label
+                }
+              ) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 pr-4", children: target ? /* @__PURE__ */ jsxRuntimeExports.jsx(PrincipalDisplay, { principal: target }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.65rem] text-muted-foreground/40", children: "—" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "td",
+                {
+                  className: "py-3 pr-4 font-mono text-[0.65rem] tabular-nums text-muted-foreground whitespace-nowrap",
+                  title: isoTimestamp(ev.timestamp),
+                  children: relativeTime$1(ev.timestamp)
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 font-mono text-[0.65rem] text-muted-foreground/40", children: "—" })
+            ]
+          },
+          ev.id.toString()
+        );
+      }) })
+    ] }) })
+  ] });
+}
+function QuickActionCard({
+  label,
+  description,
+  icon: Icon2,
+  onClick,
+  ocid
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      type: "button",
+      "data-ocid": ocid,
+      onClick,
+      className: cn(
+        "group flex items-center gap-3 rounded-sm border border-border bg-card p-4 text-left w-full",
+        "transition-all duration-200 hover:shadow-sm hover:-translate-y-px hover:border-foreground/30",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      ),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-border/60 bg-muted/40 transition-colors duration-200 group-hover:border-foreground/20 group-hover:bg-muted/60", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Icon2,
+          {
+            className: "h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200",
+            "aria-hidden": "true"
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0 flex-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-[0.7rem] font-semibold uppercase tracking-wider text-foreground", children: label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-0.5 font-mono text-[0.6rem] text-muted-foreground/70 truncate", children: description })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          ChevronRight,
+          {
+            className: "h-3.5 w-3.5 shrink-0 text-muted-foreground/40 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-muted-foreground",
+            "aria-hidden": "true"
+          }
+        )
+      ]
+    }
+  );
+}
+function AdminDashboardPage() {
+  var _a3;
+  const navigate = useNavigate();
+  const { principal } = useAuth();
+  const setExpiryCount = usePolicyExpiryStore((s2) => s2.setExpiryCount);
+  const { data: isSuperAdmin } = useIsSuperAdmin();
+  const { data: expiringPolicies = [] } = useCheckPolicyExpiry();
+  const { data: myOrgs } = useMyOrgs();
+  const firstOrgId = (_a3 = myOrgs == null ? void 0 : myOrgs[0]) == null ? void 0 : _a3.orgId;
+  const {
+    data: orgsData,
+    isLoading: orgsLoading,
+    error: orgsError
+  } = useOrgs({ limit: BigInt(100), afterOrgId: void 0 });
+  const { data: orgUsersData, isLoading: usersLoading } = useOrgUsers(
+    firstOrgId ? { orgId: firstOrgId, limit: BigInt(100), afterUserId: void 0 } : null
+  );
+  const {
+    data: auditEvents = [],
+    isLoading: auditLoading,
+    error: auditError
+  } = useAdminAuditLog({ limit: BigInt(200), afterEventId: void 0 });
+  const typedAuditEvents = auditEvents;
+  const totalOrgsVal = orgsLoading ? "…" : orgsError ? "ERR" : String(Number((orgsData == null ? void 0 : orgsData.total) ?? 0));
+  const totalUsersVal = orgsLoading ? "…" : orgsError ? "ERR" : isSuperAdmin ? String(
+    ((orgsData == null ? void 0 : orgsData.orgs) ?? []).reduce(
+      (acc, org) => acc + Number(org.memberCount ?? 0),
+      0
+    )
+  ) : (
+    // For non-SA: fall back to users in first org
+    usersLoading ? "…" : String(Number((orgUsersData == null ? void 0 : orgUsersData.total) ?? 0))
+  );
+  const activeUsersVal = auditLoading ? "…" : String(countActiveUsers(typedAuditEvents));
+  const messagesVal = auditLoading ? "…" : String(countMessages7d(typedAuditEvents));
+  const principalFull = (principal == null ? void 0 : principal.toText()) ?? "";
+  const principalCompact = compactPrincipal(principalFull);
+  const expiryAlertCount = expiringPolicies.length;
+  reactExports.useEffect(() => {
+    setExpiryCount(expiryAlertCount);
+  }, [expiryAlertCount, setExpiryCount]);
+  const [expiryBannerDismissed, setExpiryBannerDismissed] = reactExports.useState(false);
+  const topError = orgsError ? String(orgsError.message) : null;
+  const auditErrorMsg = auditError ? String(auditError.message) : null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(AdminLayout, { title: "Dashboard", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(SecurityBanner, {}),
+    expiryAlertCount > 0 && !expiryBannerDismissed && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "mt-3 flex items-center justify-between gap-3 rounded-sm border border-amber-400/60 bg-amber-50 px-4 py-2.5",
+        role: "alert",
+        "data-ocid": "dashboard.policy_expiry_banner",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "svg",
+              {
+                className: "h-4 w-4 shrink-0 text-amber-600",
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                "aria-hidden": "true",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "12", y1: "9", x2: "12", y2: "13" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "12", y1: "17", x2: "12.01", y2: "17" })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-mono text-[0.65rem] font-semibold uppercase tracking-widest text-amber-800", children: [
+              "Policy Expiry Alert:",
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-normal", children: [
+                expiryAlertCount,
+                " retention",
+                " ",
+                expiryAlertCount === 1 ? "policy" : "policies",
+                " expiring within 30 days. Review required in",
+                " ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "a",
+                  {
+                    href: "/admin/retention-policies",
+                    className: "underline hover:text-amber-900 transition-colors",
+                    "data-ocid": "dashboard.policy_expiry_link",
+                    children: "Retention Policies"
+                  }
+                ),
+                "."
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => setExpiryBannerDismissed(true),
+              className: "shrink-0 rounded-sm px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-amber-700 hover:bg-amber-100 hover:text-amber-900 transition-colors",
+              "data-ocid": "dashboard.policy_expiry_dismiss_button",
+              children: "Dismiss"
+            }
+          )
+        ]
+      }
+    ),
+    principalFull && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "mt-3 flex items-center gap-2",
+        "data-ocid": "dashboard.user_info",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[0.6rem] uppercase tracking-widest text-muted-foreground", children: "Authenticated as:" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              title: principalFull,
+              className: "font-mono text-[0.65rem] text-foreground cursor-default select-all",
+              children: principalCompact
+            }
+          ),
+          isSuperAdmin && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-sm border border-red-500/30 bg-red-500/10 px-1.5 py-0.5 font-mono text-[0.55rem] font-semibold uppercase tracking-widest text-red-700", children: "Super Admin" })
+        ]
+      }
+    ),
+    topError && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "mt-4 rounded-sm border border-destructive/50 bg-destructive/5 px-4 py-3",
+        "data-ocid": "dashboard.error_state",
+        role: "alert",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-mono text-xs font-semibold text-destructive uppercase tracking-wider", children: [
+          "ERROR — ",
+          topError
+        ] })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 space-y-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "aria-labelledby": "stats-heading", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "p",
+          {
+            id: "stats-heading",
+            className: "mb-3 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground",
+            children: "System Overview"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5",
+            "data-ocid": "dashboard.stats.section",
+            children: [
+              isSuperAdmin ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                StatCard,
+                {
+                  label: "Total Organizations",
+                  value: totalOrgsVal,
+                  icon: Building2,
+                  loading: orgsLoading,
+                  accent: "text-blue-600/70",
+                  "data-ocid": "dashboard.stats.total_orgs"
+                }
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                StatCard,
+                {
+                  label: "My Organizations",
+                  value: String(
+                    (myOrgs == null ? void 0 : myOrgs.length) ?? 0
+                  ),
+                  icon: Building2,
+                  accent: "text-blue-600/70",
+                  "data-ocid": "dashboard.stats.my_orgs"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                StatCard,
+                {
+                  label: "Total Users",
+                  value: totalUsersVal,
+                  icon: Users,
+                  loading: orgsLoading || !!firstOrgId && usersLoading,
+                  accent: "text-indigo-600/70",
+                  "data-ocid": "dashboard.stats.total_users"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                StatCard,
+                {
+                  label: "Active (24h)",
+                  value: activeUsersVal,
+                  icon: UserCheck,
+                  loading: auditLoading,
+                  accent: "text-teal-600/70",
+                  "data-ocid": "dashboard.stats.active_users"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                StatCard,
+                {
+                  label: "Messages (7d)",
+                  value: messagesVal,
+                  icon: MessageSquare,
+                  loading: auditLoading,
+                  accent: "text-violet-600/70",
+                  "data-ocid": "dashboard.stats.messages_7d"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(SecurityStatusCard, {})
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "aria-labelledby": "activity-heading", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "p",
+          {
+            id: "activity-heading",
+            className: "mb-3 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground",
+            children: "Recent Activity"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-sm border border-border bg-card px-4 py-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          RecentActivityTable,
+          {
+            events: typedAuditEvents,
+            loading: auditLoading,
+            error: auditErrorMsg,
+            onViewAll: () => navigate({ to: "/admin/audit-logs" })
+          }
+        ) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "aria-labelledby": "actions-heading", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "p",
+          {
+            id: "actions-heading",
+            className: "mb-3 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground",
+            children: "Quick Actions"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: "grid grid-cols-1 gap-3 sm:grid-cols-2",
+            "data-ocid": "dashboard.quick_actions.section",
+            children: [
+              isSuperAdmin && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                QuickActionCard,
+                {
+                  label: "Create Organization",
+                  description: "Provision a new tenant or agency org",
+                  icon: Building2,
+                  ocid: "dashboard.create_org_button",
+                  onClick: () => navigate({ to: "/admin/organizations" })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                QuickActionCard,
+                {
+                  label: "Invite User",
+                  description: "Add a user to an organization by principal",
+                  icon: UserPlus,
+                  ocid: "dashboard.invite_user_button",
+                  onClick: () => navigate({ to: "/admin/users" })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                QuickActionCard,
+                {
+                  label: "View Full Audit Logs",
+                  description: "Browse immutable records of all admin actions",
+                  icon: ClipboardList,
+                  ocid: "dashboard.view_audit_logs_button",
+                  onClick: () => navigate({ to: "/admin/audit-logs" })
+                }
+              ),
+              isSuperAdmin && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                QuickActionCard,
+                {
+                  label: "System Settings",
+                  description: "Platform-wide configuration and controls",
+                  icon: Settings,
+                  ocid: "dashboard.system_settings_button",
+                  onClick: () => navigate({ to: "/admin/settings" })
+                }
+              )
+            ]
+          }
+        )
+      ] })
+    ] })
+  ] });
+}
+function LoadingSpinner({
+  size: size2 = 24,
+  className = "",
+  label = "Loading…",
+  fullScreen = false
+}) {
+  const spinner = /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "svg",
+    {
+      width: size2,
+      height: size2,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg",
+      className: `animate-spin text-primary ${className}`,
+      "aria-hidden": "true",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "circle",
+          {
+            className: "opacity-25",
+            cx: "12",
+            cy: "12",
+            r: "10",
+            stroke: "currentColor",
+            strokeWidth: "3"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "path",
+          {
+            className: "opacity-75",
+            fill: "currentColor",
+            d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          }
+        )
+      ]
+    }
+  );
+  if (fullScreen) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full w-full min-h-[200px]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+      spinner,
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: label })
+    ] }) });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center", "aria-label": label, children: spinner });
+}
+var REACT_LAZY_TYPE = Symbol.for("react.lazy");
+var use = React$5[" use ".trim().toString()];
+function isPromiseLike(value) {
+  return typeof value === "object" && value !== null && "then" in value;
+}
+function isLazyComponent(element) {
+  return element != null && typeof element === "object" && "$$typeof" in element && element.$$typeof === REACT_LAZY_TYPE && "_payload" in element && isPromiseLike(element._payload);
+}
+// @__NO_SIDE_EFFECTS__
+function createSlot(ownerName) {
+  const SlotClone = /* @__PURE__ */ createSlotClone(ownerName);
+  const Slot2 = reactExports.forwardRef((props, forwardedRef) => {
+    let { children, ...slotProps } = props;
+    if (isLazyComponent(children) && typeof use === "function") {
+      children = use(children._payload);
+    }
+    const childrenArray = reactExports.Children.toArray(children);
+    const slottable = childrenArray.find(isSlottable);
+    if (slottable) {
+      const newElement = slottable.props.children;
+      const newChildren = childrenArray.map((child) => {
+        if (child === slottable) {
+          if (reactExports.Children.count(newElement) > 1) return reactExports.Children.only(null);
+          return reactExports.isValidElement(newElement) ? newElement.props.children : null;
+        } else {
+          return child;
+        }
+      });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
+  });
+  Slot2.displayName = `${ownerName}.Slot`;
+  return Slot2;
+}
+var Slot$2 = /* @__PURE__ */ createSlot("Slot");
+// @__NO_SIDE_EFFECTS__
+function createSlotClone(ownerName) {
+  const SlotClone = reactExports.forwardRef((props, forwardedRef) => {
+    let { children, ...slotProps } = props;
+    if (isLazyComponent(children) && typeof use === "function") {
+      children = use(children._payload);
+    }
+    if (reactExports.isValidElement(children)) {
+      const childrenRef = getElementRef(children);
+      const props2 = mergeProps(slotProps, children.props);
+      if (children.type !== reactExports.Fragment) {
+        props2.ref = forwardedRef ? composeRefs$1(forwardedRef, childrenRef) : childrenRef;
+      }
+      return reactExports.cloneElement(children, props2);
+    }
+    return reactExports.Children.count(children) > 1 ? reactExports.Children.only(null) : null;
+  });
+  SlotClone.displayName = `${ownerName}.SlotClone`;
+  return SlotClone;
+}
+var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
+function isSlottable(child) {
+  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
+}
+function mergeProps(slotProps, childProps) {
+  const overrideProps = { ...childProps };
+  for (const propName in childProps) {
+    const slotPropValue = slotProps[propName];
+    const childPropValue = childProps[propName];
+    const isHandler = /^on[A-Z]/.test(propName);
+    if (isHandler) {
+      if (slotPropValue && childPropValue) {
+        overrideProps[propName] = (...args) => {
+          const result = childPropValue(...args);
+          slotPropValue(...args);
+          return result;
+        };
+      } else if (slotPropValue) {
+        overrideProps[propName] = slotPropValue;
+      }
+    } else if (propName === "style") {
+      overrideProps[propName] = { ...slotPropValue, ...childPropValue };
+    } else if (propName === "className") {
+      overrideProps[propName] = [slotPropValue, childPropValue].filter(Boolean).join(" ");
+    }
+  }
+  return { ...slotProps, ...overrideProps };
+}
+function getElementRef(element) {
+  var _a3, _b3;
+  let getter = (_a3 = Object.getOwnPropertyDescriptor(element.props, "ref")) == null ? void 0 : _a3.get;
+  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.ref;
+  }
+  getter = (_b3 = Object.getOwnPropertyDescriptor(element, "ref")) == null ? void 0 : _b3.get;
+  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.props.ref;
+  }
+  return element.props.ref || element.ref;
+}
+const falsyToString = (value) => typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
+const cx = clsx;
+const cva = (base, config) => (props) => {
+  var _config_compoundVariants;
+  if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+  const { variants, defaultVariants } = config;
+  const getVariantClassNames = Object.keys(variants).map((variant) => {
+    const variantProp = props === null || props === void 0 ? void 0 : props[variant];
+    const defaultVariantProp = defaultVariants === null || defaultVariants === void 0 ? void 0 : defaultVariants[variant];
+    if (variantProp === null) return null;
+    const variantKey = falsyToString(variantProp) || falsyToString(defaultVariantProp);
+    return variants[variant][variantKey];
+  });
+  const propsWithoutUndefined = props && Object.entries(props).reduce((acc, param) => {
+    let [key, value] = param;
+    if (value === void 0) {
+      return acc;
+    }
+    acc[key] = value;
+    return acc;
+  }, {});
+  const getCompoundVariantClassNames = config === null || config === void 0 ? void 0 : (_config_compoundVariants = config.compoundVariants) === null || _config_compoundVariants === void 0 ? void 0 : _config_compoundVariants.reduce((acc, param) => {
+    let { class: cvClass, className: cvClassName, ...compoundVariantOptions } = param;
+    return Object.entries(compoundVariantOptions).every((param2) => {
+      let [key, value] = param2;
+      return Array.isArray(value) ? value.includes({
+        ...defaultVariants,
+        ...propsWithoutUndefined
+      }[key]) : {
+        ...defaultVariants,
+        ...propsWithoutUndefined
+      }[key] === value;
+    }) ? [
+      ...acc,
+      cvClass,
+      cvClassName
+    ] : acc;
+  }, []);
+  return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+};
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline: "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        link: "text-primary underline-offset-4 hover:underline"
+      },
+      size: {
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        icon: "size-9"
+      }
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default"
+    }
+  }
+);
+function Button({
+  className,
+  variant,
+  size: size2,
+  asChild = false,
+  ...props
+}) {
+  const Comp = asChild ? Slot$2 : "button";
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Comp,
+    {
+      "data-slot": "button",
+      className: cn(buttonVariants({ variant, size: size2, className })),
+      ...props
+    }
+  );
+}
 function AdminAccessGate({
   children,
   compartment: _compartment
@@ -47003,15 +48305,15 @@ function useDisplayName(principal) {
 }
 function useHasDisplayName() {
   const { principal } = useAuth();
-  const principalText = (principal == null ? void 0 : principal.toText()) ?? null;
+  const principalText2 = (principal == null ? void 0 : principal.toText()) ?? null;
   const {
     data: profile,
     isLoading,
     isFetched
   } = useUserProfile(principal ?? null);
-  if (!principalText) return null;
+  if (!principalText2) return null;
   if (isLoading && !isFetched) return null;
-  const cached = getLocalDisplayName(principalText);
+  const cached = getLocalDisplayName(principalText2);
   if (cached && cached.trim().length >= 2) return true;
   if (profile && profile.encryptedDisplayName.length > 0) return true;
   return false;
@@ -47114,14 +48416,14 @@ function OnboardingGate({ children }) {
   reactExports.useEffect(() => {
     if (!principal || !isReady || !keyPair || !profile) return;
     if (profile.encryptedDisplayName.length === 0) return;
-    const principalText = principal.toText();
-    const cached = localStorage.getItem(`cs_name:${principalText}`);
+    const principalText2 = principal.toText();
+    const cached = localStorage.getItem(`cs_name:${principalText2}`);
     if (cached == null ? void 0 : cached.trim()) return;
     decryptOwnDisplayName(
       new Uint8Array(profile.encryptedDisplayName)
     ).then((decrypted) => {
       if (decrypted == null ? void 0 : decrypted.trim()) {
-        setLocalDisplayName(principalText, decrypted.trim());
+        setLocalDisplayName(principalText2, decrypted.trim());
         setLocalReady((prev) => !prev);
       }
     }).catch(() => {
@@ -47318,10 +48620,10 @@ function AccessibilityProvider({
   reactExports.useEffect(() => {
     document.documentElement.dataset.colorBlind = prefs.colorBlindMode;
   }, [prefs.colorBlindMode]);
-  const setFontSizeScale = reactExports.useCallback((scale) => {
+  const setFontSizeScale = reactExports.useCallback((scale2) => {
     setPrefs((p2) => ({
       ...p2,
-      fontSizeScale: Math.min(2, Math.max(1, scale))
+      fontSizeScale: Math.min(2, Math.max(1, scale2))
     }));
   }, []);
   const setHighContrast = reactExports.useCallback((on) => {
@@ -47388,7 +48690,7 @@ var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
   const onMountAutoFocus = useCallbackRef$1(onMountAutoFocusProp);
   const onUnmountAutoFocus = useCallbackRef$1(onUnmountAutoFocusProp);
   const lastFocusedElementRef = reactExports.useRef(null);
-  const composedRefs = useComposedRefs(forwardedRef, (node) => setContainer(node));
+  const composedRefs = useComposedRefs$1(forwardedRef, (node) => setContainer(node));
   const focusScope = reactExports.useRef({
     paused: false,
     pause() {
@@ -47668,7 +48970,7 @@ function useCallbackRef(initialValue, callback) {
   ref.callback = callback;
   return ref.facade;
 }
-var useIsomorphicLayoutEffect = typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
+var useIsomorphicLayoutEffect$1 = typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
 var currentValues = /* @__PURE__ */ new WeakMap();
 function useMergeRefs(refs, defaultValue) {
   var callbackRef = useCallbackRef(null, function(newValue) {
@@ -47676,7 +48978,7 @@ function useMergeRefs(refs, defaultValue) {
       return assignRef(ref, newValue);
     });
   });
-  useIsomorphicLayoutEffect(function() {
+  useIsomorphicLayoutEffect$1(function() {
     var oldValue = currentValues.get(callbackRef);
     if (oldValue) {
       var prevRefs_1 = new Set(oldValue);
@@ -47764,8 +49066,8 @@ function innerCreateMedium(defaults, middleware) {
           pendingQueue.push(x3);
           cycle();
         },
-        filter: function(filter) {
-          pendingQueue = pendingQueue.filter(filter);
+        filter: function(filter2) {
+          pendingQueue = pendingQueue.filter(filter2);
           return buffer;
         }
       };
@@ -47890,10 +49192,10 @@ var styleHookSingleton = function() {
   };
 };
 var styleSingleton = function() {
-  var useStyle = styleHookSingleton();
+  var useStyle2 = styleHookSingleton();
   var Sheet2 = function(_a3) {
     var styles = _a3.styles, dynamic = _a3.dynamic;
-    useStyle(styles, dynamic);
+    useStyle2(styles, dynamic);
     return null;
   };
   return Sheet2;
@@ -48095,8 +49397,8 @@ var extractRef = function(ref) {
 var deltaCompare = function(x3, y2) {
   return x3[0] === y2[0] && x3[1] === y2[1];
 };
-var generateStyle = function(id) {
-  return "\n  .block-interactivity-".concat(id, " {pointer-events: none;}\n  .allow-interactivity-").concat(id, " {pointer-events: all;}\n");
+var generateStyle = function(id2) {
+  return "\n  .block-interactivity-".concat(id2, " {pointer-events: none;}\n  .allow-interactivity-").concat(id2, " {pointer-events: all;}\n");
 };
 var idCounter = 0;
 var lockStack = [];
@@ -48104,7 +49406,7 @@ function RemoveScrollSideCar(props) {
   var shouldPreventQueue = reactExports.useRef([]);
   var touchStartRef = reactExports.useRef([0, 0]);
   var activeAxis = reactExports.useRef();
-  var id = reactExports.useState(idCounter++)[0];
+  var id2 = reactExports.useState(idCounter++)[0];
   var Style2 = reactExports.useState(styleSingleton)[0];
   var lastProps = reactExports.useRef(props);
   reactExports.useEffect(function() {
@@ -48112,15 +49414,15 @@ function RemoveScrollSideCar(props) {
   }, [props]);
   reactExports.useEffect(function() {
     if (props.inert) {
-      document.body.classList.add("block-interactivity-".concat(id));
+      document.body.classList.add("block-interactivity-".concat(id2));
       var allow_1 = __spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), true).filter(Boolean);
       allow_1.forEach(function(el) {
-        return el.classList.add("allow-interactivity-".concat(id));
+        return el.classList.add("allow-interactivity-".concat(id2));
       });
       return function() {
-        document.body.classList.remove("block-interactivity-".concat(id));
+        document.body.classList.remove("block-interactivity-".concat(id2));
         allow_1.forEach(function(el) {
-          return el.classList.remove("allow-interactivity-".concat(id));
+          return el.classList.remove("allow-interactivity-".concat(id2));
         });
       };
     }
@@ -48237,7 +49539,7 @@ function RemoveScrollSideCar(props) {
   return reactExports.createElement(
     reactExports.Fragment,
     null,
-    inert ? reactExports.createElement(Style2, { styles: generateStyle(id) }) : null,
+    inert ? reactExports.createElement(Style2, { styles: generateStyle(id2) }) : null,
     removeScrollBar ? reactExports.createElement(RemoveScrollBar, { noRelative: props.noRelative, gapMode: props.gapMode }) : null
   );
 }
@@ -48419,7 +49721,7 @@ var DialogTrigger = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...triggerProps } = props;
     const context = useDialogContext(TRIGGER_NAME$4, __scopeDialog);
-    const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
+    const composedTriggerRef = useComposedRefs$1(forwardedRef, context.triggerRef);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive$1.button,
       {
@@ -48490,7 +49792,7 @@ var DialogContentModal = reactExports.forwardRef(
   (props, forwardedRef) => {
     const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
     const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
+    const composedRefs = useComposedRefs$1(forwardedRef, context.contentRef, contentRef);
     reactExports.useEffect(() => {
       const content = contentRef.current;
       if (content) return hideOthers(content);
@@ -48568,7 +49870,7 @@ var DialogContentImpl = reactExports.forwardRef(
     const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
     const context = useDialogContext(CONTENT_NAME$3, __scopeDialog);
     const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, contentRef);
+    const composedRefs = useComposedRefs$1(forwardedRef, contentRef);
     useFocusGuards();
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -48726,7 +50028,7 @@ var AlertDialogContent$1 = reactExports.forwardRef(
     const { __scopeAlertDialog, children, ...contentProps } = props;
     const dialogScope = useDialogScope(__scopeAlertDialog);
     const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, contentRef);
+    const composedRefs = useComposedRefs$1(forwardedRef, contentRef);
     const cancelRef = reactExports.useRef(null);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       WarningProvider,
@@ -48790,7 +50092,7 @@ var AlertDialogCancel$1 = reactExports.forwardRef(
     const { __scopeAlertDialog, ...cancelProps } = props;
     const { cancelRef } = useAlertDialogContentContext(CANCEL_NAME, __scopeAlertDialog);
     const dialogScope = useDialogScope(__scopeAlertDialog);
-    const ref = useComposedRefs(forwardedRef, cancelRef);
+    const ref = useComposedRefs$1(forwardedRef, cancelRef);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { ...dialogScope, ...cancelProps, ref });
   }
 );
@@ -48955,7 +50257,7 @@ function useDirection(localDir) {
   const globalDir = reactExports.useContext(DirectionContext);
   return localDir || globalDir || "ltr";
 }
-function clamp(value, [min2, max2]) {
+function clamp$1(value, [min2, max2]) {
   return Math.min(max2, Math.max(min2, value));
 }
 function useStateMachine(initialState, machine) {
@@ -48985,7 +50287,7 @@ var ScrollArea$1 = reactExports.forwardRef(
     const [cornerHeight, setCornerHeight] = reactExports.useState(0);
     const [scrollbarXEnabled, setScrollbarXEnabled] = reactExports.useState(false);
     const [scrollbarYEnabled, setScrollbarYEnabled] = reactExports.useState(false);
-    const composedRefs = useComposedRefs(forwardedRef, (node) => setScrollArea(node));
+    const composedRefs = useComposedRefs$1(forwardedRef, (node) => setScrollArea(node));
     const direction = useDirection(dir);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       ScrollAreaProvider,
@@ -49035,7 +50337,7 @@ var ScrollAreaViewport = reactExports.forwardRef(
     const { __scopeScrollArea, children, nonce, ...viewportProps } = props;
     const context = useScrollAreaContext(VIEWPORT_NAME$1, __scopeScrollArea);
     const ref = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, ref, context.onViewportChange);
+    const composedRefs = useComposedRefs$1(forwardedRef, ref, context.onViewportChange);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "style",
@@ -49282,7 +50584,7 @@ var ScrollAreaScrollbarX = reactExports.forwardRef((props, forwardedRef) => {
   const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
   const [computedStyle, setComputedStyle] = reactExports.useState();
   const ref = reactExports.useRef(null);
-  const composeRefs2 = useComposedRefs(forwardedRef, ref, context.onScrollbarXChange);
+  const composeRefs2 = useComposedRefs$1(forwardedRef, ref, context.onScrollbarXChange);
   reactExports.useEffect(() => {
     if (ref.current) setComputedStyle(getComputedStyle(ref.current));
   }, [ref]);
@@ -49332,7 +50634,7 @@ var ScrollAreaScrollbarY = reactExports.forwardRef((props, forwardedRef) => {
   const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
   const [computedStyle, setComputedStyle] = reactExports.useState();
   const ref = reactExports.useRef(null);
-  const composeRefs2 = useComposedRefs(forwardedRef, ref, context.onScrollbarYChange);
+  const composeRefs2 = useComposedRefs$1(forwardedRef, ref, context.onScrollbarYChange);
   reactExports.useEffect(() => {
     if (ref.current) setComputedStyle(getComputedStyle(ref.current));
   }, [ref]);
@@ -49395,7 +50697,7 @@ var ScrollAreaScrollbarImpl = reactExports.forwardRef((props, forwardedRef) => {
   } = props;
   const context = useScrollAreaContext(SCROLLBAR_NAME, __scopeScrollArea);
   const [scrollbar, setScrollbar] = reactExports.useState(null);
-  const composeRefs2 = useComposedRefs(forwardedRef, (node) => setScrollbar(node));
+  const composeRefs2 = useComposedRefs$1(forwardedRef, (node) => setScrollbar(node));
   const rectRef = reactExports.useRef(null);
   const prevWebkitUserSelectRef = reactExports.useRef("");
   const viewport = context.viewport;
@@ -49479,7 +50781,7 @@ var ScrollAreaThumbImpl = reactExports.forwardRef(
     const scrollAreaContext = useScrollAreaContext(THUMB_NAME$1, __scopeScrollArea);
     const scrollbarContext = useScrollbarContext(THUMB_NAME$1, __scopeScrollArea);
     const { onThumbPositionChange } = scrollbarContext;
-    const composedRef = useComposedRefs(
+    const composedRef = useComposedRefs$1(
       forwardedRef,
       (node) => scrollbarContext.onThumbChange(node)
     );
@@ -49597,8 +50899,8 @@ function getScrollPositionFromPointer(pointerPos, pointerOffset, sizes, dir = "l
   const maxPointerPos = sizes.scrollbar.size - sizes.scrollbar.paddingEnd - thumbOffsetFromEnd;
   const maxScrollPos = sizes.content - sizes.viewport;
   const scrollRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
-  const interpolate = linearScale([minPointerPos, maxPointerPos], scrollRange);
-  return interpolate(pointerPos);
+  const interpolate2 = linearScale([minPointerPos, maxPointerPos], scrollRange);
+  return interpolate2(pointerPos);
 }
 function getThumbOffsetFromScroll(scrollPos, sizes, dir = "ltr") {
   const thumbSizePx = getThumbSize(sizes);
@@ -49607,9 +50909,9 @@ function getThumbOffsetFromScroll(scrollPos, sizes, dir = "ltr") {
   const maxScrollPos = sizes.content - sizes.viewport;
   const maxThumbPos = scrollbar - thumbSizePx;
   const scrollClampRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
-  const scrollWithoutMomentum = clamp(scrollPos, scrollClampRange);
-  const interpolate = linearScale([0, maxScrollPos], [0, maxThumbPos]);
-  return interpolate(scrollWithoutMomentum);
+  const scrollWithoutMomentum = clamp$1(scrollPos, scrollClampRange);
+  const interpolate2 = linearScale([0, maxScrollPos], [0, maxThumbPos]);
+  return interpolate2(scrollWithoutMomentum);
 }
 function linearScale(input, output) {
   return (value) => {
@@ -49894,22 +51196,22 @@ function useConversations() {
       return all.filter((c2) => !hidden.has(c2.id.toString()));
     },
     enabled: !!actor && !isFetching,
-    staleTime: 6e4,
+    staleTime: 0,
     gcTime: 3e5,
-    refetchInterval: 3e4,
+    refetchInterval: 5e3,
     refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: true
   });
 }
-function useConversation(id) {
+function useConversation(id2) {
   const { actor, isFetching } = useActor(createActor);
   return useQuery({
-    queryKey: ["conversation", id == null ? void 0 : id.toString()],
+    queryKey: ["conversation", id2 == null ? void 0 : id2.toString()],
     queryFn: async () => {
-      if (!actor || id === null) return null;
-      return actor.getConversation(id);
+      if (!actor || id2 === null) return null;
+      return actor.getConversation(id2);
     },
-    enabled: !!actor && !isFetching && id !== null,
+    enabled: !!actor && !isFetching && id2 !== null,
     staleTime: 6e4,
     gcTime: 3e5,
     refetchInterval: 3e4,
@@ -49964,6 +51266,7 @@ function useMarkRead() {
     },
     onSuccess: () => {
       queryClient2.invalidateQueries({ queryKey: ["messages"] });
+      queryClient2.invalidateQueries({ queryKey: ["conversations"] });
     }
   });
 }
@@ -50335,8 +51638,8 @@ function ContactSearchInput({
         await Promise.all(
           profiles.map(async (profile2) => {
             try {
-              const principalText = profile2.id.toText();
-              if (getLocalDisplayName(principalText)) return;
+              const principalText2 = profile2.id.toText();
+              if (getLocalDisplayName(principalText2)) return;
               if (!profile2.encryptedDisplayName || profile2.encryptedDisplayName.length === 0)
                 return;
               const key = await deriveDisplayNameKey(profile2.id);
@@ -50345,7 +51648,7 @@ function ContactSearchInput({
                 new Uint8Array(profile2.encryptedDisplayName).slice(0)
               );
               if (decrypted == null ? void 0 : decrypted.trim()) {
-                setLocalDisplayName(principalText, decrypted);
+                setLocalDisplayName(principalText2, decrypted);
                 storedCount++;
               }
             } catch {
@@ -50599,11 +51902,11 @@ function MembersList({
     if (memberProfiles.length === 0) return;
     for (const profile of memberProfiles) {
       if (profile.encryptedDisplayName.length === 0) continue;
-      const principalText = profile.id.toText();
-      const cached = getDisplayName(principalText);
-      const alreadyResolved = cached !== `${principalText.slice(0, 10)}…${principalText.slice(-4)}`;
+      const principalText2 = profile.id.toText();
+      const cached = getDisplayName(principalText2);
+      const alreadyResolved = cached !== `${principalText2.slice(0, 10)}…${principalText2.slice(-4)}`;
       if (alreadyResolved) {
-        setResolvedNames((prev) => ({ ...prev, [principalText]: cached }));
+        setResolvedNames((prev) => ({ ...prev, [principalText2]: cached }));
         continue;
       }
       (async () => {
@@ -50614,16 +51917,16 @@ function MembersList({
             new Uint8Array(profile.encryptedDisplayName).slice(0)
           );
           if (decrypted == null ? void 0 : decrypted.trim()) {
-            setLocalDisplayName(principalText, decrypted);
+            setLocalDisplayName(principalText2, decrypted);
             setResolvedNames((prev) => ({
               ...prev,
-              [principalText]: decrypted
+              [principalText2]: decrypted
             }));
           }
         } catch (err) {
           console.error(
             "[DisplayName] GroupManagePanel member decrypt failed for",
-            principalText,
+            principalText2,
             err
           );
         }
@@ -50734,11 +52037,11 @@ function JoinRequestsList({ convId }) {
     if (requesterProfiles.length === 0) return;
     for (const profile of requesterProfiles) {
       if (profile.encryptedDisplayName.length === 0) continue;
-      const principalText = profile.id.toText();
-      const cached = getDisplayName(principalText);
-      const shortFallback = `${principalText.slice(0, 10)}…${principalText.slice(-4)}`;
+      const principalText2 = profile.id.toText();
+      const cached = getDisplayName(principalText2);
+      const shortFallback = `${principalText2.slice(0, 10)}…${principalText2.slice(-4)}`;
       if (cached !== shortFallback) {
-        setResolvedNames((prev) => ({ ...prev, [principalText]: cached }));
+        setResolvedNames((prev) => ({ ...prev, [principalText2]: cached }));
         continue;
       }
       (async () => {
@@ -50749,16 +52052,16 @@ function JoinRequestsList({ convId }) {
             new Uint8Array(profile.encryptedDisplayName).slice(0)
           );
           if (decrypted == null ? void 0 : decrypted.trim()) {
-            setLocalDisplayName(principalText, decrypted);
+            setLocalDisplayName(principalText2, decrypted);
             setResolvedNames((prev) => ({
               ...prev,
-              [principalText]: decrypted
+              [principalText2]: decrypted
             }));
           }
         } catch (err) {
           console.error(
             "[DisplayName] JoinRequestsList decrypt failed for",
-            principalText,
+            principalText2,
             err
           );
         }
@@ -51191,7 +52494,7 @@ function AttachmentUpload({
   const { backend, uploadBlob } = useBackend();
   const inputRef = reactExports.useRef(null);
   const [selectedFile, setSelectedFile] = reactExports.useState(null);
-  const [progress, setProgress] = reactExports.useState(0);
+  const [progress2, setProgress] = reactExports.useState(0);
   const [uploading, setUploading] = reactExports.useState(false);
   const [error, setError] = reactExports.useState(null);
   const [dragOver, setDragOver] = reactExports.useState(false);
@@ -51305,7 +52608,7 @@ function AttachmentUpload({
     setError(null);
     onClose();
   }, [uploading, onClose]);
-  const uploadLabel = progress < 25 ? "Encrypting..." : progress < 65 ? "Uploading..." : progress < 85 ? "Saving message..." : "Registering...";
+  const uploadLabel = progress2 < 25 ? "Encrypting..." : progress2 < 65 ? "Uploading..." : progress2 < 85 ? "Saving message..." : "Registering...";
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (v2) => !v2 && handleClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "sm:max-w-md", "data-ocid": "attachment.dialog", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogTitle, { className: "flex items-center gap-2", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { size: 16, className: "text-primary" }),
@@ -51379,7 +52682,7 @@ function AttachmentUpload({
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between text-xs text-muted-foreground", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: uploadLabel }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-            progress,
+            progress2,
             "%"
           ] })
         ] }),
@@ -51387,7 +52690,7 @@ function AttachmentUpload({
           "div",
           {
             className: "h-full bg-primary rounded-full transition-all duration-300",
-            style: { width: `${progress}%` }
+            style: { width: `${progress2}%` }
           }
         ) })
       ] }),
@@ -51448,7 +52751,7 @@ function createCollection(name) {
     (props, forwardedRef) => {
       const { scope, children } = props;
       const context = useCollectionContext(COLLECTION_SLOT_NAME, scope);
-      const composedRefs = useComposedRefs(forwardedRef, context.collectionRef);
+      const composedRefs = useComposedRefs$1(forwardedRef, context.collectionRef);
       return /* @__PURE__ */ jsxRuntimeExports.jsx(CollectionSlotImpl, { ref: composedRefs, children });
     }
   );
@@ -51460,7 +52763,7 @@ function createCollection(name) {
     (props, forwardedRef) => {
       const { scope, children, ...itemData } = props;
       const ref = React$4.useRef(null);
-      const composedRefs = useComposedRefs(forwardedRef, ref);
+      const composedRefs = useComposedRefs$1(forwardedRef, ref);
       const context = useCollectionContext(ITEM_SLOT_NAME, scope);
       React$4.useEffect(() => {
         context.itemMap.set(ref, { ref, ...itemData });
@@ -51617,7 +52920,7 @@ var SelectTrigger$1 = reactExports.forwardRef(
     const popperScope = usePopperScope(__scopeSelect);
     const context = useSelectContext(TRIGGER_NAME$2, __scopeSelect);
     const isDisabled = context.disabled || disabled;
-    const composedRefs = useComposedRefs(forwardedRef, context.onTriggerChange);
+    const composedRefs = useComposedRefs$1(forwardedRef, context.onTriggerChange);
     const getItems = useCollection$1(__scopeSelect);
     const pointerTypeRef = reactExports.useRef("touch");
     const [searchRef, handleTypeaheadSearch, resetTypeahead] = useTypeaheadSearch((search) => {
@@ -51695,7 +52998,7 @@ var SelectValue$1 = reactExports.forwardRef(
     const context = useSelectContext(VALUE_NAME, __scopeSelect);
     const { onValueNodeHasChildrenChange } = context;
     const hasChildren = children !== void 0;
-    const composedRefs = useComposedRefs(forwardedRef, context.onValueNodeChange);
+    const composedRefs = useComposedRefs$1(forwardedRef, context.onValueNodeChange);
     useLayoutEffect2(() => {
       onValueNodeHasChildrenChange(hasChildren);
     }, [onValueNodeHasChildrenChange, hasChildren]);
@@ -51773,7 +53076,7 @@ var SelectContentImpl = reactExports.forwardRef(
     const context = useSelectContext(CONTENT_NAME$1, __scopeSelect);
     const [content, setContent] = reactExports.useState(null);
     const [viewport, setViewport] = reactExports.useState(null);
-    const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
+    const composedRefs = useComposedRefs$1(forwardedRef, (node) => setContent(node));
     const [selectedItem, setSelectedItem] = reactExports.useState(null);
     const [selectedItemText, setSelectedItemText] = reactExports.useState(
       null
@@ -51989,7 +53292,7 @@ var SelectItemAlignedPosition = reactExports.forwardRef((props, forwardedRef) =>
   const contentContext = useSelectContentContext(CONTENT_NAME$1, __scopeSelect);
   const [contentWrapper, setContentWrapper] = reactExports.useState(null);
   const [content, setContent] = reactExports.useState(null);
-  const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
+  const composedRefs = useComposedRefs$1(forwardedRef, (node) => setContent(node));
   const getItems = useCollection$1(__scopeSelect);
   const shouldExpandOnScrollRef = reactExports.useRef(false);
   const shouldRepositionRef = reactExports.useRef(true);
@@ -52007,7 +53310,7 @@ var SelectItemAlignedPosition = reactExports.forwardRef((props, forwardedRef) =>
         const minContentWidth = triggerRect.width + leftDelta;
         const contentWidth = Math.max(minContentWidth, contentRect.width);
         const rightEdge = window.innerWidth - CONTENT_MARGIN;
-        const clampedLeft = clamp(left, [
+        const clampedLeft = clamp$1(left, [
           CONTENT_MARGIN,
           // Prevents the content from going off the starting edge of the
           // viewport. It may still go off the ending edge, but this can be
@@ -52025,7 +53328,7 @@ var SelectItemAlignedPosition = reactExports.forwardRef((props, forwardedRef) =>
         const minContentWidth = triggerRect.width + rightDelta;
         const contentWidth = Math.max(minContentWidth, contentRect.width);
         const leftEdge = window.innerWidth - CONTENT_MARGIN;
-        const clampedRight = clamp(right, [
+        const clampedRight = clamp$1(right, [
           CONTENT_MARGIN,
           Math.max(CONTENT_MARGIN, leftEdge - contentWidth)
         ]);
@@ -52187,7 +53490,7 @@ var SelectViewport = reactExports.forwardRef(
     const { __scopeSelect, nonce, ...viewportProps } = props;
     const contentContext = useSelectContentContext(VIEWPORT_NAME, __scopeSelect);
     const viewportContext = useSelectViewportContext(VIEWPORT_NAME, __scopeSelect);
-    const composedRefs = useComposedRefs(forwardedRef, contentContext.onViewportChange);
+    const composedRefs = useComposedRefs$1(forwardedRef, contentContext.onViewportChange);
     const prevScrollTopRef = reactExports.useRef(0);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -52284,7 +53587,7 @@ var SelectItem$1 = reactExports.forwardRef(
     const isSelected = context.value === value;
     const [textValue, setTextValue] = reactExports.useState(textValueProp ?? "");
     const [isFocused, setIsFocused] = reactExports.useState(false);
-    const composedRefs = useComposedRefs(
+    const composedRefs = useComposedRefs$1(
       forwardedRef,
       (node) => {
         var _a3;
@@ -52386,7 +53689,7 @@ var SelectItemText = reactExports.forwardRef(
     const itemContext = useSelectItemContext(ITEM_TEXT_NAME, __scopeSelect);
     const nativeOptionsContext = useSelectNativeOptionsContext(ITEM_TEXT_NAME, __scopeSelect);
     const [itemTextNode, setItemTextNode] = reactExports.useState(null);
-    const composedRefs = useComposedRefs(
+    const composedRefs = useComposedRefs$1(
       forwardedRef,
       (node) => setItemTextNode(node),
       itemContext.onItemTextChange,
@@ -52426,7 +53729,7 @@ var SelectScrollUpButton$1 = reactExports.forwardRef((props, forwardedRef) => {
   const contentContext = useSelectContentContext(SCROLL_UP_BUTTON_NAME, props.__scopeSelect);
   const viewportContext = useSelectViewportContext(SCROLL_UP_BUTTON_NAME, props.__scopeSelect);
   const [canScrollUp, setCanScrollUp] = reactExports.useState(false);
-  const composedRefs = useComposedRefs(forwardedRef, viewportContext.onScrollButtonChange);
+  const composedRefs = useComposedRefs$1(forwardedRef, viewportContext.onScrollButtonChange);
   useLayoutEffect2(() => {
     if (contentContext.viewport && contentContext.isPositioned) {
       let handleScroll2 = function() {
@@ -52459,7 +53762,7 @@ var SelectScrollDownButton$1 = reactExports.forwardRef((props, forwardedRef) => 
   const contentContext = useSelectContentContext(SCROLL_DOWN_BUTTON_NAME, props.__scopeSelect);
   const viewportContext = useSelectViewportContext(SCROLL_DOWN_BUTTON_NAME, props.__scopeSelect);
   const [canScrollDown, setCanScrollDown] = reactExports.useState(false);
-  const composedRefs = useComposedRefs(forwardedRef, viewportContext.onScrollButtonChange);
+  const composedRefs = useComposedRefs$1(forwardedRef, viewportContext.onScrollButtonChange);
   useLayoutEffect2(() => {
     if (contentContext.viewport && contentContext.isPositioned) {
       let handleScroll2 = function() {
@@ -52555,7 +53858,7 @@ var BUBBLE_INPUT_NAME$2 = "SelectBubbleInput";
 var SelectBubbleInput = reactExports.forwardRef(
   ({ __scopeSelect, value, ...props }, forwardedRef) => {
     const ref = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, ref);
+    const composedRefs = useComposedRefs$1(forwardedRef, ref);
     const prevValue = usePrevious(value);
     reactExports.useEffect(() => {
       const select = ref.current;
@@ -53297,12 +54600,12 @@ async function getPendingMessages() {
     return a2.createdAt - b2.createdAt;
   });
 }
-async function updatePendingMessage(id, patch) {
+async function updatePendingMessage(id2, patch) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
-    const req = store.get(id);
+    const req = store.get(id2);
     req.onsuccess = () => {
       if (!req.result) {
         resolve();
@@ -53314,15 +54617,15 @@ async function updatePendingMessage(id, patch) {
     tx.onerror = () => reject(tx.error);
   });
 }
-async function markDelivered(id) {
-  return updatePendingMessage(id, { status: "delivered" });
+async function markDelivered(id2) {
+  return updatePendingMessage(id2, { status: "delivered" });
 }
-async function markFailed(id, errorReason) {
+async function markFailed(id2, errorReason) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
-    const req = store.get(id);
+    const req = store.get(id2);
     req.onsuccess = () => {
       if (!req.result) {
         resolve();
@@ -53340,11 +54643,11 @@ async function markFailed(id, errorReason) {
     tx.onerror = () => reject(tx.error);
   });
 }
-async function removePendingMessage(id) {
+async function removePendingMessage(id2) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
-    tx.objectStore(STORE_NAME).delete(id);
+    tx.objectStore(STORE_NAME).delete(id2);
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
@@ -53361,7 +54664,7 @@ async function clearDeliveredMessages() {
   if (deliveredIds.length === 0) return;
   const tx = db.transaction(STORE_NAME, "readwrite");
   const store = tx.objectStore(STORE_NAME);
-  for (const id of deliveredIds) store.delete(id);
+  for (const id2 of deliveredIds) store.delete(id2);
 }
 async function getAllQueuedMessages() {
   const db = await openDB();
@@ -53435,8 +54738,8 @@ function useOfflineQueue() {
     }
   }, [actor, isAuthenticated, principal, refreshQueue]);
   const retryMessage = reactExports.useCallback(
-    async (id) => {
-      await updatePendingMessage(id, {
+    async (id2) => {
+      await updatePendingMessage(id2, {
         status: "pending",
         errorReason: void 0
       });
@@ -53445,8 +54748,8 @@ function useOfflineQueue() {
     [refreshQueue]
   );
   const deleteQueuedMessage = reactExports.useCallback(
-    async (id) => {
-      await removePendingMessage(id);
+    async (id2) => {
+      await removePendingMessage(id2);
       await refreshQueue();
     },
     [refreshQueue]
@@ -54632,6 +55935,8075 @@ const TypingIndicator = reactExports.memo(function TypingIndicator2({
     }
   );
 });
+const LayoutGroupContext = reactExports.createContext({});
+function useConstant(init) {
+  const ref = reactExports.useRef(null);
+  if (ref.current === null) {
+    ref.current = init();
+  }
+  return ref.current;
+}
+const isBrowser$1 = typeof window !== "undefined";
+const useIsomorphicLayoutEffect = isBrowser$1 ? reactExports.useLayoutEffect : reactExports.useEffect;
+const PresenceContext = /* @__PURE__ */ reactExports.createContext(null);
+function addUniqueItem(arr, item) {
+  if (arr.indexOf(item) === -1)
+    arr.push(item);
+}
+function removeItem(arr, item) {
+  const index2 = arr.indexOf(item);
+  if (index2 > -1)
+    arr.splice(index2, 1);
+}
+const clamp = (min2, max2, v2) => {
+  if (v2 > max2)
+    return max2;
+  if (v2 < min2)
+    return min2;
+  return v2;
+};
+let invariant = () => {
+};
+const MotionGlobalConfig = {};
+const isNumericalString = (v2) => /^-?(?:\d+(?:\.\d+)?|\.\d+)$/u.test(v2);
+function isObject(value) {
+  return typeof value === "object" && value !== null;
+}
+const isZeroValueString = (v2) => /^0[^.\s]+$/u.test(v2);
+// @__NO_SIDE_EFFECTS__
+function memo(callback) {
+  let result;
+  return () => {
+    if (result === void 0)
+      result = callback();
+    return result;
+  };
+}
+const noop2 = /* @__NO_SIDE_EFFECTS__ */ (any) => any;
+const combineFunctions = (a2, b2) => (v2) => b2(a2(v2));
+const pipe = (...transformers) => transformers.reduce(combineFunctions);
+const progress = /* @__NO_SIDE_EFFECTS__ */ (from, to, value) => {
+  const toFromDifference = to - from;
+  return toFromDifference === 0 ? 1 : (value - from) / toFromDifference;
+};
+class SubscriptionManager {
+  constructor() {
+    this.subscriptions = [];
+  }
+  add(handler) {
+    addUniqueItem(this.subscriptions, handler);
+    return () => removeItem(this.subscriptions, handler);
+  }
+  notify(a2, b2, c2) {
+    const numSubscriptions = this.subscriptions.length;
+    if (!numSubscriptions)
+      return;
+    if (numSubscriptions === 1) {
+      this.subscriptions[0](a2, b2, c2);
+    } else {
+      for (let i = 0; i < numSubscriptions; i++) {
+        const handler = this.subscriptions[i];
+        handler && handler(a2, b2, c2);
+      }
+    }
+  }
+  getSize() {
+    return this.subscriptions.length;
+  }
+  clear() {
+    this.subscriptions.length = 0;
+  }
+}
+const secondsToMilliseconds = /* @__NO_SIDE_EFFECTS__ */ (seconds) => seconds * 1e3;
+const millisecondsToSeconds = /* @__NO_SIDE_EFFECTS__ */ (milliseconds) => milliseconds / 1e3;
+function velocityPerSecond(velocity, frameDuration) {
+  return frameDuration ? velocity * (1e3 / frameDuration) : 0;
+}
+const calcBezier = (t, a1, a2) => (((1 - 3 * a2 + 3 * a1) * t + (3 * a2 - 6 * a1)) * t + 3 * a1) * t;
+const subdivisionPrecision = 1e-7;
+const subdivisionMaxIterations = 12;
+function binarySubdivide(x3, lowerBound, upperBound, mX1, mX2) {
+  let currentX;
+  let currentT;
+  let i = 0;
+  do {
+    currentT = lowerBound + (upperBound - lowerBound) / 2;
+    currentX = calcBezier(currentT, mX1, mX2) - x3;
+    if (currentX > 0) {
+      upperBound = currentT;
+    } else {
+      lowerBound = currentT;
+    }
+  } while (Math.abs(currentX) > subdivisionPrecision && ++i < subdivisionMaxIterations);
+  return currentT;
+}
+function cubicBezier(mX1, mY1, mX2, mY2) {
+  if (mX1 === mY1 && mX2 === mY2)
+    return noop2;
+  const getTForX = (aX) => binarySubdivide(aX, 0, 1, mX1, mX2);
+  return (t) => t === 0 || t === 1 ? t : calcBezier(getTForX(t), mY1, mY2);
+}
+const mirrorEasing = (easing) => (p2) => p2 <= 0.5 ? easing(2 * p2) / 2 : (2 - easing(2 * (1 - p2))) / 2;
+const reverseEasing = (easing) => (p2) => 1 - easing(1 - p2);
+const backOut = /* @__PURE__ */ cubicBezier(0.33, 1.53, 0.69, 0.99);
+const backIn = /* @__PURE__ */ reverseEasing(backOut);
+const backInOut = /* @__PURE__ */ mirrorEasing(backIn);
+const anticipate = (p2) => p2 >= 1 ? 1 : (p2 *= 2) < 1 ? 0.5 * backIn(p2) : 0.5 * (2 - Math.pow(2, -10 * (p2 - 1)));
+const circIn = (p2) => 1 - Math.sin(Math.acos(p2));
+const circOut = reverseEasing(circIn);
+const circInOut = mirrorEasing(circIn);
+const easeIn = /* @__PURE__ */ cubicBezier(0.42, 0, 1, 1);
+const easeOut = /* @__PURE__ */ cubicBezier(0, 0, 0.58, 1);
+const easeInOut = /* @__PURE__ */ cubicBezier(0.42, 0, 0.58, 1);
+const isEasingArray = (ease2) => {
+  return Array.isArray(ease2) && typeof ease2[0] !== "number";
+};
+const isBezierDefinition = (easing) => Array.isArray(easing) && typeof easing[0] === "number";
+const easingLookup = {
+  linear: noop2,
+  easeIn,
+  easeInOut,
+  easeOut,
+  circIn,
+  circInOut,
+  circOut,
+  backIn,
+  backInOut,
+  backOut,
+  anticipate
+};
+const isValidEasing = (easing) => {
+  return typeof easing === "string";
+};
+const easingDefinitionToFunction = (definition) => {
+  if (isBezierDefinition(definition)) {
+    invariant(definition.length === 4);
+    const [x1, y1, x22, y2] = definition;
+    return cubicBezier(x1, y1, x22, y2);
+  } else if (isValidEasing(definition)) {
+    return easingLookup[definition];
+  }
+  return definition;
+};
+const stepsOrder = [
+  "setup",
+  // Compute
+  "read",
+  // Read
+  "resolveKeyframes",
+  // Write/Read/Write/Read
+  "preUpdate",
+  // Compute
+  "update",
+  // Compute
+  "preRender",
+  // Compute
+  "render",
+  // Write
+  "postRender"
+  // Compute
+];
+function createRenderStep(runNextFrame, stepName) {
+  let thisFrame = /* @__PURE__ */ new Set();
+  let nextFrame = /* @__PURE__ */ new Set();
+  let isProcessing = false;
+  let flushNextFrame = false;
+  const toKeepAlive = /* @__PURE__ */ new WeakSet();
+  let latestFrameData = {
+    delta: 0,
+    timestamp: 0,
+    isProcessing: false
+  };
+  function triggerCallback(callback) {
+    if (toKeepAlive.has(callback)) {
+      step.schedule(callback);
+      runNextFrame();
+    }
+    callback(latestFrameData);
+  }
+  const step = {
+    /**
+     * Schedule a process to run on the next frame.
+     */
+    schedule: (callback, keepAlive = false, immediate = false) => {
+      const addToCurrentFrame = immediate && isProcessing;
+      const queue = addToCurrentFrame ? thisFrame : nextFrame;
+      if (keepAlive)
+        toKeepAlive.add(callback);
+      queue.add(callback);
+      return callback;
+    },
+    /**
+     * Cancel the provided callback from running on the next frame.
+     */
+    cancel: (callback) => {
+      nextFrame.delete(callback);
+      toKeepAlive.delete(callback);
+    },
+    /**
+     * Execute all schedule callbacks.
+     */
+    process: (frameData2) => {
+      latestFrameData = frameData2;
+      if (isProcessing) {
+        flushNextFrame = true;
+        return;
+      }
+      isProcessing = true;
+      const prevFrame = thisFrame;
+      thisFrame = nextFrame;
+      nextFrame = prevFrame;
+      thisFrame.forEach(triggerCallback);
+      thisFrame.clear();
+      isProcessing = false;
+      if (flushNextFrame) {
+        flushNextFrame = false;
+        step.process(frameData2);
+      }
+    }
+  };
+  return step;
+}
+const maxElapsed = 40;
+function createRenderBatcher(scheduleNextBatch, allowKeepAlive) {
+  let runNextFrame = false;
+  let useDefaultElapsed = true;
+  const state = {
+    delta: 0,
+    timestamp: 0,
+    isProcessing: false
+  };
+  const flagRunNextFrame = () => runNextFrame = true;
+  const steps = stepsOrder.reduce((acc, key) => {
+    acc[key] = createRenderStep(flagRunNextFrame);
+    return acc;
+  }, {});
+  const { setup, read, resolveKeyframes, preUpdate, update, preRender, render, postRender } = steps;
+  const processBatch = () => {
+    const useManualTiming = MotionGlobalConfig.useManualTiming;
+    const timestamp = useManualTiming ? state.timestamp : performance.now();
+    runNextFrame = false;
+    if (!useManualTiming) {
+      state.delta = useDefaultElapsed ? 1e3 / 60 : Math.max(Math.min(timestamp - state.timestamp, maxElapsed), 1);
+    }
+    state.timestamp = timestamp;
+    state.isProcessing = true;
+    setup.process(state);
+    read.process(state);
+    resolveKeyframes.process(state);
+    preUpdate.process(state);
+    update.process(state);
+    preRender.process(state);
+    render.process(state);
+    postRender.process(state);
+    state.isProcessing = false;
+    if (runNextFrame && allowKeepAlive) {
+      useDefaultElapsed = false;
+      scheduleNextBatch(processBatch);
+    }
+  };
+  const wake = () => {
+    runNextFrame = true;
+    useDefaultElapsed = true;
+    if (!state.isProcessing) {
+      scheduleNextBatch(processBatch);
+    }
+  };
+  const schedule = stepsOrder.reduce((acc, key) => {
+    const step = steps[key];
+    acc[key] = (process2, keepAlive = false, immediate = false) => {
+      if (!runNextFrame)
+        wake();
+      return step.schedule(process2, keepAlive, immediate);
+    };
+    return acc;
+  }, {});
+  const cancel = (process2) => {
+    for (let i = 0; i < stepsOrder.length; i++) {
+      steps[stepsOrder[i]].cancel(process2);
+    }
+  };
+  return { schedule, cancel, state, steps };
+}
+const { schedule: frame, cancel: cancelFrame, state: frameData, steps: frameSteps } = /* @__PURE__ */ createRenderBatcher(typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame : noop2, true);
+let now;
+function clearTime() {
+  now = void 0;
+}
+const time = {
+  now: () => {
+    if (now === void 0) {
+      time.set(frameData.isProcessing || MotionGlobalConfig.useManualTiming ? frameData.timestamp : performance.now());
+    }
+    return now;
+  },
+  set: (newTime) => {
+    now = newTime;
+    queueMicrotask(clearTime);
+  }
+};
+const checkStringStartsWith = (token) => (key) => typeof key === "string" && key.startsWith(token);
+const isCSSVariableName = /* @__PURE__ */ checkStringStartsWith("--");
+const startsAsVariableToken = /* @__PURE__ */ checkStringStartsWith("var(--");
+const isCSSVariableToken = (value) => {
+  const startsWithToken = startsAsVariableToken(value);
+  if (!startsWithToken)
+    return false;
+  return singleCssVariableRegex.test(value.split("/*")[0].trim());
+};
+const singleCssVariableRegex = /var\(--(?:[\w-]+\s*|[\w-]+\s*,(?:\s*[^)(\s]|\s*\((?:[^)(]|\([^)(]*\))*\))+\s*)\)$/iu;
+function containsCSSVariable(value) {
+  if (typeof value !== "string")
+    return false;
+  return value.split("/*")[0].includes("var(--");
+}
+const number = {
+  test: (v2) => typeof v2 === "number",
+  parse: parseFloat,
+  transform: (v2) => v2
+};
+const alpha = {
+  ...number,
+  transform: (v2) => clamp(0, 1, v2)
+};
+const scale = {
+  ...number,
+  default: 1
+};
+const sanitize = (v2) => Math.round(v2 * 1e5) / 1e5;
+const floatRegex = /-?(?:\d+(?:\.\d+)?|\.\d+)/gu;
+function isNullish(v2) {
+  return v2 == null;
+}
+const singleColorRegex = /^(?:#[\da-f]{3,8}|(?:rgb|hsl)a?\((?:-?[\d.]+%?[,\s]+){2}-?[\d.]+%?\s*(?:[,/]\s*)?(?:\b\d+(?:\.\d+)?|\.\d+)?%?\))$/iu;
+const isColorString = (type, testProp) => (v2) => {
+  return Boolean(typeof v2 === "string" && singleColorRegex.test(v2) && v2.startsWith(type) || testProp && !isNullish(v2) && Object.prototype.hasOwnProperty.call(v2, testProp));
+};
+const splitColor = (aName, bName, cName) => (v2) => {
+  if (typeof v2 !== "string")
+    return v2;
+  const [a2, b2, c2, alpha2] = v2.match(floatRegex);
+  return {
+    [aName]: parseFloat(a2),
+    [bName]: parseFloat(b2),
+    [cName]: parseFloat(c2),
+    alpha: alpha2 !== void 0 ? parseFloat(alpha2) : 1
+  };
+};
+const clampRgbUnit = (v2) => clamp(0, 255, v2);
+const rgbUnit = {
+  ...number,
+  transform: (v2) => Math.round(clampRgbUnit(v2))
+};
+const rgba = {
+  test: /* @__PURE__ */ isColorString("rgb", "red"),
+  parse: /* @__PURE__ */ splitColor("red", "green", "blue"),
+  transform: ({ red, green, blue, alpha: alpha$1 = 1 }) => "rgba(" + rgbUnit.transform(red) + ", " + rgbUnit.transform(green) + ", " + rgbUnit.transform(blue) + ", " + sanitize(alpha.transform(alpha$1)) + ")"
+};
+function parseHex(v2) {
+  let r2 = "";
+  let g2 = "";
+  let b2 = "";
+  let a2 = "";
+  if (v2.length > 5) {
+    r2 = v2.substring(1, 3);
+    g2 = v2.substring(3, 5);
+    b2 = v2.substring(5, 7);
+    a2 = v2.substring(7, 9);
+  } else {
+    r2 = v2.substring(1, 2);
+    g2 = v2.substring(2, 3);
+    b2 = v2.substring(3, 4);
+    a2 = v2.substring(4, 5);
+    r2 += r2;
+    g2 += g2;
+    b2 += b2;
+    a2 += a2;
+  }
+  return {
+    red: parseInt(r2, 16),
+    green: parseInt(g2, 16),
+    blue: parseInt(b2, 16),
+    alpha: a2 ? parseInt(a2, 16) / 255 : 1
+  };
+}
+const hex = {
+  test: /* @__PURE__ */ isColorString("#"),
+  parse: parseHex,
+  transform: rgba.transform
+};
+const createUnitType = /* @__NO_SIDE_EFFECTS__ */ (unit) => ({
+  test: (v2) => typeof v2 === "string" && v2.endsWith(unit) && v2.split(" ").length === 1,
+  parse: parseFloat,
+  transform: (v2) => `${v2}${unit}`
+});
+const degrees = /* @__PURE__ */ createUnitType("deg");
+const percent = /* @__PURE__ */ createUnitType("%");
+const px = /* @__PURE__ */ createUnitType("px");
+const vh = /* @__PURE__ */ createUnitType("vh");
+const vw = /* @__PURE__ */ createUnitType("vw");
+const progressPercentage = /* @__PURE__ */ (() => ({
+  ...percent,
+  parse: (v2) => percent.parse(v2) / 100,
+  transform: (v2) => percent.transform(v2 * 100)
+}))();
+const hsla = {
+  test: /* @__PURE__ */ isColorString("hsl", "hue"),
+  parse: /* @__PURE__ */ splitColor("hue", "saturation", "lightness"),
+  transform: ({ hue, saturation, lightness, alpha: alpha$1 = 1 }) => {
+    return "hsla(" + Math.round(hue) + ", " + percent.transform(sanitize(saturation)) + ", " + percent.transform(sanitize(lightness)) + ", " + sanitize(alpha.transform(alpha$1)) + ")";
+  }
+};
+const color = {
+  test: (v2) => rgba.test(v2) || hex.test(v2) || hsla.test(v2),
+  parse: (v2) => {
+    if (rgba.test(v2)) {
+      return rgba.parse(v2);
+    } else if (hsla.test(v2)) {
+      return hsla.parse(v2);
+    } else {
+      return hex.parse(v2);
+    }
+  },
+  transform: (v2) => {
+    return typeof v2 === "string" ? v2 : v2.hasOwnProperty("red") ? rgba.transform(v2) : hsla.transform(v2);
+  },
+  getAnimatableNone: (v2) => {
+    const parsed = color.parse(v2);
+    parsed.alpha = 0;
+    return color.transform(parsed);
+  }
+};
+const colorRegex = /(?:#[\da-f]{3,8}|(?:rgb|hsl)a?\((?:-?[\d.]+%?[,\s]+){2}-?[\d.]+%?\s*(?:[,/]\s*)?(?:\b\d+(?:\.\d+)?|\.\d+)?%?\))/giu;
+function test(v2) {
+  var _a3, _b3;
+  return isNaN(v2) && typeof v2 === "string" && (((_a3 = v2.match(floatRegex)) == null ? void 0 : _a3.length) || 0) + (((_b3 = v2.match(colorRegex)) == null ? void 0 : _b3.length) || 0) > 0;
+}
+const NUMBER_TOKEN = "number";
+const COLOR_TOKEN = "color";
+const VAR_TOKEN = "var";
+const VAR_FUNCTION_TOKEN = "var(";
+const SPLIT_TOKEN = "${}";
+const complexRegex = /var\s*\(\s*--(?:[\w-]+\s*|[\w-]+\s*,(?:\s*[^)(\s]|\s*\((?:[^)(]|\([^)(]*\))*\))+\s*)\)|#[\da-f]{3,8}|(?:rgb|hsl)a?\((?:-?[\d.]+%?[,\s]+){2}-?[\d.]+%?\s*(?:[,/]\s*)?(?:\b\d+(?:\.\d+)?|\.\d+)?%?\)|-?(?:\d+(?:\.\d+)?|\.\d+)/giu;
+function analyseComplexValue(value) {
+  const originalValue = value.toString();
+  const values = [];
+  const indexes = {
+    color: [],
+    number: [],
+    var: []
+  };
+  const types = [];
+  let i = 0;
+  const tokenised = originalValue.replace(complexRegex, (parsedValue) => {
+    if (color.test(parsedValue)) {
+      indexes.color.push(i);
+      types.push(COLOR_TOKEN);
+      values.push(color.parse(parsedValue));
+    } else if (parsedValue.startsWith(VAR_FUNCTION_TOKEN)) {
+      indexes.var.push(i);
+      types.push(VAR_TOKEN);
+      values.push(parsedValue);
+    } else {
+      indexes.number.push(i);
+      types.push(NUMBER_TOKEN);
+      values.push(parseFloat(parsedValue));
+    }
+    ++i;
+    return SPLIT_TOKEN;
+  });
+  const split2 = tokenised.split(SPLIT_TOKEN);
+  return { values, split: split2, indexes, types };
+}
+function parseComplexValue(v2) {
+  return analyseComplexValue(v2).values;
+}
+function buildTransformer({ split: split2, types }) {
+  const numSections = split2.length;
+  return (v2) => {
+    let output = "";
+    for (let i = 0; i < numSections; i++) {
+      output += split2[i];
+      if (v2[i] !== void 0) {
+        const type = types[i];
+        if (type === NUMBER_TOKEN) {
+          output += sanitize(v2[i]);
+        } else if (type === COLOR_TOKEN) {
+          output += color.transform(v2[i]);
+        } else {
+          output += v2[i];
+        }
+      }
+    }
+    return output;
+  };
+}
+function createTransformer(source) {
+  return buildTransformer(analyseComplexValue(source));
+}
+const convertNumbersToZero = (v2) => typeof v2 === "number" ? 0 : color.test(v2) ? color.getAnimatableNone(v2) : v2;
+const convertToZero = (value, splitBefore) => {
+  if (typeof value === "number") {
+    return (splitBefore == null ? void 0 : splitBefore.trim().endsWith("/")) ? value : 0;
+  }
+  return convertNumbersToZero(value);
+};
+function getAnimatableNone$1(v2) {
+  const info = analyseComplexValue(v2);
+  const transformer = buildTransformer(info);
+  return transformer(info.values.map((value, i) => convertToZero(value, info.split[i])));
+}
+const complex = {
+  test,
+  parse: parseComplexValue,
+  createTransformer,
+  getAnimatableNone: getAnimatableNone$1
+};
+function hueToRgb(p2, q2, t) {
+  if (t < 0)
+    t += 1;
+  if (t > 1)
+    t -= 1;
+  if (t < 1 / 6)
+    return p2 + (q2 - p2) * 6 * t;
+  if (t < 1 / 2)
+    return q2;
+  if (t < 2 / 3)
+    return p2 + (q2 - p2) * (2 / 3 - t) * 6;
+  return p2;
+}
+function hslaToRgba({ hue, saturation, lightness, alpha: alpha2 }) {
+  hue /= 360;
+  saturation /= 100;
+  lightness /= 100;
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+  if (!saturation) {
+    red = green = blue = lightness;
+  } else {
+    const q2 = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+    const p2 = 2 * lightness - q2;
+    red = hueToRgb(p2, q2, hue + 1 / 3);
+    green = hueToRgb(p2, q2, hue);
+    blue = hueToRgb(p2, q2, hue - 1 / 3);
+  }
+  return {
+    red: Math.round(red * 255),
+    green: Math.round(green * 255),
+    blue: Math.round(blue * 255),
+    alpha: alpha2
+  };
+}
+function mixImmediate(a2, b2) {
+  return (p2) => p2 > 0 ? b2 : a2;
+}
+const mixNumber$1 = (from, to, progress2) => {
+  return from + (to - from) * progress2;
+};
+const mixLinearColor = (from, to, v2) => {
+  const fromExpo = from * from;
+  const expo = v2 * (to * to - fromExpo) + fromExpo;
+  return expo < 0 ? 0 : Math.sqrt(expo);
+};
+const colorTypes = [hex, rgba, hsla];
+const getColorType = (v2) => colorTypes.find((type) => type.test(v2));
+function asRGBA(color2) {
+  const type = getColorType(color2);
+  if (!Boolean(type))
+    return false;
+  let model = type.parse(color2);
+  if (type === hsla) {
+    model = hslaToRgba(model);
+  }
+  return model;
+}
+const mixColor = (from, to) => {
+  const fromRGBA = asRGBA(from);
+  const toRGBA = asRGBA(to);
+  if (!fromRGBA || !toRGBA) {
+    return mixImmediate(from, to);
+  }
+  const blended = { ...fromRGBA };
+  return (v2) => {
+    blended.red = mixLinearColor(fromRGBA.red, toRGBA.red, v2);
+    blended.green = mixLinearColor(fromRGBA.green, toRGBA.green, v2);
+    blended.blue = mixLinearColor(fromRGBA.blue, toRGBA.blue, v2);
+    blended.alpha = mixNumber$1(fromRGBA.alpha, toRGBA.alpha, v2);
+    return rgba.transform(blended);
+  };
+};
+const invisibleValues = /* @__PURE__ */ new Set(["none", "hidden"]);
+function mixVisibility(origin, target) {
+  if (invisibleValues.has(origin)) {
+    return (p2) => p2 <= 0 ? origin : target;
+  } else {
+    return (p2) => p2 >= 1 ? target : origin;
+  }
+}
+function mixNumber(a2, b2) {
+  return (p2) => mixNumber$1(a2, b2, p2);
+}
+function getMixer(a2) {
+  if (typeof a2 === "number") {
+    return mixNumber;
+  } else if (typeof a2 === "string") {
+    return isCSSVariableToken(a2) ? mixImmediate : color.test(a2) ? mixColor : mixComplex;
+  } else if (Array.isArray(a2)) {
+    return mixArray;
+  } else if (typeof a2 === "object") {
+    return color.test(a2) ? mixColor : mixObject;
+  }
+  return mixImmediate;
+}
+function mixArray(a2, b2) {
+  const output = [...a2];
+  const numValues = output.length;
+  const blendValue = a2.map((v2, i) => getMixer(v2)(v2, b2[i]));
+  return (p2) => {
+    for (let i = 0; i < numValues; i++) {
+      output[i] = blendValue[i](p2);
+    }
+    return output;
+  };
+}
+function mixObject(a2, b2) {
+  const output = { ...a2, ...b2 };
+  const blendValue = {};
+  for (const key in output) {
+    if (a2[key] !== void 0 && b2[key] !== void 0) {
+      blendValue[key] = getMixer(a2[key])(a2[key], b2[key]);
+    }
+  }
+  return (v2) => {
+    for (const key in blendValue) {
+      output[key] = blendValue[key](v2);
+    }
+    return output;
+  };
+}
+function matchOrder(origin, target) {
+  const orderedOrigin = [];
+  const pointers = { color: 0, var: 0, number: 0 };
+  for (let i = 0; i < target.values.length; i++) {
+    const type = target.types[i];
+    const originIndex = origin.indexes[type][pointers[type]];
+    const originValue = origin.values[originIndex] ?? 0;
+    orderedOrigin[i] = originValue;
+    pointers[type]++;
+  }
+  return orderedOrigin;
+}
+const mixComplex = (origin, target) => {
+  const template = complex.createTransformer(target);
+  const originStats = analyseComplexValue(origin);
+  const targetStats = analyseComplexValue(target);
+  const canInterpolate = originStats.indexes.var.length === targetStats.indexes.var.length && originStats.indexes.color.length === targetStats.indexes.color.length && originStats.indexes.number.length >= targetStats.indexes.number.length;
+  if (canInterpolate) {
+    if (invisibleValues.has(origin) && !targetStats.values.length || invisibleValues.has(target) && !originStats.values.length) {
+      return mixVisibility(origin, target);
+    }
+    return pipe(mixArray(matchOrder(originStats, targetStats), targetStats.values), template);
+  } else {
+    return mixImmediate(origin, target);
+  }
+};
+function mix(from, to, p2) {
+  if (typeof from === "number" && typeof to === "number" && typeof p2 === "number") {
+    return mixNumber$1(from, to, p2);
+  }
+  const mixer = getMixer(from);
+  return mixer(from, to);
+}
+const frameloopDriver = (update) => {
+  const passTimestamp = ({ timestamp }) => update(timestamp);
+  return {
+    start: (keepAlive = true) => frame.update(passTimestamp, keepAlive),
+    stop: () => cancelFrame(passTimestamp),
+    /**
+     * If we're processing this frame we can use the
+     * framelocked timestamp to keep things in sync.
+     */
+    now: () => frameData.isProcessing ? frameData.timestamp : time.now()
+  };
+};
+const generateLinearEasing = (easing, duration, resolution = 10) => {
+  let points = "";
+  const numPoints = Math.max(Math.round(duration / resolution), 2);
+  for (let i = 0; i < numPoints; i++) {
+    points += Math.round(easing(i / (numPoints - 1)) * 1e4) / 1e4 + ", ";
+  }
+  return `linear(${points.substring(0, points.length - 2)})`;
+};
+const maxGeneratorDuration = 2e4;
+function calcGeneratorDuration(generator) {
+  let duration = 0;
+  const timeStep = 50;
+  let state = generator.next(duration);
+  while (!state.done && duration < maxGeneratorDuration) {
+    duration += timeStep;
+    state = generator.next(duration);
+  }
+  return duration >= maxGeneratorDuration ? Infinity : duration;
+}
+function createGeneratorEasing(options, scale2 = 100, createGenerator) {
+  const generator = createGenerator({ ...options, keyframes: [0, scale2] });
+  const duration = Math.min(calcGeneratorDuration(generator), maxGeneratorDuration);
+  return {
+    type: "keyframes",
+    ease: (progress2) => {
+      return generator.next(duration * progress2).value / scale2;
+    },
+    duration: /* @__PURE__ */ millisecondsToSeconds(duration)
+  };
+}
+const springDefaults = {
+  // Default spring physics
+  stiffness: 100,
+  damping: 10,
+  mass: 1,
+  velocity: 0,
+  // Default duration/bounce-based options
+  duration: 800,
+  // in ms
+  bounce: 0.3,
+  visualDuration: 0.3,
+  // in seconds
+  // Rest thresholds
+  restSpeed: {
+    granular: 0.01,
+    default: 2
+  },
+  restDelta: {
+    granular: 5e-3,
+    default: 0.5
+  },
+  // Limits
+  minDuration: 0.01,
+  // in seconds
+  maxDuration: 10,
+  // in seconds
+  minDamping: 0.05,
+  maxDamping: 1
+};
+function calcAngularFreq(undampedFreq, dampingRatio) {
+  return undampedFreq * Math.sqrt(1 - dampingRatio * dampingRatio);
+}
+const rootIterations = 12;
+function approximateRoot(envelope, derivative, initialGuess) {
+  let result = initialGuess;
+  for (let i = 1; i < rootIterations; i++) {
+    result = result - envelope(result) / derivative(result);
+  }
+  return result;
+}
+const safeMin = 1e-3;
+function findSpring({ duration = springDefaults.duration, bounce = springDefaults.bounce, velocity = springDefaults.velocity, mass = springDefaults.mass }) {
+  let envelope;
+  let derivative;
+  let dampingRatio = 1 - bounce;
+  dampingRatio = clamp(springDefaults.minDamping, springDefaults.maxDamping, dampingRatio);
+  duration = clamp(springDefaults.minDuration, springDefaults.maxDuration, /* @__PURE__ */ millisecondsToSeconds(duration));
+  if (dampingRatio < 1) {
+    envelope = (undampedFreq2) => {
+      const exponentialDecay = undampedFreq2 * dampingRatio;
+      const delta = exponentialDecay * duration;
+      const a2 = exponentialDecay - velocity;
+      const b2 = calcAngularFreq(undampedFreq2, dampingRatio);
+      const c2 = Math.exp(-delta);
+      return safeMin - a2 / b2 * c2;
+    };
+    derivative = (undampedFreq2) => {
+      const exponentialDecay = undampedFreq2 * dampingRatio;
+      const delta = exponentialDecay * duration;
+      const d2 = delta * velocity + velocity;
+      const e = Math.pow(dampingRatio, 2) * Math.pow(undampedFreq2, 2) * duration;
+      const f = Math.exp(-delta);
+      const g2 = calcAngularFreq(Math.pow(undampedFreq2, 2), dampingRatio);
+      const factor = -envelope(undampedFreq2) + safeMin > 0 ? -1 : 1;
+      return factor * ((d2 - e) * f) / g2;
+    };
+  } else {
+    envelope = (undampedFreq2) => {
+      const a2 = Math.exp(-undampedFreq2 * duration);
+      const b2 = (undampedFreq2 - velocity) * duration + 1;
+      return -safeMin + a2 * b2;
+    };
+    derivative = (undampedFreq2) => {
+      const a2 = Math.exp(-undampedFreq2 * duration);
+      const b2 = (velocity - undampedFreq2) * (duration * duration);
+      return a2 * b2;
+    };
+  }
+  const initialGuess = 5 / duration;
+  const undampedFreq = approximateRoot(envelope, derivative, initialGuess);
+  duration = /* @__PURE__ */ secondsToMilliseconds(duration);
+  if (isNaN(undampedFreq)) {
+    return {
+      stiffness: springDefaults.stiffness,
+      damping: springDefaults.damping,
+      duration
+    };
+  } else {
+    const stiffness = Math.pow(undampedFreq, 2) * mass;
+    return {
+      stiffness,
+      damping: dampingRatio * 2 * Math.sqrt(mass * stiffness),
+      duration
+    };
+  }
+}
+const durationKeys = ["duration", "bounce"];
+const physicsKeys = ["stiffness", "damping", "mass"];
+function isSpringType(options, keys) {
+  return keys.some((key) => options[key] !== void 0);
+}
+function getSpringOptions(options) {
+  let springOptions = {
+    velocity: springDefaults.velocity,
+    stiffness: springDefaults.stiffness,
+    damping: springDefaults.damping,
+    mass: springDefaults.mass,
+    isResolvedFromDuration: false,
+    ...options
+  };
+  if (!isSpringType(options, physicsKeys) && isSpringType(options, durationKeys)) {
+    springOptions.velocity = 0;
+    if (options.visualDuration) {
+      const visualDuration = options.visualDuration;
+      const root2 = 2 * Math.PI / (visualDuration * 1.2);
+      const stiffness = root2 * root2;
+      const damping = 2 * clamp(0.05, 1, 1 - (options.bounce || 0)) * Math.sqrt(stiffness);
+      springOptions = {
+        ...springOptions,
+        mass: springDefaults.mass,
+        stiffness,
+        damping
+      };
+    } else {
+      const derived = findSpring({ ...options, velocity: 0 });
+      springOptions = {
+        ...springOptions,
+        ...derived,
+        mass: springDefaults.mass
+      };
+      springOptions.isResolvedFromDuration = true;
+    }
+  }
+  return springOptions;
+}
+function spring(optionsOrVisualDuration = springDefaults.visualDuration, bounce = springDefaults.bounce) {
+  const options = typeof optionsOrVisualDuration !== "object" ? {
+    visualDuration: optionsOrVisualDuration,
+    keyframes: [0, 1],
+    bounce
+  } : optionsOrVisualDuration;
+  let { restSpeed, restDelta } = options;
+  const origin = options.keyframes[0];
+  const target = options.keyframes[options.keyframes.length - 1];
+  const state = { done: false, value: origin };
+  const { stiffness, damping, mass, duration, velocity, isResolvedFromDuration } = getSpringOptions({
+    ...options,
+    velocity: -/* @__PURE__ */ millisecondsToSeconds(options.velocity || 0)
+  });
+  const initialVelocity = velocity || 0;
+  const dampingRatio = damping / (2 * Math.sqrt(stiffness * mass));
+  const initialDelta = target - origin;
+  const undampedAngularFreq = /* @__PURE__ */ millisecondsToSeconds(Math.sqrt(stiffness / mass));
+  const isGranularScale = Math.abs(initialDelta) < 5;
+  restSpeed || (restSpeed = isGranularScale ? springDefaults.restSpeed.granular : springDefaults.restSpeed.default);
+  restDelta || (restDelta = isGranularScale ? springDefaults.restDelta.granular : springDefaults.restDelta.default);
+  let resolveSpring;
+  let resolveVelocity;
+  let angularFreq;
+  let A2;
+  let sinCoeff;
+  let cosCoeff;
+  if (dampingRatio < 1) {
+    angularFreq = calcAngularFreq(undampedAngularFreq, dampingRatio);
+    A2 = (initialVelocity + dampingRatio * undampedAngularFreq * initialDelta) / angularFreq;
+    resolveSpring = (t) => {
+      const envelope = Math.exp(-dampingRatio * undampedAngularFreq * t);
+      return target - envelope * (A2 * Math.sin(angularFreq * t) + initialDelta * Math.cos(angularFreq * t));
+    };
+    sinCoeff = dampingRatio * undampedAngularFreq * A2 + initialDelta * angularFreq;
+    cosCoeff = dampingRatio * undampedAngularFreq * initialDelta - A2 * angularFreq;
+    resolveVelocity = (t) => {
+      const envelope = Math.exp(-dampingRatio * undampedAngularFreq * t);
+      return envelope * (sinCoeff * Math.sin(angularFreq * t) + cosCoeff * Math.cos(angularFreq * t));
+    };
+  } else if (dampingRatio === 1) {
+    resolveSpring = (t) => target - Math.exp(-undampedAngularFreq * t) * (initialDelta + (initialVelocity + undampedAngularFreq * initialDelta) * t);
+    const C2 = initialVelocity + undampedAngularFreq * initialDelta;
+    resolveVelocity = (t) => Math.exp(-undampedAngularFreq * t) * (undampedAngularFreq * C2 * t - initialVelocity);
+  } else {
+    const dampedAngularFreq = undampedAngularFreq * Math.sqrt(dampingRatio * dampingRatio - 1);
+    resolveSpring = (t) => {
+      const envelope = Math.exp(-dampingRatio * undampedAngularFreq * t);
+      const freqForT = Math.min(dampedAngularFreq * t, 300);
+      return target - envelope * ((initialVelocity + dampingRatio * undampedAngularFreq * initialDelta) * Math.sinh(freqForT) + dampedAngularFreq * initialDelta * Math.cosh(freqForT)) / dampedAngularFreq;
+    };
+    const P2 = (initialVelocity + dampingRatio * undampedAngularFreq * initialDelta) / dampedAngularFreq;
+    const sinhCoeff = dampingRatio * undampedAngularFreq * P2 - initialDelta * dampedAngularFreq;
+    const coshCoeff = dampingRatio * undampedAngularFreq * initialDelta - P2 * dampedAngularFreq;
+    resolveVelocity = (t) => {
+      const envelope = Math.exp(-dampingRatio * undampedAngularFreq * t);
+      const freqForT = Math.min(dampedAngularFreq * t, 300);
+      return envelope * (sinhCoeff * Math.sinh(freqForT) + coshCoeff * Math.cosh(freqForT));
+    };
+  }
+  const generator = {
+    calculatedDuration: isResolvedFromDuration ? duration || null : null,
+    velocity: (t) => /* @__PURE__ */ secondsToMilliseconds(resolveVelocity(t)),
+    next: (t) => {
+      if (!isResolvedFromDuration && dampingRatio < 1) {
+        const envelope = Math.exp(-dampingRatio * undampedAngularFreq * t);
+        const sin = Math.sin(angularFreq * t);
+        const cos = Math.cos(angularFreq * t);
+        const current2 = target - envelope * (A2 * sin + initialDelta * cos);
+        const currentVelocity = /* @__PURE__ */ secondsToMilliseconds(envelope * (sinCoeff * sin + cosCoeff * cos));
+        state.done = Math.abs(currentVelocity) <= restSpeed && Math.abs(target - current2) <= restDelta;
+        state.value = state.done ? target : current2;
+        return state;
+      }
+      const current = resolveSpring(t);
+      if (!isResolvedFromDuration) {
+        const currentVelocity = /* @__PURE__ */ secondsToMilliseconds(resolveVelocity(t));
+        state.done = Math.abs(currentVelocity) <= restSpeed && Math.abs(target - current) <= restDelta;
+      } else {
+        state.done = t >= duration;
+      }
+      state.value = state.done ? target : current;
+      return state;
+    },
+    toString: () => {
+      const calculatedDuration = Math.min(calcGeneratorDuration(generator), maxGeneratorDuration);
+      const easing = generateLinearEasing((progress2) => generator.next(calculatedDuration * progress2).value, calculatedDuration, 30);
+      return calculatedDuration + "ms " + easing;
+    },
+    toTransition: () => {
+    }
+  };
+  return generator;
+}
+spring.applyToOptions = (options) => {
+  const generatorOptions = createGeneratorEasing(options, 100, spring);
+  options.ease = generatorOptions.ease;
+  options.duration = /* @__PURE__ */ secondsToMilliseconds(generatorOptions.duration);
+  options.type = "keyframes";
+  return options;
+};
+const velocitySampleDuration = 5;
+function getGeneratorVelocity(resolveValue, t, current) {
+  const prevT = Math.max(t - velocitySampleDuration, 0);
+  return velocityPerSecond(current - resolveValue(prevT), t - prevT);
+}
+function inertia({ keyframes: keyframes2, velocity = 0, power = 0.8, timeConstant = 325, bounceDamping = 10, bounceStiffness = 500, modifyTarget, min: min2, max: max2, restDelta = 0.5, restSpeed }) {
+  const origin = keyframes2[0];
+  const state = {
+    done: false,
+    value: origin
+  };
+  const isOutOfBounds = (v2) => min2 !== void 0 && v2 < min2 || max2 !== void 0 && v2 > max2;
+  const nearestBoundary = (v2) => {
+    if (min2 === void 0)
+      return max2;
+    if (max2 === void 0)
+      return min2;
+    return Math.abs(min2 - v2) < Math.abs(max2 - v2) ? min2 : max2;
+  };
+  let amplitude = power * velocity;
+  const ideal = origin + amplitude;
+  const target = modifyTarget === void 0 ? ideal : modifyTarget(ideal);
+  if (target !== ideal)
+    amplitude = target - origin;
+  const calcDelta = (t) => -amplitude * Math.exp(-t / timeConstant);
+  const calcLatest = (t) => target + calcDelta(t);
+  const applyFriction = (t) => {
+    const delta = calcDelta(t);
+    const latest = calcLatest(t);
+    state.done = Math.abs(delta) <= restDelta;
+    state.value = state.done ? target : latest;
+  };
+  let timeReachedBoundary;
+  let spring$1;
+  const checkCatchBoundary = (t) => {
+    if (!isOutOfBounds(state.value))
+      return;
+    timeReachedBoundary = t;
+    spring$1 = spring({
+      keyframes: [state.value, nearestBoundary(state.value)],
+      velocity: getGeneratorVelocity(calcLatest, t, state.value),
+      // TODO: This should be passing * 1000
+      damping: bounceDamping,
+      stiffness: bounceStiffness,
+      restDelta,
+      restSpeed
+    });
+  };
+  checkCatchBoundary(0);
+  return {
+    calculatedDuration: null,
+    next: (t) => {
+      let hasUpdatedFrame = false;
+      if (!spring$1 && timeReachedBoundary === void 0) {
+        hasUpdatedFrame = true;
+        applyFriction(t);
+        checkCatchBoundary(t);
+      }
+      if (timeReachedBoundary !== void 0 && t >= timeReachedBoundary) {
+        return spring$1.next(t - timeReachedBoundary);
+      } else {
+        !hasUpdatedFrame && applyFriction(t);
+        return state;
+      }
+    }
+  };
+}
+function createMixers(output, ease2, customMixer) {
+  const mixers = [];
+  const mixerFactory = customMixer || MotionGlobalConfig.mix || mix;
+  const numMixers = output.length - 1;
+  for (let i = 0; i < numMixers; i++) {
+    let mixer = mixerFactory(output[i], output[i + 1]);
+    if (ease2) {
+      const easingFunction = Array.isArray(ease2) ? ease2[i] || noop2 : ease2;
+      mixer = pipe(easingFunction, mixer);
+    }
+    mixers.push(mixer);
+  }
+  return mixers;
+}
+function interpolate(input, output, { clamp: isClamp = true, ease: ease2, mixer } = {}) {
+  const inputLength = input.length;
+  invariant(inputLength === output.length);
+  if (inputLength === 1)
+    return () => output[0];
+  if (inputLength === 2 && output[0] === output[1])
+    return () => output[1];
+  const isZeroDeltaRange = input[0] === input[1];
+  if (input[0] > input[inputLength - 1]) {
+    input = [...input].reverse();
+    output = [...output].reverse();
+  }
+  const mixers = createMixers(output, ease2, mixer);
+  const numMixers = mixers.length;
+  const interpolator = (v2) => {
+    if (isZeroDeltaRange && v2 < input[0])
+      return output[0];
+    let i = 0;
+    if (numMixers > 1) {
+      for (; i < input.length - 2; i++) {
+        if (v2 < input[i + 1])
+          break;
+      }
+    }
+    const progressInRange = /* @__PURE__ */ progress(input[i], input[i + 1], v2);
+    return mixers[i](progressInRange);
+  };
+  return isClamp ? (v2) => interpolator(clamp(input[0], input[inputLength - 1], v2)) : interpolator;
+}
+function fillOffset(offset2, remaining) {
+  const min2 = offset2[offset2.length - 1];
+  for (let i = 1; i <= remaining; i++) {
+    const offsetProgress = /* @__PURE__ */ progress(0, remaining, i);
+    offset2.push(mixNumber$1(min2, 1, offsetProgress));
+  }
+}
+function defaultOffset(arr) {
+  const offset2 = [0];
+  fillOffset(offset2, arr.length - 1);
+  return offset2;
+}
+function convertOffsetToTimes(offset2, duration) {
+  return offset2.map((o2) => o2 * duration);
+}
+function defaultEasing(values, easing) {
+  return values.map(() => easing || easeInOut).splice(0, values.length - 1);
+}
+function keyframes({ duration = 300, keyframes: keyframeValues, times, ease: ease2 = "easeInOut" }) {
+  const easingFunctions = isEasingArray(ease2) ? ease2.map(easingDefinitionToFunction) : easingDefinitionToFunction(ease2);
+  const state = {
+    done: false,
+    value: keyframeValues[0]
+  };
+  const absoluteTimes = convertOffsetToTimes(
+    // Only use the provided offsets if they're the correct length
+    // TODO Maybe we should warn here if there's a length mismatch
+    times && times.length === keyframeValues.length ? times : defaultOffset(keyframeValues),
+    duration
+  );
+  const mapTimeToKeyframe = interpolate(absoluteTimes, keyframeValues, {
+    ease: Array.isArray(easingFunctions) ? easingFunctions : defaultEasing(keyframeValues, easingFunctions)
+  });
+  return {
+    calculatedDuration: duration,
+    next: (t) => {
+      state.value = mapTimeToKeyframe(t);
+      state.done = t >= duration;
+      return state;
+    }
+  };
+}
+const isNotNull = (value) => value !== null;
+function getFinalKeyframe(keyframes2, { repeat, repeatType = "loop" }, finalKeyframe, speed = 1) {
+  const resolvedKeyframes = keyframes2.filter(isNotNull);
+  const useFirstKeyframe = speed < 0 || repeat && repeatType !== "loop" && repeat % 2 === 1;
+  const index2 = useFirstKeyframe ? 0 : resolvedKeyframes.length - 1;
+  return !index2 || finalKeyframe === void 0 ? resolvedKeyframes[index2] : finalKeyframe;
+}
+const transitionTypeMap = {
+  decay: inertia,
+  inertia,
+  tween: keyframes,
+  keyframes,
+  spring
+};
+function replaceTransitionType(transition) {
+  if (typeof transition.type === "string") {
+    transition.type = transitionTypeMap[transition.type];
+  }
+}
+class WithPromise {
+  constructor() {
+    this.updateFinished();
+  }
+  get finished() {
+    return this._finished;
+  }
+  updateFinished() {
+    this._finished = new Promise((resolve) => {
+      this.resolve = resolve;
+    });
+  }
+  notifyFinished() {
+    this.resolve();
+  }
+  /**
+   * Allows the animation to be awaited.
+   *
+   * @deprecated Use `finished` instead.
+   */
+  then(onResolve, onReject) {
+    return this.finished.then(onResolve, onReject);
+  }
+}
+const percentToProgress = (percent2) => percent2 / 100;
+class JSAnimation extends WithPromise {
+  constructor(options) {
+    super();
+    this.state = "idle";
+    this.startTime = null;
+    this.isStopped = false;
+    this.currentTime = 0;
+    this.holdTime = null;
+    this.playbackSpeed = 1;
+    this.delayState = {
+      done: false,
+      value: void 0
+    };
+    this.stop = () => {
+      var _a3, _b3;
+      const { motionValue: motionValue2 } = this.options;
+      if (motionValue2 && motionValue2.updatedAt !== time.now()) {
+        this.tick(time.now());
+      }
+      this.isStopped = true;
+      if (this.state === "idle")
+        return;
+      this.teardown();
+      (_b3 = (_a3 = this.options).onStop) == null ? void 0 : _b3.call(_a3);
+    };
+    this.options = options;
+    this.initAnimation();
+    this.play();
+    if (options.autoplay === false)
+      this.pause();
+  }
+  initAnimation() {
+    const { options } = this;
+    replaceTransitionType(options);
+    const { type = keyframes, repeat = 0, repeatDelay = 0, repeatType, velocity = 0 } = options;
+    let { keyframes: keyframes$1 } = options;
+    const generatorFactory = type || keyframes;
+    if (generatorFactory !== keyframes && typeof keyframes$1[0] !== "number") {
+      this.mixKeyframes = pipe(percentToProgress, mix(keyframes$1[0], keyframes$1[1]));
+      keyframes$1 = [0, 100];
+    }
+    const generator = generatorFactory({ ...options, keyframes: keyframes$1 });
+    if (repeatType === "mirror") {
+      this.mirroredGenerator = generatorFactory({
+        ...options,
+        keyframes: [...keyframes$1].reverse(),
+        velocity: -velocity
+      });
+    }
+    if (generator.calculatedDuration === null) {
+      generator.calculatedDuration = calcGeneratorDuration(generator);
+    }
+    const { calculatedDuration } = generator;
+    this.calculatedDuration = calculatedDuration;
+    this.resolvedDuration = calculatedDuration + repeatDelay;
+    this.totalDuration = this.resolvedDuration * (repeat + 1) - repeatDelay;
+    this.generator = generator;
+  }
+  updateTime(timestamp) {
+    const animationTime = Math.round(timestamp - this.startTime) * this.playbackSpeed;
+    if (this.holdTime !== null) {
+      this.currentTime = this.holdTime;
+    } else {
+      this.currentTime = animationTime;
+    }
+  }
+  tick(timestamp, sample = false) {
+    const { generator, totalDuration, mixKeyframes, mirroredGenerator, resolvedDuration, calculatedDuration } = this;
+    if (this.startTime === null)
+      return generator.next(0);
+    const { delay: delay2 = 0, keyframes: keyframes2, repeat, repeatType, repeatDelay, type, onUpdate, finalKeyframe } = this.options;
+    if (this.speed > 0) {
+      this.startTime = Math.min(this.startTime, timestamp);
+    } else if (this.speed < 0) {
+      this.startTime = Math.min(timestamp - totalDuration / this.speed, this.startTime);
+    }
+    if (sample) {
+      this.currentTime = timestamp;
+    } else {
+      this.updateTime(timestamp);
+    }
+    const timeWithoutDelay = this.currentTime - delay2 * (this.playbackSpeed >= 0 ? 1 : -1);
+    const isInDelayPhase = this.playbackSpeed >= 0 ? timeWithoutDelay < 0 : timeWithoutDelay > totalDuration;
+    this.currentTime = Math.max(timeWithoutDelay, 0);
+    if (this.state === "finished" && this.holdTime === null) {
+      this.currentTime = totalDuration;
+    }
+    let elapsed = this.currentTime;
+    let frameGenerator = generator;
+    if (repeat) {
+      const progress2 = Math.min(this.currentTime, totalDuration) / resolvedDuration;
+      let currentIteration = Math.floor(progress2);
+      let iterationProgress = progress2 % 1;
+      if (!iterationProgress && progress2 >= 1) {
+        iterationProgress = 1;
+      }
+      iterationProgress === 1 && currentIteration--;
+      currentIteration = Math.min(currentIteration, repeat + 1);
+      const isOddIteration = Boolean(currentIteration % 2);
+      if (isOddIteration) {
+        if (repeatType === "reverse") {
+          iterationProgress = 1 - iterationProgress;
+          if (repeatDelay) {
+            iterationProgress -= repeatDelay / resolvedDuration;
+          }
+        } else if (repeatType === "mirror") {
+          frameGenerator = mirroredGenerator;
+        }
+      }
+      elapsed = clamp(0, 1, iterationProgress) * resolvedDuration;
+    }
+    let state;
+    if (isInDelayPhase) {
+      this.delayState.value = keyframes2[0];
+      state = this.delayState;
+    } else {
+      state = frameGenerator.next(elapsed);
+    }
+    if (mixKeyframes && !isInDelayPhase) {
+      state.value = mixKeyframes(state.value);
+    }
+    let { done } = state;
+    if (!isInDelayPhase && calculatedDuration !== null) {
+      done = this.playbackSpeed >= 0 ? this.currentTime >= totalDuration : this.currentTime <= 0;
+    }
+    const isAnimationFinished = this.holdTime === null && (this.state === "finished" || this.state === "running" && done);
+    if (isAnimationFinished && type !== inertia) {
+      state.value = getFinalKeyframe(keyframes2, this.options, finalKeyframe, this.speed);
+    }
+    if (onUpdate) {
+      onUpdate(state.value);
+    }
+    if (isAnimationFinished) {
+      this.finish();
+    }
+    return state;
+  }
+  /**
+   * Allows the returned animation to be awaited or promise-chained. Currently
+   * resolves when the animation finishes at all but in a future update could/should
+   * reject if its cancels.
+   */
+  then(resolve, reject) {
+    return this.finished.then(resolve, reject);
+  }
+  get duration() {
+    return /* @__PURE__ */ millisecondsToSeconds(this.calculatedDuration);
+  }
+  get iterationDuration() {
+    const { delay: delay2 = 0 } = this.options || {};
+    return this.duration + /* @__PURE__ */ millisecondsToSeconds(delay2);
+  }
+  get time() {
+    return /* @__PURE__ */ millisecondsToSeconds(this.currentTime);
+  }
+  set time(newTime) {
+    newTime = /* @__PURE__ */ secondsToMilliseconds(newTime);
+    this.currentTime = newTime;
+    if (this.startTime === null || this.holdTime !== null || this.playbackSpeed === 0) {
+      this.holdTime = newTime;
+    } else if (this.driver) {
+      this.startTime = this.driver.now() - newTime / this.playbackSpeed;
+    }
+    if (this.driver) {
+      this.driver.start(false);
+    } else {
+      this.startTime = 0;
+      this.state = "paused";
+      this.holdTime = newTime;
+      this.tick(newTime);
+    }
+  }
+  /**
+   * Returns the generator's velocity at the current time in units/second.
+   * Uses the analytical derivative when available (springs), avoiding
+   * the MotionValue's frame-dependent velocity estimation.
+   */
+  getGeneratorVelocity() {
+    const t = this.currentTime;
+    if (t <= 0)
+      return this.options.velocity || 0;
+    if (this.generator.velocity) {
+      return this.generator.velocity(t);
+    }
+    const current = this.generator.next(t).value;
+    return getGeneratorVelocity((s2) => this.generator.next(s2).value, t, current);
+  }
+  get speed() {
+    return this.playbackSpeed;
+  }
+  set speed(newSpeed) {
+    const hasChanged = this.playbackSpeed !== newSpeed;
+    if (hasChanged && this.driver) {
+      this.updateTime(time.now());
+    }
+    this.playbackSpeed = newSpeed;
+    if (hasChanged && this.driver) {
+      this.time = /* @__PURE__ */ millisecondsToSeconds(this.currentTime);
+    }
+  }
+  play() {
+    var _a3, _b3;
+    if (this.isStopped)
+      return;
+    const { driver = frameloopDriver, startTime } = this.options;
+    if (!this.driver) {
+      this.driver = driver((timestamp) => this.tick(timestamp));
+    }
+    (_b3 = (_a3 = this.options).onPlay) == null ? void 0 : _b3.call(_a3);
+    const now2 = this.driver.now();
+    if (this.state === "finished") {
+      this.updateFinished();
+      this.startTime = now2;
+    } else if (this.holdTime !== null) {
+      this.startTime = now2 - this.holdTime;
+    } else if (!this.startTime) {
+      this.startTime = startTime ?? now2;
+    }
+    if (this.state === "finished" && this.speed < 0) {
+      this.startTime += this.calculatedDuration;
+    }
+    this.holdTime = null;
+    this.state = "running";
+    this.driver.start();
+  }
+  pause() {
+    this.state = "paused";
+    this.updateTime(time.now());
+    this.holdTime = this.currentTime;
+  }
+  complete() {
+    if (this.state !== "running") {
+      this.play();
+    }
+    this.state = "finished";
+    this.holdTime = null;
+  }
+  finish() {
+    var _a3, _b3;
+    this.notifyFinished();
+    this.teardown();
+    this.state = "finished";
+    (_b3 = (_a3 = this.options).onComplete) == null ? void 0 : _b3.call(_a3);
+  }
+  cancel() {
+    var _a3, _b3;
+    this.holdTime = null;
+    this.startTime = 0;
+    this.tick(0);
+    this.teardown();
+    (_b3 = (_a3 = this.options).onCancel) == null ? void 0 : _b3.call(_a3);
+  }
+  teardown() {
+    this.state = "idle";
+    this.stopDriver();
+    this.startTime = this.holdTime = null;
+  }
+  stopDriver() {
+    if (!this.driver)
+      return;
+    this.driver.stop();
+    this.driver = void 0;
+  }
+  sample(sampleTime) {
+    this.startTime = 0;
+    return this.tick(sampleTime, true);
+  }
+  attachTimeline(timeline) {
+    var _a3;
+    if (this.options.allowFlatten) {
+      this.options.type = "keyframes";
+      this.options.ease = "linear";
+      this.initAnimation();
+    }
+    (_a3 = this.driver) == null ? void 0 : _a3.stop();
+    return timeline.observe(this);
+  }
+}
+function fillWildcards(keyframes2) {
+  for (let i = 1; i < keyframes2.length; i++) {
+    keyframes2[i] ?? (keyframes2[i] = keyframes2[i - 1]);
+  }
+}
+const radToDeg = (rad) => rad * 180 / Math.PI;
+const rotate = (v2) => {
+  const angle = radToDeg(Math.atan2(v2[1], v2[0]));
+  return rebaseAngle(angle);
+};
+const matrix2dParsers = {
+  x: 4,
+  y: 5,
+  translateX: 4,
+  translateY: 5,
+  scaleX: 0,
+  scaleY: 3,
+  scale: (v2) => (Math.abs(v2[0]) + Math.abs(v2[3])) / 2,
+  rotate,
+  rotateZ: rotate,
+  skewX: (v2) => radToDeg(Math.atan(v2[1])),
+  skewY: (v2) => radToDeg(Math.atan(v2[2])),
+  skew: (v2) => (Math.abs(v2[1]) + Math.abs(v2[2])) / 2
+};
+const rebaseAngle = (angle) => {
+  angle = angle % 360;
+  if (angle < 0)
+    angle += 360;
+  return angle;
+};
+const rotateZ = rotate;
+const scaleX = (v2) => Math.sqrt(v2[0] * v2[0] + v2[1] * v2[1]);
+const scaleY = (v2) => Math.sqrt(v2[4] * v2[4] + v2[5] * v2[5]);
+const matrix3dParsers = {
+  x: 12,
+  y: 13,
+  z: 14,
+  translateX: 12,
+  translateY: 13,
+  translateZ: 14,
+  scaleX,
+  scaleY,
+  scale: (v2) => (scaleX(v2) + scaleY(v2)) / 2,
+  rotateX: (v2) => rebaseAngle(radToDeg(Math.atan2(v2[6], v2[5]))),
+  rotateY: (v2) => rebaseAngle(radToDeg(Math.atan2(-v2[2], v2[0]))),
+  rotateZ,
+  rotate: rotateZ,
+  skewX: (v2) => radToDeg(Math.atan(v2[4])),
+  skewY: (v2) => radToDeg(Math.atan(v2[1])),
+  skew: (v2) => (Math.abs(v2[1]) + Math.abs(v2[4])) / 2
+};
+function defaultTransformValue(name) {
+  return name.includes("scale") ? 1 : 0;
+}
+function parseValueFromTransform(transform, name) {
+  if (!transform || transform === "none") {
+    return defaultTransformValue(name);
+  }
+  const matrix3dMatch = transform.match(/^matrix3d\(([-\d.e\s,]+)\)$/u);
+  let parsers;
+  let match;
+  if (matrix3dMatch) {
+    parsers = matrix3dParsers;
+    match = matrix3dMatch;
+  } else {
+    const matrix2dMatch = transform.match(/^matrix\(([-\d.e\s,]+)\)$/u);
+    parsers = matrix2dParsers;
+    match = matrix2dMatch;
+  }
+  if (!match) {
+    return defaultTransformValue(name);
+  }
+  const valueParser = parsers[name];
+  const values = match[1].split(",").map(convertTransformToNumber);
+  return typeof valueParser === "function" ? valueParser(values) : values[valueParser];
+}
+const readTransformValue = (instance, name) => {
+  const { transform = "none" } = getComputedStyle(instance);
+  return parseValueFromTransform(transform, name);
+};
+function convertTransformToNumber(value) {
+  return parseFloat(value.trim());
+}
+const transformPropOrder = [
+  "transformPerspective",
+  "x",
+  "y",
+  "z",
+  "translateX",
+  "translateY",
+  "translateZ",
+  "scale",
+  "scaleX",
+  "scaleY",
+  "rotate",
+  "rotateX",
+  "rotateY",
+  "rotateZ",
+  "skew",
+  "skewX",
+  "skewY"
+];
+const transformProps = /* @__PURE__ */ (() => new Set(transformPropOrder))();
+const isNumOrPxType = (v2) => v2 === number || v2 === px;
+const transformKeys = /* @__PURE__ */ new Set(["x", "y", "z"]);
+const nonTranslationalTransformKeys = transformPropOrder.filter((key) => !transformKeys.has(key));
+function removeNonTranslationalTransform(visualElement) {
+  const removedTransforms = [];
+  nonTranslationalTransformKeys.forEach((key) => {
+    const value = visualElement.getValue(key);
+    if (value !== void 0) {
+      removedTransforms.push([key, value.get()]);
+      value.set(key.startsWith("scale") ? 1 : 0);
+    }
+  });
+  return removedTransforms;
+}
+const positionalValues = {
+  // Dimensions
+  width: ({ x: x3 }, { paddingLeft = "0", paddingRight = "0", boxSizing }) => {
+    const width = x3.max - x3.min;
+    return boxSizing === "border-box" ? width : width - parseFloat(paddingLeft) - parseFloat(paddingRight);
+  },
+  height: ({ y: y2 }, { paddingTop = "0", paddingBottom = "0", boxSizing }) => {
+    const height = y2.max - y2.min;
+    return boxSizing === "border-box" ? height : height - parseFloat(paddingTop) - parseFloat(paddingBottom);
+  },
+  top: (_bbox, { top }) => parseFloat(top),
+  left: (_bbox, { left }) => parseFloat(left),
+  bottom: ({ y: y2 }, { top }) => parseFloat(top) + (y2.max - y2.min),
+  right: ({ x: x3 }, { left }) => parseFloat(left) + (x3.max - x3.min),
+  // Transform
+  x: (_bbox, { transform }) => parseValueFromTransform(transform, "x"),
+  y: (_bbox, { transform }) => parseValueFromTransform(transform, "y")
+};
+positionalValues.translateX = positionalValues.x;
+positionalValues.translateY = positionalValues.y;
+const toResolve = /* @__PURE__ */ new Set();
+let isScheduled = false;
+let anyNeedsMeasurement = false;
+let isForced = false;
+function measureAllKeyframes() {
+  if (anyNeedsMeasurement) {
+    const resolversToMeasure = Array.from(toResolve).filter((resolver) => resolver.needsMeasurement);
+    const elementsToMeasure = new Set(resolversToMeasure.map((resolver) => resolver.element));
+    const transformsToRestore = /* @__PURE__ */ new Map();
+    elementsToMeasure.forEach((element) => {
+      const removedTransforms = removeNonTranslationalTransform(element);
+      if (!removedTransforms.length)
+        return;
+      transformsToRestore.set(element, removedTransforms);
+      element.render();
+    });
+    resolversToMeasure.forEach((resolver) => resolver.measureInitialState());
+    elementsToMeasure.forEach((element) => {
+      element.render();
+      const restore = transformsToRestore.get(element);
+      if (restore) {
+        restore.forEach(([key, value]) => {
+          var _a3;
+          (_a3 = element.getValue(key)) == null ? void 0 : _a3.set(value);
+        });
+      }
+    });
+    resolversToMeasure.forEach((resolver) => resolver.measureEndState());
+    resolversToMeasure.forEach((resolver) => {
+      if (resolver.suspendedScrollY !== void 0) {
+        window.scrollTo(0, resolver.suspendedScrollY);
+      }
+    });
+  }
+  anyNeedsMeasurement = false;
+  isScheduled = false;
+  toResolve.forEach((resolver) => resolver.complete(isForced));
+  toResolve.clear();
+}
+function readAllKeyframes() {
+  toResolve.forEach((resolver) => {
+    resolver.readKeyframes();
+    if (resolver.needsMeasurement) {
+      anyNeedsMeasurement = true;
+    }
+  });
+}
+function flushKeyframeResolvers() {
+  isForced = true;
+  readAllKeyframes();
+  measureAllKeyframes();
+  isForced = false;
+}
+class KeyframeResolver {
+  constructor(unresolvedKeyframes, onComplete, name, motionValue2, element, isAsync = false) {
+    this.state = "pending";
+    this.isAsync = false;
+    this.needsMeasurement = false;
+    this.unresolvedKeyframes = [...unresolvedKeyframes];
+    this.onComplete = onComplete;
+    this.name = name;
+    this.motionValue = motionValue2;
+    this.element = element;
+    this.isAsync = isAsync;
+  }
+  scheduleResolve() {
+    this.state = "scheduled";
+    if (this.isAsync) {
+      toResolve.add(this);
+      if (!isScheduled) {
+        isScheduled = true;
+        frame.read(readAllKeyframes);
+        frame.resolveKeyframes(measureAllKeyframes);
+      }
+    } else {
+      this.readKeyframes();
+      this.complete();
+    }
+  }
+  readKeyframes() {
+    const { unresolvedKeyframes, name, element, motionValue: motionValue2 } = this;
+    if (unresolvedKeyframes[0] === null) {
+      const currentValue = motionValue2 == null ? void 0 : motionValue2.get();
+      const finalKeyframe = unresolvedKeyframes[unresolvedKeyframes.length - 1];
+      if (currentValue !== void 0) {
+        unresolvedKeyframes[0] = currentValue;
+      } else if (element && name) {
+        const valueAsRead = element.readValue(name, finalKeyframe);
+        if (valueAsRead !== void 0 && valueAsRead !== null) {
+          unresolvedKeyframes[0] = valueAsRead;
+        }
+      }
+      if (unresolvedKeyframes[0] === void 0) {
+        unresolvedKeyframes[0] = finalKeyframe;
+      }
+      if (motionValue2 && currentValue === void 0) {
+        motionValue2.set(unresolvedKeyframes[0]);
+      }
+    }
+    fillWildcards(unresolvedKeyframes);
+  }
+  setFinalKeyframe() {
+  }
+  measureInitialState() {
+  }
+  renderEndStyles() {
+  }
+  measureEndState() {
+  }
+  complete(isForcedComplete = false) {
+    this.state = "complete";
+    this.onComplete(this.unresolvedKeyframes, this.finalKeyframe, isForcedComplete);
+    toResolve.delete(this);
+  }
+  cancel() {
+    if (this.state === "scheduled") {
+      toResolve.delete(this);
+      this.state = "pending";
+    }
+  }
+  resume() {
+    if (this.state === "pending")
+      this.scheduleResolve();
+  }
+}
+const isCSSVar = (name) => name.startsWith("--");
+function setStyle(element, name, value) {
+  isCSSVar(name) ? element.style.setProperty(name, value) : element.style[name] = value;
+}
+const supportsFlags = {};
+function memoSupports(callback, supportsFlag) {
+  const memoized2 = /* @__PURE__ */ memo(callback);
+  return () => supportsFlags[supportsFlag] ?? memoized2();
+}
+const supportsScrollTimeline = /* @__PURE__ */ memoSupports(() => window.ScrollTimeline !== void 0, "scrollTimeline");
+const supportsLinearEasing = /* @__PURE__ */ memoSupports(() => {
+  try {
+    document.createElement("div").animate({ opacity: 0 }, { easing: "linear(0, 1)" });
+  } catch (e) {
+    return false;
+  }
+  return true;
+}, "linearEasing");
+const cubicBezierAsString = ([a2, b2, c2, d2]) => `cubic-bezier(${a2}, ${b2}, ${c2}, ${d2})`;
+const supportedWaapiEasing = {
+  linear: "linear",
+  ease: "ease",
+  easeIn: "ease-in",
+  easeOut: "ease-out",
+  easeInOut: "ease-in-out",
+  circIn: /* @__PURE__ */ cubicBezierAsString([0, 0.65, 0.55, 1]),
+  circOut: /* @__PURE__ */ cubicBezierAsString([0.55, 0, 1, 0.45]),
+  backIn: /* @__PURE__ */ cubicBezierAsString([0.31, 0.01, 0.66, -0.59]),
+  backOut: /* @__PURE__ */ cubicBezierAsString([0.33, 1.53, 0.69, 0.99])
+};
+function mapEasingToNativeEasing(easing, duration) {
+  if (!easing) {
+    return void 0;
+  } else if (typeof easing === "function") {
+    return supportsLinearEasing() ? generateLinearEasing(easing, duration) : "ease-out";
+  } else if (isBezierDefinition(easing)) {
+    return cubicBezierAsString(easing);
+  } else if (Array.isArray(easing)) {
+    return easing.map((segmentEasing) => mapEasingToNativeEasing(segmentEasing, duration) || supportedWaapiEasing.easeOut);
+  } else {
+    return supportedWaapiEasing[easing];
+  }
+}
+function startWaapiAnimation(element, valueName, keyframes2, { delay: delay2 = 0, duration = 300, repeat = 0, repeatType = "loop", ease: ease2 = "easeOut", times } = {}, pseudoElement = void 0) {
+  const keyframeOptions = {
+    [valueName]: keyframes2
+  };
+  if (times)
+    keyframeOptions.offset = times;
+  const easing = mapEasingToNativeEasing(ease2, duration);
+  if (Array.isArray(easing))
+    keyframeOptions.easing = easing;
+  const options = {
+    delay: delay2,
+    duration,
+    easing: !Array.isArray(easing) ? easing : "linear",
+    fill: "both",
+    iterations: repeat + 1,
+    direction: repeatType === "reverse" ? "alternate" : "normal"
+  };
+  if (pseudoElement)
+    options.pseudoElement = pseudoElement;
+  const animation = element.animate(keyframeOptions, options);
+  return animation;
+}
+function isGenerator(type) {
+  return typeof type === "function" && "applyToOptions" in type;
+}
+function applyGeneratorOptions({ type, ...options }) {
+  if (isGenerator(type) && supportsLinearEasing()) {
+    return type.applyToOptions(options);
+  } else {
+    options.duration ?? (options.duration = 300);
+    options.ease ?? (options.ease = "easeOut");
+  }
+  return options;
+}
+class NativeAnimation extends WithPromise {
+  constructor(options) {
+    super();
+    this.finishedTime = null;
+    this.isStopped = false;
+    this.manualStartTime = null;
+    if (!options)
+      return;
+    const { element, name, keyframes: keyframes2, pseudoElement, allowFlatten = false, finalKeyframe, onComplete } = options;
+    this.isPseudoElement = Boolean(pseudoElement);
+    this.allowFlatten = allowFlatten;
+    this.options = options;
+    invariant(typeof options.type !== "string");
+    const transition = applyGeneratorOptions(options);
+    this.animation = startWaapiAnimation(element, name, keyframes2, transition, pseudoElement);
+    if (transition.autoplay === false) {
+      this.animation.pause();
+    }
+    this.animation.onfinish = () => {
+      this.finishedTime = this.time;
+      if (!pseudoElement) {
+        const keyframe = getFinalKeyframe(keyframes2, this.options, finalKeyframe, this.speed);
+        if (this.updateMotionValue) {
+          this.updateMotionValue(keyframe);
+        }
+        setStyle(element, name, keyframe);
+        this.animation.cancel();
+      }
+      onComplete == null ? void 0 : onComplete();
+      this.notifyFinished();
+    };
+  }
+  play() {
+    if (this.isStopped)
+      return;
+    this.manualStartTime = null;
+    this.animation.play();
+    if (this.state === "finished") {
+      this.updateFinished();
+    }
+  }
+  pause() {
+    this.animation.pause();
+  }
+  complete() {
+    var _a3, _b3;
+    (_b3 = (_a3 = this.animation).finish) == null ? void 0 : _b3.call(_a3);
+  }
+  cancel() {
+    try {
+      this.animation.cancel();
+    } catch (e) {
+    }
+  }
+  stop() {
+    if (this.isStopped)
+      return;
+    this.isStopped = true;
+    const { state } = this;
+    if (state === "idle" || state === "finished") {
+      return;
+    }
+    if (this.updateMotionValue) {
+      this.updateMotionValue();
+    } else {
+      this.commitStyles();
+    }
+    if (!this.isPseudoElement)
+      this.cancel();
+  }
+  /**
+   * WAAPI doesn't natively have any interruption capabilities.
+   *
+   * In this method, we commit styles back to the DOM before cancelling
+   * the animation.
+   *
+   * This is designed to be overridden by NativeAnimationExtended, which
+   * will create a renderless JS animation and sample it twice to calculate
+   * its current value, "previous" value, and therefore allow
+   * Motion to also correctly calculate velocity for any subsequent animation
+   * while deferring the commit until the next animation frame.
+   */
+  commitStyles() {
+    var _a3, _b3, _c2;
+    const element = (_a3 = this.options) == null ? void 0 : _a3.element;
+    if (!this.isPseudoElement && (element == null ? void 0 : element.isConnected)) {
+      (_c2 = (_b3 = this.animation).commitStyles) == null ? void 0 : _c2.call(_b3);
+    }
+  }
+  get duration() {
+    var _a3, _b3;
+    const duration = ((_b3 = (_a3 = this.animation.effect) == null ? void 0 : _a3.getComputedTiming) == null ? void 0 : _b3.call(_a3).duration) || 0;
+    return /* @__PURE__ */ millisecondsToSeconds(Number(duration));
+  }
+  get iterationDuration() {
+    const { delay: delay2 = 0 } = this.options || {};
+    return this.duration + /* @__PURE__ */ millisecondsToSeconds(delay2);
+  }
+  get time() {
+    return /* @__PURE__ */ millisecondsToSeconds(Number(this.animation.currentTime) || 0);
+  }
+  set time(newTime) {
+    const wasFinished = this.finishedTime !== null;
+    this.manualStartTime = null;
+    this.finishedTime = null;
+    this.animation.currentTime = /* @__PURE__ */ secondsToMilliseconds(newTime);
+    if (wasFinished) {
+      this.animation.pause();
+    }
+  }
+  /**
+   * The playback speed of the animation.
+   * 1 = normal speed, 2 = double speed, 0.5 = half speed.
+   */
+  get speed() {
+    return this.animation.playbackRate;
+  }
+  set speed(newSpeed) {
+    if (newSpeed < 0)
+      this.finishedTime = null;
+    this.animation.playbackRate = newSpeed;
+  }
+  get state() {
+    return this.finishedTime !== null ? "finished" : this.animation.playState;
+  }
+  get startTime() {
+    return this.manualStartTime ?? Number(this.animation.startTime);
+  }
+  set startTime(newStartTime) {
+    this.manualStartTime = this.animation.startTime = newStartTime;
+  }
+  /**
+   * Attaches a timeline to the animation, for instance the `ScrollTimeline`.
+   */
+  attachTimeline({ timeline, rangeStart, rangeEnd, observe }) {
+    var _a3;
+    if (this.allowFlatten) {
+      (_a3 = this.animation.effect) == null ? void 0 : _a3.updateTiming({ easing: "linear" });
+    }
+    this.animation.onfinish = null;
+    if (timeline && supportsScrollTimeline()) {
+      this.animation.timeline = timeline;
+      if (rangeStart)
+        this.animation.rangeStart = rangeStart;
+      if (rangeEnd)
+        this.animation.rangeEnd = rangeEnd;
+      return noop2;
+    } else {
+      return observe(this);
+    }
+  }
+}
+const unsupportedEasingFunctions = {
+  anticipate,
+  backInOut,
+  circInOut
+};
+function isUnsupportedEase(key) {
+  return key in unsupportedEasingFunctions;
+}
+function replaceStringEasing(transition) {
+  if (typeof transition.ease === "string" && isUnsupportedEase(transition.ease)) {
+    transition.ease = unsupportedEasingFunctions[transition.ease];
+  }
+}
+const sampleDelta = 10;
+class NativeAnimationExtended extends NativeAnimation {
+  constructor(options) {
+    replaceStringEasing(options);
+    replaceTransitionType(options);
+    super(options);
+    if (options.startTime !== void 0 && options.autoplay !== false) {
+      this.startTime = options.startTime;
+    }
+    this.options = options;
+  }
+  /**
+   * WAAPI doesn't natively have any interruption capabilities.
+   *
+   * Rather than read committed styles back out of the DOM, we can
+   * create a renderless JS animation and sample it twice to calculate
+   * its current value, "previous" value, and therefore allow
+   * Motion to calculate velocity for any subsequent animation.
+   */
+  updateMotionValue(value) {
+    const { motionValue: motionValue2, onUpdate, onComplete, element, ...options } = this.options;
+    if (!motionValue2)
+      return;
+    if (value !== void 0) {
+      motionValue2.set(value);
+      return;
+    }
+    const sampleAnimation = new JSAnimation({
+      ...options,
+      autoplay: false
+    });
+    const sampleTime = Math.max(sampleDelta, time.now() - this.startTime);
+    const delta = clamp(0, sampleDelta, sampleTime - sampleDelta);
+    const current = sampleAnimation.sample(sampleTime).value;
+    const { name } = this.options;
+    if (element && name)
+      setStyle(element, name, current);
+    motionValue2.setWithVelocity(sampleAnimation.sample(Math.max(0, sampleTime - delta)).value, current, delta);
+    sampleAnimation.stop();
+  }
+}
+const isAnimatable = (value, name) => {
+  if (name === "zIndex")
+    return false;
+  if (typeof value === "number" || Array.isArray(value))
+    return true;
+  if (typeof value === "string" && // It's animatable if we have a string
+  (complex.test(value) || value === "0") && // And it contains numbers and/or colors
+  !value.startsWith("url(")) {
+    return true;
+  }
+  return false;
+};
+function hasKeyframesChanged(keyframes2) {
+  const current = keyframes2[0];
+  if (keyframes2.length === 1)
+    return true;
+  for (let i = 0; i < keyframes2.length; i++) {
+    if (keyframes2[i] !== current)
+      return true;
+  }
+}
+function canAnimate(keyframes2, name, type, velocity) {
+  const originKeyframe = keyframes2[0];
+  if (originKeyframe === null) {
+    return false;
+  }
+  if (name === "display" || name === "visibility")
+    return true;
+  const targetKeyframe = keyframes2[keyframes2.length - 1];
+  const isOriginAnimatable = isAnimatable(originKeyframe, name);
+  const isTargetAnimatable = isAnimatable(targetKeyframe, name);
+  if (!isOriginAnimatable || !isTargetAnimatable) {
+    return false;
+  }
+  return hasKeyframesChanged(keyframes2) || (type === "spring" || isGenerator(type)) && velocity;
+}
+function makeAnimationInstant(options) {
+  options.duration = 0;
+  options.type = "keyframes";
+}
+const acceleratedValues = /* @__PURE__ */ new Set([
+  "opacity",
+  "clipPath",
+  "filter",
+  "transform"
+  // TODO: Can be accelerated but currently disabled until https://issues.chromium.org/issues/41491098 is resolved
+  // or until we implement support for linear() easing.
+  // "background-color"
+]);
+const browserColorFunctions = /^(?:oklch|oklab|lab|lch|color|color-mix|light-dark)\(/;
+function hasBrowserOnlyColors(keyframes2) {
+  for (let i = 0; i < keyframes2.length; i++) {
+    if (typeof keyframes2[i] === "string" && browserColorFunctions.test(keyframes2[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+const colorProperties = /* @__PURE__ */ new Set([
+  "color",
+  "backgroundColor",
+  "outlineColor",
+  "fill",
+  "stroke",
+  "borderColor",
+  "borderTopColor",
+  "borderRightColor",
+  "borderBottomColor",
+  "borderLeftColor"
+]);
+const supportsWaapi = /* @__PURE__ */ memo(() => Object.hasOwnProperty.call(Element.prototype, "animate"));
+function supportsBrowserAnimation(options) {
+  var _a3;
+  const { motionValue: motionValue2, name, repeatDelay, repeatType, damping, type, keyframes: keyframes2 } = options;
+  const subject = (_a3 = motionValue2 == null ? void 0 : motionValue2.owner) == null ? void 0 : _a3.current;
+  if (!(subject instanceof HTMLElement)) {
+    return false;
+  }
+  const { onUpdate, transformTemplate } = motionValue2.owner.getProps();
+  return supportsWaapi() && name && /**
+   * Force WAAPI for color properties with browser-only color formats
+   * (oklch, oklab, lab, lch, etc.) that the JS animation path can't parse.
+   */
+  (acceleratedValues.has(name) || colorProperties.has(name) && hasBrowserOnlyColors(keyframes2)) && (name !== "transform" || !transformTemplate) && /**
+   * If we're outputting values to onUpdate then we can't use WAAPI as there's
+   * no way to read the value from WAAPI every frame.
+   */
+  !onUpdate && !repeatDelay && repeatType !== "mirror" && damping !== 0 && type !== "inertia";
+}
+const MAX_RESOLVE_DELAY = 40;
+class AsyncMotionValueAnimation extends WithPromise {
+  constructor({ autoplay = true, delay: delay2 = 0, type = "keyframes", repeat = 0, repeatDelay = 0, repeatType = "loop", keyframes: keyframes2, name, motionValue: motionValue2, element, ...options }) {
+    var _a3;
+    super();
+    this.stop = () => {
+      var _a4, _b3;
+      if (this._animation) {
+        this._animation.stop();
+        (_a4 = this.stopTimeline) == null ? void 0 : _a4.call(this);
+      }
+      (_b3 = this.keyframeResolver) == null ? void 0 : _b3.cancel();
+    };
+    this.createdAt = time.now();
+    const optionsWithDefaults = {
+      autoplay,
+      delay: delay2,
+      type,
+      repeat,
+      repeatDelay,
+      repeatType,
+      name,
+      motionValue: motionValue2,
+      element,
+      ...options
+    };
+    const KeyframeResolver$1 = (element == null ? void 0 : element.KeyframeResolver) || KeyframeResolver;
+    this.keyframeResolver = new KeyframeResolver$1(keyframes2, (resolvedKeyframes, finalKeyframe, forced) => this.onKeyframesResolved(resolvedKeyframes, finalKeyframe, optionsWithDefaults, !forced), name, motionValue2, element);
+    (_a3 = this.keyframeResolver) == null ? void 0 : _a3.scheduleResolve();
+  }
+  onKeyframesResolved(keyframes2, finalKeyframe, options, sync) {
+    var _a3, _b3;
+    this.keyframeResolver = void 0;
+    const { name, type, velocity, delay: delay2, isHandoff, onUpdate } = options;
+    this.resolvedAt = time.now();
+    let canAnimateValue = true;
+    if (!canAnimate(keyframes2, name, type, velocity)) {
+      canAnimateValue = false;
+      if (MotionGlobalConfig.instantAnimations || !delay2) {
+        onUpdate == null ? void 0 : onUpdate(getFinalKeyframe(keyframes2, options, finalKeyframe));
+      }
+      keyframes2[0] = keyframes2[keyframes2.length - 1];
+      makeAnimationInstant(options);
+      options.repeat = 0;
+    }
+    const startTime = sync ? !this.resolvedAt ? this.createdAt : this.resolvedAt - this.createdAt > MAX_RESOLVE_DELAY ? this.resolvedAt : this.createdAt : void 0;
+    const resolvedOptions = {
+      startTime,
+      finalKeyframe,
+      ...options,
+      keyframes: keyframes2
+    };
+    const useWaapi = canAnimateValue && !isHandoff && supportsBrowserAnimation(resolvedOptions);
+    const element = (_b3 = (_a3 = resolvedOptions.motionValue) == null ? void 0 : _a3.owner) == null ? void 0 : _b3.current;
+    let animation;
+    if (useWaapi) {
+      try {
+        animation = new NativeAnimationExtended({
+          ...resolvedOptions,
+          element
+        });
+      } catch {
+        animation = new JSAnimation(resolvedOptions);
+      }
+    } else {
+      animation = new JSAnimation(resolvedOptions);
+    }
+    animation.finished.then(() => {
+      this.notifyFinished();
+    }).catch(noop2);
+    if (this.pendingTimeline) {
+      this.stopTimeline = animation.attachTimeline(this.pendingTimeline);
+      this.pendingTimeline = void 0;
+    }
+    this._animation = animation;
+  }
+  get finished() {
+    if (!this._animation) {
+      return this._finished;
+    } else {
+      return this.animation.finished;
+    }
+  }
+  then(onResolve, _onReject) {
+    return this.finished.finally(onResolve).then(() => {
+    });
+  }
+  get animation() {
+    var _a3;
+    if (!this._animation) {
+      (_a3 = this.keyframeResolver) == null ? void 0 : _a3.resume();
+      flushKeyframeResolvers();
+    }
+    return this._animation;
+  }
+  get duration() {
+    return this.animation.duration;
+  }
+  get iterationDuration() {
+    return this.animation.iterationDuration;
+  }
+  get time() {
+    return this.animation.time;
+  }
+  set time(newTime) {
+    this.animation.time = newTime;
+  }
+  get speed() {
+    return this.animation.speed;
+  }
+  get state() {
+    return this.animation.state;
+  }
+  set speed(newSpeed) {
+    this.animation.speed = newSpeed;
+  }
+  get startTime() {
+    return this.animation.startTime;
+  }
+  attachTimeline(timeline) {
+    if (this._animation) {
+      this.stopTimeline = this.animation.attachTimeline(timeline);
+    } else {
+      this.pendingTimeline = timeline;
+    }
+    return () => this.stop();
+  }
+  play() {
+    this.animation.play();
+  }
+  pause() {
+    this.animation.pause();
+  }
+  complete() {
+    this.animation.complete();
+  }
+  cancel() {
+    var _a3;
+    if (this._animation) {
+      this.animation.cancel();
+    }
+    (_a3 = this.keyframeResolver) == null ? void 0 : _a3.cancel();
+  }
+}
+function calcChildStagger(children, child, delayChildren, staggerChildren = 0, staggerDirection = 1) {
+  const index2 = Array.from(children).sort((a2, b2) => a2.sortNodePosition(b2)).indexOf(child);
+  const numChildren = children.size;
+  const maxStaggerDuration = (numChildren - 1) * staggerChildren;
+  const delayIsFunction = typeof delayChildren === "function";
+  return delayIsFunction ? delayChildren(index2, numChildren) : staggerDirection === 1 ? index2 * staggerChildren : maxStaggerDuration - index2 * staggerChildren;
+}
+const splitCSSVariableRegex = (
+  // eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive, as it can match a lot of words
+  /^var\(--(?:([\w-]+)|([\w-]+), ?([a-zA-Z\d ()%#.,-]+))\)/u
+);
+function parseCSSVariable(current) {
+  const match = splitCSSVariableRegex.exec(current);
+  if (!match)
+    return [,];
+  const [, token1, token2, fallback] = match;
+  return [`--${token1 ?? token2}`, fallback];
+}
+function getVariableValue(current, element, depth = 1) {
+  const [token, fallback] = parseCSSVariable(current);
+  if (!token)
+    return;
+  const resolved = window.getComputedStyle(element).getPropertyValue(token);
+  if (resolved) {
+    const trimmed = resolved.trim();
+    return isNumericalString(trimmed) ? parseFloat(trimmed) : trimmed;
+  }
+  return isCSSVariableToken(fallback) ? getVariableValue(fallback, element, depth + 1) : fallback;
+}
+const underDampedSpring = {
+  type: "spring",
+  stiffness: 500,
+  damping: 25,
+  restSpeed: 10
+};
+const criticallyDampedSpring = (target) => ({
+  type: "spring",
+  stiffness: 550,
+  damping: target === 0 ? 2 * Math.sqrt(550) : 30,
+  restSpeed: 10
+});
+const keyframesTransition = {
+  type: "keyframes",
+  duration: 0.8
+};
+const ease = {
+  type: "keyframes",
+  ease: [0.25, 0.1, 0.35, 1],
+  duration: 0.3
+};
+const getDefaultTransition = (valueKey, { keyframes: keyframes2 }) => {
+  if (keyframes2.length > 2) {
+    return keyframesTransition;
+  } else if (transformProps.has(valueKey)) {
+    return valueKey.startsWith("scale") ? criticallyDampedSpring(keyframes2[1]) : underDampedSpring;
+  }
+  return ease;
+};
+function resolveTransition(transition, parentTransition) {
+  if ((transition == null ? void 0 : transition.inherit) && parentTransition) {
+    const { inherit: _2, ...rest } = transition;
+    return { ...parentTransition, ...rest };
+  }
+  return transition;
+}
+function getValueTransition(transition, key) {
+  const valueTransition = (transition == null ? void 0 : transition[key]) ?? (transition == null ? void 0 : transition["default"]) ?? transition;
+  if (valueTransition !== transition) {
+    return resolveTransition(valueTransition, transition);
+  }
+  return valueTransition;
+}
+const orchestrationKeys = /* @__PURE__ */ new Set([
+  "when",
+  "delay",
+  "delayChildren",
+  "staggerChildren",
+  "staggerDirection",
+  "repeat",
+  "repeatType",
+  "repeatDelay",
+  "from",
+  "elapsed"
+]);
+function isTransitionDefined(transition) {
+  for (const key in transition) {
+    if (!orchestrationKeys.has(key))
+      return true;
+  }
+  return false;
+}
+const animateMotionValue = (name, value, target, transition = {}, element, isHandoff) => (onComplete) => {
+  const valueTransition = getValueTransition(transition, name) || {};
+  const delay2 = valueTransition.delay || transition.delay || 0;
+  let { elapsed = 0 } = transition;
+  elapsed = elapsed - /* @__PURE__ */ secondsToMilliseconds(delay2);
+  const options = {
+    keyframes: Array.isArray(target) ? target : [null, target],
+    ease: "easeOut",
+    velocity: value.getVelocity(),
+    ...valueTransition,
+    delay: -elapsed,
+    onUpdate: (v2) => {
+      value.set(v2);
+      valueTransition.onUpdate && valueTransition.onUpdate(v2);
+    },
+    onComplete: () => {
+      onComplete();
+      valueTransition.onComplete && valueTransition.onComplete();
+    },
+    name,
+    motionValue: value,
+    element: isHandoff ? void 0 : element
+  };
+  if (!isTransitionDefined(valueTransition)) {
+    Object.assign(options, getDefaultTransition(name, options));
+  }
+  options.duration && (options.duration = /* @__PURE__ */ secondsToMilliseconds(options.duration));
+  options.repeatDelay && (options.repeatDelay = /* @__PURE__ */ secondsToMilliseconds(options.repeatDelay));
+  if (options.from !== void 0) {
+    options.keyframes[0] = options.from;
+  }
+  let shouldSkip = false;
+  if (options.type === false || options.duration === 0 && !options.repeatDelay) {
+    makeAnimationInstant(options);
+    if (options.delay === 0) {
+      shouldSkip = true;
+    }
+  }
+  if (MotionGlobalConfig.instantAnimations || MotionGlobalConfig.skipAnimations || (element == null ? void 0 : element.shouldSkipAnimations)) {
+    shouldSkip = true;
+    makeAnimationInstant(options);
+    options.delay = 0;
+  }
+  options.allowFlatten = !valueTransition.type && !valueTransition.ease;
+  if (shouldSkip && !isHandoff && value.get() !== void 0) {
+    const finalKeyframe = getFinalKeyframe(options.keyframes, valueTransition);
+    if (finalKeyframe !== void 0) {
+      frame.update(() => {
+        options.onUpdate(finalKeyframe);
+        options.onComplete();
+      });
+      return;
+    }
+  }
+  return valueTransition.isSync ? new JSAnimation(options) : new AsyncMotionValueAnimation(options);
+};
+function getValueState(visualElement) {
+  const state = [{}, {}];
+  visualElement == null ? void 0 : visualElement.values.forEach((value, key) => {
+    state[0][key] = value.get();
+    state[1][key] = value.getVelocity();
+  });
+  return state;
+}
+function resolveVariantFromProps(props, definition, custom, visualElement) {
+  if (typeof definition === "function") {
+    const [current, velocity] = getValueState(visualElement);
+    definition = definition(custom !== void 0 ? custom : props.custom, current, velocity);
+  }
+  if (typeof definition === "string") {
+    definition = props.variants && props.variants[definition];
+  }
+  if (typeof definition === "function") {
+    const [current, velocity] = getValueState(visualElement);
+    definition = definition(custom !== void 0 ? custom : props.custom, current, velocity);
+  }
+  return definition;
+}
+function resolveVariant(visualElement, definition, custom) {
+  const props = visualElement.getProps();
+  return resolveVariantFromProps(props, definition, custom !== void 0 ? custom : props.custom, visualElement);
+}
+const positionalKeys = /* @__PURE__ */ new Set([
+  "width",
+  "height",
+  "top",
+  "left",
+  "right",
+  "bottom",
+  ...transformPropOrder
+]);
+const MAX_VELOCITY_DELTA = 30;
+const isFloat = (value) => {
+  return !isNaN(parseFloat(value));
+};
+class MotionValue {
+  /**
+   * @param init - The initiating value
+   * @param config - Optional configuration options
+   *
+   * -  `transformer`: A function to transform incoming values with.
+   */
+  constructor(init, options = {}) {
+    this.canTrackVelocity = null;
+    this.events = {};
+    this.updateAndNotify = (v2) => {
+      var _a3;
+      const currentTime = time.now();
+      if (this.updatedAt !== currentTime) {
+        this.setPrevFrameValue();
+      }
+      this.prev = this.current;
+      this.setCurrent(v2);
+      if (this.current !== this.prev) {
+        (_a3 = this.events.change) == null ? void 0 : _a3.notify(this.current);
+        if (this.dependents) {
+          for (const dependent of this.dependents) {
+            dependent.dirty();
+          }
+        }
+      }
+    };
+    this.hasAnimated = false;
+    this.setCurrent(init);
+    this.owner = options.owner;
+  }
+  setCurrent(current) {
+    this.current = current;
+    this.updatedAt = time.now();
+    if (this.canTrackVelocity === null && current !== void 0) {
+      this.canTrackVelocity = isFloat(this.current);
+    }
+  }
+  setPrevFrameValue(prevFrameValue = this.current) {
+    this.prevFrameValue = prevFrameValue;
+    this.prevUpdatedAt = this.updatedAt;
+  }
+  /**
+   * Adds a function that will be notified when the `MotionValue` is updated.
+   *
+   * It returns a function that, when called, will cancel the subscription.
+   *
+   * When calling `onChange` inside a React component, it should be wrapped with the
+   * `useEffect` hook. As it returns an unsubscribe function, this should be returned
+   * from the `useEffect` function to ensure you don't add duplicate subscribers..
+   *
+   * ```jsx
+   * export const MyComponent = () => {
+   *   const x = useMotionValue(0)
+   *   const y = useMotionValue(0)
+   *   const opacity = useMotionValue(1)
+   *
+   *   useEffect(() => {
+   *     function updateOpacity() {
+   *       const maxXY = Math.max(x.get(), y.get())
+   *       const newOpacity = transform(maxXY, [0, 100], [1, 0])
+   *       opacity.set(newOpacity)
+   *     }
+   *
+   *     const unsubscribeX = x.on("change", updateOpacity)
+   *     const unsubscribeY = y.on("change", updateOpacity)
+   *
+   *     return () => {
+   *       unsubscribeX()
+   *       unsubscribeY()
+   *     }
+   *   }, [])
+   *
+   *   return <motion.div style={{ x }} />
+   * }
+   * ```
+   *
+   * @param subscriber - A function that receives the latest value.
+   * @returns A function that, when called, will cancel this subscription.
+   *
+   * @deprecated
+   */
+  onChange(subscription) {
+    return this.on("change", subscription);
+  }
+  on(eventName, callback) {
+    if (!this.events[eventName]) {
+      this.events[eventName] = new SubscriptionManager();
+    }
+    const unsubscribe = this.events[eventName].add(callback);
+    if (eventName === "change") {
+      return () => {
+        unsubscribe();
+        frame.read(() => {
+          if (!this.events.change.getSize()) {
+            this.stop();
+          }
+        });
+      };
+    }
+    return unsubscribe;
+  }
+  clearListeners() {
+    for (const eventManagers in this.events) {
+      this.events[eventManagers].clear();
+    }
+  }
+  /**
+   * Attaches a passive effect to the `MotionValue`.
+   */
+  attach(passiveEffect, stopPassiveEffect) {
+    this.passiveEffect = passiveEffect;
+    this.stopPassiveEffect = stopPassiveEffect;
+  }
+  /**
+   * Sets the state of the `MotionValue`.
+   *
+   * @remarks
+   *
+   * ```jsx
+   * const x = useMotionValue(0)
+   * x.set(10)
+   * ```
+   *
+   * @param latest - Latest value to set.
+   * @param render - Whether to notify render subscribers. Defaults to `true`
+   *
+   * @public
+   */
+  set(v2) {
+    if (!this.passiveEffect) {
+      this.updateAndNotify(v2);
+    } else {
+      this.passiveEffect(v2, this.updateAndNotify);
+    }
+  }
+  setWithVelocity(prev, current, delta) {
+    this.set(current);
+    this.prev = void 0;
+    this.prevFrameValue = prev;
+    this.prevUpdatedAt = this.updatedAt - delta;
+  }
+  /**
+   * Set the state of the `MotionValue`, stopping any active animations,
+   * effects, and resets velocity to `0`.
+   */
+  jump(v2, endAnimation = true) {
+    this.updateAndNotify(v2);
+    this.prev = v2;
+    this.prevUpdatedAt = this.prevFrameValue = void 0;
+    endAnimation && this.stop();
+    if (this.stopPassiveEffect)
+      this.stopPassiveEffect();
+  }
+  dirty() {
+    var _a3;
+    (_a3 = this.events.change) == null ? void 0 : _a3.notify(this.current);
+  }
+  addDependent(dependent) {
+    if (!this.dependents) {
+      this.dependents = /* @__PURE__ */ new Set();
+    }
+    this.dependents.add(dependent);
+  }
+  removeDependent(dependent) {
+    if (this.dependents) {
+      this.dependents.delete(dependent);
+    }
+  }
+  /**
+   * Returns the latest state of `MotionValue`
+   *
+   * @returns - The latest state of `MotionValue`
+   *
+   * @public
+   */
+  get() {
+    return this.current;
+  }
+  /**
+   * @public
+   */
+  getPrevious() {
+    return this.prev;
+  }
+  /**
+   * Returns the latest velocity of `MotionValue`
+   *
+   * @returns - The latest velocity of `MotionValue`. Returns `0` if the state is non-numerical.
+   *
+   * @public
+   */
+  getVelocity() {
+    const currentTime = time.now();
+    if (!this.canTrackVelocity || this.prevFrameValue === void 0 || currentTime - this.updatedAt > MAX_VELOCITY_DELTA) {
+      return 0;
+    }
+    const delta = Math.min(this.updatedAt - this.prevUpdatedAt, MAX_VELOCITY_DELTA);
+    return velocityPerSecond(parseFloat(this.current) - parseFloat(this.prevFrameValue), delta);
+  }
+  /**
+   * Registers a new animation to control this `MotionValue`. Only one
+   * animation can drive a `MotionValue` at one time.
+   *
+   * ```jsx
+   * value.start()
+   * ```
+   *
+   * @param animation - A function that starts the provided animation
+   */
+  start(startAnimation) {
+    this.stop();
+    return new Promise((resolve) => {
+      this.hasAnimated = true;
+      this.animation = startAnimation(resolve);
+      if (this.events.animationStart) {
+        this.events.animationStart.notify();
+      }
+    }).then(() => {
+      if (this.events.animationComplete) {
+        this.events.animationComplete.notify();
+      }
+      this.clearAnimation();
+    });
+  }
+  /**
+   * Stop the currently active animation.
+   *
+   * @public
+   */
+  stop() {
+    if (this.animation) {
+      this.animation.stop();
+      if (this.events.animationCancel) {
+        this.events.animationCancel.notify();
+      }
+    }
+    this.clearAnimation();
+  }
+  /**
+   * Returns `true` if this value is currently animating.
+   *
+   * @public
+   */
+  isAnimating() {
+    return !!this.animation;
+  }
+  clearAnimation() {
+    delete this.animation;
+  }
+  /**
+   * Destroy and clean up subscribers to this `MotionValue`.
+   *
+   * The `MotionValue` hooks like `useMotionValue` and `useTransform` automatically
+   * handle the lifecycle of the returned `MotionValue`, so this method is only necessary if you've manually
+   * created a `MotionValue` via the `motionValue` function.
+   *
+   * @public
+   */
+  destroy() {
+    var _a3, _b3;
+    (_a3 = this.dependents) == null ? void 0 : _a3.clear();
+    (_b3 = this.events.destroy) == null ? void 0 : _b3.notify();
+    this.clearListeners();
+    this.stop();
+    if (this.stopPassiveEffect) {
+      this.stopPassiveEffect();
+    }
+  }
+}
+function motionValue(init, options) {
+  return new MotionValue(init, options);
+}
+const isKeyframesTarget = (v2) => {
+  return Array.isArray(v2);
+};
+function setMotionValue(visualElement, key, value) {
+  if (visualElement.hasValue(key)) {
+    visualElement.getValue(key).set(value);
+  } else {
+    visualElement.addValue(key, motionValue(value));
+  }
+}
+function resolveFinalValueInKeyframes(v2) {
+  return isKeyframesTarget(v2) ? v2[v2.length - 1] || 0 : v2;
+}
+function setTarget(visualElement, definition) {
+  const resolved = resolveVariant(visualElement, definition);
+  let { transitionEnd = {}, transition = {}, ...target } = resolved || {};
+  target = { ...target, ...transitionEnd };
+  for (const key in target) {
+    const value = resolveFinalValueInKeyframes(target[key]);
+    setMotionValue(visualElement, key, value);
+  }
+}
+const isMotionValue = (value) => Boolean(value && value.getVelocity);
+function isWillChangeMotionValue(value) {
+  return Boolean(isMotionValue(value) && value.add);
+}
+function addValueToWillChange(visualElement, key) {
+  const willChange = visualElement.getValue("willChange");
+  if (isWillChangeMotionValue(willChange)) {
+    return willChange.add(key);
+  } else if (!willChange && MotionGlobalConfig.WillChange) {
+    const newWillChange = new MotionGlobalConfig.WillChange("auto");
+    visualElement.addValue("willChange", newWillChange);
+    newWillChange.add(key);
+  }
+}
+function camelToDash(str) {
+  return str.replace(/([A-Z])/g, (match) => `-${match.toLowerCase()}`);
+}
+const optimizedAppearDataId = "framerAppearId";
+const optimizedAppearDataAttribute = "data-" + camelToDash(optimizedAppearDataId);
+function getOptimisedAppearId(visualElement) {
+  return visualElement.props[optimizedAppearDataAttribute];
+}
+function shouldBlockAnimation({ protectedKeys, needsAnimating }, key) {
+  const shouldBlock = protectedKeys.hasOwnProperty(key) && needsAnimating[key] !== true;
+  needsAnimating[key] = false;
+  return shouldBlock;
+}
+function animateTarget(visualElement, targetAndTransition, { delay: delay2 = 0, transitionOverride, type } = {}) {
+  let { transition, transitionEnd, ...target } = targetAndTransition;
+  const defaultTransition = visualElement.getDefaultTransition();
+  transition = transition ? resolveTransition(transition, defaultTransition) : defaultTransition;
+  const reduceMotion = transition == null ? void 0 : transition.reduceMotion;
+  if (transitionOverride)
+    transition = transitionOverride;
+  const animations2 = [];
+  const animationTypeState = type && visualElement.animationState && visualElement.animationState.getState()[type];
+  for (const key in target) {
+    const value = visualElement.getValue(key, visualElement.latestValues[key] ?? null);
+    const valueTarget = target[key];
+    if (valueTarget === void 0 || animationTypeState && shouldBlockAnimation(animationTypeState, key)) {
+      continue;
+    }
+    const valueTransition = {
+      delay: delay2,
+      ...getValueTransition(transition || {}, key)
+    };
+    const currentValue = value.get();
+    if (currentValue !== void 0 && !value.isAnimating() && !Array.isArray(valueTarget) && valueTarget === currentValue && !valueTransition.velocity) {
+      frame.update(() => value.set(valueTarget));
+      continue;
+    }
+    let isHandoff = false;
+    if (window.MotionHandoffAnimation) {
+      const appearId = getOptimisedAppearId(visualElement);
+      if (appearId) {
+        const startTime = window.MotionHandoffAnimation(appearId, key, frame);
+        if (startTime !== null) {
+          valueTransition.startTime = startTime;
+          isHandoff = true;
+        }
+      }
+    }
+    addValueToWillChange(visualElement, key);
+    const shouldReduceMotion = reduceMotion ?? visualElement.shouldReduceMotion;
+    value.start(animateMotionValue(key, value, valueTarget, shouldReduceMotion && positionalKeys.has(key) ? { type: false } : valueTransition, visualElement, isHandoff));
+    const animation = value.animation;
+    if (animation) {
+      animations2.push(animation);
+    }
+  }
+  if (transitionEnd) {
+    const applyTransitionEnd = () => frame.update(() => {
+      transitionEnd && setTarget(visualElement, transitionEnd);
+    });
+    if (animations2.length) {
+      Promise.all(animations2).then(applyTransitionEnd);
+    } else {
+      applyTransitionEnd();
+    }
+  }
+  return animations2;
+}
+function animateVariant(visualElement, variant, options = {}) {
+  var _a3;
+  const resolved = resolveVariant(visualElement, variant, options.type === "exit" ? (_a3 = visualElement.presenceContext) == null ? void 0 : _a3.custom : void 0);
+  let { transition = visualElement.getDefaultTransition() || {} } = resolved || {};
+  if (options.transitionOverride) {
+    transition = options.transitionOverride;
+  }
+  const getAnimation = resolved ? () => Promise.all(animateTarget(visualElement, resolved, options)) : () => Promise.resolve();
+  const getChildAnimations = visualElement.variantChildren && visualElement.variantChildren.size ? (forwardDelay = 0) => {
+    const { delayChildren = 0, staggerChildren, staggerDirection } = transition;
+    return animateChildren(visualElement, variant, forwardDelay, delayChildren, staggerChildren, staggerDirection, options);
+  } : () => Promise.resolve();
+  const { when } = transition;
+  if (when) {
+    const [first, last2] = when === "beforeChildren" ? [getAnimation, getChildAnimations] : [getChildAnimations, getAnimation];
+    return first().then(() => last2());
+  } else {
+    return Promise.all([getAnimation(), getChildAnimations(options.delay)]);
+  }
+}
+function animateChildren(visualElement, variant, delay2 = 0, delayChildren = 0, staggerChildren = 0, staggerDirection = 1, options) {
+  const animations2 = [];
+  for (const child of visualElement.variantChildren) {
+    child.notify("AnimationStart", variant);
+    animations2.push(animateVariant(child, variant, {
+      ...options,
+      delay: delay2 + (typeof delayChildren === "function" ? 0 : delayChildren) + calcChildStagger(visualElement.variantChildren, child, delayChildren, staggerChildren, staggerDirection)
+    }).then(() => child.notify("AnimationComplete", variant)));
+  }
+  return Promise.all(animations2);
+}
+function animateVisualElement(visualElement, definition, options = {}) {
+  visualElement.notify("AnimationStart", definition);
+  let animation;
+  if (Array.isArray(definition)) {
+    const animations2 = definition.map((variant) => animateVariant(visualElement, variant, options));
+    animation = Promise.all(animations2);
+  } else if (typeof definition === "string") {
+    animation = animateVariant(visualElement, definition, options);
+  } else {
+    const resolvedDefinition = typeof definition === "function" ? resolveVariant(visualElement, definition, options.custom) : definition;
+    animation = Promise.all(animateTarget(visualElement, resolvedDefinition, options));
+  }
+  return animation.then(() => {
+    visualElement.notify("AnimationComplete", definition);
+  });
+}
+const auto = {
+  test: (v2) => v2 === "auto",
+  parse: (v2) => v2
+};
+const testValueType = (v2) => (type) => type.test(v2);
+const dimensionValueTypes = [number, px, percent, degrees, vw, vh, auto];
+const findDimensionValueType = (v2) => dimensionValueTypes.find(testValueType(v2));
+function isNone(value) {
+  if (typeof value === "number") {
+    return value === 0;
+  } else if (value !== null) {
+    return value === "none" || value === "0" || isZeroValueString(value);
+  } else {
+    return true;
+  }
+}
+const maxDefaults = /* @__PURE__ */ new Set(["brightness", "contrast", "saturate", "opacity"]);
+function applyDefaultFilter(v2) {
+  const [name, value] = v2.slice(0, -1).split("(");
+  if (name === "drop-shadow")
+    return v2;
+  const [number2] = value.match(floatRegex) || [];
+  if (!number2)
+    return v2;
+  const unit = value.replace(number2, "");
+  let defaultValue = maxDefaults.has(name) ? 1 : 0;
+  if (number2 !== value)
+    defaultValue *= 100;
+  return name + "(" + defaultValue + unit + ")";
+}
+const functionRegex = /\b([a-z-]*)\(.*?\)/gu;
+const filter = {
+  ...complex,
+  getAnimatableNone: (v2) => {
+    const functions = v2.match(functionRegex);
+    return functions ? functions.map(applyDefaultFilter).join(" ") : v2;
+  }
+};
+const mask = {
+  ...complex,
+  getAnimatableNone: (v2) => {
+    const parsed = complex.parse(v2);
+    const transformer = complex.createTransformer(v2);
+    return transformer(parsed.map((v3) => typeof v3 === "number" ? 0 : typeof v3 === "object" ? { ...v3, alpha: 1 } : v3));
+  }
+};
+const int = {
+  ...number,
+  transform: Math.round
+};
+const transformValueTypes = {
+  rotate: degrees,
+  rotateX: degrees,
+  rotateY: degrees,
+  rotateZ: degrees,
+  scale,
+  scaleX: scale,
+  scaleY: scale,
+  scaleZ: scale,
+  skew: degrees,
+  skewX: degrees,
+  skewY: degrees,
+  distance: px,
+  translateX: px,
+  translateY: px,
+  translateZ: px,
+  x: px,
+  y: px,
+  z: px,
+  perspective: px,
+  transformPerspective: px,
+  opacity: alpha,
+  originX: progressPercentage,
+  originY: progressPercentage,
+  originZ: px
+};
+const numberValueTypes = {
+  // Border props
+  borderWidth: px,
+  borderTopWidth: px,
+  borderRightWidth: px,
+  borderBottomWidth: px,
+  borderLeftWidth: px,
+  borderRadius: px,
+  borderTopLeftRadius: px,
+  borderTopRightRadius: px,
+  borderBottomRightRadius: px,
+  borderBottomLeftRadius: px,
+  // Positioning props
+  width: px,
+  maxWidth: px,
+  height: px,
+  maxHeight: px,
+  top: px,
+  right: px,
+  bottom: px,
+  left: px,
+  inset: px,
+  insetBlock: px,
+  insetBlockStart: px,
+  insetBlockEnd: px,
+  insetInline: px,
+  insetInlineStart: px,
+  insetInlineEnd: px,
+  // Spacing props
+  padding: px,
+  paddingTop: px,
+  paddingRight: px,
+  paddingBottom: px,
+  paddingLeft: px,
+  paddingBlock: px,
+  paddingBlockStart: px,
+  paddingBlockEnd: px,
+  paddingInline: px,
+  paddingInlineStart: px,
+  paddingInlineEnd: px,
+  margin: px,
+  marginTop: px,
+  marginRight: px,
+  marginBottom: px,
+  marginLeft: px,
+  marginBlock: px,
+  marginBlockStart: px,
+  marginBlockEnd: px,
+  marginInline: px,
+  marginInlineStart: px,
+  marginInlineEnd: px,
+  // Typography
+  fontSize: px,
+  // Misc
+  backgroundPositionX: px,
+  backgroundPositionY: px,
+  ...transformValueTypes,
+  zIndex: int,
+  // SVG
+  fillOpacity: alpha,
+  strokeOpacity: alpha,
+  numOctaves: int
+};
+const defaultValueTypes = {
+  ...numberValueTypes,
+  // Color props
+  color,
+  backgroundColor: color,
+  outlineColor: color,
+  fill: color,
+  stroke: color,
+  // Border props
+  borderColor: color,
+  borderTopColor: color,
+  borderRightColor: color,
+  borderBottomColor: color,
+  borderLeftColor: color,
+  filter,
+  WebkitFilter: filter,
+  mask,
+  WebkitMask: mask
+};
+const getDefaultValueType = (key) => defaultValueTypes[key];
+const customTypes = /* @__PURE__ */ new Set([filter, mask]);
+function getAnimatableNone(key, value) {
+  let defaultValueType = getDefaultValueType(key);
+  if (!customTypes.has(defaultValueType))
+    defaultValueType = complex;
+  return defaultValueType.getAnimatableNone ? defaultValueType.getAnimatableNone(value) : void 0;
+}
+const invalidTemplates = /* @__PURE__ */ new Set(["auto", "none", "0"]);
+function makeNoneKeyframesAnimatable(unresolvedKeyframes, noneKeyframeIndexes, name) {
+  let i = 0;
+  let animatableTemplate = void 0;
+  while (i < unresolvedKeyframes.length && !animatableTemplate) {
+    const keyframe = unresolvedKeyframes[i];
+    if (typeof keyframe === "string" && !invalidTemplates.has(keyframe) && analyseComplexValue(keyframe).values.length) {
+      animatableTemplate = unresolvedKeyframes[i];
+    }
+    i++;
+  }
+  if (animatableTemplate && name) {
+    for (const noneIndex of noneKeyframeIndexes) {
+      unresolvedKeyframes[noneIndex] = getAnimatableNone(name, animatableTemplate);
+    }
+  }
+}
+class DOMKeyframesResolver extends KeyframeResolver {
+  constructor(unresolvedKeyframes, onComplete, name, motionValue2, element) {
+    super(unresolvedKeyframes, onComplete, name, motionValue2, element, true);
+  }
+  readKeyframes() {
+    const { unresolvedKeyframes, element, name } = this;
+    if (!element || !element.current)
+      return;
+    super.readKeyframes();
+    for (let i = 0; i < unresolvedKeyframes.length; i++) {
+      let keyframe = unresolvedKeyframes[i];
+      if (typeof keyframe === "string") {
+        keyframe = keyframe.trim();
+        if (isCSSVariableToken(keyframe)) {
+          const resolved = getVariableValue(keyframe, element.current);
+          if (resolved !== void 0) {
+            unresolvedKeyframes[i] = resolved;
+          }
+          if (i === unresolvedKeyframes.length - 1) {
+            this.finalKeyframe = keyframe;
+          }
+        }
+      }
+    }
+    this.resolveNoneKeyframes();
+    if (!positionalKeys.has(name) || unresolvedKeyframes.length !== 2) {
+      return;
+    }
+    const [origin, target] = unresolvedKeyframes;
+    const originType = findDimensionValueType(origin);
+    const targetType = findDimensionValueType(target);
+    const originHasVar = containsCSSVariable(origin);
+    const targetHasVar = containsCSSVariable(target);
+    if (originHasVar !== targetHasVar && positionalValues[name]) {
+      this.needsMeasurement = true;
+      return;
+    }
+    if (originType === targetType)
+      return;
+    if (isNumOrPxType(originType) && isNumOrPxType(targetType)) {
+      for (let i = 0; i < unresolvedKeyframes.length; i++) {
+        const value = unresolvedKeyframes[i];
+        if (typeof value === "string") {
+          unresolvedKeyframes[i] = parseFloat(value);
+        }
+      }
+    } else if (positionalValues[name]) {
+      this.needsMeasurement = true;
+    }
+  }
+  resolveNoneKeyframes() {
+    const { unresolvedKeyframes, name } = this;
+    const noneKeyframeIndexes = [];
+    for (let i = 0; i < unresolvedKeyframes.length; i++) {
+      if (unresolvedKeyframes[i] === null || isNone(unresolvedKeyframes[i])) {
+        noneKeyframeIndexes.push(i);
+      }
+    }
+    if (noneKeyframeIndexes.length) {
+      makeNoneKeyframesAnimatable(unresolvedKeyframes, noneKeyframeIndexes, name);
+    }
+  }
+  measureInitialState() {
+    const { element, unresolvedKeyframes, name } = this;
+    if (!element || !element.current)
+      return;
+    if (name === "height") {
+      this.suspendedScrollY = window.pageYOffset;
+    }
+    this.measuredOrigin = positionalValues[name](element.measureViewportBox(), window.getComputedStyle(element.current));
+    unresolvedKeyframes[0] = this.measuredOrigin;
+    const measureKeyframe = unresolvedKeyframes[unresolvedKeyframes.length - 1];
+    if (measureKeyframe !== void 0) {
+      element.getValue(name, measureKeyframe).jump(measureKeyframe, false);
+    }
+  }
+  measureEndState() {
+    var _a3;
+    const { element, name, unresolvedKeyframes } = this;
+    if (!element || !element.current)
+      return;
+    const value = element.getValue(name);
+    value && value.jump(this.measuredOrigin, false);
+    const finalKeyframeIndex = unresolvedKeyframes.length - 1;
+    const finalKeyframe = unresolvedKeyframes[finalKeyframeIndex];
+    unresolvedKeyframes[finalKeyframeIndex] = positionalValues[name](element.measureViewportBox(), window.getComputedStyle(element.current));
+    if (finalKeyframe !== null && this.finalKeyframe === void 0) {
+      this.finalKeyframe = finalKeyframe;
+    }
+    if ((_a3 = this.removedTransforms) == null ? void 0 : _a3.length) {
+      this.removedTransforms.forEach(([unsetTransformName, unsetTransformValue]) => {
+        element.getValue(unsetTransformName).set(unsetTransformValue);
+      });
+    }
+    this.resolveNoneKeyframes();
+  }
+}
+function resolveElements(elementOrSelector, scope, selectorCache) {
+  if (elementOrSelector == null) {
+    return [];
+  }
+  if (elementOrSelector instanceof EventTarget) {
+    return [elementOrSelector];
+  } else if (typeof elementOrSelector === "string") {
+    let root2 = document;
+    const elements = (selectorCache == null ? void 0 : selectorCache[elementOrSelector]) ?? root2.querySelectorAll(elementOrSelector);
+    return elements ? Array.from(elements) : [];
+  }
+  return Array.from(elementOrSelector).filter((element) => element != null);
+}
+const getValueAsType = (value, type) => {
+  return type && typeof value === "number" ? type.transform(value) : value;
+};
+function isHTMLElement(element) {
+  return isObject(element) && "offsetHeight" in element && !("ownerSVGElement" in element);
+}
+const { schedule: microtask } = /* @__PURE__ */ createRenderBatcher(queueMicrotask, false);
+const isDragging = {
+  x: false,
+  y: false
+};
+function isDragActive() {
+  return isDragging.x || isDragging.y;
+}
+function setDragLock(axis) {
+  if (axis === "x" || axis === "y") {
+    if (isDragging[axis]) {
+      return null;
+    } else {
+      isDragging[axis] = true;
+      return () => {
+        isDragging[axis] = false;
+      };
+    }
+  } else {
+    if (isDragging.x || isDragging.y) {
+      return null;
+    } else {
+      isDragging.x = isDragging.y = true;
+      return () => {
+        isDragging.x = isDragging.y = false;
+      };
+    }
+  }
+}
+function setupGesture(elementOrSelector, options) {
+  const elements = resolveElements(elementOrSelector);
+  const gestureAbortController = new AbortController();
+  const eventOptions = {
+    passive: true,
+    ...options,
+    signal: gestureAbortController.signal
+  };
+  const cancel = () => gestureAbortController.abort();
+  return [elements, eventOptions, cancel];
+}
+function isValidHover(event) {
+  return !(event.pointerType === "touch" || isDragActive());
+}
+function hover(elementOrSelector, onHoverStart, options = {}) {
+  const [elements, eventOptions, cancel] = setupGesture(elementOrSelector, options);
+  elements.forEach((element) => {
+    let isPressed = false;
+    let deferredHoverEnd = false;
+    let hoverEndCallback;
+    const removePointerLeave = () => {
+      element.removeEventListener("pointerleave", onPointerLeave);
+    };
+    const endHover = (event) => {
+      if (hoverEndCallback) {
+        hoverEndCallback(event);
+        hoverEndCallback = void 0;
+      }
+      removePointerLeave();
+    };
+    const onPointerUp = (event) => {
+      isPressed = false;
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+      if (deferredHoverEnd) {
+        deferredHoverEnd = false;
+        endHover(event);
+      }
+    };
+    const onPointerDown = () => {
+      isPressed = true;
+      window.addEventListener("pointerup", onPointerUp, eventOptions);
+      window.addEventListener("pointercancel", onPointerUp, eventOptions);
+    };
+    const onPointerLeave = (leaveEvent) => {
+      if (leaveEvent.pointerType === "touch")
+        return;
+      if (isPressed) {
+        deferredHoverEnd = true;
+        return;
+      }
+      endHover(leaveEvent);
+    };
+    const onPointerEnter = (enterEvent) => {
+      if (!isValidHover(enterEvent))
+        return;
+      deferredHoverEnd = false;
+      const onHoverEnd = onHoverStart(element, enterEvent);
+      if (typeof onHoverEnd !== "function")
+        return;
+      hoverEndCallback = onHoverEnd;
+      element.addEventListener("pointerleave", onPointerLeave, eventOptions);
+    };
+    element.addEventListener("pointerenter", onPointerEnter, eventOptions);
+    element.addEventListener("pointerdown", onPointerDown, eventOptions);
+  });
+  return cancel;
+}
+const isNodeOrChild = (parent, child) => {
+  if (!child) {
+    return false;
+  } else if (parent === child) {
+    return true;
+  } else {
+    return isNodeOrChild(parent, child.parentElement);
+  }
+};
+const isPrimaryPointer = (event) => {
+  if (event.pointerType === "mouse") {
+    return typeof event.button !== "number" || event.button <= 0;
+  } else {
+    return event.isPrimary !== false;
+  }
+};
+const keyboardAccessibleElements = /* @__PURE__ */ new Set([
+  "BUTTON",
+  "INPUT",
+  "SELECT",
+  "TEXTAREA",
+  "A"
+]);
+function isElementKeyboardAccessible(element) {
+  return keyboardAccessibleElements.has(element.tagName) || element.isContentEditable === true;
+}
+const textInputElements = /* @__PURE__ */ new Set(["INPUT", "SELECT", "TEXTAREA"]);
+function isElementTextInput(element) {
+  return textInputElements.has(element.tagName) || element.isContentEditable === true;
+}
+const isPressing = /* @__PURE__ */ new WeakSet();
+function filterEvents(callback) {
+  return (event) => {
+    if (event.key !== "Enter")
+      return;
+    callback(event);
+  };
+}
+function firePointerEvent(target, type) {
+  target.dispatchEvent(new PointerEvent("pointer" + type, { isPrimary: true, bubbles: true }));
+}
+const enableKeyboardPress = (focusEvent, eventOptions) => {
+  const element = focusEvent.currentTarget;
+  if (!element)
+    return;
+  const handleKeydown = filterEvents(() => {
+    if (isPressing.has(element))
+      return;
+    firePointerEvent(element, "down");
+    const handleKeyup = filterEvents(() => {
+      firePointerEvent(element, "up");
+    });
+    const handleBlur = () => firePointerEvent(element, "cancel");
+    element.addEventListener("keyup", handleKeyup, eventOptions);
+    element.addEventListener("blur", handleBlur, eventOptions);
+  });
+  element.addEventListener("keydown", handleKeydown, eventOptions);
+  element.addEventListener("blur", () => element.removeEventListener("keydown", handleKeydown), eventOptions);
+};
+function isValidPressEvent(event) {
+  return isPrimaryPointer(event) && !isDragActive();
+}
+const claimedPointerDownEvents = /* @__PURE__ */ new WeakSet();
+function press(targetOrSelector, onPressStart, options = {}) {
+  const [targets, eventOptions, cancelEvents] = setupGesture(targetOrSelector, options);
+  const startPress = (startEvent) => {
+    const target = startEvent.currentTarget;
+    if (!isValidPressEvent(startEvent))
+      return;
+    if (claimedPointerDownEvents.has(startEvent))
+      return;
+    isPressing.add(target);
+    if (options.stopPropagation) {
+      claimedPointerDownEvents.add(startEvent);
+    }
+    const onPressEnd = onPressStart(target, startEvent);
+    const onPointerEnd = (endEvent, success) => {
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerCancel);
+      if (isPressing.has(target)) {
+        isPressing.delete(target);
+      }
+      if (!isValidPressEvent(endEvent)) {
+        return;
+      }
+      if (typeof onPressEnd === "function") {
+        onPressEnd(endEvent, { success });
+      }
+    };
+    const onPointerUp = (upEvent) => {
+      onPointerEnd(upEvent, target === window || target === document || options.useGlobalTarget || isNodeOrChild(target, upEvent.target));
+    };
+    const onPointerCancel = (cancelEvent) => {
+      onPointerEnd(cancelEvent, false);
+    };
+    window.addEventListener("pointerup", onPointerUp, eventOptions);
+    window.addEventListener("pointercancel", onPointerCancel, eventOptions);
+  };
+  targets.forEach((target) => {
+    const pointerDownTarget = options.useGlobalTarget ? window : target;
+    pointerDownTarget.addEventListener("pointerdown", startPress, eventOptions);
+    if (isHTMLElement(target)) {
+      target.addEventListener("focus", (event) => enableKeyboardPress(event, eventOptions));
+      if (!isElementKeyboardAccessible(target) && !target.hasAttribute("tabindex")) {
+        target.tabIndex = 0;
+      }
+    }
+  });
+  return cancelEvents;
+}
+function isSVGElement(element) {
+  return isObject(element) && "ownerSVGElement" in element;
+}
+const resizeHandlers = /* @__PURE__ */ new WeakMap();
+let observer;
+const getSize = (borderBoxAxis, svgAxis, htmlAxis) => (target, borderBoxSize) => {
+  if (borderBoxSize && borderBoxSize[0]) {
+    return borderBoxSize[0][borderBoxAxis + "Size"];
+  } else if (isSVGElement(target) && "getBBox" in target) {
+    return target.getBBox()[svgAxis];
+  } else {
+    return target[htmlAxis];
+  }
+};
+const getWidth = /* @__PURE__ */ getSize("inline", "width", "offsetWidth");
+const getHeight = /* @__PURE__ */ getSize("block", "height", "offsetHeight");
+function notifyTarget({ target, borderBoxSize }) {
+  var _a3;
+  (_a3 = resizeHandlers.get(target)) == null ? void 0 : _a3.forEach((handler) => {
+    handler(target, {
+      get width() {
+        return getWidth(target, borderBoxSize);
+      },
+      get height() {
+        return getHeight(target, borderBoxSize);
+      }
+    });
+  });
+}
+function notifyAll(entries) {
+  entries.forEach(notifyTarget);
+}
+function createResizeObserver() {
+  if (typeof ResizeObserver === "undefined")
+    return;
+  observer = new ResizeObserver(notifyAll);
+}
+function resizeElement(target, handler) {
+  if (!observer)
+    createResizeObserver();
+  const elements = resolveElements(target);
+  elements.forEach((element) => {
+    let elementHandlers = resizeHandlers.get(element);
+    if (!elementHandlers) {
+      elementHandlers = /* @__PURE__ */ new Set();
+      resizeHandlers.set(element, elementHandlers);
+    }
+    elementHandlers.add(handler);
+    observer == null ? void 0 : observer.observe(element);
+  });
+  return () => {
+    elements.forEach((element) => {
+      const elementHandlers = resizeHandlers.get(element);
+      elementHandlers == null ? void 0 : elementHandlers.delete(handler);
+      if (!(elementHandlers == null ? void 0 : elementHandlers.size)) {
+        observer == null ? void 0 : observer.unobserve(element);
+      }
+    });
+  };
+}
+const windowCallbacks = /* @__PURE__ */ new Set();
+let windowResizeHandler;
+function createWindowResizeHandler() {
+  windowResizeHandler = () => {
+    const info = {
+      get width() {
+        return window.innerWidth;
+      },
+      get height() {
+        return window.innerHeight;
+      }
+    };
+    windowCallbacks.forEach((callback) => callback(info));
+  };
+  window.addEventListener("resize", windowResizeHandler);
+}
+function resizeWindow(callback) {
+  windowCallbacks.add(callback);
+  if (!windowResizeHandler)
+    createWindowResizeHandler();
+  return () => {
+    windowCallbacks.delete(callback);
+    if (!windowCallbacks.size && typeof windowResizeHandler === "function") {
+      window.removeEventListener("resize", windowResizeHandler);
+      windowResizeHandler = void 0;
+    }
+  };
+}
+function resize(a2, b2) {
+  return typeof a2 === "function" ? resizeWindow(a2) : resizeElement(a2, b2);
+}
+function isSVGSVGElement(element) {
+  return isSVGElement(element) && element.tagName === "svg";
+}
+const valueTypes = [...dimensionValueTypes, color, complex];
+const findValueType = (v2) => valueTypes.find(testValueType(v2));
+const createAxisDelta = () => ({
+  translate: 0,
+  scale: 1,
+  origin: 0,
+  originPoint: 0
+});
+const createDelta = () => ({
+  x: createAxisDelta(),
+  y: createAxisDelta()
+});
+const createAxis = () => ({ min: 0, max: 0 });
+const createBox = () => ({
+  x: createAxis(),
+  y: createAxis()
+});
+const visualElementStore = /* @__PURE__ */ new WeakMap();
+function isAnimationControls(v2) {
+  return v2 !== null && typeof v2 === "object" && typeof v2.start === "function";
+}
+function isVariantLabel(v2) {
+  return typeof v2 === "string" || Array.isArray(v2);
+}
+const variantPriorityOrder = [
+  "animate",
+  "whileInView",
+  "whileFocus",
+  "whileHover",
+  "whileTap",
+  "whileDrag",
+  "exit"
+];
+const variantProps = ["initial", ...variantPriorityOrder];
+function isControllingVariants(props) {
+  return isAnimationControls(props.animate) || variantProps.some((name) => isVariantLabel(props[name]));
+}
+function isVariantNode(props) {
+  return Boolean(isControllingVariants(props) || props.variants);
+}
+function updateMotionValuesFromProps(element, next, prev) {
+  for (const key in next) {
+    const nextValue = next[key];
+    const prevValue = prev[key];
+    if (isMotionValue(nextValue)) {
+      element.addValue(key, nextValue);
+    } else if (isMotionValue(prevValue)) {
+      element.addValue(key, motionValue(nextValue, { owner: element }));
+    } else if (prevValue !== nextValue) {
+      if (element.hasValue(key)) {
+        const existingValue = element.getValue(key);
+        if (existingValue.liveStyle === true) {
+          existingValue.jump(nextValue);
+        } else if (!existingValue.hasAnimated) {
+          existingValue.set(nextValue);
+        }
+      } else {
+        const latestValue = element.getStaticValue(key);
+        element.addValue(key, motionValue(latestValue !== void 0 ? latestValue : nextValue, { owner: element }));
+      }
+    }
+  }
+  for (const key in prev) {
+    if (next[key] === void 0)
+      element.removeValue(key);
+  }
+  return next;
+}
+const prefersReducedMotion = { current: null };
+const hasReducedMotionListener = { current: false };
+const isBrowser = typeof window !== "undefined";
+function initPrefersReducedMotion() {
+  hasReducedMotionListener.current = true;
+  if (!isBrowser)
+    return;
+  if (window.matchMedia) {
+    const motionMediaQuery = window.matchMedia("(prefers-reduced-motion)");
+    const setReducedMotionPreferences = () => prefersReducedMotion.current = motionMediaQuery.matches;
+    motionMediaQuery.addEventListener("change", setReducedMotionPreferences);
+    setReducedMotionPreferences();
+  } else {
+    prefersReducedMotion.current = false;
+  }
+}
+const propEventHandlers = [
+  "AnimationStart",
+  "AnimationComplete",
+  "Update",
+  "BeforeLayoutMeasure",
+  "LayoutMeasure",
+  "LayoutAnimationStart",
+  "LayoutAnimationComplete"
+];
+let featureDefinitions = {};
+function setFeatureDefinitions(definitions) {
+  featureDefinitions = definitions;
+}
+function getFeatureDefinitions() {
+  return featureDefinitions;
+}
+class VisualElement {
+  /**
+   * This method takes React props and returns found MotionValues. For example, HTML
+   * MotionValues will be found within the style prop, whereas for Three.js within attribute arrays.
+   *
+   * This isn't an abstract method as it needs calling in the constructor, but it is
+   * intended to be one.
+   */
+  scrapeMotionValuesFromProps(_props, _prevProps, _visualElement) {
+    return {};
+  }
+  constructor({ parent, props, presenceContext, reducedMotionConfig, skipAnimations, blockInitialAnimation, visualState }, options = {}) {
+    this.current = null;
+    this.children = /* @__PURE__ */ new Set();
+    this.isVariantNode = false;
+    this.isControllingVariants = false;
+    this.shouldReduceMotion = null;
+    this.shouldSkipAnimations = false;
+    this.values = /* @__PURE__ */ new Map();
+    this.KeyframeResolver = KeyframeResolver;
+    this.features = {};
+    this.valueSubscriptions = /* @__PURE__ */ new Map();
+    this.prevMotionValues = {};
+    this.hasBeenMounted = false;
+    this.events = {};
+    this.propEventSubscriptions = {};
+    this.notifyUpdate = () => this.notify("Update", this.latestValues);
+    this.render = () => {
+      if (!this.current)
+        return;
+      this.triggerBuild();
+      this.renderInstance(this.current, this.renderState, this.props.style, this.projection);
+    };
+    this.renderScheduledAt = 0;
+    this.scheduleRender = () => {
+      const now2 = time.now();
+      if (this.renderScheduledAt < now2) {
+        this.renderScheduledAt = now2;
+        frame.render(this.render, false, true);
+      }
+    };
+    const { latestValues, renderState } = visualState;
+    this.latestValues = latestValues;
+    this.baseTarget = { ...latestValues };
+    this.initialValues = props.initial ? { ...latestValues } : {};
+    this.renderState = renderState;
+    this.parent = parent;
+    this.props = props;
+    this.presenceContext = presenceContext;
+    this.depth = parent ? parent.depth + 1 : 0;
+    this.reducedMotionConfig = reducedMotionConfig;
+    this.skipAnimationsConfig = skipAnimations;
+    this.options = options;
+    this.blockInitialAnimation = Boolean(blockInitialAnimation);
+    this.isControllingVariants = isControllingVariants(props);
+    this.isVariantNode = isVariantNode(props);
+    if (this.isVariantNode) {
+      this.variantChildren = /* @__PURE__ */ new Set();
+    }
+    this.manuallyAnimateOnMount = Boolean(parent && parent.current);
+    const { willChange, ...initialMotionValues } = this.scrapeMotionValuesFromProps(props, {}, this);
+    for (const key in initialMotionValues) {
+      const value = initialMotionValues[key];
+      if (latestValues[key] !== void 0 && isMotionValue(value)) {
+        value.set(latestValues[key]);
+      }
+    }
+  }
+  mount(instance) {
+    var _a3, _b3;
+    if (this.hasBeenMounted) {
+      for (const key in this.initialValues) {
+        (_a3 = this.values.get(key)) == null ? void 0 : _a3.jump(this.initialValues[key]);
+        this.latestValues[key] = this.initialValues[key];
+      }
+    }
+    this.current = instance;
+    visualElementStore.set(instance, this);
+    if (this.projection && !this.projection.instance) {
+      this.projection.mount(instance);
+    }
+    if (this.parent && this.isVariantNode && !this.isControllingVariants) {
+      this.removeFromVariantTree = this.parent.addVariantChild(this);
+    }
+    this.values.forEach((value, key) => this.bindToMotionValue(key, value));
+    if (this.reducedMotionConfig === "never") {
+      this.shouldReduceMotion = false;
+    } else if (this.reducedMotionConfig === "always") {
+      this.shouldReduceMotion = true;
+    } else {
+      if (!hasReducedMotionListener.current) {
+        initPrefersReducedMotion();
+      }
+      this.shouldReduceMotion = prefersReducedMotion.current;
+    }
+    this.shouldSkipAnimations = this.skipAnimationsConfig ?? false;
+    (_b3 = this.parent) == null ? void 0 : _b3.addChild(this);
+    this.update(this.props, this.presenceContext);
+    this.hasBeenMounted = true;
+  }
+  unmount() {
+    var _a3;
+    this.projection && this.projection.unmount();
+    cancelFrame(this.notifyUpdate);
+    cancelFrame(this.render);
+    this.valueSubscriptions.forEach((remove) => remove());
+    this.valueSubscriptions.clear();
+    this.removeFromVariantTree && this.removeFromVariantTree();
+    (_a3 = this.parent) == null ? void 0 : _a3.removeChild(this);
+    for (const key in this.events) {
+      this.events[key].clear();
+    }
+    for (const key in this.features) {
+      const feature = this.features[key];
+      if (feature) {
+        feature.unmount();
+        feature.isMounted = false;
+      }
+    }
+    this.current = null;
+  }
+  addChild(child) {
+    this.children.add(child);
+    this.enteringChildren ?? (this.enteringChildren = /* @__PURE__ */ new Set());
+    this.enteringChildren.add(child);
+  }
+  removeChild(child) {
+    this.children.delete(child);
+    this.enteringChildren && this.enteringChildren.delete(child);
+  }
+  bindToMotionValue(key, value) {
+    if (this.valueSubscriptions.has(key)) {
+      this.valueSubscriptions.get(key)();
+    }
+    if (value.accelerate && acceleratedValues.has(key) && this.current instanceof HTMLElement) {
+      const { factory, keyframes: keyframes2, times, ease: ease2, duration } = value.accelerate;
+      const animation = new NativeAnimation({
+        element: this.current,
+        name: key,
+        keyframes: keyframes2,
+        times,
+        ease: ease2,
+        duration: /* @__PURE__ */ secondsToMilliseconds(duration)
+      });
+      const cleanup = factory(animation);
+      this.valueSubscriptions.set(key, () => {
+        cleanup();
+        animation.cancel();
+      });
+      return;
+    }
+    const valueIsTransform = transformProps.has(key);
+    if (valueIsTransform && this.onBindTransform) {
+      this.onBindTransform();
+    }
+    const removeOnChange = value.on("change", (latestValue) => {
+      this.latestValues[key] = latestValue;
+      this.props.onUpdate && frame.preRender(this.notifyUpdate);
+      if (valueIsTransform && this.projection) {
+        this.projection.isTransformDirty = true;
+      }
+      this.scheduleRender();
+    });
+    let removeSyncCheck;
+    if (typeof window !== "undefined" && window.MotionCheckAppearSync) {
+      removeSyncCheck = window.MotionCheckAppearSync(this, key, value);
+    }
+    this.valueSubscriptions.set(key, () => {
+      removeOnChange();
+      if (removeSyncCheck)
+        removeSyncCheck();
+      if (value.owner)
+        value.stop();
+    });
+  }
+  sortNodePosition(other) {
+    if (!this.current || !this.sortInstanceNodePosition || this.type !== other.type) {
+      return 0;
+    }
+    return this.sortInstanceNodePosition(this.current, other.current);
+  }
+  updateFeatures() {
+    let key = "animation";
+    for (key in featureDefinitions) {
+      const featureDefinition = featureDefinitions[key];
+      if (!featureDefinition)
+        continue;
+      const { isEnabled, Feature: FeatureConstructor } = featureDefinition;
+      if (!this.features[key] && FeatureConstructor && isEnabled(this.props)) {
+        this.features[key] = new FeatureConstructor(this);
+      }
+      if (this.features[key]) {
+        const feature = this.features[key];
+        if (feature.isMounted) {
+          feature.update();
+        } else {
+          feature.mount();
+          feature.isMounted = true;
+        }
+      }
+    }
+  }
+  triggerBuild() {
+    this.build(this.renderState, this.latestValues, this.props);
+  }
+  /**
+   * Measure the current viewport box with or without transforms.
+   * Only measures axis-aligned boxes, rotate and skew must be manually
+   * removed with a re-render to work.
+   */
+  measureViewportBox() {
+    return this.current ? this.measureInstanceViewportBox(this.current, this.props) : createBox();
+  }
+  getStaticValue(key) {
+    return this.latestValues[key];
+  }
+  setStaticValue(key, value) {
+    this.latestValues[key] = value;
+  }
+  /**
+   * Update the provided props. Ensure any newly-added motion values are
+   * added to our map, old ones removed, and listeners updated.
+   */
+  update(props, presenceContext) {
+    if (props.transformTemplate || this.props.transformTemplate) {
+      this.scheduleRender();
+    }
+    this.prevProps = this.props;
+    this.props = props;
+    this.prevPresenceContext = this.presenceContext;
+    this.presenceContext = presenceContext;
+    for (let i = 0; i < propEventHandlers.length; i++) {
+      const key = propEventHandlers[i];
+      if (this.propEventSubscriptions[key]) {
+        this.propEventSubscriptions[key]();
+        delete this.propEventSubscriptions[key];
+      }
+      const listenerName = "on" + key;
+      const listener = props[listenerName];
+      if (listener) {
+        this.propEventSubscriptions[key] = this.on(key, listener);
+      }
+    }
+    this.prevMotionValues = updateMotionValuesFromProps(this, this.scrapeMotionValuesFromProps(props, this.prevProps || {}, this), this.prevMotionValues);
+    if (this.handleChildMotionValue) {
+      this.handleChildMotionValue();
+    }
+  }
+  getProps() {
+    return this.props;
+  }
+  /**
+   * Returns the variant definition with a given name.
+   */
+  getVariant(name) {
+    return this.props.variants ? this.props.variants[name] : void 0;
+  }
+  /**
+   * Returns the defined default transition on this component.
+   */
+  getDefaultTransition() {
+    return this.props.transition;
+  }
+  getTransformPagePoint() {
+    return this.props.transformPagePoint;
+  }
+  getClosestVariantNode() {
+    return this.isVariantNode ? this : this.parent ? this.parent.getClosestVariantNode() : void 0;
+  }
+  /**
+   * Add a child visual element to our set of children.
+   */
+  addVariantChild(child) {
+    const closestVariantNode = this.getClosestVariantNode();
+    if (closestVariantNode) {
+      closestVariantNode.variantChildren && closestVariantNode.variantChildren.add(child);
+      return () => closestVariantNode.variantChildren.delete(child);
+    }
+  }
+  /**
+   * Add a motion value and bind it to this visual element.
+   */
+  addValue(key, value) {
+    const existingValue = this.values.get(key);
+    if (value !== existingValue) {
+      if (existingValue)
+        this.removeValue(key);
+      this.bindToMotionValue(key, value);
+      this.values.set(key, value);
+      this.latestValues[key] = value.get();
+    }
+  }
+  /**
+   * Remove a motion value and unbind any active subscriptions.
+   */
+  removeValue(key) {
+    this.values.delete(key);
+    const unsubscribe = this.valueSubscriptions.get(key);
+    if (unsubscribe) {
+      unsubscribe();
+      this.valueSubscriptions.delete(key);
+    }
+    delete this.latestValues[key];
+    this.removeValueFromRenderState(key, this.renderState);
+  }
+  /**
+   * Check whether we have a motion value for this key
+   */
+  hasValue(key) {
+    return this.values.has(key);
+  }
+  getValue(key, defaultValue) {
+    if (this.props.values && this.props.values[key]) {
+      return this.props.values[key];
+    }
+    let value = this.values.get(key);
+    if (value === void 0 && defaultValue !== void 0) {
+      value = motionValue(defaultValue === null ? void 0 : defaultValue, { owner: this });
+      this.addValue(key, value);
+    }
+    return value;
+  }
+  /**
+   * If we're trying to animate to a previously unencountered value,
+   * we need to check for it in our state and as a last resort read it
+   * directly from the instance (which might have performance implications).
+   */
+  readValue(key, target) {
+    let value = this.latestValues[key] !== void 0 || !this.current ? this.latestValues[key] : this.getBaseTargetFromProps(this.props, key) ?? this.readValueFromInstance(this.current, key, this.options);
+    if (value !== void 0 && value !== null) {
+      if (typeof value === "string" && (isNumericalString(value) || isZeroValueString(value))) {
+        value = parseFloat(value);
+      } else if (!findValueType(value) && complex.test(target)) {
+        value = getAnimatableNone(key, target);
+      }
+      this.setBaseTarget(key, isMotionValue(value) ? value.get() : value);
+    }
+    return isMotionValue(value) ? value.get() : value;
+  }
+  /**
+   * Set the base target to later animate back to. This is currently
+   * only hydrated on creation and when we first read a value.
+   */
+  setBaseTarget(key, value) {
+    this.baseTarget[key] = value;
+  }
+  /**
+   * Find the base target for a value thats been removed from all animation
+   * props.
+   */
+  getBaseTarget(key) {
+    var _a3;
+    const { initial } = this.props;
+    let valueFromInitial;
+    if (typeof initial === "string" || typeof initial === "object") {
+      const variant = resolveVariantFromProps(this.props, initial, (_a3 = this.presenceContext) == null ? void 0 : _a3.custom);
+      if (variant) {
+        valueFromInitial = variant[key];
+      }
+    }
+    if (initial && valueFromInitial !== void 0) {
+      return valueFromInitial;
+    }
+    const target = this.getBaseTargetFromProps(this.props, key);
+    if (target !== void 0 && !isMotionValue(target))
+      return target;
+    return this.initialValues[key] !== void 0 && valueFromInitial === void 0 ? void 0 : this.baseTarget[key];
+  }
+  on(eventName, callback) {
+    if (!this.events[eventName]) {
+      this.events[eventName] = new SubscriptionManager();
+    }
+    return this.events[eventName].add(callback);
+  }
+  notify(eventName, ...args) {
+    if (this.events[eventName]) {
+      this.events[eventName].notify(...args);
+    }
+  }
+  scheduleRenderMicrotask() {
+    microtask.render(this.render);
+  }
+}
+class DOMVisualElement extends VisualElement {
+  constructor() {
+    super(...arguments);
+    this.KeyframeResolver = DOMKeyframesResolver;
+  }
+  sortInstanceNodePosition(a2, b2) {
+    return a2.compareDocumentPosition(b2) & 2 ? 1 : -1;
+  }
+  getBaseTargetFromProps(props, key) {
+    const style2 = props.style;
+    return style2 ? style2[key] : void 0;
+  }
+  removeValueFromRenderState(key, { vars, style: style2 }) {
+    delete vars[key];
+    delete style2[key];
+  }
+  handleChildMotionValue() {
+    if (this.childSubscription) {
+      this.childSubscription();
+      delete this.childSubscription;
+    }
+    const { children } = this.props;
+    if (isMotionValue(children)) {
+      this.childSubscription = children.on("change", (latest) => {
+        if (this.current) {
+          this.current.textContent = `${latest}`;
+        }
+      });
+    }
+  }
+}
+class Feature {
+  constructor(node) {
+    this.isMounted = false;
+    this.node = node;
+  }
+  update() {
+  }
+}
+function convertBoundingBoxToBox({ top, left, right, bottom }) {
+  return {
+    x: { min: left, max: right },
+    y: { min: top, max: bottom }
+  };
+}
+function convertBoxToBoundingBox({ x: x3, y: y2 }) {
+  return { top: y2.min, right: x3.max, bottom: y2.max, left: x3.min };
+}
+function transformBoxPoints(point, transformPoint2) {
+  if (!transformPoint2)
+    return point;
+  const topLeft = transformPoint2({ x: point.left, y: point.top });
+  const bottomRight = transformPoint2({ x: point.right, y: point.bottom });
+  return {
+    top: topLeft.y,
+    left: topLeft.x,
+    bottom: bottomRight.y,
+    right: bottomRight.x
+  };
+}
+function isIdentityScale(scale2) {
+  return scale2 === void 0 || scale2 === 1;
+}
+function hasScale({ scale: scale2, scaleX: scaleX2, scaleY: scaleY2 }) {
+  return !isIdentityScale(scale2) || !isIdentityScale(scaleX2) || !isIdentityScale(scaleY2);
+}
+function hasTransform(values) {
+  return hasScale(values) || has2DTranslate(values) || values.z || values.rotate || values.rotateX || values.rotateY || values.skewX || values.skewY;
+}
+function has2DTranslate(values) {
+  return is2DTranslate(values.x) || is2DTranslate(values.y);
+}
+function is2DTranslate(value) {
+  return value && value !== "0%";
+}
+function scalePoint(point, scale2, originPoint) {
+  const distanceFromOrigin = point - originPoint;
+  const scaled = scale2 * distanceFromOrigin;
+  return originPoint + scaled;
+}
+function applyPointDelta(point, translate, scale2, originPoint, boxScale) {
+  if (boxScale !== void 0) {
+    point = scalePoint(point, boxScale, originPoint);
+  }
+  return scalePoint(point, scale2, originPoint) + translate;
+}
+function applyAxisDelta(axis, translate = 0, scale2 = 1, originPoint, boxScale) {
+  axis.min = applyPointDelta(axis.min, translate, scale2, originPoint, boxScale);
+  axis.max = applyPointDelta(axis.max, translate, scale2, originPoint, boxScale);
+}
+function applyBoxDelta(box, { x: x3, y: y2 }) {
+  applyAxisDelta(box.x, x3.translate, x3.scale, x3.originPoint);
+  applyAxisDelta(box.y, y2.translate, y2.scale, y2.originPoint);
+}
+const TREE_SCALE_SNAP_MIN = 0.999999999999;
+const TREE_SCALE_SNAP_MAX = 1.0000000000001;
+function applyTreeDeltas(box, treeScale, treePath, isSharedTransition = false) {
+  var _a3;
+  const treeLength = treePath.length;
+  if (!treeLength)
+    return;
+  treeScale.x = treeScale.y = 1;
+  let node;
+  let delta;
+  for (let i = 0; i < treeLength; i++) {
+    node = treePath[i];
+    delta = node.projectionDelta;
+    const { visualElement } = node.options;
+    if (visualElement && visualElement.props.style && visualElement.props.style.display === "contents") {
+      continue;
+    }
+    if (isSharedTransition && node.options.layoutScroll && node.scroll && node !== node.root) {
+      translateAxis(box.x, -node.scroll.offset.x);
+      translateAxis(box.y, -node.scroll.offset.y);
+    }
+    if (delta) {
+      treeScale.x *= delta.x.scale;
+      treeScale.y *= delta.y.scale;
+      applyBoxDelta(box, delta);
+    }
+    if (isSharedTransition && hasTransform(node.latestValues)) {
+      transformBox(box, node.latestValues, (_a3 = node.layout) == null ? void 0 : _a3.layoutBox);
+    }
+  }
+  if (treeScale.x < TREE_SCALE_SNAP_MAX && treeScale.x > TREE_SCALE_SNAP_MIN) {
+    treeScale.x = 1;
+  }
+  if (treeScale.y < TREE_SCALE_SNAP_MAX && treeScale.y > TREE_SCALE_SNAP_MIN) {
+    treeScale.y = 1;
+  }
+}
+function translateAxis(axis, distance2) {
+  axis.min += distance2;
+  axis.max += distance2;
+}
+function transformAxis(axis, axisTranslate, axisScale, boxScale, axisOrigin = 0.5) {
+  const originPoint = mixNumber$1(axis.min, axis.max, axisOrigin);
+  applyAxisDelta(axis, axisTranslate, axisScale, originPoint, boxScale);
+}
+function resolveAxisTranslate(value, axis) {
+  if (typeof value === "string") {
+    return parseFloat(value) / 100 * (axis.max - axis.min);
+  }
+  return value;
+}
+function transformBox(box, transform, sourceBox) {
+  const resolveBox = sourceBox ?? box;
+  transformAxis(box.x, resolveAxisTranslate(transform.x, resolveBox.x), transform.scaleX, transform.scale, transform.originX);
+  transformAxis(box.y, resolveAxisTranslate(transform.y, resolveBox.y), transform.scaleY, transform.scale, transform.originY);
+}
+function measureViewportBox(instance, transformPoint2) {
+  return convertBoundingBoxToBox(transformBoxPoints(instance.getBoundingClientRect(), transformPoint2));
+}
+function measurePageBox(element, rootProjectionNode2, transformPagePoint) {
+  const viewportBox = measureViewportBox(element, transformPagePoint);
+  const { scroll } = rootProjectionNode2;
+  if (scroll) {
+    translateAxis(viewportBox.x, scroll.offset.x);
+    translateAxis(viewportBox.y, scroll.offset.y);
+  }
+  return viewportBox;
+}
+const translateAlias = {
+  x: "translateX",
+  y: "translateY",
+  z: "translateZ",
+  transformPerspective: "perspective"
+};
+const numTransforms = transformPropOrder.length;
+function buildTransform(latestValues, transform, transformTemplate) {
+  let transformString = "";
+  let transformIsDefault = true;
+  for (let i = 0; i < numTransforms; i++) {
+    const key = transformPropOrder[i];
+    const value = latestValues[key];
+    if (value === void 0)
+      continue;
+    let valueIsDefault = true;
+    if (typeof value === "number") {
+      valueIsDefault = value === (key.startsWith("scale") ? 1 : 0);
+    } else {
+      const parsed = parseFloat(value);
+      valueIsDefault = key.startsWith("scale") ? parsed === 1 : parsed === 0;
+    }
+    if (!valueIsDefault || transformTemplate) {
+      const valueAsType = getValueAsType(value, numberValueTypes[key]);
+      if (!valueIsDefault) {
+        transformIsDefault = false;
+        const transformName = translateAlias[key] || key;
+        transformString += `${transformName}(${valueAsType}) `;
+      }
+      if (transformTemplate) {
+        transform[key] = valueAsType;
+      }
+    }
+  }
+  transformString = transformString.trim();
+  if (transformTemplate) {
+    transformString = transformTemplate(transform, transformIsDefault ? "" : transformString);
+  } else if (transformIsDefault) {
+    transformString = "none";
+  }
+  return transformString;
+}
+function buildHTMLStyles(state, latestValues, transformTemplate) {
+  const { style: style2, vars, transformOrigin: transformOrigin2 } = state;
+  let hasTransform2 = false;
+  let hasTransformOrigin = false;
+  for (const key in latestValues) {
+    const value = latestValues[key];
+    if (transformProps.has(key)) {
+      hasTransform2 = true;
+      continue;
+    } else if (isCSSVariableName(key)) {
+      vars[key] = value;
+      continue;
+    } else {
+      const valueAsType = getValueAsType(value, numberValueTypes[key]);
+      if (key.startsWith("origin")) {
+        hasTransformOrigin = true;
+        transformOrigin2[key] = valueAsType;
+      } else {
+        style2[key] = valueAsType;
+      }
+    }
+  }
+  if (!latestValues.transform) {
+    if (hasTransform2 || transformTemplate) {
+      style2.transform = buildTransform(latestValues, state.transform, transformTemplate);
+    } else if (style2.transform) {
+      style2.transform = "none";
+    }
+  }
+  if (hasTransformOrigin) {
+    const { originX = "50%", originY = "50%", originZ = 0 } = transformOrigin2;
+    style2.transformOrigin = `${originX} ${originY} ${originZ}`;
+  }
+}
+function renderHTML(element, { style: style2, vars }, styleProp, projection) {
+  const elementStyle = element.style;
+  let key;
+  for (key in style2) {
+    elementStyle[key] = style2[key];
+  }
+  projection == null ? void 0 : projection.applyProjectionStyles(elementStyle, styleProp);
+  for (key in vars) {
+    elementStyle.setProperty(key, vars[key]);
+  }
+}
+function pixelsToPercent(pixels, axis) {
+  if (axis.max === axis.min)
+    return 0;
+  return pixels / (axis.max - axis.min) * 100;
+}
+const correctBorderRadius = {
+  correct: (latest, node) => {
+    if (!node.target)
+      return latest;
+    if (typeof latest === "string") {
+      if (px.test(latest)) {
+        latest = parseFloat(latest);
+      } else {
+        return latest;
+      }
+    }
+    const x3 = pixelsToPercent(latest, node.target.x);
+    const y2 = pixelsToPercent(latest, node.target.y);
+    return `${x3}% ${y2}%`;
+  }
+};
+const correctBoxShadow = {
+  correct: (latest, { treeScale, projectionDelta }) => {
+    const original = latest;
+    const shadow = complex.parse(latest);
+    if (shadow.length > 5)
+      return original;
+    const template = complex.createTransformer(latest);
+    const offset2 = typeof shadow[0] !== "number" ? 1 : 0;
+    const xScale = projectionDelta.x.scale * treeScale.x;
+    const yScale = projectionDelta.y.scale * treeScale.y;
+    shadow[0 + offset2] /= xScale;
+    shadow[1 + offset2] /= yScale;
+    const averageScale = mixNumber$1(xScale, yScale, 0.5);
+    if (typeof shadow[2 + offset2] === "number")
+      shadow[2 + offset2] /= averageScale;
+    if (typeof shadow[3 + offset2] === "number")
+      shadow[3 + offset2] /= averageScale;
+    return template(shadow);
+  }
+};
+const scaleCorrectors = {
+  borderRadius: {
+    ...correctBorderRadius,
+    applyTo: [
+      "borderTopLeftRadius",
+      "borderTopRightRadius",
+      "borderBottomLeftRadius",
+      "borderBottomRightRadius"
+    ]
+  },
+  borderTopLeftRadius: correctBorderRadius,
+  borderTopRightRadius: correctBorderRadius,
+  borderBottomLeftRadius: correctBorderRadius,
+  borderBottomRightRadius: correctBorderRadius,
+  boxShadow: correctBoxShadow
+};
+function isForcedMotionValue(key, { layout: layout2, layoutId }) {
+  return transformProps.has(key) || key.startsWith("origin") || (layout2 || layoutId !== void 0) && (!!scaleCorrectors[key] || key === "opacity");
+}
+function scrapeMotionValuesFromProps$1(props, prevProps, visualElement) {
+  var _a3;
+  const style2 = props.style;
+  const prevStyle = prevProps == null ? void 0 : prevProps.style;
+  const newValues = {};
+  if (!style2)
+    return newValues;
+  for (const key in style2) {
+    if (isMotionValue(style2[key]) || prevStyle && isMotionValue(prevStyle[key]) || isForcedMotionValue(key, props) || ((_a3 = visualElement == null ? void 0 : visualElement.getValue(key)) == null ? void 0 : _a3.liveStyle) !== void 0) {
+      newValues[key] = style2[key];
+    }
+  }
+  return newValues;
+}
+function getComputedStyle$1(element) {
+  return window.getComputedStyle(element);
+}
+class HTMLVisualElement extends DOMVisualElement {
+  constructor() {
+    super(...arguments);
+    this.type = "html";
+    this.renderInstance = renderHTML;
+  }
+  readValueFromInstance(instance, key) {
+    var _a3;
+    if (transformProps.has(key)) {
+      return ((_a3 = this.projection) == null ? void 0 : _a3.isProjecting) ? defaultTransformValue(key) : readTransformValue(instance, key);
+    } else {
+      const computedStyle = getComputedStyle$1(instance);
+      const value = (isCSSVariableName(key) ? computedStyle.getPropertyValue(key) : computedStyle[key]) || 0;
+      return typeof value === "string" ? value.trim() : value;
+    }
+  }
+  measureInstanceViewportBox(instance, { transformPagePoint }) {
+    return measureViewportBox(instance, transformPagePoint);
+  }
+  build(renderState, latestValues, props) {
+    buildHTMLStyles(renderState, latestValues, props.transformTemplate);
+  }
+  scrapeMotionValuesFromProps(props, prevProps, visualElement) {
+    return scrapeMotionValuesFromProps$1(props, prevProps, visualElement);
+  }
+}
+const dashKeys = {
+  offset: "stroke-dashoffset",
+  array: "stroke-dasharray"
+};
+const camelKeys = {
+  offset: "strokeDashoffset",
+  array: "strokeDasharray"
+};
+function buildSVGPath(attrs, length, spacing = 1, offset2 = 0, useDashCase = true) {
+  attrs.pathLength = 1;
+  const keys = useDashCase ? dashKeys : camelKeys;
+  attrs[keys.offset] = `${-offset2}`;
+  attrs[keys.array] = `${length} ${spacing}`;
+}
+const cssMotionPathProperties = [
+  "offsetDistance",
+  "offsetPath",
+  "offsetRotate",
+  "offsetAnchor"
+];
+function buildSVGAttrs(state, {
+  attrX,
+  attrY,
+  attrScale,
+  pathLength,
+  pathSpacing = 1,
+  pathOffset = 0,
+  // This is object creation, which we try to avoid per-frame.
+  ...latest
+}, isSVGTag2, transformTemplate, styleProp) {
+  buildHTMLStyles(state, latest, transformTemplate);
+  if (isSVGTag2) {
+    if (state.style.viewBox) {
+      state.attrs.viewBox = state.style.viewBox;
+    }
+    return;
+  }
+  state.attrs = state.style;
+  state.style = {};
+  const { attrs, style: style2 } = state;
+  if (attrs.transform) {
+    style2.transform = attrs.transform;
+    delete attrs.transform;
+  }
+  if (style2.transform || attrs.transformOrigin) {
+    style2.transformOrigin = attrs.transformOrigin ?? "50% 50%";
+    delete attrs.transformOrigin;
+  }
+  if (style2.transform) {
+    style2.transformBox = (styleProp == null ? void 0 : styleProp.transformBox) ?? "fill-box";
+    delete attrs.transformBox;
+  }
+  for (const key of cssMotionPathProperties) {
+    if (attrs[key] !== void 0) {
+      style2[key] = attrs[key];
+      delete attrs[key];
+    }
+  }
+  if (attrX !== void 0)
+    attrs.x = attrX;
+  if (attrY !== void 0)
+    attrs.y = attrY;
+  if (attrScale !== void 0)
+    attrs.scale = attrScale;
+  if (pathLength !== void 0) {
+    buildSVGPath(attrs, pathLength, pathSpacing, pathOffset, false);
+  }
+}
+const camelCaseAttributes = /* @__PURE__ */ new Set([
+  "baseFrequency",
+  "diffuseConstant",
+  "kernelMatrix",
+  "kernelUnitLength",
+  "keySplines",
+  "keyTimes",
+  "limitingConeAngle",
+  "markerHeight",
+  "markerWidth",
+  "numOctaves",
+  "targetX",
+  "targetY",
+  "surfaceScale",
+  "specularConstant",
+  "specularExponent",
+  "stdDeviation",
+  "tableValues",
+  "viewBox",
+  "gradientTransform",
+  "pathLength",
+  "startOffset",
+  "textLength",
+  "lengthAdjust"
+]);
+const isSVGTag = (tag) => typeof tag === "string" && tag.toLowerCase() === "svg";
+function renderSVG(element, renderState, _styleProp, projection) {
+  renderHTML(element, renderState, void 0, projection);
+  for (const key in renderState.attrs) {
+    element.setAttribute(!camelCaseAttributes.has(key) ? camelToDash(key) : key, renderState.attrs[key]);
+  }
+}
+function scrapeMotionValuesFromProps(props, prevProps, visualElement) {
+  const newValues = scrapeMotionValuesFromProps$1(props, prevProps, visualElement);
+  for (const key in props) {
+    if (isMotionValue(props[key]) || isMotionValue(prevProps[key])) {
+      const targetKey = transformPropOrder.indexOf(key) !== -1 ? "attr" + key.charAt(0).toUpperCase() + key.substring(1) : key;
+      newValues[targetKey] = props[key];
+    }
+  }
+  return newValues;
+}
+class SVGVisualElement extends DOMVisualElement {
+  constructor() {
+    super(...arguments);
+    this.type = "svg";
+    this.isSVGTag = false;
+    this.measureInstanceViewportBox = createBox;
+  }
+  getBaseTargetFromProps(props, key) {
+    return props[key];
+  }
+  readValueFromInstance(instance, key) {
+    if (transformProps.has(key)) {
+      const defaultType = getDefaultValueType(key);
+      return defaultType ? defaultType.default || 0 : 0;
+    }
+    key = !camelCaseAttributes.has(key) ? camelToDash(key) : key;
+    return instance.getAttribute(key);
+  }
+  scrapeMotionValuesFromProps(props, prevProps, visualElement) {
+    return scrapeMotionValuesFromProps(props, prevProps, visualElement);
+  }
+  build(renderState, latestValues, props) {
+    buildSVGAttrs(renderState, latestValues, this.isSVGTag, props.transformTemplate, props.style);
+  }
+  renderInstance(instance, renderState, styleProp, projection) {
+    renderSVG(instance, renderState, styleProp, projection);
+  }
+  mount(instance) {
+    this.isSVGTag = isSVGTag(instance.tagName);
+    super.mount(instance);
+  }
+}
+const numVariantProps = variantProps.length;
+function getVariantContext(visualElement) {
+  if (!visualElement)
+    return void 0;
+  if (!visualElement.isControllingVariants) {
+    const context2 = visualElement.parent ? getVariantContext(visualElement.parent) || {} : {};
+    if (visualElement.props.initial !== void 0) {
+      context2.initial = visualElement.props.initial;
+    }
+    return context2;
+  }
+  const context = {};
+  for (let i = 0; i < numVariantProps; i++) {
+    const name = variantProps[i];
+    const prop = visualElement.props[name];
+    if (isVariantLabel(prop) || prop === false) {
+      context[name] = prop;
+    }
+  }
+  return context;
+}
+function shallowCompare(next, prev) {
+  if (!Array.isArray(prev))
+    return false;
+  const prevLength = prev.length;
+  if (prevLength !== next.length)
+    return false;
+  for (let i = 0; i < prevLength; i++) {
+    if (prev[i] !== next[i])
+      return false;
+  }
+  return true;
+}
+const reversePriorityOrder = [...variantPriorityOrder].reverse();
+const numAnimationTypes = variantPriorityOrder.length;
+function createAnimateFunction(visualElement) {
+  return (animations2) => {
+    return Promise.all(animations2.map(({ animation, options }) => animateVisualElement(visualElement, animation, options)));
+  };
+}
+function createAnimationState(visualElement) {
+  let animate = createAnimateFunction(visualElement);
+  let state = createState();
+  let isInitialRender = true;
+  let wasReset = false;
+  const buildResolvedTypeValues = (type) => (acc, definition) => {
+    var _a3;
+    const resolved = resolveVariant(visualElement, definition, type === "exit" ? (_a3 = visualElement.presenceContext) == null ? void 0 : _a3.custom : void 0);
+    if (resolved) {
+      const { transition, transitionEnd, ...target } = resolved;
+      acc = { ...acc, ...target, ...transitionEnd };
+    }
+    return acc;
+  };
+  function setAnimateFunction(makeAnimator) {
+    animate = makeAnimator(visualElement);
+  }
+  function animateChanges(changedActiveType) {
+    const { props } = visualElement;
+    const context = getVariantContext(visualElement.parent) || {};
+    const animations2 = [];
+    const removedKeys = /* @__PURE__ */ new Set();
+    let encounteredKeys = {};
+    let removedVariantIndex = Infinity;
+    for (let i = 0; i < numAnimationTypes; i++) {
+      const type = reversePriorityOrder[i];
+      const typeState = state[type];
+      const prop = props[type] !== void 0 ? props[type] : context[type];
+      const propIsVariant = isVariantLabel(prop);
+      const activeDelta = type === changedActiveType ? typeState.isActive : null;
+      if (activeDelta === false)
+        removedVariantIndex = i;
+      let isInherited = prop === context[type] && prop !== props[type] && propIsVariant;
+      if (isInherited && (isInitialRender || wasReset) && visualElement.manuallyAnimateOnMount) {
+        isInherited = false;
+      }
+      typeState.protectedKeys = { ...encounteredKeys };
+      if (
+        // If it isn't active and hasn't *just* been set as inactive
+        !typeState.isActive && activeDelta === null || // If we didn't and don't have any defined prop for this animation type
+        !prop && !typeState.prevProp || // Or if the prop doesn't define an animation
+        isAnimationControls(prop) || typeof prop === "boolean"
+      ) {
+        continue;
+      }
+      if (type === "exit" && typeState.isActive && activeDelta !== true) {
+        if (typeState.prevResolvedValues) {
+          encounteredKeys = {
+            ...encounteredKeys,
+            ...typeState.prevResolvedValues
+          };
+        }
+        continue;
+      }
+      const variantDidChange = checkVariantsDidChange(typeState.prevProp, prop);
+      let shouldAnimateType = variantDidChange || // If we're making this variant active, we want to always make it active
+      type === changedActiveType && typeState.isActive && !isInherited && propIsVariant || // If we removed a higher-priority variant (i is in reverse order)
+      i > removedVariantIndex && propIsVariant;
+      let handledRemovedValues = false;
+      const definitionList = Array.isArray(prop) ? prop : [prop];
+      let resolvedValues = definitionList.reduce(buildResolvedTypeValues(type), {});
+      if (activeDelta === false)
+        resolvedValues = {};
+      const { prevResolvedValues = {} } = typeState;
+      const allKeys = {
+        ...prevResolvedValues,
+        ...resolvedValues
+      };
+      const markToAnimate = (key) => {
+        shouldAnimateType = true;
+        if (removedKeys.has(key)) {
+          handledRemovedValues = true;
+          removedKeys.delete(key);
+        }
+        typeState.needsAnimating[key] = true;
+        const motionValue2 = visualElement.getValue(key);
+        if (motionValue2)
+          motionValue2.liveStyle = false;
+      };
+      for (const key in allKeys) {
+        const next = resolvedValues[key];
+        const prev = prevResolvedValues[key];
+        if (encounteredKeys.hasOwnProperty(key))
+          continue;
+        let valueHasChanged = false;
+        if (isKeyframesTarget(next) && isKeyframesTarget(prev)) {
+          valueHasChanged = !shallowCompare(next, prev);
+        } else {
+          valueHasChanged = next !== prev;
+        }
+        if (valueHasChanged) {
+          if (next !== void 0 && next !== null) {
+            markToAnimate(key);
+          } else {
+            removedKeys.add(key);
+          }
+        } else if (next !== void 0 && removedKeys.has(key)) {
+          markToAnimate(key);
+        } else {
+          typeState.protectedKeys[key] = true;
+        }
+      }
+      typeState.prevProp = prop;
+      typeState.prevResolvedValues = resolvedValues;
+      if (typeState.isActive) {
+        encounteredKeys = { ...encounteredKeys, ...resolvedValues };
+      }
+      if ((isInitialRender || wasReset) && visualElement.blockInitialAnimation) {
+        shouldAnimateType = false;
+      }
+      const willAnimateViaParent = isInherited && variantDidChange;
+      const needsAnimating = !willAnimateViaParent || handledRemovedValues;
+      if (shouldAnimateType && needsAnimating) {
+        animations2.push(...definitionList.map((animation) => {
+          const options = { type };
+          if (typeof animation === "string" && (isInitialRender || wasReset) && !willAnimateViaParent && visualElement.manuallyAnimateOnMount && visualElement.parent) {
+            const { parent } = visualElement;
+            const parentVariant = resolveVariant(parent, animation);
+            if (parent.enteringChildren && parentVariant) {
+              const { delayChildren } = parentVariant.transition || {};
+              options.delay = calcChildStagger(parent.enteringChildren, visualElement, delayChildren);
+            }
+          }
+          return {
+            animation,
+            options
+          };
+        }));
+      }
+    }
+    if (removedKeys.size) {
+      const fallbackAnimation = {};
+      if (typeof props.initial !== "boolean") {
+        const initialTransition = resolveVariant(visualElement, Array.isArray(props.initial) ? props.initial[0] : props.initial);
+        if (initialTransition && initialTransition.transition) {
+          fallbackAnimation.transition = initialTransition.transition;
+        }
+      }
+      removedKeys.forEach((key) => {
+        const fallbackTarget = visualElement.getBaseTarget(key);
+        const motionValue2 = visualElement.getValue(key);
+        if (motionValue2)
+          motionValue2.liveStyle = true;
+        fallbackAnimation[key] = fallbackTarget ?? null;
+      });
+      animations2.push({ animation: fallbackAnimation });
+    }
+    let shouldAnimate = Boolean(animations2.length);
+    if (isInitialRender && (props.initial === false || props.initial === props.animate) && !visualElement.manuallyAnimateOnMount) {
+      shouldAnimate = false;
+    }
+    isInitialRender = false;
+    wasReset = false;
+    return shouldAnimate ? animate(animations2) : Promise.resolve();
+  }
+  function setActive(type, isActive) {
+    var _a3;
+    if (state[type].isActive === isActive)
+      return Promise.resolve();
+    (_a3 = visualElement.variantChildren) == null ? void 0 : _a3.forEach((child) => {
+      var _a4;
+      return (_a4 = child.animationState) == null ? void 0 : _a4.setActive(type, isActive);
+    });
+    state[type].isActive = isActive;
+    const animations2 = animateChanges(type);
+    for (const key in state) {
+      state[key].protectedKeys = {};
+    }
+    return animations2;
+  }
+  return {
+    animateChanges,
+    setActive,
+    setAnimateFunction,
+    getState: () => state,
+    reset: () => {
+      state = createState();
+      wasReset = true;
+    }
+  };
+}
+function checkVariantsDidChange(prev, next) {
+  if (typeof next === "string") {
+    return next !== prev;
+  } else if (Array.isArray(next)) {
+    return !shallowCompare(next, prev);
+  }
+  return false;
+}
+function createTypeState(isActive = false) {
+  return {
+    isActive,
+    protectedKeys: {},
+    needsAnimating: {},
+    prevResolvedValues: {}
+  };
+}
+function createState() {
+  return {
+    animate: createTypeState(true),
+    whileInView: createTypeState(),
+    whileHover: createTypeState(),
+    whileTap: createTypeState(),
+    whileDrag: createTypeState(),
+    whileFocus: createTypeState(),
+    exit: createTypeState()
+  };
+}
+function copyAxisInto(axis, originAxis) {
+  axis.min = originAxis.min;
+  axis.max = originAxis.max;
+}
+function copyBoxInto(box, originBox) {
+  copyAxisInto(box.x, originBox.x);
+  copyAxisInto(box.y, originBox.y);
+}
+function copyAxisDeltaInto(delta, originDelta) {
+  delta.translate = originDelta.translate;
+  delta.scale = originDelta.scale;
+  delta.originPoint = originDelta.originPoint;
+  delta.origin = originDelta.origin;
+}
+const SCALE_PRECISION = 1e-4;
+const SCALE_MIN = 1 - SCALE_PRECISION;
+const SCALE_MAX = 1 + SCALE_PRECISION;
+const TRANSLATE_PRECISION = 0.01;
+const TRANSLATE_MIN = 0 - TRANSLATE_PRECISION;
+const TRANSLATE_MAX = 0 + TRANSLATE_PRECISION;
+function calcLength(axis) {
+  return axis.max - axis.min;
+}
+function isNear(value, target, maxDistance) {
+  return Math.abs(value - target) <= maxDistance;
+}
+function calcAxisDelta(delta, source, target, origin = 0.5) {
+  delta.origin = origin;
+  delta.originPoint = mixNumber$1(source.min, source.max, delta.origin);
+  delta.scale = calcLength(target) / calcLength(source);
+  delta.translate = mixNumber$1(target.min, target.max, delta.origin) - delta.originPoint;
+  if (delta.scale >= SCALE_MIN && delta.scale <= SCALE_MAX || isNaN(delta.scale)) {
+    delta.scale = 1;
+  }
+  if (delta.translate >= TRANSLATE_MIN && delta.translate <= TRANSLATE_MAX || isNaN(delta.translate)) {
+    delta.translate = 0;
+  }
+}
+function calcBoxDelta(delta, source, target, origin) {
+  calcAxisDelta(delta.x, source.x, target.x, origin ? origin.originX : void 0);
+  calcAxisDelta(delta.y, source.y, target.y, origin ? origin.originY : void 0);
+}
+function calcRelativeAxis(target, relative, parent, anchor = 0) {
+  const anchorPoint = anchor ? mixNumber$1(parent.min, parent.max, anchor) : parent.min;
+  target.min = anchorPoint + relative.min;
+  target.max = target.min + calcLength(relative);
+}
+function calcRelativeBox(target, relative, parent, anchor) {
+  calcRelativeAxis(target.x, relative.x, parent.x, anchor == null ? void 0 : anchor.x);
+  calcRelativeAxis(target.y, relative.y, parent.y, anchor == null ? void 0 : anchor.y);
+}
+function calcRelativeAxisPosition(target, layout2, parent, anchor = 0) {
+  const anchorPoint = anchor ? mixNumber$1(parent.min, parent.max, anchor) : parent.min;
+  target.min = layout2.min - anchorPoint;
+  target.max = target.min + calcLength(layout2);
+}
+function calcRelativePosition(target, layout2, parent, anchor) {
+  calcRelativeAxisPosition(target.x, layout2.x, parent.x, anchor == null ? void 0 : anchor.x);
+  calcRelativeAxisPosition(target.y, layout2.y, parent.y, anchor == null ? void 0 : anchor.y);
+}
+function removePointDelta(point, translate, scale2, originPoint, boxScale) {
+  point -= translate;
+  point = scalePoint(point, 1 / scale2, originPoint);
+  if (boxScale !== void 0) {
+    point = scalePoint(point, 1 / boxScale, originPoint);
+  }
+  return point;
+}
+function removeAxisDelta(axis, translate = 0, scale2 = 1, origin = 0.5, boxScale, originAxis = axis, sourceAxis = axis) {
+  if (percent.test(translate)) {
+    translate = parseFloat(translate);
+    const relativeProgress = mixNumber$1(sourceAxis.min, sourceAxis.max, translate / 100);
+    translate = relativeProgress - sourceAxis.min;
+  }
+  if (typeof translate !== "number")
+    return;
+  let originPoint = mixNumber$1(originAxis.min, originAxis.max, origin);
+  if (axis === originAxis)
+    originPoint -= translate;
+  axis.min = removePointDelta(axis.min, translate, scale2, originPoint, boxScale);
+  axis.max = removePointDelta(axis.max, translate, scale2, originPoint, boxScale);
+}
+function removeAxisTransforms(axis, transforms, [key, scaleKey, originKey], origin, sourceAxis) {
+  removeAxisDelta(axis, transforms[key], transforms[scaleKey], transforms[originKey], transforms.scale, origin, sourceAxis);
+}
+const xKeys = ["x", "scaleX", "originX"];
+const yKeys = ["y", "scaleY", "originY"];
+function removeBoxTransforms(box, transforms, originBox, sourceBox) {
+  removeAxisTransforms(box.x, transforms, xKeys, originBox ? originBox.x : void 0, sourceBox ? sourceBox.x : void 0);
+  removeAxisTransforms(box.y, transforms, yKeys, originBox ? originBox.y : void 0, sourceBox ? sourceBox.y : void 0);
+}
+function isAxisDeltaZero(delta) {
+  return delta.translate === 0 && delta.scale === 1;
+}
+function isDeltaZero(delta) {
+  return isAxisDeltaZero(delta.x) && isAxisDeltaZero(delta.y);
+}
+function axisEquals(a2, b2) {
+  return a2.min === b2.min && a2.max === b2.max;
+}
+function boxEquals(a2, b2) {
+  return axisEquals(a2.x, b2.x) && axisEquals(a2.y, b2.y);
+}
+function axisEqualsRounded(a2, b2) {
+  return Math.round(a2.min) === Math.round(b2.min) && Math.round(a2.max) === Math.round(b2.max);
+}
+function boxEqualsRounded(a2, b2) {
+  return axisEqualsRounded(a2.x, b2.x) && axisEqualsRounded(a2.y, b2.y);
+}
+function aspectRatio(box) {
+  return calcLength(box.x) / calcLength(box.y);
+}
+function axisDeltaEquals(a2, b2) {
+  return a2.translate === b2.translate && a2.scale === b2.scale && a2.originPoint === b2.originPoint;
+}
+function eachAxis(callback) {
+  return [callback("x"), callback("y")];
+}
+function buildProjectionTransform(delta, treeScale, latestTransform) {
+  let transform = "";
+  const xTranslate = delta.x.translate / treeScale.x;
+  const yTranslate = delta.y.translate / treeScale.y;
+  const zTranslate = (latestTransform == null ? void 0 : latestTransform.z) || 0;
+  if (xTranslate || yTranslate || zTranslate) {
+    transform = `translate3d(${xTranslate}px, ${yTranslate}px, ${zTranslate}px) `;
+  }
+  if (treeScale.x !== 1 || treeScale.y !== 1) {
+    transform += `scale(${1 / treeScale.x}, ${1 / treeScale.y}) `;
+  }
+  if (latestTransform) {
+    const { transformPerspective, rotate: rotate2, rotateX, rotateY, skewX, skewY } = latestTransform;
+    if (transformPerspective)
+      transform = `perspective(${transformPerspective}px) ${transform}`;
+    if (rotate2)
+      transform += `rotate(${rotate2}deg) `;
+    if (rotateX)
+      transform += `rotateX(${rotateX}deg) `;
+    if (rotateY)
+      transform += `rotateY(${rotateY}deg) `;
+    if (skewX)
+      transform += `skewX(${skewX}deg) `;
+    if (skewY)
+      transform += `skewY(${skewY}deg) `;
+  }
+  const elementScaleX = delta.x.scale * treeScale.x;
+  const elementScaleY = delta.y.scale * treeScale.y;
+  if (elementScaleX !== 1 || elementScaleY !== 1) {
+    transform += `scale(${elementScaleX}, ${elementScaleY})`;
+  }
+  return transform || "none";
+}
+const borderLabels = [
+  "borderTopLeftRadius",
+  "borderTopRightRadius",
+  "borderBottomLeftRadius",
+  "borderBottomRightRadius"
+];
+const numBorders = borderLabels.length;
+const asNumber = (value) => typeof value === "string" ? parseFloat(value) : value;
+const isPx = (value) => typeof value === "number" || px.test(value);
+function mixValues(target, follow, lead, progress2, shouldCrossfadeOpacity, isOnlyMember) {
+  if (shouldCrossfadeOpacity) {
+    target.opacity = mixNumber$1(0, lead.opacity ?? 1, easeCrossfadeIn(progress2));
+    target.opacityExit = mixNumber$1(follow.opacity ?? 1, 0, easeCrossfadeOut(progress2));
+  } else if (isOnlyMember) {
+    target.opacity = mixNumber$1(follow.opacity ?? 1, lead.opacity ?? 1, progress2);
+  }
+  for (let i = 0; i < numBorders; i++) {
+    const borderLabel = borderLabels[i];
+    let followRadius = getRadius(follow, borderLabel);
+    let leadRadius = getRadius(lead, borderLabel);
+    if (followRadius === void 0 && leadRadius === void 0)
+      continue;
+    followRadius || (followRadius = 0);
+    leadRadius || (leadRadius = 0);
+    const canMix = followRadius === 0 || leadRadius === 0 || isPx(followRadius) === isPx(leadRadius);
+    if (canMix) {
+      target[borderLabel] = Math.max(mixNumber$1(asNumber(followRadius), asNumber(leadRadius), progress2), 0);
+      if (percent.test(leadRadius) || percent.test(followRadius)) {
+        target[borderLabel] += "%";
+      }
+    } else {
+      target[borderLabel] = leadRadius;
+    }
+  }
+  if (follow.rotate || lead.rotate) {
+    target.rotate = mixNumber$1(follow.rotate || 0, lead.rotate || 0, progress2);
+  }
+}
+function getRadius(values, radiusName) {
+  return values[radiusName] !== void 0 ? values[radiusName] : values.borderRadius;
+}
+const easeCrossfadeIn = /* @__PURE__ */ compress(0, 0.5, circOut);
+const easeCrossfadeOut = /* @__PURE__ */ compress(0.5, 0.95, noop2);
+function compress(min2, max2, easing) {
+  return (p2) => {
+    if (p2 < min2)
+      return 0;
+    if (p2 > max2)
+      return 1;
+    return easing(/* @__PURE__ */ progress(min2, max2, p2));
+  };
+}
+function animateSingleValue(value, keyframes2, options) {
+  const motionValue$1 = isMotionValue(value) ? value : motionValue(value);
+  motionValue$1.start(animateMotionValue("", motionValue$1, keyframes2, options));
+  return motionValue$1.animation;
+}
+function addDomEvent(target, eventName, handler, options = { passive: true }) {
+  target.addEventListener(eventName, handler, options);
+  return () => target.removeEventListener(eventName, handler);
+}
+const compareByDepth = (a2, b2) => a2.depth - b2.depth;
+class FlatTree {
+  constructor() {
+    this.children = [];
+    this.isDirty = false;
+  }
+  add(child) {
+    addUniqueItem(this.children, child);
+    this.isDirty = true;
+  }
+  remove(child) {
+    removeItem(this.children, child);
+    this.isDirty = true;
+  }
+  forEach(callback) {
+    this.isDirty && this.children.sort(compareByDepth);
+    this.isDirty = false;
+    this.children.forEach(callback);
+  }
+}
+function delay$1(callback, timeout2) {
+  const start = time.now();
+  const checkElapsed = ({ timestamp }) => {
+    const elapsed = timestamp - start;
+    if (elapsed >= timeout2) {
+      cancelFrame(checkElapsed);
+      callback(elapsed - timeout2);
+    }
+  };
+  frame.setup(checkElapsed, true);
+  return () => cancelFrame(checkElapsed);
+}
+function resolveMotionValue(value) {
+  return isMotionValue(value) ? value.get() : value;
+}
+class NodeStack {
+  constructor() {
+    this.members = [];
+  }
+  add(node) {
+    addUniqueItem(this.members, node);
+    for (let i = this.members.length - 1; i >= 0; i--) {
+      const member = this.members[i];
+      if (member === node || member === this.lead || member === this.prevLead)
+        continue;
+      const inst = member.instance;
+      if ((!inst || inst.isConnected === false) && !member.snapshot) {
+        removeItem(this.members, member);
+        member.unmount();
+      }
+    }
+    node.scheduleRender();
+  }
+  remove(node) {
+    removeItem(this.members, node);
+    if (node === this.prevLead)
+      this.prevLead = void 0;
+    if (node === this.lead) {
+      const prevLead = this.members[this.members.length - 1];
+      if (prevLead)
+        this.promote(prevLead);
+    }
+  }
+  relegate(node) {
+    var _a3;
+    for (let i = this.members.indexOf(node) - 1; i >= 0; i--) {
+      const member = this.members[i];
+      if (member.isPresent !== false && ((_a3 = member.instance) == null ? void 0 : _a3.isConnected) !== false) {
+        this.promote(member);
+        return true;
+      }
+    }
+    return false;
+  }
+  promote(node, preserveFollowOpacity) {
+    var _a3;
+    const prevLead = this.lead;
+    if (node === prevLead)
+      return;
+    this.prevLead = prevLead;
+    this.lead = node;
+    node.show();
+    if (prevLead) {
+      prevLead.updateSnapshot();
+      node.scheduleRender();
+      const { layoutDependency: prevDep } = prevLead.options;
+      const { layoutDependency: nextDep } = node.options;
+      if (prevDep === void 0 || prevDep !== nextDep) {
+        node.resumeFrom = prevLead;
+        if (preserveFollowOpacity)
+          prevLead.preserveOpacity = true;
+        if (prevLead.snapshot) {
+          node.snapshot = prevLead.snapshot;
+          node.snapshot.latestValues = prevLead.animationValues || prevLead.latestValues;
+        }
+        if ((_a3 = node.root) == null ? void 0 : _a3.isUpdating)
+          node.isLayoutDirty = true;
+      }
+      if (node.options.crossfade === false)
+        prevLead.hide();
+    }
+  }
+  exitAnimationComplete() {
+    this.members.forEach((member) => {
+      var _a3, _b3, _c2, _d2, _e2;
+      (_b3 = (_a3 = member.options).onExitComplete) == null ? void 0 : _b3.call(_a3);
+      (_e2 = (_c2 = member.resumingFrom) == null ? void 0 : (_d2 = _c2.options).onExitComplete) == null ? void 0 : _e2.call(_d2);
+    });
+  }
+  scheduleRender() {
+    this.members.forEach((member) => member.instance && member.scheduleRender(false));
+  }
+  removeLeadSnapshot() {
+    var _a3;
+    if ((_a3 = this.lead) == null ? void 0 : _a3.snapshot)
+      this.lead.snapshot = void 0;
+  }
+}
+const globalProjectionState = {
+  /**
+   * Global flag as to whether the tree has animated since the last time
+   * we resized the window
+   */
+  hasAnimatedSinceResize: true,
+  /**
+   * We set this to true once, on the first update. Any nodes added to the tree beyond that
+   * update will be given a `data-projection-id` attribute.
+   */
+  hasEverUpdated: false
+};
+const transformAxes = ["", "X", "Y", "Z"];
+const animationTarget = 1e3;
+let id$1 = 0;
+function resetDistortingTransform(key, visualElement, values, sharedAnimationValues) {
+  const { latestValues } = visualElement;
+  if (latestValues[key]) {
+    values[key] = latestValues[key];
+    visualElement.setStaticValue(key, 0);
+    if (sharedAnimationValues) {
+      sharedAnimationValues[key] = 0;
+    }
+  }
+}
+function cancelTreeOptimisedTransformAnimations(projectionNode) {
+  projectionNode.hasCheckedOptimisedAppear = true;
+  if (projectionNode.root === projectionNode)
+    return;
+  const { visualElement } = projectionNode.options;
+  if (!visualElement)
+    return;
+  const appearId = getOptimisedAppearId(visualElement);
+  if (window.MotionHasOptimisedAnimation(appearId, "transform")) {
+    const { layout: layout2, layoutId } = projectionNode.options;
+    window.MotionCancelOptimisedAnimation(appearId, "transform", frame, !(layout2 || layoutId));
+  }
+  const { parent } = projectionNode;
+  if (parent && !parent.hasCheckedOptimisedAppear) {
+    cancelTreeOptimisedTransformAnimations(parent);
+  }
+}
+function createProjectionNode$1({ attachResizeListener, defaultParent, measureScroll, checkIsScrollRoot, resetTransform }) {
+  return class ProjectionNode {
+    constructor(latestValues = {}, parent = defaultParent == null ? void 0 : defaultParent()) {
+      this.id = id$1++;
+      this.animationId = 0;
+      this.animationCommitId = 0;
+      this.children = /* @__PURE__ */ new Set();
+      this.options = {};
+      this.isTreeAnimating = false;
+      this.isAnimationBlocked = false;
+      this.isLayoutDirty = false;
+      this.isProjectionDirty = false;
+      this.isSharedProjectionDirty = false;
+      this.isTransformDirty = false;
+      this.updateManuallyBlocked = false;
+      this.updateBlockedByResize = false;
+      this.isUpdating = false;
+      this.isSVG = false;
+      this.needsReset = false;
+      this.shouldResetTransform = false;
+      this.hasCheckedOptimisedAppear = false;
+      this.treeScale = { x: 1, y: 1 };
+      this.eventHandlers = /* @__PURE__ */ new Map();
+      this.hasTreeAnimated = false;
+      this.layoutVersion = 0;
+      this.updateScheduled = false;
+      this.scheduleUpdate = () => this.update();
+      this.projectionUpdateScheduled = false;
+      this.checkUpdateFailed = () => {
+        if (this.isUpdating) {
+          this.isUpdating = false;
+          this.clearAllSnapshots();
+        }
+      };
+      this.updateProjection = () => {
+        this.projectionUpdateScheduled = false;
+        this.nodes.forEach(propagateDirtyNodes);
+        this.nodes.forEach(resolveTargetDelta);
+        this.nodes.forEach(calcProjection);
+        this.nodes.forEach(cleanDirtyNodes);
+      };
+      this.resolvedRelativeTargetAt = 0;
+      this.linkedParentVersion = 0;
+      this.hasProjected = false;
+      this.isVisible = true;
+      this.animationProgress = 0;
+      this.sharedNodes = /* @__PURE__ */ new Map();
+      this.latestValues = latestValues;
+      this.root = parent ? parent.root || parent : this;
+      this.path = parent ? [...parent.path, parent] : [];
+      this.parent = parent;
+      this.depth = parent ? parent.depth + 1 : 0;
+      for (let i = 0; i < this.path.length; i++) {
+        this.path[i].shouldResetTransform = true;
+      }
+      if (this.root === this)
+        this.nodes = new FlatTree();
+    }
+    addEventListener(name, handler) {
+      if (!this.eventHandlers.has(name)) {
+        this.eventHandlers.set(name, new SubscriptionManager());
+      }
+      return this.eventHandlers.get(name).add(handler);
+    }
+    notifyListeners(name, ...args) {
+      const subscriptionManager = this.eventHandlers.get(name);
+      subscriptionManager && subscriptionManager.notify(...args);
+    }
+    hasListeners(name) {
+      return this.eventHandlers.has(name);
+    }
+    /**
+     * Lifecycles
+     */
+    mount(instance) {
+      if (this.instance)
+        return;
+      this.isSVG = isSVGElement(instance) && !isSVGSVGElement(instance);
+      this.instance = instance;
+      const { layoutId, layout: layout2, visualElement } = this.options;
+      if (visualElement && !visualElement.current) {
+        visualElement.mount(instance);
+      }
+      this.root.nodes.add(this);
+      this.parent && this.parent.children.add(this);
+      if (this.root.hasTreeAnimated && (layout2 || layoutId)) {
+        this.isLayoutDirty = true;
+      }
+      if (attachResizeListener) {
+        let cancelDelay;
+        let innerWidth = 0;
+        const resizeUnblockUpdate = () => this.root.updateBlockedByResize = false;
+        frame.read(() => {
+          innerWidth = window.innerWidth;
+        });
+        attachResizeListener(instance, () => {
+          const newInnerWidth = window.innerWidth;
+          if (newInnerWidth === innerWidth)
+            return;
+          innerWidth = newInnerWidth;
+          this.root.updateBlockedByResize = true;
+          cancelDelay && cancelDelay();
+          cancelDelay = delay$1(resizeUnblockUpdate, 250);
+          if (globalProjectionState.hasAnimatedSinceResize) {
+            globalProjectionState.hasAnimatedSinceResize = false;
+            this.nodes.forEach(finishAnimation);
+          }
+        });
+      }
+      if (layoutId) {
+        this.root.registerSharedNode(layoutId, this);
+      }
+      if (this.options.animate !== false && visualElement && (layoutId || layout2)) {
+        this.addEventListener("didUpdate", ({ delta, hasLayoutChanged, hasRelativeLayoutChanged, layout: newLayout }) => {
+          if (this.isTreeAnimationBlocked()) {
+            this.target = void 0;
+            this.relativeTarget = void 0;
+            return;
+          }
+          const layoutTransition = this.options.transition || visualElement.getDefaultTransition() || defaultLayoutTransition;
+          const { onLayoutAnimationStart, onLayoutAnimationComplete } = visualElement.getProps();
+          const hasTargetChanged = !this.targetLayout || !boxEqualsRounded(this.targetLayout, newLayout);
+          const hasOnlyRelativeTargetChanged = !hasLayoutChanged && hasRelativeLayoutChanged;
+          if (this.options.layoutRoot || this.resumeFrom || hasOnlyRelativeTargetChanged || hasLayoutChanged && (hasTargetChanged || !this.currentAnimation)) {
+            if (this.resumeFrom) {
+              this.resumingFrom = this.resumeFrom;
+              this.resumingFrom.resumingFrom = void 0;
+            }
+            const animationOptions = {
+              ...getValueTransition(layoutTransition, "layout"),
+              onPlay: onLayoutAnimationStart,
+              onComplete: onLayoutAnimationComplete
+            };
+            if (visualElement.shouldReduceMotion || this.options.layoutRoot) {
+              animationOptions.delay = 0;
+              animationOptions.type = false;
+            }
+            this.startAnimation(animationOptions);
+            this.setAnimationOrigin(delta, hasOnlyRelativeTargetChanged);
+          } else {
+            if (!hasLayoutChanged) {
+              finishAnimation(this);
+            }
+            if (this.isLead() && this.options.onExitComplete) {
+              this.options.onExitComplete();
+            }
+          }
+          this.targetLayout = newLayout;
+        });
+      }
+    }
+    unmount() {
+      this.options.layoutId && this.willUpdate();
+      this.root.nodes.remove(this);
+      const stack = this.getStack();
+      stack && stack.remove(this);
+      this.parent && this.parent.children.delete(this);
+      this.instance = void 0;
+      this.eventHandlers.clear();
+      cancelFrame(this.updateProjection);
+    }
+    // only on the root
+    blockUpdate() {
+      this.updateManuallyBlocked = true;
+    }
+    unblockUpdate() {
+      this.updateManuallyBlocked = false;
+    }
+    isUpdateBlocked() {
+      return this.updateManuallyBlocked || this.updateBlockedByResize;
+    }
+    isTreeAnimationBlocked() {
+      return this.isAnimationBlocked || this.parent && this.parent.isTreeAnimationBlocked() || false;
+    }
+    // Note: currently only running on root node
+    startUpdate() {
+      if (this.isUpdateBlocked())
+        return;
+      this.isUpdating = true;
+      this.nodes && this.nodes.forEach(resetSkewAndRotation);
+      this.animationId++;
+    }
+    getTransformTemplate() {
+      const { visualElement } = this.options;
+      return visualElement && visualElement.getProps().transformTemplate;
+    }
+    willUpdate(shouldNotifyListeners = true) {
+      this.root.hasTreeAnimated = true;
+      if (this.root.isUpdateBlocked()) {
+        this.options.onExitComplete && this.options.onExitComplete();
+        return;
+      }
+      if (window.MotionCancelOptimisedAnimation && !this.hasCheckedOptimisedAppear) {
+        cancelTreeOptimisedTransformAnimations(this);
+      }
+      !this.root.isUpdating && this.root.startUpdate();
+      if (this.isLayoutDirty)
+        return;
+      this.isLayoutDirty = true;
+      for (let i = 0; i < this.path.length; i++) {
+        const node = this.path[i];
+        node.shouldResetTransform = true;
+        if (typeof node.latestValues.x === "string" || typeof node.latestValues.y === "string") {
+          node.isLayoutDirty = true;
+        }
+        node.updateScroll("snapshot");
+        if (node.options.layoutRoot) {
+          node.willUpdate(false);
+        }
+      }
+      const { layoutId, layout: layout2 } = this.options;
+      if (layoutId === void 0 && !layout2)
+        return;
+      const transformTemplate = this.getTransformTemplate();
+      this.prevTransformTemplateValue = transformTemplate ? transformTemplate(this.latestValues, "") : void 0;
+      this.updateSnapshot();
+      shouldNotifyListeners && this.notifyListeners("willUpdate");
+    }
+    update() {
+      this.updateScheduled = false;
+      const updateWasBlocked = this.isUpdateBlocked();
+      if (updateWasBlocked) {
+        const wasBlockedByResize = this.updateBlockedByResize;
+        this.unblockUpdate();
+        this.updateBlockedByResize = false;
+        this.clearAllSnapshots();
+        if (wasBlockedByResize) {
+          this.nodes.forEach(forceLayoutMeasure);
+        }
+        this.nodes.forEach(clearMeasurements);
+        return;
+      }
+      if (this.animationId <= this.animationCommitId) {
+        this.nodes.forEach(clearIsLayoutDirty);
+        return;
+      }
+      this.animationCommitId = this.animationId;
+      if (!this.isUpdating) {
+        this.nodes.forEach(clearIsLayoutDirty);
+      } else {
+        this.isUpdating = false;
+        this.nodes.forEach(ensureDraggedNodesSnapshotted);
+        this.nodes.forEach(resetTransformStyle);
+        this.nodes.forEach(updateLayout);
+        this.nodes.forEach(notifyLayoutUpdate);
+      }
+      this.clearAllSnapshots();
+      const now2 = time.now();
+      frameData.delta = clamp(0, 1e3 / 60, now2 - frameData.timestamp);
+      frameData.timestamp = now2;
+      frameData.isProcessing = true;
+      frameSteps.update.process(frameData);
+      frameSteps.preRender.process(frameData);
+      frameSteps.render.process(frameData);
+      frameData.isProcessing = false;
+    }
+    didUpdate() {
+      if (!this.updateScheduled) {
+        this.updateScheduled = true;
+        microtask.read(this.scheduleUpdate);
+      }
+    }
+    clearAllSnapshots() {
+      this.nodes.forEach(clearSnapshot);
+      this.sharedNodes.forEach(removeLeadSnapshots);
+    }
+    scheduleUpdateProjection() {
+      if (!this.projectionUpdateScheduled) {
+        this.projectionUpdateScheduled = true;
+        frame.preRender(this.updateProjection, false, true);
+      }
+    }
+    scheduleCheckAfterUnmount() {
+      frame.postRender(() => {
+        if (this.isLayoutDirty) {
+          this.root.didUpdate();
+        } else {
+          this.root.checkUpdateFailed();
+        }
+      });
+    }
+    /**
+     * Update measurements
+     */
+    updateSnapshot() {
+      if (this.snapshot || !this.instance)
+        return;
+      this.snapshot = this.measure();
+      if (this.snapshot && !calcLength(this.snapshot.measuredBox.x) && !calcLength(this.snapshot.measuredBox.y)) {
+        this.snapshot = void 0;
+      }
+    }
+    updateLayout() {
+      if (!this.instance)
+        return;
+      this.updateScroll();
+      if (!(this.options.alwaysMeasureLayout && this.isLead()) && !this.isLayoutDirty) {
+        return;
+      }
+      if (this.resumeFrom && !this.resumeFrom.instance) {
+        for (let i = 0; i < this.path.length; i++) {
+          const node = this.path[i];
+          node.updateScroll();
+        }
+      }
+      const prevLayout = this.layout;
+      this.layout = this.measure(false);
+      this.layoutVersion++;
+      if (!this.layoutCorrected)
+        this.layoutCorrected = createBox();
+      this.isLayoutDirty = false;
+      this.projectionDelta = void 0;
+      this.notifyListeners("measure", this.layout.layoutBox);
+      const { visualElement } = this.options;
+      visualElement && visualElement.notify("LayoutMeasure", this.layout.layoutBox, prevLayout ? prevLayout.layoutBox : void 0);
+    }
+    updateScroll(phase = "measure") {
+      let needsMeasurement = Boolean(this.options.layoutScroll && this.instance);
+      if (this.scroll && this.scroll.animationId === this.root.animationId && this.scroll.phase === phase) {
+        needsMeasurement = false;
+      }
+      if (needsMeasurement && this.instance) {
+        const isRoot = checkIsScrollRoot(this.instance);
+        this.scroll = {
+          animationId: this.root.animationId,
+          phase,
+          isRoot,
+          offset: measureScroll(this.instance),
+          wasRoot: this.scroll ? this.scroll.isRoot : isRoot
+        };
+      }
+    }
+    resetTransform() {
+      if (!resetTransform)
+        return;
+      const isResetRequested = this.isLayoutDirty || this.shouldResetTransform || this.options.alwaysMeasureLayout;
+      const hasProjection = this.projectionDelta && !isDeltaZero(this.projectionDelta);
+      const transformTemplate = this.getTransformTemplate();
+      const transformTemplateValue = transformTemplate ? transformTemplate(this.latestValues, "") : void 0;
+      const transformTemplateHasChanged = transformTemplateValue !== this.prevTransformTemplateValue;
+      if (isResetRequested && this.instance && (hasProjection || hasTransform(this.latestValues) || transformTemplateHasChanged)) {
+        resetTransform(this.instance, transformTemplateValue);
+        this.shouldResetTransform = false;
+        this.scheduleRender();
+      }
+    }
+    measure(removeTransform = true) {
+      const pageBox = this.measurePageBox();
+      let layoutBox = this.removeElementScroll(pageBox);
+      if (removeTransform) {
+        layoutBox = this.removeTransform(layoutBox);
+      }
+      roundBox(layoutBox);
+      return {
+        animationId: this.root.animationId,
+        measuredBox: pageBox,
+        layoutBox,
+        latestValues: {},
+        source: this.id
+      };
+    }
+    measurePageBox() {
+      var _a3;
+      const { visualElement } = this.options;
+      if (!visualElement)
+        return createBox();
+      const box = visualElement.measureViewportBox();
+      const wasInScrollRoot = ((_a3 = this.scroll) == null ? void 0 : _a3.wasRoot) || this.path.some(checkNodeWasScrollRoot);
+      if (!wasInScrollRoot) {
+        const { scroll } = this.root;
+        if (scroll) {
+          translateAxis(box.x, scroll.offset.x);
+          translateAxis(box.y, scroll.offset.y);
+        }
+      }
+      return box;
+    }
+    removeElementScroll(box) {
+      var _a3;
+      const boxWithoutScroll = createBox();
+      copyBoxInto(boxWithoutScroll, box);
+      if ((_a3 = this.scroll) == null ? void 0 : _a3.wasRoot) {
+        return boxWithoutScroll;
+      }
+      for (let i = 0; i < this.path.length; i++) {
+        const node = this.path[i];
+        const { scroll, options } = node;
+        if (node !== this.root && scroll && options.layoutScroll) {
+          if (scroll.wasRoot) {
+            copyBoxInto(boxWithoutScroll, box);
+          }
+          translateAxis(boxWithoutScroll.x, scroll.offset.x);
+          translateAxis(boxWithoutScroll.y, scroll.offset.y);
+        }
+      }
+      return boxWithoutScroll;
+    }
+    applyTransform(box, transformOnly = false, output) {
+      var _a3, _b3;
+      const withTransforms = output || createBox();
+      copyBoxInto(withTransforms, box);
+      for (let i = 0; i < this.path.length; i++) {
+        const node = this.path[i];
+        if (!transformOnly && node.options.layoutScroll && node.scroll && node !== node.root) {
+          translateAxis(withTransforms.x, -node.scroll.offset.x);
+          translateAxis(withTransforms.y, -node.scroll.offset.y);
+        }
+        if (!hasTransform(node.latestValues))
+          continue;
+        transformBox(withTransforms, node.latestValues, (_a3 = node.layout) == null ? void 0 : _a3.layoutBox);
+      }
+      if (hasTransform(this.latestValues)) {
+        transformBox(withTransforms, this.latestValues, (_b3 = this.layout) == null ? void 0 : _b3.layoutBox);
+      }
+      return withTransforms;
+    }
+    removeTransform(box) {
+      var _a3;
+      const boxWithoutTransform = createBox();
+      copyBoxInto(boxWithoutTransform, box);
+      for (let i = 0; i < this.path.length; i++) {
+        const node = this.path[i];
+        if (!hasTransform(node.latestValues))
+          continue;
+        let sourceBox;
+        if (node.instance) {
+          hasScale(node.latestValues) && node.updateSnapshot();
+          sourceBox = createBox();
+          copyBoxInto(sourceBox, node.measurePageBox());
+        }
+        removeBoxTransforms(boxWithoutTransform, node.latestValues, (_a3 = node.snapshot) == null ? void 0 : _a3.layoutBox, sourceBox);
+      }
+      if (hasTransform(this.latestValues)) {
+        removeBoxTransforms(boxWithoutTransform, this.latestValues);
+      }
+      return boxWithoutTransform;
+    }
+    setTargetDelta(delta) {
+      this.targetDelta = delta;
+      this.root.scheduleUpdateProjection();
+      this.isProjectionDirty = true;
+    }
+    setOptions(options) {
+      this.options = {
+        ...this.options,
+        ...options,
+        crossfade: options.crossfade !== void 0 ? options.crossfade : true
+      };
+    }
+    clearMeasurements() {
+      this.scroll = void 0;
+      this.layout = void 0;
+      this.snapshot = void 0;
+      this.prevTransformTemplateValue = void 0;
+      this.targetDelta = void 0;
+      this.target = void 0;
+      this.isLayoutDirty = false;
+    }
+    forceRelativeParentToResolveTarget() {
+      if (!this.relativeParent)
+        return;
+      if (this.relativeParent.resolvedRelativeTargetAt !== frameData.timestamp) {
+        this.relativeParent.resolveTargetDelta(true);
+      }
+    }
+    resolveTargetDelta(forceRecalculation = false) {
+      var _a3;
+      const lead = this.getLead();
+      this.isProjectionDirty || (this.isProjectionDirty = lead.isProjectionDirty);
+      this.isTransformDirty || (this.isTransformDirty = lead.isTransformDirty);
+      this.isSharedProjectionDirty || (this.isSharedProjectionDirty = lead.isSharedProjectionDirty);
+      const isShared = Boolean(this.resumingFrom) || this !== lead;
+      const canSkip = !(forceRecalculation || isShared && this.isSharedProjectionDirty || this.isProjectionDirty || ((_a3 = this.parent) == null ? void 0 : _a3.isProjectionDirty) || this.attemptToResolveRelativeTarget || this.root.updateBlockedByResize);
+      if (canSkip)
+        return;
+      const { layout: layout2, layoutId } = this.options;
+      if (!this.layout || !(layout2 || layoutId))
+        return;
+      this.resolvedRelativeTargetAt = frameData.timestamp;
+      const relativeParent = this.getClosestProjectingParent();
+      if (relativeParent && this.linkedParentVersion !== relativeParent.layoutVersion && !relativeParent.options.layoutRoot) {
+        this.removeRelativeTarget();
+      }
+      if (!this.targetDelta && !this.relativeTarget) {
+        if (this.options.layoutAnchor !== false && relativeParent && relativeParent.layout) {
+          this.createRelativeTarget(relativeParent, this.layout.layoutBox, relativeParent.layout.layoutBox);
+        } else {
+          this.removeRelativeTarget();
+        }
+      }
+      if (!this.relativeTarget && !this.targetDelta)
+        return;
+      if (!this.target) {
+        this.target = createBox();
+        this.targetWithTransforms = createBox();
+      }
+      if (this.relativeTarget && this.relativeTargetOrigin && this.relativeParent && this.relativeParent.target) {
+        this.forceRelativeParentToResolveTarget();
+        calcRelativeBox(this.target, this.relativeTarget, this.relativeParent.target, this.options.layoutAnchor || void 0);
+      } else if (this.targetDelta) {
+        if (Boolean(this.resumingFrom)) {
+          this.applyTransform(this.layout.layoutBox, false, this.target);
+        } else {
+          copyBoxInto(this.target, this.layout.layoutBox);
+        }
+        applyBoxDelta(this.target, this.targetDelta);
+      } else {
+        copyBoxInto(this.target, this.layout.layoutBox);
+      }
+      if (this.attemptToResolveRelativeTarget) {
+        this.attemptToResolveRelativeTarget = false;
+        if (this.options.layoutAnchor !== false && relativeParent && Boolean(relativeParent.resumingFrom) === Boolean(this.resumingFrom) && !relativeParent.options.layoutScroll && relativeParent.target && this.animationProgress !== 1) {
+          this.createRelativeTarget(relativeParent, this.target, relativeParent.target);
+        } else {
+          this.relativeParent = this.relativeTarget = void 0;
+        }
+      }
+    }
+    getClosestProjectingParent() {
+      if (!this.parent || hasScale(this.parent.latestValues) || has2DTranslate(this.parent.latestValues)) {
+        return void 0;
+      }
+      if (this.parent.isProjecting()) {
+        return this.parent;
+      } else {
+        return this.parent.getClosestProjectingParent();
+      }
+    }
+    isProjecting() {
+      return Boolean((this.relativeTarget || this.targetDelta || this.options.layoutRoot) && this.layout);
+    }
+    createRelativeTarget(relativeParent, layout2, parentLayout) {
+      this.relativeParent = relativeParent;
+      this.linkedParentVersion = relativeParent.layoutVersion;
+      this.forceRelativeParentToResolveTarget();
+      this.relativeTarget = createBox();
+      this.relativeTargetOrigin = createBox();
+      calcRelativePosition(this.relativeTargetOrigin, layout2, parentLayout, this.options.layoutAnchor || void 0);
+      copyBoxInto(this.relativeTarget, this.relativeTargetOrigin);
+    }
+    removeRelativeTarget() {
+      this.relativeParent = this.relativeTarget = void 0;
+    }
+    calcProjection() {
+      var _a3;
+      const lead = this.getLead();
+      const isShared = Boolean(this.resumingFrom) || this !== lead;
+      let canSkip = true;
+      if (this.isProjectionDirty || ((_a3 = this.parent) == null ? void 0 : _a3.isProjectionDirty)) {
+        canSkip = false;
+      }
+      if (isShared && (this.isSharedProjectionDirty || this.isTransformDirty)) {
+        canSkip = false;
+      }
+      if (this.resolvedRelativeTargetAt === frameData.timestamp) {
+        canSkip = false;
+      }
+      if (canSkip)
+        return;
+      const { layout: layout2, layoutId } = this.options;
+      this.isTreeAnimating = Boolean(this.parent && this.parent.isTreeAnimating || this.currentAnimation || this.pendingAnimation);
+      if (!this.isTreeAnimating) {
+        this.targetDelta = this.relativeTarget = void 0;
+      }
+      if (!this.layout || !(layout2 || layoutId))
+        return;
+      copyBoxInto(this.layoutCorrected, this.layout.layoutBox);
+      const prevTreeScaleX = this.treeScale.x;
+      const prevTreeScaleY = this.treeScale.y;
+      applyTreeDeltas(this.layoutCorrected, this.treeScale, this.path, isShared);
+      if (lead.layout && !lead.target && (this.treeScale.x !== 1 || this.treeScale.y !== 1)) {
+        lead.target = lead.layout.layoutBox;
+        lead.targetWithTransforms = createBox();
+      }
+      const { target } = lead;
+      if (!target) {
+        if (this.prevProjectionDelta) {
+          this.createProjectionDeltas();
+          this.scheduleRender();
+        }
+        return;
+      }
+      if (!this.projectionDelta || !this.prevProjectionDelta) {
+        this.createProjectionDeltas();
+      } else {
+        copyAxisDeltaInto(this.prevProjectionDelta.x, this.projectionDelta.x);
+        copyAxisDeltaInto(this.prevProjectionDelta.y, this.projectionDelta.y);
+      }
+      calcBoxDelta(this.projectionDelta, this.layoutCorrected, target, this.latestValues);
+      if (this.treeScale.x !== prevTreeScaleX || this.treeScale.y !== prevTreeScaleY || !axisDeltaEquals(this.projectionDelta.x, this.prevProjectionDelta.x) || !axisDeltaEquals(this.projectionDelta.y, this.prevProjectionDelta.y)) {
+        this.hasProjected = true;
+        this.scheduleRender();
+        this.notifyListeners("projectionUpdate", target);
+      }
+    }
+    hide() {
+      this.isVisible = false;
+    }
+    show() {
+      this.isVisible = true;
+    }
+    scheduleRender(notifyAll2 = true) {
+      var _a3;
+      (_a3 = this.options.visualElement) == null ? void 0 : _a3.scheduleRender();
+      if (notifyAll2) {
+        const stack = this.getStack();
+        stack && stack.scheduleRender();
+      }
+      if (this.resumingFrom && !this.resumingFrom.instance) {
+        this.resumingFrom = void 0;
+      }
+    }
+    createProjectionDeltas() {
+      this.prevProjectionDelta = createDelta();
+      this.projectionDelta = createDelta();
+      this.projectionDeltaWithTransform = createDelta();
+    }
+    setAnimationOrigin(delta, hasOnlyRelativeTargetChanged = false) {
+      const snapshot = this.snapshot;
+      const snapshotLatestValues = snapshot ? snapshot.latestValues : {};
+      const mixedValues = { ...this.latestValues };
+      const targetDelta = createDelta();
+      if (!this.relativeParent || !this.relativeParent.options.layoutRoot) {
+        this.relativeTarget = this.relativeTargetOrigin = void 0;
+      }
+      this.attemptToResolveRelativeTarget = !hasOnlyRelativeTargetChanged;
+      const relativeLayout = createBox();
+      const snapshotSource = snapshot ? snapshot.source : void 0;
+      const layoutSource = this.layout ? this.layout.source : void 0;
+      const isSharedLayoutAnimation = snapshotSource !== layoutSource;
+      const stack = this.getStack();
+      const isOnlyMember = !stack || stack.members.length <= 1;
+      const shouldCrossfadeOpacity = Boolean(isSharedLayoutAnimation && !isOnlyMember && this.options.crossfade === true && !this.path.some(hasOpacityCrossfade));
+      this.animationProgress = 0;
+      let prevRelativeTarget;
+      this.mixTargetDelta = (latest) => {
+        const progress2 = latest / 1e3;
+        mixAxisDelta(targetDelta.x, delta.x, progress2);
+        mixAxisDelta(targetDelta.y, delta.y, progress2);
+        this.setTargetDelta(targetDelta);
+        if (this.relativeTarget && this.relativeTargetOrigin && this.layout && this.relativeParent && this.relativeParent.layout) {
+          calcRelativePosition(relativeLayout, this.layout.layoutBox, this.relativeParent.layout.layoutBox, this.options.layoutAnchor || void 0);
+          mixBox(this.relativeTarget, this.relativeTargetOrigin, relativeLayout, progress2);
+          if (prevRelativeTarget && boxEquals(this.relativeTarget, prevRelativeTarget)) {
+            this.isProjectionDirty = false;
+          }
+          if (!prevRelativeTarget)
+            prevRelativeTarget = createBox();
+          copyBoxInto(prevRelativeTarget, this.relativeTarget);
+        }
+        if (isSharedLayoutAnimation) {
+          this.animationValues = mixedValues;
+          mixValues(mixedValues, snapshotLatestValues, this.latestValues, progress2, shouldCrossfadeOpacity, isOnlyMember);
+        }
+        this.root.scheduleUpdateProjection();
+        this.scheduleRender();
+        this.animationProgress = progress2;
+      };
+      this.mixTargetDelta(this.options.layoutRoot ? 1e3 : 0);
+    }
+    startAnimation(options) {
+      var _a3, _b3, _c2;
+      this.notifyListeners("animationStart");
+      (_a3 = this.currentAnimation) == null ? void 0 : _a3.stop();
+      (_c2 = (_b3 = this.resumingFrom) == null ? void 0 : _b3.currentAnimation) == null ? void 0 : _c2.stop();
+      if (this.pendingAnimation) {
+        cancelFrame(this.pendingAnimation);
+        this.pendingAnimation = void 0;
+      }
+      this.pendingAnimation = frame.update(() => {
+        globalProjectionState.hasAnimatedSinceResize = true;
+        this.motionValue || (this.motionValue = motionValue(0));
+        this.motionValue.jump(0, false);
+        this.currentAnimation = animateSingleValue(this.motionValue, [0, 1e3], {
+          ...options,
+          velocity: 0,
+          isSync: true,
+          onUpdate: (latest) => {
+            this.mixTargetDelta(latest);
+            options.onUpdate && options.onUpdate(latest);
+          },
+          onStop: () => {
+          },
+          onComplete: () => {
+            options.onComplete && options.onComplete();
+            this.completeAnimation();
+          }
+        });
+        if (this.resumingFrom) {
+          this.resumingFrom.currentAnimation = this.currentAnimation;
+        }
+        this.pendingAnimation = void 0;
+      });
+    }
+    completeAnimation() {
+      if (this.resumingFrom) {
+        this.resumingFrom.currentAnimation = void 0;
+        this.resumingFrom.preserveOpacity = void 0;
+      }
+      const stack = this.getStack();
+      stack && stack.exitAnimationComplete();
+      this.resumingFrom = this.currentAnimation = this.animationValues = void 0;
+      this.notifyListeners("animationComplete");
+    }
+    finishAnimation() {
+      if (this.currentAnimation) {
+        this.mixTargetDelta && this.mixTargetDelta(animationTarget);
+        this.currentAnimation.stop();
+      }
+      this.completeAnimation();
+    }
+    applyTransformsToTarget() {
+      const lead = this.getLead();
+      let { targetWithTransforms, target, layout: layout2, latestValues } = lead;
+      if (!targetWithTransforms || !target || !layout2)
+        return;
+      if (this !== lead && this.layout && layout2 && shouldAnimatePositionOnly(this.options.animationType, this.layout.layoutBox, layout2.layoutBox)) {
+        target = this.target || createBox();
+        const xLength = calcLength(this.layout.layoutBox.x);
+        target.x.min = lead.target.x.min;
+        target.x.max = target.x.min + xLength;
+        const yLength = calcLength(this.layout.layoutBox.y);
+        target.y.min = lead.target.y.min;
+        target.y.max = target.y.min + yLength;
+      }
+      copyBoxInto(targetWithTransforms, target);
+      transformBox(targetWithTransforms, latestValues);
+      calcBoxDelta(this.projectionDeltaWithTransform, this.layoutCorrected, targetWithTransforms, latestValues);
+    }
+    registerSharedNode(layoutId, node) {
+      if (!this.sharedNodes.has(layoutId)) {
+        this.sharedNodes.set(layoutId, new NodeStack());
+      }
+      const stack = this.sharedNodes.get(layoutId);
+      stack.add(node);
+      const config = node.options.initialPromotionConfig;
+      node.promote({
+        transition: config ? config.transition : void 0,
+        preserveFollowOpacity: config && config.shouldPreserveFollowOpacity ? config.shouldPreserveFollowOpacity(node) : void 0
+      });
+    }
+    isLead() {
+      const stack = this.getStack();
+      return stack ? stack.lead === this : true;
+    }
+    getLead() {
+      var _a3;
+      const { layoutId } = this.options;
+      return layoutId ? ((_a3 = this.getStack()) == null ? void 0 : _a3.lead) || this : this;
+    }
+    getPrevLead() {
+      var _a3;
+      const { layoutId } = this.options;
+      return layoutId ? (_a3 = this.getStack()) == null ? void 0 : _a3.prevLead : void 0;
+    }
+    getStack() {
+      const { layoutId } = this.options;
+      if (layoutId)
+        return this.root.sharedNodes.get(layoutId);
+    }
+    promote({ needsReset, transition, preserveFollowOpacity } = {}) {
+      const stack = this.getStack();
+      if (stack)
+        stack.promote(this, preserveFollowOpacity);
+      if (needsReset) {
+        this.projectionDelta = void 0;
+        this.needsReset = true;
+      }
+      if (transition)
+        this.setOptions({ transition });
+    }
+    relegate() {
+      const stack = this.getStack();
+      if (stack) {
+        return stack.relegate(this);
+      } else {
+        return false;
+      }
+    }
+    resetSkewAndRotation() {
+      const { visualElement } = this.options;
+      if (!visualElement)
+        return;
+      let hasDistortingTransform = false;
+      const { latestValues } = visualElement;
+      if (latestValues.z || latestValues.rotate || latestValues.rotateX || latestValues.rotateY || latestValues.rotateZ || latestValues.skewX || latestValues.skewY) {
+        hasDistortingTransform = true;
+      }
+      if (!hasDistortingTransform)
+        return;
+      const resetValues = {};
+      if (latestValues.z) {
+        resetDistortingTransform("z", visualElement, resetValues, this.animationValues);
+      }
+      for (let i = 0; i < transformAxes.length; i++) {
+        resetDistortingTransform(`rotate${transformAxes[i]}`, visualElement, resetValues, this.animationValues);
+        resetDistortingTransform(`skew${transformAxes[i]}`, visualElement, resetValues, this.animationValues);
+      }
+      visualElement.render();
+      for (const key in resetValues) {
+        visualElement.setStaticValue(key, resetValues[key]);
+        if (this.animationValues) {
+          this.animationValues[key] = resetValues[key];
+        }
+      }
+      visualElement.scheduleRender();
+    }
+    applyProjectionStyles(targetStyle, styleProp) {
+      if (!this.instance || this.isSVG)
+        return;
+      if (!this.isVisible) {
+        targetStyle.visibility = "hidden";
+        return;
+      }
+      const transformTemplate = this.getTransformTemplate();
+      if (this.needsReset) {
+        this.needsReset = false;
+        targetStyle.visibility = "";
+        targetStyle.opacity = "";
+        targetStyle.pointerEvents = resolveMotionValue(styleProp == null ? void 0 : styleProp.pointerEvents) || "";
+        targetStyle.transform = transformTemplate ? transformTemplate(this.latestValues, "") : "none";
+        return;
+      }
+      const lead = this.getLead();
+      if (!this.projectionDelta || !this.layout || !lead.target) {
+        if (this.options.layoutId) {
+          targetStyle.opacity = this.latestValues.opacity !== void 0 ? this.latestValues.opacity : 1;
+          targetStyle.pointerEvents = resolveMotionValue(styleProp == null ? void 0 : styleProp.pointerEvents) || "";
+        }
+        if (this.hasProjected && !hasTransform(this.latestValues)) {
+          targetStyle.transform = transformTemplate ? transformTemplate({}, "") : "none";
+          this.hasProjected = false;
+        }
+        return;
+      }
+      targetStyle.visibility = "";
+      const valuesToRender = lead.animationValues || lead.latestValues;
+      this.applyTransformsToTarget();
+      let transform = buildProjectionTransform(this.projectionDeltaWithTransform, this.treeScale, valuesToRender);
+      if (transformTemplate) {
+        transform = transformTemplate(valuesToRender, transform);
+      }
+      targetStyle.transform = transform;
+      const { x: x3, y: y2 } = this.projectionDelta;
+      targetStyle.transformOrigin = `${x3.origin * 100}% ${y2.origin * 100}% 0`;
+      if (lead.animationValues) {
+        targetStyle.opacity = lead === this ? valuesToRender.opacity ?? this.latestValues.opacity ?? 1 : this.preserveOpacity ? this.latestValues.opacity : valuesToRender.opacityExit;
+      } else {
+        targetStyle.opacity = lead === this ? valuesToRender.opacity !== void 0 ? valuesToRender.opacity : "" : valuesToRender.opacityExit !== void 0 ? valuesToRender.opacityExit : 0;
+      }
+      for (const key in scaleCorrectors) {
+        if (valuesToRender[key] === void 0)
+          continue;
+        const { correct, applyTo, isCSSVariable } = scaleCorrectors[key];
+        const corrected = transform === "none" ? valuesToRender[key] : correct(valuesToRender[key], lead);
+        if (applyTo) {
+          const num = applyTo.length;
+          for (let i = 0; i < num; i++) {
+            targetStyle[applyTo[i]] = corrected;
+          }
+        } else {
+          if (isCSSVariable) {
+            this.options.visualElement.renderState.vars[key] = corrected;
+          } else {
+            targetStyle[key] = corrected;
+          }
+        }
+      }
+      if (this.options.layoutId) {
+        targetStyle.pointerEvents = lead === this ? resolveMotionValue(styleProp == null ? void 0 : styleProp.pointerEvents) || "" : "none";
+      }
+    }
+    clearSnapshot() {
+      this.resumeFrom = this.snapshot = void 0;
+    }
+    // Only run on root
+    resetTree() {
+      this.root.nodes.forEach((node) => {
+        var _a3;
+        return (_a3 = node.currentAnimation) == null ? void 0 : _a3.stop();
+      });
+      this.root.nodes.forEach(clearMeasurements);
+      this.root.sharedNodes.clear();
+    }
+  };
+}
+function updateLayout(node) {
+  node.updateLayout();
+}
+function notifyLayoutUpdate(node) {
+  var _a3;
+  const snapshot = ((_a3 = node.resumeFrom) == null ? void 0 : _a3.snapshot) || node.snapshot;
+  if (node.isLead() && node.layout && snapshot && node.hasListeners("didUpdate")) {
+    const { layoutBox: layout2, measuredBox: measuredLayout } = node.layout;
+    const { animationType } = node.options;
+    const isShared = snapshot.source !== node.layout.source;
+    if (animationType === "size") {
+      eachAxis((axis) => {
+        const axisSnapshot = isShared ? snapshot.measuredBox[axis] : snapshot.layoutBox[axis];
+        const length = calcLength(axisSnapshot);
+        axisSnapshot.min = layout2[axis].min;
+        axisSnapshot.max = axisSnapshot.min + length;
+      });
+    } else if (animationType === "x" || animationType === "y") {
+      const snapAxis = animationType === "x" ? "y" : "x";
+      copyAxisInto(isShared ? snapshot.measuredBox[snapAxis] : snapshot.layoutBox[snapAxis], layout2[snapAxis]);
+    } else if (shouldAnimatePositionOnly(animationType, snapshot.layoutBox, layout2)) {
+      eachAxis((axis) => {
+        const axisSnapshot = isShared ? snapshot.measuredBox[axis] : snapshot.layoutBox[axis];
+        const length = calcLength(layout2[axis]);
+        axisSnapshot.max = axisSnapshot.min + length;
+        if (node.relativeTarget && !node.currentAnimation) {
+          node.isProjectionDirty = true;
+          node.relativeTarget[axis].max = node.relativeTarget[axis].min + length;
+        }
+      });
+    }
+    const layoutDelta = createDelta();
+    calcBoxDelta(layoutDelta, layout2, snapshot.layoutBox);
+    const visualDelta = createDelta();
+    if (isShared) {
+      calcBoxDelta(visualDelta, node.applyTransform(measuredLayout, true), snapshot.measuredBox);
+    } else {
+      calcBoxDelta(visualDelta, layout2, snapshot.layoutBox);
+    }
+    const hasLayoutChanged = !isDeltaZero(layoutDelta);
+    let hasRelativeLayoutChanged = false;
+    if (!node.resumeFrom) {
+      const relativeParent = node.getClosestProjectingParent();
+      if (relativeParent && !relativeParent.resumeFrom) {
+        const { snapshot: parentSnapshot, layout: parentLayout } = relativeParent;
+        if (parentSnapshot && parentLayout) {
+          const anchor = node.options.layoutAnchor || void 0;
+          const relativeSnapshot = createBox();
+          calcRelativePosition(relativeSnapshot, snapshot.layoutBox, parentSnapshot.layoutBox, anchor);
+          const relativeLayout = createBox();
+          calcRelativePosition(relativeLayout, layout2, parentLayout.layoutBox, anchor);
+          if (!boxEqualsRounded(relativeSnapshot, relativeLayout)) {
+            hasRelativeLayoutChanged = true;
+          }
+          if (relativeParent.options.layoutRoot) {
+            node.relativeTarget = relativeLayout;
+            node.relativeTargetOrigin = relativeSnapshot;
+            node.relativeParent = relativeParent;
+          }
+        }
+      }
+    }
+    node.notifyListeners("didUpdate", {
+      layout: layout2,
+      snapshot,
+      delta: visualDelta,
+      layoutDelta,
+      hasLayoutChanged,
+      hasRelativeLayoutChanged
+    });
+  } else if (node.isLead()) {
+    const { onExitComplete } = node.options;
+    onExitComplete && onExitComplete();
+  }
+  node.options.transition = void 0;
+}
+function propagateDirtyNodes(node) {
+  if (!node.parent)
+    return;
+  if (!node.isProjecting()) {
+    node.isProjectionDirty = node.parent.isProjectionDirty;
+  }
+  node.isSharedProjectionDirty || (node.isSharedProjectionDirty = Boolean(node.isProjectionDirty || node.parent.isProjectionDirty || node.parent.isSharedProjectionDirty));
+  node.isTransformDirty || (node.isTransformDirty = node.parent.isTransformDirty);
+}
+function cleanDirtyNodes(node) {
+  node.isProjectionDirty = node.isSharedProjectionDirty = node.isTransformDirty = false;
+}
+function clearSnapshot(node) {
+  node.clearSnapshot();
+}
+function clearMeasurements(node) {
+  node.clearMeasurements();
+}
+function forceLayoutMeasure(node) {
+  node.isLayoutDirty = true;
+  node.updateLayout();
+}
+function clearIsLayoutDirty(node) {
+  node.isLayoutDirty = false;
+}
+function ensureDraggedNodesSnapshotted(node) {
+  if (node.isAnimationBlocked && node.layout && !node.isLayoutDirty) {
+    node.snapshot = node.layout;
+    node.isLayoutDirty = true;
+  }
+}
+function resetTransformStyle(node) {
+  const { visualElement } = node.options;
+  if (visualElement && visualElement.getProps().onBeforeLayoutMeasure) {
+    visualElement.notify("BeforeLayoutMeasure");
+  }
+  node.resetTransform();
+}
+function finishAnimation(node) {
+  node.finishAnimation();
+  node.targetDelta = node.relativeTarget = node.target = void 0;
+  node.isProjectionDirty = true;
+}
+function resolveTargetDelta(node) {
+  node.resolveTargetDelta();
+}
+function calcProjection(node) {
+  node.calcProjection();
+}
+function resetSkewAndRotation(node) {
+  node.resetSkewAndRotation();
+}
+function removeLeadSnapshots(stack) {
+  stack.removeLeadSnapshot();
+}
+function mixAxisDelta(output, delta, p2) {
+  output.translate = mixNumber$1(delta.translate, 0, p2);
+  output.scale = mixNumber$1(delta.scale, 1, p2);
+  output.origin = delta.origin;
+  output.originPoint = delta.originPoint;
+}
+function mixAxis(output, from, to, p2) {
+  output.min = mixNumber$1(from.min, to.min, p2);
+  output.max = mixNumber$1(from.max, to.max, p2);
+}
+function mixBox(output, from, to, p2) {
+  mixAxis(output.x, from.x, to.x, p2);
+  mixAxis(output.y, from.y, to.y, p2);
+}
+function hasOpacityCrossfade(node) {
+  return node.animationValues && node.animationValues.opacityExit !== void 0;
+}
+const defaultLayoutTransition = {
+  duration: 0.45,
+  ease: [0.4, 0, 0.1, 1]
+};
+const userAgentContains = (string) => typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().includes(string);
+const roundPoint = userAgentContains("applewebkit/") && !userAgentContains("chrome/") ? Math.round : noop2;
+function roundAxis(axis) {
+  axis.min = roundPoint(axis.min);
+  axis.max = roundPoint(axis.max);
+}
+function roundBox(box) {
+  roundAxis(box.x);
+  roundAxis(box.y);
+}
+function shouldAnimatePositionOnly(animationType, snapshot, layout2) {
+  return animationType === "position" || animationType === "preserve-aspect" && !isNear(aspectRatio(snapshot), aspectRatio(layout2), 0.2);
+}
+function checkNodeWasScrollRoot(node) {
+  var _a3;
+  return node !== node.root && ((_a3 = node.scroll) == null ? void 0 : _a3.wasRoot);
+}
+const DocumentProjectionNode = createProjectionNode$1({
+  attachResizeListener: (ref, notify) => addDomEvent(ref, "resize", notify),
+  measureScroll: () => {
+    var _a3, _b3;
+    return {
+      x: document.documentElement.scrollLeft || ((_a3 = document.body) == null ? void 0 : _a3.scrollLeft) || 0,
+      y: document.documentElement.scrollTop || ((_b3 = document.body) == null ? void 0 : _b3.scrollTop) || 0
+    };
+  },
+  checkIsScrollRoot: () => true
+});
+const rootProjectionNode = {
+  current: void 0
+};
+const HTMLProjectionNode = createProjectionNode$1({
+  measureScroll: (instance) => ({
+    x: instance.scrollLeft,
+    y: instance.scrollTop
+  }),
+  defaultParent: () => {
+    if (!rootProjectionNode.current) {
+      const documentNode = new DocumentProjectionNode({});
+      documentNode.mount(window);
+      documentNode.setOptions({ layoutScroll: true });
+      rootProjectionNode.current = documentNode;
+    }
+    return rootProjectionNode.current;
+  },
+  resetTransform: (instance, value) => {
+    instance.style.transform = value !== void 0 ? value : "none";
+  },
+  checkIsScrollRoot: (instance) => Boolean(window.getComputedStyle(instance).position === "fixed")
+});
+const MotionConfigContext = reactExports.createContext({
+  transformPagePoint: (p2) => p2,
+  isStatic: false,
+  reducedMotion: "never"
+});
+function setRef(ref, value) {
+  if (typeof ref === "function") {
+    return ref(value);
+  } else if (ref !== null && ref !== void 0) {
+    ref.current = value;
+  }
+}
+function composeRefs(...refs) {
+  return (node) => {
+    let hasCleanup = false;
+    const cleanups = refs.map((ref) => {
+      const cleanup = setRef(ref, node);
+      if (!hasCleanup && typeof cleanup === "function") {
+        hasCleanup = true;
+      }
+      return cleanup;
+    });
+    if (hasCleanup) {
+      return () => {
+        for (let i = 0; i < cleanups.length; i++) {
+          const cleanup = cleanups[i];
+          if (typeof cleanup === "function") {
+            cleanup();
+          } else {
+            setRef(refs[i], null);
+          }
+        }
+      };
+    }
+  };
+}
+function useComposedRefs(...refs) {
+  return reactExports.useCallback(composeRefs(...refs), refs);
+}
+class PopChildMeasure extends reactExports.Component {
+  getSnapshotBeforeUpdate(prevProps) {
+    const element = this.props.childRef.current;
+    if (isHTMLElement(element) && prevProps.isPresent && !this.props.isPresent && this.props.pop !== false) {
+      const parent = element.offsetParent;
+      const parentWidth = isHTMLElement(parent) ? parent.offsetWidth || 0 : 0;
+      const parentHeight = isHTMLElement(parent) ? parent.offsetHeight || 0 : 0;
+      const computedStyle = getComputedStyle(element);
+      const size2 = this.props.sizeRef.current;
+      size2.height = parseFloat(computedStyle.height);
+      size2.width = parseFloat(computedStyle.width);
+      size2.top = element.offsetTop;
+      size2.left = element.offsetLeft;
+      size2.right = parentWidth - size2.width - size2.left;
+      size2.bottom = parentHeight - size2.height - size2.top;
+    }
+    return null;
+  }
+  /**
+   * Required with getSnapshotBeforeUpdate to stop React complaining.
+   */
+  componentDidUpdate() {
+  }
+  render() {
+    return this.props.children;
+  }
+}
+function PopChild({ children, isPresent, anchorX, anchorY, root: root2, pop: pop2 }) {
+  var _a3;
+  const id2 = reactExports.useId();
+  const ref = reactExports.useRef(null);
+  const size2 = reactExports.useRef({
+    width: 0,
+    height: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  });
+  const { nonce } = reactExports.useContext(MotionConfigContext);
+  const childRef = ((_a3 = children.props) == null ? void 0 : _a3.ref) ?? (children == null ? void 0 : children.ref);
+  const composedRef = useComposedRefs(ref, childRef);
+  reactExports.useInsertionEffect(() => {
+    const { width, height, top, left, right, bottom } = size2.current;
+    if (isPresent || pop2 === false || !ref.current || !width || !height)
+      return;
+    const x3 = anchorX === "left" ? `left: ${left}` : `right: ${right}`;
+    const y2 = anchorY === "bottom" ? `bottom: ${bottom}` : `top: ${top}`;
+    ref.current.dataset.motionPopId = id2;
+    const style2 = document.createElement("style");
+    if (nonce)
+      style2.nonce = nonce;
+    const parent = root2 ?? document.head;
+    parent.appendChild(style2);
+    if (style2.sheet) {
+      style2.sheet.insertRule(`
+          [data-motion-pop-id="${id2}"] {
+            position: absolute !important;
+            width: ${width}px !important;
+            height: ${height}px !important;
+            ${x3}px !important;
+            ${y2}px !important;
+          }
+        `);
+    }
+    return () => {
+      var _a4;
+      (_a4 = ref.current) == null ? void 0 : _a4.removeAttribute("data-motion-pop-id");
+      if (parent.contains(style2)) {
+        parent.removeChild(style2);
+      }
+    };
+  }, [isPresent]);
+  return jsxRuntimeExports.jsx(PopChildMeasure, { isPresent, childRef: ref, sizeRef: size2, pop: pop2, children: pop2 === false ? children : reactExports.cloneElement(children, { ref: composedRef }) });
+}
+const PresenceChild = ({ children, initial, isPresent, onExitComplete, custom, presenceAffectsLayout, mode, anchorX, anchorY, root: root2 }) => {
+  const presenceChildren = useConstant(newChildrenMap);
+  const id2 = reactExports.useId();
+  let isReusedContext = true;
+  let context = reactExports.useMemo(() => {
+    isReusedContext = false;
+    return {
+      id: id2,
+      initial,
+      isPresent,
+      custom,
+      onExitComplete: (childId) => {
+        presenceChildren.set(childId, true);
+        for (const isComplete of presenceChildren.values()) {
+          if (!isComplete)
+            return;
+        }
+        onExitComplete && onExitComplete();
+      },
+      register: (childId) => {
+        presenceChildren.set(childId, false);
+        return () => presenceChildren.delete(childId);
+      }
+    };
+  }, [isPresent, presenceChildren, onExitComplete]);
+  if (presenceAffectsLayout && isReusedContext) {
+    context = { ...context };
+  }
+  reactExports.useMemo(() => {
+    presenceChildren.forEach((_2, key) => presenceChildren.set(key, false));
+  }, [isPresent]);
+  reactExports.useEffect(() => {
+    !isPresent && !presenceChildren.size && onExitComplete && onExitComplete();
+  }, [isPresent]);
+  children = jsxRuntimeExports.jsx(PopChild, { pop: mode === "popLayout", isPresent, anchorX, anchorY, root: root2, children });
+  return jsxRuntimeExports.jsx(PresenceContext.Provider, { value: context, children });
+};
+function newChildrenMap() {
+  return /* @__PURE__ */ new Map();
+}
+function usePresence$1(subscribe2 = true) {
+  const context = reactExports.useContext(PresenceContext);
+  if (context === null)
+    return [true, null];
+  const { isPresent, onExitComplete, register } = context;
+  const id2 = reactExports.useId();
+  reactExports.useEffect(() => {
+    if (subscribe2) {
+      return register(id2);
+    }
+  }, [subscribe2]);
+  const safeToRemove = reactExports.useCallback(() => subscribe2 && onExitComplete && onExitComplete(id2), [id2, onExitComplete, subscribe2]);
+  return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
+}
+const getChildKey = (child) => child.key || "";
+function onlyElements(children) {
+  const filtered = [];
+  reactExports.Children.forEach(children, (child) => {
+    if (reactExports.isValidElement(child))
+      filtered.push(child);
+  });
+  return filtered;
+}
+const AnimatePresence = ({ children, custom, initial = true, onExitComplete, presenceAffectsLayout = true, mode = "sync", propagate = false, anchorX = "left", anchorY = "top", root: root2 }) => {
+  const [isParentPresent, safeToRemove] = usePresence$1(propagate);
+  const presentChildren = reactExports.useMemo(() => onlyElements(children), [children]);
+  const presentKeys = propagate && !isParentPresent ? [] : presentChildren.map(getChildKey);
+  const isInitialRender = reactExports.useRef(true);
+  const pendingPresentChildren = reactExports.useRef(presentChildren);
+  const exitComplete = useConstant(() => /* @__PURE__ */ new Map());
+  const exitingComponents = reactExports.useRef(/* @__PURE__ */ new Set());
+  const [diffedChildren, setDiffedChildren] = reactExports.useState(presentChildren);
+  const [renderedChildren, setRenderedChildren] = reactExports.useState(presentChildren);
+  useIsomorphicLayoutEffect(() => {
+    isInitialRender.current = false;
+    pendingPresentChildren.current = presentChildren;
+    for (let i = 0; i < renderedChildren.length; i++) {
+      const key = getChildKey(renderedChildren[i]);
+      if (!presentKeys.includes(key)) {
+        if (exitComplete.get(key) !== true) {
+          exitComplete.set(key, false);
+        }
+      } else {
+        exitComplete.delete(key);
+        exitingComponents.current.delete(key);
+      }
+    }
+  }, [renderedChildren, presentKeys.length, presentKeys.join("-")]);
+  const exitingChildren = [];
+  if (presentChildren !== diffedChildren) {
+    let nextChildren = [...presentChildren];
+    for (let i = 0; i < renderedChildren.length; i++) {
+      const child = renderedChildren[i];
+      const key = getChildKey(child);
+      if (!presentKeys.includes(key)) {
+        nextChildren.splice(i, 0, child);
+        exitingChildren.push(child);
+      }
+    }
+    if (mode === "wait" && exitingChildren.length) {
+      nextChildren = exitingChildren;
+    }
+    setRenderedChildren(onlyElements(nextChildren));
+    setDiffedChildren(presentChildren);
+    return null;
+  }
+  const { forceRender } = reactExports.useContext(LayoutGroupContext);
+  return jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: renderedChildren.map((child) => {
+    const key = getChildKey(child);
+    const isPresent = propagate && !isParentPresent ? false : presentChildren === renderedChildren || presentKeys.includes(key);
+    const onExit = () => {
+      if (exitingComponents.current.has(key)) {
+        return;
+      }
+      if (exitComplete.has(key)) {
+        exitingComponents.current.add(key);
+        exitComplete.set(key, true);
+      } else {
+        return;
+      }
+      let isEveryExitComplete = true;
+      exitComplete.forEach((isExitComplete) => {
+        if (!isExitComplete)
+          isEveryExitComplete = false;
+      });
+      if (isEveryExitComplete) {
+        forceRender == null ? void 0 : forceRender();
+        setRenderedChildren(pendingPresentChildren.current);
+        propagate && (safeToRemove == null ? void 0 : safeToRemove());
+        onExitComplete && onExitComplete();
+      }
+    };
+    return jsxRuntimeExports.jsx(PresenceChild, { isPresent, initial: !isInitialRender.current || initial ? void 0 : false, custom, presenceAffectsLayout, mode, root: root2, onExitComplete: isPresent ? void 0 : onExit, anchorX, anchorY, children: child }, key);
+  }) });
+};
+const LazyContext = reactExports.createContext({ strict: false });
+const featureProps = {
+  animation: [
+    "animate",
+    "variants",
+    "whileHover",
+    "whileTap",
+    "exit",
+    "whileInView",
+    "whileFocus",
+    "whileDrag"
+  ],
+  exit: ["exit"],
+  drag: ["drag", "dragControls"],
+  focus: ["whileFocus"],
+  hover: ["whileHover", "onHoverStart", "onHoverEnd"],
+  tap: ["whileTap", "onTap", "onTapStart", "onTapCancel"],
+  pan: ["onPan", "onPanStart", "onPanSessionStart", "onPanEnd"],
+  inView: ["whileInView", "onViewportEnter", "onViewportLeave"],
+  layout: ["layout", "layoutId"]
+};
+let isInitialized = false;
+function initFeatureDefinitions() {
+  if (isInitialized)
+    return;
+  const initialFeatureDefinitions = {};
+  for (const key in featureProps) {
+    initialFeatureDefinitions[key] = {
+      isEnabled: (props) => featureProps[key].some((name) => !!props[name])
+    };
+  }
+  setFeatureDefinitions(initialFeatureDefinitions);
+  isInitialized = true;
+}
+function getInitializedFeatureDefinitions() {
+  initFeatureDefinitions();
+  return getFeatureDefinitions();
+}
+function loadFeatures(features) {
+  const featureDefinitions2 = getInitializedFeatureDefinitions();
+  for (const key in features) {
+    featureDefinitions2[key] = {
+      ...featureDefinitions2[key],
+      ...features[key]
+    };
+  }
+  setFeatureDefinitions(featureDefinitions2);
+}
+const validMotionProps = /* @__PURE__ */ new Set([
+  "animate",
+  "exit",
+  "variants",
+  "initial",
+  "style",
+  "values",
+  "variants",
+  "transition",
+  "transformTemplate",
+  "custom",
+  "inherit",
+  "onBeforeLayoutMeasure",
+  "onAnimationStart",
+  "onAnimationComplete",
+  "onUpdate",
+  "onDragStart",
+  "onDrag",
+  "onDragEnd",
+  "onMeasureDragConstraints",
+  "onDirectionLock",
+  "onDragTransitionEnd",
+  "_dragX",
+  "_dragY",
+  "onHoverStart",
+  "onHoverEnd",
+  "onViewportEnter",
+  "onViewportLeave",
+  "globalTapTarget",
+  "propagate",
+  "ignoreStrict",
+  "viewport"
+]);
+function isValidMotionProp(key) {
+  return key.startsWith("while") || key.startsWith("drag") && key !== "draggable" || key.startsWith("layout") || key.startsWith("onTap") || key.startsWith("onPan") || key.startsWith("onLayout") || validMotionProps.has(key);
+}
+let shouldForward = (key) => !isValidMotionProp(key);
+function loadExternalIsValidProp(isValidProp) {
+  if (typeof isValidProp !== "function")
+    return;
+  shouldForward = (key) => key.startsWith("on") ? !isValidMotionProp(key) : isValidProp(key);
+}
+try {
+  const emotionPkg = "@emotion/is-prop-valid";
+  loadExternalIsValidProp(require(emotionPkg).default);
+} catch {
+}
+function filterProps(props, isDom, forwardMotionProps) {
+  const filteredProps = {};
+  for (const key in props) {
+    if (key === "values" && typeof props.values === "object")
+      continue;
+    if (isMotionValue(props[key]))
+      continue;
+    if (shouldForward(key) || forwardMotionProps === true && isValidMotionProp(key) || !isDom && !isValidMotionProp(key) || // If trying to use native HTML drag events, forward drag listeners
+    props["draggable"] && key.startsWith("onDrag")) {
+      filteredProps[key] = props[key];
+    }
+  }
+  return filteredProps;
+}
+const MotionContext = /* @__PURE__ */ reactExports.createContext({});
+function getCurrentTreeVariants(props, context) {
+  if (isControllingVariants(props)) {
+    const { initial, animate } = props;
+    return {
+      initial: initial === false || isVariantLabel(initial) ? initial : void 0,
+      animate: isVariantLabel(animate) ? animate : void 0
+    };
+  }
+  return props.inherit !== false ? context : {};
+}
+function useCreateMotionContext(props) {
+  const { initial, animate } = getCurrentTreeVariants(props, reactExports.useContext(MotionContext));
+  return reactExports.useMemo(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
+}
+function variantLabelsAsDependency(prop) {
+  return Array.isArray(prop) ? prop.join(" ") : prop;
+}
+const createHtmlRenderState = () => ({
+  style: {},
+  transform: {},
+  transformOrigin: {},
+  vars: {}
+});
+function copyRawValuesOnly(target, source, props) {
+  for (const key in source) {
+    if (!isMotionValue(source[key]) && !isForcedMotionValue(key, props)) {
+      target[key] = source[key];
+    }
+  }
+}
+function useInitialMotionValues({ transformTemplate }, visualState) {
+  return reactExports.useMemo(() => {
+    const state = createHtmlRenderState();
+    buildHTMLStyles(state, visualState, transformTemplate);
+    return Object.assign({}, state.vars, state.style);
+  }, [visualState]);
+}
+function useStyle(props, visualState) {
+  const styleProp = props.style || {};
+  const style2 = {};
+  copyRawValuesOnly(style2, styleProp, props);
+  Object.assign(style2, useInitialMotionValues(props, visualState));
+  return style2;
+}
+function useHTMLProps(props, visualState) {
+  const htmlProps = {};
+  const style2 = useStyle(props, visualState);
+  if (props.drag && props.dragListener !== false) {
+    htmlProps.draggable = false;
+    style2.userSelect = style2.WebkitUserSelect = style2.WebkitTouchCallout = "none";
+    style2.touchAction = props.drag === true ? "none" : `pan-${props.drag === "x" ? "y" : "x"}`;
+  }
+  if (props.tabIndex === void 0 && (props.onTap || props.onTapStart || props.whileTap)) {
+    htmlProps.tabIndex = 0;
+  }
+  htmlProps.style = style2;
+  return htmlProps;
+}
+const createSvgRenderState = () => ({
+  ...createHtmlRenderState(),
+  attrs: {}
+});
+function useSVGProps(props, visualState, _isStatic, Component2) {
+  const visualProps = reactExports.useMemo(() => {
+    const state = createSvgRenderState();
+    buildSVGAttrs(state, visualState, isSVGTag(Component2), props.transformTemplate, props.style);
+    return {
+      ...state.attrs,
+      style: { ...state.style }
+    };
+  }, [visualState]);
+  if (props.style) {
+    const rawStyles = {};
+    copyRawValuesOnly(rawStyles, props.style, props);
+    visualProps.style = { ...rawStyles, ...visualProps.style };
+  }
+  return visualProps;
+}
+const lowercaseSVGElements = [
+  "animate",
+  "circle",
+  "defs",
+  "desc",
+  "ellipse",
+  "g",
+  "image",
+  "line",
+  "filter",
+  "marker",
+  "mask",
+  "metadata",
+  "path",
+  "pattern",
+  "polygon",
+  "polyline",
+  "rect",
+  "stop",
+  "switch",
+  "symbol",
+  "svg",
+  "text",
+  "tspan",
+  "use",
+  "view"
+];
+function isSVGComponent(Component2) {
+  if (
+    /**
+     * If it's not a string, it's a custom React component. Currently we only support
+     * HTML custom React components.
+     */
+    typeof Component2 !== "string" || /**
+     * If it contains a dash, the element is a custom HTML webcomponent.
+     */
+    Component2.includes("-")
+  ) {
+    return false;
+  } else if (
+    /**
+     * If it's in our list of lowercase SVG tags, it's an SVG component
+     */
+    lowercaseSVGElements.indexOf(Component2) > -1 || /**
+     * If it contains a capital letter, it's an SVG component
+     */
+    /[A-Z]/u.test(Component2)
+  ) {
+    return true;
+  }
+  return false;
+}
+function useRender(Component2, props, ref, { latestValues }, isStatic, forwardMotionProps = false, isSVG) {
+  const useVisualProps = isSVG ?? isSVGComponent(Component2) ? useSVGProps : useHTMLProps;
+  const visualProps = useVisualProps(props, latestValues, isStatic, Component2);
+  const filteredProps = filterProps(props, typeof Component2 === "string", forwardMotionProps);
+  const elementProps = Component2 !== reactExports.Fragment ? { ...filteredProps, ...visualProps, ref } : {};
+  const { children } = props;
+  const renderedChildren = reactExports.useMemo(() => isMotionValue(children) ? children.get() : children, [children]);
+  return reactExports.createElement(Component2, {
+    ...elementProps,
+    children: renderedChildren
+  });
+}
+function makeState({ scrapeMotionValuesFromProps: scrapeMotionValuesFromProps2, createRenderState }, props, context, presenceContext) {
+  const state = {
+    latestValues: makeLatestValues(props, context, presenceContext, scrapeMotionValuesFromProps2),
+    renderState: createRenderState()
+  };
+  return state;
+}
+function makeLatestValues(props, context, presenceContext, scrapeMotionValues) {
+  const values = {};
+  const motionValues = scrapeMotionValues(props, {});
+  for (const key in motionValues) {
+    values[key] = resolveMotionValue(motionValues[key]);
+  }
+  let { initial, animate } = props;
+  const isControllingVariants$1 = isControllingVariants(props);
+  const isVariantNode$1 = isVariantNode(props);
+  if (context && isVariantNode$1 && !isControllingVariants$1 && props.inherit !== false) {
+    if (initial === void 0)
+      initial = context.initial;
+    if (animate === void 0)
+      animate = context.animate;
+  }
+  let isInitialAnimationBlocked = presenceContext ? presenceContext.initial === false : false;
+  isInitialAnimationBlocked = isInitialAnimationBlocked || initial === false;
+  const variantToSet = isInitialAnimationBlocked ? animate : initial;
+  if (variantToSet && typeof variantToSet !== "boolean" && !isAnimationControls(variantToSet)) {
+    const list = Array.isArray(variantToSet) ? variantToSet : [variantToSet];
+    for (let i = 0; i < list.length; i++) {
+      const resolved = resolveVariantFromProps(props, list[i]);
+      if (resolved) {
+        const { transitionEnd, transition, ...target } = resolved;
+        for (const key in target) {
+          let valueTarget = target[key];
+          if (Array.isArray(valueTarget)) {
+            const index2 = isInitialAnimationBlocked ? valueTarget.length - 1 : 0;
+            valueTarget = valueTarget[index2];
+          }
+          if (valueTarget !== null) {
+            values[key] = valueTarget;
+          }
+        }
+        for (const key in transitionEnd) {
+          values[key] = transitionEnd[key];
+        }
+      }
+    }
+  }
+  return values;
+}
+const makeUseVisualState = (config) => (props, isStatic) => {
+  const context = reactExports.useContext(MotionContext);
+  const presenceContext = reactExports.useContext(PresenceContext);
+  const make = () => makeState(config, props, context, presenceContext);
+  return isStatic ? make() : useConstant(make);
+};
+const useHTMLVisualState = /* @__PURE__ */ makeUseVisualState({
+  scrapeMotionValuesFromProps: scrapeMotionValuesFromProps$1,
+  createRenderState: createHtmlRenderState
+});
+const useSVGVisualState = /* @__PURE__ */ makeUseVisualState({
+  scrapeMotionValuesFromProps,
+  createRenderState: createSvgRenderState
+});
+const motionComponentSymbol = Symbol.for("motionComponentSymbol");
+function useMotionRef(visualState, visualElement, externalRef) {
+  const externalRefContainer = reactExports.useRef(externalRef);
+  reactExports.useInsertionEffect(() => {
+    externalRefContainer.current = externalRef;
+  });
+  const refCleanup = reactExports.useRef(null);
+  return reactExports.useCallback((instance) => {
+    var _a3;
+    if (instance) {
+      (_a3 = visualState.onMount) == null ? void 0 : _a3.call(visualState, instance);
+    }
+    const ref = externalRefContainer.current;
+    if (typeof ref === "function") {
+      if (instance) {
+        const cleanup = ref(instance);
+        if (typeof cleanup === "function") {
+          refCleanup.current = cleanup;
+        }
+      } else if (refCleanup.current) {
+        refCleanup.current();
+        refCleanup.current = null;
+      } else {
+        ref(instance);
+      }
+    } else if (ref) {
+      ref.current = instance;
+    }
+    if (visualElement) {
+      instance ? visualElement.mount(instance) : visualElement.unmount();
+    }
+  }, [visualElement]);
+}
+const SwitchLayoutGroupContext = reactExports.createContext({});
+function isRefObject(ref) {
+  return ref && typeof ref === "object" && Object.prototype.hasOwnProperty.call(ref, "current");
+}
+function useVisualElement(Component2, visualState, props, createVisualElement, ProjectionNodeConstructor, isSVG) {
+  var _a3, _b3;
+  const { visualElement: parent } = reactExports.useContext(MotionContext);
+  const lazyContext = reactExports.useContext(LazyContext);
+  const presenceContext = reactExports.useContext(PresenceContext);
+  const motionConfig = reactExports.useContext(MotionConfigContext);
+  const reducedMotionConfig = motionConfig.reducedMotion;
+  const skipAnimations = motionConfig.skipAnimations;
+  const visualElementRef = reactExports.useRef(null);
+  const hasMountedOnce = reactExports.useRef(false);
+  createVisualElement = createVisualElement || lazyContext.renderer;
+  if (!visualElementRef.current && createVisualElement) {
+    visualElementRef.current = createVisualElement(Component2, {
+      visualState,
+      parent,
+      props,
+      presenceContext,
+      blockInitialAnimation: presenceContext ? presenceContext.initial === false : false,
+      reducedMotionConfig,
+      skipAnimations,
+      isSVG
+    });
+    if (hasMountedOnce.current && visualElementRef.current) {
+      visualElementRef.current.manuallyAnimateOnMount = true;
+    }
+  }
+  const visualElement = visualElementRef.current;
+  const initialLayoutGroupConfig = reactExports.useContext(SwitchLayoutGroupContext);
+  if (visualElement && !visualElement.projection && ProjectionNodeConstructor && (visualElement.type === "html" || visualElement.type === "svg")) {
+    createProjectionNode(visualElementRef.current, props, ProjectionNodeConstructor, initialLayoutGroupConfig);
+  }
+  const isMounted = reactExports.useRef(false);
+  reactExports.useInsertionEffect(() => {
+    if (visualElement && isMounted.current) {
+      visualElement.update(props, presenceContext);
+    }
+  });
+  const optimisedAppearId = props[optimizedAppearDataAttribute];
+  const wantsHandoff = reactExports.useRef(Boolean(optimisedAppearId) && typeof window !== "undefined" && !((_a3 = window.MotionHandoffIsComplete) == null ? void 0 : _a3.call(window, optimisedAppearId)) && ((_b3 = window.MotionHasOptimisedAnimation) == null ? void 0 : _b3.call(window, optimisedAppearId)));
+  useIsomorphicLayoutEffect(() => {
+    hasMountedOnce.current = true;
+    if (!visualElement)
+      return;
+    isMounted.current = true;
+    window.MotionIsMounted = true;
+    visualElement.updateFeatures();
+    visualElement.scheduleRenderMicrotask();
+    if (wantsHandoff.current && visualElement.animationState) {
+      visualElement.animationState.animateChanges();
+    }
+  });
+  reactExports.useEffect(() => {
+    if (!visualElement)
+      return;
+    if (!wantsHandoff.current && visualElement.animationState) {
+      visualElement.animationState.animateChanges();
+    }
+    if (wantsHandoff.current) {
+      queueMicrotask(() => {
+        var _a4;
+        (_a4 = window.MotionHandoffMarkAsComplete) == null ? void 0 : _a4.call(window, optimisedAppearId);
+      });
+      wantsHandoff.current = false;
+    }
+    visualElement.enteringChildren = void 0;
+  });
+  return visualElement;
+}
+function createProjectionNode(visualElement, props, ProjectionNodeConstructor, initialPromotionConfig) {
+  const { layoutId, layout: layout2, drag: drag2, dragConstraints, layoutScroll, layoutRoot, layoutAnchor, layoutCrossfade } = props;
+  visualElement.projection = new ProjectionNodeConstructor(visualElement.latestValues, props["data-framer-portal-id"] ? void 0 : getClosestProjectingNode(visualElement.parent));
+  visualElement.projection.setOptions({
+    layoutId,
+    layout: layout2,
+    alwaysMeasureLayout: Boolean(drag2) || dragConstraints && isRefObject(dragConstraints),
+    visualElement,
+    /**
+     * TODO: Update options in an effect. This could be tricky as it'll be too late
+     * to update by the time layout animations run.
+     * We also need to fix this safeToRemove by linking it up to the one returned by usePresence,
+     * ensuring it gets called if there's no potential layout animations.
+     *
+     */
+    animationType: typeof layout2 === "string" ? layout2 : "both",
+    initialPromotionConfig,
+    crossfade: layoutCrossfade,
+    layoutScroll,
+    layoutRoot,
+    layoutAnchor
+  });
+}
+function getClosestProjectingNode(visualElement) {
+  if (!visualElement)
+    return void 0;
+  return visualElement.options.allowProjection !== false ? visualElement.projection : getClosestProjectingNode(visualElement.parent);
+}
+function createMotionComponent(Component2, { forwardMotionProps = false, type } = {}, preloadedFeatures, createVisualElement) {
+  preloadedFeatures && loadFeatures(preloadedFeatures);
+  const isSVG = type ? type === "svg" : isSVGComponent(Component2);
+  const useVisualState = isSVG ? useSVGVisualState : useHTMLVisualState;
+  function MotionDOMComponent(props, externalRef) {
+    let MeasureLayout2;
+    const configAndProps = {
+      ...reactExports.useContext(MotionConfigContext),
+      ...props,
+      layoutId: useLayoutId(props)
+    };
+    const { isStatic } = configAndProps;
+    const context = useCreateMotionContext(props);
+    const visualState = useVisualState(props, isStatic);
+    if (!isStatic && typeof window !== "undefined") {
+      useStrictMode();
+      const layoutProjection = getProjectionFunctionality(configAndProps);
+      MeasureLayout2 = layoutProjection.MeasureLayout;
+      context.visualElement = useVisualElement(Component2, visualState, configAndProps, createVisualElement, layoutProjection.ProjectionNode, isSVG);
+    }
+    return jsxRuntimeExports.jsxs(MotionContext.Provider, { value: context, children: [MeasureLayout2 && context.visualElement ? jsxRuntimeExports.jsx(MeasureLayout2, { visualElement: context.visualElement, ...configAndProps }) : null, useRender(Component2, props, useMotionRef(visualState, context.visualElement, externalRef), visualState, isStatic, forwardMotionProps, isSVG)] });
+  }
+  MotionDOMComponent.displayName = `motion.${typeof Component2 === "string" ? Component2 : `create(${Component2.displayName ?? Component2.name ?? ""})`}`;
+  const ForwardRefMotionComponent = reactExports.forwardRef(MotionDOMComponent);
+  ForwardRefMotionComponent[motionComponentSymbol] = Component2;
+  return ForwardRefMotionComponent;
+}
+function useLayoutId({ layoutId }) {
+  const layoutGroupId = reactExports.useContext(LayoutGroupContext).id;
+  return layoutGroupId && layoutId !== void 0 ? layoutGroupId + "-" + layoutId : layoutId;
+}
+function useStrictMode(configAndProps, preloadedFeatures) {
+  reactExports.useContext(LazyContext).strict;
+}
+function getProjectionFunctionality(props) {
+  const featureDefinitions2 = getInitializedFeatureDefinitions();
+  const { drag: drag2, layout: layout2 } = featureDefinitions2;
+  if (!drag2 && !layout2)
+    return {};
+  const combined = { ...drag2, ...layout2 };
+  return {
+    MeasureLayout: (drag2 == null ? void 0 : drag2.isEnabled(props)) || (layout2 == null ? void 0 : layout2.isEnabled(props)) ? combined.MeasureLayout : void 0,
+    ProjectionNode: combined.ProjectionNode
+  };
+}
+function createMotionProxy(preloadedFeatures, createVisualElement) {
+  if (typeof Proxy === "undefined") {
+    return createMotionComponent;
+  }
+  const componentCache = /* @__PURE__ */ new Map();
+  const factory = (Component2, options) => {
+    return createMotionComponent(Component2, options, preloadedFeatures, createVisualElement);
+  };
+  const deprecatedFactoryFunction = (Component2, options) => {
+    return factory(Component2, options);
+  };
+  return new Proxy(deprecatedFactoryFunction, {
+    /**
+     * Called when `motion` is referenced with a prop: `motion.div`, `motion.input` etc.
+     * The prop name is passed through as `key` and we can use that to generate a `motion`
+     * DOM component with that name.
+     */
+    get: (_target, key) => {
+      if (key === "create")
+        return factory;
+      if (!componentCache.has(key)) {
+        componentCache.set(key, createMotionComponent(key, void 0, preloadedFeatures, createVisualElement));
+      }
+      return componentCache.get(key);
+    }
+  });
+}
+const createDomVisualElement = (Component2, options) => {
+  const isSVG = options.isSVG ?? isSVGComponent(Component2);
+  return isSVG ? new SVGVisualElement(options) : new HTMLVisualElement(options, {
+    allowProjection: Component2 !== reactExports.Fragment
+  });
+};
+class AnimationFeature extends Feature {
+  /**
+   * We dynamically generate the AnimationState manager as it contains a reference
+   * to the underlying animation library. We only want to load that if we load this,
+   * so people can optionally code split it out using the `m` component.
+   */
+  constructor(node) {
+    super(node);
+    node.animationState || (node.animationState = createAnimationState(node));
+  }
+  updateAnimationControlsSubscription() {
+    const { animate } = this.node.getProps();
+    if (isAnimationControls(animate)) {
+      this.unmountControls = animate.subscribe(this.node);
+    }
+  }
+  /**
+   * Subscribe any provided AnimationControls to the component's VisualElement
+   */
+  mount() {
+    this.updateAnimationControlsSubscription();
+  }
+  update() {
+    const { animate } = this.node.getProps();
+    const { animate: prevAnimate } = this.node.prevProps || {};
+    if (animate !== prevAnimate) {
+      this.updateAnimationControlsSubscription();
+    }
+  }
+  unmount() {
+    var _a3;
+    this.node.animationState.reset();
+    (_a3 = this.unmountControls) == null ? void 0 : _a3.call(this);
+  }
+}
+let id = 0;
+class ExitAnimationFeature extends Feature {
+  constructor() {
+    super(...arguments);
+    this.id = id++;
+    this.isExitComplete = false;
+  }
+  update() {
+    var _a3;
+    if (!this.node.presenceContext)
+      return;
+    const { isPresent, onExitComplete } = this.node.presenceContext;
+    const { isPresent: prevIsPresent } = this.node.prevPresenceContext || {};
+    if (!this.node.animationState || isPresent === prevIsPresent) {
+      return;
+    }
+    if (isPresent && prevIsPresent === false) {
+      if (this.isExitComplete) {
+        const { initial, custom } = this.node.getProps();
+        if (typeof initial === "string") {
+          const resolved = resolveVariant(this.node, initial, custom);
+          if (resolved) {
+            const { transition, transitionEnd, ...target } = resolved;
+            for (const key in target) {
+              (_a3 = this.node.getValue(key)) == null ? void 0 : _a3.jump(target[key]);
+            }
+          }
+        }
+        this.node.animationState.reset();
+        this.node.animationState.animateChanges();
+      } else {
+        this.node.animationState.setActive("exit", false);
+      }
+      this.isExitComplete = false;
+      return;
+    }
+    const exitAnimation = this.node.animationState.setActive("exit", !isPresent);
+    if (onExitComplete && !isPresent) {
+      exitAnimation.then(() => {
+        this.isExitComplete = true;
+        onExitComplete(this.id);
+      });
+    }
+  }
+  mount() {
+    const { register, onExitComplete } = this.node.presenceContext || {};
+    if (onExitComplete) {
+      onExitComplete(this.id);
+    }
+    if (register) {
+      this.unmount = register(this.id);
+    }
+  }
+  unmount() {
+  }
+}
+const animations = {
+  animation: {
+    Feature: AnimationFeature
+  },
+  exit: {
+    Feature: ExitAnimationFeature
+  }
+};
+function extractEventInfo(event) {
+  return {
+    point: {
+      x: event.pageX,
+      y: event.pageY
+    }
+  };
+}
+const addPointerInfo = (handler) => (event) => isPrimaryPointer(event) && handler(event, extractEventInfo(event));
+function addPointerEvent(target, eventName, handler, options) {
+  return addDomEvent(target, eventName, addPointerInfo(handler), options);
+}
+const getContextWindow = ({ current }) => {
+  return current ? current.ownerDocument.defaultView : null;
+};
+const distance = (a2, b2) => Math.abs(a2 - b2);
+function distance2D(a2, b2) {
+  const xDelta = distance(a2.x, b2.x);
+  const yDelta = distance(a2.y, b2.y);
+  return Math.sqrt(xDelta ** 2 + yDelta ** 2);
+}
+const overflowStyles = /* @__PURE__ */ new Set(["auto", "scroll"]);
+class PanSession {
+  constructor(event, handlers, { transformPagePoint, contextWindow = window, dragSnapToOrigin = false, distanceThreshold = 3, element } = {}) {
+    this.startEvent = null;
+    this.lastMoveEvent = null;
+    this.lastMoveEventInfo = null;
+    this.lastRawMoveEventInfo = null;
+    this.handlers = {};
+    this.contextWindow = window;
+    this.scrollPositions = /* @__PURE__ */ new Map();
+    this.removeScrollListeners = null;
+    this.onElementScroll = (event2) => {
+      this.handleScroll(event2.target);
+    };
+    this.onWindowScroll = () => {
+      this.handleScroll(window);
+    };
+    this.updatePoint = () => {
+      if (!(this.lastMoveEvent && this.lastMoveEventInfo))
+        return;
+      if (this.lastRawMoveEventInfo) {
+        this.lastMoveEventInfo = transformPoint(this.lastRawMoveEventInfo, this.transformPagePoint);
+      }
+      const info2 = getPanInfo(this.lastMoveEventInfo, this.history);
+      const isPanStarted = this.startEvent !== null;
+      const isDistancePastThreshold = distance2D(info2.offset, { x: 0, y: 0 }) >= this.distanceThreshold;
+      if (!isPanStarted && !isDistancePastThreshold)
+        return;
+      const { point: point2 } = info2;
+      const { timestamp: timestamp2 } = frameData;
+      this.history.push({ ...point2, timestamp: timestamp2 });
+      const { onStart, onMove } = this.handlers;
+      if (!isPanStarted) {
+        onStart && onStart(this.lastMoveEvent, info2);
+        this.startEvent = this.lastMoveEvent;
+      }
+      onMove && onMove(this.lastMoveEvent, info2);
+    };
+    this.handlePointerMove = (event2, info2) => {
+      this.lastMoveEvent = event2;
+      this.lastRawMoveEventInfo = info2;
+      this.lastMoveEventInfo = transformPoint(info2, this.transformPagePoint);
+      frame.update(this.updatePoint, true);
+    };
+    this.handlePointerUp = (event2, info2) => {
+      this.end();
+      const { onEnd, onSessionEnd, resumeAnimation } = this.handlers;
+      if (this.dragSnapToOrigin || !this.startEvent) {
+        resumeAnimation && resumeAnimation();
+      }
+      if (!(this.lastMoveEvent && this.lastMoveEventInfo))
+        return;
+      const panInfo = getPanInfo(event2.type === "pointercancel" ? this.lastMoveEventInfo : transformPoint(info2, this.transformPagePoint), this.history);
+      if (this.startEvent && onEnd) {
+        onEnd(event2, panInfo);
+      }
+      onSessionEnd && onSessionEnd(event2, panInfo);
+    };
+    if (!isPrimaryPointer(event))
+      return;
+    this.dragSnapToOrigin = dragSnapToOrigin;
+    this.handlers = handlers;
+    this.transformPagePoint = transformPagePoint;
+    this.distanceThreshold = distanceThreshold;
+    this.contextWindow = contextWindow || window;
+    const info = extractEventInfo(event);
+    const initialInfo = transformPoint(info, this.transformPagePoint);
+    const { point } = initialInfo;
+    const { timestamp } = frameData;
+    this.history = [{ ...point, timestamp }];
+    const { onSessionStart } = handlers;
+    onSessionStart && onSessionStart(event, getPanInfo(initialInfo, this.history));
+    this.removeListeners = pipe(addPointerEvent(this.contextWindow, "pointermove", this.handlePointerMove), addPointerEvent(this.contextWindow, "pointerup", this.handlePointerUp), addPointerEvent(this.contextWindow, "pointercancel", this.handlePointerUp));
+    if (element) {
+      this.startScrollTracking(element);
+    }
+  }
+  /**
+   * Start tracking scroll on ancestors and window.
+   */
+  startScrollTracking(element) {
+    let current = element.parentElement;
+    while (current) {
+      const style2 = getComputedStyle(current);
+      if (overflowStyles.has(style2.overflowX) || overflowStyles.has(style2.overflowY)) {
+        this.scrollPositions.set(current, {
+          x: current.scrollLeft,
+          y: current.scrollTop
+        });
+      }
+      current = current.parentElement;
+    }
+    this.scrollPositions.set(window, {
+      x: window.scrollX,
+      y: window.scrollY
+    });
+    window.addEventListener("scroll", this.onElementScroll, {
+      capture: true
+    });
+    window.addEventListener("scroll", this.onWindowScroll);
+    this.removeScrollListeners = () => {
+      window.removeEventListener("scroll", this.onElementScroll, {
+        capture: true
+      });
+      window.removeEventListener("scroll", this.onWindowScroll);
+    };
+  }
+  /**
+   * Handle scroll compensation during drag.
+   *
+   * For element scroll: adjusts history origin since pageX/pageY doesn't change.
+   * For window scroll: adjusts lastMoveEventInfo since pageX/pageY would change.
+   */
+  handleScroll(target) {
+    const initial = this.scrollPositions.get(target);
+    if (!initial)
+      return;
+    const isWindow = target === window;
+    const current = isWindow ? { x: window.scrollX, y: window.scrollY } : {
+      x: target.scrollLeft,
+      y: target.scrollTop
+    };
+    const delta = { x: current.x - initial.x, y: current.y - initial.y };
+    if (delta.x === 0 && delta.y === 0)
+      return;
+    if (isWindow) {
+      if (this.lastMoveEventInfo) {
+        this.lastMoveEventInfo.point.x += delta.x;
+        this.lastMoveEventInfo.point.y += delta.y;
+      }
+    } else {
+      if (this.history.length > 0) {
+        this.history[0].x -= delta.x;
+        this.history[0].y -= delta.y;
+      }
+    }
+    this.scrollPositions.set(target, current);
+    frame.update(this.updatePoint, true);
+  }
+  updateHandlers(handlers) {
+    this.handlers = handlers;
+  }
+  end() {
+    this.removeListeners && this.removeListeners();
+    this.removeScrollListeners && this.removeScrollListeners();
+    this.scrollPositions.clear();
+    cancelFrame(this.updatePoint);
+  }
+}
+function transformPoint(info, transformPagePoint) {
+  return transformPagePoint ? { point: transformPagePoint(info.point) } : info;
+}
+function subtractPoint(a2, b2) {
+  return { x: a2.x - b2.x, y: a2.y - b2.y };
+}
+function getPanInfo({ point }, history) {
+  return {
+    point,
+    delta: subtractPoint(point, lastDevicePoint(history)),
+    offset: subtractPoint(point, startDevicePoint(history)),
+    velocity: getVelocity(history, 0.1)
+  };
+}
+function startDevicePoint(history) {
+  return history[0];
+}
+function lastDevicePoint(history) {
+  return history[history.length - 1];
+}
+function getVelocity(history, timeDelta) {
+  if (history.length < 2) {
+    return { x: 0, y: 0 };
+  }
+  let i = history.length - 1;
+  let timestampedPoint = null;
+  const lastPoint = lastDevicePoint(history);
+  while (i >= 0) {
+    timestampedPoint = history[i];
+    if (lastPoint.timestamp - timestampedPoint.timestamp > /* @__PURE__ */ secondsToMilliseconds(timeDelta)) {
+      break;
+    }
+    i--;
+  }
+  if (!timestampedPoint) {
+    return { x: 0, y: 0 };
+  }
+  if (timestampedPoint === history[0] && history.length > 2 && lastPoint.timestamp - timestampedPoint.timestamp > /* @__PURE__ */ secondsToMilliseconds(timeDelta) * 2) {
+    timestampedPoint = history[1];
+  }
+  const time2 = /* @__PURE__ */ millisecondsToSeconds(lastPoint.timestamp - timestampedPoint.timestamp);
+  if (time2 === 0) {
+    return { x: 0, y: 0 };
+  }
+  const currentVelocity = {
+    x: (lastPoint.x - timestampedPoint.x) / time2,
+    y: (lastPoint.y - timestampedPoint.y) / time2
+  };
+  if (currentVelocity.x === Infinity) {
+    currentVelocity.x = 0;
+  }
+  if (currentVelocity.y === Infinity) {
+    currentVelocity.y = 0;
+  }
+  return currentVelocity;
+}
+function applyConstraints(point, { min: min2, max: max2 }, elastic) {
+  if (min2 !== void 0 && point < min2) {
+    point = elastic ? mixNumber$1(min2, point, elastic.min) : Math.max(point, min2);
+  } else if (max2 !== void 0 && point > max2) {
+    point = elastic ? mixNumber$1(max2, point, elastic.max) : Math.min(point, max2);
+  }
+  return point;
+}
+function calcRelativeAxisConstraints(axis, min2, max2) {
+  return {
+    min: min2 !== void 0 ? axis.min + min2 : void 0,
+    max: max2 !== void 0 ? axis.max + max2 - (axis.max - axis.min) : void 0
+  };
+}
+function calcRelativeConstraints(layoutBox, { top, left, bottom, right }) {
+  return {
+    x: calcRelativeAxisConstraints(layoutBox.x, left, right),
+    y: calcRelativeAxisConstraints(layoutBox.y, top, bottom)
+  };
+}
+function calcViewportAxisConstraints(layoutAxis, constraintsAxis) {
+  let min2 = constraintsAxis.min - layoutAxis.min;
+  let max2 = constraintsAxis.max - layoutAxis.max;
+  if (constraintsAxis.max - constraintsAxis.min < layoutAxis.max - layoutAxis.min) {
+    [min2, max2] = [max2, min2];
+  }
+  return { min: min2, max: max2 };
+}
+function calcViewportConstraints(layoutBox, constraintsBox) {
+  return {
+    x: calcViewportAxisConstraints(layoutBox.x, constraintsBox.x),
+    y: calcViewportAxisConstraints(layoutBox.y, constraintsBox.y)
+  };
+}
+function calcOrigin(source, target) {
+  let origin = 0.5;
+  const sourceLength = calcLength(source);
+  const targetLength = calcLength(target);
+  if (targetLength > sourceLength) {
+    origin = /* @__PURE__ */ progress(target.min, target.max - sourceLength, source.min);
+  } else if (sourceLength > targetLength) {
+    origin = /* @__PURE__ */ progress(source.min, source.max - targetLength, target.min);
+  }
+  return clamp(0, 1, origin);
+}
+function rebaseAxisConstraints(layout2, constraints) {
+  const relativeConstraints = {};
+  if (constraints.min !== void 0) {
+    relativeConstraints.min = constraints.min - layout2.min;
+  }
+  if (constraints.max !== void 0) {
+    relativeConstraints.max = constraints.max - layout2.min;
+  }
+  return relativeConstraints;
+}
+const defaultElastic = 0.35;
+function resolveDragElastic(dragElastic = defaultElastic) {
+  if (dragElastic === false) {
+    dragElastic = 0;
+  } else if (dragElastic === true) {
+    dragElastic = defaultElastic;
+  }
+  return {
+    x: resolveAxisElastic(dragElastic, "left", "right"),
+    y: resolveAxisElastic(dragElastic, "top", "bottom")
+  };
+}
+function resolveAxisElastic(dragElastic, minLabel, maxLabel) {
+  return {
+    min: resolvePointElastic(dragElastic, minLabel),
+    max: resolvePointElastic(dragElastic, maxLabel)
+  };
+}
+function resolvePointElastic(dragElastic, label) {
+  return typeof dragElastic === "number" ? dragElastic : dragElastic[label] || 0;
+}
+const elementDragControls = /* @__PURE__ */ new WeakMap();
+class VisualElementDragControls {
+  constructor(visualElement) {
+    this.openDragLock = null;
+    this.isDragging = false;
+    this.currentDirection = null;
+    this.originPoint = { x: 0, y: 0 };
+    this.constraints = false;
+    this.hasMutatedConstraints = false;
+    this.elastic = createBox();
+    this.latestPointerEvent = null;
+    this.latestPanInfo = null;
+    this.visualElement = visualElement;
+  }
+  start(originEvent, { snapToCursor = false, distanceThreshold } = {}) {
+    const { presenceContext } = this.visualElement;
+    if (presenceContext && presenceContext.isPresent === false)
+      return;
+    const onSessionStart = (event) => {
+      if (snapToCursor) {
+        this.snapToCursor(extractEventInfo(event).point);
+      }
+      this.stopAnimation();
+    };
+    const onStart = (event, info) => {
+      const { drag: drag2, dragPropagation, onDragStart } = this.getProps();
+      if (drag2 && !dragPropagation) {
+        if (this.openDragLock)
+          this.openDragLock();
+        this.openDragLock = setDragLock(drag2);
+        if (!this.openDragLock)
+          return;
+      }
+      this.latestPointerEvent = event;
+      this.latestPanInfo = info;
+      this.isDragging = true;
+      this.currentDirection = null;
+      this.resolveConstraints();
+      if (this.visualElement.projection) {
+        this.visualElement.projection.isAnimationBlocked = true;
+        this.visualElement.projection.target = void 0;
+      }
+      eachAxis((axis) => {
+        let current = this.getAxisMotionValue(axis).get() || 0;
+        if (percent.test(current)) {
+          const { projection } = this.visualElement;
+          if (projection && projection.layout) {
+            const measuredAxis = projection.layout.layoutBox[axis];
+            if (measuredAxis) {
+              const length = calcLength(measuredAxis);
+              current = length * (parseFloat(current) / 100);
+            }
+          }
+        }
+        this.originPoint[axis] = current;
+      });
+      if (onDragStart) {
+        frame.update(() => onDragStart(event, info), false, true);
+      }
+      addValueToWillChange(this.visualElement, "transform");
+      const { animationState } = this.visualElement;
+      animationState && animationState.setActive("whileDrag", true);
+    };
+    const onMove = (event, info) => {
+      this.latestPointerEvent = event;
+      this.latestPanInfo = info;
+      const { dragPropagation, dragDirectionLock, onDirectionLock, onDrag } = this.getProps();
+      if (!dragPropagation && !this.openDragLock)
+        return;
+      const { offset: offset2 } = info;
+      if (dragDirectionLock && this.currentDirection === null) {
+        this.currentDirection = getCurrentDirection(offset2);
+        if (this.currentDirection !== null) {
+          onDirectionLock && onDirectionLock(this.currentDirection);
+        }
+        return;
+      }
+      this.updateAxis("x", info.point, offset2);
+      this.updateAxis("y", info.point, offset2);
+      this.visualElement.render();
+      if (onDrag) {
+        frame.update(() => onDrag(event, info), false, true);
+      }
+    };
+    const onSessionEnd = (event, info) => {
+      this.latestPointerEvent = event;
+      this.latestPanInfo = info;
+      this.stop(event, info);
+      this.latestPointerEvent = null;
+      this.latestPanInfo = null;
+    };
+    const resumeAnimation = () => {
+      const { dragSnapToOrigin: snap } = this.getProps();
+      if (snap || this.constraints) {
+        this.startAnimation({ x: 0, y: 0 });
+      }
+    };
+    const { dragSnapToOrigin } = this.getProps();
+    this.panSession = new PanSession(originEvent, {
+      onSessionStart,
+      onStart,
+      onMove,
+      onSessionEnd,
+      resumeAnimation
+    }, {
+      transformPagePoint: this.visualElement.getTransformPagePoint(),
+      dragSnapToOrigin,
+      distanceThreshold,
+      contextWindow: getContextWindow(this.visualElement),
+      element: this.visualElement.current
+    });
+  }
+  /**
+   * @internal
+   */
+  stop(event, panInfo) {
+    const finalEvent = event || this.latestPointerEvent;
+    const finalPanInfo = panInfo || this.latestPanInfo;
+    const isDragging2 = this.isDragging;
+    this.cancel();
+    if (!isDragging2 || !finalPanInfo || !finalEvent)
+      return;
+    const { velocity } = finalPanInfo;
+    this.startAnimation(velocity);
+    const { onDragEnd } = this.getProps();
+    if (onDragEnd) {
+      frame.postRender(() => onDragEnd(finalEvent, finalPanInfo));
+    }
+  }
+  /**
+   * @internal
+   */
+  cancel() {
+    this.isDragging = false;
+    const { projection, animationState } = this.visualElement;
+    if (projection) {
+      projection.isAnimationBlocked = false;
+    }
+    this.endPanSession();
+    const { dragPropagation } = this.getProps();
+    if (!dragPropagation && this.openDragLock) {
+      this.openDragLock();
+      this.openDragLock = null;
+    }
+    animationState && animationState.setActive("whileDrag", false);
+  }
+  /**
+   * Clean up the pan session without modifying other drag state.
+   * This is used during unmount to ensure event listeners are removed
+   * without affecting projection animations or drag locks.
+   * @internal
+   */
+  endPanSession() {
+    this.panSession && this.panSession.end();
+    this.panSession = void 0;
+  }
+  updateAxis(axis, _point, offset2) {
+    const { drag: drag2 } = this.getProps();
+    if (!offset2 || !shouldDrag(axis, drag2, this.currentDirection))
+      return;
+    const axisValue = this.getAxisMotionValue(axis);
+    let next = this.originPoint[axis] + offset2[axis];
+    if (this.constraints && this.constraints[axis]) {
+      next = applyConstraints(next, this.constraints[axis], this.elastic[axis]);
+    }
+    axisValue.set(next);
+  }
+  resolveConstraints() {
+    var _a3;
+    const { dragConstraints, dragElastic } = this.getProps();
+    const layout2 = this.visualElement.projection && !this.visualElement.projection.layout ? this.visualElement.projection.measure(false) : (_a3 = this.visualElement.projection) == null ? void 0 : _a3.layout;
+    const prevConstraints = this.constraints;
+    if (dragConstraints && isRefObject(dragConstraints)) {
+      if (!this.constraints) {
+        this.constraints = this.resolveRefConstraints();
+      }
+    } else {
+      if (dragConstraints && layout2) {
+        this.constraints = calcRelativeConstraints(layout2.layoutBox, dragConstraints);
+      } else {
+        this.constraints = false;
+      }
+    }
+    this.elastic = resolveDragElastic(dragElastic);
+    if (prevConstraints !== this.constraints && !isRefObject(dragConstraints) && layout2 && this.constraints && !this.hasMutatedConstraints) {
+      eachAxis((axis) => {
+        if (this.constraints !== false && this.getAxisMotionValue(axis)) {
+          this.constraints[axis] = rebaseAxisConstraints(layout2.layoutBox[axis], this.constraints[axis]);
+        }
+      });
+    }
+  }
+  resolveRefConstraints() {
+    const { dragConstraints: constraints, onMeasureDragConstraints } = this.getProps();
+    if (!constraints || !isRefObject(constraints))
+      return false;
+    const constraintsElement = constraints.current;
+    const { projection } = this.visualElement;
+    if (!projection || !projection.layout)
+      return false;
+    const constraintsBox = measurePageBox(constraintsElement, projection.root, this.visualElement.getTransformPagePoint());
+    let measuredConstraints = calcViewportConstraints(projection.layout.layoutBox, constraintsBox);
+    if (onMeasureDragConstraints) {
+      const userConstraints = onMeasureDragConstraints(convertBoxToBoundingBox(measuredConstraints));
+      this.hasMutatedConstraints = !!userConstraints;
+      if (userConstraints) {
+        measuredConstraints = convertBoundingBoxToBox(userConstraints);
+      }
+    }
+    return measuredConstraints;
+  }
+  startAnimation(velocity) {
+    const { drag: drag2, dragMomentum, dragElastic, dragTransition, dragSnapToOrigin, onDragTransitionEnd } = this.getProps();
+    const constraints = this.constraints || {};
+    const momentumAnimations = eachAxis((axis) => {
+      if (!shouldDrag(axis, drag2, this.currentDirection)) {
+        return;
+      }
+      let transition = constraints && constraints[axis] || {};
+      if (dragSnapToOrigin === true || dragSnapToOrigin === axis)
+        transition = { min: 0, max: 0 };
+      const bounceStiffness = dragElastic ? 200 : 1e6;
+      const bounceDamping = dragElastic ? 40 : 1e7;
+      const inertia2 = {
+        type: "inertia",
+        velocity: dragMomentum ? velocity[axis] : 0,
+        bounceStiffness,
+        bounceDamping,
+        timeConstant: 750,
+        restDelta: 1,
+        restSpeed: 10,
+        ...dragTransition,
+        ...transition
+      };
+      return this.startAxisValueAnimation(axis, inertia2);
+    });
+    return Promise.all(momentumAnimations).then(onDragTransitionEnd);
+  }
+  startAxisValueAnimation(axis, transition) {
+    const axisValue = this.getAxisMotionValue(axis);
+    addValueToWillChange(this.visualElement, axis);
+    return axisValue.start(animateMotionValue(axis, axisValue, 0, transition, this.visualElement, false));
+  }
+  stopAnimation() {
+    eachAxis((axis) => this.getAxisMotionValue(axis).stop());
+  }
+  /**
+   * Drag works differently depending on which props are provided.
+   *
+   * - If _dragX and _dragY are provided, we output the gesture delta directly to those motion values.
+   * - Otherwise, we apply the delta to the x/y motion values.
+   */
+  getAxisMotionValue(axis) {
+    const dragKey = `_drag${axis.toUpperCase()}`;
+    const props = this.visualElement.getProps();
+    const externalMotionValue = props[dragKey];
+    return externalMotionValue ? externalMotionValue : this.visualElement.getValue(axis, (props.initial ? props.initial[axis] : void 0) || 0);
+  }
+  snapToCursor(point) {
+    eachAxis((axis) => {
+      const { drag: drag2 } = this.getProps();
+      if (!shouldDrag(axis, drag2, this.currentDirection))
+        return;
+      const { projection } = this.visualElement;
+      const axisValue = this.getAxisMotionValue(axis);
+      if (projection && projection.layout) {
+        const { min: min2, max: max2 } = projection.layout.layoutBox[axis];
+        const current = axisValue.get() || 0;
+        axisValue.set(point[axis] - mixNumber$1(min2, max2, 0.5) + current);
+      }
+    });
+  }
+  /**
+   * When the viewport resizes we want to check if the measured constraints
+   * have changed and, if so, reposition the element within those new constraints
+   * relative to where it was before the resize.
+   */
+  scalePositionWithinConstraints() {
+    if (!this.visualElement.current)
+      return;
+    const { drag: drag2, dragConstraints } = this.getProps();
+    const { projection } = this.visualElement;
+    if (!isRefObject(dragConstraints) || !projection || !this.constraints)
+      return;
+    this.stopAnimation();
+    const boxProgress = { x: 0, y: 0 };
+    eachAxis((axis) => {
+      const axisValue = this.getAxisMotionValue(axis);
+      if (axisValue && this.constraints !== false) {
+        const latest = axisValue.get();
+        boxProgress[axis] = calcOrigin({ min: latest, max: latest }, this.constraints[axis]);
+      }
+    });
+    const { transformTemplate } = this.visualElement.getProps();
+    this.visualElement.current.style.transform = transformTemplate ? transformTemplate({}, "") : "none";
+    projection.root && projection.root.updateScroll();
+    projection.updateLayout();
+    this.constraints = false;
+    this.resolveConstraints();
+    eachAxis((axis) => {
+      if (!shouldDrag(axis, drag2, null))
+        return;
+      const axisValue = this.getAxisMotionValue(axis);
+      const { min: min2, max: max2 } = this.constraints[axis];
+      axisValue.set(mixNumber$1(min2, max2, boxProgress[axis]));
+    });
+    this.visualElement.render();
+  }
+  addListeners() {
+    if (!this.visualElement.current)
+      return;
+    elementDragControls.set(this.visualElement, this);
+    const element = this.visualElement.current;
+    const stopPointerListener = addPointerEvent(element, "pointerdown", (event) => {
+      const { drag: drag2, dragListener = true } = this.getProps();
+      const target = event.target;
+      const isClickingTextInputChild = target !== element && isElementTextInput(target);
+      if (drag2 && dragListener && !isClickingTextInputChild) {
+        this.start(event);
+      }
+    });
+    let stopResizeObservers;
+    const measureDragConstraints = () => {
+      const { dragConstraints } = this.getProps();
+      if (isRefObject(dragConstraints) && dragConstraints.current) {
+        this.constraints = this.resolveRefConstraints();
+        if (!stopResizeObservers) {
+          stopResizeObservers = startResizeObservers(element, dragConstraints.current, () => this.scalePositionWithinConstraints());
+        }
+      }
+    };
+    const { projection } = this.visualElement;
+    const stopMeasureLayoutListener = projection.addEventListener("measure", measureDragConstraints);
+    if (projection && !projection.layout) {
+      projection.root && projection.root.updateScroll();
+      projection.updateLayout();
+    }
+    frame.read(measureDragConstraints);
+    const stopResizeListener = addDomEvent(window, "resize", () => this.scalePositionWithinConstraints());
+    const stopLayoutUpdateListener = projection.addEventListener("didUpdate", ({ delta, hasLayoutChanged }) => {
+      if (this.isDragging && hasLayoutChanged) {
+        eachAxis((axis) => {
+          const motionValue2 = this.getAxisMotionValue(axis);
+          if (!motionValue2)
+            return;
+          this.originPoint[axis] += delta[axis].translate;
+          motionValue2.set(motionValue2.get() + delta[axis].translate);
+        });
+        this.visualElement.render();
+      }
+    });
+    return () => {
+      stopResizeListener();
+      stopPointerListener();
+      stopMeasureLayoutListener();
+      stopLayoutUpdateListener && stopLayoutUpdateListener();
+      stopResizeObservers && stopResizeObservers();
+    };
+  }
+  getProps() {
+    const props = this.visualElement.getProps();
+    const { drag: drag2 = false, dragDirectionLock = false, dragPropagation = false, dragConstraints = false, dragElastic = defaultElastic, dragMomentum = true } = props;
+    return {
+      ...props,
+      drag: drag2,
+      dragDirectionLock,
+      dragPropagation,
+      dragConstraints,
+      dragElastic,
+      dragMomentum
+    };
+  }
+}
+function skipFirstCall(callback) {
+  let isFirst = true;
+  return () => {
+    if (isFirst) {
+      isFirst = false;
+      return;
+    }
+    callback();
+  };
+}
+function startResizeObservers(element, constraintsElement, onResize) {
+  const stopElement = resize(element, skipFirstCall(onResize));
+  const stopContainer = resize(constraintsElement, skipFirstCall(onResize));
+  return () => {
+    stopElement();
+    stopContainer();
+  };
+}
+function shouldDrag(direction, drag2, currentDirection) {
+  return (drag2 === true || drag2 === direction) && (currentDirection === null || currentDirection === direction);
+}
+function getCurrentDirection(offset2, lockThreshold = 10) {
+  let direction = null;
+  if (Math.abs(offset2.y) > lockThreshold) {
+    direction = "y";
+  } else if (Math.abs(offset2.x) > lockThreshold) {
+    direction = "x";
+  }
+  return direction;
+}
+class DragGesture extends Feature {
+  constructor(node) {
+    super(node);
+    this.removeGroupControls = noop2;
+    this.removeListeners = noop2;
+    this.controls = new VisualElementDragControls(node);
+  }
+  mount() {
+    const { dragControls } = this.node.getProps();
+    if (dragControls) {
+      this.removeGroupControls = dragControls.subscribe(this.controls);
+    }
+    this.removeListeners = this.controls.addListeners() || noop2;
+  }
+  update() {
+    const { dragControls } = this.node.getProps();
+    const { dragControls: prevDragControls } = this.node.prevProps || {};
+    if (dragControls !== prevDragControls) {
+      this.removeGroupControls();
+      if (dragControls) {
+        this.removeGroupControls = dragControls.subscribe(this.controls);
+      }
+    }
+  }
+  unmount() {
+    this.removeGroupControls();
+    this.removeListeners();
+    if (!this.controls.isDragging) {
+      this.controls.endPanSession();
+    }
+  }
+}
+const asyncHandler = (handler) => (event, info) => {
+  if (handler) {
+    frame.update(() => handler(event, info), false, true);
+  }
+};
+class PanGesture extends Feature {
+  constructor() {
+    super(...arguments);
+    this.removePointerDownListener = noop2;
+  }
+  onPointerDown(pointerDownEvent) {
+    this.session = new PanSession(pointerDownEvent, this.createPanHandlers(), {
+      transformPagePoint: this.node.getTransformPagePoint(),
+      contextWindow: getContextWindow(this.node)
+    });
+  }
+  createPanHandlers() {
+    const { onPanSessionStart, onPanStart, onPan, onPanEnd } = this.node.getProps();
+    return {
+      onSessionStart: asyncHandler(onPanSessionStart),
+      onStart: asyncHandler(onPanStart),
+      onMove: asyncHandler(onPan),
+      onEnd: (event, info) => {
+        delete this.session;
+        if (onPanEnd) {
+          frame.postRender(() => onPanEnd(event, info));
+        }
+      }
+    };
+  }
+  mount() {
+    this.removePointerDownListener = addPointerEvent(this.node.current, "pointerdown", (event) => this.onPointerDown(event));
+  }
+  update() {
+    this.session && this.session.updateHandlers(this.createPanHandlers());
+  }
+  unmount() {
+    this.removePointerDownListener();
+    this.session && this.session.end();
+  }
+}
+let hasTakenAnySnapshot = false;
+class MeasureLayoutWithContext extends reactExports.Component {
+  /**
+   * This only mounts projection nodes for components that
+   * need measuring, we might want to do it for all components
+   * in order to incorporate transforms
+   */
+  componentDidMount() {
+    const { visualElement, layoutGroup, switchLayoutGroup, layoutId } = this.props;
+    const { projection } = visualElement;
+    if (projection) {
+      if (layoutGroup.group)
+        layoutGroup.group.add(projection);
+      if (switchLayoutGroup && switchLayoutGroup.register && layoutId) {
+        switchLayoutGroup.register(projection);
+      }
+      if (hasTakenAnySnapshot) {
+        projection.root.didUpdate();
+      }
+      projection.addEventListener("animationComplete", () => {
+        this.safeToRemove();
+      });
+      projection.setOptions({
+        ...projection.options,
+        layoutDependency: this.props.layoutDependency,
+        onExitComplete: () => this.safeToRemove()
+      });
+    }
+    globalProjectionState.hasEverUpdated = true;
+  }
+  getSnapshotBeforeUpdate(prevProps) {
+    const { layoutDependency, visualElement, drag: drag2, isPresent } = this.props;
+    const { projection } = visualElement;
+    if (!projection)
+      return null;
+    projection.isPresent = isPresent;
+    if (prevProps.layoutDependency !== layoutDependency) {
+      projection.setOptions({
+        ...projection.options,
+        layoutDependency
+      });
+    }
+    hasTakenAnySnapshot = true;
+    if (drag2 || prevProps.layoutDependency !== layoutDependency || layoutDependency === void 0 || prevProps.isPresent !== isPresent) {
+      projection.willUpdate();
+    } else {
+      this.safeToRemove();
+    }
+    if (prevProps.isPresent !== isPresent) {
+      if (isPresent) {
+        projection.promote();
+      } else if (!projection.relegate()) {
+        frame.postRender(() => {
+          const stack = projection.getStack();
+          if (!stack || !stack.members.length) {
+            this.safeToRemove();
+          }
+        });
+      }
+    }
+    return null;
+  }
+  componentDidUpdate() {
+    const { visualElement, layoutAnchor } = this.props;
+    const { projection } = visualElement;
+    if (projection) {
+      projection.options.layoutAnchor = layoutAnchor;
+      projection.root.didUpdate();
+      microtask.postRender(() => {
+        if (!projection.currentAnimation && projection.isLead()) {
+          this.safeToRemove();
+        }
+      });
+    }
+  }
+  componentWillUnmount() {
+    const { visualElement, layoutGroup, switchLayoutGroup: promoteContext } = this.props;
+    const { projection } = visualElement;
+    hasTakenAnySnapshot = true;
+    if (projection) {
+      projection.scheduleCheckAfterUnmount();
+      if (layoutGroup && layoutGroup.group)
+        layoutGroup.group.remove(projection);
+      if (promoteContext && promoteContext.deregister)
+        promoteContext.deregister(projection);
+    }
+  }
+  safeToRemove() {
+    const { safeToRemove } = this.props;
+    safeToRemove && safeToRemove();
+  }
+  render() {
+    return null;
+  }
+}
+function MeasureLayout(props) {
+  const [isPresent, safeToRemove] = usePresence$1();
+  const layoutGroup = reactExports.useContext(LayoutGroupContext);
+  return jsxRuntimeExports.jsx(MeasureLayoutWithContext, { ...props, layoutGroup, switchLayoutGroup: reactExports.useContext(SwitchLayoutGroupContext), isPresent, safeToRemove });
+}
+const drag = {
+  pan: {
+    Feature: PanGesture
+  },
+  drag: {
+    Feature: DragGesture,
+    ProjectionNode: HTMLProjectionNode,
+    MeasureLayout
+  }
+};
+function handleHoverEvent(node, event, lifecycle) {
+  const { props } = node;
+  if (node.animationState && props.whileHover) {
+    node.animationState.setActive("whileHover", lifecycle === "Start");
+  }
+  const eventName = "onHover" + lifecycle;
+  const callback = props[eventName];
+  if (callback) {
+    frame.postRender(() => callback(event, extractEventInfo(event)));
+  }
+}
+class HoverGesture extends Feature {
+  mount() {
+    const { current } = this.node;
+    if (!current)
+      return;
+    this.unmount = hover(current, (_element, startEvent) => {
+      handleHoverEvent(this.node, startEvent, "Start");
+      return (endEvent) => handleHoverEvent(this.node, endEvent, "End");
+    });
+  }
+  unmount() {
+  }
+}
+class FocusGesture extends Feature {
+  constructor() {
+    super(...arguments);
+    this.isActive = false;
+  }
+  onFocus() {
+    let isFocusVisible = false;
+    try {
+      isFocusVisible = this.node.current.matches(":focus-visible");
+    } catch (e) {
+      isFocusVisible = true;
+    }
+    if (!isFocusVisible || !this.node.animationState)
+      return;
+    this.node.animationState.setActive("whileFocus", true);
+    this.isActive = true;
+  }
+  onBlur() {
+    if (!this.isActive || !this.node.animationState)
+      return;
+    this.node.animationState.setActive("whileFocus", false);
+    this.isActive = false;
+  }
+  mount() {
+    this.unmount = pipe(addDomEvent(this.node.current, "focus", () => this.onFocus()), addDomEvent(this.node.current, "blur", () => this.onBlur()));
+  }
+  unmount() {
+  }
+}
+function handlePressEvent(node, event, lifecycle) {
+  const { props } = node;
+  if (node.current instanceof HTMLButtonElement && node.current.disabled) {
+    return;
+  }
+  if (node.animationState && props.whileTap) {
+    node.animationState.setActive("whileTap", lifecycle === "Start");
+  }
+  const eventName = "onTap" + (lifecycle === "End" ? "" : lifecycle);
+  const callback = props[eventName];
+  if (callback) {
+    frame.postRender(() => callback(event, extractEventInfo(event)));
+  }
+}
+class PressGesture extends Feature {
+  mount() {
+    const { current } = this.node;
+    if (!current)
+      return;
+    const { globalTapTarget, propagate } = this.node.props;
+    this.unmount = press(current, (_element, startEvent) => {
+      handlePressEvent(this.node, startEvent, "Start");
+      return (endEvent, { success }) => handlePressEvent(this.node, endEvent, success ? "End" : "Cancel");
+    }, {
+      useGlobalTarget: globalTapTarget,
+      stopPropagation: (propagate == null ? void 0 : propagate.tap) === false
+    });
+  }
+  unmount() {
+  }
+}
+const observerCallbacks = /* @__PURE__ */ new WeakMap();
+const observers = /* @__PURE__ */ new WeakMap();
+const fireObserverCallback = (entry) => {
+  const callback = observerCallbacks.get(entry.target);
+  callback && callback(entry);
+};
+const fireAllObserverCallbacks = (entries) => {
+  entries.forEach(fireObserverCallback);
+};
+function initIntersectionObserver({ root: root2, ...options }) {
+  const lookupRoot = root2 || document;
+  if (!observers.has(lookupRoot)) {
+    observers.set(lookupRoot, {});
+  }
+  const rootObservers = observers.get(lookupRoot);
+  const key = JSON.stringify(options);
+  if (!rootObservers[key]) {
+    rootObservers[key] = new IntersectionObserver(fireAllObserverCallbacks, { root: root2, ...options });
+  }
+  return rootObservers[key];
+}
+function observeIntersection(element, options, callback) {
+  const rootInteresectionObserver = initIntersectionObserver(options);
+  observerCallbacks.set(element, callback);
+  rootInteresectionObserver.observe(element);
+  return () => {
+    observerCallbacks.delete(element);
+    rootInteresectionObserver.unobserve(element);
+  };
+}
+const thresholdNames = {
+  some: 0,
+  all: 1
+};
+class InViewFeature extends Feature {
+  constructor() {
+    super(...arguments);
+    this.hasEnteredView = false;
+    this.isInView = false;
+  }
+  startObserver() {
+    var _a3;
+    (_a3 = this.stopObserver) == null ? void 0 : _a3.call(this);
+    const { viewport = {} } = this.node.getProps();
+    const { root: root2, margin: rootMargin, amount = "some", once: once2 } = viewport;
+    const options = {
+      root: root2 ? root2.current : void 0,
+      rootMargin,
+      threshold: typeof amount === "number" ? amount : thresholdNames[amount]
+    };
+    const onIntersectionUpdate = (entry) => {
+      const { isIntersecting } = entry;
+      if (this.isInView === isIntersecting)
+        return;
+      this.isInView = isIntersecting;
+      if (once2 && !isIntersecting && this.hasEnteredView) {
+        return;
+      } else if (isIntersecting) {
+        this.hasEnteredView = true;
+      }
+      if (this.node.animationState) {
+        this.node.animationState.setActive("whileInView", isIntersecting);
+      }
+      const { onViewportEnter, onViewportLeave } = this.node.getProps();
+      const callback = isIntersecting ? onViewportEnter : onViewportLeave;
+      callback && callback(entry);
+    };
+    this.stopObserver = observeIntersection(this.node.current, options, onIntersectionUpdate);
+  }
+  mount() {
+    this.startObserver();
+  }
+  update() {
+    if (typeof IntersectionObserver === "undefined")
+      return;
+    const { props, prevProps } = this.node;
+    const hasOptionsChanged = ["amount", "margin", "root"].some(hasViewportOptionChanged(props, prevProps));
+    if (hasOptionsChanged) {
+      this.startObserver();
+    }
+  }
+  unmount() {
+    var _a3;
+    (_a3 = this.stopObserver) == null ? void 0 : _a3.call(this);
+    this.hasEnteredView = false;
+    this.isInView = false;
+  }
+}
+function hasViewportOptionChanged({ viewport = {} }, { viewport: prevViewport = {} } = {}) {
+  return (name) => viewport[name] !== prevViewport[name];
+}
+const gestureAnimations = {
+  inView: {
+    Feature: InViewFeature
+  },
+  tap: {
+    Feature: PressGesture
+  },
+  focus: {
+    Feature: FocusGesture
+  },
+  hover: {
+    Feature: HoverGesture
+  }
+};
+const layout = {
+  layout: {
+    ProjectionNode: HTMLProjectionNode,
+    MeasureLayout
+  }
+};
+const featureBundle = {
+  ...animations,
+  ...gestureAnimations,
+  ...drag,
+  ...layout
+};
+const motion = /* @__PURE__ */ createMotionProxy(featureBundle, createDomVisualElement);
 function groupByDate(messages) {
   const groups = [];
   for (const msg of messages) {
@@ -54730,6 +64102,8 @@ const MessageList = reactExports.memo(function MessageList2({
   const topRef = reactExports.useRef(null);
   const scrollRef = reactExports.useRef(null);
   const [isAtBottom, setIsAtBottom] = reactExports.useState(true);
+  const [unreadBelowCount, setUnreadBelowCount] = reactExports.useState(0);
+  const highwaterMsgCountRef = reactExports.useRef(0);
   const [oldestId, setOldestId] = reactExports.useState(void 0);
   const [loadingOlder, setLoadingOlder] = reactExports.useState(false);
   const [allMessages, setAllMessages] = reactExports.useState([]);
@@ -54781,14 +64155,22 @@ const MessageList = reactExports.memo(function MessageList2({
       (_a3 = bottomRef.current) == null ? void 0 : _a3.scrollIntoView({
         behavior: "smooth"
       });
+      highwaterMsgCountRef.current = allMessagesCount;
+    } else if (!isAtBottom && allMessagesCount > highwaterMsgCountRef.current) {
+      setUnreadBelowCount(allMessagesCount - highwaterMsgCountRef.current);
     }
     prevLenRef.current = allMessagesCount;
   }, [allMessagesCount, isAtBottom]);
   const handleScroll2 = reactExports.useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
+    const distFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    const atBottom = distFromBottom < 60;
     setIsAtBottom(atBottom);
+    if (atBottom) {
+      setUnreadBelowCount(0);
+      highwaterMsgCountRef.current = allMessages.length;
+    }
     if (el.scrollTop < 80 && allMessages.length > 0) {
       const oldest = allMessages[0].id;
       if (oldest !== oldestId) {
@@ -54818,14 +64200,14 @@ const MessageList = reactExports.memo(function MessageList2({
   reactExports.useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
+    const observer2 = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            const id = entry.target.dataset.messageId;
-            if (id && !markedMessageIdsRef.current.has(id)) {
-              markedMessageIdsRef.current.add(id);
-              markReadMutateRef.current(BigInt(id));
+            const id2 = entry.target.dataset.messageId;
+            if (id2 && !markedMessageIdsRef.current.has(id2)) {
+              markedMessageIdsRef.current.add(id2);
+              markReadMutateRef.current(BigInt(id2));
             }
           }
         }
@@ -54833,8 +64215,8 @@ const MessageList = reactExports.memo(function MessageList2({
       { root: el, threshold: 0.5 }
     );
     const nodes = el.querySelectorAll("[data-message-id]");
-    for (const node of nodes) observer.observe(node);
-    return () => observer.disconnect();
+    for (const node of nodes) observer2.observe(node);
+    return () => observer2.disconnect();
   }, [allMessagesCount]);
   const uniqueSenderIds = reactExports.useMemo(() => {
     const seen2 = /* @__PURE__ */ new Set();
@@ -54937,7 +64319,78 @@ const MessageList = reactExports.memo(function MessageList2({
           },
           qm.id
         )) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: bottomRef, className: "h-1" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: bottomRef, className: "h-1" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: !isAtBottom && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.button,
+          {
+            initial: { opacity: 0, scale: 0.8, y: 8 },
+            animate: { opacity: 1, scale: 1, y: 0 },
+            exit: { opacity: 0, scale: 0.8, y: 8 },
+            transition: { duration: 0.18, ease: "easeOut" },
+            whileHover: { scale: 1.1 },
+            whileTap: { scale: 0.95 },
+            type: "button",
+            onClick: () => {
+              var _a3;
+              (_a3 = bottomRef.current) == null ? void 0 : _a3.scrollIntoView({
+                behavior: "smooth",
+                block: "end"
+              });
+              setUnreadBelowCount(0);
+              highwaterMsgCountRef.current = allMessages.length;
+            },
+            "aria-label": "Scroll to latest message",
+            "data-ocid": "messages.scroll_to_bottom_button",
+            style: {
+              position: "sticky",
+              bottom: "1rem",
+              marginLeft: "auto",
+              marginRight: "0.25rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "2.5rem",
+              height: "2.5rem",
+              minWidth: "44px",
+              minHeight: "44px",
+              borderRadius: "50%",
+              background: "oklch(var(--card))",
+              border: "1px solid oklch(var(--border))",
+              color: "oklch(var(--foreground))",
+              boxShadow: "0 2px 12px oklch(0 0 0 / 0.35)",
+              cursor: "pointer",
+              zIndex: 10,
+              flexShrink: 0,
+              flexGrow: 0
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { size: 18, strokeWidth: 2.5 }),
+              unreadBelowCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  style: {
+                    position: "absolute",
+                    top: "-4px",
+                    right: "-4px",
+                    minWidth: "18px",
+                    height: "18px",
+                    borderRadius: "9px",
+                    background: "oklch(var(--primary))",
+                    color: "oklch(var(--primary-foreground))",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    lineHeight: "18px",
+                    textAlign: "center",
+                    padding: "0 4px",
+                    pointerEvents: "none"
+                  },
+                  children: unreadBelowCount > 99 ? "99+" : unreadBelowCount
+                }
+              )
+            ]
+          },
+          "scroll-to-bottom"
+        ) })
       ]
     }
   );
@@ -55163,11 +64616,11 @@ function usePresence() {
     if (!actor || isFetching) return;
     actor.touchPresence().catch(() => {
     });
-    const id = setInterval(() => {
+    const id2 = setInterval(() => {
       actor.touchPresence().catch(() => {
       });
     }, PRESENCE_INTERVAL_MS);
-    return () => clearInterval(id);
+    return () => clearInterval(id2);
   }, [actor, isFetching]);
 }
 function isOnline(lastSeen) {
@@ -55191,8 +64644,8 @@ async function decryptProfileDisplayName(profile) {
   if (!profile.encryptedDisplayName || profile.encryptedDisplayName.length === 0)
     return null;
   try {
-    const principalText = profile.id.toText();
-    const key = await deriveDisplayNameKey({ toText: () => principalText });
+    const principalText2 = profile.id.toText();
+    const key = await deriveDisplayNameKey({ toText: () => principalText2 });
     return await decryptMessage(
       key,
       new Uint8Array(profile.encryptedDisplayName)
@@ -55587,7 +65040,7 @@ function ChatHeader({
 }
 function ChatPage() {
   var _a3;
-  const { id } = useParams({ from: "/app/conversations/$id" });
+  const { id: id2 } = useParams({ from: "/app/conversations/$id" });
   const navigate = useNavigate();
   const { principal } = useAuth();
   const { actor, isFetching: actorFetching } = useActor(createActor);
@@ -55617,13 +65070,20 @@ function ChatPage() {
       drainQueue();
     }
   }, [connection.isOnline, drainQueue]);
+  reactExports.useEffect(() => {
+    if (!id2) return;
+    try {
+      localStorage.setItem(`cs_last_read_${id2}`, Date.now().toString());
+    } catch {
+    }
+  }, [id2]);
   const convId = reactExports.useMemo(() => {
     try {
-      return BigInt(id);
+      return BigInt(id2);
     } catch {
       return null;
     }
-  }, [id]);
+  }, [id2]);
   const { data: conv, isLoading } = useConversation(convId);
   const cachedMessages = reactExports.useMemo(() => {
     if (!convId) return [];
@@ -56085,9 +65545,29 @@ function ConversationListItem({
     "messages",
     conversation.id.toString()
   ]) ?? [];
-  const unreadCount = principal ? cachedMessages.filter(
-    (m2) => !m2.readBy.some((r2) => r2.userId.toText() === principal.toText())
-  ).length : 0;
+  const lastReadAtMs = (() => {
+    try {
+      const raw = localStorage.getItem(
+        `cs_last_read_${conversation.id.toString()}`
+      );
+      return raw ? Number(raw) : 0;
+    } catch {
+      return 0;
+    }
+  })();
+  const lastMessageAtMs = Number(conversation.lastMessageAt) / 1e6;
+  const unreadCount = (() => {
+    if (!principal) return 0;
+    if (cachedMessages.length > 0) {
+      return cachedMessages.filter(
+        (m2) => !m2.readBy.some((r2) => r2.userId.toText() === principal.toText())
+      ).length;
+    }
+    if (lastMessageAtMs > lastReadAtMs && lastMessageAtMs > 0) {
+      return 1;
+    }
+    return 0;
+  })();
   function handleDeleteClick(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -56803,7 +66283,7 @@ var CheckboxTrigger = reactExports.forwardRef(
       isFormControl,
       bubbleInput
     } = useCheckboxContext(TRIGGER_NAME$1, __scopeCheckbox);
-    const composedRefs = useComposedRefs(forwardedRef, setControl);
+    const composedRefs = useComposedRefs$1(forwardedRef, setControl);
     const initialCheckedStateRef = reactExports.useRef(checked);
     reactExports.useEffect(() => {
       const form = control == null ? void 0 : control.form;
@@ -56928,7 +66408,7 @@ var CheckboxBubbleInput = reactExports.forwardRef(
       bubbleInput,
       setBubbleInput
     } = useCheckboxContext(BUBBLE_INPUT_NAME$1, __scopeCheckbox);
-    const composedRefs = useComposedRefs(forwardedRef, setBubbleInput);
+    const composedRefs = useComposedRefs$1(forwardedRef, setBubbleInput);
     const prevChecked = usePrevious(checked);
     const controlSize = useSize(control);
     reactExports.useEffect(() => {
@@ -57042,7 +66522,7 @@ var RovingFocusGroupImpl = reactExports.forwardRef((props, forwardedRef) => {
     ...groupProps
   } = props;
   const ref = reactExports.useRef(null);
-  const composedRefs = useComposedRefs(forwardedRef, ref);
+  const composedRefs = useComposedRefs$1(forwardedRef, ref);
   const direction = useDirection(dir);
   const [currentTabStopId, setCurrentTabStopId] = useControllableState({
     prop: currentTabStopIdProp,
@@ -57130,9 +66610,9 @@ var RovingFocusGroupItem = reactExports.forwardRef(
       ...itemProps
     } = props;
     const autoId = useId();
-    const id = tabStopId || autoId;
+    const id2 = tabStopId || autoId;
     const context = useRovingFocusContext(ITEM_NAME, __scopeRovingFocusGroup);
-    const isCurrentTabStop = context.currentTabStopId === id;
+    const isCurrentTabStop = context.currentTabStopId === id2;
     const getItems = useCollection(__scopeRovingFocusGroup);
     const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
     reactExports.useEffect(() => {
@@ -57145,7 +66625,7 @@ var RovingFocusGroupItem = reactExports.forwardRef(
       Collection.ItemSlot,
       {
         scope: __scopeRovingFocusGroup,
-        id,
+        id: id2,
         focusable,
         active,
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -57157,9 +66637,9 @@ var RovingFocusGroupItem = reactExports.forwardRef(
             ref: forwardedRef,
             onMouseDown: composeEventHandlers(props.onMouseDown, (event) => {
               if (!focusable) event.preventDefault();
-              else context.onItemFocus(id);
+              else context.onItemFocus(id2);
             }),
-            onFocus: composeEventHandlers(props.onFocus, () => context.onItemFocus(id)),
+            onFocus: composeEventHandlers(props.onFocus, () => context.onItemFocus(id2)),
             onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
               if (event.key === "Tab" && event.shiftKey) {
                 context.onItemShiftTab();
@@ -57506,9 +66986,9 @@ function NewConversationDialog({
     if (groupMembers.some((m2) => m2.userId.toText() === userId.toText())) return;
     setGroupMembers((prev) => [...prev, { userId, profile }]);
   };
-  const removeGroupMember = (principalText) => {
+  const removeGroupMember = (principalText2) => {
     setGroupMembers(
-      (prev) => prev.filter((m2) => m2.userId.toText() !== principalText)
+      (prev) => prev.filter((m2) => m2.userId.toText() !== principalText2)
     );
   };
   const startDirectChat = async () => {
@@ -57911,6 +67391,16 @@ function ConversationsPage() {
   const [dialogOpen, setDialogOpen] = reactExports.useState(false);
   const params = useParams({ strict: false });
   const activeId = (params == null ? void 0 : params.id) ?? null;
+  const sortedConversations = reactExports.useMemo(() => {
+    if (!conversations) return [];
+    return [...conversations].sort((a2, b2) => {
+      const aTime = typeof a2.lastMessageAt === "bigint" ? a2.lastMessageAt : BigInt(a2.lastMessageAt ?? 0);
+      const bTime = typeof b2.lastMessageAt === "bigint" ? b2.lastMessageAt : BigInt(b2.lastMessageAt ?? 0);
+      if (bTime > aTime) return 1;
+      if (bTime < aTime) return -1;
+      return 0;
+    });
+  }, [conversations]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     Layout,
     {
@@ -57958,15 +67448,29 @@ function ConversationsPage() {
                     },
                     ocid: "conversations.empty_state"
                   }
-                ) : conversations.map((conv, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  ConversationListItem,
+                ) : /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { initial: false, children: sortedConversations.map((conv, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  motion.div,
                   {
-                    conversation: conv,
-                    isActive: activeId === conv.id.toString(),
-                    index: idx + 1
+                    layout: true,
+                    initial: { opacity: 0, y: -6 },
+                    animate: { opacity: 1, y: 0 },
+                    exit: { opacity: 0 },
+                    transition: {
+                      duration: 0.22,
+                      ease: [0.25, 0.46, 0.45, 0.94]
+                    },
+                    style: { willChange: "transform, opacity" },
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      ConversationListItem,
+                      {
+                        conversation: conv,
+                        isActive: activeId === conv.id.toString(),
+                        index: idx + 1
+                      }
+                    )
                   },
                   conv.id.toString()
-                ))
+                )) })
               }
             )
           ] }),
@@ -58174,10 +67678,10 @@ function ProfileEditor() {
   const { keyPair, isReady } = useCrypto();
   const { isLoading } = useUserProfile(principal);
   const updateProfile = useUpdateProfile();
-  const principalText = (principal == null ? void 0 : principal.toText()) ?? "";
+  const principalText2 = (principal == null ? void 0 : principal.toText()) ?? "";
   const [displayName, setDisplayName] = reactExports.useState("");
   const [copied, setCopied] = reactExports.useState(false);
-  const existingDataUrl = principalText ? getLocalAvatarDataUrl(principalText) : null;
+  const existingDataUrl = principalText2 ? getLocalAvatarDataUrl(principalText2) : null;
   const [pendingFile, setPendingFile] = reactExports.useState(null);
   const [pendingPreview, setPendingPreview] = reactExports.useState(null);
   const [clearAvatar, setClearAvatar] = reactExports.useState(false);
@@ -58185,7 +67689,7 @@ function ProfileEditor() {
   const fileInputRef = reactExports.useRef(null);
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(principalText);
+      await navigator.clipboard.writeText(principalText2);
       setCopied(true);
       setTimeout(() => setCopied(false), 2e3);
     } catch {
@@ -58244,12 +67748,12 @@ function ProfileEditor() {
       let encryptedAvatarKey;
       if (pendingFile && pendingPreview) {
         setUploadProgress(30);
-        setLocalAvatarDataUrl(principalText, pendingPreview);
+        setLocalAvatarDataUrl(principalText2, pendingPreview);
         setUploadProgress(80);
-        encryptedAvatarKey = getLocalAvatarKey(principalText);
+        encryptedAvatarKey = getLocalAvatarKey(principalText2);
         setUploadProgress(100);
       } else if (clearAvatar) {
-        removeLocalAvatar(principalText);
+        removeLocalAvatar(principalText2);
         encryptedAvatarKey = "";
       }
       await updateProfile.mutateAsync({
@@ -58258,8 +67762,8 @@ function ProfileEditor() {
         ...encryptedAvatarKey !== void 0 ? { encryptedAvatarKey } : {}
       });
       ue.success("Profile updated successfully");
-      if (name && principalText) {
-        setLocalDisplayName(principalText, name);
+      if (name && principalText2) {
+        setLocalDisplayName(principalText2, name);
       }
       setDisplayName("");
       setPendingFile(null);
@@ -58302,7 +67806,7 @@ function ProfileEditor() {
                       alt: "Profile preview",
                       className: "w-full h-full object-cover"
                     }
-                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: principalText, size: 64 })
+                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx(UserAvatar, { principal: principalText2, size: 64 })
                 }
               ),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -58420,7 +67924,7 @@ function ProfileEditor() {
               {
                 className: "flex-1 min-w-0 font-mono text-xs text-foreground bg-muted/60 border border-border rounded-md px-3 py-2 break-all",
                 "data-ocid": "profile.principal_id",
-                children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-3 w-48" }) : principalText
+                children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-3 w-48" }) : principalText2
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -58445,7 +67949,7 @@ function ProfileEditor() {
               type: "text",
               value: displayName,
               onChange: (e) => setDisplayName(e.target.value),
-              placeholder: isLoading ? "Loading…" : getLocalDisplayName(principalText) ?? "Enter a display name",
+              placeholder: isLoading ? "Loading…" : getLocalDisplayName(principalText2) ?? "Enter a display name",
               maxLength: 64,
               disabled: !isReady || isLoading,
               "data-ocid": "profile.display_name_input",
@@ -58486,7 +67990,7 @@ var Switch$1 = reactExports.forwardRef(
       ...switchProps
     } = props;
     const [button, setButton] = reactExports.useState(null);
-    const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
+    const composedRefs = useComposedRefs$1(forwardedRef, (node) => setButton(node));
     const hasConsumerStoppedPropagationRef = reactExports.useRef(false);
     const isFormControl = button ? form || !!button.closest("form") : true;
     const [checked, setChecked] = useControllableState({
@@ -58563,7 +68067,7 @@ var SwitchBubbleInput = reactExports.forwardRef(
     ...props
   }, forwardedRef) => {
     const ref = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(ref, forwardedRef);
+    const composedRefs = useComposedRefs$1(ref, forwardedRef);
     const prevChecked = usePrevious(checked);
     const controlSize = useSize(control);
     reactExports.useEffect(() => {
@@ -60315,25 +69819,22 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-BCDt8xOg.js"), true ? __vite__mapDeps([0,1]) : void 0));
-const AdminDashboardPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminDashboardPage-BnVNVtgM.js"), true ? __vite__mapDeps([2,3,4,5]) : void 0)
-);
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Cqt2BpR7.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-6kYj2W8E.js"), true ? __vite__mapDeps([6,3,7,8,4,9,10]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-ku4Bea_R.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CxzjRi4R.js"), true ? __vite__mapDeps([11,3,7,8,4,12,5]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-BwVII4bF.js"), true ? __vite__mapDeps([13,3,7,8,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-sL3bR012.js"), true ? __vite__mapDeps([14,3,10,12]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-Opy8sJS9.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-JL4cgcdH.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-BOfUnMLb.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-Ba5bN0cZ.js"), true ? __vite__mapDeps([15,3,4]) : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-huu2iX1D.js"), true ? [] : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-REhh9OPf.js").then((n) => n.A), true ? __vite__mapDeps([16,3,8,1,9]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-CdKQiprL.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-9fdabLS-.js"), true ? __vite__mapDeps([17,3,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C0sYzI6C.js"), true ? __vite__mapDeps([12,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-Cgdg1pcI.js"), true ? __vite__mapDeps([18,10]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-DwcMrMJ6.js"), true ? __vite__mapDeps([13,6]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
@@ -60403,14 +69904,64 @@ const notFoundRoute = createRoute({
   path: "*",
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(NotFoundPage, {})
 });
+const RELOAD_KEY = "admin_chunk_reload_attempted";
+class ChunkLoadErrorBoundary extends reactExports.Component {
+  constructor(props) {
+    super(props);
+    __publicField(this, "handleRetry", () => {
+      sessionStorage.removeItem(RELOAD_KEY);
+      this.setState({ hasError: false, isChunkError: false, reloading: false });
+    });
+    this.state = { hasError: false, isChunkError: false, reloading: false };
+  }
+  static getDerivedStateFromError(error) {
+    const msg = (error == null ? void 0 : error.message) ?? "";
+    const isChunkError = msg.includes("dynamically imported module") || msg.includes("Failed to fetch") || msg.includes("ChunkLoadError") || msg.includes("Loading chunk");
+    return { hasError: true, isChunkError, reloading: false };
+  }
+  componentDidCatch(error, info) {
+    if (this.state.isChunkError) {
+      const alreadyAttempted = sessionStorage.getItem(RELOAD_KEY);
+      if (!alreadyAttempted) {
+        sessionStorage.setItem(RELOAD_KEY, "1");
+        this.setState({ reloading: true });
+        window.location.reload();
+      }
+    } else {
+      console.error("[AdminBoundary] non-chunk error:", error, info);
+    }
+  }
+  render() {
+    const { hasError, isChunkError, reloading } = this.state;
+    if (!hasError) return this.props.children;
+    if (isChunkError || reloading) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 flex flex-col items-center justify-center gap-3 bg-background", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: "Refreshing…" })
+      ] });
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background p-8 text-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground font-semibold", children: "Something went wrong loading this page." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          type: "button",
+          onClick: this.handleRetry,
+          className: "rounded bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90",
+          children: "Try again"
+        }
+      )
+    ] });
+  }
+}
 function AdminGuard() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "app-shell", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminAccessGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "app-shell", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminAccessGate, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChunkLoadErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     reactExports.Suspense,
     {
       fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-background", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { size: 36 }) }),
       children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
     }
-  ) }) });
+  ) }) }) });
 }
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -60531,104 +70082,104 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(InternetIdentityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) })
 );
 export {
-  useMyRole as $,
-  SelectContent as A,
+  Shield as $,
+  AdminLayout as A,
   Button as B,
   Compass as C,
-  RetentionPeriod as D,
-  SelectItem as E,
-  AlertDialog as F,
-  AlertDialogTrigger as G,
-  AlertDialogContent as H,
+  SelectItem as D,
+  AlertDialog as E,
+  AlertDialogTrigger as F,
+  AlertDialogContent as G,
+  AlertDialogHeader as H,
   Input as I,
-  AlertDialogHeader as J,
-  AlertDialogTitle as K,
+  AlertDialogTitle as J,
+  AlertDialogDescription as K,
   Layout as L,
-  AlertDialogDescription as M,
-  AlertDialogFooter as N,
+  AlertDialogFooter as M,
+  AlertDialogCancel as N,
   OrgRole as O,
   PasswordPolicy as P,
-  AlertDialogCancel as Q,
+  AlertDialogAction as Q,
   React$4 as R,
   Search as S,
   TriangleAlert as T,
   Users as U,
-  AlertDialogAction as V,
-  GroupCreationPermission as W,
-  DataExportPermission as X,
-  Textarea as Y,
-  createActor as Z,
-  useIsSuperAdmin as _,
+  GroupCreationPermission as V,
+  DataExportPermission as W,
+  Textarea as X,
+  createActor as Y,
+  useIsSuperAdmin as Z,
+  useMyRole as _,
   Skeleton as a,
-  useControllableState as a$,
-  Shield as a0,
-  useOrgDetails as a1,
-  useOrgUsers as a2,
-  useSuspendOrg as a3,
-  useDeleteOrg as a4,
-  ArrowLeft as a5,
+  useId as a$,
+  useOrgDetails as a0,
+  useOrgUsers as a1,
+  useSuspendOrg as a2,
+  useDeleteOrg as a3,
+  ArrowLeft as a4,
+  Building2 as a5,
   Trash2 as a6,
-  useOrgs as a7,
-  X as a8,
-  RefreshCw as a9,
-  Lock as aA,
-  Download as aB,
-  useCallbackRef$1 as aC,
-  useDirection as aD,
-  Root2$3 as aE,
-  Anchor as aF,
-  Presence as aG,
-  Portal$3 as aH,
-  useComposedRefs as aI,
-  composeEventHandlers as aJ,
-  Primitive$1 as aK,
-  createContextScope as aL,
-  createPopperScope as aM,
-  createRovingFocusGroupScope as aN,
-  createCollection as aO,
-  hideOthers as aP,
-  Item as aQ,
-  dispatchDiscreteCustomEvent as aR,
-  useFocusGuards as aS,
-  ReactRemoveScroll as aT,
-  FocusScope as aU,
-  DismissableLayer as aV,
-  Root$1 as aW,
-  Content$2 as aX,
-  createSlot$1 as aY,
-  Arrow as aZ,
-  composeRefs as a_,
-  ChevronDown as aa,
-  useCreateOrg as ab,
-  Dialog as ac,
-  DialogContent as ad,
-  DialogHeader as ae,
-  DialogTitle as af,
-  DialogDescription as ag,
-  DialogFooter as ah,
-  useUpdateOrg as ai,
-  useAllGroups as aj,
-  GroupStatus as ak,
-  useGroupMembers as al,
-  useRemoveMemberFromGroup as am,
-  UserMinus as an,
-  LoaderCircle as ao,
-  Principal$1 as ap,
-  useCheckPolicyExpiry as aq,
-  useMyOrgs as ar,
-  useAdminAuditLog as as,
-  UserCheck as at,
-  MessageSquare as au,
-  Settings as av,
-  AuditEventType as aw,
-  ShieldCheck as ax,
-  EmptyState as ay,
-  useExportAuditLogs as az,
+  PrincipalDisplay as a7,
+  useOrgs as a8,
+  X as a9,
+  Download as aA,
+  useCallbackRef$1 as aB,
+  useDirection as aC,
+  Root2$3 as aD,
+  Anchor as aE,
+  Presence as aF,
+  Portal$3 as aG,
+  useComposedRefs$1 as aH,
+  composeEventHandlers as aI,
+  Primitive$1 as aJ,
+  createContextScope as aK,
+  createPopperScope as aL,
+  createRovingFocusGroupScope as aM,
+  createCollection as aN,
+  hideOthers as aO,
+  Item as aP,
+  dispatchDiscreteCustomEvent as aQ,
+  useFocusGuards as aR,
+  ReactRemoveScroll as aS,
+  FocusScope as aT,
+  DismissableLayer as aU,
+  Root$1 as aV,
+  Content$2 as aW,
+  createSlot$1 as aX,
+  Arrow as aY,
+  composeRefs$1 as aZ,
+  useControllableState as a_,
+  RefreshCw as aa,
+  ChevronDown as ab,
+  useCreateOrg as ac,
+  Dialog as ad,
+  DialogContent as ae,
+  DialogHeader as af,
+  DialogTitle as ag,
+  DialogDescription as ah,
+  DialogFooter as ai,
+  useUpdateOrg as aj,
+  Check as ak,
+  Copy as al,
+  useAllGroups as am,
+  GroupStatus as an,
+  useGroupMembers as ao,
+  useRemoveMemberFromGroup as ap,
+  UserMinus as aq,
+  LoaderCircle as ar,
+  Principal$1 as as,
+  EmptyState as at,
+  ShieldCheck as au,
+  AuditEventType as av,
+  useMyOrgs as aw,
+  useAdminAuditLog as ax,
+  useExportAuditLogs as ay,
+  Lock as az,
   useSubmitJoinRequest as b,
-  useId as b0,
-  useSuspendMember as b1,
-  useReactivateMember as b2,
-  useRemoveMember as b3,
+  useSuspendMember as b0,
+  useReactivateMember as b1,
+  useRemoveMember as b2,
+  UserPlus as b3,
   Ellipsis as b4,
   useInviteUser as b5,
   useUpdateMemberRole as b6,
@@ -60647,36 +70198,35 @@ export {
   useApproveKeyRecovery as bj,
   __vitePreload as bk,
   useRejectKeyRecovery as bl,
-  useRouterState as bm,
-  Menu as bn,
-  FileText as bo,
-  LogOut as bp,
-  useLogPolicyExpiryCheck as bq,
-  useLogPolicyReportExported as br,
-  commonjsGlobal as bs,
-  getDefaultExportFromCjs as bt,
+  useCheckPolicyExpiry as bm,
+  useLogPolicyExpiryCheck as bn,
+  useLogPolicyReportExported as bo,
+  usePolicyExpiryStore as bp,
+  FileText as bq,
+  commonjsGlobal as br,
+  getDefaultExportFromCjs as bs,
   Badge as c,
   ue as d,
-  createLucideIcon as e,
-  cn as f,
-  Check as g,
-  Copy as h,
-  useActor as i,
+  cn as e,
+  createLucideIcon as f,
+  useActor as g,
+  useAuth as h,
+  useQueryClient as i,
   jsxRuntimeExports as j,
-  useAuth as k,
-  useQueryClient as l,
-  useQuery as m,
-  useNavigate as n,
-  useMutation as o,
-  Tabs as p,
-  TabsList as q,
+  useQuery as k,
+  useNavigate as l,
+  useMutation as m,
+  Tabs as n,
+  TabsList as o,
+  TabsTrigger as p,
+  TabsContent as q,
   reactExports as r,
-  TabsTrigger as s,
-  TabsContent as t,
+  Label as s,
+  Switch as t,
   usePublicGroups as u,
-  Label as v,
-  Switch as w,
-  Select as x,
-  SelectTrigger as y,
-  SelectValue as z
+  Select as v,
+  SelectTrigger as w,
+  SelectValue as x,
+  SelectContent as y,
+  RetentionPeriod as z
 };

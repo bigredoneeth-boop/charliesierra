@@ -567,6 +567,17 @@ export default function ChatPage() {
     }
   }, [connection.isOnline, drainQueue]);
 
+  // Record when this conversation was last opened so ConversationListItem
+  // can use it as a fallback unread signal for threads without cached messages.
+  useEffect(() => {
+    if (!id) return;
+    try {
+      localStorage.setItem(`cs_last_read_${id}`, Date.now().toString());
+    } catch {
+      // localStorage unavailable — no-op
+    }
+  }, [id]);
+
   const convId = useMemo(() => {
     try {
       return BigInt(id);

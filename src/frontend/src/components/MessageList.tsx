@@ -15,7 +15,8 @@ import { useOfflineQueue } from "@/hooks/use-offline-queue";
 import { useUserProfiles } from "@/hooks/use-profiles";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import React, {
   memo,
   useCallback,
@@ -158,6 +159,8 @@ export const MessageList = memo(function MessageList({
   const topRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
+  const [unreadBelowCount, setUnreadBelowCount] = useState(0);
+  const highwaterMsgCountRef = useRef(0);
   const [oldestId, setOldestId] = useState<bigint | undefined>(undefined);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const [allMessages, setAllMessages] = useState<MessagePublic[]>([]);
@@ -233,6 +236,10 @@ export const MessageList = memo(function MessageList({
       bottomRef.current?.scrollIntoView({
         behavior: "smooth",
       });
+      highwaterMsgCountRef.current = allMessagesCount;
+    } else if (!isAtBottom && allMessagesCount > highwaterMsgCountRef.current) {
+      // New messages arrived while user is scrolled up — update badge
+      setUnreadBelowCount(allMessagesCount - highwaterMsgCountRef.current);
     }
     prevLenRef.current = allMessagesCount;
   }, [allMessagesCount, isAtBottom]);
@@ -241,8 +248,14 @@ export const MessageList = memo(function MessageList({
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
+    const distFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    const atBottom = distFromBottom < 60;
     setIsAtBottom(atBottom);
+    // When user returns to bottom, reset unread badge and highwater mark
+    if (atBottom) {
+      setUnreadBelowCount(0);
+      highwaterMsgCountRef.current = allMessages.length;
+    }
     // Load older messages on scroll to top
     if (el.scrollTop < 80 && allMessages.length > 0) {
       const oldest = allMessages[0].id;
@@ -433,6 +446,78 @@ export const MessageList = memo(function MessageList({
       )}
 
       <div ref={bottomRef} className="h-1" />
+
+      {/* Scroll-to-bottom FAB */}
+      <AnimatePresence>
+        {!isAtBottom && (
+          <motion.button
+            key="scroll-to-bottom"
+            initial={{ opacity: 0, scale: 0.8, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 8 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            type="button"
+            onClick={() => {
+              bottomRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+              });
+              setUnreadBelowCount(0);
+              highwaterMsgCountRef.current = allMessages.length;
+            }}
+            aria-label="Scroll to latest message"
+            data-ocid="messages.scroll_to_bottom_button"
+            style={{
+              position: "sticky",
+              bottom: "1rem",
+              marginLeft: "auto",
+              marginRight: "0.25rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "2.5rem",
+              height: "2.5rem",
+              minWidth: "44px",
+              minHeight: "44px",
+              borderRadius: "50%",
+              background: "oklch(var(--card))",
+              border: "1px solid oklch(var(--border))",
+              color: "oklch(var(--foreground))",
+              boxShadow: "0 2px 12px oklch(0 0 0 / 0.35)",
+              cursor: "pointer",
+              zIndex: 10,
+              flexShrink: 0,
+              flexGrow: 0,
+            }}
+          >
+            <ChevronDown size={18} strokeWidth={2.5} />
+            {unreadBelowCount > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-4px",
+                  right: "-4px",
+                  minWidth: "18px",
+                  height: "18px",
+                  borderRadius: "9px",
+                  background: "oklch(var(--primary))",
+                  color: "oklch(var(--primary-foreground))",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  lineHeight: "18px",
+                  textAlign: "center",
+                  padding: "0 4px",
+                  pointerEvents: "none",
+                }}
+              >
+                {unreadBelowCount > 99 ? "99+" : unreadBelowCount}
+              </span>
+            )}
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 });

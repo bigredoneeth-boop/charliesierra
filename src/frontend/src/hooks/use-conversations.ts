@@ -63,11 +63,11 @@ export function useConversations() {
       return all.filter((c) => !hidden.has(c.id.toString()));
     },
     enabled: !!actor && !isFetching,
-    staleTime: 60_000,
+    staleTime: 0,
     gcTime: 300_000,
-    refetchInterval: 30_000,
+    refetchInterval: 5_000,
     refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
   });
 }
 
@@ -163,6 +163,7 @@ export function useMarkRead() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
 }

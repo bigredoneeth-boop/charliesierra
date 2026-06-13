@@ -2,12 +2,12 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/context/auth-context";
 import { CryptoProvider } from "@/context/crypto-context";
+// AdminDashboardPage is statically imported to eliminate stale-chunk failures
+import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import type React from "react";
-import { Suspense, lazy } from "react";
+import { Component, Suspense, lazy } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 const DiscoverPage = lazy(() => import("@/pages/DiscoverPage"));
-const AdminDashboardPage = lazy(
-  () => import("@/pages/admin/AdminDashboardPage"),
-);
 const AdminOrganizationsPage = lazy(
   () => import("@/pages/admin/AdminOrganizationsPage"),
 );
@@ -134,20 +134,98 @@ const notFoundRoute = createRoute({
   component: () => <NotFoundPage />,
 });
 
+// ── Chunk-load error boundary ───────────────────────────────────────────────
+const RELOAD_KEY = "admin_chunk_reload_attempted";
+
+interface ChunkBoundaryState {
+  hasError: boolean;
+  isChunkError: boolean;
+  reloading: boolean;
+}
+
+class ChunkLoadErrorBoundary extends Component<
+  { children: ReactNode },
+  ChunkBoundaryState
+> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, isChunkError: false, reloading: false };
+  }
+
+  static getDerivedStateFromError(error: Error): ChunkBoundaryState {
+    const msg = error?.message ?? "";
+    const isChunkError =
+      msg.includes("dynamically imported module") ||
+      msg.includes("Failed to fetch") ||
+      msg.includes("ChunkLoadError") ||
+      msg.includes("Loading chunk");
+    return { hasError: true, isChunkError, reloading: false };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    if (this.state.isChunkError) {
+      const alreadyAttempted = sessionStorage.getItem(RELOAD_KEY);
+      if (!alreadyAttempted) {
+        sessionStorage.setItem(RELOAD_KEY, "1");
+        this.setState({ reloading: true });
+        window.location.reload();
+      }
+    } else {
+      console.error("[AdminBoundary] non-chunk error:", error, info);
+    }
+  }
+
+  handleRetry = () => {
+    sessionStorage.removeItem(RELOAD_KEY);
+    this.setState({ hasError: false, isChunkError: false, reloading: false });
+  };
+
+  render() {
+    const { hasError, isChunkError, reloading } = this.state;
+    if (!hasError) return this.props.children;
+
+    if (isChunkError || reloading) {
+      return (
+        <div className="fixed inset-0 flex flex-col items-center justify-center gap-3 bg-background">
+          <LoadingSpinner size={36} />
+          <p className="text-sm text-muted-foreground">Refreshing…</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background p-8 text-center">
+        <p className="text-foreground font-semibold">
+          Something went wrong loading this page.
+        </p>
+        <button
+          type="button"
+          onClick={this.handleRetry}
+          className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+}
+
 // ── Admin layout wrapper ─────────────────────────────────────────────────────
 function AdminGuard() {
   return (
     <div className="app-shell">
       <AdminAccessGate>
-        <Suspense
-          fallback={
-            <div className="fixed inset-0 flex items-center justify-center bg-background">
-              <LoadingSpinner size={36} />
-            </div>
-          }
-        >
-          <Outlet />
-        </Suspense>
+        <ChunkLoadErrorBoundary>
+          <Suspense
+            fallback={
+              <div className="fixed inset-0 flex items-center justify-center bg-background">
+                <LoadingSpinner size={36} />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
+        </ChunkLoadErrorBoundary>
       </AdminAccessGate>
     </div>
   );

@@ -177,11 +177,41 @@ export function ConversationListItem({
       "messages",
       conversation.id.toString(),
     ]) ?? [];
-  const unreadCount = principal
-    ? cachedMessages.filter(
+
+  // Compute last-read timestamp from localStorage for this conversation.
+  // Updated by ChatPage when the user opens the thread.
+  const lastReadAtMs = (() => {
+    try {
+      const raw = localStorage.getItem(
+        `cs_last_read_${conversation.id.toString()}`,
+      );
+      return raw ? Number(raw) : 0;
+    } catch {
+      return 0;
+    }
+  })();
+
+  const lastMessageAtMs = Number(conversation.lastMessageAt) / 1_000_000;
+
+  // Determine unread count:
+  // 1. If we have cached messages, use the accurate per-message readBy check.
+  // 2. If no cache exists for this conversation (inactive thread), fall back to
+  //    comparing lastMessageAt against the localStorage last-read timestamp.
+  //    This makes the dot appear immediately for threads the user hasn't
+  //    opened since a new message arrived, even before messages are fetched.
+  const unreadCount = (() => {
+    if (!principal) return 0;
+    if (cachedMessages.length > 0) {
+      return cachedMessages.filter(
         (m) => !m.readBy.some((r) => r.userId.toText() === principal.toText()),
-      ).length
-    : 0;
+      ).length;
+    }
+    // No cache: use lastMessageAt vs last-read time as a fallback signal.
+    if (lastMessageAtMs > lastReadAtMs && lastMessageAtMs > 0) {
+      return 1;
+    }
+    return 0;
+  })();
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();

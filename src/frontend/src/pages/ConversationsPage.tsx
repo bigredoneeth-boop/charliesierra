@@ -6,7 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useConversations } from "@/hooks/use-conversations";
 import { useParams } from "@tanstack/react-router";
 import { Lock, MessageSquare, PenSquare } from "lucide-react";
-import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useMemo, useState } from "react";
 
 const SKELETON_IDS = ["a", "b", "c", "d", "e"] as const;
 
@@ -18,6 +19,28 @@ export default function ConversationsPage() {
   // Determine active conversation from route param if present
   const params = useParams({ strict: false }) as { id?: string };
   const activeId = params?.id ?? null;
+
+  // Sort conversations by most recent activity (descending).
+  // useMemo only recomputes when the conversations array reference changes
+  // (i.e. after a React Query refetch), preventing unnecessary re-renders.
+  // Stable sort preserves relative order for identical lastMessageAt values.
+  const sortedConversations = useMemo(() => {
+    if (!conversations) return [];
+    return [...conversations].sort((a, b) => {
+      const aTime =
+        typeof a.lastMessageAt === "bigint"
+          ? a.lastMessageAt
+          : BigInt(a.lastMessageAt ?? 0);
+      const bTime =
+        typeof b.lastMessageAt === "bigint"
+          ? b.lastMessageAt
+          : BigInt(b.lastMessageAt ?? 0);
+      // Descending: most recent first
+      if (bTime > aTime) return 1;
+      if (bTime < aTime) return -1;
+      return 0;
+    });
+  }, [conversations]);
 
   return (
     <Layout
@@ -77,14 +100,28 @@ export default function ConversationsPage() {
                 ocid="conversations.empty_state"
               />
             ) : (
-              conversations.map((conv, idx) => (
-                <ConversationListItem
-                  key={conv.id.toString()}
-                  conversation={conv}
-                  isActive={activeId === conv.id.toString()}
-                  index={idx + 1}
-                />
-              ))
+              <AnimatePresence initial={false}>
+                {sortedConversations.map((conv, idx) => (
+                  <motion.div
+                    key={conv.id.toString()}
+                    layout
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 0.22,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    }}
+                    style={{ willChange: "transform, opacity" }}
+                  >
+                    <ConversationListItem
+                      conversation={conv}
+                      isActive={activeId === conv.id.toString()}
+                      index={idx + 1}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             )}
           </div>
         </div>

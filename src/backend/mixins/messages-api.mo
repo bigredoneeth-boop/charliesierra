@@ -8,6 +8,7 @@ import NotifTypes "../types/notifications";
 import Principal "mo:core/Principal";
 import Nat "mo:core/Nat";
 import Map "mo:core/Map";
+import Time "mo:core/Time";
 
 mixin (
   msgsState : MsgsLib.State,
@@ -43,6 +44,12 @@ mixin (
     // Post-send hooks: retention metadata + notification triggers
     switch (result) {
       case (#ok(msg)) {
+        // Update conversation's lastMessageAt so it sorts to top
+        switch (convsState.conversations.get(req.conversationId)) {
+          case (?conv) { conv.lastMessageAt := Time.now() };
+          case null {};
+        };
+
         switch (convsState.conversations.get(req.conversationId)) {
           case (?conv) {
             if (conv.kind == #group) {
