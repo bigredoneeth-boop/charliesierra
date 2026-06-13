@@ -18,6 +18,31 @@ module {
     convsState  : ConvsLib.State;
     adminState  : AdminLib.State;
     memberships : Map.Map<Text, OrgTypes.OrgMembership>;
+    removeMemberRateLimitWindows : Map.Map<Common.UserId, Int>;
+    removeMemberRateLimitCounts  : Map.Map<Common.UserId, Nat>;
+  };
+
+  // Rate-limit helper: returns true (allowed) and records, or false (exceeded) without mutating.
+  // Window is in nanoseconds. Uses Time.now() values directly.
+  func checkAndRecordRateLimit(
+    caller      : Common.UserId,
+    now         : Int,
+    windowMap   : Map.Map<Common.UserId, Int>,
+    countMap    : Map.Map<Common.UserId, Nat>,
+    maxAttempts : Nat,
+  ) : Bool {
+    let windowNs : Int = 3_600_000_000_000;
+    let (windowStart, currentCount) : (Int, Nat) = switch (windowMap.get(caller)) {
+      case null (now, 0);
+      case (?ws) {
+        let count = switch (countMap.get(caller)) { case null 0; case (?c) c };
+        if (now - ws >= windowNs) { (now, 0) } else { (ws, count) };
+      };
+    };
+    if (currentCount >= maxAttempts) { return false };
+    windowMap.add(caller, windowStart);
+    countMap.add(caller, currentCount + 1);
+    true
   };
 
   // ── Private helpers ────────────────────────────────────────────────────────
@@ -161,11 +186,13 @@ module {
   /// Force-remove a member from a group and record an audit event.
   /// Caller must be SuperAdmin or OrgAdmin.
   public func removeMemberFromGroup(
-    convsState  : ConvsLib.State,
-    adminState  : AdminLib.State,
-    memberships : Map.Map<Text, OrgTypes.OrgMembership>,
-    caller      : Common.UserId,
-    req         : T.RemoveMemberFromGroupRequest,
+    convsState   : ConvsLib.State,
+    adminState   : AdminLib.State,
+    memberships  : Map.Map<Text, OrgTypes.OrgMembership>,
+    caller       : Common.UserId,
+    req          : T.RemoveMemberFromGroupRequest,
+    rlWindowMap  : Map.Map<Common.UserId, Int>,
+    rlCountMap   : Map.Map<Common.UserId, Nat>,
   ) : Common.Result<(), Text> {
     let superAdmin = isSuperAdmin(caller, adminState);
     if (not superAdmin) {
@@ -173,6 +200,11 @@ module {
         case null return #err("Unauthorized: must be OrgAdmin or SuperAdmin");
         case (?_) {};
       };
+    };
+    // Rate limit: 30 removeMemberFromGroup calls per hour per caller.
+    let now = Time.now();
+    if (not checkAndRecordRateLimit(caller, now, rlWindowMap, rlCountMap, 30)) {
+      return #err("Rate limit exceeded: too many removeMemberFromGroup requests. Try again later.");
     };
 
     switch (convsState.conversations.get(req.groupId)) {

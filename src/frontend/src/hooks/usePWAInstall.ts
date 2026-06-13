@@ -16,6 +16,8 @@ export type BrowserInstallType =
 interface UsePWAInstallResult {
   isInstallable: boolean;
   isInstalled: boolean;
+  isStandalone: boolean;
+  isAndroid: boolean;
   canAutoPrompt: boolean;
   browserInstallType: BrowserInstallType;
   showInstructionModal: boolean;
@@ -29,6 +31,12 @@ const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 function detectBrowserInstallType(): BrowserInstallType {
   const ua = navigator.userAgent;
+  // Check standalone first — if already installed, don't show install button
+  const standalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    ("standalone" in navigator &&
+      (navigator as { standalone?: boolean }).standalone === true);
+  if (standalone) return "auto"; // will be filtered by isStandalone
   const isIOS =
     /iPad|iPhone|iPod/.test(ua) &&
     !(window as Window & { MSStream?: unknown }).MSStream;
@@ -53,12 +61,17 @@ export default function usePWAInstall(): UsePWAInstallResult {
     useState<BeforeInstallPromptEvent | null>(null);
   const [dismissed, setDismissed] = useState(() => isDismissed());
   const [showInstructionModal, setShowInstructionModal] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(
-    () =>
-      window.matchMedia("(display-mode: standalone)").matches ||
-      ("standalone" in navigator &&
-        (navigator as { standalone?: boolean }).standalone === true),
-  );
+
+  // Standalone detection: true when running as installed PWA
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    ("standalone" in navigator &&
+      (navigator as { standalone?: boolean }).standalone === true);
+
+  const [isInstalled, setIsInstalled] = useState(() => isStandalone);
+
+  const ua = navigator.userAgent;
+  const isAndroid = /Android/.test(ua);
 
   const browserInstallType = detectBrowserInstallType();
   const canAutoPrompt = deferredPrompt !== null;
@@ -71,7 +84,9 @@ export default function usePWAInstall(): UsePWAInstallResult {
     browserInstallType === "chrome" ||
     browserInstallType === "generic";
 
+  // Never show install UI when already running in standalone/installed mode
   const isInstallable =
+    !isStandalone &&
     !isInstalled &&
     !dismissed &&
     (canAutoPrompt ||
@@ -81,7 +96,7 @@ export default function usePWAInstall(): UsePWAInstallResult {
         (navigator as { standalone?: boolean }).standalone === undefined));
 
   useEffect(() => {
-    if (isInstalled) return;
+    if (isInstalled || isStandalone) return;
 
     const onBeforeInstall = (e: Event) => {
       e.preventDefault();
@@ -100,7 +115,7 @@ export default function usePWAInstall(): UsePWAInstallResult {
       window.removeEventListener("beforeinstallprompt", onBeforeInstall);
       window.removeEventListener("appinstalled", onAppInstalled);
     };
-  }, [isInstalled]);
+  }, [isInstalled, isStandalone]);
 
   const promptInstall = useCallback(async (): Promise<void> => {
     if (deferredPrompt) {
@@ -127,6 +142,8 @@ export default function usePWAInstall(): UsePWAInstallResult {
   return {
     isInstallable,
     isInstalled,
+    isStandalone,
+    isAndroid,
     canAutoPrompt,
     browserInstallType,
     showInstructionModal,

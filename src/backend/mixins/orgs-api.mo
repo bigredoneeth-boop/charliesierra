@@ -20,12 +20,16 @@ mixin (
   orgsData    : Map.Map<T.OrgId, T.OrgRecord>,
   memberships : Map.Map<Text, T.OrgMembership>,
   invites     : Map.Map<Text, T.OrgInvite>,
+  orgsRlState : OrgsLib.RateLimitState,
 ) {
-  /// Create a new organisation. Caller becomes the initial OrgAdmin.
+  /// Create a new organisation. Super Admin only.
   public shared ({ caller }) func createOrg(
     req : T.CreateOrgRequest
   ) : async Common.Result<T.OrgRecord, Text> {
-    OrgsLib.createOrg(caller, req, orgsData, memberships, adminState);
+    if (not OrgsLib.isSuperAdmin(caller, adminState)) {
+      return #err("Unauthorized: Super Admin access required");
+    };
+    OrgsLib.createOrg(caller, req, orgsData, memberships, adminState, orgsRlState);
   };
 
   /// Get a single organisation record by ID.
@@ -50,7 +54,7 @@ mixin (
   public shared ({ caller }) func inviteUser(
     req : T.InviteUserRequest
   ) : async Common.Result<T.OrgMembership, Text> {
-    OrgsLib.inviteUser(caller, req, orgsData, memberships, invites, adminState);
+    OrgsLib.inviteUser(caller, req, orgsData, memberships, invites, adminState, orgsRlState);
   };
 
   /// List members of an organisation with pagination.
@@ -75,7 +79,7 @@ mixin (
   public shared ({ caller }) func suspendMember(
     req : T.SuspendUserRequest
   ) : async Common.Result<(), Text> {
-    OrgsLib.suspendMember(caller, req, memberships, adminState);
+    OrgsLib.suspendMember(caller, req, memberships, adminState, orgsRlState);
   };
 
   /// Reactivate a previously suspended member, restoring their status to #Active.

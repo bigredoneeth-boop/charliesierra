@@ -413,14 +413,15 @@ mixin (
   // ── sendPushToUser ────────────────────────────────────────────────────────────
 
   /// Deliver a Web Push notification to a subscribed user.
-  /// Builds a real P-256 VAPID-signed JWT and HTTP POSTs to the push endpoint.
-  /// Handles 410/404 expiry by removing stale subscriptions.
+  /// Caller must be an admin. Builds a real P-256 VAPID-signed JWT and HTTP POSTs
+  /// to the push endpoint. Handles 410/404 expiry by removing stale subscriptions.
   public shared ({ caller }) func sendPushToUser(
     targetPrincipal : Principal,
     senderName      : Text,
     messageType     : Text,
     convId          : Text,
   ) : async () {
+    if (not AdminLib.isAdmin(adminState, caller)) { return };
     ensureVapidInit();
     NotifLib.pruneStaleSubscriptions(pushSubscriptions);
 
@@ -489,12 +490,40 @@ mixin (
     };
   };
 
+  // ── Push endpoint security ────────────────────────────────────────────────────
+
+  /// Validate that a push endpoint is a known, legitimate push service URL.
+  /// Must start with https:// and contain a domain from the allow-list.
+  func isValidPushEndpoint(endpoint : Text) : Bool {
+    if (not endpoint.startsWith(#text "https://")) { return false };
+    let knownDomains : [Text] = [
+      "fcm.googleapis.com",
+      "push.services.mozilla.com",
+      "updates.push.services.mozilla.com",
+      "notify.windows.com",
+      "web.push.apple.com",
+      "push.apple.com",
+    ];
+    for (domain in knownDomains.vals()) {
+      if (endpoint.contains(#text domain)) { return true };
+    };
+    false
+  };
+
   /// Store or replace a Web Push subscription for the caller.
+  /// Security: only the caller may register their own subscription.
+  /// The endpoint must begin with https:// and match a known push service domain.
   public shared ({ caller }) func registerPushSubscription(
     endpoint : Text,
     p256dh   : Text,
     auth     : Text,
   ) : async Common.Result<(), Text> {
+    // Caller-is-owner: subscription is always keyed by caller — this is
+    // enforced by the Map key being `caller` itself.
+    // Endpoint validation: reject suspicious or non-HTTPS endpoints.
+    if (not isValidPushEndpoint(endpoint)) {
+      return #err("Invalid push endpoint: must use https:// and a known push service domain.");
+    };
     let now = Time.now();
     let record : T.PushSubscriptionRecord = {
       endpoint  = endpoint;
@@ -509,11 +538,13 @@ mixin (
   };
 
   /// Legacy alias (arg order: endpoint, auth, p256dh).
+  /// Also validates endpoint — silently drops invalid subscriptions.
   public shared ({ caller }) func subscribeToPush(
     endpoint : Text,
     auth     : Text,
     p256dh   : Text,
   ) : async () {
+    if (not isValidPushEndpoint(endpoint)) { return };
     let now = Time.now();
     let record : T.PushSubscriptionRecord = {
       endpoint  = endpoint;

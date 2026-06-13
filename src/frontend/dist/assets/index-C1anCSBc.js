@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-Cqt2BpR7.js","assets/card-ey6R8cFg.js","assets/AdminOrganizationsPage-ku4Bea_R.js","assets/AdminStatusBadge-D_QdF9I0.js","assets/ConfirmDialog-7ykLrmRA.js","assets/pencil-BAmab5s2.js","assets/shield-alert-CB87cWob.js","assets/AdminUsersPage-Opy8sJS9.js","assets/funnel-CCrWuhil.js","assets/AdminGroupsPage-JL4cgcdH.js","assets/AdminAuditPage-BOfUnMLb.js","assets/AdminRetentionPoliciesPage-CdKQiprL.js","assets/AdminSettingsPage-C0sYzI6C.js","assets/AdminBootstrapPage-DwcMrMJ6.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-QZ5HQAv5.js","assets/card-VHfzxIbH.js","assets/AdminOrganizationsPage-DSgPJPMy.js","assets/AdminStatusBadge-BaSZIflu.js","assets/ConfirmDialog-DIJU9L6Y.js","assets/pencil-BPP6znzb.js","assets/shield-alert-DCZMlNyl.js","assets/AdminUsersPage-CtW7zZRy.js","assets/funnel-CqSEyVpO.js","assets/AdminGroupsPage-Cp8GPTfl.js","assets/AdminAuditPage-CC326fi9.js","assets/AdminRetentionPoliciesPage-DAmkXwPC.js","assets/AdminSettingsPage-C_XslpSI.js","assets/AdminBootstrapPage-BL90oApT.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -48557,6 +48557,101 @@ function OnboardingGate({ children }) {
     }
   );
 }
+function UpdateBanner({ onUpdate }) {
+  const [visible, setVisible] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    const id2 = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(id2);
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "output",
+    {
+      "aria-live": "polite",
+      "data-ocid": "update.banner",
+      style: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 9999,
+        paddingTop: "env(safe-area-inset-top)",
+        transform: visible ? "translateY(0)" : "translateY(-100%)",
+        transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        // Dark CharlieSierra theme
+        backgroundColor: "#0f172a",
+        borderBottom: "1px solid rgba(99,179,237,0.25)"
+      },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          style: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+            padding: "8px 16px",
+            minHeight: "40px"
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Download,
+              {
+                size: 13,
+                style: { color: "#63b3ed", flexShrink: 0 },
+                "aria-hidden": true
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "span",
+              {
+                style: {
+                  fontSize: "13px",
+                  lineHeight: 1.4,
+                  color: "#cbd5e1",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
+                },
+                children: "A new version of CharlieSierra is available."
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: onUpdate,
+                "data-ocid": "update.primary_button",
+                style: {
+                  flexShrink: 0,
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  padding: "4px 12px",
+                  borderRadius: "6px",
+                  border: "1px solid rgba(99,179,237,0.5)",
+                  backgroundColor: "rgba(99,179,237,0.12)",
+                  color: "#63b3ed",
+                  cursor: "pointer",
+                  transition: "background-color 0.15s, border-color 0.15s",
+                  letterSpacing: "0.01em",
+                  whiteSpace: "nowrap"
+                },
+                onMouseEnter: (e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(99,179,237,0.22)";
+                  e.currentTarget.style.borderColor = "rgba(99,179,237,0.75)";
+                },
+                onMouseLeave: (e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(99,179,237,0.12)";
+                  e.currentTarget.style.borderColor = "rgba(99,179,237,0.5)";
+                },
+                children: "Update Now"
+              }
+            )
+          ]
+        }
+      )
+    }
+  );
+}
 const STORAGE_KEY$1 = "cs_a11y";
 const DEFAULTS = {
   fontSizeScale: 1,
@@ -48656,6 +48751,85 @@ function useAccessibility() {
       "useAccessibility must be used within AccessibilityProvider"
     );
   return ctx;
+}
+function useServiceWorkerUpdate() {
+  const [needsUpdate, setNeedsUpdate] = reactExports.useState(false);
+  const updateFnRef = reactExports.useRef(
+    null
+  );
+  const needsUpdateRef = reactExports.useRef(false);
+  reactExports.useEffect(() => {
+    if (!("serviceWorker" in navigator)) return;
+    let cleanupFns = [];
+    async function init() {
+      try {
+        let bindUpdateFn = function(worker) {
+          updateFnRef.current = async (reload = true) => {
+            worker.postMessage({ type: "SKIP_WAITING" });
+            if (reload) {
+              await new Promise((resolve) => setTimeout(resolve, 250));
+              window.location.reload();
+            }
+          };
+        };
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (!registration) return;
+        if (registration.waiting) {
+          needsUpdateRef.current = true;
+          setNeedsUpdate(true);
+          bindUpdateFn(registration.waiting);
+        }
+        const onUpdateFound = () => {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+          const onStateChange = () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+              needsUpdateRef.current = true;
+              setNeedsUpdate(true);
+              bindUpdateFn(newWorker);
+            }
+          };
+          newWorker.addEventListener("statechange", onStateChange);
+          cleanupFns.push(
+            () => newWorker.removeEventListener("statechange", onStateChange)
+          );
+        };
+        registration.addEventListener("updatefound", onUpdateFound);
+        cleanupFns.push(
+          () => registration.removeEventListener("updatefound", onUpdateFound)
+        );
+        const onControllerChange = () => {
+          if (needsUpdateRef.current) {
+            window.location.reload();
+          }
+        };
+        navigator.serviceWorker.addEventListener(
+          "controllerchange",
+          onControllerChange
+        );
+        cleanupFns.push(
+          () => navigator.serviceWorker.removeEventListener(
+            "controllerchange",
+            onControllerChange
+          )
+        );
+      } catch (err) {
+        console.warn("[SW Update] Failed to set up update detection:", err);
+      }
+    }
+    init();
+    return () => {
+      for (const fn of cleanupFns) fn();
+    };
+  }, []);
+  const applyUpdate = () => {
+    if (updateFnRef.current) {
+      updateFnRef.current(true);
+    } else {
+      window.location.reload();
+    }
+  };
+  return { needsUpdate, applyUpdate };
 }
 function EncryptedBadge({
   compact = false,
@@ -54811,6 +54985,25 @@ function MessageInput({
   const textareaRef = reactExports.useRef(null);
   const typingTimeout = reactExports.useRef(null);
   const isTypingRef = reactExports.useRef(false);
+  const wrapperRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    let lastHeight = vv.height;
+    const handler = () => {
+      const wrapper = wrapperRef.current;
+      if (!wrapper) return;
+      const diff = lastHeight - vv.height;
+      if (diff > 100) {
+        wrapper.setAttribute("data-keyboard-open", "true");
+      } else if (diff < -100) {
+        wrapper.removeAttribute("data-keyboard-open");
+      }
+      lastHeight = vv.height;
+    };
+    vv.addEventListener("resize", handler);
+    return () => vv.removeEventListener("resize", handler);
+  }, []);
   reactExports.useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
@@ -54937,113 +55130,126 @@ function MessageInput({
     [handleSend]
   );
   const canSend = text.trim().length > 0 && !sending && !isRestoringKeys && isKeyReady;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-t border-border px-3 py-2.5 flex-shrink-0", children: [
-    showVoice && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      VoiceNoteRecorder,
-      {
-        conversationId,
-        onClose: () => setShowVoice(false),
-        onSent: () => {
-          setShowVoice(false);
-          onMessageSent == null ? void 0 : onMessageSent();
-        }
-      }
-    ) }),
-    isRestoringKeys && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[10px] text-muted-foreground mb-1.5 px-1 flex items-center gap-1", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 10, className: "animate-spin" }),
-      "Loading encryption keys…"
-    ] }),
-    !connection.isOnline && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-amber-600 dark:text-amber-400 mb-1.5 px-1", children: "You’re offline — message will be queued and sent when reconnected." }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-end gap-2", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          type: "button",
-          onClick: () => setShowAttachment(true),
-          className: "flex-shrink-0 p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-smooth",
-          "aria-label": "Attach file",
-          "data-ocid": "message.upload_button",
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 20 })
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "textarea",
-        {
-          ref: textareaRef,
-          value: text,
-          onChange: handleChange,
-          onKeyDown: handleKeyDown,
-          onBlur: clearTypingIndicator,
-          placeholder: connection.isOnline ? "Message" : "Message (will be queued)",
-          rows: 1,
-          className: "w-full resize-none bg-muted/50 border border-input rounded-xl px-3.5 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-smooth leading-relaxed overflow-hidden",
-          style: { maxHeight: `${5 * 24}px` },
-          "data-ocid": "message.input"
-        }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(Tooltip, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      ref: wrapperRef,
+      className: "chat-input-container bg-card border-t border-border px-3 py-2.5 flex-shrink-0",
+      style: { paddingBottom: "env(safe-area-inset-bottom, 0px)" },
+      children: [
+        showVoice && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          VoiceNoteRecorder,
           {
-            type: "button",
-            onClick: togglePriority,
-            className: `flex-shrink-0 p-2 rounded-lg transition-smooth ${priority === "high" ? "text-orange-500 bg-orange-500/15 hover:bg-orange-500/25" : "text-muted-foreground hover:text-orange-500 hover:bg-orange-500/10"}`,
-            "aria-label": priority === "high" ? "Priority: High" : "Priority: Normal",
-            "aria-pressed": priority === "high",
-            "data-ocid": "message.priority_toggle",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Zap,
-              {
-                size: 18,
-                className: priority === "high" ? "fill-orange-500" : ""
-              }
-            )
+            conversationId,
+            onClose: () => setShowVoice(false),
+            onSent: () => {
+              setShowVoice(false);
+              onMessageSent == null ? void 0 : onMessageSent();
+            }
           }
         ) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipContent, { side: "top", className: "text-xs", children: priority === "high" ? "High priority — click to set normal" : "Normal priority — click to set high" })
-      ] }),
-      !canSend && !sending ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          type: "button",
-          onClick: () => setShowVoice((v2) => !v2),
-          className: `flex-shrink-0 p-2 rounded-lg transition-smooth ${showVoice ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary hover:bg-primary/10"}`,
-          "aria-label": "Record voice note",
-          "data-ocid": "message.voice_button",
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Mic, { size: 20 })
-        }
-      ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Button,
-        {
-          type: "button",
-          size: "sm",
-          onClick: handleSend,
-          disabled: !canSend,
-          className: "flex-shrink-0 h-9 w-9 p-0 rounded-xl",
-          "data-ocid": "message.submit_button",
-          "aria-label": connection.isOnline ? "Send message" : "Queue message",
-          children: sending || isRestoringKeys ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 16, className: "animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 16 })
-        }
-      )
-    ] }),
-    error && /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "p",
-      {
-        className: "text-xs text-destructive mt-1.5 px-1",
-        "data-ocid": "message.error_state",
-        children: error
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      AttachmentUpload,
-      {
-        conversationId,
-        open: showAttachment,
-        onClose: () => setShowAttachment(false),
-        onMessageSent
-      }
-    )
-  ] });
+        isRestoringKeys && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[10px] text-muted-foreground mb-1.5 px-1 flex items-center gap-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 10, className: "animate-spin" }),
+          "Loading encryption keys…"
+        ] }),
+        !connection.isOnline && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-amber-600 dark:text-amber-400 mb-1.5 px-1", children: "You’re offline — message will be queued and sent when reconnected." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-end gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => setShowAttachment(true),
+              className: "flex-shrink-0 p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-smooth",
+              "aria-label": "Attach file",
+              "data-ocid": "message.upload_button",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Paperclip, { size: 20 })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              ref: textareaRef,
+              value: text,
+              onChange: handleChange,
+              onKeyDown: handleKeyDown,
+              onBlur: clearTypingIndicator,
+              placeholder: connection.isOnline ? "Message" : "Message (will be queued)",
+              rows: 1,
+              className: "w-full resize-none bg-muted/50 border border-input rounded-xl px-3.5 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-smooth leading-relaxed overflow-hidden",
+              style: { maxHeight: `${5 * 24}px` },
+              inputMode: "text",
+              enterKeyHint: "send",
+              autoCorrect: "on",
+              autoCapitalize: "sentences",
+              spellCheck: true,
+              "data-ocid": "message.input"
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(Tooltip, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: togglePriority,
+                className: `flex-shrink-0 p-2 rounded-lg transition-smooth ${priority === "high" ? "text-orange-500 bg-orange-500/15 hover:bg-orange-500/25" : "text-muted-foreground hover:text-orange-500 hover:bg-orange-500/10"}`,
+                "aria-label": priority === "high" ? "Priority: High" : "Priority: Normal",
+                "aria-pressed": priority === "high",
+                "data-ocid": "message.priority_toggle",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Zap,
+                  {
+                    size: 18,
+                    className: priority === "high" ? "fill-orange-500" : ""
+                  }
+                )
+              }
+            ) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipContent, { side: "top", className: "text-xs", children: priority === "high" ? "High priority — click to set normal" : "Normal priority — click to set high" })
+          ] }),
+          !canSend && !sending ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => setShowVoice((v2) => !v2),
+              className: `flex-shrink-0 p-2 rounded-lg transition-smooth ${showVoice ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary hover:bg-primary/10"}`,
+              "aria-label": "Record voice note",
+              "data-ocid": "message.voice_button",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Mic, { size: 20 })
+            }
+          ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              type: "button",
+              size: "sm",
+              onClick: handleSend,
+              disabled: !canSend,
+              className: "flex-shrink-0 h-9 w-9 p-0 rounded-xl",
+              "data-ocid": "message.submit_button",
+              "aria-label": connection.isOnline ? "Send message" : "Queue message",
+              children: sending || isRestoringKeys ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 16, className: "animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 16 })
+            }
+          )
+        ] }),
+        error && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "p",
+          {
+            className: "text-xs text-destructive mt-1.5 px-1",
+            "data-ocid": "message.error_state",
+            children: error
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          AttachmentUpload,
+          {
+            conversationId,
+            open: showAttachment,
+            onClose: () => setShowAttachment(false),
+            onMessageSent
+          }
+        )
+      ]
+    }
+  );
 }
 function PriorityMessageBadge() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Tooltip, { children: [
@@ -64146,6 +64352,14 @@ const MessageList = reactExports.memo(function MessageList2({
             bottom.scrollIntoView({ behavior: "instant", block: "end" });
           }
           hasScrolledToBottomRef.current = true;
+          setTimeout(() => {
+            const elFallback = scrollRef.current;
+            if (!elFallback) return;
+            const dist = elFallback.scrollHeight - elFallback.scrollTop - elFallback.clientHeight;
+            if (dist > 60) {
+              elFallback.scrollTop = elFallback.scrollHeight;
+            }
+          }, 300);
         });
       };
       requestAnimationFrame(doScroll);
@@ -64267,10 +64481,11 @@ const MessageList = reactExports.memo(function MessageList2({
     {
       ref: scrollRef,
       onScroll: handleScroll2,
-      className: "flex-1 overflow-y-auto overscroll-contain chat-scroll px-4 py-3 flex flex-col",
+      className: "flex-1 overflow-y-auto overscroll-contain chat-scroll native-scroll px-4 py-3 flex flex-col",
       style: {
         WebkitOverflowScrolling: "touch",
-        touchAction: "pan-y"
+        touchAction: "pan-y",
+        overscrollBehaviorY: "contain"
       },
       "data-ocid": "messages.list",
       children: [
@@ -65706,6 +65921,16 @@ function EmptyState({
     }
   );
 }
+function AppIcon() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center mb-4 pt-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "img",
+    {
+      src: "/icon-192x192.png",
+      alt: "CharlieSierra",
+      className: "w-16 h-16 rounded-2xl shadow-md border border-border"
+    }
+  ) });
+}
 function EdgeInstructions() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
     {
@@ -65760,15 +65985,19 @@ function IOSInstructions() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
     {
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Share2, { size: 16, className: "text-primary" }),
-      text: "Tap the Share button (📤) at the bottom of Safari."
+      text: "Tap the Share button (📤) at the bottom of Safari"
     },
     {
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
-      text: `"Add to Home Screen" — scroll down if you don't see it.`
+      text: "Scroll down and tap Add to Home Screen"
     },
     {
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
-      text: 'Tap "Add" in the top-right corner to confirm.'
+      text: "Tap Add in the top right corner"
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: "CharlieSierra will appear on your home screen"
     }
   ].map((step, i) => (
     // biome-ignore lint/suspicious/noArrayIndexKey: static list
@@ -65785,15 +66014,19 @@ function AndroidInstructions() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "space-y-4 mt-4", children: [
     {
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Ellipsis, { size: 16, className: "text-primary" }),
-      text: "Tap the ⋮ menu in the top-right corner of Chrome."
+      text: "Tap the three-dot menu (⋮) in Chrome"
     },
     {
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
-      text: '"Add to Home Screen" or "Install App" — tap it.'
+      text: "Select Add to Home screen"
     },
     {
       icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
-      text: 'Tap "Add" or "Install" to confirm and find CharlieSierra on your home screen.'
+      text: "Tap Add to confirm"
+    },
+    {
+      icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 16, className: "text-primary" }),
+      text: "Find CharlieSierra on your home screen"
     }
   ].map((step, i) => (
     // biome-ignore lint/suspicious/noArrayIndexKey: static list
@@ -65845,6 +66078,7 @@ function PWAInstallModal({
   browserInstallType
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange: (o2) => !o2 && onClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-md", "data-ocid": "pwa.install_modal", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AppIcon, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogTitle, { className: "flex items-center gap-2 text-base", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { size: 18, className: "text-primary", "aria-hidden": "true" }),
@@ -65859,7 +66093,10 @@ function PWAInstallModal({
       browserInstallType === "android" && /* @__PURE__ */ jsxRuntimeExports.jsx(AndroidInstructions, {}),
       (browserInstallType === "generic" || browserInstallType === "auto") && /* @__PURE__ */ jsxRuntimeExports.jsx(GenericInstructions, {})
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-muted-foreground border-t border-border pt-3 mt-1", children: "Once installed, CharlieSierra runs in its own window with offline support and faster load times." })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-border pt-3 mt-1 space-y-1.5", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-muted-foreground", children: "Once installed, CharlieSierra runs in its own window with offline support and faster load times." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] font-medium text-foreground/70", children: "💡 For the best experience, use the installed version." })
+    ] })
   ] }) });
 }
 const STORAGE_KEY = "cs_theme";
@@ -65897,6 +66134,8 @@ const DISMISS_KEY = "pwa-install-dismissed-at";
 const DISMISS_TTL_MS = 7 * 24 * 60 * 60 * 1e3;
 function detectBrowserInstallType() {
   const ua = navigator.userAgent;
+  const standalone = window.matchMedia("(display-mode: standalone)").matches || "standalone" in navigator && navigator.standalone === true;
+  if (standalone) return "auto";
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
   const isAndroid = /Android/.test(ua);
   if (isIOS) return "ios";
@@ -65913,16 +66152,17 @@ function usePWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = reactExports.useState(null);
   const [dismissed, setDismissed] = reactExports.useState(() => isDismissed());
   const [showInstructionModal, setShowInstructionModal] = reactExports.useState(false);
-  const [isInstalled, setIsInstalled] = reactExports.useState(
-    () => window.matchMedia("(display-mode: standalone)").matches || "standalone" in navigator && navigator.standalone === true
-  );
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || "standalone" in navigator && navigator.standalone === true;
+  const [isInstalled, setIsInstalled] = reactExports.useState(() => isStandalone);
+  const ua = navigator.userAgent;
+  const isAndroid = /Android/.test(ua);
   const browserInstallType = detectBrowserInstallType();
   const canAutoPrompt = deferredPrompt !== null;
   const isDesktop = browserInstallType === "edge" || browserInstallType === "chrome" || browserInstallType === "generic";
-  const isInstallable = !isInstalled && !dismissed && (canAutoPrompt || isDesktop || // iOS / Android — only show when service worker available
+  const isInstallable = !isStandalone && !isInstalled && !dismissed && (canAutoPrompt || isDesktop || // iOS / Android — only show when service worker available
   "serviceWorker" in navigator && navigator.standalone === void 0);
   reactExports.useEffect(() => {
-    if (isInstalled) return;
+    if (isInstalled || isStandalone) return;
     const onBeforeInstall = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -65937,7 +66177,7 @@ function usePWAInstall() {
       window.removeEventListener("beforeinstallprompt", onBeforeInstall);
       window.removeEventListener("appinstalled", onAppInstalled);
     };
-  }, [isInstalled]);
+  }, [isInstalled, isStandalone]);
   const promptInstall = reactExports.useCallback(async () => {
     if (deferredPrompt) {
       await deferredPrompt.prompt();
@@ -65958,6 +66198,8 @@ function usePWAInstall() {
   return {
     isInstallable,
     isInstalled,
+    isStandalone,
+    isAndroid,
     canAutoPrompt,
     browserInstallType,
     showInstructionModal,
@@ -66152,6 +66394,14 @@ function Layout({
   headerRight
 }) {
   const [mobileOpen, setMobileOpen] = reactExports.useState(false);
+  const {
+    isStandalone,
+    isInstallable,
+    promptInstall,
+    browserInstallType,
+    showInstructionModal,
+    closeInstructionModal
+  } = usePWAInstall();
   reactExports.useEffect(() => {
     const stored = localStorage.getItem("cs_theme");
     const isDark = stored ? stored === "dark" : false;
@@ -66191,7 +66441,29 @@ function Layout({
         title && /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-sm font-semibold text-foreground truncate flex-1 min-w-0", children: title }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "ml-auto flex items-center gap-2 flex-shrink-0", children: [
           showEncryptedBadge && /* @__PURE__ */ jsxRuntimeExports.jsx(EncryptedBadge, {}),
-          headerRight
+          headerRight,
+          !isStandalone && isInstallable && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: promptInstall,
+                "data-ocid": "header.install_button",
+                "aria-label": "Install CharlieSierra",
+                title: "Install CharlieSierra",
+                className: "p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 15, "aria-hidden": "true" })
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              PWAInstallModal,
+              {
+                open: showInstructionModal,
+                onClose: closeInstructionModal,
+                browserInstallType
+              }
+            )
+          ] })
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 overflow-y-auto bg-background flex flex-col", children: [
@@ -69584,7 +69856,8 @@ function SettingsPage() {
   const navigate = useNavigate();
   const {
     isInstallable,
-    isInstalled,
+    isStandalone,
+    isAndroid,
     promptInstall,
     dismissInstall,
     canAutoPrompt,
@@ -69613,9 +69886,9 @@ function SettingsPage() {
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-card border border-border rounded-lg px-4 py-5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ProfileEditor, {}) })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, {}),
-    (isInstallable || isInstalled) && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "data-ocid": "settings.pwa_section", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "data-ocid": "settings.pwa_section", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(SectionHeader, { icon: Download, title: "App Installation" }),
-      isInstalled ? /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsCard, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-4 flex items-start gap-3", children: [
+      isStandalone ? /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsCard, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-4 flex items-start gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           CircleCheckBig,
           {
@@ -69624,33 +69897,49 @@ function SettingsPage() {
             "aria-hidden": "true"
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-0.5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground", children: "App Installed" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "CharlieSierra is installed on this device." })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground", children: "Running as Installed App" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Badge,
+              {
+                variant: "default",
+                className: "bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/30 text-[10px] px-1.5 py-0",
+                children: "Active"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "✓ You are using the installed version of CharlieSierra." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground/70", children: "You have the best experience available — full offline support, push notifications, and a native-like interface." })
         ] })
-      ] }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsCard, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4", children: [
+      ] }) }) : isInstallable ? /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsCard, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-3", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Download,
             {
               size: 18,
-              className: "text-muted-foreground flex-shrink-0 mt-0.5",
+              className: "text-primary flex-shrink-0 mt-0.5",
               "aria-hidden": "true"
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-0.5", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground", children: "Install CharlieSierra" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Install the app on your device for a faster, offline-capable experience." })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: isAndroid ? "Install on Android for the best experience — faster, offline-capable, and feels like a native app." : browserInstallType === "ios" ? "Install on your iPhone or iPad using Safari for the best native-like experience." : "Install the app on your device for a faster, offline-capable experience." }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-muted-foreground/70 pt-0.5", children: "💡 For the best experience, use the installed version." })
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 flex-shrink-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
             Button,
             {
               size: "sm",
               onClick: promptInstall,
               "data-ocid": "settings.pwa.install_button",
-              children: canAutoPrompt ? "Install App" : "How to Install"
+              className: "flex items-center gap-1.5",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 13 }),
+                canAutoPrompt ? "Install App" : "How to Install"
+              ]
             }
           ),
           canAutoPrompt && /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -69663,6 +69952,19 @@ function SettingsPage() {
               children: "Maybe later"
             }
           )
+        ] })
+      ] }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsCard, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-4 flex items-start gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Wifi,
+          {
+            size: 18,
+            className: "text-muted-foreground flex-shrink-0 mt-0.5",
+            "aria-hidden": "true"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-0.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground", children: "App Installation" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Open CharlieSierra in Chrome, Edge, or Safari on iOS/Android to install it as an app on your device." })
         ] })
       ] }) })
     ] }),
@@ -69819,22 +70121,22 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-Cqt2BpR7.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-QZ5HQAv5.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-ku4Bea_R.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-DSgPJPMy.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-Opy8sJS9.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-JL4cgcdH.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-BOfUnMLb.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CtW7zZRy.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-Cp8GPTfl.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-CC326fi9.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-huu2iX1D.js"), true ? [] : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-Db8-1its.js"), true ? [] : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-CdKQiprL.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DAmkXwPC.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C0sYzI6C.js"), true ? __vite__mapDeps([12,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C_XslpSI.js"), true ? __vite__mapDeps([12,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-DwcMrMJ6.js"), true ? __vite__mapDeps([13,6]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-BL90oApT.js"), true ? __vite__mapDeps([13,6]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
@@ -70056,7 +70358,9 @@ const routeTree = rootRoute.addChildren([
 ]);
 const router = createRouter({ routeTree });
 function App() {
+  const { needsUpdate, applyUpdate } = useServiceWorkerUpdate();
   return /* @__PURE__ */ jsxRuntimeExports.jsx(AccessibilityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(AuthProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CryptoProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TooltipProvider, { children: [
+    needsUpdate && /* @__PURE__ */ jsxRuntimeExports.jsx(UpdateBanner, { onUpdate: applyUpdate }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(RouterProvider, { router }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Toaster, { position: "bottom-right", richColors: true, closeButton: true })
   ] }) }) }) });

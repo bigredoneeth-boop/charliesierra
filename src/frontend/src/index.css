@@ -323,3 +323,94 @@
   touch-action: pan-y;
   overscroll-behavior-y: auto;
 }
+
+/* ─── PWA / Native-like enhancements ─────────────────────────────────────── */
+
+/* Prevent pull-to-refresh and elastic overscroll globally */
+body {
+  overscroll-behavior: none;
+}
+
+/* Safe area insets on full-width containers */
+.safe-area-x {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* Standalone mode detection – set CSS variable + layout adjustments */
+@media (display-mode: standalone) {
+  :root {
+    --standalone: 1;
+  }
+
+  .standalone-header {
+    padding-top: max(env(safe-area-inset-top, 0px), 16px);
+  }
+
+  .standalone-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
+  }
+
+  #root,
+  .app-shell {
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  a,
+  button,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Fallback for non-standalone contexts */
+:root {
+  --standalone: 0;
+}
+
+/* Standalone header / bottom helpers – also usable via JS class */
+.standalone-header {
+  padding-top: max(env(safe-area-inset-top, 0px), 16px);
+}
+
+.standalone-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
+}
+
+/* Chat input container – always respects bottom safe area */
+.chat-input-container {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Native scroll helper – apply to any scrollable region */
+.native-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  will-change: scroll-position;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Message list scroll improvements */
+.message-list {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Keyboard-open state – set via JS on visualViewport resize */
+.keyboard-open .app-shell {
+  height: 100dvh;
+}
+
+.keyboard-open .message-list {
+  max-height: calc(100dvh - var(--keyboard-height, 0px) - 56px);
+}

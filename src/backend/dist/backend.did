@@ -978,5 +978,5 @@ service : {
   updatePlatformSettings: (update: PlatformSettings) -> (Result_2);
   updateRetentionPolicy: (req: UpdateRetentionPolicyRequest) -> (Result_1);
   updateUserProfile: (req: UpdateProfileRequest) -> (Result);
-  uploadFile: (fileBytes: blob, _mimeType: text) -> (blob);
+  uploadFile: (fileBytes: blob, mimeType: text) -> (blob);
 }

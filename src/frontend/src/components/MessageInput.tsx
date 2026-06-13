@@ -78,6 +78,31 @@ export function MessageInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isTypingRef = useRef(false);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  // Visual viewport handler — detects software keyboard open/close on mobile.
+  // When the keyboard opens, the viewport height shrinks significantly; we
+  // toggle a data attribute so CSS can respond (e.g. remove rounded corners).
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    let lastHeight = vv.height;
+    const handler = () => {
+      const wrapper = wrapperRef.current;
+      if (!wrapper) return;
+      const diff = lastHeight - vv.height;
+      if (diff > 100) {
+        // Keyboard opened
+        wrapper.setAttribute("data-keyboard-open", "true");
+      } else if (diff < -100) {
+        // Keyboard closed
+        wrapper.removeAttribute("data-keyboard-open");
+      }
+      lastHeight = vv.height;
+    };
+    vv.addEventListener("resize", handler);
+    return () => vv.removeEventListener("resize", handler);
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: text change must trigger DOM resize
   useEffect(() => {
@@ -236,7 +261,11 @@ export function MessageInput({
     text.trim().length > 0 && !sending && !isRestoringKeys && isKeyReady;
 
   return (
-    <div className="bg-card border-t border-border px-3 py-2.5 flex-shrink-0">
+    <div
+      ref={wrapperRef}
+      className="chat-input-container bg-card border-t border-border px-3 py-2.5 flex-shrink-0"
+      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+    >
       {/* Voice recorder overlay */}
       {showVoice && (
         <div className="mb-2">
@@ -293,6 +322,11 @@ export function MessageInput({
             rows={1}
             className="w-full resize-none bg-muted/50 border border-input rounded-xl px-3.5 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-smooth leading-relaxed overflow-hidden"
             style={{ maxHeight: `${5 * 24}px` }}
+            inputMode="text"
+            enterKeyHint="send"
+            autoCorrect="on"
+            autoCapitalize="sentences"
+            spellCheck={true}
             data-ocid="message.input"
           />
         </div>

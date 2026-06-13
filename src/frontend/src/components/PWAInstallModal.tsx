@@ -8,6 +8,18 @@ import {
 import type { BrowserInstallType } from "@/hooks/usePWAInstall";
 import { Chrome, Globe, Monitor, MoreHorizontal, Share2 } from "lucide-react";
 
+function AppIcon() {
+  return (
+    <div className="flex justify-center mb-4 pt-1">
+      <img
+        src="/icon-192x192.png"
+        alt="CharlieSierra"
+        className="w-16 h-16 rounded-2xl shadow-md border border-border"
+      />
+    </div>
+  );
+}
+
 interface PWAInstallModalProps {
   open: boolean;
   onClose: () => void;
@@ -94,15 +106,19 @@ function IOSInstructions() {
         [
           {
             icon: <Share2 size={16} className="text-primary" />,
-            text: "Tap the Share button (\u{1F4E4}) at the bottom of Safari.",
+            text: "Tap the Share button (\u{1F4E4}) at the bottom of Safari",
           },
           {
             icon: <Monitor size={16} className="text-primary" />,
-            text: '"Add to Home Screen" — scroll down if you don\'t see it.',
+            text: "Scroll down and tap Add to Home Screen",
           },
           {
             icon: <Monitor size={16} className="text-primary" />,
-            text: 'Tap "Add" in the top-right corner to confirm.',
+            text: "Tap Add in the top right corner",
+          },
+          {
+            icon: <Monitor size={16} className="text-primary" />,
+            text: "CharlieSierra will appear on your home screen",
           },
         ] as InstallStep[]
       ).map((step, i) => (
@@ -128,15 +144,19 @@ function AndroidInstructions() {
         [
           {
             icon: <MoreHorizontal size={16} className="text-primary" />,
-            text: "Tap the \u22ee menu in the top-right corner of Chrome.",
+            text: "Tap the three-dot menu (⋮) in Chrome",
           },
           {
             icon: <Monitor size={16} className="text-primary" />,
-            text: '"Add to Home Screen" or "Install App" — tap it.',
+            text: "Select Add to Home screen",
           },
           {
             icon: <Monitor size={16} className="text-primary" />,
-            text: 'Tap "Add" or "Install" to confirm and find CharlieSierra on your home screen.',
+            text: "Tap Add to confirm",
+          },
+          {
+            icon: <Monitor size={16} className="text-primary" />,
+            text: "Find CharlieSierra on your home screen",
           },
         ] as InstallStep[]
       ).map((step, i) => (
@@ -206,6 +226,7 @@ export function PWAInstallModal({
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-md" data-ocid="pwa.install_modal">
+        <AppIcon />
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base">
             <Monitor size={18} className="text-primary" aria-hidden="true" />
@@ -226,10 +247,15 @@ export function PWAInstallModal({
             browserInstallType === "auto") && <GenericInstructions />}
         </div>
 
-        <p className="text-[11px] text-muted-foreground border-t border-border pt-3 mt-1">
-          Once installed, CharlieSierra runs in its own window with offline
-          support and faster load times.
-        </p>
+        <div className="border-t border-border pt-3 mt-1 space-y-1.5">
+          <p className="text-[11px] text-muted-foreground">
+            Once installed, CharlieSierra runs in its own window with offline
+            support and faster load times.
+          </p>
+          <p className="text-[11px] font-medium text-foreground/70">
+            💡 For the best experience, use the installed version.
+          </p>
+        </div>
       </DialogContent>
     </Dialog>
   );

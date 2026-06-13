@@ -62,15 +62,17 @@ mixin (
     RetentionLib.checkPolicyExpiry(retentionState, adminState, caller, callerOrgId);
   };
 
-  /// Update: log a #policyReportExported audit event.
+  /// Update: log a #policyReportExported audit event. Admin only.
   public shared ({ caller }) func logPolicyReportExported(
     orgFilter : ?OrgTypes.OrgId
   ) : async () {
+    if (not AdminLib.isAdmin(adminState, caller)) { return };
     RetentionLib.logPolicyReportExported(adminState, caller, orgFilter);
   };
 
-  /// Update: log a #policyExpiryCheckPerformed audit event.
+  /// Update: log a #policyExpiryCheckPerformed audit event. Admin only.
   public shared ({ caller }) func logPolicyExpiryCheck() : async () {
+    if (not AdminLib.isAdmin(adminState, caller)) { return };
     RetentionLib.logPolicyExpiryCheck(adminState, caller);
   };
 };

@@ -2,12 +2,18 @@ import Common "../types/common";
 import T "../types/conversations";
 import ConvsLib "../lib/conversations";
 import MsgsLib "../lib/messages";
+import Principal "mo:core/Principal";
 
 mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
   /// Create or retrieve a 1:1 direct conversation with another user.
   public shared ({ caller }) func createDirectConversation(
     req : T.CreateDirectRequest
   ) : async Common.Result<T.ConversationPublic, Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.peer.isAnonymous()) return #err(#invalidInput);
+    if (Principal.equal(req.peer, caller)) return #err(#invalidInput);
     ConvsLib.createDirect(convsState, caller, req);
   };
 
@@ -15,6 +21,11 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
   public shared ({ caller }) func createGroupConversation(
     req : T.CreateGroupRequest
   ) : async Common.Result<T.ConversationPublic, Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.encryptedName.size() == 0 or req.encryptedName.size() > 512) return #err(#invalidInput);
+    if (req.initialMembers.size() == 0 or req.initialMembers.size() > 500) return #err(#invalidInput);
     ConvsLib.createGroup(convsState, caller, req);
   };
 
@@ -34,6 +45,10 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
   public shared ({ caller }) func addConversationMember(
     req : T.AddMemberRequest
   ) : async Common.Result<(), Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.member.isAnonymous()) return #err(#invalidInput);
     ConvsLib.addMember(convsState, caller, req);
   };
 
@@ -42,6 +57,10 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
   public shared ({ caller }) func removeConversationMember(
     req : T.RemoveMemberRequest
   ) : async Common.Result<(), Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.member.isAnonymous()) return #err(#invalidInput);
     ConvsLib.removeMember(convsState, caller, req);
   };
   /// Delete a group conversation. Only the group creator may call this.
@@ -49,6 +68,10 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
   public shared ({ caller }) func deleteGroupConversation(
     conversationId : Common.ConversationId
   ) : async Common.Result<(), Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (conversationId == 0) return #err(#invalidInput);
     ConvsLib.deleteConversation(
       convsState,
       msgsState.conversationMessages,
@@ -63,6 +86,10 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
   public shared ({ caller }) func deleteConversation(
     conversationId : Common.ConversationId
   ) : async Common.Result<(), Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (conversationId == 0) return #err(#invalidInput);
     ConvsLib.deleteConversation(
       convsState,
       msgsState.conversationMessages,

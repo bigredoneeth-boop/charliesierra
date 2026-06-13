@@ -1,23 +1,25 @@
 {
-  "overview": "CharlieSierra is a fully decentralized, end-to-end encrypted secure messaging platform with proper Web Push notification delivery.",
+  "overview": "CharlieSierra is a fully decentralized, end-to-end encrypted secure messaging platform with a polished native-like PWA experience.",
   "features": [
     "End-to-end encrypted messaging",
-    "Real Web Push notifications (works when app is closed)",
-    "VAPID-signed push subscriptions stored per user",
-    "Service worker push event handling",
-    "Fallback polling when push unavailable",
-    "User notification controls in settings",
-    "Group and direct message notifications",
+    "Platform-specific PWA install guidance for iOS and Android",
+    "Prominent install button in header and sidebar",
+    "Safe area insets for notched devices",
+    "iOS splash screen support",
+    "Optimized mobile keyboard handling in chat",
+    "Smooth native-like touch scrolling",
+    "Push notifications on Android when app is fully closed",
+    "Standalone mode detection and styling",
     "Admin console with full RBAC"
   ],
-  "category": "secure-messaging",
+  "category": "messaging",
   "tags": [
-    "security",
-    "e2ee",
+    "secure-messaging",
     "pwa",
-    "push-notifications",
-    "messaging",
-    "icp"
+    "end-to-end-encryption",
+    "internet-computer",
+    "progressive-web-app",
+    "mobile"
   ],
-  "last_updated": "2026-05-31T17:53:25.338Z"
+  "last_updated": "2026-06-13T18:09:22.440Z"
 }

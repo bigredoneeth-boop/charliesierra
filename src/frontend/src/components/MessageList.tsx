@@ -224,6 +224,19 @@ export const MessageList = memo(function MessageList({
             bottom.scrollIntoView({ behavior: "instant", block: "end" });
           }
           hasScrolledToBottomRef.current = true;
+          // Fallback: if still not at bottom after 300ms (e.g. images not yet loaded),
+          // force scroll once more to guarantee we land on the latest message.
+          setTimeout(() => {
+            const elFallback = scrollRef.current;
+            if (!elFallback) return;
+            const dist =
+              elFallback.scrollHeight -
+              elFallback.scrollTop -
+              elFallback.clientHeight;
+            if (dist > 60) {
+              elFallback.scrollTop = elFallback.scrollHeight;
+            }
+          }, 300);
         });
       };
       // Double rAF guarantees layout is complete before scrolling.
@@ -373,10 +386,11 @@ export const MessageList = memo(function MessageList({
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className="flex-1 overflow-y-auto overscroll-contain chat-scroll px-4 py-3 flex flex-col"
+      className="flex-1 overflow-y-auto overscroll-contain chat-scroll native-scroll px-4 py-3 flex flex-col"
       style={{
         WebkitOverflowScrolling: "touch" as unknown as undefined,
         touchAction: "pan-y",
+        overscrollBehaviorY: "contain",
       }}
       data-ocid="messages.list"
     >

@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/context/auth-context";
 import { getLocalAvatarDataUrl, useDisplayName } from "@/hooks/use-profiles";
+import { default as usePWAInstallHeader } from "@/hooks/usePWAInstall";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   Compass,
@@ -208,6 +209,14 @@ export function Layout({
   headerRight,
 }: LayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const {
+    isStandalone,
+    isInstallable,
+    promptInstall,
+    browserInstallType,
+    showInstructionModal,
+    closeInstructionModal,
+  } = usePWAInstallHeader();
 
   // Apply persisted theme on mount
   useEffect(() => {
@@ -268,6 +277,25 @@ export function Layout({
           <div className="ml-auto flex items-center gap-2 flex-shrink-0">
             {showEncryptedBadge && <EncryptedBadge />}
             {headerRight}
+            {!isStandalone && isInstallable && (
+              <>
+                <button
+                  type="button"
+                  onClick={promptInstall}
+                  data-ocid="header.install_button"
+                  aria-label="Install CharlieSierra"
+                  title="Install CharlieSierra"
+                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <Download size={15} aria-hidden="true" />
+                </button>
+                <PWAInstallModal
+                  open={showInstructionModal}
+                  onClose={closeInstructionModal}
+                  browserInstallType={browserInstallType}
+                />
+              </>
+            )}
           </div>
         </header>
 

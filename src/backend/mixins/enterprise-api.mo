@@ -151,12 +151,18 @@ mixin (
   public shared ({ caller }) func getEscrowedUsers(
     req : E.GetEscrowedUsersRequest
   ) : async Common.Result<[E.EscrowedUserRecord], Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
     EnterpriseLib.getEscrowedUsers(enterpriseState, adminState, caller, req);
   };
 
   /// Admin: return platform-wide escrow statistics. Super Admin only.
   public shared ({ caller }) func getEscrowStats()
     : async Common.Result<E.EscrowStatsRecord, Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
     EnterpriseLib.getEscrowStats(enterpriseState, adminState, caller);
   };
 
@@ -192,6 +198,9 @@ mixin (
     orgId        : ?OrgTypes.OrgId,
     statusFilter : ?E.RecoveryRequestStatus,
   ) : async Common.Result<[E.RecoveryRequest], Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
     EnterpriseLib.getRecoveryRequests(
       enterpriseState, adminState, caller, orgId, statusFilter,
     );
@@ -231,6 +240,9 @@ mixin (
   public shared ({ caller }) func getRecoveryDetails(
     requestId : Nat
   ) : async Common.Result<E.RecoveryRequest, Common.Error> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err(#unauthorized);
+    };
     EnterpriseLib.getRecoveryDetails(enterpriseState, adminState, caller, requestId);
   };
 };

@@ -27,7 +27,9 @@ const AdminBootstrapPage = lazy(
 import { AdminAccessGate } from "@/components/AdminAccessGate";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { OnboardingGate } from "@/components/OnboardingGate";
+import { UpdateBanner } from "@/components/UpdateBanner";
 import { AccessibilityProvider } from "@/context/accessibility-context";
+import { useServiceWorkerUpdate } from "@/hooks/useServiceWorkerUpdate";
 import ChatPage from "@/pages/ChatPage";
 import ConversationsPage from "@/pages/ConversationsPage";
 import LoginPage from "@/pages/LoginPage";
@@ -346,11 +348,14 @@ declare module "@tanstack/react-router" {
 
 // ── App root ─────────────────────────────────────────────────────────────────
 export default function App() {
+  const { needsUpdate, applyUpdate } = useServiceWorkerUpdate();
+
   return (
     <AccessibilityProvider>
       <AuthProvider>
         <CryptoProvider>
           <TooltipProvider>
+            {needsUpdate && <UpdateBanner onUpdate={applyUpdate} />}
             <RouterProvider router={router} />
             <Toaster position="bottom-right" richColors closeButton />
           </TooltipProvider>

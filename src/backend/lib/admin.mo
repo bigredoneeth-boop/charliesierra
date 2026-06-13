@@ -12,7 +12,7 @@ module {
   public type State = {
     auditLog : Map.Map<Nat, T.AuditEvent>;
     adminPrincipals : Set.Set<Common.UserId>;
-    state : { var nextEventId : Nat; var bootstrapCompleted : Bool; var dataResetCompleted : Bool };
+    state : { var nextEventId : Nat; var bootstrapCompleted : Bool; var dataResetCompleted : Bool; var seedPrincipal : ?Principal };
   };
 
   /// Append an audit event. Call from other lib modules — never expose raw log writes publicly.
@@ -237,30 +237,70 @@ module {
   };
 
   /// Bootstrap: ensure deployer is an admin on first run.
+  /// One-time bootstrap seed: add the canister principal as a temporary admin
+  /// so the deployer can call bootstrapSuperAdmin on first run.
+  /// This is a COMPLETE NO-OP once bootstrapCompleted is true — safe to call
+  /// on every upgrade because it never re-seeds after bootstrap is done.
+  public func initBootstrapOnce(
+    s : State,
+    canisterPrincipal : Common.UserId,
+  ) : () {
+    // If bootstrap is already done, do nothing — permanent guard.
+    if (s.state.bootstrapCompleted) {
+      return;
+    };
+    // Seed the canister principal as a temporary admin so the deployer
+    // can invoke bootstrapSuperAdmin. Store it so we can remove it later.
+    s.adminPrincipals.add(canisterPrincipal);
+    s.state.seedPrincipal := ?canisterPrincipal;
+  };
+
+  /// Deprecated no-op kept for call-site compatibility during migration.
+  /// All existing callers should migrate to initBootstrapOnce.
   public func ensureDeployer(
     s : State,
     deployer : Common.UserId,
   ) : () {
-    if (s.adminPrincipals.isEmpty()) {
-      s.adminPrincipals.add(deployer);
-    };
+    initBootstrapOnce(s, deployer);
   };
 
-  /// One-shot bootstrap: assign the first real Super Admin when none has been set yet.
-  /// Safe to expose publicly — the guard makes it a no-op once used.
-  /// Returns #ok on success, #err if bootstrap was already completed.
+  /// One-shot bootstrap: assign the first real Super Admin.
+  /// On success: adds superAdminPrincipal, removes the temporary canister-seed
+  /// principal, sets bootstrapCompleted = true permanently.
+  /// Guard: returns #err if bootstrapCompleted is already true — this function
+  /// can only succeed ONCE in the lifetime of the canister.
   public func bootstrapSuperAdmin(
     s : State,
     targetPrincipal : Common.UserId,
   ) : Common.Result<Text, Text> {
     if (s.state.bootstrapCompleted) {
-      return #err("Bootstrap already completed. A Super Admin already exists.");
+      return #err("Bootstrap already completed. Cannot re-run.");
     };
-    // Mark bootstrap done and add the target as an admin.
-    s.state.bootstrapCompleted := true;
+    // Add the real Super Admin.
     s.adminPrincipals.add(targetPrincipal);
+    // Remove the temporary canister-seed principal so it does NOT retain
+    // permanent admin rights after bootstrap completes.
+    switch (s.state.seedPrincipal) {
+      case (?seed) {
+        s.adminPrincipals.remove(seed);
+        s.state.seedPrincipal := null;
+      };
+      case null {};
+    };
+    // Lock bootstrap permanently — this is the ONLY place this is set to true.
+    s.state.bootstrapCompleted := true;
     recordEvent(s, #adminAction, targetPrincipal, ?targetPrincipal, null);
     #ok("Super Admin successfully bootstrapped.");
+  };
+
+  /// Assert that caller is the owner of a resource.
+  /// Returns #ok(()) if caller == owner, #err(#unauthorized) otherwise.
+  public func assertCallerIsOwner(
+    caller : Common.UserId,
+    owner  : Common.UserId,
+  ) : Common.Result<(), Common.Error> {
+    if (caller == owner) { #ok(()) }
+    else { #err(#unauthorized) };
   };
 
   /// Returns true if the one-shot bootstrap has been completed.

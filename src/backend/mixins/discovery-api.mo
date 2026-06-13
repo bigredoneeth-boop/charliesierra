@@ -2,6 +2,7 @@ import Common "../types/common";
 import T "../types/discovery";
 import DiscoveryLib "../lib/discovery";
 import ConvsLib "../lib/conversations";
+import Principal "mo:core/Principal";
 
 mixin (discoveryState : DiscoveryLib.State, convsState : ConvsLib.State) {
   /// List discoverable public groups. No E2EE metadata or messages included.
@@ -15,6 +16,10 @@ mixin (discoveryState : DiscoveryLib.State, convsState : ConvsLib.State) {
   public shared ({ caller }) func submitJoinRequest(
     req : T.SubmitJoinRequestRequest
   ) : async Common.Result<T.JoinRequest, Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.conversationId == 0) return #err(#invalidInput);
     DiscoveryLib.submitJoinRequest(discoveryState, convsState.conversations, caller, req);
   };
 
@@ -30,6 +35,11 @@ mixin (discoveryState : DiscoveryLib.State, convsState : ConvsLib.State) {
   public shared ({ caller }) func approveJoinRequest(
     req : T.JoinRequestActionRequest
   ) : async Common.Result<(), Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.requestId.size() == 0) return #err(#invalidInput);
+    if (req.conversationId == 0) return #err(#invalidInput);
     DiscoveryLib.approveJoinRequest(discoveryState, convsState.conversations, caller, req);
   };
 
@@ -37,6 +47,11 @@ mixin (discoveryState : DiscoveryLib.State, convsState : ConvsLib.State) {
   public shared ({ caller }) func denyJoinRequest(
     req : T.JoinRequestActionRequest
   ) : async Common.Result<(), Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.requestId.size() == 0) return #err(#invalidInput);
+    if (req.conversationId == 0) return #err(#invalidInput);
     DiscoveryLib.denyJoinRequest(discoveryState, convsState.conversations, caller, req);
   };
 };

@@ -13,6 +13,8 @@ import Text "mo:core/Text";
 import Iter "mo:core/Iter";
 import Blob "mo:core/Blob";
 import Nat8 "mo:core/Nat8";
+import Array "mo:core/Array";
+import Nat "mo:core/Nat";
 
 module {
   // ── Management Canister Interface (vetKD) ─────────────────────────────────
@@ -34,13 +36,15 @@ module {
   // ── State ──────────────────────────────────────────────────────────────────
 
   public type State = {
-    retentionPolicies  : Map.Map<Common.ConversationId, T.GroupRetentionPolicy>;
-    retentionMetadata  : List.List<T.RetentionMetadataRecord>;
-    escrowRecords      : Map.Map<(Common.UserId, Text), T.EscrowRecord>;
-    escrowGrants         : Map.Map<Nat, T.EscrowAccessGrant>;
-    recoveryRequests     : Map.Map<Nat, T.RecoveryRequest>;
-    vetEscrowRecords     : Map.Map<Common.UserId, T.VetEscrowRecord>;
-    state                : { var nextGrantId : Nat; var nextRecoveryRequestId : Nat };
+    retentionPolicies        : Map.Map<Common.ConversationId, T.GroupRetentionPolicy>;
+    retentionMetadata        : List.List<T.RetentionMetadataRecord>;
+    escrowRecords            : Map.Map<(Common.UserId, Text), T.EscrowRecord>;
+    escrowGrants             : Map.Map<Nat, T.EscrowAccessGrant>;
+    recoveryRequests         : Map.Map<Nat, T.RecoveryRequest>;
+    vetEscrowRecords         : Map.Map<Common.UserId, T.VetEscrowRecord>;
+    recoveryRateLimits       : Map.Map<Common.UserId, Int>;  // window-start timestamp per admin
+    recoveryRateLimitCounts  : Map.Map<Common.UserId, Nat>;  // attempts in current window
+    state                    : { var nextGrantId : Nat; var nextRecoveryRequestId : Nat };
   };
 
   // ── Helpers ────────────────────────────────────────────────────────────────
@@ -133,6 +137,18 @@ module {
     targetPrincipal    : Common.UserId,
     transportPublicKey : Blob,
   ) : async Common.Result<Blob, Text> {
+    // SECURITY: Validate transport key length before any other operation.
+    // Must be exactly 48 bytes (compressed P-256 public key per vetKeys spec).
+    if (transportPublicKey.size() != 48) {
+      return #err("Invalid transport public key: expected 48 bytes, got " # transportPublicKey.size().toText());
+    };
+    // SECURITY: Reject all-zero transport key (trivially weak).
+    let allZero = transportPublicKey.toArray().foldLeft(
+      true,
+      func(acc, b) { acc and (b == 0) },
+    );
+    if (allZero) { return #err("Invalid transport public key: all-zero key rejected") };
+
     if (not AdminLib.isAdmin(adminState, caller)) {
       return #err("Unauthorized: admin role required");
     };
@@ -174,7 +190,7 @@ module {
       resolvedAt = ?Time.now();
     };
     s.recoveryRequests.add(rr.id, completed);
-    // Build JSON audit metadata with compliance details — no raw key material
+    // SECURITY: no raw key material — only safe compliance metadata in audit log
     let transportFingerprint = blobFingerprint(transportPublicKey);
     let derivId = derivationId();
     let detailsJson =
@@ -185,6 +201,7 @@ module {
       "\"derivationId\":\"" # derivId # "\"" #
       "}";
     let detailsBlob = ?detailsJson.encodeUtf8();
+    // SECURITY: no raw key material — detailsBlob contains only fingerprint metadata
     AdminLib.recordEvent(adminState, #keyRecoveryCompleted, caller, ?targetPrincipal, detailsBlob);
     #ok(deriveResp.encrypted_key);
   };
@@ -827,6 +844,31 @@ module {
     if (Principal.equal(caller, targetUserId)) {
       return #err(#forbidden);
     };
+    // Rate limit: 5 recovery initiations per admin per hour
+    let now = Time.now();
+    let windowNs : Int = 3_600_000_000_000; // 1 hour in nanoseconds
+    let maxAttempts : Nat = 5;
+    let (windowStart, currentCount) : (Int, Nat) = switch (s.recoveryRateLimits.get(caller)) {
+      case null (now, 0);
+      case (?ws) {
+        let count = switch (s.recoveryRateLimitCounts.get(caller)) {
+          case null 0;
+          case (?c) c;
+        };
+        if (now - ws >= windowNs) {
+          // Window has expired — reset
+          (now, 0)
+        } else {
+          (ws, count)
+        };
+      };
+    };
+    if (currentCount >= maxAttempts) {
+      return #err(#forbidden);
+    };
+    s.recoveryRateLimits.add(caller, windowStart);
+    s.recoveryRateLimitCounts.add(caller, currentCount + 1);
+
     let requestId = s.state.nextRecoveryRequestId;
     s.state.nextRecoveryRequestId += 1;
     let request : T.RecoveryRequest = {
@@ -874,6 +916,7 @@ module {
       case null { #err(#notFound) };
       case (?rr) {
         if (rr.status != #pending) { return #err(#forbidden) };
+        // SECURITY: Dual-control enforcement — initiating admin cannot approve their own request
         if (Principal.equal(caller, rr.initiatingAdmin)) {
           return #err(#forbidden);
         };
@@ -885,7 +928,7 @@ module {
           resolvedAt = ?Time.now();
         };
         s.recoveryRequests.add(requestId, updated);
-        // Build JSON audit metadata with technical details for compliance
+        // SECURITY: no raw key material — only safe compliance metadata in audit log
         let detailsJson =
           "{" #
           "\"recoveryId\":" # requestId.toText() # "," #
@@ -894,6 +937,7 @@ module {
           "\"derivationId\":\"" # derivationId() # "\"" #
           "}";
         let detailsBlob = ?detailsJson.encodeUtf8();
+        // SECURITY: no raw key material — detailsBlob contains only fingerprint metadata
         AdminLib.recordEvent(adminState, #keyRecoveryApproved, caller, ?rr.targetUserId, detailsBlob);
         #ok(updated);
       };

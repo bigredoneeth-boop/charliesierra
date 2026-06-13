@@ -40,6 +40,11 @@ mixin (
   public shared ({ caller }) func sendMessage(
     req : T.SendMessageRequest
   ) : async Common.Result<T.MessagePublic, Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.conversationId == 0) return #err(#invalidInput);
+    if (req.encryptedContent.size() == 0) return #err(#invalidInput);
     let result = MsgsLib.sendMessage(msgsState, caller, req, isMember);
     // Post-send hooks: retention metadata + notification triggers
     switch (result) {
@@ -122,6 +127,8 @@ mixin (
   public shared ({ caller }) func markMessageRead(
     messageId : Common.MessageId
   ) : async Common.Result<(), Common.Error> {
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (messageId == 0) return #err(#invalidInput);
     MsgsLib.markRead(msgsState, caller, messageId);
   };
 
@@ -131,14 +138,18 @@ mixin (
     conversationId : Common.ConversationId,
     ttlSeconds : Nat,
   ) : async () {
-    MsgsLib.setTyping(msgsState, caller, conversationId, ttlSeconds * 1_000_000_000);
+    if (not caller.isAnonymous()) {
+      MsgsLib.setTyping(msgsState, caller, conversationId, ttlSeconds * 1_000_000_000);
+    };
   };
 
   /// Clear the caller's typing indicator.
   public shared ({ caller }) func clearTypingIndicator(
     conversationId : Common.ConversationId
   ) : async () {
-    MsgsLib.clearTyping(msgsState, caller, conversationId);
+    if (not caller.isAnonymous()) {
+      MsgsLib.clearTyping(msgsState, caller, conversationId);
+    };
   };
 
   /// Get active typing indicators for a conversation (expired entries filtered out).

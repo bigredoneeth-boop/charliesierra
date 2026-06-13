@@ -24,6 +24,9 @@ mixin (
   public shared ({ caller }) func updatePlatformSettings(
     update : T.PlatformSettings
   ) : async Common.Result<(), Text> {
+    if (not AdminLib.isAdmin(adminState, caller)) {
+      return #err("Unauthorized: admin access required");
+    };
     SettingsLib.updatePlatformSettings(settingsState, adminState, caller, update);
   };
 
@@ -54,6 +57,18 @@ mixin (
     orgId  : Text,
     update : T.OrgSettings,
   ) : async Common.Result<(), Text> {
+    // Caller must be an admin (Super Admin or Org Admin of the target org).
+    // Full RBAC enforcement is delegated to SettingsLib; this guard is a fast-fail
+    // to prevent any logic running for completely unauthorized callers.
+    let callerIsAdmin = AdminLib.isAdmin(adminState, caller);
+    let membershipKey = orgId # ":" # caller.toText();
+    let callerIsMember = switch (memberships.get(membershipKey)) {
+      case (?m) m.status != #Suspended;
+      case null false;
+    };
+    if (not callerIsAdmin and not callerIsMember) {
+      return #err("Unauthorized: org admin access required");
+    };
     SettingsLib.updateOrgSettings(
       settingsState,
       adminState,

@@ -1,12 +1,19 @@
 import Common "../types/common";
 import T "../types/devices";
 import DevicesLib "../lib/devices";
+import Principal "mo:core/Principal";
 
 mixin (devicesState : DevicesLib.State) {
   /// Register a new device for the caller. Replaces any existing entry with the same deviceId.
   public shared ({ caller }) func addDevice(
     req : T.AddDeviceRequest
   ) : async Common.Result<T.DeviceRecordPublic, Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (req.deviceId.size() == 0 or req.deviceId.size() > 128) return #err(#invalidInput);
+    if (req.deviceLabel.size() == 0 or req.deviceLabel.size() > 100) return #err(#invalidInput);
+    if (req.publicKey.size() == 0 or req.publicKey.size() > 512) return #err(#invalidInput);
     DevicesLib.addDevice(devicesState, caller, req);
   };
 
@@ -19,6 +26,10 @@ mixin (devicesState : DevicesLib.State) {
   public shared ({ caller }) func revokeDevice(
     deviceId : Text
   ) : async Common.Result<(), Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (deviceId.size() == 0 or deviceId.size() > 128) return #err(#invalidInput);
     DevicesLib.revokeDevice(devicesState, caller, deviceId);
   };
 
@@ -27,6 +38,10 @@ mixin (devicesState : DevicesLib.State) {
   public shared ({ caller }) func generateDeviceSyncToken(
     devicePublicKey : Blob
   ) : async Common.Result<Text, Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (devicePublicKey.size() == 0 or devicePublicKey.size() > 512) return #err(#invalidInput);
     DevicesLib.generateDeviceSyncToken(devicesState, caller, devicePublicKey);
   };
 
@@ -36,6 +51,12 @@ mixin (devicesState : DevicesLib.State) {
     deviceId    : Text,
     deviceLabel : Text,
   ) : async Common.Result<T.DeviceRecordPublic, Common.Error> {
+    // Authorization: reject anonymous callers
+    if (caller.isAnonymous()) return #err(#unauthorized);
+    // Input validation
+    if (token.size() == 0 or token.size() > 512) return #err(#invalidInput);
+    if (deviceId.size() == 0 or deviceId.size() > 128) return #err(#invalidInput);
+    if (deviceLabel.size() == 0 or deviceLabel.size() > 100) return #err(#invalidInput);
     DevicesLib.redeemDeviceSyncToken(devicesState, caller, token, deviceLabel, deviceId);
   };
 };

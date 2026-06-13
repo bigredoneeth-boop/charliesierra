@@ -3,6 +3,7 @@ import AdminLib "../lib/admin";
 import OrgTypes "../types/orgs";
 import T "../types/settings";
 import Map "mo:core/Map";
+import Time "mo:core/Time";
 
 module {
   // ── Default values ─────────────────────────────────────────────────────────
@@ -35,13 +36,39 @@ module {
   // Enhanced orthogonal persistence: no stable keyword needed.
 
   public type State = {
-    platformSettings : { var value : T.PlatformSettings };
-    orgSettingsMap   : Map.Map<Text, T.OrgSettings>;
+    platformSettings             : { var value : T.PlatformSettings };
+    orgSettingsMap               : Map.Map<Text, T.OrgSettings>;
+    settingsUpdateRateLimitWindows : Map.Map<Common.UserId, Int>;
+    settingsUpdateRateLimitCounts  : Map.Map<Common.UserId, Nat>;
   };
 
   public func emptyState() : State = {
-    platformSettings = { var value = defaultPlatformSettings };
-    orgSettingsMap   = Map.empty();
+    platformSettings               = { var value = defaultPlatformSettings };
+    orgSettingsMap                 = Map.empty();
+    settingsUpdateRateLimitWindows = Map.empty();
+    settingsUpdateRateLimitCounts  = Map.empty();
+  };
+
+  // Rate-limit helper: returns true (allowed) and records, or false (exceeded) without mutating.
+  func checkAndRecordRateLimit(
+    caller      : Common.UserId,
+    now         : Int,
+    windowMap   : Map.Map<Common.UserId, Int>,
+    countMap    : Map.Map<Common.UserId, Nat>,
+    maxAttempts : Nat,
+  ) : Bool {
+    let windowNs : Int = 3_600_000_000_000;
+    let (windowStart, currentCount) : (Int, Nat) = switch (windowMap.get(caller)) {
+      case null (now, 0);
+      case (?ws) {
+        let count = switch (countMap.get(caller)) { case null 0; case (?c) c };
+        if (now - ws >= windowNs) { (now, 0) } else { (ws, count) };
+      };
+    };
+    if (currentCount >= maxAttempts) { return false };
+    windowMap.add(caller, windowStart);
+    countMap.add(caller, currentCount + 1);
+    true
   };
 
   // ── Platform settings ──────────────────────────────────────────────────────
@@ -59,6 +86,11 @@ module {
   ) : Common.Result<(), Text> {
     if (not AdminLib.isAdmin(adminState, caller)) {
       return #err("Unauthorized: Super Admin access required.");
+    };
+    // Rate limit: 5 updatePlatformSettings calls per hour per caller.
+    let now = Time.now();
+    if (not checkAndRecordRateLimit(caller, now, s.settingsUpdateRateLimitWindows, s.settingsUpdateRateLimitCounts, 5)) {
+      return #err("Rate limit exceeded: too many settings update requests. Try again later.");
     };
     s.platformSettings.value := update;
     AdminLib.recordEvent(

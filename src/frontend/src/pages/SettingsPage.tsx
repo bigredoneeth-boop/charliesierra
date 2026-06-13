@@ -1195,7 +1195,8 @@ export default function SettingsPage() {
   const navigate = useNavigate();
   const {
     isInstallable,
-    isInstalled,
+    isStandalone,
+    isAndroid,
     promptInstall,
     dismissInstall,
     canAutoPrompt,
@@ -1236,70 +1237,107 @@ export default function SettingsPage() {
         <Separator />
 
         {/* ── App Installation ─────────────────────────────────────────── */}
-        {(isInstallable || isInstalled) && (
-          <section data-ocid="settings.pwa_section">
-            <SectionHeader icon={Download} title="App Installation" />
-            {isInstalled ? (
-              <SettingsCard>
-                <div className="px-4 py-4 flex items-start gap-3">
-                  <CheckCircle
+        <section data-ocid="settings.pwa_section">
+          <SectionHeader icon={Download} title="App Installation" />
+          {isStandalone ? (
+            <SettingsCard>
+              <div className="px-4 py-4 flex items-start gap-3">
+                <CheckCircle
+                  size={18}
+                  className="text-green-500 flex-shrink-0 mt-0.5"
+                  aria-hidden="true"
+                />
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-foreground">
+                      Running as Installed App
+                    </p>
+                    <Badge
+                      variant="default"
+                      className="bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/30 text-[10px] px-1.5 py-0"
+                    >
+                      Active
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    ✓ You are using the installed version of CharlieSierra.
+                  </p>
+                  <p className="text-xs text-muted-foreground/70">
+                    You have the best experience available — full offline
+                    support, push notifications, and a native-like interface.
+                  </p>
+                </div>
+              </div>
+            </SettingsCard>
+          ) : isInstallable ? (
+            <SettingsCard>
+              <div className="px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  <Download
                     size={18}
-                    className="text-green-500 flex-shrink-0 mt-0.5"
+                    className="text-primary flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <div className="space-y-0.5">
                     <p className="text-sm font-medium text-foreground">
-                      App Installed
+                      Install CharlieSierra
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      CharlieSierra is installed on this device.
+                      {isAndroid
+                        ? "Install on Android for the best experience — faster, offline-capable, and feels like a native app."
+                        : browserInstallType === "ios"
+                          ? "Install on your iPhone or iPad using Safari for the best native-like experience."
+                          : "Install the app on your device for a faster, offline-capable experience."}
+                    </p>
+                    <p className="text-[11px] text-muted-foreground/70 pt-0.5">
+                      💡 For the best experience, use the installed version.
                     </p>
                   </div>
                 </div>
-              </SettingsCard>
-            ) : (
-              <SettingsCard>
-                <div className="px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="flex items-start gap-3">
-                    <Download
-                      size={18}
-                      className="text-muted-foreground flex-shrink-0 mt-0.5"
-                      aria-hidden="true"
-                    />
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium text-foreground">
-                        Install CharlieSierra
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Install the app on your device for a faster,
-                        offline-capable experience.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 flex-shrink-0">
-                    <Button
-                      size="sm"
-                      onClick={promptInstall}
-                      data-ocid="settings.pwa.install_button"
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <Button
+                    size="sm"
+                    onClick={promptInstall}
+                    data-ocid="settings.pwa.install_button"
+                    className="flex items-center gap-1.5"
+                  >
+                    <Download size={13} />
+                    {canAutoPrompt ? "Install App" : "How to Install"}
+                  </Button>
+                  {canAutoPrompt && (
+                    <button
+                      type="button"
+                      onClick={dismissInstall}
+                      data-ocid="settings.pwa.dismiss_button"
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
                     >
-                      {canAutoPrompt ? "Install App" : "How to Install"}
-                    </Button>
-                    {canAutoPrompt && (
-                      <button
-                        type="button"
-                        onClick={dismissInstall}
-                        data-ocid="settings.pwa.dismiss_button"
-                        className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
-                      >
-                        Maybe later
-                      </button>
-                    )}
-                  </div>
+                      Maybe later
+                    </button>
+                  )}
                 </div>
-              </SettingsCard>
-            )}
-          </section>
-        )}
+              </div>
+            </SettingsCard>
+          ) : (
+            <SettingsCard>
+              <div className="px-4 py-4 flex items-start gap-3">
+                <Wifi
+                  size={18}
+                  className="text-muted-foreground flex-shrink-0 mt-0.5"
+                  aria-hidden="true"
+                />
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-foreground">
+                    App Installation
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Open CharlieSierra in Chrome, Edge, or Safari on iOS/Android
+                    to install it as an app on your device.
+                  </p>
+                </div>
+              </div>
+            </SettingsCard>
+          )}
+        </section>
         <PWAInstallModal
           open={showInstructionModal}
           onClose={closeInstructionModal}

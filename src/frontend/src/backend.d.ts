@@ -938,5 +938,5 @@ export interface backendInterface {
     updatePlatformSettings(update: PlatformSettings): Promise<Result_2>;
     updateRetentionPolicy(req: UpdateRetentionPolicyRequest): Promise<Result_1>;
     updateUserProfile(req: UpdateProfileRequest): Promise<Result>;
-    uploadFile(fileBytes: Uint8Array, _mimeType: string): Promise<Uint8Array>;
+    uploadFile(fileBytes: Uint8Array, mimeType: string): Promise<Uint8Array>;
 }

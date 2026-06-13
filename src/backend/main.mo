@@ -20,6 +20,7 @@ import DevicesMixin "mixins/devices-api";
 import DiscoveryMixin "mixins/discovery-api";
 import OrgsMixin "mixins/orgs-api";
 import OrgTypes "types/orgs";
+import OrgsLib "lib/orgs";
 
 import SovereignLib "lib/sovereign";
 import SovereignMixin "mixins/sovereign-api";
@@ -33,6 +34,7 @@ import SettingsMixin "mixins/settings-api";
 import NotificationsMixin "mixins/notifications-api";
 import NotifTypes "types/notifications";
 import T "types/users";
+import Migration "migration";
 
 
 
@@ -52,6 +54,7 @@ import T "types/users";
 
 
 
+(with migration = Migration.run)
 actor self {
   // ── Stable state slices ──────────────────────────────────────────────────────
 
@@ -89,7 +92,7 @@ actor self {
   let adminState : AdminLib.State = {
     auditLog = Map.empty();
     adminPrincipals = Set.empty();
-    state = { var nextEventId = 0; var bootstrapCompleted = false; var dataResetCompleted = false };
+    state = { var nextEventId = 0; var bootstrapCompleted = false; var dataResetCompleted = false; var seedPrincipal : ?Principal = null };
   };
 
   // Sovereign deployment
@@ -109,13 +112,15 @@ actor self {
 
   // Enterprise
   let enterpriseState : EnterpriseLib.State = {
-    retentionPolicies = Map.empty();
-    retentionMetadata = List.empty();
-    escrowRecords     = Map.empty();
-    escrowGrants      = Map.empty();
-    recoveryRequests  = Map.empty();
-    vetEscrowRecords  = Map.empty();
-    state             = { var nextGrantId = 0; var nextRecoveryRequestId = 0 };
+    retentionPolicies    = Map.empty();
+    retentionMetadata    = List.empty();
+    escrowRecords        = Map.empty();
+    escrowGrants         = Map.empty();
+    recoveryRequests     = Map.empty();
+    vetEscrowRecords     = Map.empty();
+    recoveryRateLimits   = Map.empty();
+    recoveryRateLimitCounts = Map.empty();
+    state                = { var nextGrantId = 0; var nextRecoveryRequestId = 0 };
   };
 
   // Retention Policy Management
@@ -124,7 +129,21 @@ actor self {
     state             = { var nextPolicyId = 0 };
   };
 
-  // Settings (platform-wide and per-org)
+  // ── Rate-limit stable state ──────────────────────────────────────────────
+  // These are top-level stable vars (not in any migrated sub-record).
+  // They default to empty on fresh install and upgrade — no migration needed.
+  let orgCreateRateLimitWindows    : Map.Map<Principal, Int> = Map.empty();
+  let orgCreateRateLimitCounts     : Map.Map<Principal, Nat> = Map.empty();
+  let inviteRateLimitWindows       : Map.Map<Principal, Int> = Map.empty();
+  let inviteRateLimitCounts        : Map.Map<Principal, Nat> = Map.empty();
+  let suspendRateLimitWindows      : Map.Map<Principal, Int> = Map.empty();
+  let suspendRateLimitCounts       : Map.Map<Principal, Nat> = Map.empty();
+  let removeMemberRateLimitWindows : Map.Map<Principal, Int> = Map.empty();
+  let removeMemberRateLimitCounts  : Map.Map<Principal, Nat> = Map.empty();
+
+  // Settings (platform-wide and per-org).
+  // settingsUpdateRateLimitWindows/Counts are owned inside this record so the
+  // migration can carry them forward correctly on upgrade.
   let settingsState : SettingsLib.State = SettingsLib.emptyState();
 
   // Devices (multi-device sync)
@@ -146,15 +165,25 @@ actor self {
   let memberships : Map.Map<Text, OrgTypes.OrgMembership>          = Map.empty();
   let invites     : Map.Map<Text, OrgTypes.OrgInvite>              = Map.empty();
 
+  // Composed rate-limit state record for OrgsLib.
+  let orgsRlState : OrgsLib.RateLimitState = {
+    orgCreateRateLimitWindows;
+    orgCreateRateLimitCounts;
+    inviteRateLimitWindows;
+    inviteRateLimitCounts;
+    suspendRateLimitWindows;
+    suspendRateLimitCounts;
+  };
+
   // Notifications — push subscriptions, preferences, pending triggers, and VAPID state
   let pushSubscriptions    : Map.Map<Principal, NotifTypes.PushSubscriptionRecord> = Map.empty();
   let notificationPrefs    : Map.Map<Principal, NotifTypes.NotificationPreferences> = Map.empty();
   let pendingNotifications : Map.Map<Principal, [NotifTypes.PendingNotification]>   = Map.empty();
   let vapidState           : { var value : ?NotifTypes.VapidState } = { var value = null };
 
-  // Bootstrap: add the canister's own principal as the first admin so the deployer
-  // (who is the controller) can call addAdmin to grant themselves or others access.
-  AdminLib.ensureDeployer(adminState, Principal.fromActor(self));
+  // One-time bootstrap seed: adds the canister principal as a temporary admin so the deployer
+  // can call bootstrapSuperAdmin on first run. After bootstrap completes this is a no-op.
+  AdminLib.initBootstrapOnce(adminState, Principal.fromActor(self));
   // Seed sovereign config with the canister's own principal text as the canister ID.
   sovereignState.state.sovereignConfig := {
     sovereignState.state.sovereignConfig with
@@ -180,8 +209,8 @@ actor self {
   include DiscoveryMixin(discoveryState, convsState);
   // Wire org state + adminState into the OrgsMixin.
   // adminState.adminPrincipals serves as the SuperAdmin set (shared with AdminLib).
-  include OrgsMixin(adminState, orgsData, memberships, invites);
-  include GroupsAdminMixin(adminState, convsState, memberships);
+  include OrgsMixin(adminState, orgsData, memberships, invites, orgsRlState);
+  include GroupsAdminMixin(adminState, convsState, memberships, removeMemberRateLimitWindows, removeMemberRateLimitCounts);
   include RetentionMixin(adminState, retentionState);
   include NotificationsMixin(pushSubscriptions, notificationPrefs, pendingNotifications, vapidState, adminState);
   include SettingsMixin(adminState, settingsState, memberships);

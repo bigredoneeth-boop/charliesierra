@@ -27,6 +27,39 @@ import Array "mo:core/Array";
 // No message content is ever stored here.
 
 module {
+  // ── Rate-limit state ────────────────────────────────────────────────────────
+  // Each endpoint gets two Maps: windowStart (epoch ns) and count in that window.
+  // This state is threaded in via the State record so it persists across upgrades.
+  public type RateLimitState = {
+    orgCreateRateLimitWindows  : Map.Map<Common.UserId, Int>;
+    orgCreateRateLimitCounts   : Map.Map<Common.UserId, Nat>;
+    inviteRateLimitWindows     : Map.Map<Common.UserId, Int>;
+    inviteRateLimitCounts      : Map.Map<Common.UserId, Nat>;
+    suspendRateLimitWindows    : Map.Map<Common.UserId, Int>;
+    suspendRateLimitCounts     : Map.Map<Common.UserId, Nat>;
+  };
+
+  // Returns true (allowed) and records the attempt, or false (exceeded) without mutating.
+  func checkAndRecordRateLimit(
+    caller      : Common.UserId,
+    now         : Int,
+    windowMap   : Map.Map<Common.UserId, Int>,
+    countMap    : Map.Map<Common.UserId, Nat>,
+    maxAttempts : Nat,
+  ) : Bool {
+    let windowNs : Int = 3_600_000_000_000;
+    let (windowStart, currentCount) : (Int, Nat) = switch (windowMap.get(caller)) {
+      case null (now, 0);
+      case (?ws) {
+        let count = switch (countMap.get(caller)) { case null 0; case (?c) c };
+        if (now - ws >= windowNs) { (now, 0) } else { (ws, count) };
+      };
+    };
+    if (currentCount >= maxAttempts) { return false };
+    windowMap.add(caller, windowStart);
+    countMap.add(caller, currentCount + 1);
+    true
+  };
 
   // ── Helper: membership map key ──────────────────────────────────────────
   // We use Text keys "orgId:principalText" so the Map can use Text.compare.
@@ -111,17 +144,20 @@ module {
     orgs        : Map.Map<T.OrgId, T.OrgRecord>,
     memberships : Map.Map<Text, T.OrgMembership>,
     adminState  : AdminLib.State,
+    rlState     : RateLimitState,
   ) : Common.Result<T.OrgRecord, Text> {
+    // Rate limit: 10 createOrg calls per hour per caller.
+    let now = Time.now();
+    if (not checkAndRecordRateLimit(caller, now, rlState.orgCreateRateLimitWindows, rlState.orgCreateRateLimitCounts, 10)) {
+      return #err("Rate limit exceeded: too many createOrg requests. Try again later.");
+    };
     // Validate name is non-empty.
     if (req.name == "") return #err("Organisation name cannot be empty");
 
     // Generate a UUID-style ID by combining the caller's principal text
     // with the current nanosecond timestamp. This is pseudo-unique and
     // deterministic enough for canister-local IDs.
-    let orgId : T.OrgId = caller.toText() # "-" # Time.now().toText();
-
-    // Build the OrgRecord. memberCount starts at 1 (the creator).
-    let now = Time.now();
+    let orgId : T.OrgId = caller.toText() # "-" # now.toText();
     let org : T.OrgRecord = {
       id          = orgId;
       name        = req.name;
@@ -240,11 +276,17 @@ module {
     memberships : Map.Map<Text, T.OrgMembership>,
     invites     : Map.Map<Text, T.OrgInvite>,
     adminState  : AdminLib.State,
+    rlState     : RateLimitState,
   ) : Common.Result<T.OrgMembership, Text> {
     // RBAC: caller must be OrgAdmin or SuperAdmin in this org.
     switch (assertOrgAdmin(req.orgId, caller, memberships, adminState)) {
       case (#err(e)) return #err(e);
       case (#ok(())) {};
+    };
+    // Rate limit: 20 inviteUser calls per hour per caller.
+    let now = Time.now();
+    if (not checkAndRecordRateLimit(caller, now, rlState.inviteRateLimitWindows, rlState.inviteRateLimitCounts, 20)) {
+      return #err("Rate limit exceeded: too many inviteUser requests. Try again later.");
     };
 
     // Verify the org exists.
@@ -253,7 +295,6 @@ module {
       case (?_) {};
     };
 
-    let now = Time.now();
     let inviteId = "inv-" # caller.toText() # "-" # now.toText();
 
     // Determine the invited user's effective Principal from principalId.
@@ -478,11 +519,17 @@ module {
     req         : T.SuspendUserRequest,
     memberships : Map.Map<Text, T.OrgMembership>,
     adminState  : AdminLib.State,
+    rlState     : RateLimitState,
   ) : Common.Result<(), Text> {
     // RBAC check.
     switch (assertOrgAdmin(req.orgId, caller, memberships, adminState)) {
       case (#err(e)) return #err(e);
       case (#ok(())) {};
+    };
+    // Rate limit: 10 suspendMember calls per hour per caller.
+    let now = Time.now();
+    if (not checkAndRecordRateLimit(caller, now, rlState.suspendRateLimitWindows, rlState.suspendRateLimitCounts, 10)) {
+      return #err("Rate limit exceeded: too many suspendMember requests. Try again later.");
     };
 
     // SuperAdmins are immune to suspension by OrgAdmins.
