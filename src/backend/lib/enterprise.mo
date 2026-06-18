@@ -230,10 +230,10 @@ module {
     getConv   : Common.ConversationId -> ?ConvT.Conversation,
   ) : Common.Result<(), Common.Error> {
     switch (getConv(convId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?conv) {
-        if (conv.kind != #group) { return #err(#forbidden) };
-        if (not AdminLib.isAdmin(adminState, caller)) { return #err(#unauthorized) };
+        if (conv.kind != #group) { return #err(#error("forbidden")) };
+        if (not AdminLib.isAdmin(adminState, caller)) { return #err(#error("unauthorized")) };
         let policy : T.GroupRetentionPolicy = {
           convId;
           retentionEnabled = true;
@@ -262,10 +262,10 @@ module {
     getConv   : Common.ConversationId -> ?ConvT.Conversation,
   ) : Common.Result<(), Common.Error> {
     switch (getConv(convId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?conv) {
-        if (conv.kind != #group) { return #err(#forbidden) };
-        if (not AdminLib.isAdmin(adminState, caller)) { return #err(#unauthorized) };
+        if (conv.kind != #group) { return #err(#error("forbidden")) };
+        if (not AdminLib.isAdmin(adminState, caller)) { return #err(#error("unauthorized")) };
         let policy : T.GroupRetentionPolicy = {
           convId;
           retentionEnabled = false;
@@ -294,12 +294,12 @@ module {
     getConv : Common.ConversationId -> ?ConvT.Conversation,
   ) : Common.Result<T.GroupRetentionPolicy, Common.Error> {
     switch (getConv(convId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?conv) {
         let isMember = conv.members.find(
           func(m : Common.UserId) : Bool { Principal.equal(m, caller) }
         ) != null;
-        if (not isMember) { return #err(#unauthorized) };
+        if (not isMember) { return #err(#error("unauthorized")) };
         let policy = switch (s.retentionPolicies.get(convId)) {
           case (?p) p;
           case null {
@@ -376,9 +376,9 @@ module {
   ) : Common.Result<(), Common.Error> {
     let key = escrowKey(caller, deviceId);
     switch (s.escrowRecords.get(cmpEscrowKey, key)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?existing) {
-        if (existing.revokedAt != null) { return #err(#notFound) };
+        if (existing.revokedAt != null) { return #err(#error("notFound")) };
         let updated : T.EscrowRecord = {
           existing with
           revokedAt     = ?Time.now();
@@ -416,13 +416,13 @@ module {
     reason         : Text,
   ) : Common.Result<T.EscrowAccessGrant, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let key = escrowKey(targetUserId, targetDeviceId);
     switch (s.escrowRecords.get(cmpEscrowKey, key)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?escrow) {
-        if (escrow.revokedAt != null) { return #err(#notFound) };
+        if (escrow.revokedAt != null) { return #err(#error("notFound")) };
         let grantId = s.state.nextGrantId;
         s.state.nextGrantId += 1;
         let grant : T.EscrowAccessGrant = {
@@ -452,7 +452,7 @@ module {
     afterGrantId : ?Nat,
   ) : Common.Result<[T.EscrowAccessGrant], Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let effectiveLimit = if (limit == 0) { 50 } else { limit };
     let startId = switch (afterGrantId) {
@@ -488,7 +488,7 @@ module {
     req        : T.AuditExportRequest,
   ) : Common.Result<Text, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     // Filter audit log entries
     let matching = List.empty<AdminT.AuditEvent>();
@@ -694,7 +694,7 @@ module {
     req        : T.GetRetentionMetadataRequest,
   ) : Common.Result<[T.RetentionMetadataRecord], Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let effectiveLimit = if (req.limit == 0) { 50 } else { req.limit };
     let results = List.empty<T.RetentionMetadataRecord>();
@@ -735,7 +735,7 @@ module {
     req        : T.GetEscrowedUsersRequest,
   ) : Common.Result<[T.EscrowedUserRecord], Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let effectiveLimit = if (req.limit == 0) { 50 } else { req.limit };
     let seen = Map.empty<Common.UserId, Bool>();
@@ -805,7 +805,7 @@ module {
     caller     : Common.UserId,
   ) : Common.Result<T.EscrowStatsRecord, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let seen = Map.empty<Common.UserId, Bool>();
     for (((uid, _), _) in s.escrowRecords.entries()) {
@@ -839,10 +839,10 @@ module {
     orgId          : ?OrgTypes.OrgId,
   ) : Common.Result<T.RecoveryRequest, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     if (Principal.equal(caller, targetUserId)) {
-      return #err(#forbidden);
+      return #err(#error("forbidden"));
     };
     // Rate limit: 5 recovery initiations per admin per hour
     let now = Time.now();
@@ -864,7 +864,7 @@ module {
       };
     };
     if (currentCount >= maxAttempts) {
-      return #err(#forbidden);
+      return #err(#error("forbidden"));
     };
     s.recoveryRateLimits.add(caller, windowStart);
     s.recoveryRateLimitCounts.add(caller, currentCount + 1);
@@ -910,15 +910,15 @@ module {
     requestId  : Nat,
   ) : Common.Result<T.RecoveryRequest, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     switch (s.recoveryRequests.get(requestId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?rr) {
-        if (rr.status != #pending) { return #err(#forbidden) };
+        if (rr.status != #pending) { return #err(#error("forbidden")) };
         // SECURITY: Dual-control enforcement — initiating admin cannot approve their own request
         if (Principal.equal(caller, rr.initiatingAdmin)) {
-          return #err(#forbidden);
+          return #err(#error("forbidden"));
         };
         ignore adminGrantEscrowAccess(s, adminState, caller, rr.targetUserId, rr.targetDeviceId, rr.reason);
         let updated : T.RecoveryRequest = {
@@ -952,12 +952,12 @@ module {
     requestId  : Nat,
   ) : Common.Result<T.RecoveryRequest, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     switch (s.recoveryRequests.get(requestId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?rr) {
-        if (rr.status != #pending) { return #err(#forbidden) };
+        if (rr.status != #pending) { return #err(#error("forbidden")) };
         let updated : T.RecoveryRequest = {
           rr with
           status     = #rejected;
@@ -988,10 +988,10 @@ module {
     requestId  : Nat,
   ) : Common.Result<T.RecoveryRequest, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     switch (s.recoveryRequests.get(requestId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?rr) { #ok(rr) };
     };
   };
@@ -1005,7 +1005,7 @@ module {
     statusFilter : ?T.RecoveryRequestStatus,
   ) : Common.Result<[T.RecoveryRequest], Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let results = List.empty<T.RecoveryRequest>();
     for ((_rid, rr) in s.recoveryRequests.entries()) {

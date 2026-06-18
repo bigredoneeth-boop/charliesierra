@@ -20,6 +20,7 @@ import {
   getLocalDisplayName,
 } from "@/hooks/use-profiles";
 import { deriveGroupKey, encryptMessage } from "@/lib/crypto";
+import { extractErrText } from "@/lib/error-utils";
 import { parseIcError } from "@/utils/ic-errors";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useNavigate } from "@tanstack/react-router";
@@ -106,7 +107,7 @@ export function NewConversationDialog({
       if (result.__kind__ === "err") {
         // result.err may be undefined due to a known bindgen issue; treat
         // both undefined and explicit error strings gracefully.
-        const errKey = result.err as string | undefined;
+        const errKey = extractErrText(result);
         const errMessages: Record<string, string> = {
           notFound:
             "User not found. Ask them to open CharlieSierra first so their account is registered.",
@@ -223,13 +224,10 @@ export function NewConversationDialog({
           forbidden: "Group creation is not allowed.",
           alreadyExists: "A group with these members already exists.",
         };
+        const errKey = extractErrText(result);
         const msg =
-          errMessages[result.err as string] ??
-          `Failed to create group (${result.err}).`;
-        console.error(
-          "[CharlieSierra] createGroupConversation error:",
-          result.err,
-        );
+          errMessages[errKey] ?? `Failed to create group (${errKey}).`;
+        console.error("[CharlieSierra] createGroupConversation error:", errKey);
         toast.error(msg);
         return;
       }

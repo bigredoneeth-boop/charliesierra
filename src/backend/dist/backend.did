@@ -617,14 +617,7 @@ type EscrowAccessGrant =
    targetDeviceId: text;
    targetUserId: UserId;
  };
-type Error = 
- variant {
-   alreadyExists;
-   forbidden;
-   invalidInput;
-   notFound;
-   unauthorized;
- };
+type Error = variant {error: text;};
 type EcdhPublicKey = blob;
 type DeviceRecordPublic = 
  record {

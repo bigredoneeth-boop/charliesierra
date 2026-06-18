@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
 import { createExternalBlob } from "@/lib/blob-helpers";
+import { extractErrText } from "@/lib/error-utils";
 import { Loader2, Mic, MicOff, Play, Send, Square, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -130,7 +131,8 @@ export function VoiceNoteRecorder({
         encryptedContent,
         messageType: MessageType.audio,
       });
-      if (msgResult.__kind__ === "err") throw new Error(msgResult.err);
+      if (msgResult.__kind__ === "err")
+        throw new Error(extractErrText(msgResult));
 
       const msgId = msgResult.ok.id;
       const attachResult = await backend.registerAttachment({
@@ -139,7 +141,8 @@ export function VoiceNoteRecorder({
         encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey,
       });
-      if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
+      if (attachResult.__kind__ === "err")
+        throw new Error(extractErrText(attachResult));
 
       onSent();
       discard();

@@ -1,4 +1,4 @@
-// Version: 3.0.0
+// Version: 1.0.0
 type AttachmentId__640090544 = Nat;
 type Attachment__831262237 =
   {
@@ -204,150 +204,6 @@ type Node__918630472<T> =
   {#internal : Internal__1007892817<T>; #leaf : Leaf__693487502<T>};
 type NotificationPreferences__789589615 =
   {directMessagesEnabled : Bool; groupMessagesEnabled : Bool};
-type OldAdminState__921620111 =
-  {
-    adminPrincipals : Set__1052415927<UserId__2049225>;
-    auditLog : Map__222667396<Nat, OldAuditEvent__1008209622>;
-    state :
-      {
-        var bootstrapCompleted : Bool;
-        var dataResetCompleted : Bool;
-        var nextEventId : Nat;
-        var seedPrincipal : ?Principal
-      }
-  };
-type OldAuditEventType__634193866 =
-  {
-    #adminAction;
-    #auditLogExported;
-    #callInitiated;
-    #compartmentAssigned;
-    #escrowAccessGranted;
-    #escrowEnrolled;
-    #escrowRevoked;
-    #groupMemberRemoved;
-    #keyEscrowEnrolled;
-    #keyRecoveryApproved;
-    #keyRecoveryCompleted;
-    #keyRecoveryInitiated;
-    #keyRecoveryRejected;
-    #legalHoldPlaced;
-    #legalHoldRemoved;
-    #memberAdded;
-    #memberReactivated;
-    #memberRemoved;
-    #memberRoleChanged;
-    #memberSuspended;
-    #messageQueueDrained;
-    #messageSent;
-    #orgCreated;
-    #orgDeleted;
-    #orgSettingsUpdated;
-    #orgSuspended;
-    #orgUpdated;
-    #platformSettingsUpdated;
-    #policyExpiryCheckPerformed;
-    #policyReportExported;
-    #priorityMessageSent;
-    #retentionDisabled;
-    #retentionEnabled;
-    #retentionPolicyCreated;
-    #retentionPolicyUpdated;
-    #sovereignConfigUpdated;
-    #userInvited;
-    #userRegistered;
-    #userRemoved
-  };
-type OldAuditEvent__1008209622 =
-  {
-    actorPrincipal : UserId__2049225;
-    encryptedDetails : ?Blob;
-    eventType : OldAuditEventType__634193866;
-    id : Nat;
-    orgId : ?Text;
-    targetPrincipal : ?UserId__2049225;
-    timestamp : Int
-  };
-type OldEnterpriseState__923432221 =
-  {
-    escrowGrants : Map__222667396<Nat, OldEscrowAccessGrant__194434364>;
-    escrowRecords :
-      Map__222667396<(UserId__2049225, Text), OldEscrowRecord__567196940>;
-    recoveryRateLimitCounts : Map__222667396<UserId__2049225, Nat>;
-    recoveryRateLimits : Map__222667396<UserId__2049225, Int>;
-    recoveryRequests : Map__222667396<Nat, OldRecoveryRequest__468060565>;
-    retentionMetadata :
-      List__560604548<OldRetentionMetadataRecord__744003835>;
-    retentionPolicies :
-      Map__222667396<Nat, OldGroupRetentionPolicy__479802482>;
-    state : {var nextGrantId : Nat; var nextRecoveryRequestId : Nat};
-    vetEscrowRecords :
-      Map__222667396<UserId__2049225, OldVetEscrowRecord__326799376>
-  };
-type OldEscrowAccessGrant__194434364 =
-  {
-    accessOutcome : Text;
-    grantId : Nat;
-    grantTimestamp : Int;
-    reason : Text;
-    requestingAdmin : UserId__2049225;
-    targetDeviceId : Text;
-    targetUserId : UserId__2049225
-  };
-type OldEscrowRecord__567196940 =
-  {
-    consentLanguageVersion : Text;
-    consentTimestamp : Int;
-    deviceId : Text;
-    deviceLabel : Text;
-    devicePublicKeyFingerprint : Text;
-    revokedAt : ?Int;
-    revokedReason : ?Text;
-    userId : UserId__2049225;
-    wrappedKey : Blob
-  };
-type OldGroupRetentionPolicy__479802482 =
-  {
-    convId : Nat;
-    enabledAt : ?Int;
-    enabledBy : ?UserId__2049225;
-    retentionEnabled : Bool
-  };
-type OldRecoveryRequest__468060565 =
-  {
-    approvedBy : ?UserId__2049225;
-    createdAt : Int;
-    id : Nat;
-    initiatingAdmin : UserId__2049225;
-    orgId : ?Text;
-    reason : Text;
-    resolvedAt : ?Int;
-    status : {#approved; #completed; #pending; #rejected};
-    targetDeviceId : Text;
-    targetUserId : UserId__2049225
-  };
-type OldRetentionMetadataRecord__744003835 =
-  {
-    convId : Nat;
-    messageId : Nat;
-    recipientPrincipals : [UserId__2049225];
-    senderPrincipal : UserId__2049225;
-    sentAt : Int
-  };
-type OldSettingsState__831092524 =
-  {
-    orgSettingsMap : Map__222667396<Text, OrgSettings__337404528>;
-    platformSettings : {var value : PlatformSettings__592001590};
-    settingsUpdateRateLimitCounts : Map__222667396<UserId__2049225, Nat>;
-    settingsUpdateRateLimitWindows : Map__222667396<UserId__2049225, Int>
-  };
-type OldVetEscrowRecord__326799376 =
-  {
-    enrolledAt : Int;
-    keyDerivationInput : Blob;
-    principal : UserId__2049225;
-    status : {#active; #revoked}
-  };
 type OrgId__195627598 = Text;
 type OrgInvite__781467659 =
   {
@@ -488,7 +344,6 @@ type TypingIndicator__500933211 =
     userId : UserId__158757552
   };
 type UserId__158757552 = Principal;
-type UserId__2049225 = Principal;
 type UserProfile__277265826 =
   {
     ecdhPublicKey : EcdhPublicKey__310434782;
@@ -512,145 +367,7 @@ type VetEscrowRecord__210350760 =
     principal : UserId__158757552;
     status : {#active; #revoked}
   };
-actor ({
-  stable P256_GX : Nat;
-  stable P256_GY : Nat;
-  stable P256_INFINITY : {x : Nat; y : Nat; z : Nat};
-  stable P256_N : Nat;
-  stable P256_P : Nat;
-  stable VAPID_PRIVATE_KEY : [Nat8];
-  stable VAPID_PUBLIC_KEY_B64 : Text;
-  stable VAPID_PUBLIC_KEY_BYTES : [Nat8];
-  in adminState : OldAdminState__921620111;
-  stable attState :
-    {
-      attachments :
-        Map__222667396<AttachmentId__640090544, Attachment__831262237>;
-      messageAttachments :
-        Map__222667396<MessageId__291319400, [AttachmentId__640090544]>;
-      state : {var nextId : AttachmentId__640090544}
-    };
-  stable convsState :
-    {
-      conversations :
-        Map__222667396<ConversationId__966455625, Conversation__442121514>;
-      directIndex : Map__222667396<Text, ConversationId__966455625>;
-      state : {var nextId : ConversationId__966455625}
-    };
-  stable devicesState :
-    {
-      devices :
-        Map__222667396<UserId__158757552,
-                        List__560604548<DeviceRecord__387655850>>;
-      syncTokens : Map__222667396<Text, DeviceSyncToken__919843731>
-    };
-  stable discoveryState :
-    {
-      joinRequests :
-        Map__222667396<ConversationId__966455625,
-                        Map__222667396<Text, JoinRequest__726477487>>
-    };
-  in enterpriseState : OldEnterpriseState__923432221;
-  stable inviteRateLimitCounts :
-    {var root : Node__1000929467<Principal, Nat>; var size : Nat__1040412405};
-  stable inviteRateLimitWindows :
-    {var root : Node__1000929467<Principal, Int>; var size : Nat__1040412405};
-  stable invites :
-    {
-      var root : Node__1000929467<Text, OrgInvite__781467659>;
-      var size : Nat__1040412405
-    };
-  stable memberships :
-    {
-      var root : Node__1000929467<Text, OrgMembership__162165522>;
-      var size : Nat__1040412405
-    };
-  stable mgmt :
-    actor {
-      http_request :
-        shared HttpRequestArgs__1018892528 ->
-          async HttpResponseType__158211698
-    };
-  stable msgsState :
-    {
-      conversationMessages :
-        Map__222667396<ConversationId__966455625, [MessageId__291319400]>;
-      messages : Map__222667396<MessageId__291319400, Message__714344397>;
-      readReceipts :
-        Map__222667396<(MessageId__291319400, UserId__158757552),
-                        ReadReceiptRecord__853033662>;
-      receiptsByMessage :
-        Map__222667396<MessageId__291319400,
-                        List__560604548<ReadReceiptRecord__853033662>>;
-      state : {var nextId : MessageId__291319400};
-      typingIndicators :
-        Map__222667396<(ConversationId__966455625, UserId__158757552),
-                        TypingIndicator__500933211>
-    };
-  stable notificationPrefs :
-    {
-      var root :
-        Node__1000929467<Principal, NotificationPreferences__789589615>;
-      var size : Nat__1040412405
-    };
-  stable orgCreateRateLimitCounts :
-    {var root : Node__1000929467<Principal, Nat>; var size : Nat__1040412405};
-  stable orgCreateRateLimitWindows :
-    {var root : Node__1000929467<Principal, Int>; var size : Nat__1040412405};
-  stable orgsData :
-    {
-      var root : Node__1000929467<OrgId__195627598, OrgRecord__907003018>;
-      var size : Nat__1040412405
-    };
-  stable orgsRlState :
-    {
-      inviteRateLimitCounts : Map__222667396<UserId__158757552, Nat>;
-      inviteRateLimitWindows : Map__222667396<UserId__158757552, Int>;
-      orgCreateRateLimitCounts : Map__222667396<UserId__158757552, Nat>;
-      orgCreateRateLimitWindows : Map__222667396<UserId__158757552, Int>;
-      suspendRateLimitCounts : Map__222667396<UserId__158757552, Nat>;
-      suspendRateLimitWindows : Map__222667396<UserId__158757552, Int>
-    };
-  stable pendingNotifications :
-    {
-      var root : Node__1000929467<Principal, [PendingNotification__525714583]>;
-      var size : Nat__1040412405
-    };
-  stable pushActor :
-    actor {sendPushToUser : shared (Principal, Text, Text, Text) -> async ()};
-  stable pushSubscriptions :
-    {
-      var root :
-        Node__1000929467<Principal, PushSubscriptionRecord__480474545>;
-      var size : Nat__1040412405
-    };
-  stable removeMemberRateLimitCounts :
-    {var root : Node__1000929467<Principal, Nat>; var size : Nat__1040412405};
-  stable removeMemberRateLimitWindows :
-    {var root : Node__1000929467<Principal, Int>; var size : Nat__1040412405};
-  stable retentionState :
-    {
-      retentionPolicies : Map__222667396<Text, RetentionPolicy__757505855>;
-      state : {var nextPolicyId : Nat}
-    };
-  in settingsState : OldSettingsState__831092524;
-  stable sovereignState :
-    {
-      groupCompartments :
-        Map__222667396<ConversationId__966455625, CompartmentLabel__761974401>;
-      state : {var sovereignConfig : SovereignConfig__682828137}
-    };
-  stable suspendRateLimitCounts :
-    {var root : Node__1000929467<Principal, Nat>; var size : Nat__1040412405};
-  stable suspendRateLimitWindows :
-    {var root : Node__1000929467<Principal, Int>; var size : Nat__1040412405};
-  stable usersState :
-    {
-      profiles : Map__222667396<UserId__158757552, UserProfile__277265826>;
-      state : {var nextId : Nat}
-    };
-  stable vapidState : {var value : ?VapidState__26894748}
-}, {
+actor {
   stable P256_GX : Nat;
   stable P256_GY : Nat;
   stable P256_INFINITY : {x : Nat; y : Nat; z : Nat};
@@ -820,4 +537,4 @@ actor ({
       state : {var nextId : Nat}
     };
   stable vapidState : {var value : ?VapidState__26894748}
-});
+};

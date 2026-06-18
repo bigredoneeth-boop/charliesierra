@@ -10,6 +10,7 @@ import {
 import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
 import { createExternalBlob } from "@/lib/blob-helpers";
+import { extractErrText } from "@/lib/error-utils";
 import { FileText, ImageIcon, Loader2, Upload, Video, X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
@@ -154,7 +155,8 @@ export function AttachmentUpload({
         encryptedContent,
         messageType: msgType,
       });
-      if (msgResult.__kind__ === "err") throw new Error(msgResult.err);
+      if (msgResult.__kind__ === "err")
+        throw new Error(extractErrText(msgResult));
       setProgress(85);
 
       // Step 5: Register the attachment with the real storageKey
@@ -165,7 +167,8 @@ export function AttachmentUpload({
         encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey,
       });
-      if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
+      if (attachResult.__kind__ === "err")
+        throw new Error(extractErrText(attachResult));
       setProgress(100);
 
       onClose();

@@ -33,6 +33,7 @@ import type {
   UserId,
 } from "@/backend";
 import { useAuth } from "@/context/auth-context";
+import { extractErrText } from "@/lib/error-utils";
 import { useActor } from "@caffeineai/core-infrastructure";
 import type { Principal } from "@dfinity/principal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -47,7 +48,7 @@ export function useMyOrgs() {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getMyOrgs();
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -63,7 +64,7 @@ export function useMyRole(orgId: OrgId | null) {
     queryFn: async () => {
       if (!actor || !orgId) return null;
       const res = await actor.getMyRole(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching && !!orgId,
@@ -95,7 +96,7 @@ export function useOrgs(req: UseOrgsRequest) {
         afterOrgId: req.afterOrgId,
         search: req.search ?? undefined,
       });
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -111,7 +112,7 @@ export function useOrgDetails(orgId: OrgId | null) {
     queryFn: async () => {
       if (!actor || !orgId) return null;
       const res = await actor.getOrg(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching && !!orgId,
@@ -158,7 +159,7 @@ export function useAdminAuditLog(req: GetAuditLogRequest) {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getAuditLog(req);
-      if (res.__kind__ === "err") throw new Error(String(res.err));
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -188,7 +189,7 @@ export function useGroupMembers(groupId: bigint) {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getGroupMembers({ groupId });
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -204,7 +205,7 @@ export function useRemoveMemberFromGroup() {
     mutationFn: async (req: RemoveMemberFromGroupRequest) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.removeMemberFromGroup(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -246,7 +247,7 @@ export function useCreateOrg() {
     mutationFn: async (req: CreateOrgRequest) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.createOrg(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -264,7 +265,7 @@ export function useInviteUser() {
     mutationFn: async (req: InviteUserRequest) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.inviteUser(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -283,7 +284,7 @@ export function useUpdateMemberRole() {
     mutationFn: async (req: UpdateMemberRoleRequest) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.updateMemberRole(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -302,7 +303,7 @@ export function useSuspendMember() {
     mutationFn: async (req: SuspendUserRequest) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.suspendMember(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -322,7 +323,7 @@ export function useRemoveMember() {
     mutationFn: async ({ orgId, userId }: { orgId: OrgId; userId: UserId }) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.removeMember(orgId, userId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, { orgId }) => {
@@ -339,7 +340,7 @@ export function useReactivateMember() {
     mutationFn: async ({ orgId, userId }: { orgId: OrgId; userId: UserId }) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.reactivateMember(orgId, userId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, { orgId }) => {
@@ -365,7 +366,7 @@ export function useUpdateOrg() {
     }) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.updateOrg(orgId, name, description);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, { orgId }) => {
@@ -384,7 +385,7 @@ export function useSuspendOrg() {
     mutationFn: async (orgId: OrgId) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.suspendOrg(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -443,7 +444,7 @@ export function useBootstrapSuperAdmin() {
     mutationFn: async (principal: Principal) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.bootstrapSuperAdmin(principal);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -464,7 +465,7 @@ export function useExportAuditLogs() {
     mutationFn: async (req: ExportAuditLogsRequest) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.exportAuditLogs(req);
-      if (res.__kind__ === "err") throw new Error(String(res.err));
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
   });
@@ -478,7 +479,7 @@ export function useEscrowStats() {
     queryFn: async () => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.getEscrowStats();
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -500,7 +501,7 @@ export function useEscrowedUsers(req: GetEscrowedUsersRequest) {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getEscrowedUsers(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -522,7 +523,7 @@ export function useRecoveryRequests(
         orgId ?? null,
         statusFilter ?? null,
       );
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -542,7 +543,7 @@ export function useEscrowGrants(targetUserId: UserId | null) {
         50n,
         null,
       );
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -573,7 +574,7 @@ export function useInitiateKeyRecovery() {
         reason,
         orgId ?? null,
       );
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -592,7 +593,7 @@ export function useApproveKeyRecovery() {
     mutationFn: async (requestId: bigint) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.approveKeyRecovery(requestId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -661,7 +662,7 @@ export function useRejectKeyRecovery() {
     mutationFn: async (requestId: bigint) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.rejectKeyRecovery(requestId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -690,7 +691,7 @@ export function useEnrollUserKeyEscrow() {
       }
       const result = (await fn.call(actor)) as { ok?: string; err?: string };
       if ("err" in result && result.err !== undefined)
-        throw new Error(result.err);
+        throw new Error(extractErrText(result));
       return result.ok ?? "Enrolled";
     },
     onSuccess: () => {
@@ -724,7 +725,7 @@ export function useGetEncryptedEscrowKey() {
         transportPublicKey,
       )) as { ok?: Uint8Array; err?: string };
       if ("err" in result && result.err !== undefined)
-        throw new Error(result.err);
+        throw new Error(extractErrText(result));
       if (!result.ok) throw new Error("No key data returned");
       return result.ok;
     },

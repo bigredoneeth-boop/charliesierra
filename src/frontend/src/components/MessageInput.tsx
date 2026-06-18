@@ -17,6 +17,7 @@ import { useBackend } from "@/hooks/use-backend";
 import { useConnection } from "@/hooks/use-connection";
 import type { MessagePriority } from "@/hooks/use-offline-queue";
 import { useOfflineQueue } from "@/hooks/use-offline-queue";
+import { extractErrText } from "@/lib/error-utils";
 import { Loader2, Mic, Paperclip, Send, Zap } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -223,7 +224,7 @@ export function MessageInput({
             ? BackendMessagePriority.high
             : BackendMessagePriority.normal,
       });
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       setText("");
       if (textareaRef.current) textareaRef.current.style.height = "auto";
       onMessageSent?.();

@@ -34,7 +34,7 @@ module {
     now       : Common.Timestamp
   ) : Common.Result<SovereignT.SovereignConfig, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let updated : SovereignT.SovereignConfig = {
       state.state.sovereignConfig with
@@ -60,7 +60,7 @@ module {
     _now     : Common.Timestamp
   ) : Common.Result<(), Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     state.groupCompartments.add(convId, compartment);
     AdminLib.recordEvent(adminState, #compartmentAssigned, caller, null, null);
@@ -85,7 +85,7 @@ module {
     now            : Common.Timestamp
   ) : Common.Result<SovereignT.ConfigExportBundle, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let subnetText = switch (state.state.sovereignConfig.subnetPrincipal) {
       case (?p) ?p.toText();

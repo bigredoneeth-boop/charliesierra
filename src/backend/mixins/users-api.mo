@@ -9,10 +9,10 @@ mixin (usersState : UsersLib.State) {
     req : T.RegisterRequest
   ) : async Common.Result<T.UserProfilePublic, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.encryptedDisplayName.size() == 0 or req.encryptedDisplayName.size() > 2048) return #err(#invalidInput);
-    if (req.ecdhPublicKey.size() == 0 or req.ecdhPublicKey.size() > 512) return #err(#invalidInput);
+    if (req.encryptedDisplayName.size() == 0 or req.encryptedDisplayName.size() > 2048) return #err(#error("invalidInput"));
+    if (req.ecdhPublicKey.size() == 0 or req.ecdhPublicKey.size() > 512) return #err(#error("invalidInput"));
     UsersLib.register(usersState, caller, req);
   };
 
@@ -35,14 +35,14 @@ mixin (usersState : UsersLib.State) {
     req : T.UpdateProfileRequest
   ) : async Common.Result<T.UserProfilePublic, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation on optional fields when provided
     switch (req.encryptedDisplayName) {
-      case (?b) { if (b.size() == 0 or b.size() > 2048) return #err(#invalidInput) };
+      case (?b) { if (b.size() == 0 or b.size() > 2048) return #err(#error("invalidInput")) };
       case null {};
     };
     switch (req.ecdhPublicKey) {
-      case (?b) { if (b.size() == 0 or b.size() > 512) return #err(#invalidInput) };
+      case (?b) { if (b.size() == 0 or b.size() > 512) return #err(#error("invalidInput")) };
       case null {};
     };
     UsersLib.updateProfile(usersState, caller, req);

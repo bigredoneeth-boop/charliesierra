@@ -51,6 +51,7 @@ import {
   useSetGroupCompartment,
   useSetSovereignConfig,
 } from "@/hooks/use-sovereign";
+import { extractErrText } from "@/lib/error-utils";
 import { AuditEventType } from "@/types/audit";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -733,7 +734,7 @@ function AdminAccountsTab() {
       );
       const newAdmin = PrincipalClass.fromText(trimmed);
       const result = await actor.addAdmin(newAdmin);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       toast.success("Admin access granted successfully");
       setNewPrincipal("");
       setPrincipalError(null);
@@ -752,7 +753,7 @@ function AdminAccountsTab() {
     setIsRemoving(true);
     try {
       const result = await actor.removeAdmin(removeTarget);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       toast.success("Admin access revoked");
       setRemoveTarget(null);
       void qc.invalidateQueries({ queryKey: ["admin-list"] });

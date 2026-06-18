@@ -20,13 +20,7 @@ export const _ImmutableObjectStorageRefillResult = IDL.Record({
   'topped_up_amount' : IDL.Opt(IDL.Nat),
 });
 export const UserId = IDL.Principal;
-export const Error = IDL.Variant({
-  'forbidden' : IDL.Null,
-  'alreadyExists' : IDL.Null,
-  'invalidInput' : IDL.Null,
-  'notFound' : IDL.Null,
-  'unauthorized' : IDL.Null,
-});
+export const Error = IDL.Variant({ 'error' : IDL.Text });
 export const Result_6 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
 export const ConversationId = IDL.Nat;
 export const AddMemberRequest = IDL.Record({
@@ -989,13 +983,7 @@ export const idlFactory = ({ IDL }) => {
     'topped_up_amount' : IDL.Opt(IDL.Nat),
   });
   const UserId = IDL.Principal;
-  const Error = IDL.Variant({
-    'forbidden' : IDL.Null,
-    'alreadyExists' : IDL.Null,
-    'invalidInput' : IDL.Null,
-    'notFound' : IDL.Null,
-    'unauthorized' : IDL.Null,
-  });
+  const Error = IDL.Variant({ 'error' : IDL.Text });
   const Result_6 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
   const ConversationId = IDL.Nat;
   const AddMemberRequest = IDL.Record({

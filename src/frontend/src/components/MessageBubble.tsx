@@ -79,15 +79,18 @@ export function useDecryptedContent(
   conversationId: string,
   _isMine: boolean,
 ) {
-  const { decryptFromConv } = useCrypto();
+  const { decryptFromConv, rekeyConversation } = useCrypto();
   const [text, setText] = useState<string | null>(null);
+  const hasTriggeredRekey = useRef(false);
   const [failed, setFailed] = useState(false);
+  const [showStaleKeyButton, setShowStaleKeyButton] = useState(false);
 
   useEffect(() => {
     if (message.messageType !== MessageType.text) return;
     if (isExpired(message)) {
       setFailed(false);
       setText(null);
+      setShowStaleKeyButton(false);
       return;
     }
 
@@ -133,6 +136,7 @@ export function useDecryptedContent(
         if (result !== null) {
           setText(result);
           setFailed(false);
+          setShowStaleKeyButton(false);
           // Cancel remaining retries — success
           cancelled = true;
         } else if (attempt === attempts.length) {
@@ -140,7 +144,21 @@ export function useDecryptedContent(
           console.error(
             `[E2EE] useDecryptedContent: all ${attempts.length} attempts failed for convId=${conversationId} msgId=${message.id}`,
           );
+          if (!hasTriggeredRekey.current) {
+            hasTriggeredRekey.current = true;
+            console.log(
+              `[E2EE] Stale key detected — initiating rekey for convId=${conversationId} msgId=${message.id}`,
+            );
+            rekeyConversation(conversationId).catch((err: unknown) => {
+              console.error(
+                `[E2EE] rekeyConversation failed for convId=${conversationId}:`,
+                err,
+              );
+            });
+          }
+          console.error();
           setFailed(true);
+          setShowStaleKeyButton(true);
         }
       }, delay);
       timers.push(t);
@@ -150,9 +168,9 @@ export function useDecryptedContent(
       cancelled = true;
       for (const t of timers) clearTimeout(t);
     };
-  }, [message, conversationId, decryptFromConv]);
+  }, [message, conversationId, decryptFromConv, rekeyConversation]);
 
-  return { text, failed };
+  return { text, failed, showStaleKeyButton };
 }
 
 /** Parse encrypted metadata JSON from a non-text message's encryptedContent */
@@ -805,7 +823,12 @@ export function MessageBubble({
   const [contextOpen, setContextOpen] = useState(false);
   const [contextPos, setContextPos] = useState({ x: 0, y: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
-  const { text, failed } = useDecryptedContent(message, conversationId, isMine);
+  const { text, failed, showStaleKeyButton } = useDecryptedContent(
+    message,
+    conversationId,
+    isMine,
+  );
+  const { rekeyConversation } = useCrypto();
   const meta = useAttachmentMeta(message, conversationId);
   const expired = isExpired(message);
 
@@ -937,9 +960,33 @@ export function MessageBubble({
             <span className="text-xs italic opacity-60">Message deleted</span>
           ) : message.messageType === MessageType.text ? (
             failed ? (
-              <span className="text-xs italic opacity-60">
-                Unable to decrypt
-              </span>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs italic opacity-60">
+                  Unable to decrypt
+                </span>
+                {showStaleKeyButton && (
+                  <button
+                    type="button"
+                    className="text-xs underline text-destructive hover:text-destructive/80 transition-colors cursor-pointer"
+                    onClick={() => {
+                      console.log(
+                        `[E2EE UI] User tapped rekey for convId=${conversationId}`,
+                      );
+                      rekeyConversation(conversationId).catch(
+                        (err: unknown) => {
+                          console.error(
+                            `[E2EE UI] Manual rekey failed for convId=${conversationId}:`,
+                            err,
+                          );
+                        },
+                      );
+                    }}
+                    data-ocid="message.rekey_button"
+                  >
+                    Stale key — tap to rekey
+                  </button>
+                )}
+              </div>
             ) : text === null ? (
               <Loader2 size={14} className="animate-spin opacity-40" />
             ) : (

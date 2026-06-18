@@ -56,6 +56,7 @@ import {
   ChevronUp,
   Database,
   Home,
+  KeyRound,
   Search,
   Settings,
   Timer,
@@ -356,6 +357,36 @@ interface HeaderProps {
   onManageOpen: () => void;
 }
 
+function RekeyButton({ convId }: { convId: bigint }) {
+  const { rekeyConversation } = useCrypto();
+  const [isRekeying, setIsRekeying] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        setIsRekeying(true);
+        try {
+          await rekeyConversation(convId.toString());
+        } finally {
+          setIsRekeying(false);
+        }
+      }}
+      disabled={isRekeying}
+      className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth disabled:opacity-50"
+      aria-label="Rekey conversation"
+      title="Rekey conversation"
+      data-ocid="chat.rekey_button"
+    >
+      {isRekeying ? (
+        <span className="text-xs font-medium">Rekeying…</span>
+      ) : (
+        <KeyRound size={18} />
+      )}
+    </button>
+  );
+}
+
 async function decryptGroupName(
   conv: ConversationPublic,
 ): Promise<string | null> {
@@ -502,6 +533,7 @@ function ChatHeader({
         >
           <Search size={18} />
         </button>
+        <RekeyButton convId={conv.id} />
         {isCreator && (
           <button
             type="button"
@@ -559,6 +591,7 @@ export default function ChatPage() {
   const [decryptedMsgs, setDecryptedMsgs] = useState<
     { id: string; text: string }[]
   >([]);
+  const [, _setIsRekeying] = useState(false);
 
   // When coming back online, drain the offline queue
   useEffect(() => {
@@ -704,7 +737,21 @@ export default function ChatPage() {
       // Also clear the guard immediately so it re-fires even if peerProfiles
       // hasn't changed by re-deriving directly when a peer key is available.
       if (peerProfiles.length > 0) {
-        const peer = peerProfiles[0];
+        const peer = peerProfiles.find(
+          (p) => p.id.toText() === peerIds[0]?.toText(),
+        );
+        if (!peer) {
+          console.warn(
+            `[E2EE] ChatPage: peer profile not found for peerId=${peerIds[0]?.toText()} in convId=${convIdStr}`,
+          );
+          return;
+        }
+        if (peer.id.toText() === myPrincipal) {
+          console.warn(
+            `[E2EE] Self-keying detected for convId=${convIdStr}, aborting`,
+          );
+          return;
+        }
         if (peer.ecdhPublicKey.length > 0) {
           const freshPeerKeyBytes = toCleanUint8Array(peer.ecdhPublicKey);
           deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then((key) => {
@@ -740,6 +787,8 @@ export default function ChatPage() {
     convId,
     conv,
     peerProfiles,
+    peerIds,
+    myPrincipal,
     deriveAndStoreKey,
     setGroupConversationKey,
     clearMissingKeyConvId,
@@ -755,7 +804,21 @@ export default function ChatPage() {
     // see the fingerprint already set and skip re-derivation immediately.
     if (conv.kind === ConversationKind.direct) {
       if (peerProfiles.length > 0) {
-        const peer = peerProfiles[0];
+        const peer = peerProfiles.find(
+          (p) => p.id.toText() === peerIds[0]?.toText(),
+        );
+        if (!peer) {
+          console.warn(
+            `[E2EE] ChatPage: peer profile not found for peerId=${peerIds[0]?.toText()} in convId=${convIdStr}`,
+          );
+          return;
+        }
+        if (peer.id.toText() === myPrincipal) {
+          console.warn(
+            `[E2EE] Self-keying detected for convId=${convIdStr}, aborting`,
+          );
+          return;
+        }
         if (peer.ecdhPublicKey.length === 0) {
           console.warn(
             `[E2EE] ChatPage: peer profile arrived with empty ecdhPublicKey for convId=${convIdStr}`,
@@ -781,6 +844,18 @@ export default function ChatPage() {
               `[E2EE ChatPage] skipping re-derive for convId=${convIdStr} — key already present with same fingerprint`,
             );
             return;
+          }
+
+          // SECONDARY GUARD: if the key is NOT ready (evicted/cleared) but we
+          // have the same fingerprint, we MUST re-derive. Don't skip.
+          if (
+            lastDerivedPeerKey.current === keyFingerprint &&
+            !isKeyReady(convIdStr)
+          ) {
+            console.log(
+              `[E2EE ChatPage] re-deriving for convId=${convIdStr} — same fingerprint but key not ready (was evicted)`,
+            );
+            // Fall through to re-derivation below
           }
 
           // Claim the fingerprint synchronously BEFORE any async work so that
@@ -885,6 +960,8 @@ export default function ChatPage() {
     conv,
     convId,
     peerProfiles,
+    peerIds,
+    myPrincipal,
     keyPair,
     deriveAndStoreKey,
     getConversationKey,

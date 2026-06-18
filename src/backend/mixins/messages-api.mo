@@ -41,10 +41,10 @@ mixin (
     req : T.SendMessageRequest
   ) : async Common.Result<T.MessagePublic, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.conversationId == 0) return #err(#invalidInput);
-    if (req.encryptedContent.size() == 0) return #err(#invalidInput);
+    if (req.conversationId == 0) return #err(#error("invalidInput"));
+    if (req.encryptedContent.size() == 0) return #err(#error("invalidInput"));
     let result = MsgsLib.sendMessage(msgsState, caller, req, isMember);
     // Post-send hooks: retention metadata + notification triggers
     switch (result) {
@@ -127,8 +127,8 @@ mixin (
   public shared ({ caller }) func markMessageRead(
     messageId : Common.MessageId
   ) : async Common.Result<(), Common.Error> {
-    if (caller.isAnonymous()) return #err(#unauthorized);
-    if (messageId == 0) return #err(#invalidInput);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
+    if (messageId == 0) return #err(#error("invalidInput"));
     MsgsLib.markRead(msgsState, caller, messageId);
   };
 

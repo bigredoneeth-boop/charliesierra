@@ -1,3 +1,4 @@
+import { useUpdateProfile } from "@/hooks/use-profiles";
 import {
   CONV_KEY_PREFIX,
   dbGet,
@@ -74,12 +75,25 @@ interface CryptoContextValue {
   isDerivingKey: (convId: string) => boolean;
   /** Returns true once a conversation key has been derived and stored. */
   isKeyReady: (convId: string) => boolean;
+  /**
+   * Forcefully clear a conversation key from both memory and IndexedDB,
+   * then mark it as missing so ChatPage triggers fresh re-derivation.
+   * Use this when decryption fails repeatedly and you need a clean slate.
+   */
+  forceReDeriveKey: (convId: string) => Promise<void>;
+  /**
+   * Force a full key re-exchange for a conversation: clear the old key,
+   * publish a fresh ECDH public key to the backend, and trigger re-derivation.
+   * Use this when a stale key is detected or as a manual "Rekey" action.
+   */
+  rekeyConversation: (convId: string) => Promise<void>;
 }
 
 const CryptoContext = createContext<CryptoContextValue | null>(null);
 
 export function CryptoProvider({ children }: { children: React.ReactNode }) {
   const { principal } = useAuth();
+  const updateProfile = useUpdateProfile();
   const [keyPair, setKeyPair] = useState<CryptoKeyPair | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [isRestoringKeys, setIsRestoringKeys] = useState(true);
@@ -95,6 +109,11 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   const derivingConvIds = useRef<Set<string>>(new Set());
   const [keyReadyConvIds, setKeyReadyConvIds] = useState<Set<string>>(
     new Set(),
+  );
+  // Tracks convIds currently undergoing a rekey to prevent duplicate rekey loops.
+  const rekeyInProgress = useRef<Set<string>>(new Set());
+  const keyLoadingPromises = useRef<Map<string, Promise<CryptoKey | null>>>(
+    new Map(),
   );
 
   const clearMissingKeyConvId = useCallback((convId: string) => {
@@ -185,6 +204,8 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           console.log(
             `[E2EE RESTORE] Restoring ${allEntries.length} conversation keys from IndexedDB`,
           );
+          // After each key is restored, log full fingerprint:
+          // (add inside the loop that restores keys)
 
           // Derive the wrap key ONCE for the entire batch — fail fast and visibly
           let wrapKey: CryptoKey | null = null;
@@ -311,9 +332,16 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
     (convId: string, key: CryptoKey) => {
       convKeys.current.set(convId, key);
       if (principal) {
-        persistConvKey(principal.toText(), convId, key).catch(() => {
-          /* best effort */
-        });
+        persistConvKey(principal.toText(), convId, key)
+          .then(() => {
+            console.log(`[E2EE KEYSTORE] Persisted key for convId=${convId}`);
+          })
+          .catch((e) => {
+            console.error(
+              `[E2EE KEYSTORE] Failed to persist key for convId=${convId}:`,
+              e,
+            );
+          });
       }
     },
     [principal, persistConvKey],
@@ -324,14 +352,18 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       convKeys.current.set(convId, key);
       groupKeyFingerprints.current.set(convId, memberFingerprint);
       if (principal) {
-        persistConvKey(
-          principal.toText(),
-          convId,
-          key,
-          memberFingerprint,
-        ).catch(() => {
-          /* best effort */
-        });
+        persistConvKey(principal.toText(), convId, key, memberFingerprint)
+          .then(() => {
+            console.log(
+              `[E2EE KEYSTORE] Persisted group key for convId=${convId}`,
+            );
+          })
+          .catch((e) => {
+            console.error(
+              `[E2EE KEYSTORE] Failed to persist group key for convId=${convId}:`,
+              e,
+            );
+          });
       }
     },
     [principal, persistConvKey],
@@ -361,9 +393,50 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       convId: string,
       theirPublicKeyBytes: Uint8Array,
     ): Promise<CryptoKey | null> => {
+      const freshKeyBytes = toCleanUint8Array(theirPublicKeyBytes);
+      const peerPubFp = Array.from(freshKeyBytes.slice(0, 8))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
       console.log(
-        `[E2EE] deriveAndStoreKey called for convId=${convId}, ownKey ready: ${!!keyPair?.privateKey}`,
+        `[E2EE] deriveAndStoreKey START for convId=${convId}, peerKey first8=${peerPubFp}`,
       );
+
+      // CRITICAL: Always delete any old/stale key before deriving a new one.
+      // This prevents stale keys from being reused after peer key rotation.
+      // Also clear from IndexedDB so a stale persisted key can't shadow the new one.
+      if (convKeys.current.has(convId)) {
+        console.log(
+          `[E2EE] deriveAndStoreKey: clearing old key for convId=${convId} before re-derivation`,
+        );
+        convKeys.current.delete(convId);
+      }
+      if (principal) {
+        const dbKeyClear = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+        try {
+          await dbSet(dbKeyClear, null);
+          console.log(
+            `[E2EE] deriveAndStoreKey: cleared IndexedDB key for convId=${convId}`,
+          );
+        } catch {
+          /* best effort */
+        }
+      }
+      // Self-keying guard: abort if peer is the current user
+      if (principal && convId.includes(principal.toText())) {
+        console.warn(
+          `[E2EE] Self-keying detected, aborting for convId=${convId}`,
+        );
+        derivingConvIds.current.delete(convId);
+        return null;
+      }
+      // Also clear from ready state so isKeyReady returns false until re-derivation completes
+      setKeyReadyConvIds((prev) => {
+        if (!prev.has(convId)) return prev;
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
+
       derivingConvIds.current.add(convId);
       if (!keyPair?.privateKey) {
         console.log(
@@ -373,10 +446,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
       try {
-        const freshKeyBytes = toCleanUint8Array(theirPublicKeyBytes);
-        const peerPubFp = Array.from(freshKeyBytes.slice(0, 8))
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join("");
         console.log(
           `[E2EE] deriveAndStoreKey: importing peer public key, byteLength=${freshKeyBytes.byteLength}, fingerprint(first8)=${peerPubFp}, convId=${convId}`,
         );
@@ -406,7 +475,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         );
         const sharedFp = await getKeyFingerprint(sharedKey);
         console.log(
-          `[E2EE] deriveAndStoreKey: ECDH shared key derived, fingerprint=${sharedFp}, convId=${convId}`,
+          `[E2EE] NEW SHARED KEY fingerprint=${sharedFp} for convId=${convId}`,
         );
         convKeys.current.set(convId, sharedKey);
         console.log(
@@ -418,10 +487,64 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         );
         // Persist to IndexedDB immediately
         if (principal) {
-          persistConvKey(principal.toText(), convId, sharedKey).catch(() => {
-            /* best effort */
-          });
+          try {
+            await persistConvKey(principal.toText(), convId, sharedKey);
+            const fullFp = await getKeyFingerprint(sharedKey);
+            console.log(
+              `[E2EE KEYSTORE] Persisted key for convId=${convId}, fullFp=${fullFp}`,
+            );
+          } catch (e) {
+            console.error(
+              `[E2EE KEYSTORE] Failed to persist key for convId=${convId}:`,
+              e,
+            );
+          }
         }
+
+        // ── ROUNDTRIP SMOKE TEST ─────────────────────────────────────────────
+        // Immediately verify the newly derived key can encrypt AND decrypt a
+        // known plaintext. This catches key derivation mismatches early (e.g.
+        // wrong peer key used) before the first real message arrives.
+        // We mirror the EXACT buffer construction used in encryptForConv so
+        // the roundtrip validates the real send-path format.
+        try {
+          const testPlaintext = "__roundtrip_test__";
+          const testBytes = new TextEncoder().encode(testPlaintext);
+          const encryptedBlob = await encryptMessage(sharedKey, testBytes);
+          // Force a fresh contiguous copy exactly like encryptForConv does
+          const fullBlob = new Uint8Array(encryptedBlob);
+          const decryptedText = await decryptMessage(sharedKey, fullBlob);
+          if (decryptedText === testPlaintext) {
+            console.log(`[E2EE ROUNDTRIP] convId=${convId}: PASS`);
+          } else {
+            throw new Error(`roundtrip mismatch: got "${decryptedText}"`);
+          }
+        } catch (rtErr) {
+          console.error(
+            `[E2EE ROUNDTRIP] convId=${convId}: FAIL — evicting key`,
+            rtErr,
+          );
+          // Key is bad — evict immediately so re-derivation can try again.
+          convKeys.current.delete(convId);
+          setKeyReadyConvIds((prev) => {
+            const next = new Set(prev);
+            next.delete(convId);
+            return next;
+          });
+          if (principal) {
+            const dbKeyRt = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+            dbSet(dbKeyRt, null).catch(() => {
+              /* best effort */
+            });
+          }
+          setMissingKeyConvIds((prev) => {
+            const next = new Set(prev);
+            next.add(convId);
+            return next;
+          });
+          return null;
+        }
+
         return sharedKey;
       } catch (err) {
         console.error(
@@ -441,17 +564,30 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   const encryptForConv = useCallback(
     async (convId: string, text: string): Promise<Uint8Array | null> => {
       const key = convKeys.current.get(convId);
-      console.log(`[E2EE ENCRYPT] convId=${convId} key present: ${!!key}`);
+      const keyFp = key
+        ? await getKeyFingerprint(key).catch(() => "unknown")
+        : "none";
+      console.log(
+        `[E2EE SEND] Using key fingerprint=${keyFp} for convId=${convId}`,
+      );
       if (!key) return null;
       try {
-        // Encode plaintext to bytes, then delegate entirely to encryptMessage
+        // Encode plaintext to bytes, then delegate to encryptMessage.
         const plaintextBytes = new TextEncoder().encode(text);
-        const blob = await encryptMessage(key, plaintextBytes);
+        const cipherBuf = await encryptMessage(key, plaintextBytes);
+        // encryptMessage already returns a fresh contiguous Uint8Array with
+        // byteOffset === 0.  We force one more copy here to be absolutely
+        // certain the buffer that goes into Candid serialization is pristine.
+        const full = new Uint8Array(cipherBuf);
         console.log(
-          `[E2EE SEND] encryptForConv: full blob size = ${blob.length} bytes (byteOffset=${blob.byteOffset}), convId=${convId}`,
+          `[E2EE ENCRYPT direct] total=${full.length}, iv=12, ct+tag=${full.length - 12}, byteOffset=${full.byteOffset}, keyFp=${keyFp}, convId=${convId}`,
         );
-        return blob;
-      } catch {
+        return full; // byteOffset guaranteed = 0
+      } catch (err) {
+        console.error(
+          `[E2EE ENCRYPT] encryptForConv FAILED for convId=${convId}:`,
+          err,
+        );
         return null;
       }
     },
@@ -460,164 +596,147 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
 
   const decryptFromConv = useCallback(
     async (convId: string, blob: Uint8Array): Promise<string | null> => {
+      // ── STEP 1: Force a contiguous clean copy BEFORE any slicing ─────────────
+      // toCleanUint8Array handles Candid/IDB non-zero byteOffset, but V8 can
+      // still share a backing buffer.  We force a fresh copy so every slice
+      // below is unambiguous.
+      let clean = toCleanUint8Array(blob);
+      if (clean.byteOffset !== 0 || clean.length !== clean.buffer.byteLength) {
+        console.log(
+          `[E2EE DECRYPT buffer fix] copying non-contiguous view, old byteOffset=${clean.byteOffset}, old length=${clean.length}, old bufferSize=${clean.buffer.byteLength}`,
+        );
+        clean = new Uint8Array(clean); // force fresh contiguous copy
+      }
+      console.log(
+        `[E2EE DECRYPT final buffer] length=${clean.length}, byteOffset=${clean.byteOffset}, bufferSize=${clean.buffer.byteLength}, convId=${convId}`,
+      );
+
+      // ── STEP 2: Minimum size validation ──────────────────────────────────
+      if (clean.length < 28) {
+        console.warn(
+          `[E2EE DECRYPT] blob too short: ${clean.length} bytes (need >=28), convId=${convId}`,
+        );
+        return null;
+      }
+
+      // ── STEP 3: Resolve the conversation key ─────────────────────────────
       let key = convKeys.current.get(convId);
 
-      // If not in memory, try to load from IndexedDB before giving up
+      // If not in memory, attempt lazy load from IndexedDB before giving up.
       if (!key && principal) {
         const principalText = principal.toText();
         const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
-        try {
-          const stored = await dbGet<
-            | { wrapped: number[]; fingerprint?: string }
-            | Uint8Array
-            | { raw: Uint8Array; fingerprint?: string }
-            | null
-          >(dbKey);
-          if (stored) {
-            let rawBytes: Uint8Array | null = null;
-            let fingerprint: string | undefined;
+        // lazy load from IndexedDB (shared promise)
+        const loadPromise = (async () => {
+          try {
+            const stored = await dbGet<
+              | { wrapped: number[]; fingerprint?: string }
+              | Uint8Array
+              | { raw: Uint8Array; fingerprint?: string }
+              | null
+            >(dbKey);
+            if (stored) {
+              let rawBytes: Uint8Array | null = null;
+              let fingerprint: string | undefined;
 
-            if (stored instanceof Uint8Array) {
-              rawBytes = toCleanUint8Array(stored);
-            } else if (
-              Array.isArray((stored as { wrapped?: number[] }).wrapped)
-            ) {
-              const wrapKey = await deriveStorageWrapKey(principalText);
-              // toCleanUint8Array handles number[] (IDB deserialization) and
-              // any Uint8Array with non-zero byteOffset safely.
-              const wrappedArr = toCleanUint8Array(
-                (stored as { wrapped: number[]; fingerprint?: string }).wrapped,
-              );
-              rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr, dbKey);
-              fingerprint = (
-                stored as { wrapped: number[]; fingerprint?: string }
-              ).fingerprint;
-            } else if ((stored as { raw?: Uint8Array }).raw) {
-              const legacy = stored as {
-                raw: Uint8Array;
-                fingerprint?: string;
-              };
-              rawBytes = toCleanUint8Array(legacy.raw);
-              fingerprint = legacy.fingerprint;
-            }
-
-            if (rawBytes && rawBytes.length > 0) {
-              key = await importAESKey(rawBytes);
-              convKeys.current.set(convId, key);
-              if (fingerprint) {
-                groupKeyFingerprints.current.set(convId, fingerprint);
+              if (stored instanceof Uint8Array) {
+                rawBytes = toCleanUint8Array(stored);
+              } else if (
+                Array.isArray((stored as { wrapped?: number[] }).wrapped)
+              ) {
+                const wrapKey = await deriveStorageWrapKey(principalText);
+                const wrappedArr = toCleanUint8Array(
+                  (stored as { wrapped: number[]; fingerprint?: string })
+                    .wrapped,
+                );
+                rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr, dbKey);
+                fingerprint = (
+                  stored as { wrapped: number[]; fingerprint?: string }
+                ).fingerprint;
+              } else if ((stored as { raw?: Uint8Array }).raw) {
+                const legacy = stored as {
+                  raw: Uint8Array;
+                  fingerprint?: string;
+                };
+                rawBytes = toCleanUint8Array(legacy.raw);
+                fingerprint = legacy.fingerprint;
               }
-              const fpLog = fingerprint || "none";
-              console.log(
-                `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`,
-              );
+
+              if (rawBytes && rawBytes.length > 0) {
+                const loadedKey = await importAESKey(rawBytes);
+                convKeys.current.set(convId, loadedKey);
+                if (fingerprint) {
+                  groupKeyFingerprints.current.set(convId, fingerprint);
+                }
+                const fpLog = fingerprint || "none";
+                console.log(
+                  `[E2EE KEYSTORE] Lazy-loaded key for convId=${convId} (fingerprint=${fpLog})`,
+                );
+                return loadedKey;
+              }
             }
-          }
-        } catch (err) {
-          console.warn(
-            `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
-            err,
-          );
-          // Remove corrupted lazy-load entry so next load starts fresh
-          if (principal) {
-            const principalText2 = principal.toText();
-            const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
-            try {
-              await dbSet(dbKeyToRemove, null);
-              console.log(
-                `[E2EE KEYSTORE] Removed corrupted lazy key for ${dbKeyToRemove} — will re-derive`,
-              );
-            } catch {
-              /* best effort */
+            return null;
+          } catch (err) {
+            console.warn(
+              `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
+              err,
+            );
+            if (principal) {
+              const principalText2 = principal.toText();
+              const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
+              try {
+                await dbSet(dbKeyToRemove, null);
+                console.log(
+                  `[E2EE KEYSTORE] Removed corrupted lazy key for ${dbKeyToRemove} — will re-derive`,
+                );
+              } catch {
+                /* best effort */
+              }
             }
+            setMissingKeyConvIds((prev) => {
+              const next = new Set(prev);
+              next.add(convId);
+              return next;
+            });
+            return null;
           }
-          // Signal missing key so ChatPage can trigger re-derivation
-          setMissingKeyConvIds((prev) => {
-            const next = new Set(prev);
-            next.add(convId);
-            return next;
-          });
-          return null;
-        }
+        })();
+        keyLoadingPromises.current.set(convId, loadPromise);
+        key = (await loadPromise) ?? undefined;
+        keyLoadingPromises.current.delete(convId);
       }
 
       if (!key) {
-        console.log(
-          `[E2EE KEYSTORE] No stored key for convId=${convId} - performing exchange`,
-        );
-        // Signal missing key so ChatPage can trigger re-derivation
-        setMissingKeyConvIds((prev) => {
-          const next = new Set(prev);
-          next.add(convId);
-          return next;
-        });
-        return null;
-      }
-
-      // Delegate entirely to decryptMessage — it handles the fresh-copy internally
-      console.log(
-        `[E2EE RECV] decryptFromConv: blob=${blob.length} bytes (original byteOffset=${(blob as Uint8Array & { byteOffset?: number }).byteOffset ?? 0}), convId=${convId}`,
-      );
-      try {
-        return await decryptMessage(key, blob);
-      } catch (err) {
-        const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
-        console.error(
-          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.length} bytes, keyFp=${keyFp}`,
-          err,
-        );
-        console.warn(
-          `[E2EE KEYSTORE] Key fingerprint ${keyFp} does not match stored key — triggering re-exchange for convId=${convId}`,
-        );
-        // Smart eviction: test if the key object itself is valid before deleting
-        // from IndexedDB. If the key can be exported successfully, the OperationError
-        // was caused by a wrong payload (IV/ciphertext mismatch), NOT a corrupt key.
-        // In that case we skip the IndexedDB delete but still trigger re-derivation
-        // so ChatPage can re-exchange keys with the peer.
-        let keyIsValid = false;
-        try {
-          await crypto.subtle.exportKey("raw", key);
-          keyIsValid = true;
-        } catch {
-          // exportKey failed → CryptoKey object itself is corrupt → delete from IDB
-        }
-
-        if (keyIsValid) {
+        // Check if a load is already in flight for this convId
+        const existingLoad = keyLoadingPromises.current.get(convId);
+        if (existingLoad) {
           console.log(
-            `[E2EE EVICT] convId=${convId} — key export test passed (skipping IndexedDB delete, keeping key)`,
+            `[E2EE] Waiting for in-flight key load for convId=${convId}`,
           );
-          // Key object is still valid — the OperationError was caused by a
-          // wrong payload (IV/ciphertext mismatch), NOT a corrupt key.
-          // Do NOT delete from convKeys.current — that would break future sends.
-          // Only clear the ready-state so ChatPage can trigger a re-exchange.
-          console.log(
-            `[E2EE] Key eviction triggered for convId=${convId} — keeping in-memory key, clearing ready state only`,
-          );
-          setKeyReadyConvIds((prev) => {
-            const next = new Set(prev);
-            next.delete(convId);
-            return next;
-          });
-        } else {
-          console.log(
-            `[E2EE EVICT] convId=${convId} — key export test failed, evicting from IndexedDB`,
-          );
-          console.log(
-            `[E2EE] Key eviction triggered for convId=${convId} — keeping in-memory key, clearing ready state only`,
-          );
-          // Key object is corrupt — evict from IndexedDB so it gets re-derived.
-          // Still do NOT delete from convKeys.current so in-flight encrypts keep working.
-          if (principal) {
-            const dbKeyEvict = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-            dbSet(dbKeyEvict, null).catch(() => {
-              /* best effort */
-            });
+          const loadedKey = await existingLoad;
+          if (loadedKey) {
+            console.log(`[E2EE] In-flight load succeeded for convId=${convId}`);
+            return decryptMessage(loadedKey, blob);
           }
-          setKeyReadyConvIds((prev) => {
-            const next = new Set(prev);
-            next.delete(convId);
-            return next;
-          });
+        }
+        console.log(
+          `[E2EE KEYSTORE] No stored key for convId=${convId} — performing exchange`,
+        );
+        // Prevent re-triggering exchange if key already exists or is being derived
+        if (convKeys.current.has(convId)) {
+          console.log(
+            `[E2EE] Key already in memory for convId=${convId}, skipping exchange trigger`,
+          );
+          return null;
+        }
+        if (
+          derivingConvIds.current.has(convId) ||
+          rekeyInProgress.current.has(convId)
+        ) {
+          console.log(
+            `[E2EE] Key derivation/rekey already in progress for convId=${convId}, skipping exchange trigger`,
+          );
+          return null;
         }
         setMissingKeyConvIds((prev) => {
           const next = new Set(prev);
@@ -626,8 +745,251 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         });
         return null;
       }
+
+      const keyFpPre = await getKeyFingerprint(key).catch(() => "unknown");
+      console.log(
+        `[E2EE RECV] Attempting decrypt with key fingerprint=${keyFpPre} for blob len=${clean.length}, convId=${convId}`,
+      );
+
+      // ── STEP 4: Attempt decryption (max 3 tries, 100 ms apart) ────────────
+      // decryptMessage now handles prefix-skipping internally for Candid blobs.
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
+          console.log(
+            `[E2EE DECRYPT] decryptFromConv attempt=${attempt}/3: total=${clean.length}, keyFp=${keyFp}, convId=${convId}`,
+          );
+          const result = await decryptMessage(key, clean);
+          if (result !== null) {
+            if (attempt > 1) {
+              console.log(
+                `[E2EE DECRYPT] decryptFromConv succeeded on attempt ${attempt} for convId=${convId}`,
+              );
+            }
+            return result;
+          }
+          // decryptMessage returned null — all prefix skips and brute-force failed
+          console.warn(
+            `[E2EE DECRYPT] decryptFromConv attempt ${attempt}/3 returned null (all prefix skips 0-16 and brute-force attempted) for convId=${convId}`,
+          );
+        } catch (err) {
+          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
+          console.warn(
+            `[E2EE DECRYPT] decryptFromConv FAILED (attempt ${attempt}/3) for convId=${convId}: blob=${clean.length} bytes, keyFp=${keyFp}`,
+            err,
+          );
+        }
+        if (attempt < 3) {
+          await new Promise((r) => setTimeout(r, 100));
+        }
+      }
+
+      // Log hex prefix of the blob for diagnosis when all attempts fail
+      const hexPrefix = Array.from(clean.slice(0, Math.min(clean.length, 64)))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join(" ");
+      console.error(
+        `[E2EE DECRYPT] All 3 attempts failed for convId=${convId}. Blob len=${clean.length}, hexPrefix(64)=${hexPrefix}`,
+      );
+
+      // ── STEP 5a: Trigger rekey if not already in progress ────────────────
+      // After all decryption attempts fail, automatically initiate a full
+      // key re-exchange so both sides derive a fresh shared secret.
+      if (!rekeyInProgress.current.has(convId)) {
+        console.log(
+          `[E2EE DECRYPT] Triggering automatic rekey for convId=${convId} after decrypt failure`,
+        );
+        // Fire-and-forget: rekeyConversation handles its own guard
+        rekeyConversation(convId).catch(() => {
+          /* best effort */
+        });
+      }
+
+      // ── STEP 5: All 3 attempts failed — manual roundtrip test with stored key ──
+      // Try encrypting a known plaintext with the SAME stored key and decrypting
+      // it.  If this roundtrip also fails, the key itself is corrupt.
+      const keyFpFinal = await getKeyFingerprint(key).catch(() => "unknown");
+      let roundtripPassed = false;
+      try {
+        const testPlaintext = "__roundtrip_test__";
+        const testBytes = new TextEncoder().encode(testPlaintext);
+        const testBlob = await encryptMessage(key, testBytes);
+        const testResult = await decryptMessage(key, testBlob);
+        roundtripPassed = testResult === testPlaintext;
+        console.log(
+          `[E2EE DECRYPT] Manual roundtrip with stored key ${roundtripPassed ? "PASSED" : "FAILED"} for convId=${convId}, keyFp=${keyFpFinal}`,
+        );
+      } catch (rtErr) {
+        console.error(
+          `[E2EE DECRYPT] Manual roundtrip with stored key FAILED for convId=${convId}, keyFp=${keyFpFinal}:`,
+          rtErr,
+        );
+      }
+
+      // ── STEP 6: Distinguish bad blob vs corrupt key ──────────────────────
+      // CRITICAL RULE: Only evict the key if exportKey FAILS (corrupt CryptoKey)
+      // OR the manual roundtrip above also fails.
+      // AES-GCM OperationError with a passing exportKey = bad blob format, NOT
+      // a corrupt key. Evicting on OperationError causes endless re-derivation
+      // loops because the NEXT message will fail the same way.
+      let keyExportFailed = false;
+      try {
+        await crypto.subtle.exportKey("raw", key);
+      } catch (exportErr) {
+        keyExportFailed = true;
+        console.error(
+          `[E2EE DECRYPT] Key export test FAILED (keyFp=${keyFpFinal}, convId=${convId}) — CryptoKey is CORRUPT. Evicting and triggering re-derivation.`,
+          exportErr,
+        );
+      }
+
+      if (!keyExportFailed && roundtripPassed) {
+        // exportKey PASSED and roundtrip PASSED → key object is valid;
+        // the blob is unreadable (bad format, wrong sender key at time of
+        // encryption, or network corruption).
+        // Retain the key — do NOT evict from memory or IndexedDB.
+        console.warn(
+          `[E2EE DECRYPT] All prefix variants failed but key is healthy — marking message as unreadable. keyFp=${keyFpFinal}, convId=${convId}`,
+        );
+        // Do NOT clear the key. Do NOT mark convId as missing.
+        // Return null so the UI shows "Decryption failed" for this message only.
+        return null;
+      }
+
+      // exportKey FAILED or roundtrip FAILED → the CryptoKey itself is bad → full eviction.
+      console.log(
+        `[E2EE DECRYPT] Evicting corrupt key for convId=${convId} (exportTest=${keyExportFailed ? "FAILED" : "PASSED"}, roundtrip=${roundtripPassed ? "PASSED" : "FAILED"})`,
+      );
+      // Clear from memory
+      convKeys.current.delete(convId);
+      // Clear from ready state
+      setKeyReadyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
+      // Clear from IndexedDB
+      if (principal) {
+        const dbKeyEvict = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+        dbSet(dbKeyEvict, null).catch(() => {
+          /* best effort */
+        });
+      }
+      // Mark as missing so ChatPage triggers re-derivation
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.add(convId);
+        return next;
+      });
+
+      return null;
     },
     [principal],
+  );
+
+  const forceReDeriveKey = useCallback(
+    async (convId: string) => {
+      console.log(
+        `[E2EE FORCE-REDERIVE] Clearing key for convId=${convId} from memory + IndexedDB — will re-derive on next peer key arrival`,
+      );
+      // Clear from memory
+      convKeys.current.delete(convId);
+      groupKeyFingerprints.current.delete(convId);
+      keyLoadingPromises.current.delete(convId);
+      // Remove from ready state
+      setKeyReadyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
+      // Clear from IndexedDB
+      if (principal) {
+        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+        try {
+          await dbSet(dbKey, null);
+          console.log(
+            `[E2EE FORCE-REDERIVE] Removed key from IndexedDB for convId=${convId}`,
+          );
+        } catch {
+          /* best effort */
+        }
+      }
+      // Mark as missing to trigger ChatPage re-derivation
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.add(convId);
+        return next;
+      });
+    },
+    [principal],
+  );
+
+  /**
+   * rekeyConversation — force a full ECDH key re-exchange for a conversation.
+   * 1. Clear the old conversation key from memory + IndexedDB.
+   * 2. Export the current ECDH public key and publish it to the backend profile.
+   * 3. Mark the conversation as missing so ChatPage triggers fresh re-derivation.
+   * A rekeyInProgress guard prevents duplicate loops.
+   */
+  const rekeyConversation = useCallback(
+    async (convId: string) => {
+      if (!keyPair) {
+        console.warn("[E2EE REKEY] keyPair not ready, waiting...");
+        setTimeout(() => rekeyConversation(convId), 500);
+        return;
+      }
+      if (!principal) {
+        console.warn("[E2EE REKEY] principal not ready, waiting...");
+        setTimeout(() => rekeyConversation(convId), 500);
+        return;
+      }
+      if (rekeyInProgress.current.has(convId)) {
+        console.log(
+          `[E2EE REKEY] Skipping rekey for convId=${convId} — already in progress`,
+        );
+        return;
+      }
+      rekeyInProgress.current.add(convId);
+      console.log(
+        `[E2EE] Stale key detected — initiating rekey for convId=${convId}`,
+      );
+
+      try {
+        // Step 1: forcefully clear the old key
+        await forceReDeriveKey(convId);
+
+        // Step 2: publish a fresh ECDH public key to the backend profile
+        if (keyPair && principal) {
+          try {
+            const pubBytes = await exportPublicKey(keyPair.publicKey);
+            const fp = Array.from(pubBytes.slice(0, 8))
+              .map((b) => b.toString(16).padStart(2, "0"))
+              .join("");
+            console.log(
+              `[E2EE REKEY] Publishing fresh public key (fingerprint=${fp}) for convId=${convId}`,
+            );
+            await updateProfile.mutateAsync({
+              ecdhPublicKey: pubBytes,
+            });
+            console.log(
+              `[E2EE REKEY] Fresh public key published successfully for convId=${convId}`,
+            );
+          } catch (pubErr) {
+            console.error(
+              `[E2EE REKEY] Failed to publish fresh public key for convId=${convId}:`,
+              pubErr,
+            );
+          }
+        } else {
+          console.warn(
+            `[E2EE REKEY] Cannot publish public key — keyPair or principal missing for convId=${convId}`,
+          );
+        }
+      } finally {
+        rekeyInProgress.current.delete(convId);
+      }
+    },
+    [forceReDeriveKey, keyPair, principal, updateProfile],
   );
 
   const decryptOwnDisplayName = useCallback(
@@ -663,8 +1025,9 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         decryptFromConv,
         decryptOwnDisplayName,
         isDerivingKey: (convId: string) => derivingConvIds.current.has(convId),
-        isKeyReady: (convId: string) =>
-          keyReadyConvIds.has(convId) || convKeys.current.has(convId),
+        isKeyReady: (convId: string) => keyReadyConvIds.has(convId),
+        forceReDeriveKey,
+        rekeyConversation,
       }}
     >
       {children}

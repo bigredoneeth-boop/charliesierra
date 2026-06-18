@@ -152,7 +152,7 @@ mixin (
     req : E.GetEscrowedUsersRequest
   ) : async Common.Result<[E.EscrowedUserRecord], Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     EnterpriseLib.getEscrowedUsers(enterpriseState, adminState, caller, req);
   };
@@ -161,7 +161,7 @@ mixin (
   public shared ({ caller }) func getEscrowStats()
     : async Common.Result<E.EscrowStatsRecord, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     EnterpriseLib.getEscrowStats(enterpriseState, adminState, caller);
   };
@@ -199,7 +199,7 @@ mixin (
     statusFilter : ?E.RecoveryRequestStatus,
   ) : async Common.Result<[E.RecoveryRequest], Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     EnterpriseLib.getRecoveryRequests(
       enterpriseState, adminState, caller, orgId, statusFilter,
@@ -241,7 +241,7 @@ mixin (
     requestId : Nat
   ) : async Common.Result<E.RecoveryRequest, Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     EnterpriseLib.getRecoveryDetails(enterpriseState, adminState, caller, requestId);
   };

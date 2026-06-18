@@ -17,9 +17,9 @@ mixin (discoveryState : DiscoveryLib.State, convsState : ConvsLib.State) {
     req : T.SubmitJoinRequestRequest
   ) : async Common.Result<T.JoinRequest, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.conversationId == 0) return #err(#invalidInput);
+    if (req.conversationId == 0) return #err(#error("invalidInput"));
     DiscoveryLib.submitJoinRequest(discoveryState, convsState.conversations, caller, req);
   };
 
@@ -36,10 +36,10 @@ mixin (discoveryState : DiscoveryLib.State, convsState : ConvsLib.State) {
     req : T.JoinRequestActionRequest
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.requestId.size() == 0) return #err(#invalidInput);
-    if (req.conversationId == 0) return #err(#invalidInput);
+    if (req.requestId.size() == 0) return #err(#error("invalidInput"));
+    if (req.conversationId == 0) return #err(#error("invalidInput"));
     DiscoveryLib.approveJoinRequest(discoveryState, convsState.conversations, caller, req);
   };
 
@@ -48,10 +48,10 @@ mixin (discoveryState : DiscoveryLib.State, convsState : ConvsLib.State) {
     req : T.JoinRequestActionRequest
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.requestId.size() == 0) return #err(#invalidInput);
-    if (req.conversationId == 0) return #err(#invalidInput);
+    if (req.requestId.size() == 0) return #err(#error("invalidInput"));
+    if (req.conversationId == 0) return #err(#error("invalidInput"));
     DiscoveryLib.denyJoinRequest(discoveryState, convsState.conversations, caller, req);
   };
 };

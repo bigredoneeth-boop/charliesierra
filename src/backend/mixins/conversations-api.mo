@@ -10,10 +10,10 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
     req : T.CreateDirectRequest
   ) : async Common.Result<T.ConversationPublic, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.peer.isAnonymous()) return #err(#invalidInput);
-    if (Principal.equal(req.peer, caller)) return #err(#invalidInput);
+    if (req.peer.isAnonymous()) return #err(#error("invalidInput"));
+    if (Principal.equal(req.peer, caller)) return #err(#error("invalidInput"));
     ConvsLib.createDirect(convsState, caller, req);
   };
 
@@ -22,10 +22,10 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
     req : T.CreateGroupRequest
   ) : async Common.Result<T.ConversationPublic, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.encryptedName.size() == 0 or req.encryptedName.size() > 512) return #err(#invalidInput);
-    if (req.initialMembers.size() == 0 or req.initialMembers.size() > 500) return #err(#invalidInput);
+    if (req.encryptedName.size() == 0 or req.encryptedName.size() > 512) return #err(#error("invalidInput"));
+    if (req.initialMembers.size() == 0 or req.initialMembers.size() > 500) return #err(#error("invalidInput"));
     ConvsLib.createGroup(convsState, caller, req);
   };
 
@@ -46,9 +46,9 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
     req : T.AddMemberRequest
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.member.isAnonymous()) return #err(#invalidInput);
+    if (req.member.isAnonymous()) return #err(#error("invalidInput"));
     ConvsLib.addMember(convsState, caller, req);
   };
 
@@ -58,9 +58,9 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
     req : T.RemoveMemberRequest
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.member.isAnonymous()) return #err(#invalidInput);
+    if (req.member.isAnonymous()) return #err(#error("invalidInput"));
     ConvsLib.removeMember(convsState, caller, req);
   };
   /// Delete a group conversation. Only the group creator may call this.
@@ -69,9 +69,9 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
     conversationId : Common.ConversationId
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (conversationId == 0) return #err(#invalidInput);
+    if (conversationId == 0) return #err(#error("invalidInput"));
     ConvsLib.deleteConversation(
       convsState,
       msgsState.conversationMessages,
@@ -87,9 +87,9 @@ mixin (convsState : ConvsLib.State, msgsState : MsgsLib.State) {
     conversationId : Common.ConversationId
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (conversationId == 0) return #err(#invalidInput);
+    if (conversationId == 0) return #err(#error("invalidInput"));
     ConvsLib.deleteConversation(
       convsState,
       msgsState.conversationMessages,

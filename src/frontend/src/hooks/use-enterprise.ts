@@ -1,5 +1,6 @@
 import { createActor } from "@/backend";
 import { useAuth } from "@/context/auth-context";
+import { extractErrText } from "@/lib/error-utils";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -77,7 +78,7 @@ export function useEnableGroupRetention() {
       if (!actor) throw new Error("Actor not ready");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await (actor as any).enableGroupRetention(convId);
-      if (result?.__kind__ === "err") throw new Error(result.err);
+      if (result?.__kind__ === "err") throw new Error(extractErrText(result));
     },
     onSuccess: (_data, convId) => {
       void qc.invalidateQueries({
@@ -95,7 +96,7 @@ export function useDisableGroupRetention() {
       if (!actor) throw new Error("Actor not ready");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await (actor as any).disableGroupRetention(convId);
-      if (result?.__kind__ === "err") throw new Error(result.err);
+      if (result?.__kind__ === "err") throw new Error(extractErrText(result));
     },
     onSuccess: (_data, convId) => {
       void qc.invalidateQueries({
@@ -147,7 +148,7 @@ export function useEnrollKeyEscrow() {
         args.wrappedKey,
         args.consentLanguageVersion,
       );
-      if (result?.__kind__ === "err") throw new Error(result.err);
+      if (result?.__kind__ === "err") throw new Error(extractErrText(result));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["my-escrow-status"] });
@@ -166,7 +167,7 @@ export function useRevokeKeyEscrow() {
         args.deviceId,
         args.reason,
       );
-      if (result?.__kind__ === "err") throw new Error(result.err);
+      if (result?.__kind__ === "err") throw new Error(extractErrText(result));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["my-escrow-status"] });
@@ -213,7 +214,7 @@ export function useAdminGrantEscrow() {
         args.targetDeviceId,
         args.reason,
       );
-      if (result?.__kind__ === "err") throw new Error(result.err);
+      if (result?.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok as EscrowAccessGrant;
     },
     onSuccess: () => {
@@ -244,7 +245,7 @@ export function useExportAuditLog() {
       };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await (actor as any).exportAuditLog(candid_req);
-      if (result?.__kind__ === "err") throw new Error(result.err);
+      if (result?.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok as string;
     },
   });

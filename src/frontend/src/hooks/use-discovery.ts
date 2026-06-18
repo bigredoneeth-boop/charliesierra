@@ -5,6 +5,7 @@ import type {
   PublicGroupSummary,
   SubmitJoinRequestRequest,
 } from "@/backend";
+import { extractErrText } from "@/lib/error-utils";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -38,7 +39,8 @@ export function useSubmitJoinRequest() {
     mutationFn: async (req: SubmitJoinRequestRequest) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.submitJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
+
       return result.ok;
     },
     onSuccess: () => {
@@ -75,7 +77,8 @@ export function useApproveJoinRequest() {
     mutationFn: async (req: JoinRequestActionRequest) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.approveJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
+
       return result.ok;
     },
     onSuccess: (_, vars) => {
@@ -95,7 +98,8 @@ export function useDenyJoinRequest() {
     mutationFn: async (req: JoinRequestActionRequest) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.denyJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
+
       return result.ok;
     },
     onSuccess: (_, vars) => {

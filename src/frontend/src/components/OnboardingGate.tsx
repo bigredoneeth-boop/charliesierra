@@ -22,6 +22,7 @@ import {
   encryptMessage,
   exportPublicKey,
 } from "@/lib/crypto";
+import { extractErrText } from "@/lib/error-utils";
 import { ShieldCheck } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -105,6 +106,12 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
       "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile",
     );
 
+    // Mark as published BEFORE the async call so concurrent effect invocations
+    // (e.g. StrictMode double-invoke) don't slip through the guard. Even if the
+    // call fails, we do NOT want to retry in the same session — the user can
+    // log out and back in to trigger a fresh attempt.
+    hasPublishedRef.current = true;
+
     (async () => {
       try {
         const pubBytes = await exportPublicKey(keyPair.publicKey);
@@ -132,15 +139,11 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
             console.log(
               "[E2EE KEYSYNC] Public key unchanged - skipping publish",
             );
-            hasPublishedRef.current = true;
             setIsNewKeyPair(false);
             return;
           }
         }
 
-        // Mark as published BEFORE the async call so concurrent effect invocations
-        // (e.g. StrictMode double-invoke) don't slip through the guard.
-        hasPublishedRef.current = true;
         lastPublishTime = Date.now();
 
         // Preserve existing encryptedDisplayName bytes — never replace them with an empty array.
@@ -159,10 +162,13 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
               )
             : new Uint8Array(0);
 
-        await mutateAsyncRef.current({
+        const result = await mutateAsyncRef.current({
           encryptedDisplayName: existingDisplayName,
           ecdhPublicKey: pubBytes,
         });
+
+        // Log the EXACT raw result object for debugging.
+        console.log("[E2EE KEYSYNC] Key sync result:", result);
 
         // Reset the flag AFTER successful publish so this effect never re-triggers.
         setIsNewKeyPair(false);
@@ -170,12 +176,33 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
           `[E2EE KEYSYNC] Published new public key (fingerprint=${fp})`,
         );
       } catch (err) {
-        // On failure, reset hasPublishedRef so a manual retry is possible on next login.
-        hasPublishedRef.current = false;
-        console.warn(
-          "[E2EE KEYSYNC] Failed to publish public key to profile:",
-          err,
-        );
+        // Extract a clean error text for logging.
+        const errText =
+          err instanceof Error ? err.message : extractErrText(err);
+        console.warn("[E2EE KEYSYNC] Key sync error:", errText, err);
+
+        // Gracefully handle "already published" or "no change" responses.
+        // These are not real failures — the key is already on the backend.
+        const lower = errText.toLowerCase();
+        const isAlreadyPublished =
+          lower.includes("already") ||
+          lower.includes("no change") ||
+          lower.includes("unchanged") ||
+          lower.includes("not modified");
+
+        if (isAlreadyPublished) {
+          console.log(
+            "[E2EE KEYSYNC] Key already published on backend — skipping retry",
+          );
+          setIsNewKeyPair(false);
+          return;
+        }
+
+        // For all other errors, keep hasPublishedRef = true so we do NOT
+        // retry in the same session. The user can log out and back in to
+        // trigger a fresh attempt. Only a true network-level failure
+        // (e.g. navigator.onLine === false) could justify a retry, but even
+        // then we prefer to wait for the next login to avoid loops.
       }
     })();
   }, [isNewKeyPair, keyPair, isReady, principal, setIsNewKeyPair]);

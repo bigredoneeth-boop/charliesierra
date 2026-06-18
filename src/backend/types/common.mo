@@ -13,11 +13,5 @@ module {
   public type Result<T, E> = { #ok : T; #err : E };
 
   // Common errors
-  public type Error = {
-    #unauthorized;
-    #notFound;
-    #alreadyExists;
-    #invalidInput;
-    #forbidden;
-  };
+  public type Error = { #error : Text };
 };

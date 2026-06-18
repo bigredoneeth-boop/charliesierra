@@ -38,7 +38,7 @@ mixin (
     newAdmin : Common.UserId
   ) : async Common.Result<(), Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     AdminLib.addAdmin(adminState, newAdmin);
     AdminLib.recordEvent(adminState, #adminAction, caller, ?newAdmin, null);
@@ -50,7 +50,7 @@ mixin (
     target : Common.UserId
   ) : async Common.Result<(), Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let result = AdminLib.removeAdmin(adminState, caller, target);
     switch (result) {
@@ -65,7 +65,7 @@ mixin (
   /// List all admin principals — caller must be an admin.
   public shared query ({ caller }) func listAdmins() : async Common.Result<[Common.UserId], Common.Error> {
     if (not AdminLib.isAdmin(adminState, caller)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     #ok(AdminLib.listAdmins(adminState));
   };

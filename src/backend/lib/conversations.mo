@@ -36,14 +36,14 @@ module {
     req : T.CreateDirectRequest,
   ) : Common.Result<T.ConversationPublic, Common.Error> {
     if (Principal.equal(caller, req.peer)) {
-      return #err(#invalidInput);
+      return #err(#error("invalidInput"));
     };
     let key = directKey(caller, req.peer);
     switch (s.directIndex.get(key)) {
       case (?existingId) {
         switch (s.conversations.get(existingId)) {
           case (?c) { #ok(toPublic(c)) };
-          case null { #err(#notFound) }; // orphan entry — should never happen
+          case null { #err(#error("notFound")) }; // orphan entry — should never happen
         };
       };
       case null {
@@ -77,7 +77,7 @@ module {
     req : T.CreateGroupRequest,
   ) : Common.Result<T.ConversationPublic, Common.Error> {
     if (req.initialMembers.size() == 0) {
-      return #err(#invalidInput);
+      return #err(#error("invalidInput"));
     };
     let id = s.state.nextId;
     s.state.nextId += 1;
@@ -141,11 +141,11 @@ module {
     req : T.AddMemberRequest,
   ) : Common.Result<(), Common.Error> {
     switch (s.conversations.get(req.conversationId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?c) {
-        if (c.kind != #group) { return #err(#forbidden) };
-        if (not isMember(c, caller)) { return #err(#unauthorized) };
-        if (isMember(c, req.member)) { return #err(#alreadyExists) };
+        if (c.kind != #group) { return #err(#error("forbidden")) };
+        if (not isMember(c, caller)) { return #err(#error("unauthorized")) };
+        if (isMember(c, req.member)) { return #err(#error("alreadyExists")) };
         let updated : T.Conversation = {
           c with
           members = c.members.concat([req.member]);
@@ -165,14 +165,14 @@ module {
     req : T.RemoveMemberRequest,
   ) : Common.Result<(), Common.Error> {
     switch (s.conversations.get(req.conversationId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?c) {
-        if (c.kind != #group) { return #err(#forbidden) };
-        if (not isMember(c, caller)) { return #err(#unauthorized) };
+        if (c.kind != #group) { return #err(#error("forbidden")) };
+        if (not isMember(c, caller)) { return #err(#error("unauthorized")) };
         let isSelf = Principal.equal(caller, req.member);
         let isCreator = Principal.equal(caller, c.createdBy);
-        if (not isSelf and not isCreator) { return #err(#unauthorized) };
-        if (not isMember(c, req.member)) { return #err(#notFound) };
+        if (not isSelf and not isCreator) { return #err(#error("unauthorized")) };
+        if (not isMember(c, req.member)) { return #err(#error("notFound")) };
         let updated : T.Conversation = {
           c with
           members = c.members.filter(func(m : Common.UserId) : Bool { not Principal.equal(m, req.member) });
@@ -199,15 +199,15 @@ module {
     conversationId : Common.ConversationId,
   ) : Common.Result<(), Common.Error> {
     switch (s.conversations.get(conversationId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?c) {
         // Authorization check
         switch (c.kind) {
           case (#group) {
-            if (not Principal.equal(caller, c.createdBy)) { return #err(#unauthorized) };
+            if (not Principal.equal(caller, c.createdBy)) { return #err(#error("unauthorized")) };
           };
           case (#direct) {
-            if (not isMember(c, caller)) { return #err(#unauthorized) };
+            if (not isMember(c, caller)) { return #err(#error("unauthorized")) };
             // Remove from directIndex
             let members = c.members;
             if (members.size() == 2) {

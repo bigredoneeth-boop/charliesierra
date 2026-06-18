@@ -1,6 +1,7 @@
 import { createActor } from "@/backend";
 import type { UserId, UserProfilePublic } from "@/backend";
 import { useAuth } from "@/context/auth-context";
+import { extractErrText } from "@/lib/error-utils";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -56,12 +57,18 @@ export function useUpdateProfile() {
         encryptedAvatarKey,
       });
 
+      // Log the EXACT raw result for debugging before any parsing.
+      console.log(
+        "[useUpdateProfile] Raw result from updateUserProfile:",
+        result,
+      );
+
       // Backend.ts bug: Error enum values deserialize to `undefined` instead of
       // the correct Error_ string. Detect this by checking for an err result
       // where err is falsy (undefined) — treat it the same as a real notFound.
       const isNotFound =
         result.__kind__ === "err" &&
-        (!result.err || result.err === ("notFound" as string));
+        (!result.err || extractErrText(result) === "notFound");
 
       if (isNotFound) {
         // User not registered yet — auto-register with the provided credentials.
@@ -75,6 +82,11 @@ export function useUpdateProfile() {
           ecdhPublicKey,
           encryptedAvatarKey,
         });
+        // Log the EXACT raw registration result for debugging.
+        console.log(
+          "[useUpdateProfile] Raw result from registerUser:",
+          regResult,
+        );
         // If registration also fails, surface the error clearly.
         if (regResult.__kind__ === "err") {
           // alreadyExists means someone else registered while we were trying —
@@ -84,21 +96,19 @@ export function useUpdateProfile() {
             ecdhPublicKey,
             encryptedAvatarKey,
           });
+          console.log(
+            "[useUpdateProfile] Retry updateUserProfile raw result:",
+            result,
+          );
         } else {
           return regResult.ok;
         }
       }
 
       if (result.__kind__ === "err") {
-        const errLabel = result.err || "unknown";
-        const messages: Record<string, string> = {
-          unauthorized: "You must be logged in to update your profile.",
-          forbidden: "You don't have permission to perform this action.",
-          notFound: "Profile not found. Please reload and try again.",
-          alreadyExists: "A profile with these details already exists.",
-          invalidInput: "Invalid profile data. Please check your input.",
-        };
-        throw new Error(messages[errLabel] ?? `Update failed: ${errLabel}`);
+        const errText = extractErrText(result);
+        console.warn("[useUpdateProfile] Extracted error text:", errText);
+        throw new Error(`Update failed: ${errText}`);
       }
 
       return result.ok;

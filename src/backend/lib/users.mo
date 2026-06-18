@@ -16,7 +16,7 @@ module {
     req : T.RegisterRequest,
   ) : Common.Result<T.UserProfilePublic, Common.Error> {
     switch (s.profiles.get(caller)) {
-      case (?_) { #err(#alreadyExists) };
+      case (?_) { #err(#error("alreadyExists")) };
       case null {
         let now = Time.now();
         let profile : T.UserProfile = {
@@ -66,7 +66,7 @@ module {
     req : T.UpdateProfileRequest,
   ) : Common.Result<T.UserProfilePublic, Common.Error> {
     switch (s.profiles.get(caller)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?profile) {
         let now = Time.now();
         let updated : T.UserProfile = {

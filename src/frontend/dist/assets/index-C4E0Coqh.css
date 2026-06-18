@@ -4300,6 +4300,10 @@ body {
   color: oklch(var(--destructive) / var(--tw-text-opacity, 1));
 }
 
+.hover\:text-destructive\/80:hover {
+  color: oklch(var(--destructive) / 0.8);
+}
+
 .hover\:text-foreground:hover {
   color: oklch(var(--foreground));
 }

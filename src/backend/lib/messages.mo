@@ -72,7 +72,7 @@ module {
     isMember : (Common.UserId, Common.ConversationId) -> Bool,
   ) : Common.Result<T.MessagePublic, Common.Error> {
     if (not isMember(caller, req.conversationId)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let msgId = s.state.nextId;
     s.state.nextId += 1;
@@ -105,7 +105,7 @@ module {
     isMember : (Common.UserId, Common.ConversationId) -> Bool,
   ) : Common.Result<[T.MessagePublic], Common.Error> {
     if (not isMember(caller, req.conversationId)) {
-      return #err(#unauthorized);
+      return #err(#error("unauthorized"));
     };
     let limit = Nat.min(req.limit, MAX_PAGE_LIMIT);
     let ids = switch (s.conversationMessages.get(req.conversationId)) {
@@ -149,7 +149,7 @@ module {
     messageId : Common.MessageId,
   ) : Common.Result<(), Common.Error> {
     switch (s.messages.get(messageId)) {
-      case null #err(#notFound);
+      case null #err(#error("notFound"));
       case (?_msg) {
         let key = (messageId, caller);
         switch (s.readReceipts.get(cmpMsgUser, key)) {

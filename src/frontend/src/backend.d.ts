@@ -138,6 +138,10 @@ export interface GroupRetentionPolicy {
     enabledBy?: UserId;
     convId: ConversationId;
 }
+export type Error_ = {
+    __kind__: "error";
+    error: string;
+};
 export interface CreateGroupRequest {
     initialMembers: Array<UserId>;
     displayName?: string;
@@ -731,13 +735,6 @@ export enum DataResidency {
     us = "us",
     apac = "apac",
     global = "global"
-}
-export enum Error_ {
-    forbidden = "forbidden",
-    alreadyExists = "alreadyExists",
-    invalidInput = "invalidInput",
-    notFound = "notFound",
-    unauthorized = "unauthorized"
 }
 export enum EscrowStatus {
     active = "active",

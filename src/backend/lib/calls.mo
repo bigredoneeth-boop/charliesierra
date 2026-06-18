@@ -9,7 +9,7 @@ module {
   ) : Common.Result<T.CallRecordPublic, Common.Error> {
     // Require at least one callee
     if (req.callees.size() == 0) {
-      return #err(#invalidInput);
+      return #err(#error("invalidInput"));
     };
     let callId = s.state.nextId;
     s.state.nextId += 1;
@@ -38,17 +38,17 @@ module {
     req : T.AnswerCallRequest,
   ) : Common.Result<T.CallRecordPublic, Common.Error> {
     switch (s.calls.get(req.callId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?record) {
         // Only a listed callee can answer
         let isCallee = record.callees.find(func(c : Common.UserId) : Bool {
           Principal.equal(c, caller)
         });
         switch (isCallee) {
-          case null { #err(#unauthorized) };
+          case null { #err(#error("unauthorized")) };
           case (?_) {
             if (record.status != #ringing) {
-              return #err(#forbidden);
+              return #err(#error("forbidden"));
             };
             record.encryptedSdpAnswer := ?req.encryptedSdpAnswer;
             record.status := #active;
@@ -67,7 +67,7 @@ module {
     req : T.AddIceCandidateRequest,
   ) : Common.Result<(), Common.Error> {
     switch (s.calls.get(req.callId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?record) {
         // Any participant (caller or callee) may add ICE candidates
         let isParticipant = Principal.equal(record.caller, caller) or
@@ -75,10 +75,10 @@ module {
             Principal.equal(c, caller)
           }) != null;
         if (not isParticipant) {
-          return #err(#unauthorized);
+          return #err(#error("unauthorized"));
         };
         if (record.status != #ringing and record.status != #active) {
-          return #err(#forbidden);
+          return #err(#error("forbidden"));
         };
         record.iceCandidates := record.iceCandidates.concat([req.encryptedIceCandidate]);
         record.updatedAt := Time.now();
@@ -95,14 +95,14 @@ module {
     reason : T.CallStatus,
   ) : Common.Result<(), Common.Error> {
     switch (s.calls.get(callId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?record) {
         let isParticipant = Principal.equal(record.caller, caller) or
           record.callees.find(func(c : Common.UserId) : Bool {
             Principal.equal(c, caller)
           }) != null;
         if (not isParticipant) {
-          return #err(#unauthorized);
+          return #err(#error("unauthorized"));
         };
         // decline is callee-only
         if (reason == #declined) {
@@ -110,7 +110,7 @@ module {
             Principal.equal(c, caller)
           });
           if (isCallee == null) {
-            return #err(#forbidden);
+            return #err(#error("forbidden"));
           };
         };
         record.status := reason;

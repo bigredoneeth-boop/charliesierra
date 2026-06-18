@@ -53,12 +53,12 @@ module {
     req    : T.SubmitJoinRequestRequest,
   ) : Common.Result<T.JoinRequest, Common.Error> {
     switch (convs.get(req.conversationId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?c) {
-        if (not c.discoverable) { return #err(#forbidden) };
+        if (not c.discoverable) { return #err(#error("forbidden")) };
         // Caller must not already be a member
         let alreadyMember = c.members.find(func(m : Common.UserId) : Bool { Principal.equal(m, caller) });
-        if (alreadyMember != null) { return #err(#alreadyExists) };
+        if (alreadyMember != null) { return #err(#error("alreadyExists")) };
         let now = Time.now();
         let requestId = caller.toText() # "#" # now.toText();
         let joinReq : T.JoinRequest = {
@@ -91,11 +91,11 @@ module {
     conversationId : Common.ConversationId,
   ) : Common.Result<[T.JoinRequest], Common.Error> {
     switch (convs.get(conversationId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?c) {
         let isCreator = Principal.equal(c.createdBy, caller);
         let isMember = c.members.find(func(m : Common.UserId) : Bool { Principal.equal(m, caller) });
-        if (not isCreator and isMember == null) { return #err(#unauthorized) };
+        if (not isCreator and isMember == null) { return #err(#error("unauthorized")) };
         switch (s.joinRequests.get(conversationId)) {
           case null { #ok([]) };
           case (?reqMap) {
@@ -114,16 +114,16 @@ module {
     req    : T.JoinRequestActionRequest,
   ) : Common.Result<(), Common.Error> {
     switch (convs.get(req.conversationId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?c) {
         let isCreator = Principal.equal(c.createdBy, caller);
         let isMember = c.members.find(func(m : Common.UserId) : Bool { Principal.equal(m, caller) });
-        if (not isCreator and isMember == null) { return #err(#unauthorized) };
+        if (not isCreator and isMember == null) { return #err(#error("unauthorized")) };
         switch (s.joinRequests.get(req.conversationId)) {
-          case null { #err(#notFound) };
+          case null { #err(#error("notFound")) };
           case (?reqMap) {
             switch (reqMap.get(req.requestId)) {
-              case null { #err(#notFound) };
+              case null { #err(#error("notFound")) };
               case (?joinReq) {
                 let updated : T.JoinRequest = { joinReq with status = #approved };
                 reqMap.add(req.requestId, updated);
@@ -152,16 +152,16 @@ module {
     req    : T.JoinRequestActionRequest,
   ) : Common.Result<(), Common.Error> {
     switch (convs.get(req.conversationId)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?c) {
         let isCreator = Principal.equal(c.createdBy, caller);
         let isMember = c.members.find(func(m : Common.UserId) : Bool { Principal.equal(m, caller) });
-        if (not isCreator and isMember == null) { return #err(#unauthorized) };
+        if (not isCreator and isMember == null) { return #err(#error("unauthorized")) };
         switch (s.joinRequests.get(req.conversationId)) {
-          case null { #err(#notFound) };
+          case null { #err(#error("notFound")) };
           case (?reqMap) {
             switch (reqMap.get(req.requestId)) {
-              case null { #err(#notFound) };
+              case null { #err(#error("notFound")) };
               case (?joinReq) {
                 let updated : T.JoinRequest = { joinReq with status = #denied };
                 reqMap.add(req.requestId, updated);

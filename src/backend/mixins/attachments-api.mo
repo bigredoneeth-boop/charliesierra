@@ -9,11 +9,11 @@ mixin (attState : AttLib.State) {
     req : T.RegisterAttachmentRequest
   ) : async Common.Result<T.Attachment, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.storageKey.size() == 0 or req.storageKey.size() > 512) return #err(#invalidInput);
-    if (req.mimeType.size() == 0 or req.mimeType.size() > 127) return #err(#invalidInput);
-    if (req.encryptedSizeBytes == 0 or req.encryptedSizeBytes > 104857600) return #err(#invalidInput);
+    if (req.storageKey.size() == 0 or req.storageKey.size() > 512) return #err(#error("invalidInput"));
+    if (req.mimeType.size() == 0 or req.mimeType.size() > 127) return #err(#error("invalidInput"));
+    if (req.encryptedSizeBytes == 0 or req.encryptedSizeBytes > 104857600) return #err(#error("invalidInput"));
     AttLib.registerAttachment(attState, caller, req);
   };
 
@@ -29,9 +29,9 @@ mixin (attState : AttLib.State) {
     attachmentId : Common.AttachmentId
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (attachmentId == 0) return #err(#invalidInput);
+    if (attachmentId == 0) return #err(#error("invalidInput"));
     AttLib.deleteAttachment(attState, caller, attachmentId);
   };
 

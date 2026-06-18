@@ -44,9 +44,9 @@ module {
       case (?_) { true };
       case null { false };
     };
-    if (hasDuplicate) { return #err(#alreadyExists) };
+    if (hasDuplicate) { return #err(#error("alreadyExists")) };
     // Enforce max 10 devices per user
-    if (deviceList.size() >= 10) { return #err(#forbidden) };
+    if (deviceList.size() >= 10) { return #err(#error("forbidden")) };
     let now = Time.now();
     let record : T.DeviceRecord = {
       deviceId     = req.deviceId;
@@ -77,13 +77,13 @@ module {
     deviceId : Text,
   ) : Common.Result<(), Common.Error> {
     switch (s.devices.get(caller)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?list) {
         let found = switch (list.find(func(d : T.DeviceRecord) : Bool { d.deviceId == deviceId })) {
           case (?_) { true };
           case null { false };
         };
-        if (not found) { return #err(#notFound) };
+        if (not found) { return #err(#error("notFound")) };
         // Rebuild list without the revoked device
         let filtered = List.fromIter<T.DeviceRecord>(
           list.values().filter(func(d : T.DeviceRecord) : Bool { d.deviceId != deviceId })
@@ -123,17 +123,17 @@ module {
     deviceId    : Text,
   ) : Common.Result<T.DeviceRecordPublic, Common.Error> {
     switch (s.syncTokens.get(token)) {
-      case null { #err(#notFound) };
+      case null { #err(#error("notFound")) };
       case (?syncToken) {
         let now = Time.now();
         // Check TTL
         if (now > syncToken.expiresAt) {
           s.syncTokens.remove(token);
-          return #err(#forbidden);
+          return #err(#error("forbidden"));
         };
         // Caller must match token owner
         if (not Principal.equal(caller, syncToken.ownerPrincipal)) {
-          return #err(#unauthorized);
+          return #err(#error("unauthorized"));
         };
         // Delete the token (one-time use)
         s.syncTokens.remove(token);

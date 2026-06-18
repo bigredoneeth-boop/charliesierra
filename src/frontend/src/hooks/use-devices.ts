@@ -1,5 +1,6 @@
 import { createActor } from "@/backend";
 import type { AddDeviceRequest, DeviceRecordPublic } from "@/backend";
+import { extractErrText } from "@/lib/error-utils";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -26,7 +27,7 @@ export function useAddDevice() {
     mutationFn: async (req: AddDeviceRequest) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.addDevice(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: () => {
@@ -43,7 +44,7 @@ export function useRevokeDevice() {
     mutationFn: async (deviceId: string) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.revokeDevice(deviceId);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: () => {
@@ -59,7 +60,7 @@ export function useGenerateDeviceSyncToken() {
     mutationFn: async (devicePublicKey: Uint8Array) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.generateDeviceSyncToken(devicePublicKey);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok; // returns the token string
     },
   });
@@ -85,7 +86,7 @@ export function useRedeemDeviceSyncToken() {
         deviceId,
         deviceLabel,
       );
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: () => {

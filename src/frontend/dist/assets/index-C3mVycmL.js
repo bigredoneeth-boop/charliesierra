@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-QZ5HQAv5.js","assets/card-VHfzxIbH.js","assets/AdminOrganizationsPage-DSgPJPMy.js","assets/AdminStatusBadge-BaSZIflu.js","assets/ConfirmDialog-DIJU9L6Y.js","assets/pencil-BPP6znzb.js","assets/shield-alert-DCZMlNyl.js","assets/AdminUsersPage-CtW7zZRy.js","assets/funnel-CqSEyVpO.js","assets/AdminGroupsPage-Cp8GPTfl.js","assets/AdminAuditPage-CC326fi9.js","assets/AdminRetentionPoliciesPage-DAmkXwPC.js","assets/AdminSettingsPage-C_XslpSI.js","assets/AdminBootstrapPage-BL90oApT.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-BY9-BXC8.js","assets/card-BwKF9dLv.js","assets/AdminOrganizationsPage-lrduiwmQ.js","assets/AdminStatusBadge-Dih91Myo.js","assets/ConfirmDialog-VgE_kPk4.js","assets/pencil-C871CQI6.js","assets/shield-alert-DgF3vJyS.js","assets/AdminUsersPage-B6aeYjAr.js","assets/funnel-5z88ab7w.js","assets/AdminGroupsPage-eOUdySh_.js","assets/AdminAuditPage-yoCGzvEX.js","assets/AdminRetentionPoliciesPage-D9nN-AH2.js","assets/AdminSettingsPage-Cdmzb_Ik.js","assets/AdminBootstrapPage-CJkEVCd7.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -33808,13 +33808,7 @@ const _ImmutableObjectStorageRefillResult = Record({
   "topped_up_amount": Opt(Nat)
 });
 const UserId = Principal2;
-const Error$1 = Variant({
-  "forbidden": Null,
-  "alreadyExists": Null,
-  "invalidInput": Null,
-  "notFound": Null,
-  "unauthorized": Null
-});
+const Error$1 = Variant({ "error": Text });
 const Result_6 = Variant({ "ok": Null, "err": Error$1 });
 const ConversationId = Nat;
 const AddMemberRequest = Record({
@@ -34773,13 +34767,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "topped_up_amount": IDL2.Opt(IDL2.Nat)
   });
   const UserId2 = IDL2.Principal;
-  const Error2 = IDL2.Variant({
-    "forbidden": IDL2.Null,
-    "alreadyExists": IDL2.Null,
-    "invalidInput": IDL2.Null,
-    "notFound": IDL2.Null,
-    "unauthorized": IDL2.Null
-  });
+  const Error2 = IDL2.Variant({ "error": IDL2.Text });
   const Result_62 = IDL2.Variant({ "ok": IDL2.Null, "err": Error2 });
   const ConversationId2 = IDL2.Nat;
   const AddMemberRequest2 = IDL2.Record({
@@ -37996,7 +37984,10 @@ function from_candid_variant_n103(_uploadFile, _downloadFile, value) {
   return "active" in value ? "active" : "suspended" in value ? "suspended" : value;
 }
 function from_candid_variant_n11(_uploadFile, _downloadFile, value) {
-  return "forbidden" in value ? Error.forbidden : "alreadyExists" in value ? Error.alreadyExists : "invalidInput" in value ? Error.invalidInput : "notFound" in value ? Error.notFound : "unauthorized" in value ? Error.unauthorized : value;
+  return "error" in value ? {
+    __kind__: "error",
+    error: value.error
+  } : value;
 }
 function from_candid_variant_n114(_uploadFile, _downloadFile, value) {
   return "ok" in value ? {
@@ -39022,6 +39013,216 @@ function useAuth() {
   if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 }
+function extractErrText(result) {
+  if (result === null || result === void 0) {
+    return "unknown backend error";
+  }
+  const r2 = result;
+  if (typeof r2.error === "string" && r2.error.length > 0) {
+    return r2.error;
+  }
+  if (r2.__kind__ !== "err") {
+    return "unknown backend error";
+  }
+  if (typeof r2.err === "object" && r2.err !== null && r2.err.__kind__ === "error" && typeof r2.err.error === "string") {
+    return r2.err.error;
+  }
+  if (typeof r2.err === "string" && r2.err.length > 0) {
+    return r2.err;
+  }
+  for (const key of ["error", "message", "text", "detail"]) {
+    const val = r2[key];
+    if (typeof val === "string" && val.length > 0) {
+      return val;
+    }
+  }
+  try {
+    const json = JSON.stringify(r2);
+    if (json && json !== "{}" && json !== "{}") {
+      return json.length > 200 ? `${json.slice(0, 200)}…` : json;
+    }
+  } catch {
+  }
+  return "unknown backend error";
+}
+function useUserProfile(userId) {
+  const { actor } = useActor(createActor);
+  return useQuery({
+    queryKey: ["profile", userId == null ? void 0 : userId.toText()],
+    queryFn: async () => {
+      if (!actor || !userId) return null;
+      return actor.getUserProfile(userId);
+    },
+    enabled: !!actor && !!userId,
+    staleTime: 3e4,
+    retry: 2
+  });
+}
+function useUserProfiles(userIds) {
+  const { actor } = useActor(createActor);
+  return useQuery({
+    queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
+    queryFn: async () => {
+      if (!actor || userIds.length === 0) return [];
+      return actor.getUserProfiles(userIds);
+    },
+    enabled: !!actor && userIds.length > 0,
+    staleTime: 3e4,
+    retry: 2
+  });
+}
+function useUpdateProfile() {
+  const { actor } = useActor(createActor);
+  const { principal } = useAuth();
+  const queryClient2 = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      encryptedDisplayName,
+      ecdhPublicKey,
+      encryptedAvatarKey
+    }) => {
+      if (!actor) throw new Error("Not connected");
+      let result = await actor.updateUserProfile({
+        encryptedDisplayName,
+        ecdhPublicKey,
+        encryptedAvatarKey
+      });
+      console.log(
+        "[useUpdateProfile] Raw result from updateUserProfile:",
+        result
+      );
+      const isNotFound2 = result.__kind__ === "err" && (!result.err || extractErrText(result) === "notFound");
+      if (isNotFound2) {
+        if (!encryptedDisplayName || !ecdhPublicKey) {
+          throw new Error(
+            "Profile not found on server. Please reload and try again."
+          );
+        }
+        const regResult = await actor.registerUser({
+          encryptedDisplayName,
+          ecdhPublicKey,
+          encryptedAvatarKey
+        });
+        console.log(
+          "[useUpdateProfile] Raw result from registerUser:",
+          regResult
+        );
+        if (regResult.__kind__ === "err") {
+          result = await actor.updateUserProfile({
+            encryptedDisplayName,
+            ecdhPublicKey,
+            encryptedAvatarKey
+          });
+          console.log(
+            "[useUpdateProfile] Retry updateUserProfile raw result:",
+            result
+          );
+        } else {
+          return regResult.ok;
+        }
+      }
+      if (result.__kind__ === "err") {
+        const errText = extractErrText(result);
+        console.warn("[useUpdateProfile] Extracted error text:", errText);
+        throw new Error(`Update failed: ${errText}`);
+      }
+      return result.ok;
+    },
+    onSuccess: (updatedProfile) => {
+      const userId = principal == null ? void 0 : principal.toText();
+      if (!userId) return;
+      if (updatedProfile) {
+        queryClient2.setQueryData(
+          ["profile", userId],
+          updatedProfile
+        );
+      }
+      queryClient2.invalidateQueries({
+        queryKey: ["profile", userId],
+        exact: true
+      });
+    }
+  });
+}
+const AVATAR_STORAGE_PREFIX = "cs_avatar:";
+function getLocalAvatarKey(principal) {
+  return `${AVATAR_STORAGE_PREFIX}${principal}`;
+}
+function getLocalAvatarDataUrl(principal) {
+  try {
+    return localStorage.getItem(getLocalAvatarKey(principal));
+  } catch {
+    return null;
+  }
+}
+function setLocalAvatarDataUrl(principal, dataUrl) {
+  try {
+    localStorage.setItem(getLocalAvatarKey(principal), dataUrl);
+  } catch {
+  }
+}
+function removeLocalAvatar(principal) {
+  try {
+    localStorage.removeItem(getLocalAvatarKey(principal));
+  } catch {
+  }
+}
+const DISPLAY_NAME_PREFIX = "cs_name:";
+function getLocalDisplayName(principal) {
+  try {
+    return localStorage.getItem(`${DISPLAY_NAME_PREFIX}${principal}`);
+  } catch {
+    return null;
+  }
+}
+function setLocalDisplayName(principal, name) {
+  try {
+    if (name.trim()) {
+      localStorage.setItem(`${DISPLAY_NAME_PREFIX}${principal}`, name.trim());
+    }
+  } catch {
+  }
+}
+function shortPrincipal(principal) {
+  if (principal.length <= 16) return principal;
+  return `${principal.slice(0, 10)}…${principal.slice(-4)}`;
+}
+function getDisplayName(principal) {
+  return getLocalDisplayName(principal) ?? shortPrincipal(principal);
+}
+function useDisplayName(principal) {
+  const [name, setName] = reactExports.useState(
+    principal ? getDisplayName(principal) : ""
+  );
+  reactExports.useEffect(() => {
+    if (!principal) return;
+    setName(getDisplayName(principal));
+    const handler = (e) => {
+      var _a3;
+      if (e.key === `${DISPLAY_NAME_PREFIX}${principal}`) {
+        setName(((_a3 = e.newValue) == null ? void 0 : _a3.trim()) || shortPrincipal(principal));
+      }
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, [principal]);
+  return name || (principal ? shortPrincipal(principal) : "");
+}
+function useHasDisplayName() {
+  const { principal } = useAuth();
+  const principalText2 = (principal == null ? void 0 : principal.toText()) ?? null;
+  const {
+    data: profile,
+    isLoading,
+    isFetched
+  } = useUserProfile(principal ?? null);
+  if (!principalText2) return null;
+  if (isLoading && !isFetched) return null;
+  const cached = getLocalDisplayName(principalText2);
+  if (cached && cached.trim().length >= 2) return true;
+  if (profile && profile.encryptedDisplayName.length > 0) return true;
+  return false;
+}
 const DB_NAME$1 = "cs_keystore";
 const DB_VERSION$1 = 1;
 const KEY_STORE = "keypairs";
@@ -39135,33 +39336,94 @@ async function encryptMessage(key, plaintext) {
     key,
     plaintext
   );
-  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  const ctBytes = new Uint8Array(encrypted);
+  const fullPayload = new Uint8Array(12 + ctBytes.byteLength);
   fullPayload.set(iv, 0);
-  fullPayload.set(new Uint8Array(encrypted), 12);
+  fullPayload.set(ctBytes, 12);
+  const cleanResult = new Uint8Array(fullPayload);
+  const hexPrefix = Array.from(
+    cleanResult.slice(0, Math.min(cleanResult.length, 32))
+  ).map((b2) => b2.toString(16).padStart(2, "0")).join(" ");
   console.log(
-    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV12 + data+tag)`
+    `[E2EE ENCRYPT direct] total=${cleanResult.length}, iv=12, ct+tag=${ctBytes.byteLength}, byteOffset=${cleanResult.byteOffset}, hexPrefix=${hexPrefix}`
   );
-  return fullPayload;
+  return cleanResult;
 }
 async function decryptMessage(key, input) {
-  const blob = input instanceof Uint8Array ? input : new Uint8Array(input);
-  const fresh = new Uint8Array(blob.length);
-  for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
-  if (fresh.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", fresh.length);
-    throw new Error("Blob too small");
+  try {
+    const blobView = toCleanUint8Array(
+      input instanceof Uint8Array ? input : new Uint8Array(input)
+    );
+    let clean2 = new Uint8Array(blobView.length);
+    for (let i = 0; i < blobView.length; i++) clean2[i] = blobView[i];
+    if (clean2.byteOffset !== 0 || clean2.length !== clean2.buffer.byteLength) {
+      clean2 = new Uint8Array(clean2);
+    }
+    console.log(
+      `[E2EE DECRYPT final] len=${clean2.length}, offset=${clean2.byteOffset}`
+    );
+    if (clean2.length < 28) {
+      console.error(
+        `[E2EE RECV] decryptMessage: blob too small (${clean2.length} bytes, need >=28)`
+      );
+      return null;
+    }
+    if (clean2.length < 100) {
+      const hexPrefix = Array.from(clean2.slice(0, Math.min(clean2.length, 64))).map((b2) => b2.toString(16).padStart(2, "0")).join(" ");
+      console.log(`[E2EE HEX BLOB] ${hexPrefix}`);
+    }
+    for (let skip = 0; skip <= 16; skip++) {
+      if (clean2.length - skip < 28) continue;
+      const blob = clean2.slice(skip);
+      const iv = blob.slice(0, 12);
+      const ciphertext = blob.slice(12);
+      try {
+        const decrypted = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv },
+          key,
+          ciphertext
+        );
+        const text = new TextDecoder().decode(decrypted);
+        console.log(
+          `[E2EE DECRYPT SUCCESS] len=${clean2.length} with prefix skip=${skip}`
+        );
+        return text;
+      } catch (_e2) {
+      }
+    }
+    if (clean2.length <= 100) {
+      console.log(
+        `[E2EE DECRYPT DIAGNOSTIC] Brute-forcing IV positions for len=${clean2.length}`
+      );
+      for (let ivStart = 0; ivStart <= clean2.length - 28; ivStart++) {
+        const iv = clean2.slice(ivStart, ivStart + 12);
+        const ciphertext = clean2.slice(ivStart + 12);
+        if (ciphertext.length < 16) continue;
+        try {
+          const decrypted = await crypto.subtle.decrypt(
+            { name: "AES-GCM", iv },
+            key,
+            ciphertext
+          );
+          const text = new TextDecoder().decode(decrypted);
+          console.log(
+            `[E2EE DECRYPT SUCCESS via brute-force] IV start=${ivStart}, len=${clean2.length}`
+          );
+          return text;
+        } catch (_e2) {
+        }
+      }
+    }
+    console.error(
+      `[E2EE DECRYPT] All attempts failed for len=${clean2.length}. Full hex: ${Array.from(
+        clean2
+      ).map((b2) => b2.toString(16).padStart(2, "0")).join(" ")}`
+    );
+    return null;
+  } catch (err) {
+    console.error("[E2EE DECRYPT] Top-level error:", err);
+    return null;
   }
-  const iv = fresh.slice(0, 12);
-  const ciphertextAndTag = fresh.slice(12);
-  console.log(
-    `[E2EE RECV] Decrypting: total=${fresh.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`
-  );
-  const decrypted = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
-    key,
-    ciphertextAndTag
-  );
-  return new TextDecoder().decode(decrypted);
 }
 async function encryptBlob(key, data) {
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -39170,19 +39432,24 @@ async function encryptBlob(key, data) {
     key,
     data
   );
-  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  const ctBytes = new Uint8Array(encrypted);
+  const fullPayload = new Uint8Array(12 + ctBytes.byteLength);
   fullPayload.set(iv, 0);
-  fullPayload.set(new Uint8Array(encrypted), 12);
+  fullPayload.set(ctBytes, 12);
+  const cleanResult = new Uint8Array(fullPayload);
   console.log(
-    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`
+    `[E2EE SEND] encryptBlob: IV length=${iv.length}, ciphertext+tag length=${ctBytes.byteLength}, total=${cleanResult.length}, byteOffset=${cleanResult.byteOffset}`
   );
-  return fullPayload;
+  return cleanResult;
 }
 async function decryptBlob(key, data) {
-  const fresh = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
+  const clean2 = toCleanUint8Array(data);
+  const fresh = new Uint8Array(clean2.length);
+  for (let i = 0; i < clean2.length; i++) fresh[i] = clean2[i];
   if (fresh.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", fresh.length);
+    console.error(
+      `[E2EE RECV] decryptBlob: blob too small (${fresh.length} bytes, need >=28)`
+    );
     throw new Error("Blob too small");
   }
   const iv = fresh.slice(0, 12);
@@ -39345,6 +39612,7 @@ const crypto$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProp
 const CryptoContext = reactExports.createContext(null);
 function CryptoProvider({ children }) {
   const { principal } = useAuth();
+  const updateProfile = useUpdateProfile();
   const [keyPair, setKeyPair] = reactExports.useState(null);
   const [isReady, setIsReady] = reactExports.useState(false);
   const [isRestoringKeys, setIsRestoringKeys] = reactExports.useState(true);
@@ -39357,6 +39625,10 @@ function CryptoProvider({ children }) {
   const derivingConvIds = reactExports.useRef(/* @__PURE__ */ new Set());
   const [keyReadyConvIds, setKeyReadyConvIds] = reactExports.useState(
     /* @__PURE__ */ new Set()
+  );
+  const rekeyInProgress = reactExports.useRef(/* @__PURE__ */ new Set());
+  const keyLoadingPromises = reactExports.useRef(
+    /* @__PURE__ */ new Map()
   );
   const clearMissingKeyConvId = reactExports.useCallback((convId) => {
     setMissingKeyConvIds((prev) => {
@@ -39517,7 +39789,13 @@ function CryptoProvider({ children }) {
     (convId, key) => {
       convKeys.current.set(convId, key);
       if (principal) {
-        persistConvKey(principal.toText(), convId, key).catch(() => {
+        persistConvKey(principal.toText(), convId, key).then(() => {
+          console.log(`[E2EE KEYSTORE] Persisted key for convId=${convId}`);
+        }).catch((e) => {
+          console.error(
+            `[E2EE KEYSTORE] Failed to persist key for convId=${convId}:`,
+            e
+          );
         });
       }
     },
@@ -39528,12 +39806,15 @@ function CryptoProvider({ children }) {
       convKeys.current.set(convId, key);
       groupKeyFingerprints.current.set(convId, memberFingerprint);
       if (principal) {
-        persistConvKey(
-          principal.toText(),
-          convId,
-          key,
-          memberFingerprint
-        ).catch(() => {
+        persistConvKey(principal.toText(), convId, key, memberFingerprint).then(() => {
+          console.log(
+            `[E2EE KEYSTORE] Persisted group key for convId=${convId}`
+          );
+        }).catch((e) => {
+          console.error(
+            `[E2EE KEYSTORE] Failed to persist group key for convId=${convId}:`,
+            e
+          );
         });
       }
     },
@@ -39557,9 +39838,40 @@ function CryptoProvider({ children }) {
   );
   const deriveAndStoreKey = reactExports.useCallback(
     async (convId, theirPublicKeyBytes) => {
+      const freshKeyBytes = toCleanUint8Array(theirPublicKeyBytes);
+      const peerPubFp = Array.from(freshKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
       console.log(
-        `[E2EE] deriveAndStoreKey called for convId=${convId}, ownKey ready: ${!!(keyPair == null ? void 0 : keyPair.privateKey)}`
+        `[E2EE] deriveAndStoreKey START for convId=${convId}, peerKey first8=${peerPubFp}`
       );
+      if (convKeys.current.has(convId)) {
+        console.log(
+          `[E2EE] deriveAndStoreKey: clearing old key for convId=${convId} before re-derivation`
+        );
+        convKeys.current.delete(convId);
+      }
+      if (principal) {
+        const dbKeyClear = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+        try {
+          await dbSet(dbKeyClear, null);
+          console.log(
+            `[E2EE] deriveAndStoreKey: cleared IndexedDB key for convId=${convId}`
+          );
+        } catch {
+        }
+      }
+      if (principal && convId.includes(principal.toText())) {
+        console.warn(
+          `[E2EE] Self-keying detected, aborting for convId=${convId}`
+        );
+        derivingConvIds.current.delete(convId);
+        return null;
+      }
+      setKeyReadyConvIds((prev) => {
+        if (!prev.has(convId)) return prev;
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
       derivingConvIds.current.add(convId);
       if (!(keyPair == null ? void 0 : keyPair.privateKey)) {
         console.log(
@@ -39569,8 +39881,6 @@ function CryptoProvider({ children }) {
         return null;
       }
       try {
-        const freshKeyBytes = toCleanUint8Array(theirPublicKeyBytes);
-        const peerPubFp = Array.from(freshKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
         console.log(
           `[E2EE] deriveAndStoreKey: importing peer public key, byteLength=${freshKeyBytes.byteLength}, fingerprint(first8)=${peerPubFp}, convId=${convId}`
         );
@@ -39595,7 +39905,7 @@ function CryptoProvider({ children }) {
         );
         const sharedFp = await getKeyFingerprint(sharedKey);
         console.log(
-          `[E2EE] deriveAndStoreKey: ECDH shared key derived, fingerprint=${sharedFp}, convId=${convId}`
+          `[E2EE] NEW SHARED KEY fingerprint=${sharedFp} for convId=${convId}`
         );
         convKeys.current.set(convId, sharedKey);
         console.log(
@@ -39606,8 +39916,52 @@ function CryptoProvider({ children }) {
           `[E2EE] Derived and stored shared key for convId=${convId}`
         );
         if (principal) {
-          persistConvKey(principal.toText(), convId, sharedKey).catch(() => {
+          try {
+            await persistConvKey(principal.toText(), convId, sharedKey);
+            const fullFp = await getKeyFingerprint(sharedKey);
+            console.log(
+              `[E2EE KEYSTORE] Persisted key for convId=${convId}, fullFp=${fullFp}`
+            );
+          } catch (e) {
+            console.error(
+              `[E2EE KEYSTORE] Failed to persist key for convId=${convId}:`,
+              e
+            );
+          }
+        }
+        try {
+          const testPlaintext = "__roundtrip_test__";
+          const testBytes = new TextEncoder().encode(testPlaintext);
+          const encryptedBlob = await encryptMessage(sharedKey, testBytes);
+          const fullBlob = new Uint8Array(encryptedBlob);
+          const decryptedText = await decryptMessage(sharedKey, fullBlob);
+          if (decryptedText === testPlaintext) {
+            console.log(`[E2EE ROUNDTRIP] convId=${convId}: PASS`);
+          } else {
+            throw new Error(`roundtrip mismatch: got "${decryptedText}"`);
+          }
+        } catch (rtErr) {
+          console.error(
+            `[E2EE ROUNDTRIP] convId=${convId}: FAIL — evicting key`,
+            rtErr
+          );
+          convKeys.current.delete(convId);
+          setKeyReadyConvIds((prev) => {
+            const next = new Set(prev);
+            next.delete(convId);
+            return next;
           });
+          if (principal) {
+            const dbKeyRt = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+            dbSet(dbKeyRt, null).catch(() => {
+            });
+          }
+          setMissingKeyConvIds((prev) => {
+            const next = new Set(prev);
+            next.add(convId);
+            return next;
+          });
+          return null;
         }
         return sharedKey;
       } catch (err) {
@@ -39627,16 +39981,24 @@ function CryptoProvider({ children }) {
   const encryptForConv = reactExports.useCallback(
     async (convId, text) => {
       const key = convKeys.current.get(convId);
-      console.log(`[E2EE ENCRYPT] convId=${convId} key present: ${!!key}`);
+      const keyFp = key ? await getKeyFingerprint(key).catch(() => "unknown") : "none";
+      console.log(
+        `[E2EE SEND] Using key fingerprint=${keyFp} for convId=${convId}`
+      );
       if (!key) return null;
       try {
         const plaintextBytes = new TextEncoder().encode(text);
-        const blob = await encryptMessage(key, plaintextBytes);
+        const cipherBuf = await encryptMessage(key, plaintextBytes);
+        const full = new Uint8Array(cipherBuf);
         console.log(
-          `[E2EE SEND] encryptForConv: full blob size = ${blob.length} bytes (byteOffset=${blob.byteOffset}), convId=${convId}`
+          `[E2EE ENCRYPT direct] total=${full.length}, iv=12, ct+tag=${full.length - 12}, byteOffset=${full.byteOffset}, keyFp=${keyFp}, convId=${convId}`
         );
-        return blob;
-      } catch {
+        return full;
+      } catch (err) {
+        console.error(
+          `[E2EE ENCRYPT] encryptForConv FAILED for convId=${convId}:`,
+          err
+        );
         return null;
       }
     },
@@ -39644,135 +40006,306 @@ function CryptoProvider({ children }) {
   );
   const decryptFromConv = reactExports.useCallback(
     async (convId, blob) => {
+      let clean2 = toCleanUint8Array(blob);
+      if (clean2.byteOffset !== 0 || clean2.length !== clean2.buffer.byteLength) {
+        console.log(
+          `[E2EE DECRYPT buffer fix] copying non-contiguous view, old byteOffset=${clean2.byteOffset}, old length=${clean2.length}, old bufferSize=${clean2.buffer.byteLength}`
+        );
+        clean2 = new Uint8Array(clean2);
+      }
+      console.log(
+        `[E2EE DECRYPT final buffer] length=${clean2.length}, byteOffset=${clean2.byteOffset}, bufferSize=${clean2.buffer.byteLength}, convId=${convId}`
+      );
+      if (clean2.length < 28) {
+        console.warn(
+          `[E2EE DECRYPT] blob too short: ${clean2.length} bytes (need >=28), convId=${convId}`
+        );
+        return null;
+      }
       let key = convKeys.current.get(convId);
       if (!key && principal) {
         const principalText2 = principal.toText();
         const dbKey = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
-        try {
-          const stored = await dbGet(dbKey);
-          if (stored) {
-            let rawBytes = null;
-            let fingerprint;
-            if (stored instanceof Uint8Array) {
-              rawBytes = toCleanUint8Array(stored);
-            } else if (Array.isArray(stored.wrapped)) {
-              const wrapKey = await deriveStorageWrapKey(principalText2);
-              const wrappedArr = toCleanUint8Array(
-                stored.wrapped
-              );
-              rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr, dbKey);
-              fingerprint = stored.fingerprint;
-            } else if (stored.raw) {
-              const legacy = stored;
-              rawBytes = toCleanUint8Array(legacy.raw);
-              fingerprint = legacy.fingerprint;
-            }
-            if (rawBytes && rawBytes.length > 0) {
-              key = await importAESKey(rawBytes);
-              convKeys.current.set(convId, key);
-              if (fingerprint) {
-                groupKeyFingerprints.current.set(convId, fingerprint);
+        const loadPromise = (async () => {
+          try {
+            const stored = await dbGet(dbKey);
+            if (stored) {
+              let rawBytes = null;
+              let fingerprint;
+              if (stored instanceof Uint8Array) {
+                rawBytes = toCleanUint8Array(stored);
+              } else if (Array.isArray(stored.wrapped)) {
+                const wrapKey = await deriveStorageWrapKey(principalText2);
+                const wrappedArr = toCleanUint8Array(
+                  stored.wrapped
+                );
+                rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr, dbKey);
+                fingerprint = stored.fingerprint;
+              } else if (stored.raw) {
+                const legacy = stored;
+                rawBytes = toCleanUint8Array(legacy.raw);
+                fingerprint = legacy.fingerprint;
               }
-              const fpLog = fingerprint || "none";
-              console.log(
-                `[E2EE KEYSTORE] Loaded key for convId=${convId} (fingerprint=${fpLog})`
-              );
+              if (rawBytes && rawBytes.length > 0) {
+                const loadedKey = await importAESKey(rawBytes);
+                convKeys.current.set(convId, loadedKey);
+                if (fingerprint) {
+                  groupKeyFingerprints.current.set(convId, fingerprint);
+                }
+                const fpLog = fingerprint || "none";
+                console.log(
+                  `[E2EE KEYSTORE] Lazy-loaded key for convId=${convId} (fingerprint=${fpLog})`
+                );
+                return loadedKey;
+              }
             }
-          }
-        } catch (err) {
-          console.warn(
-            `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
-            err
-          );
-          if (principal) {
-            const principalText22 = principal.toText();
-            const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText22}:${convId}`;
-            try {
-              await dbSet(dbKeyToRemove, null);
-              console.log(
-                `[E2EE KEYSTORE] Removed corrupted lazy key for ${dbKeyToRemove} — will re-derive`
-              );
-            } catch {
+            return null;
+          } catch (err) {
+            console.warn(
+              `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
+              err
+            );
+            if (principal) {
+              const principalText22 = principal.toText();
+              const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText22}:${convId}`;
+              try {
+                await dbSet(dbKeyToRemove, null);
+                console.log(
+                  `[E2EE KEYSTORE] Removed corrupted lazy key for ${dbKeyToRemove} — will re-derive`
+                );
+              } catch {
+              }
             }
+            setMissingKeyConvIds((prev) => {
+              const next = new Set(prev);
+              next.add(convId);
+              return next;
+            });
+            return null;
           }
-          setMissingKeyConvIds((prev) => {
-            const next = new Set(prev);
-            next.add(convId);
-            return next;
-          });
-          return null;
-        }
+        })();
+        keyLoadingPromises.current.set(convId, loadPromise);
+        key = await loadPromise ?? void 0;
+        keyLoadingPromises.current.delete(convId);
       }
       if (!key) {
+        const existingLoad = keyLoadingPromises.current.get(convId);
+        if (existingLoad) {
+          console.log(
+            `[E2EE] Waiting for in-flight key load for convId=${convId}`
+          );
+          const loadedKey = await existingLoad;
+          if (loadedKey) {
+            console.log(`[E2EE] In-flight load succeeded for convId=${convId}`);
+            return decryptMessage(loadedKey, blob);
+          }
+        }
         console.log(
-          `[E2EE KEYSTORE] No stored key for convId=${convId} - performing exchange`
+          `[E2EE KEYSTORE] No stored key for convId=${convId} — performing exchange`
         );
+        if (convKeys.current.has(convId)) {
+          console.log(
+            `[E2EE] Key already in memory for convId=${convId}, skipping exchange trigger`
+          );
+          return null;
+        }
+        if (derivingConvIds.current.has(convId) || rekeyInProgress.current.has(convId)) {
+          console.log(
+            `[E2EE] Key derivation/rekey already in progress for convId=${convId}, skipping exchange trigger`
+          );
+          return null;
+        }
         setMissingKeyConvIds((prev) => {
           const next = new Set(prev);
           next.add(convId);
           return next;
         });
+        return null;
+      }
+      const keyFpPre = await getKeyFingerprint(key).catch(() => "unknown");
+      console.log(
+        `[E2EE RECV] Attempting decrypt with key fingerprint=${keyFpPre} for blob len=${clean2.length}, convId=${convId}`
+      );
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
+          console.log(
+            `[E2EE DECRYPT] decryptFromConv attempt=${attempt}/3: total=${clean2.length}, keyFp=${keyFp}, convId=${convId}`
+          );
+          const result = await decryptMessage(key, clean2);
+          if (result !== null) {
+            if (attempt > 1) {
+              console.log(
+                `[E2EE DECRYPT] decryptFromConv succeeded on attempt ${attempt} for convId=${convId}`
+              );
+            }
+            return result;
+          }
+          console.warn(
+            `[E2EE DECRYPT] decryptFromConv attempt ${attempt}/3 returned null (all prefix skips 0-16 and brute-force attempted) for convId=${convId}`
+          );
+        } catch (err) {
+          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
+          console.warn(
+            `[E2EE DECRYPT] decryptFromConv FAILED (attempt ${attempt}/3) for convId=${convId}: blob=${clean2.length} bytes, keyFp=${keyFp}`,
+            err
+          );
+        }
+        if (attempt < 3) {
+          await new Promise((r2) => setTimeout(r2, 100));
+        }
+      }
+      const hexPrefix = Array.from(clean2.slice(0, Math.min(clean2.length, 64))).map((b2) => b2.toString(16).padStart(2, "0")).join(" ");
+      console.error(
+        `[E2EE DECRYPT] All 3 attempts failed for convId=${convId}. Blob len=${clean2.length}, hexPrefix(64)=${hexPrefix}`
+      );
+      if (!rekeyInProgress.current.has(convId)) {
+        console.log(
+          `[E2EE DECRYPT] Triggering automatic rekey for convId=${convId} after decrypt failure`
+        );
+        rekeyConversation(convId).catch(() => {
+        });
+      }
+      const keyFpFinal = await getKeyFingerprint(key).catch(() => "unknown");
+      let roundtripPassed = false;
+      try {
+        const testPlaintext = "__roundtrip_test__";
+        const testBytes = new TextEncoder().encode(testPlaintext);
+        const testBlob = await encryptMessage(key, testBytes);
+        const testResult = await decryptMessage(key, testBlob);
+        roundtripPassed = testResult === testPlaintext;
+        console.log(
+          `[E2EE DECRYPT] Manual roundtrip with stored key ${roundtripPassed ? "PASSED" : "FAILED"} for convId=${convId}, keyFp=${keyFpFinal}`
+        );
+      } catch (rtErr) {
+        console.error(
+          `[E2EE DECRYPT] Manual roundtrip with stored key FAILED for convId=${convId}, keyFp=${keyFpFinal}:`,
+          rtErr
+        );
+      }
+      let keyExportFailed = false;
+      try {
+        await crypto.subtle.exportKey("raw", key);
+      } catch (exportErr) {
+        keyExportFailed = true;
+        console.error(
+          `[E2EE DECRYPT] Key export test FAILED (keyFp=${keyFpFinal}, convId=${convId}) — CryptoKey is CORRUPT. Evicting and triggering re-derivation.`,
+          exportErr
+        );
+      }
+      if (!keyExportFailed && roundtripPassed) {
+        console.warn(
+          `[E2EE DECRYPT] All prefix variants failed but key is healthy — marking message as unreadable. keyFp=${keyFpFinal}, convId=${convId}`
+        );
         return null;
       }
       console.log(
-        `[E2EE RECV] decryptFromConv: blob=${blob.length} bytes (original byteOffset=${blob.byteOffset ?? 0}), convId=${convId}`
+        `[E2EE DECRYPT] Evicting corrupt key for convId=${convId} (exportTest=${keyExportFailed ? "FAILED" : "PASSED"}, roundtrip=${roundtripPassed ? "PASSED" : "FAILED"})`
       );
-      try {
-        return await decryptMessage(key, blob);
-      } catch (err) {
-        const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
-        console.error(
-          `[E2EE] decryptFromConv FAILED for convId=${convId}: blob=${blob.length} bytes, keyFp=${keyFp}`,
-          err
-        );
-        console.warn(
-          `[E2EE KEYSTORE] Key fingerprint ${keyFp} does not match stored key — triggering re-exchange for convId=${convId}`
-        );
-        let keyIsValid = false;
-        try {
-          await crypto.subtle.exportKey("raw", key);
-          keyIsValid = true;
-        } catch {
-        }
-        if (keyIsValid) {
-          console.log(
-            `[E2EE EVICT] convId=${convId} — key export test passed (skipping IndexedDB delete, keeping key)`
-          );
-          console.log(
-            `[E2EE] Key eviction triggered for convId=${convId} — keeping in-memory key, clearing ready state only`
-          );
-          setKeyReadyConvIds((prev) => {
-            const next = new Set(prev);
-            next.delete(convId);
-            return next;
-          });
-        } else {
-          console.log(
-            `[E2EE EVICT] convId=${convId} — key export test failed, evicting from IndexedDB`
-          );
-          console.log(
-            `[E2EE] Key eviction triggered for convId=${convId} — keeping in-memory key, clearing ready state only`
-          );
-          if (principal) {
-            const dbKeyEvict = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-            dbSet(dbKeyEvict, null).catch(() => {
-            });
-          }
-          setKeyReadyConvIds((prev) => {
-            const next = new Set(prev);
-            next.delete(convId);
-            return next;
-          });
-        }
-        setMissingKeyConvIds((prev) => {
-          const next = new Set(prev);
-          next.add(convId);
-          return next;
+      convKeys.current.delete(convId);
+      setKeyReadyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
+      if (principal) {
+        const dbKeyEvict = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+        dbSet(dbKeyEvict, null).catch(() => {
         });
-        return null;
       }
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.add(convId);
+        return next;
+      });
+      return null;
     },
     [principal]
+  );
+  const forceReDeriveKey = reactExports.useCallback(
+    async (convId) => {
+      console.log(
+        `[E2EE FORCE-REDERIVE] Clearing key for convId=${convId} from memory + IndexedDB — will re-derive on next peer key arrival`
+      );
+      convKeys.current.delete(convId);
+      groupKeyFingerprints.current.delete(convId);
+      keyLoadingPromises.current.delete(convId);
+      setKeyReadyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
+      if (principal) {
+        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
+        try {
+          await dbSet(dbKey, null);
+          console.log(
+            `[E2EE FORCE-REDERIVE] Removed key from IndexedDB for convId=${convId}`
+          );
+        } catch {
+        }
+      }
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.add(convId);
+        return next;
+      });
+    },
+    [principal]
+  );
+  const rekeyConversation = reactExports.useCallback(
+    async (convId) => {
+      if (!keyPair) {
+        console.warn("[E2EE REKEY] keyPair not ready, waiting...");
+        setTimeout(() => rekeyConversation(convId), 500);
+        return;
+      }
+      if (!principal) {
+        console.warn("[E2EE REKEY] principal not ready, waiting...");
+        setTimeout(() => rekeyConversation(convId), 500);
+        return;
+      }
+      if (rekeyInProgress.current.has(convId)) {
+        console.log(
+          `[E2EE REKEY] Skipping rekey for convId=${convId} — already in progress`
+        );
+        return;
+      }
+      rekeyInProgress.current.add(convId);
+      console.log(
+        `[E2EE] Stale key detected — initiating rekey for convId=${convId}`
+      );
+      try {
+        await forceReDeriveKey(convId);
+        if (keyPair && principal) {
+          try {
+            const pubBytes = await exportPublicKey(keyPair.publicKey);
+            const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+            console.log(
+              `[E2EE REKEY] Publishing fresh public key (fingerprint=${fp}) for convId=${convId}`
+            );
+            await updateProfile.mutateAsync({
+              ecdhPublicKey: pubBytes
+            });
+            console.log(
+              `[E2EE REKEY] Fresh public key published successfully for convId=${convId}`
+            );
+          } catch (pubErr) {
+            console.error(
+              `[E2EE REKEY] Failed to publish fresh public key for convId=${convId}:`,
+              pubErr
+            );
+          }
+        } else {
+          console.warn(
+            `[E2EE REKEY] Cannot publish public key — keyPair or principal missing for convId=${convId}`
+          );
+        }
+      } finally {
+        rekeyInProgress.current.delete(convId);
+      }
+    },
+    [forceReDeriveKey, keyPair, principal, updateProfile]
   );
   const decryptOwnDisplayName = reactExports.useCallback(
     async (encryptedBlob) => {
@@ -39807,7 +40340,9 @@ function CryptoProvider({ children }) {
         decryptFromConv,
         decryptOwnDisplayName,
         isDerivingKey: (convId) => derivingConvIds.current.has(convId),
-        isKeyReady: (convId) => keyReadyConvIds.has(convId) || convKeys.current.has(convId)
+        isKeyReady: (convId) => keyReadyConvIds.has(convId),
+        forceReDeriveKey,
+        rekeyConversation
       },
       children
     }
@@ -46399,7 +46934,7 @@ function useMyOrgs() {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getMyOrgs();
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46413,7 +46948,7 @@ function useMyRole(orgId) {
     queryFn: async () => {
       if (!actor || !orgId) return null;
       const res = await actor.getMyRole(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching && !!orgId,
@@ -46437,7 +46972,7 @@ function useOrgs(req) {
         afterOrgId: req.afterOrgId,
         search: req.search ?? void 0
       });
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46451,7 +46986,7 @@ function useOrgDetails(orgId) {
     queryFn: async () => {
       if (!actor || !orgId) return null;
       const res = await actor.getOrg(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching && !!orgId,
@@ -46495,7 +47030,7 @@ function useAdminAuditLog(req) {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getAuditLog(req);
-      if (res.__kind__ === "err") throw new Error(String(res.err));
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46521,7 +47056,7 @@ function useGroupMembers(groupId) {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getGroupMembers({ groupId });
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46535,7 +47070,7 @@ function useRemoveMemberFromGroup() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.removeMemberFromGroup(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -46569,7 +47104,7 @@ function useCreateOrg() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.createOrg(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -46585,7 +47120,7 @@ function useInviteUser() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.inviteUser(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -46602,7 +47137,7 @@ function useUpdateMemberRole() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.updateMemberRole(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -46619,7 +47154,7 @@ function useSuspendMember() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.suspendMember(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, req) => {
@@ -46637,7 +47172,7 @@ function useRemoveMember() {
     mutationFn: async ({ orgId, userId }) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.removeMember(orgId, userId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, { orgId }) => {
@@ -46653,7 +47188,7 @@ function useReactivateMember() {
     mutationFn: async ({ orgId, userId }) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.reactivateMember(orgId, userId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, { orgId }) => {
@@ -46673,7 +47208,7 @@ function useUpdateOrg() {
     }) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.updateOrg(orgId, name, description);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: (_data, { orgId }) => {
@@ -46690,7 +47225,7 @@ function useSuspendOrg() {
     mutationFn: async (orgId) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.suspendOrg(orgId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -46735,7 +47270,7 @@ function useExportAuditLogs() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.exportAuditLogs(req);
-      if (res.__kind__ === "err") throw new Error(String(res.err));
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     }
   });
@@ -46747,7 +47282,7 @@ function useEscrowStats() {
     queryFn: async () => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.getEscrowStats();
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46767,7 +47302,7 @@ function useEscrowedUsers(req) {
     queryFn: async () => {
       if (!actor) return [];
       const res = await actor.getEscrowedUsers(req);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46784,7 +47319,7 @@ function useRecoveryRequests(orgId, statusFilter) {
         null,
         statusFilter ?? null
       );
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46803,7 +47338,7 @@ function useEscrowGrants(targetUserId) {
         50n,
         null
       );
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     enabled: !!actor && !isFetching,
@@ -46827,7 +47362,7 @@ function useInitiateKeyRecovery() {
         reason,
         orgId ?? null
       );
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -46844,7 +47379,7 @@ function useApproveKeyRecovery() {
     mutationFn: async (requestId) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.approveKeyRecovery(requestId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -46893,7 +47428,7 @@ function useRejectKeyRecovery() {
     mutationFn: async (requestId) => {
       if (!actor) throw new Error("Actor not ready");
       const res = await actor.rejectKeyRecovery(requestId);
-      if (res.__kind__ === "err") throw new Error(res.err);
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
       return res.ok;
     },
     onSuccess: () => {
@@ -46917,7 +47452,7 @@ function useEnrollUserKeyEscrow() {
       }
       const result = await fn.call(actor);
       if ("err" in result && result.err !== void 0)
-        throw new Error(result.err);
+        throw new Error(extractErrText(result));
       return result.ok ?? "Enrolled";
     },
     onSuccess: () => {
@@ -46951,7 +47486,7 @@ function useGetEncryptedEscrowKey() {
         transportPublicKey
       );
       if ("err" in result && result.err !== void 0)
-        throw new Error(result.err);
+        throw new Error(extractErrText(result));
       if (!result.ok) throw new Error("No key data returned");
       return result.ok;
     }
@@ -48146,178 +48681,6 @@ function Label({
     }
   );
 }
-function useUserProfile(userId) {
-  const { actor } = useActor(createActor);
-  return useQuery({
-    queryKey: ["profile", userId == null ? void 0 : userId.toText()],
-    queryFn: async () => {
-      if (!actor || !userId) return null;
-      return actor.getUserProfile(userId);
-    },
-    enabled: !!actor && !!userId,
-    staleTime: 3e4,
-    retry: 2
-  });
-}
-function useUserProfiles(userIds) {
-  const { actor } = useActor(createActor);
-  return useQuery({
-    queryKey: ["profiles", userIds.map((u) => u.toText()).join(",")],
-    queryFn: async () => {
-      if (!actor || userIds.length === 0) return [];
-      return actor.getUserProfiles(userIds);
-    },
-    enabled: !!actor && userIds.length > 0,
-    staleTime: 3e4,
-    retry: 2
-  });
-}
-function useUpdateProfile() {
-  const { actor } = useActor(createActor);
-  const { principal } = useAuth();
-  const queryClient2 = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      encryptedDisplayName,
-      ecdhPublicKey,
-      encryptedAvatarKey
-    }) => {
-      if (!actor) throw new Error("Not connected");
-      let result = await actor.updateUserProfile({
-        encryptedDisplayName,
-        ecdhPublicKey,
-        encryptedAvatarKey
-      });
-      const isNotFound2 = result.__kind__ === "err" && (!result.err || result.err === "notFound");
-      if (isNotFound2) {
-        if (!encryptedDisplayName || !ecdhPublicKey) {
-          throw new Error(
-            "Profile not found on server. Please reload and try again."
-          );
-        }
-        const regResult = await actor.registerUser({
-          encryptedDisplayName,
-          ecdhPublicKey,
-          encryptedAvatarKey
-        });
-        if (regResult.__kind__ === "err") {
-          result = await actor.updateUserProfile({
-            encryptedDisplayName,
-            ecdhPublicKey,
-            encryptedAvatarKey
-          });
-        } else {
-          return regResult.ok;
-        }
-      }
-      if (result.__kind__ === "err") {
-        const errLabel = result.err || "unknown";
-        const messages = {
-          unauthorized: "You must be logged in to update your profile.",
-          forbidden: "You don't have permission to perform this action.",
-          notFound: "Profile not found. Please reload and try again.",
-          alreadyExists: "A profile with these details already exists.",
-          invalidInput: "Invalid profile data. Please check your input."
-        };
-        throw new Error(messages[errLabel] ?? `Update failed: ${errLabel}`);
-      }
-      return result.ok;
-    },
-    onSuccess: (updatedProfile) => {
-      const userId = principal == null ? void 0 : principal.toText();
-      if (!userId) return;
-      if (updatedProfile) {
-        queryClient2.setQueryData(
-          ["profile", userId],
-          updatedProfile
-        );
-      }
-      queryClient2.invalidateQueries({
-        queryKey: ["profile", userId],
-        exact: true
-      });
-    }
-  });
-}
-const AVATAR_STORAGE_PREFIX = "cs_avatar:";
-function getLocalAvatarKey(principal) {
-  return `${AVATAR_STORAGE_PREFIX}${principal}`;
-}
-function getLocalAvatarDataUrl(principal) {
-  try {
-    return localStorage.getItem(getLocalAvatarKey(principal));
-  } catch {
-    return null;
-  }
-}
-function setLocalAvatarDataUrl(principal, dataUrl) {
-  try {
-    localStorage.setItem(getLocalAvatarKey(principal), dataUrl);
-  } catch {
-  }
-}
-function removeLocalAvatar(principal) {
-  try {
-    localStorage.removeItem(getLocalAvatarKey(principal));
-  } catch {
-  }
-}
-const DISPLAY_NAME_PREFIX = "cs_name:";
-function getLocalDisplayName(principal) {
-  try {
-    return localStorage.getItem(`${DISPLAY_NAME_PREFIX}${principal}`);
-  } catch {
-    return null;
-  }
-}
-function setLocalDisplayName(principal, name) {
-  try {
-    if (name.trim()) {
-      localStorage.setItem(`${DISPLAY_NAME_PREFIX}${principal}`, name.trim());
-    }
-  } catch {
-  }
-}
-function shortPrincipal(principal) {
-  if (principal.length <= 16) return principal;
-  return `${principal.slice(0, 10)}…${principal.slice(-4)}`;
-}
-function getDisplayName(principal) {
-  return getLocalDisplayName(principal) ?? shortPrincipal(principal);
-}
-function useDisplayName(principal) {
-  const [name, setName] = reactExports.useState(
-    principal ? getDisplayName(principal) : ""
-  );
-  reactExports.useEffect(() => {
-    if (!principal) return;
-    setName(getDisplayName(principal));
-    const handler = (e) => {
-      var _a3;
-      if (e.key === `${DISPLAY_NAME_PREFIX}${principal}`) {
-        setName(((_a3 = e.newValue) == null ? void 0 : _a3.trim()) || shortPrincipal(principal));
-      }
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
-  }, [principal]);
-  return name || (principal ? shortPrincipal(principal) : "");
-}
-function useHasDisplayName() {
-  const { principal } = useAuth();
-  const principalText2 = (principal == null ? void 0 : principal.toText()) ?? null;
-  const {
-    data: profile,
-    isLoading,
-    isFetched
-  } = useUserProfile(principal ?? null);
-  if (!principalText2) return null;
-  if (isLoading && !isFetched) return null;
-  const cached = getLocalDisplayName(principalText2);
-  if (cached && cached.trim().length >= 2) return true;
-  if (profile && profile.encryptedDisplayName.length > 0) return true;
-  return false;
-}
 let lastPublishTime = 0;
 function OnboardingGate({ children }) {
   const { principal } = useAuth();
@@ -48364,6 +48727,7 @@ function OnboardingGate({ children }) {
     console.log(
       "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile"
     );
+    hasPublishedRef.current = true;
     (async () => {
       try {
         const pubBytes = await exportPublicKey(keyPair.publicKey);
@@ -48382,12 +48746,10 @@ function OnboardingGate({ children }) {
             console.log(
               "[E2EE KEYSYNC] Public key unchanged - skipping publish"
             );
-            hasPublishedRef.current = true;
             setIsNewKeyPair(false);
             return;
           }
         }
-        hasPublishedRef.current = true;
         lastPublishTime = Date.now();
         const existingDisplayName = (latestProfile == null ? void 0 : latestProfile.encryptedDisplayName) && latestProfile.encryptedDisplayName.length > 0 ? new Uint8Array(
           latestProfile.encryptedDisplayName instanceof Uint8Array ? latestProfile.encryptedDisplayName.buffer.slice(
@@ -48395,20 +48757,27 @@ function OnboardingGate({ children }) {
             latestProfile.encryptedDisplayName.byteOffset + latestProfile.encryptedDisplayName.byteLength
           ) : latestProfile.encryptedDisplayName
         ) : new Uint8Array(0);
-        await mutateAsyncRef.current({
+        const result = await mutateAsyncRef.current({
           encryptedDisplayName: existingDisplayName,
           ecdhPublicKey: pubBytes
         });
+        console.log("[E2EE KEYSYNC] Key sync result:", result);
         setIsNewKeyPair(false);
         console.log(
           `[E2EE KEYSYNC] Published new public key (fingerprint=${fp})`
         );
       } catch (err) {
-        hasPublishedRef.current = false;
-        console.warn(
-          "[E2EE KEYSYNC] Failed to publish public key to profile:",
-          err
-        );
+        const errText = err instanceof Error ? err.message : extractErrText(err);
+        console.warn("[E2EE KEYSYNC] Key sync error:", errText, err);
+        const lower = errText.toLowerCase();
+        const isAlreadyPublished = lower.includes("already") || lower.includes("no change") || lower.includes("unchanged") || lower.includes("not modified");
+        if (isAlreadyPublished) {
+          console.log(
+            "[E2EE KEYSYNC] Key already published on backend — skipping retry"
+          );
+          setIsNewKeyPair(false);
+          return;
+        }
       }
     })();
   }, [isNewKeyPair, keyPair, isReady, principal, setIsNewKeyPair]);
@@ -51451,7 +51820,7 @@ function useAddConversationMember() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.addConversationMember(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: (_2, vars) => {
@@ -51469,7 +51838,7 @@ function useRemoveConversationMember() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.removeConversationMember(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: (_2, vars) => {
@@ -51531,7 +51900,7 @@ function useSubmitJoinRequest() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.submitJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: () => {
@@ -51564,7 +51933,7 @@ function useApproveJoinRequest() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.approveJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: (_2, vars) => {
@@ -51582,7 +51951,7 @@ function useDenyJoinRequest() {
     mutationFn: async (req) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.denyJoinRequest(req);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: (_2, vars) => {
@@ -52745,7 +53114,8 @@ function AttachmentUpload({
         encryptedContent,
         messageType: msgType
       });
-      if (msgResult.__kind__ === "err") throw new Error(msgResult.err);
+      if (msgResult.__kind__ === "err")
+        throw new Error(extractErrText(msgResult));
       setProgress(85);
       const msgId = msgResult.ok.id;
       const attachResult = await backend.registerAttachment({
@@ -52754,7 +53124,8 @@ function AttachmentUpload({
         encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey: storageKey2
       });
-      if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
+      if (attachResult.__kind__ === "err")
+        throw new Error(extractErrText(attachResult));
       setProgress(100);
       onClose();
       onMessageSent == null ? void 0 : onMessageSent();
@@ -54416,7 +54787,8 @@ function VoiceNoteRecorder({
         encryptedContent,
         messageType: MessageType.audio
       });
-      if (msgResult.__kind__ === "err") throw new Error(msgResult.err);
+      if (msgResult.__kind__ === "err")
+        throw new Error(extractErrText(msgResult));
       const msgId = msgResult.ok.id;
       const attachResult = await backend.registerAttachment({
         messageId: msgId,
@@ -54424,7 +54796,8 @@ function VoiceNoteRecorder({
         encryptedSizeBytes: BigInt(encrypted.byteLength),
         storageKey: storageKey2
       });
-      if (attachResult.__kind__ === "err") throw new Error(attachResult.err);
+      if (attachResult.__kind__ === "err")
+        throw new Error(extractErrText(attachResult));
       onSent();
       discard();
     } catch (err) {
@@ -54889,7 +55262,7 @@ function useOfflineQueue() {
           priority: msg.priority === "high" ? MessagePriority.high : msg.priority === "normal" ? MessagePriority.normal : void 0
         });
         if (result.__kind__ === "err") {
-          throw new Error(result.err ?? "Send failed");
+          throw new Error(extractErrText(result));
         }
         await markDelivered(msg.id);
         drainedCount++;
@@ -55099,7 +55472,7 @@ function MessageInput({
         ttlSeconds: ttlValue > 0 ? BigInt(ttlValue) : void 0,
         priority: priority === "high" ? MessagePriority.high : MessagePriority.normal
       });
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       setText("");
       if (textareaRef.current) textareaRef.current.style.height = "auto";
       onMessageSent == null ? void 0 : onMessageSent();
@@ -55310,14 +55683,17 @@ function isExpired(msg) {
   return Date.now() > expiresMs;
 }
 function useDecryptedContent(message, conversationId, _isMine) {
-  const { decryptFromConv } = useCrypto();
+  const { decryptFromConv, rekeyConversation } = useCrypto();
   const [text, setText] = reactExports.useState(null);
+  const hasTriggeredRekey = reactExports.useRef(false);
   const [failed, setFailed] = reactExports.useState(false);
+  const [showStaleKeyButton, setShowStaleKeyButton] = reactExports.useState(false);
   reactExports.useEffect(() => {
     if (message.messageType !== MessageType.text) return;
     if (isExpired(message)) {
       setFailed(false);
       setText(null);
+      setShowStaleKeyButton(false);
       return;
     }
     let cancelled = false;
@@ -55347,12 +55723,27 @@ function useDecryptedContent(message, conversationId, _isMine) {
         if (result !== null) {
           setText(result);
           setFailed(false);
+          setShowStaleKeyButton(false);
           cancelled = true;
         } else if (attempt === attempts.length) {
           console.error(
             `[E2EE] useDecryptedContent: all ${attempts.length} attempts failed for convId=${conversationId} msgId=${message.id}`
           );
+          if (!hasTriggeredRekey.current) {
+            hasTriggeredRekey.current = true;
+            console.log(
+              `[E2EE] Stale key detected — initiating rekey for convId=${conversationId} msgId=${message.id}`
+            );
+            rekeyConversation(conversationId).catch((err) => {
+              console.error(
+                `[E2EE] rekeyConversation failed for convId=${conversationId}:`,
+                err
+              );
+            });
+          }
+          console.error();
           setFailed(true);
+          setShowStaleKeyButton(true);
         }
       }, delay2);
       timers.push(t);
@@ -55361,8 +55752,8 @@ function useDecryptedContent(message, conversationId, _isMine) {
       cancelled = true;
       for (const t of timers) clearTimeout(t);
     };
-  }, [message, conversationId, decryptFromConv]);
-  return { text, failed };
+  }, [message, conversationId, decryptFromConv, rekeyConversation]);
+  return { text, failed, showStaleKeyButton };
 }
 function useAttachmentMeta(message, conversationId) {
   const { decryptFromConv } = useCrypto();
@@ -55825,7 +56216,11 @@ function MessageBubble({
   const [contextOpen, setContextOpen] = reactExports.useState(false);
   const [contextPos, setContextPos] = reactExports.useState({ x: 0, y: 0 });
   const menuRef = reactExports.useRef(null);
-  const { text, failed } = useDecryptedContent(message, conversationId);
+  const { text, failed, showStaleKeyButton } = useDecryptedContent(
+    message,
+    conversationId
+  );
+  const { rekeyConversation } = useCrypto();
   const meta = useAttachmentMeta(message, conversationId);
   const expired = isExpired(message);
   const sentMs = Number(message.sentAt) / 1e6;
@@ -55918,7 +56313,31 @@ function MessageBubble({
                   children: expired ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 text-xs opacity-60 italic", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(Timer, { size: 12 }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Message expired" })
-                  ] }) : message.isDeleted ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Message deleted" }) : message.messageType === MessageType.text ? failed ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Unable to decrypt" }) : text === null ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin opacity-40" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm leading-relaxed whitespace-pre-wrap break-words", children: text }) : isAttachment && message.messageType === MessageType.image ? isMine ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5 text-sm opacity-90", children: [
+                  ] }) : message.isDeleted ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Message deleted" }) : message.messageType === MessageType.text ? failed ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Unable to decrypt" }),
+                    showStaleKeyButton && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        className: "text-xs underline text-destructive hover:text-destructive/80 transition-colors cursor-pointer",
+                        onClick: () => {
+                          console.log(
+                            `[E2EE UI] User tapped rekey for convId=${conversationId}`
+                          );
+                          rekeyConversation(conversationId).catch(
+                            (err) => {
+                              console.error(
+                                `[E2EE UI] Manual rekey failed for convId=${conversationId}:`,
+                                err
+                              );
+                            }
+                          );
+                        },
+                        "data-ocid": "message.rekey_button",
+                        children: "Stale key — tap to rekey"
+                      }
+                    )
+                  ] }) : text === null ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin opacity-40" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm leading-relaxed whitespace-pre-wrap break-words", children: text }) : isAttachment && message.messageType === MessageType.image ? isMine ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5 text-sm opacity-90", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(CheckCheck, { size: 14 }),
                     "File delivered",
                     (meta == null ? void 0 : meta.name) ? `: ${meta.name}` : ""
@@ -64743,7 +65162,7 @@ function useEnableGroupRetention() {
     mutationFn: async (convId) => {
       if (!actor) throw new Error("Actor not ready");
       const result = await actor.enableGroupRetention(convId);
-      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(result.err);
+      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(extractErrText(result));
     },
     onSuccess: (_data, convId) => {
       void qc.invalidateQueries({
@@ -64759,7 +65178,7 @@ function useDisableGroupRetention() {
     mutationFn: async (convId) => {
       if (!actor) throw new Error("Actor not ready");
       const result = await actor.disableGroupRetention(convId);
-      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(result.err);
+      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(extractErrText(result));
     },
     onSuccess: (_data, convId) => {
       void qc.invalidateQueries({
@@ -64799,7 +65218,7 @@ function useEnrollKeyEscrow() {
         args.wrappedKey,
         args.consentLanguageVersion
       );
-      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(result.err);
+      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(extractErrText(result));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["my-escrow-status"] });
@@ -64816,7 +65235,7 @@ function useRevokeKeyEscrow() {
         args.deviceId,
         args.reason
       );
-      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(result.err);
+      if ((result == null ? void 0 : result.__kind__) === "err") throw new Error(extractErrText(result));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["my-escrow-status"] });
@@ -65107,6 +65526,30 @@ function ChatSearchBar({
     }
   );
 }
+function RekeyButton({ convId }) {
+  const { rekeyConversation } = useCrypto();
+  const [isRekeying, setIsRekeying] = reactExports.useState(false);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "button",
+    {
+      type: "button",
+      onClick: async () => {
+        setIsRekeying(true);
+        try {
+          await rekeyConversation(convId.toString());
+        } finally {
+          setIsRekeying(false);
+        }
+      },
+      disabled: isRekeying,
+      className: "relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth disabled:opacity-50",
+      "aria-label": "Rekey conversation",
+      title: "Rekey conversation",
+      "data-ocid": "chat.rekey_button",
+      children: isRekeying ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium", children: "Rekeying…" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(KeyRound, { size: 18 })
+    }
+  );
+}
 async function decryptGroupName(conv) {
   if (!conv.encryptedName || conv.encryptedName.length === 0) return null;
   const convIdStr = conv.id.toString();
@@ -65227,6 +65670,7 @@ function ChatHeader({
               children: /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 18 })
             }
           ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(RekeyButton, { convId: conv.id }),
           isCreator && /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "button",
             {
@@ -65280,6 +65724,7 @@ function ChatPage() {
   const [managePanelOpen, setManagePanelOpen] = reactExports.useState(false);
   const [highlightedMsgId, setHighlightedMsgId] = reactExports.useState(null);
   const [decryptedMsgs, setDecryptedMsgs] = reactExports.useState([]);
+  const [, _setIsRekeying] = reactExports.useState(false);
   reactExports.useEffect(() => {
     if (connection.isOnline) {
       drainQueue();
@@ -65373,6 +65818,7 @@ function ChatPage() {
     lastDerivedPeerKey.current = "";
   }, [convId]);
   reactExports.useEffect(() => {
+    var _a4;
     if (!convId || !conv) return;
     const convIdStr = convId.toString();
     if (!missingKeyConvIds.has(convIdStr)) return;
@@ -65382,7 +65828,24 @@ function ChatPage() {
     if (conv.kind === ConversationKind.direct) {
       lastDerivedPeerKey.current = "";
       if (peerProfiles.length > 0) {
-        const peer = peerProfiles[0];
+        const peer = peerProfiles.find(
+          (p2) => {
+            var _a5;
+            return p2.id.toText() === ((_a5 = peerIds[0]) == null ? void 0 : _a5.toText());
+          }
+        );
+        if (!peer) {
+          console.warn(
+            `[E2EE] ChatPage: peer profile not found for peerId=${(_a4 = peerIds[0]) == null ? void 0 : _a4.toText()} in convId=${convIdStr}`
+          );
+          return;
+        }
+        if (peer.id.toText() === myPrincipal) {
+          console.warn(
+            `[E2EE] Self-keying detected for convId=${convIdStr}, aborting`
+          );
+          return;
+        }
         if (peer.ecdhPublicKey.length > 0) {
           const freshPeerKeyBytes = toCleanUint8Array(peer.ecdhPublicKey);
           deriveAndStoreKey(convIdStr, freshPeerKeyBytes).then((key) => {
@@ -65416,16 +65879,36 @@ function ChatPage() {
     convId,
     conv,
     peerProfiles,
+    peerIds,
+    myPrincipal,
     deriveAndStoreKey,
     setGroupConversationKey,
     clearMissingKeyConvId
   ]);
   reactExports.useEffect(() => {
+    var _a4;
     if (!conv || convId === null) return;
     const convIdStr = convId.toString();
     if (conv.kind === ConversationKind.direct) {
       if (peerProfiles.length > 0) {
-        const peer = peerProfiles[0];
+        const peer = peerProfiles.find(
+          (p2) => {
+            var _a5;
+            return p2.id.toText() === ((_a5 = peerIds[0]) == null ? void 0 : _a5.toText());
+          }
+        );
+        if (!peer) {
+          console.warn(
+            `[E2EE] ChatPage: peer profile not found for peerId=${(_a4 = peerIds[0]) == null ? void 0 : _a4.toText()} in convId=${convIdStr}`
+          );
+          return;
+        }
+        if (peer.id.toText() === myPrincipal) {
+          console.warn(
+            `[E2EE] Self-keying detected for convId=${convIdStr}, aborting`
+          );
+          return;
+        }
         if (peer.ecdhPublicKey.length === 0) {
           console.warn(
             `[E2EE] ChatPage: peer profile arrived with empty ecdhPublicKey for convId=${convIdStr}`
@@ -65442,6 +65925,11 @@ function ChatPage() {
               `[E2EE ChatPage] skipping re-derive for convId=${convIdStr} — key already present with same fingerprint`
             );
             return;
+          }
+          if (lastDerivedPeerKey.current === keyFingerprint && !isKeyReady(convIdStr)) {
+            console.log(
+              `[E2EE ChatPage] re-deriving for convId=${convIdStr} — same fingerprint but key not ready (was evicted)`
+            );
           }
           lastDerivedPeerKey.current = keyFingerprint;
           const existingKey = getConversationKey(convIdStr);
@@ -65509,6 +65997,8 @@ function ChatPage() {
     conv,
     convId,
     peerProfiles,
+    peerIds,
+    myPrincipal,
     keyPair,
     deriveAndStoreKey,
     getConversationKey,
@@ -67273,7 +67763,7 @@ function NewConversationDialog({
       );
       const result = await actor.createDirectConversation({ peer: directPeer });
       if (result.__kind__ === "err") {
-        const errKey = result.err;
+        const errKey = extractErrText(result);
         const errMessages = {
           notFound: "User not found. Ask them to open CharlieSierra first so their account is registered.",
           alreadyExists: "A conversation with this user already exists.",
@@ -67364,11 +67854,9 @@ function NewConversationDialog({
           forbidden: "Group creation is not allowed.",
           alreadyExists: "A group with these members already exists."
         };
-        const msg = errMessages[result.err] ?? `Failed to create group (${result.err}).`;
-        console.error(
-          "[CharlieSierra] createGroupConversation error:",
-          result.err
-        );
+        const errKey = extractErrText(result);
+        const msg = errMessages[errKey] ?? `Failed to create group (${errKey}).`;
+        console.error("[CharlieSierra] createGroupConversation error:", errKey);
         ue.error(msg);
         return;
       }
@@ -68429,7 +68917,7 @@ function useRevokeDevice() {
     mutationFn: async (deviceId) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.revokeDevice(deviceId);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     },
     onSuccess: () => {
@@ -68443,7 +68931,7 @@ function useGenerateDeviceSyncToken() {
     mutationFn: async (devicePublicKey) => {
       if (!actor) throw new Error("Not connected");
       const result = await actor.generateDeviceSyncToken(devicePublicKey);
-      if (result.__kind__ === "err") throw new Error(result.err);
+      if (result.__kind__ === "err") throw new Error(extractErrText(result));
       return result.ok;
     }
   });
@@ -70121,22 +70609,22 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-QZ5HQAv5.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-BY9-BXC8.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-DSgPJPMy.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-lrduiwmQ.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-CtW7zZRy.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-Cp8GPTfl.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-CC326fi9.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-B6aeYjAr.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-eOUdySh_.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-yoCGzvEX.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-Db8-1its.js"), true ? [] : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-B7DvTr_d.js"), true ? [] : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-DAmkXwPC.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-D9nN-AH2.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-C_XslpSI.js"), true ? __vite__mapDeps([12,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-Cdmzb_Ik.js"), true ? __vite__mapDeps([12,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-BL90oApT.js"), true ? __vite__mapDeps([13,6]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-CJkEVCd7.js"), true ? __vite__mapDeps([13,6]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})

@@ -224,6 +224,10 @@ export interface GroupRetentionPolicy {
     enabledBy?: UserId;
     convId: ConversationId;
 }
+export type Error_ = {
+    __kind__: "error";
+    error: string;
+};
 export interface CreateGroupRequest {
     initialMembers: Array<UserId>;
     displayName?: string;
@@ -824,13 +828,6 @@ export enum DataResidency {
     us = "us",
     apac = "apac",
     global = "global"
-}
-export enum Error_ {
-    forbidden = "forbidden",
-    alreadyExists = "alreadyExists",
-    invalidInput = "invalidInput",
-    notFound = "notFound",
-    unauthorized = "unauthorized"
 }
 export enum EscrowStatus {
     active = "active",
@@ -3568,17 +3565,15 @@ function from_candid_variant_n103(_uploadFile: (file: ExternalBlob) => Promise<U
     return "active" in value ? GroupStatus.active : "suspended" in value ? GroupStatus.suspended : value;
 }
 function from_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    forbidden: null;
-} | {
-    alreadyExists: null;
-} | {
-    invalidInput: null;
-} | {
-    notFound: null;
-} | {
-    unauthorized: null;
-}): Error_ {
-    return "forbidden" in value ? Error.forbidden : "alreadyExists" in value ? Error.alreadyExists : "invalidInput" in value ? Error.invalidInput : "notFound" in value ? Error.notFound : "unauthorized" in value ? Error.unauthorized : value;
+    error: string;
+}): {
+    __kind__: "error";
+    error: string;
+} {
+    return "error" in value ? {
+        __kind__: "error",
+        error: value.error
+    } : value;
 }
 function from_candid_variant_n114(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     ok: Uint8Array;

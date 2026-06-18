@@ -9,11 +9,11 @@ mixin (devicesState : DevicesLib.State) {
     req : T.AddDeviceRequest
   ) : async Common.Result<T.DeviceRecordPublic, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (req.deviceId.size() == 0 or req.deviceId.size() > 128) return #err(#invalidInput);
-    if (req.deviceLabel.size() == 0 or req.deviceLabel.size() > 100) return #err(#invalidInput);
-    if (req.publicKey.size() == 0 or req.publicKey.size() > 512) return #err(#invalidInput);
+    if (req.deviceId.size() == 0 or req.deviceId.size() > 128) return #err(#error("invalidInput"));
+    if (req.deviceLabel.size() == 0 or req.deviceLabel.size() > 100) return #err(#error("invalidInput"));
+    if (req.publicKey.size() == 0 or req.publicKey.size() > 512) return #err(#error("invalidInput"));
     DevicesLib.addDevice(devicesState, caller, req);
   };
 
@@ -27,9 +27,9 @@ mixin (devicesState : DevicesLib.State) {
     deviceId : Text
   ) : async Common.Result<(), Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (deviceId.size() == 0 or deviceId.size() > 128) return #err(#invalidInput);
+    if (deviceId.size() == 0 or deviceId.size() > 128) return #err(#error("invalidInput"));
     DevicesLib.revokeDevice(devicesState, caller, deviceId);
   };
 
@@ -39,9 +39,9 @@ mixin (devicesState : DevicesLib.State) {
     devicePublicKey : Blob
   ) : async Common.Result<Text, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (devicePublicKey.size() == 0 or devicePublicKey.size() > 512) return #err(#invalidInput);
+    if (devicePublicKey.size() == 0 or devicePublicKey.size() > 512) return #err(#error("invalidInput"));
     DevicesLib.generateDeviceSyncToken(devicesState, caller, devicePublicKey);
   };
 
@@ -52,11 +52,11 @@ mixin (devicesState : DevicesLib.State) {
     deviceLabel : Text,
   ) : async Common.Result<T.DeviceRecordPublic, Common.Error> {
     // Authorization: reject anonymous callers
-    if (caller.isAnonymous()) return #err(#unauthorized);
+    if (caller.isAnonymous()) return #err(#error("unauthorized"));
     // Input validation
-    if (token.size() == 0 or token.size() > 512) return #err(#invalidInput);
-    if (deviceId.size() == 0 or deviceId.size() > 128) return #err(#invalidInput);
-    if (deviceLabel.size() == 0 or deviceLabel.size() > 100) return #err(#invalidInput);
+    if (token.size() == 0 or token.size() > 512) return #err(#error("invalidInput"));
+    if (deviceId.size() == 0 or deviceId.size() > 128) return #err(#error("invalidInput"));
+    if (deviceLabel.size() == 0 or deviceLabel.size() > 100) return #err(#error("invalidInput"));
     DevicesLib.redeemDeviceSyncToken(devicesState, caller, token, deviceLabel, deviceId);
   };
 };

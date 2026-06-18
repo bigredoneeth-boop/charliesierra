@@ -181,38 +181,134 @@ export async function encryptMessage(
     key,
     plaintext,
   );
-  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  const ctBytes = new Uint8Array(encrypted);
+  // CRITICAL: Build the exact [12-byte IV] + [ciphertext + 16-byte tag] format
+  // in a single fresh contiguous Uint8Array.  We use new Uint8Array(12 + ctBytes.byteLength)
+  // then set() to guarantee byteOffset === 0 and a brand-new ArrayBuffer.
+  const fullPayload = new Uint8Array(12 + ctBytes.byteLength);
   fullPayload.set(iv, 0);
-  fullPayload.set(new Uint8Array(encrypted), 12);
+  fullPayload.set(ctBytes, 12);
+  // Belt-and-suspenders: force a fresh copy so callers can never receive a
+  // view with a non-zero byteOffset (defensive against future engine quirks).
+  const cleanResult = new Uint8Array(fullPayload);
+  // Hex prefix of first 32 bytes for sender/receiver log correlation
+  const hexPrefix = Array.from(
+    cleanResult.slice(0, Math.min(cleanResult.length, 32)),
+  )
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join(" ");
   console.log(
-    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV12 + data+tag)`,
+    `[E2EE ENCRYPT direct] total=${cleanResult.length}, iv=12, ct+tag=${ctBytes.byteLength}, byteOffset=${cleanResult.byteOffset}, hexPrefix=${hexPrefix}`,
   );
-  return fullPayload;
+  return cleanResult;
 }
 
 export async function decryptMessage(
   key: CryptoKey,
   input: Uint8Array | ArrayBuffer,
-): Promise<string> {
-  const blob = input instanceof Uint8Array ? input : new Uint8Array(input);
-  // IMPORTANT: always copy into a fresh zero-offset buffer first (Candid byteOffset fix)
-  const fresh = new Uint8Array(blob.length);
-  for (let i = 0; i < blob.length; i++) fresh[i] = blob[i];
-  if (fresh.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", fresh.length);
-    throw new Error("Blob too small");
+): Promise<string | null> {
+  try {
+    // STEP 1: Normalise to a Uint8Array view.
+    const blobView = toCleanUint8Array(
+      input instanceof Uint8Array ? input : new Uint8Array(input),
+    );
+
+    // STEP 2: Force a brand-new contiguous copy with byteOffset === 0.
+    // Candid/IDB paths can hand us Uint8Arrays that share a backing buffer
+    // with a non-zero offset.  WebCrypto (especially AES-GCM) is sensitive
+    // to this, so we copy element-by-element into a fresh buffer.
+    let clean = new Uint8Array(blobView.length);
+    for (let i = 0; i < blobView.length; i++) clean[i] = blobView[i];
+
+    // Extra safety: if the forced copy still has issues, force another
+    if (clean.byteOffset !== 0 || clean.length !== clean.buffer.byteLength) {
+      clean = new Uint8Array(clean);
+    }
+
+    console.log(
+      `[E2EE DECRYPT final] len=${clean.length}, offset=${clean.byteOffset}`,
+    );
+
+    if (clean.length < 28) {
+      console.error(
+        `[E2EE RECV] decryptMessage: blob too small (${clean.length} bytes, need >=28)`,
+      );
+      return null;
+    }
+
+    // Hex dump for diagnosis (first 64 bytes)
+    if (clean.length < 100) {
+      const hexPrefix = Array.from(clean.slice(0, Math.min(clean.length, 64)))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join(" ");
+      console.log(`[E2EE HEX BLOB] ${hexPrefix}`);
+    }
+
+    // STEP 3: Try skipping 0 to 16 bytes to handle Candid-serialized blobs.
+    // Candid may prepend 1-byte tag, 2-byte length, 4-byte length, 8-byte length,
+    // or other variant prefixes. We try a wider range (0-16) to be robust.
+    for (let skip = 0; skip <= 16; skip++) {
+      if (clean.length - skip < 28) continue;
+
+      const blob = clean.slice(skip);
+      const iv = blob.slice(0, 12);
+      const ciphertext = blob.slice(12);
+
+      try {
+        const decrypted = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv },
+          key,
+          ciphertext,
+        );
+        const text = new TextDecoder().decode(decrypted);
+        console.log(
+          `[E2EE DECRYPT SUCCESS] len=${clean.length} with prefix skip=${skip}`,
+        );
+        return text;
+      } catch (_e) {
+        // Continue trying next skip offset
+      }
+    }
+
+    // Diagnostic: brute-force possible IV positions if prefix skips failed (for small blobs)
+    if (clean.length <= 100) {
+      console.log(
+        `[E2EE DECRYPT DIAGNOSTIC] Brute-forcing IV positions for len=${clean.length}`,
+      );
+      for (let ivStart = 0; ivStart <= clean.length - 28; ivStart++) {
+        const iv = clean.slice(ivStart, ivStart + 12);
+        const ciphertext = clean.slice(ivStart + 12);
+        if (ciphertext.length < 16) continue;
+
+        try {
+          const decrypted = await crypto.subtle.decrypt(
+            { name: "AES-GCM", iv },
+            key,
+            ciphertext,
+          );
+          const text = new TextDecoder().decode(decrypted);
+          console.log(
+            `[E2EE DECRYPT SUCCESS via brute-force] IV start=${ivStart}, len=${clean.length}`,
+          );
+          return text;
+        } catch (_e) {
+          // continue trying next IV position
+        }
+      }
+    }
+
+    console.error(
+      `[E2EE DECRYPT] All attempts failed for len=${clean.length}. Full hex: ${Array.from(
+        clean,
+      )
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join(" ")}`,
+    );
+    return null;
+  } catch (err) {
+    console.error("[E2EE DECRYPT] Top-level error:", err);
+    return null;
   }
-  const iv = fresh.slice(0, 12);
-  const ciphertextAndTag = fresh.slice(12);
-  console.log(
-    `[E2EE RECV] Decrypting: total=${fresh.length}, IV=12, ciphertext+tag=${ciphertextAndTag.length}`,
-  );
-  const decrypted = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
-    key,
-    ciphertextAndTag,
-  );
-  return new TextDecoder().decode(decrypted);
 }
 
 // ── Blob (file) encryption ────────────────────────────────────────────────────
@@ -227,27 +323,36 @@ export async function encryptBlob(
     key,
     data,
   );
-  const fullPayload = new Uint8Array(12 + encrypted.byteLength);
+  const ctBytes = new Uint8Array(encrypted);
+  const fullPayload = new Uint8Array(12 + ctBytes.byteLength);
   fullPayload.set(iv, 0);
-  fullPayload.set(new Uint8Array(encrypted), 12);
+  fullPayload.set(ctBytes, 12);
+  // Force a fresh contiguous copy so byteOffset is guaranteed zero.
+  const cleanResult = new Uint8Array(fullPayload);
   console.log(
-    `[E2EE SEND] Produced full payload: ${fullPayload.length} bytes (IV=12 + data+tag)`,
+    `[E2EE SEND] encryptBlob: IV length=${iv.length}, ciphertext+tag length=${ctBytes.byteLength}, total=${cleanResult.length}, byteOffset=${cleanResult.byteOffset}`,
   );
-  return fullPayload;
+  return cleanResult;
 }
 
 export async function decryptBlob(
   key: CryptoKey,
   data: Uint8Array,
 ): Promise<ArrayBuffer> {
-  // CRITICAL: Element-by-element copy into a fresh zero-offset buffer FIRST.
-  // data may come from network/Candid decoding with a hidden internal byteOffset.
-  const fresh = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) fresh[i] = data[i];
+  // STEP 1: Normalise to a clean Uint8Array view.
+  const clean = toCleanUint8Array(data);
+
+  // STEP 2: Force a brand-new contiguous copy with byteOffset === 0.
+  const fresh = new Uint8Array(clean.length);
+  for (let i = 0; i < clean.length; i++) fresh[i] = clean[i];
+
   if (fresh.length < 28) {
-    console.error("[E2EE RECV] Blob too small:", fresh.length);
+    console.error(
+      `[E2EE RECV] decryptBlob: blob too small (${fresh.length} bytes, need >=28)`,
+    );
     throw new Error("Blob too small");
   }
+
   const iv = fresh.slice(0, 12);
   const ciphertextAndTag = fresh.slice(12);
   console.log(

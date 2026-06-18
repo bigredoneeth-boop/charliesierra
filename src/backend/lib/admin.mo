@@ -107,7 +107,7 @@ module {
       null // null = unrestricted
     } else {
       let ids = callerOrgIds(caller.toText(), memberships);
-      if (ids.isEmpty()) return #err(#unauthorized);
+      if (ids.isEmpty()) return #err(#error("unauthorized"));
       ?ids
     };
 
@@ -164,7 +164,7 @@ module {
       null
     } else {
       let ids = callerOrgIds(caller.toText(), memberships);
-      if (ids.isEmpty()) return #err(#unauthorized);
+      if (ids.isEmpty()) return #err(#error("unauthorized"));
       ?ids
     };
 
@@ -217,7 +217,7 @@ module {
   ) : Common.Result<(), Common.Error> {
     // Prevent lockout: block removal if it would leave zero admins
     if (s.adminPrincipals.size() <= 1 and s.adminPrincipals.contains(target)) {
-      return #err(#forbidden);
+      return #err(#error("forbidden"));
     };
     s.adminPrincipals.remove(target);
     #ok(());
@@ -300,7 +300,7 @@ module {
     owner  : Common.UserId,
   ) : Common.Result<(), Common.Error> {
     if (caller == owner) { #ok(()) }
-    else { #err(#unauthorized) };
+    else { #err(#error("unauthorized")) };
   };
 
   /// Returns true if the one-shot bootstrap has been completed.

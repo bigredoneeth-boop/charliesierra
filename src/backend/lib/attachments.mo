@@ -61,10 +61,10 @@ module {
     attachmentId : Common.AttachmentId,
   ) : Common.Result<(), Common.Error> {
     switch (s.attachments.get(attachmentId)) {
-      case null #err(#notFound);
+      case null #err(#error("notFound"));
       case (?att) {
         if (not Principal.equal(att.uploader, caller)) {
-          return #err(#forbidden);
+          return #err(#error("forbidden"));
         };
         s.attachments.remove(attachmentId);
         // Remove from per-message index

@@ -4,6 +4,7 @@ import {
 } from "@/backend";
 import type { MessageType } from "@/backend";
 import { useAuth } from "@/context/auth-context";
+import { extractErrText } from "@/lib/error-utils";
 import {
   clearDeliveredMessages,
   enqueuePendingMessage,
@@ -92,7 +93,7 @@ export function useOfflineQueue(): UseOfflineQueueResult {
         });
 
         if (result.__kind__ === "err") {
-          throw new Error(result.err ?? "Send failed");
+          throw new Error(extractErrText(result));
         }
 
         await markDelivered(msg.id);

@@ -170,11 +170,7 @@ export interface DeviceRecordPublic {
   'lastSeen' : Timestamp,
 }
 export type EcdhPublicKey = Uint8Array;
-export type Error = { 'forbidden' : null } |
-  { 'alreadyExists' : null } |
-  { 'invalidInput' : null } |
-  { 'notFound' : null } |
-  { 'unauthorized' : null };
+export type Error = { 'error' : string };
 export interface EscrowAccessGrant {
   'grantTimestamp' : Timestamp,
   'grantId' : bigint,
