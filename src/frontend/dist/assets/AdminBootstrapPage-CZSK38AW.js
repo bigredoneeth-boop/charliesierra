@@ -1,5 +1,5 @@
-import { g as useActor, l as useNavigate, r as reactExports, j as jsxRuntimeExports, a0 as LoaderCircle, a1 as Shield, a2 as CircleCheck, w as Label, I as Input, B as Button, a3 as Principal, $ as createActor } from "./index-DkCtzEA0.js";
-import { S as ShieldAlert } from "./shield-alert-Chtm8_Yw.js";
+import { g as useActor, l as useNavigate, r as reactExports, j as jsxRuntimeExports, a0 as LoaderCircle, a1 as Shield, a2 as CircleCheck, w as Label, I as Input, B as Button, a3 as Principal, $ as createActor } from "./index-C7k4kqMq.js";
+import { S as ShieldAlert } from "./shield-alert-DvRLkTqD.js";
 function AdminBootstrapPage() {
   const { actor, isFetching } = useActor(createActor);
   const navigate = useNavigate();

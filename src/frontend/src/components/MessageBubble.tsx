@@ -429,8 +429,7 @@ function useDecryptedContent(
 }
 
 /** Parse encrypted metadata JSON from a non-text message's encryptedContent */
-/** Parse encrypted metadata JSON from a non-text message's encryptedContent */
-function _useAttachmentMeta(
+function useAttachmentMeta(
   message: MessagePublic,
   conversationId: string,
 ): { name?: string; size?: number; mime?: string; storageKey?: string } {
@@ -901,7 +900,7 @@ function useAttachmentBlob(
 }
 
 /** Inline image thumbnail with click-to-expand */
-function _ImageAttachment({
+function ImageAttachment({
   message,
   conversationId,
   meta,
@@ -1030,7 +1029,7 @@ function _ImageAttachment({
 }
 
 /** File/video/audio download button */
-function _FileAttachment({
+function FileAttachment({
   message,
   conversationId,
   meta,
@@ -1124,6 +1123,75 @@ function _FileAttachment({
   );
 }
 
+/**
+ * Orchestrates attachment rendering for non-text messages.
+ *
+ * For image/video/audio/file messages, the message's `encryptedContent`
+ * decrypts to a JSON metadata string `{name,size,mime,storageKey,encrypted:true}`.
+ * This component parses that metadata and delegates to `ImageAttachment`
+ * (image preview) or `FileAttachment` (download link with filename + size).
+ *
+ * If the metadata cannot be parsed (decryption still pending, failed, or the
+ * plaintext is not valid JSON), a fallback is shown: the filename (if known
+ * from the message type) plus "Encrypted file — download to decrypt".
+ */
+function AttachmentContent({
+  message,
+  conversationId,
+}: {
+  message: MessagePublic;
+  conversationId: string;
+}) {
+  const meta = useAttachmentMeta(message, conversationId);
+  const hasMeta = !!(meta.name || meta.mime || meta.storageKey);
+
+  // Fallback label derived from the message type when metadata is unavailable.
+  const fallbackLabel =
+    message.messageType === MessageType.image
+      ? "Image"
+      : message.messageType === MessageType.video
+        ? "Video"
+        : message.messageType === MessageType.audio
+          ? "Voice note"
+          : "File";
+
+  if (!hasMeta) {
+    // Metadata not yet resolved (decryption pending/failed or not JSON).
+    // Show a non-interactive fallback so the bubble is never empty or raw JSON.
+    return (
+      <div
+        className="flex items-center gap-2 text-sm opacity-70"
+        data-ocid="message.attachment_fallback"
+      >
+        <FileText size={16} className="flex-shrink-0" />
+        <span className="truncate max-w-[160px]">{fallbackLabel}</span>
+        <span className="text-xs opacity-60">
+          Encrypted file — download to decrypt
+        </span>
+      </div>
+    );
+  }
+
+  if (message.messageType === MessageType.image) {
+    return (
+      <ImageAttachment
+        message={message}
+        conversationId={conversationId}
+        meta={meta}
+      />
+    );
+  }
+
+  // video / audio / file all render as a download link with filename + size.
+  return (
+    <FileAttachment
+      message={message}
+      conversationId={conversationId}
+      meta={meta}
+    />
+  );
+}
+
 export function MessageBubble({
   message,
   isMine,
@@ -1155,8 +1223,6 @@ export function MessageBubble({
 
   const [showReactions, setShowReactions] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const [isRekeying, setIsRekeying] = useState(false);
   const [rekeyStatus, setRekeyStatus] = useState<
     "idle" | "rekeying" | "success" | "error"
@@ -1371,9 +1437,13 @@ export function MessageBubble({
       );
     }
 
-    if ((message as unknown as { attachment?: Attachment }).attachment) {
-      return renderAttachment(
-        (message as unknown as { attachment: Attachment }).attachment,
+    // Non-text messages (image/video/audio/file) carry an encrypted JSON
+    // metadata payload in `encryptedContent` — NOT an `attachment` field on
+    // MessagePublic. Delegate to AttachmentContent, which parses the metadata
+    // and renders an image preview or a download link with filename + size.
+    if (message.messageType !== MessageType.text) {
+      return (
+        <AttachmentContent message={message} conversationId={conversationId} />
       );
     }
 
@@ -1383,111 +1453,6 @@ export function MessageBubble({
           (message as unknown as { content?: string }).content ||
           ""}
       </p>
-    );
-  };
-
-  const renderAttachment = (attachment: Attachment) => {
-    const isImage = attachment.mimeType?.startsWith("image/");
-    const isVideo = attachment.mimeType?.startsWith("video/");
-    const isAudio = attachment.mimeType?.startsWith("audio/");
-
-    if (isImage) {
-      return (
-        <div className="relative">
-          {!imageLoaded && !imageError && (
-            <div className="w-48 h-48 bg-gray-200 animate-pulse rounded-lg" />
-          )}
-          {imageError ? (
-            <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-              <ImageIcon className="w-8 h-8 text-gray-400" />
-              <span className="text-xs text-gray-400 ml-2">Failed to load</span>
-            </div>
-          ) : (
-            <img
-              src={(attachment as unknown as { url?: string }).url || ""}
-              alt={
-                (attachment as unknown as { fileName?: string }).fileName ||
-                "Image"
-              }
-              className={`max-w-48 max-h-48 rounded-lg object-cover cursor-pointer transition-opacity ${
-                imageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-              tabIndex={0}
-              role="button"
-              aria-label="Expand image"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  window.open(
-                    (attachment as unknown as { url?: string }).url || "#",
-                    "_blank",
-                  );
-                }
-              }}
-              onClick={() =>
-                window.open(
-                  (attachment as unknown as { url?: string }).url || "#",
-                  "_blank",
-                )
-              }
-            />
-          )}
-        </div>
-      );
-    }
-
-    if (isVideo) {
-      return (
-        <video
-          aria-label="Video message"
-          src={(attachment as unknown as { url?: string }).url || ""}
-          controls
-          className="max-w-48 max-h-48 rounded-lg"
-          preload="metadata"
-        />
-      );
-    }
-
-    if (isAudio) {
-      return (
-        <audio
-          aria-label="Audio message"
-          src={(attachment as unknown as { url?: string }).url || ""}
-          controls
-          className="max-w-48"
-          preload="metadata"
-        />
-      );
-    }
-
-    // Generic file
-    return (
-      <a
-        href={(attachment as unknown as { url?: string }).url || "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
-      >
-        <FileText className="w-5 h-5 text-gray-500" />
-        <div className="flex flex-col">
-          <span className="text-sm font-medium truncate max-w-[150px]">
-            {(attachment as unknown as { fileName?: string }).fileName ||
-              "File"}
-          </span>
-          {(attachment as unknown as { fileSize?: number }).fileSize && (
-            <span className="text-xs text-gray-400">
-              {((size: number) => {
-                if (size < 1024) return `${size} B`;
-                if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
-                return `${(size / (1024 * 1024)).toFixed(1)} MB`;
-              })((attachment as unknown as { fileSize: number }).fileSize)}
-            </span>
-          )}
-        </div>
-        <Download className="w-4 h-4 text-gray-400 ml-auto" />
-      </a>
     );
   };
 

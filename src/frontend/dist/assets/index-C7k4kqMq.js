@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-DmFoUHka.js","assets/card-BWpnYjwM.js","assets/AdminOrganizationsPage-B0sReS_r.js","assets/AdminStatusBadge-BE1h2Cxb.js","assets/ConfirmDialog-DXdxXD31.js","assets/pencil-T3n1_BR5.js","assets/shield-alert-Chtm8_Yw.js","assets/AdminUsersPage-HREUpBcz.js","assets/funnel-qO1jajis.js","assets/AdminGroupsPage-DpdyyeI3.js","assets/AdminAuditPage-DjIZjeBP.js","assets/AdminRetentionPoliciesPage-is1d8-zr.js","assets/AdminSettingsPage-B2el44gU.js","assets/AdminBootstrapPage-Doi8CyaF.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-DuZHT8iE.js","assets/card-ClhAkqXF.js","assets/AdminOrganizationsPage-_4692y4f.js","assets/AdminStatusBadge-CWBQtPGb.js","assets/ConfirmDialog-tA-ZAcXV.js","assets/pencil-BaRDbCau.js","assets/shield-alert-DvRLkTqD.js","assets/AdminUsersPage-Sn-i27EI.js","assets/funnel-BAJYRJAr.js","assets/AdminGroupsPage-BOgFv_2d.js","assets/AdminAuditPage-ChxxVhTe.js","assets/AdminRetentionPoliciesPage-CcyEOwg0.js","assets/AdminSettingsPage-Cv1xk_K_.js","assets/AdminBootstrapPage-CZSK38AW.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -39879,6 +39879,20 @@ async function setDecryptionStatus(convId, msgId, ciphertext, status) {
     console.error("[DECRYPT CACHE] setDecryptionStatus failed:", err);
   }
 }
+async function clearDecryptionStatus(convId, msgId) {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(STATUS_STORE, "readwrite");
+    const store = tx.objectStore(STATUS_STORE);
+    store.delete(cacheKey(convId, msgId));
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch (err) {
+    console.error("[DECRYPT CACHE] clearDecryptionStatus failed:", err);
+  }
+}
 async function clearConversationStatusCache(convId) {
   try {
     const db = await openDB$1();
@@ -39905,6 +39919,20 @@ async function clearConversationStatusCache(convId) {
     );
   } catch (err) {
     console.error("[DECRYPT CACHE] clearConversationStatusCache failed:", err);
+  }
+}
+async function clearAllStatusCache() {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(STATUS_STORE, "readwrite");
+    tx.objectStore(STATUS_STORE).clear();
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    console.log("[DECRYPT CACHE] Status cache cleared");
+  } catch (err) {
+    console.error("[DECRYPT CACHE] clearAllStatusCache failed:", err);
   }
 }
 function getDecryptedMessageSync(convId, msgId, ciphertext) {
@@ -40332,8 +40360,10 @@ const decryptionCache = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   cleanupMessageCache,
   clearAllCache,
   clearAllFileCache,
+  clearAllStatusCache,
   clearConversationCache,
   clearConversationStatusCache,
+  clearDecryptionStatus,
   clearFileCacheForConversation,
   getDecryptedFile,
   getDecryptedMessage,
@@ -57007,6 +57037,556 @@ function useDecryptedContent(msg, conversationId, onRekey) {
     isPermanentlyUnreadable
   };
 }
+function useAttachmentMeta(message, conversationId) {
+  const { decryptFromConv } = useCrypto();
+  const [meta, setMeta] = reactExports.useState({});
+  reactExports.useEffect(() => {
+    if (message.messageType === MessageType.text) return;
+    if (meta.name || meta.mime) return;
+    let cancelled = false;
+    const RETRY_DELAYS = [0, 500, 500, 1e3, 2e3];
+    let cumulative = 0;
+    const timers = [];
+    for (const delay2 of RETRY_DELAYS) {
+      cumulative += delay2;
+      const t = setTimeout(async () => {
+        if (cancelled) return;
+        const raw = message.encryptedContent;
+        const fresh = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+        const result = await decryptFromConv(conversationId, fresh);
+        if (cancelled || !result) return;
+        try {
+          const parsed = JSON.parse(result);
+          setMeta(parsed);
+          cancelled = true;
+          if (parsed.storageKey) {
+            console.log(
+              `[E2EE FILE RECV] Metadata decoded: name=${parsed.name}, mime=${parsed.mime}, storageKey=${parsed.storageKey.slice(0, 12)}...`
+            );
+          } else {
+            console.log(
+              `[E2EE FILE RECV] Metadata decoded (no inline storageKey — will use attachment record): name=${parsed.name}, mime=${parsed.mime}`
+            );
+          }
+        } catch {
+        }
+      }, cumulative);
+      timers.push(t);
+    }
+    return () => {
+      cancelled = true;
+      for (const t of timers) clearTimeout(t);
+    };
+  }, [message, conversationId, decryptFromConv, meta.name, meta.mime]);
+  return meta;
+}
+function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStorageKey, retryKey = 0) {
+  const { backend, downloadBlob } = useBackend();
+  const { getConversationKey, getDecryptedFileWithCache } = useCrypto();
+  const [blobUrl, setBlobUrl] = reactExports.useState(null);
+  const [loading, setLoading] = reactExports.useState(false);
+  const [fetchError, setFetchError] = reactExports.useState(false);
+  const blobUrlRef = reactExports.useRef(null);
+  const fetchingRef = reactExports.useRef(false);
+  const doneRef = reactExports.useRef(false);
+  const decryptedRef = reactExports.useRef(false);
+  reactExports.useEffect(() => {
+    if (metaStorageKey && !doneRef.current && !decryptedRef.current) {
+      fetchingRef.current = false;
+    }
+  }, [metaStorageKey]);
+  reactExports.useEffect(() => {
+    if (decryptedRef.current) {
+      console.log(
+        "[E2EE FILE RECV] Already decrypted — skipping re-run of download effect"
+      );
+      return;
+    }
+    fetchingRef.current = false;
+    doneRef.current = false;
+    decryptedRef.current = false;
+    if (!backend || !downloadBlob) return;
+    if (message.messageType === MessageType.text) return;
+    let cancelled = false;
+    setLoading(true);
+    setFetchError(false);
+    setBlobUrl(null);
+    const KEY_POLL_DELAYS = [0, 1500];
+    let cumulative = 0;
+    const timers = [];
+    for (let attemptIndex = 0; attemptIndex < KEY_POLL_DELAYS.length; attemptIndex++) {
+      const delay2 = KEY_POLL_DELAYS[attemptIndex];
+      cumulative += delay2;
+      const t = setTimeout(async () => {
+        if (cancelled || doneRef.current) return;
+        const convKey = getConversationKey(conversationId);
+        if (!convKey) {
+          console.log(
+            `[E2EE FILE RECV] Key not ready for convId=${conversationId}, will retry...`
+          );
+          if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
+            if (!cancelled) {
+              setFetchError(true);
+              setLoading(false);
+            }
+          }
+          return;
+        }
+        if (fetchingRef.current || decryptedRef.current) {
+          console.log(
+            decryptedRef.current ? "[E2EE FILE RECV] Already decrypted, skipping duplicate download" : "[E2EE FILE RECV] fetchingRef already locked, skipping"
+          );
+          return;
+        }
+        fetchingRef.current = true;
+        console.log(
+          `[E2EE FILE RECV] Starting download for storageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 16)}...` : "pending"}`
+        );
+        try {
+          let isShortKey = function(k2) {
+            if (k2 == null) return false;
+            return k2.startsWith("sha256:") && k2.length >= 20 && k2.length <= MAX_KEY_LEN;
+          };
+          const attachments = await backend.getMessageAttachments(message.id);
+          if (cancelled) return;
+          const MAX_KEY_LEN = 200;
+          const backendKey = attachments.length > 0 ? attachments[0].storageKey : null;
+          const inlineKey = metaStorageKey ?? null;
+          const backendKeyLen = (backendKey == null ? void 0 : backendKey.length) ?? 0;
+          const inlineKeyLen = (inlineKey == null ? void 0 : inlineKey.length) ?? 0;
+          console.log(
+            `[E2EE FILE RECV] Available keys - short: ${backendKeyLen}, meta: ${inlineKeyLen}`
+          );
+          const candidateA = backendKey && backendKey.length <= MAX_KEY_LEN ? backendKey : null;
+          const candidateB = inlineKey && inlineKey.length <= MAX_KEY_LEN ? inlineKey : null;
+          let resolvedStorageKeyHex = null;
+          if (isShortKey(candidateA)) {
+            resolvedStorageKeyHex = candidateA;
+          } else if (isShortKey(candidateB)) {
+            resolvedStorageKeyHex = candidateB;
+          } else {
+            const a2 = candidateA;
+            const b2 = candidateB;
+            if (a2 && a2.length >= 20) {
+              resolvedStorageKeyHex = b2 && b2.length >= 20 ? a2.length <= b2.length ? a2 : b2 : a2;
+            } else {
+              resolvedStorageKeyHex = b2 && b2.length >= 20 ? b2 : null;
+            }
+          }
+          if (!resolvedStorageKeyHex) {
+            if (attachments.length === 0) {
+              console.log(
+                `[E2EE FILE RECV] No attachment record yet (attempt ${attemptIndex + 1}/${KEY_POLL_DELAYS.length}), will retry`
+              );
+            } else {
+              console.warn(
+                `[E2EE FILE RECV] Both keys exceed 200 chars — backendKey=${backendKeyLen}, inlineKey=${inlineKeyLen}. Cannot download.`
+              );
+            }
+            if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
+              console.warn(
+                `[E2EE FILE RECV] No valid short storageKey found for msgId=${message.id} after all retries`
+              );
+              if (!cancelled) {
+                setFetchError(true);
+                setLoading(false);
+              }
+            }
+            return;
+          }
+          console.log(
+            `[E2EE FILE RECV] Selected final storageKey (length: ${resolvedStorageKeyHex.length}): ${resolvedStorageKeyHex}`
+          );
+          const storageKey2 = resolvedStorageKeyHex;
+          let encryptedBytes;
+          try {
+            encryptedBytes = await downloadBlob(storageKey2);
+          } catch (fetchErr) {
+            const errMsg = fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
+            console.error(
+              `[E2EE FILE RECV] Fetch failed: ${errMsg} storageKey=${storageKey2.slice(0, 16)}...`
+            );
+            if (fetchErr && typeof fetchErr.nonRetriable === "boolean" && fetchErr.nonRetriable === true) {
+              console.error(
+                "[E2EE FILE RECV] Non-retriable error — aborting all retries."
+              );
+              cancelled = true;
+              for (const t2 of timers) clearTimeout(t2);
+              if (!cancelled) {
+                setFetchError(true);
+                setLoading(false);
+              }
+              setFetchError(true);
+              setLoading(false);
+            }
+            throw fetchErr;
+          }
+          if (cancelled) return;
+          console.log(
+            `[E2EE FILE RECV] Downloaded raw encrypted data: ${encryptedBytes.length} bytes`
+          );
+          let blob;
+          let url;
+          const attachmentRecord = attachments.length > 0 ? attachments[0] : null;
+          const originalFileName = metaStorageKey || "unknown";
+          if ((attachmentRecord == null ? void 0 : attachmentRecord.storageKey) && getDecryptedFileWithCache) {
+            const cachedBlob = await getDecryptedFileWithCache(
+              attachmentRecord.storageKey,
+              encryptedBytes,
+              mimeType || "application/octet-stream",
+              conversationId,
+              convKey,
+              originalFileName
+            );
+            if (cachedBlob) {
+              blob = cachedBlob;
+              url = URL.createObjectURL(blob);
+              console.log(
+                `[E2EE FILE RECV] Decrypted via cache: ${blob.size} bytes`
+              );
+            } else {
+              const { decryptBlob: decryptBlob2 } = await __vitePreload(async () => {
+                const { decryptBlob: decryptBlob3 } = await Promise.resolve().then(() => crypto$1);
+                return { decryptBlob: decryptBlob3 };
+              }, true ? void 0 : void 0);
+              const decryptedArrayBuffer = await decryptBlob2(
+                convKey,
+                encryptedBytes
+              );
+              if (cancelled) return;
+              blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
+                type: mimeType || "application/octet-stream"
+              });
+              url = URL.createObjectURL(blob);
+              console.log(
+                `[E2EE FILE RECV] Decrypted successfully (fallback): ${decryptedArrayBuffer.byteLength} bytes`
+              );
+              const { hashCiphertext: hashCiphertext2 } = await __vitePreload(async () => {
+                const { hashCiphertext: hashCiphertext3 } = await Promise.resolve().then(() => decryptionCache);
+                return { hashCiphertext: hashCiphertext3 };
+              }, true ? void 0 : void 0);
+              await setDecryptedFile(attachmentRecord.storageKey, blob, {
+                mimeType: mimeType || "application/octet-stream",
+                originalFileName,
+                size: blob.size,
+                ciphertextHash: hashCiphertext2(encryptedBytes),
+                conversationId
+              });
+            }
+          } else {
+            const { decryptBlob: decryptBlob2 } = await __vitePreload(async () => {
+              const { decryptBlob: decryptBlob3 } = await Promise.resolve().then(() => crypto$1);
+              return { decryptBlob: decryptBlob3 };
+            }, true ? void 0 : void 0);
+            const decryptedArrayBuffer = await decryptBlob2(
+              convKey,
+              encryptedBytes
+            );
+            if (cancelled) return;
+            blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
+              type: mimeType || "application/octet-stream"
+            });
+            url = URL.createObjectURL(blob);
+            console.log(
+              `[E2EE FILE RECV] Decrypted successfully: ${decryptedArrayBuffer.byteLength} bytes`
+            );
+            if (attachmentRecord == null ? void 0 : attachmentRecord.storageKey) {
+              const { hashCiphertext: hashCiphertext2 } = await __vitePreload(async () => {
+                const { hashCiphertext: hashCiphertext3 } = await Promise.resolve().then(() => decryptionCache);
+                return { hashCiphertext: hashCiphertext3 };
+              }, true ? void 0 : void 0);
+              await setDecryptedFile(attachmentRecord.storageKey, blob, {
+                mimeType: mimeType || "application/octet-stream",
+                originalFileName,
+                size: blob.size,
+                ciphertextHash: hashCiphertext2(encryptedBytes),
+                conversationId
+              });
+            }
+          }
+          console.log("[E2EE FILE RECV] Created object URL for display");
+          if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
+          blobUrlRef.current = url;
+          decryptedRef.current = true;
+          setBlobUrl(url);
+          setLoading(false);
+          setFetchError(false);
+          console.log(
+            "[E2EE FILE RECV] UI Update: Successfully replaced spinner with file content"
+          );
+          doneRef.current = true;
+          console.log(
+            `[E2EE FILE RECV] Download succeeded for storageKey=${storageKey2.slice(0, 16)}...`
+          );
+          cancelled = true;
+          for (const t2 of timers) clearTimeout(t2);
+        } catch (err) {
+          console.error("[E2EE FILE RECV] Error during download/decrypt:", err);
+          if (!cancelled) {
+            setFetchError(true);
+            setLoading(false);
+          }
+        } finally {
+          fetchingRef.current = false;
+        }
+      }, cumulative);
+      timers.push(t);
+    }
+    return () => {
+      cancelled = true;
+      for (const t of timers) clearTimeout(t);
+    };
+  }, [
+    // retryKey triggers a full re-run and ref reset when the user taps "retry".
+    retryKey,
+    enabled,
+    backend,
+    downloadBlob,
+    message.id,
+    message.messageType,
+    conversationId,
+    getConversationKey,
+    mimeType,
+    metaStorageKey
+  ]);
+  reactExports.useEffect(() => {
+    return () => {
+      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
+    };
+  }, []);
+  return { blobUrl, loading, fetchError };
+}
+function ImageAttachment({
+  message,
+  conversationId,
+  meta
+}) {
+  const [expanded, setExpanded] = reactExports.useState(false);
+  const [retryCount, setRetryCount] = reactExports.useState(0);
+  const prevBlobUrlRef = reactExports.useRef(null);
+  const { blobUrl, loading, fetchError } = useAttachmentBlob(
+    message,
+    conversationId,
+    true,
+    meta.mime ?? "application/octet-stream",
+    meta.storageKey,
+    retryCount
+  );
+  reactExports.useEffect(() => {
+    if (blobUrl && !prevBlobUrlRef.current) {
+      console.log("[FileUI] Replaced loading spinner with actual content");
+      console.log(
+        "[FileUI] Final render: Displaying decrypted file with object URL"
+      );
+    }
+    prevBlobUrlRef.current = blobUrl;
+  }, [blobUrl]);
+  if (fetchError) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        className: "flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer",
+        onClick: () => setRetryCount((c2) => c2 + 1),
+        "aria-label": "Retry loading image",
+        "data-ocid": "message.image_retry_button",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Failed to load — tap to retry" })
+        ]
+      }
+    );
+  }
+  if (loading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading image..." })
+    ] });
+  }
+  if (!blobUrl) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: meta.name ?? "Image" })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        type: "button",
+        className: "block rounded-lg overflow-hidden max-w-[200px] cursor-pointer hover:opacity-90 transition-opacity",
+        onClick: () => setExpanded(true),
+        "aria-label": "View full image",
+        "data-ocid": "message.image_preview",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "img",
+          {
+            src: blobUrl,
+            alt: meta.name ?? "Image attachment",
+            className: "w-full h-auto object-cover",
+            style: { maxHeight: 160 }
+          }
+        )
+      }
+    ),
+    meta.name && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-1 max-w-[200px]", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs opacity-60 truncate flex-1", children: meta.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "a",
+        {
+          href: blobUrl,
+          download: meta.name ?? "image",
+          className: "opacity-70 hover:opacity-100 transition-opacity flex-shrink-0",
+          "aria-label": `Download ${meta.name ?? "image"}`,
+          "data-ocid": "message.download_button",
+          onClick: (e) => e.stopPropagation(),
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 14 })
+        }
+      )
+    ] }),
+    expanded && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        className: "fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out relative",
+        onClick: () => setExpanded(false),
+        "aria-label": "Close image",
+        "data-ocid": "message.image_lightbox",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              src: blobUrl,
+              alt: meta.name ?? "Image attachment",
+              className: "max-w-full max-h-full rounded-lg shadow-2xl object-contain"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "a",
+            {
+              href: blobUrl,
+              download: meta.name ?? "image",
+              className: "absolute top-4 right-4 flex items-center gap-2 bg-black/60 hover:bg-black/80 text-white text-sm px-3 py-2 rounded-lg transition-colors",
+              "aria-label": `Download ${meta.name ?? "image"}`,
+              "data-ocid": "message.lightbox_download_button",
+              onClick: (e) => e.stopPropagation(),
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 16 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Download" })
+              ]
+            }
+          )
+        ]
+      }
+    )
+  ] });
+}
+function FileAttachment({
+  message,
+  conversationId,
+  meta
+}) {
+  const [retryCount, setRetryCount] = reactExports.useState(0);
+  const prevBlobUrlRef = reactExports.useRef(null);
+  const { blobUrl, loading, fetchError } = useAttachmentBlob(
+    message,
+    conversationId,
+    true,
+    meta.mime ?? "application/octet-stream",
+    meta.storageKey,
+    retryCount
+  );
+  reactExports.useEffect(() => {
+    if (blobUrl && !prevBlobUrlRef.current) {
+      console.log("[FileUI] Replaced loading spinner with actual content");
+      console.log(
+        "[FileUI] Final render: Displaying decrypted file with object URL"
+      );
+    }
+    prevBlobUrlRef.current = blobUrl;
+  }, [blobUrl]);
+  const icon = message.messageType === MessageType.video ? /* @__PURE__ */ jsxRuntimeExports.jsx(Video, { size: 16 }) : message.messageType === MessageType.audio ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base leading-none", children: "🎤" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { size: 16 });
+  const label = meta.name ?? (message.messageType === MessageType.video ? "Video" : message.messageType === MessageType.audio ? "Voice note" : "File");
+  if (fetchError) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        className: "flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer",
+        onClick: () => setRetryCount((c2) => c2 + 1),
+        "aria-label": `Retry loading ${label}`,
+        "data-ocid": "message.file_retry_button",
+        children: [
+          icon,
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs opacity-50", children: "Failed to load — tap to retry" })
+        ]
+      }
+    );
+  }
+  if (loading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading..." })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm", children: [
+    icon,
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
+    blobUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "a",
+      {
+        href: blobUrl,
+        download: meta.name ?? label,
+        className: "opacity-70 hover:opacity-100 transition-opacity",
+        "aria-label": `Download ${label}`,
+        "data-ocid": "message.download_button",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 14 })
+      }
+    ) : null
+  ] });
+}
+function AttachmentContent({
+  message,
+  conversationId
+}) {
+  const meta = useAttachmentMeta(message, conversationId);
+  const hasMeta = !!(meta.name || meta.mime || meta.storageKey);
+  const fallbackLabel = message.messageType === MessageType.image ? "Image" : message.messageType === MessageType.video ? "Video" : message.messageType === MessageType.audio ? "Voice note" : "File";
+  if (!hasMeta) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex items-center gap-2 text-sm opacity-70",
+        "data-ocid": "message.attachment_fallback",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { size: 16, className: "flex-shrink-0" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[160px]", children: fallbackLabel }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs opacity-60", children: "Encrypted file — download to decrypt" })
+        ]
+      }
+    );
+  }
+  if (message.messageType === MessageType.image) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ImageAttachment,
+      {
+        message,
+        conversationId,
+        meta
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    FileAttachment,
+    {
+      message,
+      conversationId,
+      meta
+    }
+  );
+}
 function MessageBubble({
   message,
   isMine,
@@ -57037,8 +57617,6 @@ function MessageBubble({
   } = useDecryptedContent(message, conversationId, onRekey);
   const [showReactions, setShowReactions] = reactExports.useState(false);
   const [showMenu, setShowMenu] = reactExports.useState(false);
-  const [imageLoaded, setImageLoaded] = reactExports.useState(false);
-  const [imageError, setImageError] = reactExports.useState(false);
   const [isRekeying, setIsRekeying] = reactExports.useState(false);
   const [rekeyStatus, setRekeyStatus] = reactExports.useState("idle");
   const menuRef = reactExports.useRef(null);
@@ -57192,97 +57770,10 @@ function MessageBubble({
         )
       ] });
     }
-    if (message.attachment) {
-      return renderAttachment(
-        message.attachment
-      );
+    if (message.messageType !== MessageType.text) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(AttachmentContent, { message, conversationId });
     }
     return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm whitespace-pre-wrap break-words", children: decryptedContent || message.content || "" });
-  };
-  const renderAttachment = (attachment) => {
-    var _a3, _b3, _c2;
-    const isImage2 = (_a3 = attachment.mimeType) == null ? void 0 : _a3.startsWith("image/");
-    const isVideo = (_b3 = attachment.mimeType) == null ? void 0 : _b3.startsWith("video/");
-    const isAudio = (_c2 = attachment.mimeType) == null ? void 0 : _c2.startsWith("audio/");
-    if (isImage2) {
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
-        !imageLoaded && !imageError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-48 h-48 bg-gray-200 animate-pulse rounded-lg" }),
-        imageError ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { className: "w-8 h-8 text-gray-400" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-gray-400 ml-2", children: "Failed to load" })
-        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "img",
-          {
-            src: attachment.url || "",
-            alt: attachment.fileName || "Image",
-            className: `max-w-48 max-h-48 rounded-lg object-cover cursor-pointer transition-opacity ${imageLoaded ? "opacity-100" : "opacity-0"}`,
-            onLoad: () => setImageLoaded(true),
-            onError: () => setImageError(true),
-            tabIndex: 0,
-            role: "button",
-            "aria-label": "Expand image",
-            onKeyDown: (e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                window.open(
-                  attachment.url || "#",
-                  "_blank"
-                );
-              }
-            },
-            onClick: () => window.open(
-              attachment.url || "#",
-              "_blank"
-            )
-          }
-        )
-      ] });
-    }
-    if (isVideo) {
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "video",
-        {
-          "aria-label": "Video message",
-          src: attachment.url || "",
-          controls: true,
-          className: "max-w-48 max-h-48 rounded-lg",
-          preload: "metadata"
-        }
-      );
-    }
-    if (isAudio) {
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "audio",
-        {
-          "aria-label": "Audio message",
-          src: attachment.url || "",
-          controls: true,
-          className: "max-w-48",
-          preload: "metadata"
-        }
-      );
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "a",
-      {
-        href: attachment.url || "#",
-        target: "_blank",
-        rel: "noopener noreferrer",
-        className: "flex items-center gap-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "w-5 h-5 text-gray-500" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium truncate max-w-[150px]", children: attachment.fileName || "File" }),
-            attachment.fileSize && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-gray-400", children: ((size2) => {
-              if (size2 < 1024) return `${size2} B`;
-              if (size2 < 1024 * 1024) return `${(size2 / 1024).toFixed(1)} KB`;
-              return `${(size2 / (1024 * 1024)).toFixed(1)} MB`;
-            })(attachment.fileSize) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { className: "w-4 h-4 text-gray-400 ml-auto" })
-        ]
-      }
-    );
   };
   const renderReactions = () => {
     const reactions = message.reactions;
@@ -71906,22 +72397,22 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DmFoUHka.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DuZHT8iE.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-B0sReS_r.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-_4692y4f.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-HREUpBcz.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-DpdyyeI3.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DjIZjeBP.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-Sn-i27EI.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-BOgFv_2d.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-ChxxVhTe.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-DFJFODzR.js"), true ? [] : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-Dp4oZ_hx.js"), true ? [] : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-is1d8-zr.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-CcyEOwg0.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-B2el44gU.js"), true ? __vite__mapDeps([12,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-Cv1xk_K_.js"), true ? __vite__mapDeps([12,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-Doi8CyaF.js"), true ? __vite__mapDeps([13,6]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-CZSK38AW.js"), true ? __vite__mapDeps([13,6]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
