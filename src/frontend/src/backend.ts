@@ -781,17 +781,23 @@ export enum AuditEventType {
     memberRoleChanged = "memberRoleChanged"
 }
 export enum AuditExportEventType {
+    legalHoldRemoved = "legalHoldRemoved",
     memberSuspended = "memberSuspended",
     userInvited = "userInvited",
     retentionEnabled = "retentionEnabled",
     memberAdded = "memberAdded",
+    policyExpiryCheckPerformed = "policyExpiryCheckPerformed",
+    retentionPolicyUpdated = "retentionPolicyUpdated",
     retentionDisabled = "retentionDisabled",
     groupMemberRemoved = "groupMemberRemoved",
     orgCreated = "orgCreated",
+    orgDeleted = "orgDeleted",
     escrowAccessGranted = "escrowAccessGranted",
     callInitiated = "callInitiated",
     keyRecoveryApproved = "keyRecoveryApproved",
     keyRecoveryInitiated = "keyRecoveryInitiated",
+    memberReactivated = "memberReactivated",
+    legalHoldPlaced = "legalHoldPlaced",
     keyRecoveryCompleted = "keyRecoveryCompleted",
     keyRecoveryRejected = "keyRecoveryRejected",
     adminAction = "adminAction",
@@ -799,10 +805,13 @@ export enum AuditExportEventType {
     escrowEnrolled = "escrowEnrolled",
     messageSent = "messageSent",
     escrowRevoked = "escrowRevoked",
+    policyReportExported = "policyReportExported",
     userRegistered = "userRegistered",
     memberRemoved = "memberRemoved",
+    retentionPolicyCreated = "retentionPolicyCreated",
     orgSuspended = "orgSuspended",
     userRemoved = "userRemoved",
+    orgUpdated = "orgUpdated",
     keyEscrowEnrolled = "keyEscrowEnrolled",
     memberRoleChanged = "memberRoleChanged"
 }
@@ -979,6 +988,10 @@ export interface backendInterface {
     getOrgUsers(req: GetOrgUsersRequest): Promise<Result_17>;
     getPendingNotifications(): Promise<Array<PendingNotification>>;
     getPlatformSettings(): Promise<PlatformSettings>;
+    getPurgeStatus(): Promise<{
+        purgeResetUsed: boolean;
+        purgeCompleted: boolean;
+    }>;
     getRecoveryDetails(requestId: bigint): Promise<Result_9>;
     getRecoveryRequests(orgId: OrgId | null, statusFilter: RecoveryRequestStatus | null): Promise<Result_16>;
     getRetentionMetadata(req: GetRetentionMetadataRequest): Promise<Result_15>;
@@ -989,6 +1002,7 @@ export interface backendInterface {
     getUserProfiles(userIds: Array<UserId>): Promise<Array<UserProfilePublic>>;
     getVAPIDPublicKey(): Promise<string>;
     hasDataResetBeenPerformed(): Promise<boolean>;
+    hasPurgeBeenPerformed(): Promise<boolean>;
     hasSuperAdmin(): Promise<boolean>;
     initiateKeyRecovery(targetUserId: UserId, targetDeviceId: string, reason: string, orgId: OrgId | null): Promise<Result_9>;
     inviteUser(req: InviteUserRequest): Promise<Result_14>;
@@ -1001,6 +1015,7 @@ export interface backendInterface {
     logPolicyExpiryCheck(): Promise<void>;
     logPolicyReportExported(orgFilter: OrgId | null): Promise<void>;
     markMessageRead(messageId: MessageId): Promise<Result_6>;
+    purgeAllMessagesAndConversations(): Promise<Result_8>;
     reactivateMember(orgId: OrgId, userId: UserId): Promise<Result_2>;
     redeemDeviceSyncToken(token: string, deviceId: string, deviceLabel: string): Promise<Result_11>;
     registerAttachment(req: RegisterAttachmentRequest): Promise<Result_10>;
@@ -1012,6 +1027,7 @@ export interface backendInterface {
     removeMember(orgId: OrgId, userId: UserId): Promise<Result_2>;
     removeMemberFromGroup(req: RemoveMemberFromGroupRequest): Promise<Result_2>;
     resetAllTestData(): Promise<Result_8>;
+    resetPurgeFlag(): Promise<Result_6>;
     revokeDevice(deviceId: string): Promise<Result_6>;
     revokeKeyEscrow(deviceId: string, reason: string): Promise<Result_6>;
     sendMessage(req: SendMessageRequest): Promise<Result_7>;
@@ -1887,6 +1903,23 @@ export class Backend implements backendInterface {
             return from_candid_PlatformSettings_n188(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getPurgeStatus(): Promise<{
+        purgeResetUsed: boolean;
+        purgeCompleted: boolean;
+    }> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPurgeStatus();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPurgeStatus();
+            return result;
+        }
+    }
     async getRecoveryDetails(arg0: bigint): Promise<Result_9> {
         if (this.processError) {
             try {
@@ -2024,6 +2057,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.hasDataResetBeenPerformed();
+            return result;
+        }
+    }
+    async hasPurgeBeenPerformed(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.hasPurgeBeenPerformed();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.hasPurgeBeenPerformed();
             return result;
         }
     }
@@ -2195,6 +2242,20 @@ export class Backend implements backendInterface {
             return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
         }
     }
+    async purgeAllMessagesAndConversations(): Promise<Result_8> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.purgeAllMessagesAndConversations();
+                return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.purgeAllMessagesAndConversations();
+            return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async reactivateMember(arg0: OrgId, arg1: UserId): Promise<Result_2> {
         if (this.processError) {
             try {
@@ -2347,6 +2408,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.resetAllTestData();
             return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async resetPurgeFlag(): Promise<Result_6> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.resetPurgeFlag();
+                return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.resetPurgeFlag();
+            return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
         }
     }
     async revokeDevice(arg0: string): Promise<Result_6> {
@@ -5205,6 +5280,8 @@ function to_candid_variant_n58(_uploadFile: (file: ExternalBlob) => Promise<Uint
     } : value;
 }
 function to_candid_variant_n67(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: AuditExportEventType): {
+    legalHoldRemoved: null;
+} | {
     memberSuspended: null;
 } | {
     userInvited: null;
@@ -5213,11 +5290,17 @@ function to_candid_variant_n67(_uploadFile: (file: ExternalBlob) => Promise<Uint
 } | {
     memberAdded: null;
 } | {
+    policyExpiryCheckPerformed: null;
+} | {
+    retentionPolicyUpdated: null;
+} | {
     retentionDisabled: null;
 } | {
     groupMemberRemoved: null;
 } | {
     orgCreated: null;
+} | {
+    orgDeleted: null;
 } | {
     escrowAccessGranted: null;
 } | {
@@ -5226,6 +5309,10 @@ function to_candid_variant_n67(_uploadFile: (file: ExternalBlob) => Promise<Uint
     keyRecoveryApproved: null;
 } | {
     keyRecoveryInitiated: null;
+} | {
+    memberReactivated: null;
+} | {
+    legalHoldPlaced: null;
 } | {
     keyRecoveryCompleted: null;
 } | {
@@ -5241,19 +5328,27 @@ function to_candid_variant_n67(_uploadFile: (file: ExternalBlob) => Promise<Uint
 } | {
     escrowRevoked: null;
 } | {
+    policyReportExported: null;
+} | {
     userRegistered: null;
 } | {
     memberRemoved: null;
+} | {
+    retentionPolicyCreated: null;
 } | {
     orgSuspended: null;
 } | {
     userRemoved: null;
 } | {
+    orgUpdated: null;
+} | {
     keyEscrowEnrolled: null;
 } | {
     memberRoleChanged: null;
 } {
-    return value == AuditExportEventType.memberSuspended ? {
+    return value == AuditExportEventType.legalHoldRemoved ? {
+        legalHoldRemoved: null
+    } : value == AuditExportEventType.memberSuspended ? {
         memberSuspended: null
     } : value == AuditExportEventType.userInvited ? {
         userInvited: null
@@ -5261,12 +5356,18 @@ function to_candid_variant_n67(_uploadFile: (file: ExternalBlob) => Promise<Uint
         retentionEnabled: null
     } : value == AuditExportEventType.memberAdded ? {
         memberAdded: null
+    } : value == AuditExportEventType.policyExpiryCheckPerformed ? {
+        policyExpiryCheckPerformed: null
+    } : value == AuditExportEventType.retentionPolicyUpdated ? {
+        retentionPolicyUpdated: null
     } : value == AuditExportEventType.retentionDisabled ? {
         retentionDisabled: null
     } : value == AuditExportEventType.groupMemberRemoved ? {
         groupMemberRemoved: null
     } : value == AuditExportEventType.orgCreated ? {
         orgCreated: null
+    } : value == AuditExportEventType.orgDeleted ? {
+        orgDeleted: null
     } : value == AuditExportEventType.escrowAccessGranted ? {
         escrowAccessGranted: null
     } : value == AuditExportEventType.callInitiated ? {
@@ -5275,6 +5376,10 @@ function to_candid_variant_n67(_uploadFile: (file: ExternalBlob) => Promise<Uint
         keyRecoveryApproved: null
     } : value == AuditExportEventType.keyRecoveryInitiated ? {
         keyRecoveryInitiated: null
+    } : value == AuditExportEventType.memberReactivated ? {
+        memberReactivated: null
+    } : value == AuditExportEventType.legalHoldPlaced ? {
+        legalHoldPlaced: null
     } : value == AuditExportEventType.keyRecoveryCompleted ? {
         keyRecoveryCompleted: null
     } : value == AuditExportEventType.keyRecoveryRejected ? {
@@ -5289,14 +5394,20 @@ function to_candid_variant_n67(_uploadFile: (file: ExternalBlob) => Promise<Uint
         messageSent: null
     } : value == AuditExportEventType.escrowRevoked ? {
         escrowRevoked: null
+    } : value == AuditExportEventType.policyReportExported ? {
+        policyReportExported: null
     } : value == AuditExportEventType.userRegistered ? {
         userRegistered: null
     } : value == AuditExportEventType.memberRemoved ? {
         memberRemoved: null
+    } : value == AuditExportEventType.retentionPolicyCreated ? {
+        retentionPolicyCreated: null
     } : value == AuditExportEventType.orgSuspended ? {
         orgSuspended: null
     } : value == AuditExportEventType.userRemoved ? {
         userRemoved: null
+    } : value == AuditExportEventType.orgUpdated ? {
+        orgUpdated: null
     } : value == AuditExportEventType.keyEscrowEnrolled ? {
         keyEscrowEnrolled: null
     } : value == AuditExportEventType.memberRoleChanged ? {

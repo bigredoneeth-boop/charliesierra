@@ -166,17 +166,23 @@ export const Result_1 = IDL.Variant({
 export const AttachmentId = IDL.Nat;
 export const Result_2 = IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text });
 export const AuditExportEventType = IDL.Variant({
+  'legalHoldRemoved' : IDL.Null,
   'memberSuspended' : IDL.Null,
   'userInvited' : IDL.Null,
   'retentionEnabled' : IDL.Null,
   'memberAdded' : IDL.Null,
+  'policyExpiryCheckPerformed' : IDL.Null,
+  'retentionPolicyUpdated' : IDL.Null,
   'retentionDisabled' : IDL.Null,
   'groupMemberRemoved' : IDL.Null,
   'orgCreated' : IDL.Null,
+  'orgDeleted' : IDL.Null,
   'escrowAccessGranted' : IDL.Null,
   'callInitiated' : IDL.Null,
   'keyRecoveryApproved' : IDL.Null,
   'keyRecoveryInitiated' : IDL.Null,
+  'memberReactivated' : IDL.Null,
+  'legalHoldPlaced' : IDL.Null,
   'keyRecoveryCompleted' : IDL.Null,
   'keyRecoveryRejected' : IDL.Null,
   'adminAction' : IDL.Null,
@@ -184,10 +190,13 @@ export const AuditExportEventType = IDL.Variant({
   'escrowEnrolled' : IDL.Null,
   'messageSent' : IDL.Null,
   'escrowRevoked' : IDL.Null,
+  'policyReportExported' : IDL.Null,
   'userRegistered' : IDL.Null,
   'memberRemoved' : IDL.Null,
+  'retentionPolicyCreated' : IDL.Null,
   'orgSuspended' : IDL.Null,
   'userRemoved' : IDL.Null,
+  'orgUpdated' : IDL.Null,
   'keyEscrowEnrolled' : IDL.Null,
   'memberRoleChanged' : IDL.Null,
 });
@@ -837,6 +846,16 @@ export const idlService = IDL.Service({
   'getOrgUsers' : IDL.Func([GetOrgUsersRequest], [Result_17], ['query']),
   'getPendingNotifications' : IDL.Func([], [IDL.Vec(PendingNotification)], []),
   'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
+  'getPurgeStatus' : IDL.Func(
+      [],
+      [
+        IDL.Record({
+          'purgeResetUsed' : IDL.Bool,
+          'purgeCompleted' : IDL.Bool,
+        }),
+      ],
+      ['query'],
+    ),
   'getRecoveryDetails' : IDL.Func([IDL.Nat], [Result_9], []),
   'getRecoveryRequests' : IDL.Func(
       [IDL.Opt(OrgId), IDL.Opt(RecoveryRequestStatus)],
@@ -875,6 +894,7 @@ export const idlService = IDL.Service({
     ),
   'getVAPIDPublicKey' : IDL.Func([], [IDL.Text], []),
   'hasDataResetBeenPerformed' : IDL.Func([], [IDL.Bool], ['query']),
+  'hasPurgeBeenPerformed' : IDL.Func([], [IDL.Bool], ['query']),
   'hasSuperAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'initiateKeyRecovery' : IDL.Func(
       [UserId, IDL.Text, IDL.Text, IDL.Opt(OrgId)],
@@ -895,6 +915,7 @@ export const idlService = IDL.Service({
   'logPolicyExpiryCheck' : IDL.Func([], [], []),
   'logPolicyReportExported' : IDL.Func([IDL.Opt(OrgId)], [], []),
   'markMessageRead' : IDL.Func([MessageId], [Result_6], []),
+  'purgeAllMessagesAndConversations' : IDL.Func([], [Result_8], []),
   'reactivateMember' : IDL.Func([OrgId, UserId], [Result_2], []),
   'redeemDeviceSyncToken' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text],
@@ -918,6 +939,7 @@ export const idlService = IDL.Service({
       [],
     ),
   'resetAllTestData' : IDL.Func([], [Result_8], []),
+  'resetPurgeFlag' : IDL.Func([], [Result_6], []),
   'revokeDevice' : IDL.Func([IDL.Text], [Result_6], []),
   'revokeKeyEscrow' : IDL.Func([IDL.Text, IDL.Text], [Result_6], []),
   'sendMessage' : IDL.Func([SendMessageRequest], [Result_7], []),
@@ -1117,17 +1139,23 @@ export const idlFactory = ({ IDL }) => {
   const AttachmentId = IDL.Nat;
   const Result_2 = IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text });
   const AuditExportEventType = IDL.Variant({
+    'legalHoldRemoved' : IDL.Null,
     'memberSuspended' : IDL.Null,
     'userInvited' : IDL.Null,
     'retentionEnabled' : IDL.Null,
     'memberAdded' : IDL.Null,
+    'policyExpiryCheckPerformed' : IDL.Null,
+    'retentionPolicyUpdated' : IDL.Null,
     'retentionDisabled' : IDL.Null,
     'groupMemberRemoved' : IDL.Null,
     'orgCreated' : IDL.Null,
+    'orgDeleted' : IDL.Null,
     'escrowAccessGranted' : IDL.Null,
     'callInitiated' : IDL.Null,
     'keyRecoveryApproved' : IDL.Null,
     'keyRecoveryInitiated' : IDL.Null,
+    'memberReactivated' : IDL.Null,
+    'legalHoldPlaced' : IDL.Null,
     'keyRecoveryCompleted' : IDL.Null,
     'keyRecoveryRejected' : IDL.Null,
     'adminAction' : IDL.Null,
@@ -1135,10 +1163,13 @@ export const idlFactory = ({ IDL }) => {
     'escrowEnrolled' : IDL.Null,
     'messageSent' : IDL.Null,
     'escrowRevoked' : IDL.Null,
+    'policyReportExported' : IDL.Null,
     'userRegistered' : IDL.Null,
     'memberRemoved' : IDL.Null,
+    'retentionPolicyCreated' : IDL.Null,
     'orgSuspended' : IDL.Null,
     'userRemoved' : IDL.Null,
+    'orgUpdated' : IDL.Null,
     'keyEscrowEnrolled' : IDL.Null,
     'memberRoleChanged' : IDL.Null,
   });
@@ -1771,6 +1802,16 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
+    'getPurgeStatus' : IDL.Func(
+        [],
+        [
+          IDL.Record({
+            'purgeResetUsed' : IDL.Bool,
+            'purgeCompleted' : IDL.Bool,
+          }),
+        ],
+        ['query'],
+      ),
     'getRecoveryDetails' : IDL.Func([IDL.Nat], [Result_9], []),
     'getRecoveryRequests' : IDL.Func(
         [IDL.Opt(OrgId), IDL.Opt(RecoveryRequestStatus)],
@@ -1809,6 +1850,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getVAPIDPublicKey' : IDL.Func([], [IDL.Text], []),
     'hasDataResetBeenPerformed' : IDL.Func([], [IDL.Bool], ['query']),
+    'hasPurgeBeenPerformed' : IDL.Func([], [IDL.Bool], ['query']),
     'hasSuperAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'initiateKeyRecovery' : IDL.Func(
         [UserId, IDL.Text, IDL.Text, IDL.Opt(OrgId)],
@@ -1833,6 +1875,7 @@ export const idlFactory = ({ IDL }) => {
     'logPolicyExpiryCheck' : IDL.Func([], [], []),
     'logPolicyReportExported' : IDL.Func([IDL.Opt(OrgId)], [], []),
     'markMessageRead' : IDL.Func([MessageId], [Result_6], []),
+    'purgeAllMessagesAndConversations' : IDL.Func([], [Result_8], []),
     'reactivateMember' : IDL.Func([OrgId, UserId], [Result_2], []),
     'redeemDeviceSyncToken' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text],
@@ -1864,6 +1907,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'resetAllTestData' : IDL.Func([], [Result_8], []),
+    'resetPurgeFlag' : IDL.Func([], [Result_6], []),
     'revokeDevice' : IDL.Func([IDL.Text], [Result_6], []),
     'revokeKeyEscrow' : IDL.Func([IDL.Text, IDL.Text], [Result_6], []),
     'sendMessage' : IDL.Func([SendMessageRequest], [Result_7], []),

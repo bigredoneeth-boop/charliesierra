@@ -508,4 +508,8 @@ export const mockBackend: backendInterface = {
     ok: 'Test data reset successfully',
   }),
   getAllUserProfiles: async () => [aliceProfile, bobProfile],
+  hasPurgeBeenPerformed: async () => false,
+  getPurgeStatus: async () => ({ purgeResetUsed: false, purgeCompleted: false }),
+  resetPurgeFlag: async () => ({ __kind__: "ok" as const, ok: null }),
+  purgeAllMessagesAndConversations: async () => ({ __kind__: "ok", ok: "Purge completed successfully" }),
 };

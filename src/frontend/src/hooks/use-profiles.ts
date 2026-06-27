@@ -50,11 +50,31 @@ export function useUpdateProfile() {
     }) => {
       if (!actor) throw new Error("Not connected");
 
+      // CRITICAL: Backend rejects undefined fields with invalidInput.
+      // Always send all three fields as valid values.
+      const safeEncryptedDisplayName =
+        encryptedDisplayName instanceof Uint8Array
+          ? encryptedDisplayName
+          : new Uint8Array(0);
+      const safeEcdhPublicKey =
+        ecdhPublicKey instanceof Uint8Array ? ecdhPublicKey : new Uint8Array(0);
+      const safeEncryptedAvatarKey = encryptedAvatarKey ?? "";
+
+      console.log(
+        "[useUpdateProfile] Sending update with:",
+        "encryptedDisplayName.length=",
+        safeEncryptedDisplayName.length,
+        "ecdhPublicKey.length=",
+        safeEcdhPublicKey.length,
+        "encryptedAvatarKey.length=",
+        safeEncryptedAvatarKey.length,
+      );
+
       // Attempt the update; if the user isn't registered yet, auto-register first.
       let result = await actor.updateUserProfile({
-        encryptedDisplayName,
-        ecdhPublicKey,
-        encryptedAvatarKey,
+        encryptedDisplayName: safeEncryptedDisplayName,
+        ecdhPublicKey: safeEcdhPublicKey,
+        encryptedAvatarKey: safeEncryptedAvatarKey,
       });
 
       // Log the EXACT raw result for debugging before any parsing.
@@ -72,15 +92,19 @@ export function useUpdateProfile() {
 
       if (isNotFound) {
         // User not registered yet — auto-register with the provided credentials.
-        if (!encryptedDisplayName || !ecdhPublicKey) {
+        // Use safe values (already computed above)
+        if (
+          safeEncryptedDisplayName.length === 0 ||
+          safeEcdhPublicKey.length === 0
+        ) {
           throw new Error(
             "Profile not found on server. Please reload and try again.",
           );
         }
         const regResult = await actor.registerUser({
-          encryptedDisplayName,
-          ecdhPublicKey,
-          encryptedAvatarKey,
+          encryptedDisplayName: safeEncryptedDisplayName,
+          ecdhPublicKey: safeEcdhPublicKey,
+          encryptedAvatarKey: safeEncryptedAvatarKey,
         });
         // Log the EXACT raw registration result for debugging.
         console.log(
@@ -92,9 +116,9 @@ export function useUpdateProfile() {
           // alreadyExists means someone else registered while we were trying —
           // retry the update once more.
           result = await actor.updateUserProfile({
-            encryptedDisplayName,
-            ecdhPublicKey,
-            encryptedAvatarKey,
+            encryptedDisplayName: safeEncryptedDisplayName,
+            ecdhPublicKey: safeEcdhPublicKey,
+            encryptedAvatarKey: safeEncryptedAvatarKey,
           });
           console.log(
             "[useUpdateProfile] Retry updateUserProfile raw result:",

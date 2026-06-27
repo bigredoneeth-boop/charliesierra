@@ -25,6 +25,7 @@ interface MessageInputProps {
   conversationId: ConversationId;
   onMessageSent?: () => void;
   isKeyReady?: boolean;
+  disabled?: boolean;
 }
 
 const TYPING_TTL = 5n; // 5 seconds typing TTL
@@ -37,6 +38,7 @@ export function MessageInput({
   conversationId,
   onMessageSent,
   isKeyReady = true,
+  disabled = false,
 }: MessageInputProps) {
   const { encryptForConv, isRestoringKeys, getConversationKey } = useCrypto();
   const { backend } = useBackend();
@@ -195,6 +197,19 @@ export function MessageInput({
         `[E2EE SEND] Encrypted message \u2192 full blob size = ${encryptedClean.length} bytes (IV=12, tag=16)`,
       );
 
+      // Defensive guard: never call backend with empty encrypted content or invalid conversationId
+      if (encryptedClean.length === 0) {
+        throw new Error(
+          "Encrypted message is empty — encryption produced a zero-length buffer.",
+        );
+      }
+      if (conversationId === 0n) {
+        throw new Error("Invalid conversation ID (0). Cannot send message.");
+      }
+      console.log(
+        `[E2EE SEND] Preparing backend.sendMessage — conversationId=${conversationId}, encryptedClean.length=${encryptedClean.length}`,
+      );
+
       // Offline: queue the message instead of sending
       if (!connection.isOnline) {
         await queueMessage({
@@ -259,7 +274,11 @@ export function MessageInput({
   // canSend controls the Send button. When isRestoringKeys is true, show a
   // loading state instead of allowing sends that will immediately fail.
   const canSend =
-    text.trim().length > 0 && !sending && !isRestoringKeys && isKeyReady;
+    text.trim().length > 0 &&
+    !sending &&
+    !isRestoringKeys &&
+    isKeyReady &&
+    !disabled;
 
   return (
     <div

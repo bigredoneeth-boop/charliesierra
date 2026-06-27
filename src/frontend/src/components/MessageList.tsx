@@ -106,14 +106,19 @@ function DecryptedQueuedBubble({
 }: {
   message: import("@/lib/offline-queue").PendingMessage;
   convIdStr: string;
-  decryptFromConv: (convId: string, blob: Uint8Array) => Promise<string | null>;
+  decryptFromConv: (
+    convId: string,
+    blob: Uint8Array,
+    msgId?: string,
+  ) => Promise<string | null>;
   onRetry: (id: string) => void;
   onDelete: (id: string) => void;
 }) {
   const [preview, setPreview] = useState<string | null>(null);
   useEffect(() => {
     let cancelled = false;
-    decryptFromConv(convIdStr, message.encryptedContent)
+    const msgId = message.id.toString();
+    decryptFromConv(convIdStr, message.encryptedContent, msgId)
       .then((text) => {
         if (!cancelled) setPreview(text);
       })
@@ -123,7 +128,7 @@ function DecryptedQueuedBubble({
     return () => {
       cancelled = true;
     };
-  }, [convIdStr, message.encryptedContent, decryptFromConv]);
+  }, [convIdStr, message.encryptedContent, decryptFromConv, message.id]);
   return (
     <QueuedMessageBubble
       message={message}
@@ -146,7 +151,7 @@ export const MessageList = memo(function MessageList({
   const { data: messages = [], isLoading } = useMessages(conversationId);
   const { pendingMessages, retryMessage, deleteQueuedMessage } =
     useOfflineQueue();
-  const { decryptFromConv } = useCrypto();
+  const { decryptFromConv, rekeyConversation } = useCrypto();
   const markRead = useMarkRead();
   // Stable ref to the mutate function — avoids re-creating the IntersectionObserver
   // on every mutation state change (which was causing canister overload).
@@ -431,6 +436,9 @@ export const MessageList = memo(function MessageList({
                   conversationId={conversationId.toString()}
                   myPrincipal={myPrincipal}
                   isGroup={isGroup}
+                  onRekey={async () => {
+                    return rekeyConversation(conversationId.toString());
+                  }}
                 />
               </div>
             );

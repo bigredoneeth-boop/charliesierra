@@ -77,17 +77,23 @@ export type AuditEventType = { 'legalHoldRemoved' : null } |
   { 'orgUpdated' : null } |
   { 'keyEscrowEnrolled' : null } |
   { 'memberRoleChanged' : null };
-export type AuditExportEventType = { 'memberSuspended' : null } |
+export type AuditExportEventType = { 'legalHoldRemoved' : null } |
+  { 'memberSuspended' : null } |
   { 'userInvited' : null } |
   { 'retentionEnabled' : null } |
   { 'memberAdded' : null } |
+  { 'policyExpiryCheckPerformed' : null } |
+  { 'retentionPolicyUpdated' : null } |
   { 'retentionDisabled' : null } |
   { 'groupMemberRemoved' : null } |
   { 'orgCreated' : null } |
+  { 'orgDeleted' : null } |
   { 'escrowAccessGranted' : null } |
   { 'callInitiated' : null } |
   { 'keyRecoveryApproved' : null } |
   { 'keyRecoveryInitiated' : null } |
+  { 'memberReactivated' : null } |
+  { 'legalHoldPlaced' : null } |
   { 'keyRecoveryCompleted' : null } |
   { 'keyRecoveryRejected' : null } |
   { 'adminAction' : null } |
@@ -95,10 +101,13 @@ export type AuditExportEventType = { 'memberSuspended' : null } |
   { 'escrowEnrolled' : null } |
   { 'messageSent' : null } |
   { 'escrowRevoked' : null } |
+  { 'policyReportExported' : null } |
   { 'userRegistered' : null } |
   { 'memberRemoved' : null } |
+  { 'retentionPolicyCreated' : null } |
   { 'orgSuspended' : null } |
   { 'userRemoved' : null } |
+  { 'orgUpdated' : null } |
   { 'keyEscrowEnrolled' : null } |
   { 'memberRoleChanged' : null };
 export type AuditExportFormat = { 'csv' : null } |
@@ -708,6 +717,10 @@ export interface _SERVICE {
   'getOrgUsers' : ActorMethod<[GetOrgUsersRequest], Result_17>,
   'getPendingNotifications' : ActorMethod<[], Array<PendingNotification>>,
   'getPlatformSettings' : ActorMethod<[], PlatformSettings>,
+  'getPurgeStatus' : ActorMethod<
+    [],
+    { 'purgeResetUsed' : boolean, 'purgeCompleted' : boolean }
+  >,
   'getRecoveryDetails' : ActorMethod<[bigint], Result_9>,
   'getRecoveryRequests' : ActorMethod<
     [[] | [OrgId], [] | [RecoveryRequestStatus]],
@@ -730,6 +743,7 @@ export interface _SERVICE {
   'getUserProfiles' : ActorMethod<[Array<UserId>], Array<UserProfilePublic>>,
   'getVAPIDPublicKey' : ActorMethod<[], string>,
   'hasDataResetBeenPerformed' : ActorMethod<[], boolean>,
+  'hasPurgeBeenPerformed' : ActorMethod<[], boolean>,
   'hasSuperAdmin' : ActorMethod<[], boolean>,
   'initiateKeyRecovery' : ActorMethod<
     [UserId, string, string, [] | [OrgId]],
@@ -748,6 +762,7 @@ export interface _SERVICE {
   'logPolicyExpiryCheck' : ActorMethod<[], undefined>,
   'logPolicyReportExported' : ActorMethod<[[] | [OrgId]], undefined>,
   'markMessageRead' : ActorMethod<[MessageId], Result_6>,
+  'purgeAllMessagesAndConversations' : ActorMethod<[], Result_8>,
   'reactivateMember' : ActorMethod<[OrgId, UserId], Result_2>,
   'redeemDeviceSyncToken' : ActorMethod<[string, string, string], Result_11>,
   'registerAttachment' : ActorMethod<[RegisterAttachmentRequest], Result_10>,
@@ -762,6 +777,7 @@ export interface _SERVICE {
     Result_2
   >,
   'resetAllTestData' : ActorMethod<[], Result_8>,
+  'resetPurgeFlag' : ActorMethod<[], Result_6>,
   'revokeDevice' : ActorMethod<[string], Result_6>,
   'revokeKeyEscrow' : ActorMethod<[string, string], Result_6>,
   'sendMessage' : ActorMethod<[SendMessageRequest], Result_7>,

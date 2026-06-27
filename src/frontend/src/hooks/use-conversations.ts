@@ -10,6 +10,10 @@ import type {
   MessageType,
   SendMessageRequest,
 } from "@/backend";
+import {
+  clearConversationCache,
+  clearFileCacheForConversation,
+} from "@/lib/decryption-cache";
 import { extractErrText } from "@/lib/error-utils";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -81,7 +85,7 @@ export function useConversation(id: bigint | null) {
       return actor.getConversation(id);
     },
     enabled: !!actor && !isFetching && id !== null,
-    staleTime: 60_000,
+    staleTime: 0,
     gcTime: 300_000,
     refetchInterval: 30_000,
     refetchIntervalInBackground: false,
@@ -216,6 +220,8 @@ export function useDeleteConversation() {
     mutationFn: async (conversationId: bigint) => {
       const convIdStr = conversationId.toString();
       addHiddenConvId(convIdStr);
+      await clearConversationCache(convIdStr);
+      await clearFileCacheForConversation(convIdStr);
       console.log(
         `[ChatDelete] User deleted chat locally only - convId=${convIdStr} (other user still has full history)`,
       );

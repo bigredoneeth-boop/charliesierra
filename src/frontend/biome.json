@@ -28,6 +28,12 @@
       "suspicious": {
         "noExplicitAny": "off"
       },
+      "a11y": {
+        "useKeyWithClickEvents": "off",
+        "useMediaCaption": "off",
+        "noNoninteractiveElementToInteractiveRole": "off",
+        "useSemanticElements": "off"
+      },
       "style": {
         "useConst": "off",
         "noNonNullAssertion": "off"

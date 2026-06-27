@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-BY9-BXC8.js","assets/card-BwKF9dLv.js","assets/AdminOrganizationsPage-lrduiwmQ.js","assets/AdminStatusBadge-Dih91Myo.js","assets/ConfirmDialog-VgE_kPk4.js","assets/pencil-C871CQI6.js","assets/shield-alert-DgF3vJyS.js","assets/AdminUsersPage-B6aeYjAr.js","assets/funnel-5z88ab7w.js","assets/AdminGroupsPage-eOUdySh_.js","assets/AdminAuditPage-yoCGzvEX.js","assets/AdminRetentionPoliciesPage-D9nN-AH2.js","assets/AdminSettingsPage-Cdmzb_Ik.js","assets/AdminBootstrapPage-CJkEVCd7.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DiscoverPage-DmFoUHka.js","assets/card-BWpnYjwM.js","assets/AdminOrganizationsPage-B0sReS_r.js","assets/AdminStatusBadge-BE1h2Cxb.js","assets/ConfirmDialog-DXdxXD31.js","assets/pencil-T3n1_BR5.js","assets/shield-alert-Chtm8_Yw.js","assets/AdminUsersPage-HREUpBcz.js","assets/funnel-qO1jajis.js","assets/AdminGroupsPage-DpdyyeI3.js","assets/AdminAuditPage-DjIZjeBP.js","assets/AdminRetentionPoliciesPage-is1d8-zr.js","assets/AdminSettingsPage-B2el44gU.js","assets/AdminBootstrapPage-Doi8CyaF.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -15236,7 +15236,7 @@ function wrap(value) {
   return newValue;
 }
 const unwrap = (value) => reverseTransformCache.get(value);
-function openDB$2(name, version, { blocked, upgrade, blocking, terminated } = {}) {
+function openDB$3(name, version, { blocked, upgrade, blocking, terminated } = {}) {
   const request2 = indexedDB.open(name, version);
   const openPromise = wrap(request2);
   if (upgrade) {
@@ -15305,7 +15305,7 @@ const _openDbStore = async (dbName = AUTH_DB_NAME, storeName = OBJECT_STORE_NAME
     localStorage.removeItem(KEY_STORAGE_DELEGATION);
     localStorage.removeItem(KEY_STORAGE_KEY);
   }
-  return await openDB$2(dbName, version, {
+  return await openDB$3(dbName, version, {
     upgrade: (database) => {
       if (database.objectStoreNames.contains(storeName)) {
         database.clear(storeName);
@@ -15340,7 +15340,7 @@ class IdbKeyVal {
    * @param {DBCreateOptions['version']} options.version version of the database. Increment to safely upgrade
    */
   static async create(options) {
-    const { dbName = AUTH_DB_NAME, storeName = OBJECT_STORE_NAME, version = DB_VERSION$2 } = options ?? {};
+    const { dbName = AUTH_DB_NAME, storeName = OBJECT_STORE_NAME, version = DB_VERSION$3 } = options ?? {};
     const db = await _openDbStore(dbName, storeName, version);
     return new IdbKeyVal(db, storeName);
   }
@@ -15376,7 +15376,7 @@ class IdbKeyVal {
 const KEY_STORAGE_KEY = "identity";
 const KEY_STORAGE_DELEGATION = "delegation";
 const KEY_VECTOR = "iv";
-const DB_VERSION$2 = 1;
+const DB_VERSION$3 = 1;
 const isBrowser$2 = typeof window !== "undefined";
 class LocalStorage {
   constructor(prefix2 = "ic-", _localStorage) {
@@ -28334,7 +28334,7 @@ function useId(deterministicId) {
   useLayoutEffect2(() => {
     setId((reactId) => reactId ?? String(count$1++));
   }, [deterministicId]);
-  return id2 ? `radix-${id2}` : "";
+  return deterministicId || (id2 ? `radix-${id2}` : "");
 }
 const sides = ["top", "right", "bottom", "left"];
 const min = Math.min;
@@ -33954,17 +33954,23 @@ const Result_1 = Variant({
 const AttachmentId = Nat;
 const Result_2 = Variant({ "ok": Null, "err": Text });
 const AuditExportEventType = Variant({
+  "legalHoldRemoved": Null,
   "memberSuspended": Null,
   "userInvited": Null,
   "retentionEnabled": Null,
   "memberAdded": Null,
+  "policyExpiryCheckPerformed": Null,
+  "retentionPolicyUpdated": Null,
   "retentionDisabled": Null,
   "groupMemberRemoved": Null,
   "orgCreated": Null,
+  "orgDeleted": Null,
   "escrowAccessGranted": Null,
   "callInitiated": Null,
   "keyRecoveryApproved": Null,
   "keyRecoveryInitiated": Null,
+  "memberReactivated": Null,
+  "legalHoldPlaced": Null,
   "keyRecoveryCompleted": Null,
   "keyRecoveryRejected": Null,
   "adminAction": Null,
@@ -33972,10 +33978,13 @@ const AuditExportEventType = Variant({
   "escrowEnrolled": Null,
   "messageSent": Null,
   "escrowRevoked": Null,
+  "policyReportExported": Null,
   "userRegistered": Null,
   "memberRemoved": Null,
+  "retentionPolicyCreated": Null,
   "orgSuspended": Null,
   "userRemoved": Null,
+  "orgUpdated": Null,
   "keyEscrowEnrolled": Null,
   "memberRoleChanged": Null
 });
@@ -34624,6 +34633,16 @@ Service({
   "getOrgUsers": Func([GetOrgUsersRequest], [Result_17], ["query"]),
   "getPendingNotifications": Func([], [Vec(PendingNotification)], []),
   "getPlatformSettings": Func([], [PlatformSettings], ["query"]),
+  "getPurgeStatus": Func(
+    [],
+    [
+      Record({
+        "purgeResetUsed": Bool,
+        "purgeCompleted": Bool
+      })
+    ],
+    ["query"]
+  ),
   "getRecoveryDetails": Func([Nat], [Result_9], []),
   "getRecoveryRequests": Func(
     [Opt(OrgId), Opt(RecoveryRequestStatus$1)],
@@ -34662,6 +34681,7 @@ Service({
   ),
   "getVAPIDPublicKey": Func([], [Text], []),
   "hasDataResetBeenPerformed": Func([], [Bool], ["query"]),
+  "hasPurgeBeenPerformed": Func([], [Bool], ["query"]),
   "hasSuperAdmin": Func([], [Bool], ["query"]),
   "initiateKeyRecovery": Func(
     [UserId, Text, Text, Opt(OrgId)],
@@ -34682,6 +34702,7 @@ Service({
   "logPolicyExpiryCheck": Func([], [], []),
   "logPolicyReportExported": Func([Opt(OrgId)], [], []),
   "markMessageRead": Func([MessageId], [Result_6], []),
+  "purgeAllMessagesAndConversations": Func([], [Result_8], []),
   "reactivateMember": Func([OrgId, UserId], [Result_2], []),
   "redeemDeviceSyncToken": Func(
     [Text, Text, Text],
@@ -34705,6 +34726,7 @@ Service({
     []
   ),
   "resetAllTestData": Func([], [Result_8], []),
+  "resetPurgeFlag": Func([], [Result_6], []),
   "revokeDevice": Func([Text], [Result_6], []),
   "revokeKeyEscrow": Func([Text, Text], [Result_6], []),
   "sendMessage": Func([SendMessageRequest], [Result_7], []),
@@ -34901,17 +34923,23 @@ const idlFactory = ({ IDL: IDL2 }) => {
   const AttachmentId2 = IDL2.Nat;
   const Result_210 = IDL2.Variant({ "ok": IDL2.Null, "err": IDL2.Text });
   const AuditExportEventType2 = IDL2.Variant({
+    "legalHoldRemoved": IDL2.Null,
     "memberSuspended": IDL2.Null,
     "userInvited": IDL2.Null,
     "retentionEnabled": IDL2.Null,
     "memberAdded": IDL2.Null,
+    "policyExpiryCheckPerformed": IDL2.Null,
+    "retentionPolicyUpdated": IDL2.Null,
     "retentionDisabled": IDL2.Null,
     "groupMemberRemoved": IDL2.Null,
     "orgCreated": IDL2.Null,
+    "orgDeleted": IDL2.Null,
     "escrowAccessGranted": IDL2.Null,
     "callInitiated": IDL2.Null,
     "keyRecoveryApproved": IDL2.Null,
     "keyRecoveryInitiated": IDL2.Null,
+    "memberReactivated": IDL2.Null,
+    "legalHoldPlaced": IDL2.Null,
     "keyRecoveryCompleted": IDL2.Null,
     "keyRecoveryRejected": IDL2.Null,
     "adminAction": IDL2.Null,
@@ -34919,10 +34947,13 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "escrowEnrolled": IDL2.Null,
     "messageSent": IDL2.Null,
     "escrowRevoked": IDL2.Null,
+    "policyReportExported": IDL2.Null,
     "userRegistered": IDL2.Null,
     "memberRemoved": IDL2.Null,
+    "retentionPolicyCreated": IDL2.Null,
     "orgSuspended": IDL2.Null,
     "userRemoved": IDL2.Null,
+    "orgUpdated": IDL2.Null,
     "keyEscrowEnrolled": IDL2.Null,
     "memberRoleChanged": IDL2.Null
   });
@@ -35554,6 +35585,16 @@ const idlFactory = ({ IDL: IDL2 }) => {
       []
     ),
     "getPlatformSettings": IDL2.Func([], [PlatformSettings2], ["query"]),
+    "getPurgeStatus": IDL2.Func(
+      [],
+      [
+        IDL2.Record({
+          "purgeResetUsed": IDL2.Bool,
+          "purgeCompleted": IDL2.Bool
+        })
+      ],
+      ["query"]
+    ),
     "getRecoveryDetails": IDL2.Func([IDL2.Nat], [Result_92], []),
     "getRecoveryRequests": IDL2.Func(
       [IDL2.Opt(OrgId2), IDL2.Opt(RecoveryRequestStatus2)],
@@ -35592,6 +35633,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     ),
     "getVAPIDPublicKey": IDL2.Func([], [IDL2.Text], []),
     "hasDataResetBeenPerformed": IDL2.Func([], [IDL2.Bool], ["query"]),
+    "hasPurgeBeenPerformed": IDL2.Func([], [IDL2.Bool], ["query"]),
     "hasSuperAdmin": IDL2.Func([], [IDL2.Bool], ["query"]),
     "initiateKeyRecovery": IDL2.Func(
       [UserId2, IDL2.Text, IDL2.Text, IDL2.Opt(OrgId2)],
@@ -35616,6 +35658,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "logPolicyExpiryCheck": IDL2.Func([], [], []),
     "logPolicyReportExported": IDL2.Func([IDL2.Opt(OrgId2)], [], []),
     "markMessageRead": IDL2.Func([MessageId2], [Result_62], []),
+    "purgeAllMessagesAndConversations": IDL2.Func([], [Result_82], []),
     "reactivateMember": IDL2.Func([OrgId2, UserId2], [Result_210], []),
     "redeemDeviceSyncToken": IDL2.Func(
       [IDL2.Text, IDL2.Text, IDL2.Text],
@@ -35647,6 +35690,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
       []
     ),
     "resetAllTestData": IDL2.Func([], [Result_82], []),
+    "resetPurgeFlag": IDL2.Func([], [Result_62], []),
     "revokeDevice": IDL2.Func([IDL2.Text], [Result_62], []),
     "revokeKeyEscrow": IDL2.Func([IDL2.Text, IDL2.Text], [Result_62], []),
     "sendMessage": IDL2.Func([SendMessageRequest2], [Result_72], []),
@@ -36662,6 +36706,20 @@ class Backend {
       return from_candid_PlatformSettings_n188(this._uploadFile, this._downloadFile, result);
     }
   }
+  async getPurgeStatus() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getPurgeStatus();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getPurgeStatus();
+      return result;
+    }
+  }
   async getRecoveryDetails(arg0) {
     if (this.processError) {
       try {
@@ -36799,6 +36857,20 @@ class Backend {
       }
     } else {
       const result = await this.actor.hasDataResetBeenPerformed();
+      return result;
+    }
+  }
+  async hasPurgeBeenPerformed() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.hasPurgeBeenPerformed();
+        return result;
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.hasPurgeBeenPerformed();
       return result;
     }
   }
@@ -36970,6 +37042,20 @@ class Backend {
       return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
+  async purgeAllMessagesAndConversations() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.purgeAllMessagesAndConversations();
+        return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.purgeAllMessagesAndConversations();
+      return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+    }
+  }
   async reactivateMember(arg0, arg1) {
     if (this.processError) {
       try {
@@ -37122,6 +37208,20 @@ class Backend {
     } else {
       const result = await this.actor.resetAllTestData();
       return from_candid_Result_8_n31(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async resetPurgeFlag() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.resetPurgeFlag();
+        return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
+      } catch (e) {
+        this.processError(e);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.resetPurgeFlag();
+      return from_candid_Result_6_n8(this._uploadFile, this._downloadFile, result);
     }
   }
   async revokeDevice(arg0) {
@@ -38809,7 +38909,9 @@ function to_candid_variant_n58(_uploadFile, _downloadFile, value) {
   } : value;
 }
 function to_candid_variant_n67(_uploadFile, _downloadFile, value) {
-  return value == "memberSuspended" ? {
+  return value == "legalHoldRemoved" ? {
+    legalHoldRemoved: null
+  } : value == "memberSuspended" ? {
     memberSuspended: null
   } : value == "userInvited" ? {
     userInvited: null
@@ -38817,12 +38919,18 @@ function to_candid_variant_n67(_uploadFile, _downloadFile, value) {
     retentionEnabled: null
   } : value == "memberAdded" ? {
     memberAdded: null
+  } : value == "policyExpiryCheckPerformed" ? {
+    policyExpiryCheckPerformed: null
+  } : value == "retentionPolicyUpdated" ? {
+    retentionPolicyUpdated: null
   } : value == "retentionDisabled" ? {
     retentionDisabled: null
   } : value == "groupMemberRemoved" ? {
     groupMemberRemoved: null
   } : value == "orgCreated" ? {
     orgCreated: null
+  } : value == "orgDeleted" ? {
+    orgDeleted: null
   } : value == "escrowAccessGranted" ? {
     escrowAccessGranted: null
   } : value == "callInitiated" ? {
@@ -38831,6 +38939,10 @@ function to_candid_variant_n67(_uploadFile, _downloadFile, value) {
     keyRecoveryApproved: null
   } : value == "keyRecoveryInitiated" ? {
     keyRecoveryInitiated: null
+  } : value == "memberReactivated" ? {
+    memberReactivated: null
+  } : value == "legalHoldPlaced" ? {
+    legalHoldPlaced: null
   } : value == "keyRecoveryCompleted" ? {
     keyRecoveryCompleted: null
   } : value == "keyRecoveryRejected" ? {
@@ -38845,14 +38957,20 @@ function to_candid_variant_n67(_uploadFile, _downloadFile, value) {
     messageSent: null
   } : value == "escrowRevoked" ? {
     escrowRevoked: null
+  } : value == "policyReportExported" ? {
+    policyReportExported: null
   } : value == "userRegistered" ? {
     userRegistered: null
   } : value == "memberRemoved" ? {
     memberRemoved: null
+  } : value == "retentionPolicyCreated" ? {
+    retentionPolicyCreated: null
   } : value == "orgSuspended" ? {
     orgSuspended: null
   } : value == "userRemoved" ? {
     userRemoved: null
+  } : value == "orgUpdated" ? {
+    orgUpdated: null
   } : value == "keyEscrowEnrolled" ? {
     keyEscrowEnrolled: null
   } : value == "memberRoleChanged" ? {
@@ -39082,10 +39200,22 @@ function useUpdateProfile() {
       encryptedAvatarKey
     }) => {
       if (!actor) throw new Error("Not connected");
+      const safeEncryptedDisplayName = encryptedDisplayName instanceof Uint8Array ? encryptedDisplayName : new Uint8Array(0);
+      const safeEcdhPublicKey = ecdhPublicKey instanceof Uint8Array ? ecdhPublicKey : new Uint8Array(0);
+      const safeEncryptedAvatarKey = encryptedAvatarKey ?? "";
+      console.log(
+        "[useUpdateProfile] Sending update with:",
+        "encryptedDisplayName.length=",
+        safeEncryptedDisplayName.length,
+        "ecdhPublicKey.length=",
+        safeEcdhPublicKey.length,
+        "encryptedAvatarKey.length=",
+        safeEncryptedAvatarKey.length
+      );
       let result = await actor.updateUserProfile({
-        encryptedDisplayName,
-        ecdhPublicKey,
-        encryptedAvatarKey
+        encryptedDisplayName: safeEncryptedDisplayName,
+        ecdhPublicKey: safeEcdhPublicKey,
+        encryptedAvatarKey: safeEncryptedAvatarKey
       });
       console.log(
         "[useUpdateProfile] Raw result from updateUserProfile:",
@@ -39093,15 +39223,15 @@ function useUpdateProfile() {
       );
       const isNotFound2 = result.__kind__ === "err" && (!result.err || extractErrText(result) === "notFound");
       if (isNotFound2) {
-        if (!encryptedDisplayName || !ecdhPublicKey) {
+        if (safeEncryptedDisplayName.length === 0 || safeEcdhPublicKey.length === 0) {
           throw new Error(
             "Profile not found on server. Please reload and try again."
           );
         }
         const regResult = await actor.registerUser({
-          encryptedDisplayName,
-          ecdhPublicKey,
-          encryptedAvatarKey
+          encryptedDisplayName: safeEncryptedDisplayName,
+          ecdhPublicKey: safeEcdhPublicKey,
+          encryptedAvatarKey: safeEncryptedAvatarKey
         });
         console.log(
           "[useUpdateProfile] Raw result from registerUser:",
@@ -39109,9 +39239,9 @@ function useUpdateProfile() {
         );
         if (regResult.__kind__ === "err") {
           result = await actor.updateUserProfile({
-            encryptedDisplayName,
-            ecdhPublicKey,
-            encryptedAvatarKey
+            encryptedDisplayName: safeEncryptedDisplayName,
+            ecdhPublicKey: safeEcdhPublicKey,
+            encryptedAvatarKey: safeEncryptedAvatarKey
           });
           console.log(
             "[useUpdateProfile] Retry updateUserProfile raw result:",
@@ -39223,8 +39353,8 @@ function useHasDisplayName() {
   if (profile && profile.encryptedDisplayName.length > 0) return true;
   return false;
 }
-const DB_NAME$1 = "cs_keystore";
-const DB_VERSION$1 = 1;
+const DB_NAME$2 = "cs_keystore";
+const DB_VERSION$2 = 1;
 const KEY_STORE = "keypairs";
 const IV_LENGTH = 12;
 const CONV_KEY_PREFIX = "convkey_";
@@ -39237,16 +39367,16 @@ function toCleanUint8Array(val) {
   }
   return Uint8Array.from(val);
 }
-function openDB$1() {
+function openDB$2() {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME$1, DB_VERSION$1);
+    const req = indexedDB.open(DB_NAME$2, DB_VERSION$2);
     req.onupgradeneeded = () => req.result.createObjectStore(KEY_STORE);
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });
 }
 async function dbGet(key) {
-  const db = await openDB$1();
+  const db = await openDB$2();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(KEY_STORE, "readonly");
     const req = tx.objectStore(KEY_STORE).get(key);
@@ -39255,7 +39385,7 @@ async function dbGet(key) {
   });
 }
 async function dbSet(key, value) {
-  const db = await openDB$1();
+  const db = await openDB$2();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(KEY_STORE, "readwrite");
     tx.objectStore(KEY_STORE).put(value, key);
@@ -39264,7 +39394,7 @@ async function dbSet(key, value) {
   });
 }
 async function dbGetKeysWithPrefix(prefix2) {
-  const db = await openDB$1();
+  const db = await openDB$2();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(KEY_STORE, "readonly");
     const store = tx.objectStore(KEY_STORE);
@@ -39294,7 +39424,12 @@ async function generateECDHKeyPair() {
 }
 async function exportPublicKey(key) {
   const spki = await crypto.subtle.exportKey("spki", key);
-  return new Uint8Array(spki);
+  const bytes = new Uint8Array(spki);
+  const fp = Array.from(bytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
+  console.log(
+    `[E2EE KEYS] exportPublicKey: fingerprint(first8)=${fp}, byteLength=${bytes.byteLength}`
+  );
+  return bytes;
 }
 async function getKeyFingerprint(key) {
   try {
@@ -39609,6 +39744,607 @@ const crypto$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProp
   unwrapKeyBytes,
   wrapKeyBytes
 }, Symbol.toStringTag, { value: "Module" }));
+const DB_NAME$1 = "cs_decrypted_messages";
+const DB_VERSION$1 = 4;
+const PLAINTEXT_STORE = "plaintext";
+const FILE_STORE = "files";
+const STATUS_STORE = "status";
+const MAX_ENTRIES = 5e3;
+const FILE_MAX_ENTRIES = 50;
+const FILE_MAX_BYTES = 100 * 1024 * 1024;
+const _memoryCache = /* @__PURE__ */ new Map();
+function openDB$1() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME$1, DB_VERSION$1);
+    req.onupgradeneeded = (event) => {
+      const db = req.result;
+      const oldVersion = event.oldVersion;
+      if (oldVersion < 4) {
+        if (!db.objectStoreNames.contains(STATUS_STORE)) {
+          const statusStore = db.createObjectStore(STATUS_STORE);
+          statusStore.createIndex("byUpdatedAt", "updatedAt", {
+            unique: false
+          });
+        }
+      }
+      if (oldVersion < 3) {
+        if (db.objectStoreNames.contains(PLAINTEXT_STORE)) {
+          db.deleteObjectStore(PLAINTEXT_STORE);
+        }
+        if (db.objectStoreNames.contains(FILE_STORE)) {
+          db.deleteObjectStore(FILE_STORE);
+        }
+      }
+      if (!db.objectStoreNames.contains(PLAINTEXT_STORE)) {
+        const plaintextStore = db.createObjectStore(PLAINTEXT_STORE);
+        plaintextStore.createIndex("byAccessedAt", "accessedAt", {
+          unique: false
+        });
+      }
+      if (!db.objectStoreNames.contains(FILE_STORE)) {
+        const fileStore = db.createObjectStore(FILE_STORE);
+        fileStore.createIndex("byAccessedAt", "accessedAt", { unique: false });
+        fileStore.createIndex("bySize", "size", { unique: false });
+      }
+      if (!db.objectStoreNames.contains(STATUS_STORE)) {
+        const statusStore = db.createObjectStore(STATUS_STORE);
+        statusStore.createIndex("byUpdatedAt", "updatedAt", {
+          unique: false
+        });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+function cacheKey(convId, msgId) {
+  return `${convId}:${msgId}`;
+}
+function hashCiphertext(blob) {
+  let h2 = 5381;
+  for (let i = 0; i < blob.length; i++) {
+    h2 = (h2 << 5) + h2 + blob[i];
+  }
+  return (h2 >>> 0).toString(16);
+}
+async function getDecryptionAttempts(convId, msgId) {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(STATUS_STORE, "readonly");
+    const store = tx.objectStore(STATUS_STORE);
+    const req = store.get(cacheKey(convId, msgId));
+    return new Promise((resolve, reject) => {
+      req.onsuccess = () => {
+        const entry = req.result;
+        if (!entry) {
+          resolve(0);
+          return;
+        }
+        resolve(entry.attempts ?? 0);
+      };
+      req.onerror = () => reject(req.error);
+    });
+  } catch (err) {
+    console.error("[DECRYPT CACHE] getDecryptionAttempts failed:", err);
+    return 0;
+  }
+}
+async function getDecryptionStatus(convId, msgId) {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(STATUS_STORE, "readonly");
+    const store = tx.objectStore(STATUS_STORE);
+    const req = store.get(cacheKey(convId, msgId));
+    return new Promise((resolve, reject) => {
+      req.onsuccess = () => {
+        const entry = req.result;
+        if (!entry) {
+          resolve(null);
+          return;
+        }
+        resolve(entry.status);
+      };
+      req.onerror = () => reject(req.error);
+    });
+  } catch (err) {
+    console.error("[DECRYPT CACHE] getDecryptionStatus failed:", err);
+    return null;
+  }
+}
+async function setDecryptionStatus(convId, msgId, ciphertext, status) {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(STATUS_STORE, "readwrite");
+    const store = tx.objectStore(STATUS_STORE);
+    const existing = await new Promise(
+      (resolve, reject) => {
+        const req = store.get(cacheKey(convId, msgId));
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      }
+    );
+    const entry = {
+      status,
+      updatedAt: Date.now(),
+      ciphertextHash: hashCiphertext(ciphertext),
+      // Reset attempts on success; increment only on failure states
+      attempts: status === "decrypted" ? 0 : ((existing == null ? void 0 : existing.attempts) ?? 0) + 1
+    };
+    store.put(entry, cacheKey(convId, msgId));
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch (err) {
+    console.error("[DECRYPT CACHE] setDecryptionStatus failed:", err);
+  }
+}
+async function clearConversationStatusCache(convId) {
+  try {
+    const db = await openDB$1();
+    const prefix2 = `${convId}:`;
+    const tx = db.transaction(STATUS_STORE, "readwrite");
+    const store = tx.objectStore(STATUS_STORE);
+    const cursorReq = store.openCursor();
+    cursorReq.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const key = cursor.key;
+        if (key.startsWith(prefix2)) {
+          cursor.delete();
+        }
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    console.log(
+      `[DECRYPT CACHE] Cleared status cache for conversation ${convId}`
+    );
+  } catch (err) {
+    console.error("[DECRYPT CACHE] clearConversationStatusCache failed:", err);
+  }
+}
+function getDecryptedMessageSync(convId, msgId, ciphertext) {
+  const key = cacheKey(convId, msgId);
+  const currentHash = hashCiphertext(ciphertext);
+  const memEntry = _memoryCache.get(key);
+  if (memEntry && memEntry.ciphertextHash === currentHash) {
+    console.log(`[CACHE HIT] memory sync for convId=${convId} msgId=${msgId}`);
+    return memEntry.plaintext;
+  }
+  if (memEntry && memEntry.ciphertextHash !== currentHash) {
+    _memoryCache.delete(key);
+  }
+  console.log(`[CACHE MISS] memory sync for convId=${convId} msgId=${msgId}`);
+  return null;
+}
+async function getDecryptedMessage(convId, msgId, ciphertext) {
+  const key = cacheKey(convId, msgId);
+  const currentHash = hashCiphertext(ciphertext);
+  const memEntry = _memoryCache.get(key);
+  if (memEntry) {
+    if (memEntry.ciphertextHash === currentHash) {
+      console.log(
+        `[CACHE HIT] memory cache for convId=${convId} msgId=${msgId}`
+      );
+      return memEntry.plaintext;
+    }
+    _memoryCache.delete(key);
+  }
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(PLAINTEXT_STORE, "readwrite");
+    const store = tx.objectStore(PLAINTEXT_STORE);
+    const req = store.get(key);
+    return new Promise((resolve, reject) => {
+      req.onsuccess = () => {
+        const entry = req.result;
+        if (!entry) {
+          console.log(
+            `[CACHE MISS] no IndexedDB entry for convId=${convId} msgId=${msgId}`
+          );
+          resolve(null);
+          return;
+        }
+        if (entry.ciphertextHash !== currentHash) {
+          console.log(
+            `[CACHE MISS] hash mismatch for convId=${convId} msgId=${msgId} — ciphertext changed`
+          );
+          resolve(null);
+          return;
+        }
+        _memoryCache.set(key, {
+          plaintext: entry.plaintext,
+          ciphertextHash: entry.ciphertextHash
+        });
+        console.log(
+          `[CACHE HIT] IndexedDB for convId=${convId} msgId=${msgId}`
+        );
+        entry.accessedAt = Date.now();
+        store.put(entry, key);
+        resolve(entry.plaintext);
+      };
+      req.onerror = () => reject(req.error);
+    });
+  } catch (err) {
+    console.error("[DECRYPT CACHE] get failed:", err);
+    return null;
+  }
+}
+async function setDecryptedMessage(convId, msgId, ciphertext, plaintext) {
+  const key = cacheKey(convId, msgId);
+  const hash = hashCiphertext(ciphertext);
+  _memoryCache.set(key, { plaintext, ciphertextHash: hash });
+  const doSet = async () => {
+    const db = await openDB$1();
+    const tx = db.transaction(PLAINTEXT_STORE, "readwrite");
+    const store = tx.objectStore(PLAINTEXT_STORE);
+    const entry = {
+      plaintext,
+      accessedAt: Date.now(),
+      ciphertextHash: hash
+    };
+    store.put(entry, key);
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  };
+  try {
+    await doSet();
+    console.log(
+      `[CACHE WRITE] stored plaintext for convId=${convId} msgId=${msgId}`
+    );
+    void cleanupMessageCache();
+  } catch (err) {
+    if (isQuotaExceededError(err)) {
+      console.warn(
+        "[DECRYPT CACHE] QuotaExceededError on set, running cleanup and retrying…"
+      );
+      await cleanupMessageCache();
+      try {
+        await doSet();
+        void cleanupMessageCache();
+      } catch (retryErr) {
+        console.error(
+          "[DECRYPT CACHE] Retry set failed after cleanup:",
+          retryErr
+        );
+      }
+    } else {
+      console.error("[DECRYPT CACHE] set failed:", err);
+    }
+  }
+}
+async function clearConversationCache(convId) {
+  try {
+    const db = await openDB$1();
+    const prefix2 = `${convId}:`;
+    for (const key of _memoryCache.keys()) {
+      if (key.startsWith(prefix2)) {
+        _memoryCache.delete(key);
+      }
+    }
+    const tx1 = db.transaction(PLAINTEXT_STORE, "readwrite");
+    const store1 = tx1.objectStore(PLAINTEXT_STORE);
+    const cursorReq1 = store1.openCursor();
+    cursorReq1.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const key = cursor.key;
+        if (key.startsWith(prefix2)) {
+          cursor.delete();
+        }
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      tx1.oncomplete = () => resolve();
+      tx1.onerror = () => reject(tx1.error);
+    });
+    const tx2 = db.transaction(FILE_STORE, "readwrite");
+    const store2 = tx2.objectStore(FILE_STORE);
+    const cursorReq2 = store2.openCursor();
+    cursorReq2.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const key = cursor.key;
+        if (key.startsWith(prefix2)) {
+          cursor.delete();
+        }
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      tx2.oncomplete = () => resolve();
+      tx2.onerror = () => reject(tx2.error);
+    });
+    const tx3 = db.transaction(STATUS_STORE, "readwrite");
+    const store3 = tx3.objectStore(STATUS_STORE);
+    const cursorReq3 = store3.openCursor();
+    cursorReq3.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const key = cursor.key;
+        if (key.startsWith(prefix2)) {
+          cursor.delete();
+        }
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      tx3.oncomplete = () => resolve();
+      tx3.onerror = () => reject(tx3.error);
+    });
+    console.log(`[DECRYPT CACHE] Cleared cache for conversation ${convId}`);
+  } catch (err) {
+    console.error("[DECRYPT CACHE] clearConversation failed:", err);
+  }
+}
+async function clearAllCache() {
+  try {
+    _memoryCache.clear();
+    const db = await openDB$1();
+    const tx1 = db.transaction(PLAINTEXT_STORE, "readwrite");
+    tx1.objectStore(PLAINTEXT_STORE).clear();
+    await new Promise((resolve, reject) => {
+      tx1.oncomplete = () => resolve();
+      tx1.onerror = () => reject(tx1.error);
+    });
+    const tx2 = db.transaction(FILE_STORE, "readwrite");
+    tx2.objectStore(FILE_STORE).clear();
+    await new Promise((resolve, reject) => {
+      tx2.oncomplete = () => resolve();
+      tx2.onerror = () => reject(tx2.error);
+    });
+    const tx3 = db.transaction(STATUS_STORE, "readwrite");
+    tx3.objectStore(STATUS_STORE).clear();
+    await new Promise((resolve, reject) => {
+      tx3.oncomplete = () => resolve();
+      tx3.onerror = () => reject(tx3.error);
+    });
+    console.log("[DECRYPT CACHE] Entire cache cleared");
+  } catch (err) {
+    console.error("[DECRYPT CACHE] clearAll failed:", err);
+  }
+}
+async function cleanupMessageCache() {
+  try {
+    const db = await openDB$1();
+    const countTx = db.transaction(PLAINTEXT_STORE, "readonly");
+    const countStore = countTx.objectStore(PLAINTEXT_STORE);
+    const countReq = countStore.count();
+    const totalCount = await new Promise((resolve, reject) => {
+      countReq.onsuccess = () => resolve(countReq.result);
+      countReq.onerror = () => reject(countReq.error);
+    });
+    if (totalCount <= MAX_ENTRIES) return;
+    const toDeleteCount = totalCount - MAX_ENTRIES;
+    const delTx = db.transaction(PLAINTEXT_STORE, "readwrite");
+    const delStore = delTx.objectStore(PLAINTEXT_STORE);
+    const index2 = delStore.index("byAccessedAt");
+    const range = IDBKeyRange.upperBound(Date.now());
+    const cursorReq = index2.openCursor(range);
+    let deleted = 0;
+    cursorReq.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor && deleted < toDeleteCount) {
+        cursor.delete();
+        deleted++;
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      delTx.oncomplete = () => resolve();
+      delTx.onerror = () => reject(delTx.error);
+    });
+    console.log(
+      `[DECRYPT CACHE] Evicted ${deleted} old entries (limit ${MAX_ENTRIES})`
+    );
+  } catch (err) {
+    console.error("[DECRYPT CACHE] cleanup failed:", err);
+  }
+}
+function isQuotaExceededError(err) {
+  var _a3;
+  if (err instanceof Error) {
+    if (err.name === "QuotaExceededError") return true;
+    if ((_a3 = err.message) == null ? void 0 : _a3.toLowerCase().includes("quota")) return true;
+  }
+  return false;
+}
+async function getDecryptedFile(storageKey2, ciphertextHash) {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(FILE_STORE, "readwrite");
+    const store = tx.objectStore(FILE_STORE);
+    const req = store.get(storageKey2);
+    return new Promise((resolve, reject) => {
+      req.onsuccess = () => {
+        const entry = req.result;
+        if (!entry) {
+          resolve(null);
+          return;
+        }
+        if (ciphertextHash && entry.ciphertextHash !== ciphertextHash) {
+          resolve(null);
+          return;
+        }
+        entry.accessedAt = Date.now();
+        store.put(entry, storageKey2);
+        resolve(entry.blob);
+      };
+      req.onerror = () => reject(req.error);
+    });
+  } catch (err) {
+    console.error("[DECRYPT CACHE] getDecryptedFile failed:", err);
+    return null;
+  }
+}
+async function setDecryptedFile(storageKey2, blob, metadata) {
+  const doSet = async () => {
+    const db = await openDB$1();
+    const tx = db.transaction(FILE_STORE, "readwrite");
+    const store = tx.objectStore(FILE_STORE);
+    const entry = {
+      blob,
+      mimeType: metadata.mimeType,
+      originalFileName: metadata.originalFileName,
+      size: metadata.size,
+      ciphertextHash: metadata.ciphertextHash,
+      conversationId: metadata.conversationId,
+      accessedAt: Date.now()
+    };
+    store.put(entry, storageKey2);
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  };
+  try {
+    await doSet();
+    void cleanupFileCache();
+  } catch (err) {
+    if (isQuotaExceededError(err)) {
+      console.warn(
+        "[DECRYPT CACHE] QuotaExceededError on set file, running cleanup and retrying…"
+      );
+      await cleanupFileCache();
+      try {
+        await doSet();
+        void cleanupFileCache();
+      } catch (retryErr) {
+        console.error(
+          "[DECRYPT CACHE] Retry set file failed after cleanup:",
+          retryErr
+        );
+      }
+    } else {
+      console.error("[DECRYPT CACHE] setDecryptedFile failed:", err);
+    }
+  }
+}
+async function clearAllFileCache() {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(FILE_STORE, "readwrite");
+    tx.objectStore(FILE_STORE).clear();
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    console.log("[DECRYPT CACHE] File cache cleared");
+  } catch (err) {
+    console.error("[DECRYPT CACHE] clearAllFileCache failed:", err);
+  }
+}
+async function clearFileCacheForConversation(convId) {
+  try {
+    const db = await openDB$1();
+    const tx = db.transaction(FILE_STORE, "readwrite");
+    const store = tx.objectStore(FILE_STORE);
+    const cursorReq = store.openCursor();
+    cursorReq.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const entry = cursor.value;
+        if ((entry == null ? void 0 : entry.conversationId) === convId) {
+          cursor.delete();
+        }
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    console.log(
+      `[DECRYPT CACHE] File cache cleared for conversation ${convId}`
+    );
+  } catch (err) {
+    console.error("[DECRYPT CACHE] clearFileCacheForConversation failed:", err);
+  }
+}
+async function cleanupFileCache() {
+  try {
+    const db = await openDB$1();
+    const statsTx = db.transaction(FILE_STORE, "readonly");
+    const statsStore = statsTx.objectStore(FILE_STORE);
+    const countReq = statsStore.count();
+    const totalCount = await new Promise((resolve, reject) => {
+      countReq.onsuccess = () => resolve(countReq.result);
+      countReq.onerror = () => reject(countReq.error);
+    });
+    let totalSize = 0;
+    const sizeCursorReq = statsStore.openCursor();
+    sizeCursorReq.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const entry = cursor.value;
+        totalSize += entry.size;
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      statsTx.oncomplete = () => resolve();
+      statsTx.onerror = () => reject(statsTx.error);
+    });
+    if (totalCount <= FILE_MAX_ENTRIES && totalSize <= FILE_MAX_BYTES) return;
+    const delTx = db.transaction(FILE_STORE, "readwrite");
+    const delStore = delTx.objectStore(FILE_STORE);
+    const index2 = delStore.index("byAccessedAt");
+    const range = IDBKeyRange.upperBound(Date.now());
+    const cursorReq = index2.openCursor(range);
+    let currentCount = totalCount;
+    let currentSize = totalSize;
+    let pruned = 0;
+    cursorReq.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const entry = cursor.value;
+        if (currentCount <= FILE_MAX_ENTRIES && currentSize <= FILE_MAX_BYTES) {
+          return;
+        }
+        cursor.delete();
+        currentCount--;
+        currentSize -= entry.size;
+        pruned++;
+        cursor.continue();
+      }
+    };
+    await new Promise((resolve, reject) => {
+      delTx.oncomplete = () => resolve();
+      delTx.onerror = () => reject(delTx.error);
+    });
+    console.log(
+      `[DECRYPT CACHE] Pruned ${pruned} file entries (count limit ${FILE_MAX_ENTRIES}, size limit ${FILE_MAX_BYTES} bytes)`
+    );
+  } catch (err) {
+    console.error("[DECRYPT CACHE] cleanupFileCache failed:", err);
+  }
+}
+const decryptionCache = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  cleanupFileCache,
+  cleanupMessageCache,
+  clearAllCache,
+  clearAllFileCache,
+  clearConversationCache,
+  clearConversationStatusCache,
+  clearFileCacheForConversation,
+  getDecryptedFile,
+  getDecryptedMessage,
+  getDecryptedMessageSync,
+  getDecryptionAttempts,
+  getDecryptionStatus,
+  hashCiphertext,
+  setDecryptedFile,
+  setDecryptedMessage,
+  setDecryptionStatus
+}, Symbol.toStringTag, { value: "Module" }));
 const CryptoContext = reactExports.createContext(null);
 function CryptoProvider({ children }) {
   const { principal } = useAuth();
@@ -39626,10 +40362,46 @@ function CryptoProvider({ children }) {
   const [keyReadyConvIds, setKeyReadyConvIds] = reactExports.useState(
     /* @__PURE__ */ new Set()
   );
-  const rekeyInProgress = reactExports.useRef(/* @__PURE__ */ new Set());
+  const rekeyLocks = reactExports.useRef(/* @__PURE__ */ new Map());
   const keyLoadingPromises = reactExports.useRef(
     /* @__PURE__ */ new Map()
   );
+  const isRekeyInProgress = reactExports.useCallback((convId) => {
+    const lock = rekeyLocks.current.get(convId);
+    if (!lock) return false;
+    if (Date.now() - lock.startTime > 3e4) {
+      clearTimeout(lock.timeoutId);
+      rekeyLocks.current.delete(convId);
+      console.log(`[E2EE REKEY] Auto-cleared stale lock for convId=${convId}`);
+      return false;
+    }
+    return true;
+  }, []);
+  reactExports.useCallback(
+    (convId) => {
+      if (isRekeyInProgress(convId)) {
+        console.log(
+          `[E2EE REKEY] Skipping rekey for convId=${convId} — already in progress`
+        );
+        return false;
+      }
+      const timeoutId = setTimeout(() => {
+        rekeyLocks.current.delete(convId);
+        console.log(`[E2EE REKEY] Lock timed out for convId=${convId}`);
+      }, 3e4);
+      rekeyLocks.current.set(convId, { timeoutId, startTime: Date.now() });
+      return true;
+    },
+    [isRekeyInProgress]
+  );
+  reactExports.useCallback((convId) => {
+    const lock = rekeyLocks.current.get(convId);
+    if (lock) {
+      clearTimeout(lock.timeoutId);
+      rekeyLocks.current.delete(convId);
+      console.log(`[E2EE REKEY] Guard released for convId=${convId}`);
+    }
+  }, []);
   const clearMissingKeyConvId = reactExports.useCallback((convId) => {
     setMissingKeyConvIds((prev) => {
       const next = new Set(prev);
@@ -39745,6 +40517,7 @@ function CryptoProvider({ children }) {
                 if (fingerprint) {
                   groupKeyFingerprints.current.set(convId, fingerprint);
                 }
+                setKeyReadyConvIds((prev) => /* @__PURE__ */ new Set([...prev, convId]));
                 restoredCount++;
                 const fpLog = fingerprint || "none";
                 console.log(
@@ -39805,6 +40578,7 @@ function CryptoProvider({ children }) {
     (convId, key, memberFingerprint) => {
       convKeys.current.set(convId, key);
       groupKeyFingerprints.current.set(convId, memberFingerprint);
+      setKeyReadyConvIds((prev) => /* @__PURE__ */ new Set([...prev, convId]));
       if (principal) {
         persistConvKey(principal.toText(), convId, key, memberFingerprint).then(() => {
           console.log(
@@ -39859,6 +40633,12 @@ function CryptoProvider({ children }) {
         } catch {
         }
       }
+      setKeyReadyConvIds((prev) => {
+        if (!prev.has(convId)) return prev;
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
       if (principal && convId.includes(principal.toText())) {
         console.warn(
           `[E2EE] Self-keying detected, aborting for convId=${convId}`
@@ -39866,12 +40646,6 @@ function CryptoProvider({ children }) {
         derivingConvIds.current.delete(convId);
         return null;
       }
-      setKeyReadyConvIds((prev) => {
-        if (!prev.has(convId)) return prev;
-        const next = new Set(prev);
-        next.delete(convId);
-        return next;
-      });
       derivingConvIds.current.add(convId);
       if (!(keyPair == null ? void 0 : keyPair.privateKey)) {
         console.log(
@@ -39912,6 +40686,9 @@ function CryptoProvider({ children }) {
           `[E2EE] deriveAndStoreKey: key stored in memory for convId=${convId}`
         );
         setKeyReadyConvIds((prev) => /* @__PURE__ */ new Set([...prev, convId]));
+        window.dispatchEvent(
+          new CustomEvent("keyReady", { detail: { conversationId: convId } })
+        );
         console.log(
           `[E2EE] Derived and stored shared key for convId=${convId}`
         );
@@ -39938,11 +40715,13 @@ function CryptoProvider({ children }) {
           if (decryptedText === testPlaintext) {
             console.log(`[E2EE ROUNDTRIP] convId=${convId}: PASS`);
           } else {
-            throw new Error(`roundtrip mismatch: got "${decryptedText}"`);
+            console.warn(
+              `[E2EE ROUNDTRIP] convId=${convId}: MISMATCH — got "${decryptedText}", expected "${testPlaintext}". Key may still be valid for peer messages.`
+            );
           }
         } catch (rtErr) {
           console.error(
-            `[E2EE ROUNDTRIP] convId=${convId}: FAIL — evicting key`,
+            `[E2EE ROUNDTRIP] convId=${convId}: FAIL (encrypt/decrypt threw) — evicting key`,
             rtErr
           );
           convKeys.current.delete(convId);
@@ -39985,11 +40764,31 @@ function CryptoProvider({ children }) {
       console.log(
         `[E2EE SEND] Using key fingerprint=${keyFp} for convId=${convId}`
       );
-      if (!key) return null;
+      if (!key) {
+        console.error(
+          `[E2EE SEND] No key available for convId=${convId} — cannot encrypt`
+        );
+        return null;
+      }
       try {
         const plaintextBytes = new TextEncoder().encode(text);
+        if (plaintextBytes.length === 0) {
+          console.error(
+            `[E2EE ENCRYPT] Refusing to encrypt empty plaintext for convId=${convId}`
+          );
+          return null;
+        }
         const cipherBuf = await encryptMessage(key, plaintextBytes);
         const full = new Uint8Array(cipherBuf);
+        if (full.length === 0) {
+          console.error(
+            `[E2EE ENCRYPT] encryptMessage returned empty buffer for convId=${convId}`
+          );
+          return null;
+        }
+        console.log(
+          `[E2EE SEND] Using key fingerprint=${keyFp} for convId=${convId}, blob len=${full.length}`
+        );
         console.log(
           `[E2EE ENCRYPT direct] total=${full.length}, iv=12, ct+tag=${full.length - 12}, byteOffset=${full.byteOffset}, keyFp=${keyFp}, convId=${convId}`
         );
@@ -40004,220 +40803,340 @@ function CryptoProvider({ children }) {
     },
     []
   );
-  const decryptFromConv = reactExports.useCallback(
-    async (convId, blob) => {
-      let clean2 = toCleanUint8Array(blob);
-      if (clean2.byteOffset !== 0 || clean2.length !== clean2.buffer.byteLength) {
-        console.log(
-          `[E2EE DECRYPT buffer fix] copying non-contiguous view, old byteOffset=${clean2.byteOffset}, old length=${clean2.length}, old bufferSize=${clean2.buffer.byteLength}`
-        );
-        clean2 = new Uint8Array(clean2);
+  async function getDecryptedFileWithCache(storageKey2, encryptedBlob, mimeType, conversationId, key, originalFileName) {
+    try {
+      const ciphertextHash = hashCiphertext(encryptedBlob);
+      const cached = await getDecryptedFile(storageKey2, ciphertextHash);
+      if (cached) {
+        console.log("[FILE CACHE] Hit for storageKey=", storageKey2);
+        return cached;
       }
+      const decrypted = await decryptBlob(key, encryptedBlob);
+      if (!decrypted) {
+        console.log("[FILE CACHE] Decrypt failed for storageKey=", storageKey2);
+        return null;
+      }
+      const blob = new Blob([decrypted], { type: mimeType });
+      await setDecryptedFile(storageKey2, blob, {
+        mimeType,
+        originalFileName,
+        size: blob.size,
+        ciphertextHash,
+        conversationId
+      });
+      console.log("[FILE CACHE] Stored for storageKey=", storageKey2);
+      return blob;
+    } catch (err) {
+      console.error("[FILE CACHE] Error for storageKey=", storageKey2, err);
+      return null;
+    }
+  }
+  const decryptFromConv = reactExports.useCallback(
+    async (conversationId, blob, msgId) => {
+      let clean2 = toCleanUint8Array(blob);
+      clean2 = new Uint8Array(clean2);
+      if (msgId) {
+        const cached = await getDecryptedMessage(conversationId, msgId, clean2);
+        if (cached) {
+          console.log(
+            `[E2EE DECRYPT] Cache hit for convId=${conversationId} msgId=${msgId}`
+          );
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`
+          );
+          return cached;
+        }
+      }
+      if (msgId) {
+        const currentStatus = await getDecryptionStatus(conversationId, msgId);
+        if (currentStatus === "permanently-unreadable" || currentStatus === "failed-retryable") {
+          console.log(
+            `[E2EE DECRYPT] Clearing stale status '${currentStatus}' for msgId=${msgId} before fresh attempt`
+          );
+          await setDecryptionStatus(conversationId, msgId, clean2, "pending");
+        }
+      }
+      const key = convKeys.current.get(conversationId);
+      if (!key) {
+        console.log(
+          `[E2EE] decryptFromConv: no key in memory for convId=${conversationId}`
+        );
+        return null;
+      }
+      const keyFp = await getKeyFingerprint(key);
       console.log(
-        `[E2EE DECRYPT final buffer] length=${clean2.length}, byteOffset=${clean2.byteOffset}, bufferSize=${clean2.buffer.byteLength}, convId=${convId}`
+        `[E2EE] decryptFromConv START for convId=${conversationId}: blob=${clean2.length} bytes, keyFp=${keyFp}`
+      );
+      console.log(
+        `[E2EE DECRYPT final buffer] length=${clean2.length}, byteOffset=${clean2.byteOffset}, bufferSize=${clean2.buffer.byteLength}, keyFp=${keyFp}`
       );
       if (clean2.length < 28) {
-        console.warn(
-          `[E2EE DECRYPT] blob too short: ${clean2.length} bytes (need >=28), convId=${convId}`
-        );
-        return null;
-      }
-      let key = convKeys.current.get(convId);
-      if (!key && principal) {
-        const principalText2 = principal.toText();
-        const dbKey = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
-        const loadPromise = (async () => {
-          try {
-            const stored = await dbGet(dbKey);
-            if (stored) {
-              let rawBytes = null;
-              let fingerprint;
-              if (stored instanceof Uint8Array) {
-                rawBytes = toCleanUint8Array(stored);
-              } else if (Array.isArray(stored.wrapped)) {
-                const wrapKey = await deriveStorageWrapKey(principalText2);
-                const wrappedArr = toCleanUint8Array(
-                  stored.wrapped
-                );
-                rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr, dbKey);
-                fingerprint = stored.fingerprint;
-              } else if (stored.raw) {
-                const legacy = stored;
-                rawBytes = toCleanUint8Array(legacy.raw);
-                fingerprint = legacy.fingerprint;
-              }
-              if (rawBytes && rawBytes.length > 0) {
-                const loadedKey = await importAESKey(rawBytes);
-                convKeys.current.set(convId, loadedKey);
-                if (fingerprint) {
-                  groupKeyFingerprints.current.set(convId, fingerprint);
-                }
-                const fpLog = fingerprint || "none";
-                console.log(
-                  `[E2EE KEYSTORE] Lazy-loaded key for convId=${convId} (fingerprint=${fpLog})`
-                );
-                return loadedKey;
-              }
-            }
-            return null;
-          } catch (err) {
-            console.warn(
-              `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
-              err
-            );
-            if (principal) {
-              const principalText22 = principal.toText();
-              const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText22}:${convId}`;
-              try {
-                await dbSet(dbKeyToRemove, null);
-                console.log(
-                  `[E2EE KEYSTORE] Removed corrupted lazy key for ${dbKeyToRemove} — will re-derive`
-                );
-              } catch {
-              }
-            }
-            setMissingKeyConvIds((prev) => {
-              const next = new Set(prev);
-              next.add(convId);
-              return next;
-            });
-            return null;
-          }
-        })();
-        keyLoadingPromises.current.set(convId, loadPromise);
-        key = await loadPromise ?? void 0;
-        keyLoadingPromises.current.delete(convId);
-      }
-      if (!key) {
-        const existingLoad = keyLoadingPromises.current.get(convId);
-        if (existingLoad) {
-          console.log(
-            `[E2EE] Waiting for in-flight key load for convId=${convId}`
-          );
-          const loadedKey = await existingLoad;
-          if (loadedKey) {
-            console.log(`[E2EE] In-flight load succeeded for convId=${convId}`);
-            return decryptMessage(loadedKey, blob);
-          }
-        }
         console.log(
-          `[E2EE KEYSTORE] No stored key for convId=${convId} — performing exchange`
+          `[E2EE] blob too small: ${clean2.length} bytes (need >= 28 for AES-GCM)`
         );
-        if (convKeys.current.has(convId)) {
-          console.log(
-            `[E2EE] Key already in memory for convId=${convId}, skipping exchange trigger`
-          );
-          return null;
-        }
-        if (derivingConvIds.current.has(convId) || rekeyInProgress.current.has(convId)) {
-          console.log(
-            `[E2EE] Key derivation/rekey already in progress for convId=${convId}, skipping exchange trigger`
-          );
-          return null;
-        }
-        setMissingKeyConvIds((prev) => {
-          const next = new Set(prev);
-          next.add(convId);
-          return next;
-        });
         return null;
       }
-      const keyFpPre = await getKeyFingerprint(key).catch(() => "unknown");
-      console.log(
-        `[E2EE RECV] Attempting decrypt with key fingerprint=${keyFpPre} for blob len=${clean2.length}, convId=${convId}`
-      );
-      for (let attempt = 1; attempt <= 3; attempt++) {
+      if (clean2.length < 100) {
+        const hexPrefix = Array.from(clean2.slice(0, Math.min(clean2.length, 64))).map((b2) => b2.toString(16).padStart(2, "0")).join(" ");
+        console.log(`[E2EE HEX BLOB] ${hexPrefix}`);
+      }
+      for (let skip = 0; skip <= 16; skip++) {
+        if (clean2.length - skip < 28) continue;
+        const blobSlice = clean2.slice(skip);
+        const iv = blobSlice.slice(0, 12);
+        const ciphertext = blobSlice.slice(12);
         try {
-          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
-          console.log(
-            `[E2EE DECRYPT] decryptFromConv attempt=${attempt}/3: total=${clean2.length}, keyFp=${keyFp}, convId=${convId}`
+          const decrypted = await crypto.subtle.decrypt(
+            { name: "AES-GCM", iv },
+            key,
+            ciphertext
           );
-          const result = await decryptMessage(key, clean2);
-          if (result !== null) {
-            if (attempt > 1) {
+          const text = new TextDecoder().decode(decrypted);
+          console.log(
+            `[E2EE DECRYPT] SUCCESS with prefix skip=${skip} for convId=${conversationId}`
+          );
+          if (msgId) {
+            try {
+              await setDecryptedMessage(conversationId, msgId, clean2, text);
+              await setDecryptionStatus(
+                conversationId,
+                msgId,
+                clean2,
+                "decrypted"
+              );
               console.log(
-                `[E2EE DECRYPT] decryptFromConv succeeded on attempt ${attempt} for convId=${convId}`
+                `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (prefix skip=${skip})`
+              );
+              window.dispatchEvent(
+                new CustomEvent("decryptionSuccess", {
+                  detail: { conversationId, msgId, plaintext: text }
+                })
+              );
+            } catch (cacheErr) {
+              console.warn(
+                `[E2EE DECRYPT] Cache write failed for msgId=${msgId} — returning plaintext anyway:`,
+                cacheErr
+              );
+              console.log(
+                `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`
+              );
+              if (msgId) {
+                await setDecryptionStatus(
+                  conversationId,
+                  msgId,
+                  clean2,
+                  "decrypted"
+                );
+              }
+              window.dispatchEvent(
+                new CustomEvent("decryptionSuccess", {
+                  detail: { conversationId, msgId, plaintext: text }
+                })
               );
             }
-            return result;
+          } else {
+            console.log(
+              `[E2EE DECRYPT SUCCESS] displaying messageId=unknown convId=${conversationId}`
+            );
           }
-          console.warn(
-            `[E2EE DECRYPT] decryptFromConv attempt ${attempt}/3 returned null (all prefix skips 0-16 and brute-force attempted) for convId=${convId}`
-          );
+          return text;
+        } catch (_e2) {
+        }
+      }
+      if (clean2.length <= 100) {
+        console.log(
+          `[E2EE DECRYPT DIAGNOSTIC] Standard prefix-skip failed for small blob len=${clean2.length}. Brute-forcing IV positions (0-${clean2.length - 28}).`
+        );
+        for (let ivStart = 0; ivStart <= clean2.length - 28; ivStart++) {
+          const iv = clean2.slice(ivStart, ivStart + 12);
+          const ciphertext = clean2.slice(ivStart + 12);
+          if (ciphertext.length < 16) continue;
+          try {
+            const decrypted = await crypto.subtle.decrypt(
+              { name: "AES-GCM", iv },
+              key,
+              ciphertext
+            );
+            const text = new TextDecoder().decode(decrypted);
+            console.log(
+              `[E2EE DECRYPT SUCCESS via brute-force] IV start=${ivStart}, len=${clean2.length}`
+            );
+            if (msgId) {
+              try {
+                await setDecryptedMessage(conversationId, msgId, clean2, text);
+                await setDecryptionStatus(
+                  conversationId,
+                  msgId,
+                  clean2,
+                  "decrypted"
+                );
+                console.log(
+                  `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (brute-force)`
+                );
+                window.dispatchEvent(
+                  new CustomEvent("decryptionSuccess", {
+                    detail: { conversationId, msgId, plaintext: text }
+                  })
+                );
+              } catch (cacheErr) {
+                console.warn(
+                  `[E2EE DECRYPT] Cache write failed for msgId=${msgId} — returning plaintext anyway:`,
+                  cacheErr
+                );
+                console.log(
+                  `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`
+                );
+                window.dispatchEvent(
+                  new CustomEvent("decryptionSuccess", {
+                    detail: { conversationId, msgId, plaintext: text }
+                  })
+                );
+              }
+            } else {
+              console.log(
+                `[E2EE DECRYPT SUCCESS] displaying messageId=unknown convId=${conversationId}`
+              );
+            }
+            return text;
+          } catch (_e2) {
+          }
+        }
+      }
+      console.error(
+        `[E2EE DECRYPT] All prefix-skip attempts failed for convId=${conversationId}. Key fingerprint=${keyFp}. This message may be encrypted under a different key.`
+      );
+      if (principal) {
+        try {
+          const prefix2 = `${CONV_KEY_PREFIX}${principal.toText()}:${conversationId}`;
+          const allEntries = await dbGetKeysWithPrefix(prefix2);
+          if (allEntries.length > 1) {
+            console.log(
+              `[E2EE DECRYPT] Found ${allEntries.length} stored key entries for convId=${conversationId}, trying legacy keys...`
+            );
+            const wrapKey = await deriveStorageWrapKey(principal.toText());
+            for (const entry of allEntries) {
+              try {
+                const stored = entry.value;
+                if (!stored || !Array.isArray(stored.wrapped)) continue;
+                const wrappedArr = toCleanUint8Array(stored.wrapped);
+                const rawBytes = await unwrapKeyBytes(
+                  wrapKey,
+                  wrappedArr,
+                  entry.key
+                );
+                if (!rawBytes || rawBytes.length === 0) continue;
+                const legacyKey = await importAESKey(rawBytes);
+                const legacyFp = await getKeyFingerprint(legacyKey);
+                console.log(
+                  `[E2EE DECRYPT] Trying legacy key fingerprint=${legacyFp} for convId=${conversationId}`
+                );
+                for (let skip = 0; skip <= 16; skip++) {
+                  if (clean2.length - skip < 28) continue;
+                  const blobSlice = clean2.slice(skip);
+                  const iv = blobSlice.slice(0, 12);
+                  const ciphertext = blobSlice.slice(12);
+                  try {
+                    const decrypted = await crypto.subtle.decrypt(
+                      { name: "AES-GCM", iv },
+                      legacyKey,
+                      ciphertext
+                    );
+                    const text = new TextDecoder().decode(decrypted);
+                    console.log(
+                      `[E2EE DECRYPT] SUCCESS with legacy key (fp=${legacyFp}, skip=${skip}) for convId=${conversationId}`
+                    );
+                    if (msgId) {
+                      try {
+                        await setDecryptedMessage(
+                          conversationId,
+                          msgId,
+                          clean2,
+                          text
+                        );
+                        await setDecryptionStatus(
+                          conversationId,
+                          msgId,
+                          clean2,
+                          "decrypted"
+                        );
+                        console.log(
+                          `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (legacy key)`
+                        );
+                        window.dispatchEvent(
+                          new CustomEvent("decryptionSuccess", {
+                            detail: { conversationId, msgId, plaintext: text }
+                          })
+                        );
+                      } catch (cacheErr) {
+                        console.warn(
+                          `[E2EE DECRYPT] Cache write failed for msgId=${msgId} — returning plaintext anyway:`,
+                          cacheErr
+                        );
+                        console.log(
+                          `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`
+                        );
+                        window.dispatchEvent(
+                          new CustomEvent("decryptionSuccess", {
+                            detail: { conversationId, msgId, plaintext: text }
+                          })
+                        );
+                      }
+                    } else {
+                      console.log(
+                        `[E2EE DECRYPT SUCCESS] displaying messageId=unknown convId=${conversationId}`
+                      );
+                    }
+                    return text;
+                  } catch (_e2) {
+                  }
+                }
+              } catch (_e2) {
+              }
+            }
+          }
         } catch (err) {
-          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
           console.warn(
-            `[E2EE DECRYPT] decryptFromConv FAILED (attempt ${attempt}/3) for convId=${convId}: blob=${clean2.length} bytes, keyFp=${keyFp}`,
+            `[E2EE DECRYPT] Legacy key fallback failed for convId=${conversationId}:`,
             err
           );
         }
-        if (attempt < 3) {
-          await new Promise((r2) => setTimeout(r2, 100));
+      }
+      if (msgId) {
+        const finalCacheCheck = await getDecryptedMessage(
+          conversationId,
+          msgId,
+          clean2
+        );
+        if (finalCacheCheck) {
+          console.log(
+            `[E2EE DECRYPT] Final cache hit (concurrent write) for msgId=${msgId}`
+          );
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`
+          );
+          return finalCacheCheck;
         }
-      }
-      const hexPrefix = Array.from(clean2.slice(0, Math.min(clean2.length, 64))).map((b2) => b2.toString(16).padStart(2, "0")).join(" ");
-      console.error(
-        `[E2EE DECRYPT] All 3 attempts failed for convId=${convId}. Blob len=${clean2.length}, hexPrefix(64)=${hexPrefix}`
-      );
-      if (!rekeyInProgress.current.has(convId)) {
-        console.log(
-          `[E2EE DECRYPT] Triggering automatic rekey for convId=${convId} after decrypt failure`
+        const attempts = await getDecryptionAttempts(conversationId, msgId);
+        const nextStatus = attempts >= 2 ? "permanently-unreadable" : "failed-retryable";
+        await setDecryptionStatus(conversationId, msgId, clean2, nextStatus);
+        console.error(
+          `[E2EE DECRYPT] Decryption failed for convId=${conversationId} msgId=${msgId}. Key fingerprint=${keyFp}. Marking as ${nextStatus}.`
         );
-        rekeyConversation(convId).catch(() => {
+        setMissingKeyConvIds((prev) => {
+          const next = new Set(prev);
+          next.add(conversationId);
+          return next;
+        });
+      } else {
+        console.error(
+          `[E2EE DECRYPT] Decryption failed for convId=${conversationId}. Key fingerprint=${keyFp}. Triggering auto-rekey...`
+        );
+        setMissingKeyConvIds((prev) => {
+          const next = new Set(prev);
+          next.add(conversationId);
+          return next;
         });
       }
-      const keyFpFinal = await getKeyFingerprint(key).catch(() => "unknown");
-      let roundtripPassed = false;
-      try {
-        const testPlaintext = "__roundtrip_test__";
-        const testBytes = new TextEncoder().encode(testPlaintext);
-        const testBlob = await encryptMessage(key, testBytes);
-        const testResult = await decryptMessage(key, testBlob);
-        roundtripPassed = testResult === testPlaintext;
-        console.log(
-          `[E2EE DECRYPT] Manual roundtrip with stored key ${roundtripPassed ? "PASSED" : "FAILED"} for convId=${convId}, keyFp=${keyFpFinal}`
-        );
-      } catch (rtErr) {
-        console.error(
-          `[E2EE DECRYPT] Manual roundtrip with stored key FAILED for convId=${convId}, keyFp=${keyFpFinal}:`,
-          rtErr
-        );
-      }
-      let keyExportFailed = false;
-      try {
-        await crypto.subtle.exportKey("raw", key);
-      } catch (exportErr) {
-        keyExportFailed = true;
-        console.error(
-          `[E2EE DECRYPT] Key export test FAILED (keyFp=${keyFpFinal}, convId=${convId}) — CryptoKey is CORRUPT. Evicting and triggering re-derivation.`,
-          exportErr
-        );
-      }
-      if (!keyExportFailed && roundtripPassed) {
-        console.warn(
-          `[E2EE DECRYPT] All prefix variants failed but key is healthy — marking message as unreadable. keyFp=${keyFpFinal}, convId=${convId}`
-        );
-        return null;
-      }
-      console.log(
-        `[E2EE DECRYPT] Evicting corrupt key for convId=${convId} (exportTest=${keyExportFailed ? "FAILED" : "PASSED"}, roundtrip=${roundtripPassed ? "PASSED" : "FAILED"})`
-      );
-      convKeys.current.delete(convId);
-      setKeyReadyConvIds((prev) => {
-        const next = new Set(prev);
-        next.delete(convId);
-        return next;
-      });
-      if (principal) {
-        const dbKeyEvict = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-        dbSet(dbKeyEvict, null).catch(() => {
-        });
-      }
-      setMissingKeyConvIds((prev) => {
-        const next = new Set(prev);
-        next.add(convId);
-        return next;
-      });
       return null;
     },
     [principal]
@@ -40227,6 +41146,8 @@ function CryptoProvider({ children }) {
       console.log(
         `[E2EE FORCE-REDERIVE] Clearing key for convId=${convId} from memory + IndexedDB — will re-derive on next peer key arrival`
       );
+      await clearConversationCache(convId);
+      await clearFileCacheForConversation(convId);
       convKeys.current.delete(convId);
       groupKeyFingerprints.current.delete(convId);
       keyLoadingPromises.current.delete(convId);
@@ -40253,60 +41174,110 @@ function CryptoProvider({ children }) {
     },
     [principal]
   );
-  const rekeyConversation = reactExports.useCallback(
-    async (convId) => {
+  const rekeyConversation = async (conversationId) => {
+    await clearFileCacheForConversation(conversationId);
+    console.log(`[E2EE REKEY] Starting rekey for convId=${conversationId}`);
+    if (rekeyLocks.current.has(conversationId)) {
+      const lock = rekeyLocks.current.get(conversationId);
+      const elapsed = Date.now() - lock.startTime;
+      if (elapsed < 3e4) {
+        console.log(
+          `[E2EE REKEY] Rekey already in progress for convId=${conversationId} (elapsed=${elapsed}ms)`
+        );
+        return { success: false, error: "Rekey already in progress" };
+      }
+      clearTimeout(lock.timeoutId);
+      rekeyLocks.current.delete(conversationId);
+    }
+    const timeoutId = setTimeout(() => {
+      console.log(
+        `[E2EE REKEY] Auto-clearing stale lock for convId=${conversationId}`
+      );
+      rekeyLocks.current.delete(conversationId);
+    }, 3e4);
+    rekeyLocks.current.set(conversationId, {
+      timeoutId,
+      startTime: Date.now()
+    });
+    try {
+      console.log(
+        `[E2EE REKEY] Clearing old keys and plaintext cache for convId=${conversationId}`
+      );
+      await clearConversationCache(conversationId);
+      await clearFileCacheForConversation(conversationId);
+      convKeys.current.delete(conversationId);
+      setKeyReadyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(conversationId);
+        return next;
+      });
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(conversationId);
+        return next;
+      });
+      if (principal) {
+        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${conversationId}`;
+        await dbSet(dbKey, null);
+      }
       if (!keyPair) {
-        console.warn("[E2EE REKEY] keyPair not ready, waiting...");
-        setTimeout(() => rekeyConversation(convId), 500);
-        return;
+        console.log("[E2EE REKEY] No keyPair, generating fresh pair");
+        const newPair = await loadOrCreateKeyPair(
+          principal ? principal.toText() : ""
+        );
+        setKeyPair(newPair.keyPair);
       }
       if (!principal) {
-        console.warn("[E2EE REKEY] principal not ready, waiting...");
-        setTimeout(() => rekeyConversation(convId), 500);
-        return;
-      }
-      if (rekeyInProgress.current.has(convId)) {
-        console.log(
-          `[E2EE REKEY] Skipping rekey for convId=${convId} — already in progress`
+        console.error(
+          "[E2EE REKEY] Cannot publish public key — principal missing"
         );
-        return;
+        return { success: false, error: "Principal not available" };
       }
-      rekeyInProgress.current.add(convId);
+      if (!keyPair) {
+        return { success: false, error: "Key pair not ready" };
+      }
+      const pubKeyBytes = await exportPublicKey(keyPair.publicKey);
+      const newPubFp = Array.from(pubKeyBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
       console.log(
-        `[E2EE] Stale key detected — initiating rekey for convId=${convId}`
+        `[E2EE REKEY] Publishing new public key, length=${pubKeyBytes.length}, fingerprint(first8)=${newPubFp}`
       );
-      try {
-        await forceReDeriveKey(convId);
-        if (keyPair && principal) {
-          try {
-            const pubBytes = await exportPublicKey(keyPair.publicKey);
-            const fp = Array.from(pubBytes.slice(0, 8)).map((b2) => b2.toString(16).padStart(2, "0")).join("");
-            console.log(
-              `[E2EE REKEY] Publishing fresh public key (fingerprint=${fp}) for convId=${convId}`
-            );
-            await updateProfile.mutateAsync({
-              ecdhPublicKey: pubBytes
-            });
-            console.log(
-              `[E2EE REKEY] Fresh public key published successfully for convId=${convId}`
-            );
-          } catch (pubErr) {
-            console.error(
-              `[E2EE REKEY] Failed to publish fresh public key for convId=${convId}:`,
-              pubErr
-            );
-          }
-        } else {
-          console.warn(
-            `[E2EE REKEY] Cannot publish public key — keyPair or principal missing for convId=${convId}`
-          );
-        }
-      } finally {
-        rekeyInProgress.current.delete(convId);
+      const updateResult = await updateProfile.mutateAsync({
+        ecdhPublicKey: new Uint8Array(pubKeyBytes)
+      });
+      if (updateResult && typeof updateResult === "object" && "err" in updateResult && updateResult.err) {
+        const errText = extractErrText(updateResult);
+        console.error(`[E2EE REKEY] Failed to publish public key: ${errText}`);
+        return {
+          success: false,
+          error: `Failed to publish public key: ${errText}`
+        };
       }
-    },
-    [forceReDeriveKey, keyPair, principal, updateProfile]
-  );
+      console.log(
+        `[E2EE REKEY] Public key published successfully. New fingerprint(first8)=${newPubFp}. Both sides must now re-derive with the new key.`
+      );
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.add(conversationId);
+        return next;
+      });
+      window.dispatchEvent(
+        new CustomEvent("rekey:complete", { detail: { conversationId } })
+      );
+      return { success: true };
+    } catch (err) {
+      console.error(`[E2EE REKEY] Error for convId=${conversationId}:`, err);
+      return {
+        success: false,
+        error: err instanceof Error ? err.message : "Rekey failed"
+      };
+    } finally {
+      const lock = rekeyLocks.current.get(conversationId);
+      if (lock) {
+        clearTimeout(lock.timeoutId);
+        rekeyLocks.current.delete(conversationId);
+      }
+    }
+  };
   const decryptOwnDisplayName = reactExports.useCallback(
     async (encryptedBlob) => {
       if (!principal) return null;
@@ -40342,7 +41313,8 @@ function CryptoProvider({ children }) {
         isDerivingKey: (convId) => derivingConvIds.current.has(convId),
         isKeyReady: (convId) => keyReadyConvIds.has(convId),
         forceReDeriveKey,
-        rekeyConversation
+        rekeyConversation,
+        getDecryptedFileWithCache
       },
       children
     }
@@ -42063,14 +43035,14 @@ function setupScrollRestoration(router2, force) {
     document.addEventListener("scroll", throttle(onScroll, 100), true);
   }
   router2.subscribe("onRendered", (event) => {
-    const cacheKey = getKey(event.toLocation);
+    const cacheKey2 = getKey(event.toLocation);
     if (!router2.resetNextScroll) {
       router2.resetNextScroll = true;
       return;
     }
     restoreScroll({
       storageKey,
-      key: cacheKey,
+      key: cacheKey2,
       behavior: router2.options.scrollRestorationBehavior,
       shouldScrollRestoration: router2.isScrollRestoring,
       scrollToTopSelectors: router2.options.scrollToTopSelectors,
@@ -42078,7 +43050,7 @@ function setupScrollRestoration(router2, force) {
     });
     if (router2.isScrollRestoring) {
       scrollRestorationCache.set((state) => {
-        state[cacheKey] || (state[cacheKey] = {});
+        state[cacheKey2] || (state[cacheKey2] = {});
         return state;
       });
     }
@@ -45719,41 +46691,41 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$10 = [
+const __iconNode$15 = [
   ["rect", { width: "20", height: "5", x: "2", y: "3", rx: "1", key: "1wp1u1" }],
   ["path", { d: "M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8", key: "1s80jp" }],
   ["path", { d: "M10 12h4", key: "a56b0p" }]
 ];
-const Archive = createLucideIcon("archive", __iconNode$10);
+const Archive = createLucideIcon("archive", __iconNode$15);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$$ = [
+const __iconNode$14 = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$$);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$14);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$_ = [
+const __iconNode$13 = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$_);
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$13);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$Z = [
+const __iconNode$12 = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -45763,14 +46735,14 @@ const __iconNode$Z = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$Z);
+const Bell = createLucideIcon("bell", __iconNode$12);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$Y = [
+const __iconNode$11 = [
   ["path", { d: "M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z", key: "1b4qmf" }],
   ["path", { d: "M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2", key: "i71pzd" }],
   ["path", { d: "M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2", key: "10jefs" }],
@@ -45779,7 +46751,53 @@ const __iconNode$Y = [
   ["path", { d: "M10 14h4", key: "kelpxr" }],
   ["path", { d: "M10 18h4", key: "1ulq68" }]
 ];
-const Building2 = createLucideIcon("building-2", __iconNode$Y);
+const Building2 = createLucideIcon("building-2", __iconNode$11);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$10 = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$10);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$$ = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$$);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$_ = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$_);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$Z = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$Z);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$Y = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+  ["line", { x1: "21.17", x2: "12", y1: "8", y2: "8", key: "a0cw5f" }],
+  ["line", { x1: "3.95", x2: "8.54", y1: "6.06", y2: "14", key: "1kftof" }],
+  ["line", { x1: "10.88", x2: "15.46", y1: "21.94", y2: "14", key: "1ymyh8" }]
+];
+const Chrome = createLucideIcon("chrome", __iconNode$Y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45787,86 +46805,40 @@ const Building2 = createLucideIcon("building-2", __iconNode$Y);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$X = [
-  ["path", { d: "M18 6 7 17l-5-5", key: "116fxf" }],
-  ["path", { d: "m22 10-7.5 7.5L13 16", key: "ke71qq" }]
-];
-const CheckCheck = createLucideIcon("check-check", __iconNode$X);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$W = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$W);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$V = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$V);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$U = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$U);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$T = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$T);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$S = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
-  ["line", { x1: "21.17", x2: "12", y1: "8", y2: "8", key: "a0cw5f" }],
-  ["line", { x1: "3.95", x2: "8.54", y1: "6.06", y2: "14", key: "1kftof" }],
-  ["line", { x1: "10.88", x2: "15.46", y1: "21.94", y2: "14", key: "1ymyh8" }]
-];
-const Chrome = createLucideIcon("chrome", __iconNode$S);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$R = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
   ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
 ];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$R);
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$X);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$Q = [
+const __iconNode$W = [
   ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
   ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
 ];
-const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$Q);
+const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$W);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$P = [
+const __iconNode$V = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+];
+const CircleCheck = createLucideIcon("circle-check", __iconNode$V);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$U = [
   ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
   [
     "path",
@@ -45880,14 +46852,25 @@ const __iconNode$P = [
   ["path", { d: "M8 11h.01", key: "1dfujw" }],
   ["path", { d: "M8 16h.01", key: "18s6g9" }]
 ];
-const ClipboardList = createLucideIcon("clipboard-list", __iconNode$P);
+const ClipboardList = createLucideIcon("clipboard-list", __iconNode$U);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$O = [
+const __iconNode$T = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["polyline", { points: "12 6 12 12 16 14", key: "68esgv" }]
+];
+const Clock = createLucideIcon("clock", __iconNode$T);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$S = [
   [
     "path",
     {
@@ -45897,7 +46880,54 @@ const __iconNode$O = [
   ],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Compass = createLucideIcon("compass", __iconNode$O);
+const Compass = createLucideIcon("compass", __iconNode$S);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$R = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$R);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$Q = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$Q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$P = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$P);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$O = [
+  ["circle", { cx: "12", cy: "12", r: "1", key: "41hilf" }],
+  ["circle", { cx: "19", cy: "12", r: "1", key: "1wjl8i" }],
+  ["circle", { cx: "5", cy: "12", r: "1", key: "1pcz8c" }]
+];
+const Ellipsis = createLucideIcon("ellipsis", __iconNode$O);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45905,10 +46935,13 @@ const Compass = createLucideIcon("compass", __iconNode$O);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$N = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$N);
+const FileText = createLucideIcon("file-text", __iconNode$N);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45916,11 +46949,11 @@ const Copy = createLucideIcon("copy", __iconNode$N);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$M = [
-  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
-  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
-  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
 ];
-const Database = createLucideIcon("database", __iconNode$M);
+const Globe = createLucideIcon("globe", __iconNode$M);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -45928,56 +46961,6 @@ const Database = createLucideIcon("database", __iconNode$M);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$L = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
-];
-const Download = createLucideIcon("download", __iconNode$L);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$K = [
-  ["circle", { cx: "12", cy: "12", r: "1", key: "41hilf" }],
-  ["circle", { cx: "19", cy: "12", r: "1", key: "1wjl8i" }],
-  ["circle", { cx: "5", cy: "12", r: "1", key: "1pcz8c" }]
-];
-const Ellipsis = createLucideIcon("ellipsis", __iconNode$K);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$J = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
-];
-const FileText = createLucideIcon("file-text", __iconNode$J);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$I = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
-];
-const Globe = createLucideIcon("globe", __iconNode$I);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$H = [
   ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
   [
     "path",
@@ -45987,40 +46970,40 @@ const __iconNode$H = [
     }
   ]
 ];
-const House = createLucideIcon("house", __iconNode$H);
+const House = createLucideIcon("house", __iconNode$L);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$G = [
+const __iconNode$K = [
   ["path", { d: "M16 5h6", key: "1vod17" }],
   ["path", { d: "M19 2v6", key: "4bpg5p" }],
   ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
   ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
   ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
 ];
-const ImagePlus = createLucideIcon("image-plus", __iconNode$G);
+const ImagePlus = createLucideIcon("image-plus", __iconNode$K);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$F = [
+const __iconNode$J = [
   ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
   ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
   ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
 ];
-const Image = createLucideIcon("image", __iconNode$F);
+const Image = createLucideIcon("image", __iconNode$J);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$E = [
+const __iconNode$I = [
   [
     "path",
     {
@@ -46030,7 +47013,51 @@ const __iconNode$E = [
   ],
   ["circle", { cx: "16.5", cy: "7.5", r: ".5", fill: "currentColor", key: "w0ekpg" }]
 ];
-const KeyRound = createLucideIcon("key-round", __iconNode$E);
+const KeyRound = createLucideIcon("key-round", __iconNode$I);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$H = [
+  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
+  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
+  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
+];
+const Key = createLucideIcon("key", __iconNode$H);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$G = [
+  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+];
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$G);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$F = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$F);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$E = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+];
+const Lock = createLucideIcon("lock", __iconNode$E);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46038,11 +47065,11 @@ const KeyRound = createLucideIcon("key-round", __iconNode$E);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$D = [
-  ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
-  ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
-  ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const Key = createLucideIcon("key", __iconNode$D);
+const LogOut = createLucideIcon("log-out", __iconNode$D);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46050,20 +47077,21 @@ const Key = createLucideIcon("key", __iconNode$D);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$C = [
-  ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
-  ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
-  ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
-  ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$C);
+const Menu = createLucideIcon("menu", __iconNode$C);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$B = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$B);
+const __iconNode$B = [
+  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
+];
+const MessageSquare = createLucideIcon("message-square", __iconNode$B);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46071,51 +47099,6 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$B);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$A = [
-  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
-  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
-];
-const Lock = createLucideIcon("lock", __iconNode$A);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$z = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
-];
-const LogOut = createLucideIcon("log-out", __iconNode$z);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$y = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$y);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$x = [
-  ["path", { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z", key: "1lielz" }]
-];
-const MessageSquare = createLucideIcon("message-square", __iconNode$x);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$w = [
   ["line", { x1: "2", x2: "22", y1: "2", y2: "22", key: "a6p6uj" }],
   ["path", { d: "M18.89 13.23A7.12 7.12 0 0 0 19 12v-2", key: "80xlxr" }],
   ["path", { d: "M5 10v2a7 7 0 0 0 12 5", key: "p2k8kg" }],
@@ -46123,48 +47106,48 @@ const __iconNode$w = [
   ["path", { d: "M9 9v3a3 3 0 0 0 5.12 2.12", key: "r2i35w" }],
   ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
 ];
-const MicOff = createLucideIcon("mic-off", __iconNode$w);
+const MicOff = createLucideIcon("mic-off", __iconNode$A);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$v = [
+const __iconNode$z = [
   ["path", { d: "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z", key: "131961" }],
   ["path", { d: "M19 10v2a7 7 0 0 1-14 0v-2", key: "1vc78b" }],
   ["line", { x1: "12", x2: "12", y1: "19", y2: "22", key: "x3vr5v" }]
 ];
-const Mic = createLucideIcon("mic", __iconNode$v);
+const Mic = createLucideIcon("mic", __iconNode$z);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [
+const __iconNode$y = [
   ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
   ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
   ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
 ];
-const Monitor = createLucideIcon("monitor", __iconNode$u);
+const Monitor = createLucideIcon("monitor", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [
+const __iconNode$x = [
   ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
 ];
-const Moon = createLucideIcon("moon", __iconNode$t);
+const Moon = createLucideIcon("moon", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$s = [
+const __iconNode$w = [
   ["path", { d: "M13.234 20.252 21 12.3", key: "1cbrk9" }],
   [
     "path",
@@ -46174,15 +47157,67 @@ const __iconNode$s = [
     }
   ]
 ];
-const Paperclip = createLucideIcon("paperclip", __iconNode$s);
+const Paperclip = createLucideIcon("paperclip", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$r = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
-const Play = createLucideIcon("play", __iconNode$r);
+const __iconNode$v = [
+  ["path", { d: "M12 17v5", key: "bb1du9" }],
+  [
+    "path",
+    {
+      d: "M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z",
+      key: "1nkz8b"
+    }
+  ]
+];
+const Pin = createLucideIcon("pin", __iconNode$v);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$u = [["polygon", { points: "6 3 20 12 6 21 6 3", key: "1oa8hb" }]];
+const Play = createLucideIcon("play", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$t);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$s = [
+  ["path", { d: "M20 18v-2a4 4 0 0 0-4-4H4", key: "5vmcpk" }],
+  ["path", { d: "m9 17-5-5 5-5", key: "nvlc11" }]
+];
+const Reply = createLucideIcon("reply", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46190,30 +47225,6 @@ const Play = createLucideIcon("play", __iconNode$r);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$q = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$p = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
-];
-const Search = createLucideIcon("search", __iconNode$p);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$o = [
   [
     "path",
     {
@@ -46223,7 +47234,38 @@ const __iconNode$o = [
   ],
   ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
 ];
-const Send = createLucideIcon("send", __iconNode$o);
+const Send = createLucideIcon("send", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Settings = createLucideIcon("settings", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
+  ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }],
+  ["circle", { cx: "6", cy: "12", r: "3", key: "w7nqdw" }],
+  ["circle", { cx: "18", cy: "19", r: "3", key: "1xt0gg" }],
+  ["line", { x1: "8.59", x2: "15.42", y1: "13.51", y2: "17.49", key: "47mynk" }],
+  ["line", { x1: "15.41", x2: "8.59", y1: "6.51", y2: "10.49", key: "1n3mei" }]
+];
+const Share2 = createLucideIcon("share-2", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46234,13 +47276,13 @@ const __iconNode$n = [
   [
     "path",
     {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
     }
   ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const Settings = createLucideIcon("settings", __iconNode$n);
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46248,37 +47290,6 @@ const Settings = createLucideIcon("settings", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }],
-  ["circle", { cx: "6", cy: "12", r: "3", key: "w7nqdw" }],
-  ["circle", { cx: "18", cy: "19", r: "3", key: "1xt0gg" }],
-  ["line", { x1: "8.59", x2: "15.42", y1: "13.51", y2: "17.49", key: "47mynk" }],
-  ["line", { x1: "15.41", x2: "8.59", y1: "6.51", y2: "10.49", key: "1n3mei" }]
-];
-const Share2 = createLucideIcon("share-2", __iconNode$m);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$l = [
-  [
-    "path",
-    {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
-    }
-  ],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
-];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$l);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$k = [
   ["path", { d: "m2 2 20 20", key: "1ooewy" }],
   [
     "path",
@@ -46295,14 +47306,14 @@ const __iconNode$k = [
     }
   ]
 ];
-const ShieldOff = createLucideIcon("shield-off", __iconNode$k);
+const ShieldOff = createLucideIcon("shield-off", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$j = [
+const __iconNode$l = [
   [
     "path",
     {
@@ -46311,7 +47322,31 @@ const __iconNode$j = [
     }
   ]
 ];
-const Shield = createLucideIcon("shield", __iconNode$j);
+const Shield = createLucideIcon("shield", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [
+  ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+  ["path", { d: "M12 18h.01", key: "mhygvu" }]
+];
+const Smartphone = createLucideIcon("smartphone", __iconNode$k);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$j = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M8 14s1.5 2 4 2 4-2 4-2", key: "1y1vjs" }],
+  ["line", { x1: "9", x2: "9.01", y1: "9", y2: "9", key: "yxxnd0" }],
+  ["line", { x1: "15", x2: "15.01", y1: "9", y2: "9", key: "1p4y9e" }]
+];
+const Smile = createLucideIcon("smile", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46319,17 +47354,6 @@ const Shield = createLucideIcon("shield", __iconNode$j);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$i = [
-  ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
-  ["path", { d: "M12 18h.01", key: "mhygvu" }]
-];
-const Smartphone = createLucideIcon("smartphone", __iconNode$i);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$h = [
   ["path", { d: "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7", key: "1m0v6g" }],
   [
     "path",
@@ -46339,7 +47363,17 @@ const __iconNode$h = [
     }
   ]
 ];
-const SquarePen = createLucideIcon("square-pen", __iconNode$h);
+const SquarePen = createLucideIcon("square-pen", __iconNode$i);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$h = [
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
+];
+const Square = createLucideIcon("square", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46347,16 +47381,6 @@ const SquarePen = createLucideIcon("square-pen", __iconNode$h);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$g = [
-  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]
-];
-const Square = createLucideIcon("square", __iconNode$g);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$f = [
   ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
   ["path", { d: "M12 2v2", key: "tus03m" }],
   ["path", { d: "M12 20v2", key: "1lh1kg" }],
@@ -46367,7 +47391,19 @@ const __iconNode$f = [
   ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
   ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
 ];
-const Sun = createLucideIcon("sun", __iconNode$f);
+const Sun = createLucideIcon("sun", __iconNode$g);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$f = [
+  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
+  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
+  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
+];
+const Timer = createLucideIcon("timer", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46375,11 +47411,13 @@ const Sun = createLucideIcon("sun", __iconNode$f);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$e = [
-  ["line", { x1: "10", x2: "14", y1: "2", y2: "2", key: "14vaq8" }],
-  ["line", { x1: "12", x2: "15", y1: "14", y2: "11", key: "17fdiu" }],
-  ["circle", { cx: "12", cy: "14", r: "8", key: "1e1u0o" }]
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
 ];
-const Timer = createLucideIcon("timer", __iconNode$e);
+const Trash2 = createLucideIcon("trash-2", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46389,11 +47427,9 @@ const Timer = createLucideIcon("timer", __iconNode$e);
 const __iconNode$d = [
   ["path", { d: "M3 6h18", key: "d0wm0j" }],
   ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }]
 ];
-const Trash2 = createLucideIcon("trash-2", __iconNode$d);
+const Trash = createLucideIcon("trash", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -47418,6 +48454,50 @@ function useLogPolicyExpiryCheck() {
     mutationFn: async () => {
       if (!actor) throw new Error("Actor not ready");
       await actor.logPolicyExpiryCheck();
+    }
+  });
+}
+function usePurgeStatus() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery({
+    queryKey: ["admin", "purge-status"],
+    queryFn: async () => {
+      if (!actor) return { purgeCompleted: false, purgeResetUsed: false };
+      return actor.getPurgeStatus();
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE
+  });
+}
+function useResetPurgeFlag() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.resetPurgeFlag();
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "purge-status"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    }
+  });
+}
+function usePurgeAll() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.purgeAllMessagesAndConversations();
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "purge-status"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
     }
   });
 }
@@ -48727,7 +49807,6 @@ function OnboardingGate({ children }) {
     console.log(
       "[E2EE KEYSYNC] New key pair detected, publishing public key to backend profile"
     );
-    hasPublishedRef.current = true;
     (async () => {
       try {
         const pubBytes = await exportPublicKey(keyPair.publicKey);
@@ -48746,6 +49825,7 @@ function OnboardingGate({ children }) {
             console.log(
               "[E2EE KEYSYNC] Public key unchanged - skipping publish"
             );
+            hasPublishedRef.current = true;
             setIsNewKeyPair(false);
             return;
           }
@@ -48757,27 +49837,57 @@ function OnboardingGate({ children }) {
             latestProfile.encryptedDisplayName.byteOffset + latestProfile.encryptedDisplayName.byteLength
           ) : latestProfile.encryptedDisplayName
         ) : new Uint8Array(0);
-        const result = await mutateAsyncRef.current({
-          encryptedDisplayName: existingDisplayName,
+        const payload = {
+          encryptedDisplayName: existingDisplayName && existingDisplayName.length > 0 ? existingDisplayName : new Uint8Array(0),
           ecdhPublicKey: pubBytes
-        });
-        console.log("[E2EE KEYSYNC] Key sync result:", result);
-        setIsNewKeyPair(false);
-        console.log(
-          `[E2EE KEYSYNC] Published new public key (fingerprint=${fp})`
-        );
+        };
+        const retryPublish = async (attempt) => {
+          console.log(
+            `[E2EE KEYSYNC] Attempt ${attempt} publishing key fingerprint=${fp}, pubKeyLength=${pubBytes.length}`
+          );
+          try {
+            const result = await mutateAsyncRef.current(payload);
+            console.log("[E2EE KEYSYNC] Key sync result:", result);
+            console.log(
+              `[E2EE KEYSYNC] Public key published successfully (fingerprint=${fp}, length=${pubBytes.length})`
+            );
+            hasPublishedRef.current = true;
+            setIsNewKeyPair(false);
+          } catch (err) {
+            const errText = extractErrText(err);
+            console.warn(`[E2EE KEYSYNC] Failed to publish: ${errText}`, err);
+            const lower = errText.toLowerCase();
+            const isAlreadyPublished = lower.includes("already") || lower.includes("no change") || lower.includes("unchanged") || lower.includes("not modified");
+            const isInvalidButPublished = lower.includes("invalidinput") && (lower.includes("already") || lower.includes("unchanged"));
+            if (isAlreadyPublished || isInvalidButPublished) {
+              console.log(
+                "[E2EE KEYSYNC] Key already published on backend — treating as success"
+              );
+              hasPublishedRef.current = true;
+              setIsNewKeyPair(false);
+              return;
+            }
+            if (attempt < 3) {
+              const delay2 = 2e3 * 2 ** (attempt - 1);
+              console.log(
+                `[E2EE KEYSYNC] Retrying in ${delay2}ms (attempt ${attempt + 1}/3)`
+              );
+              await new Promise((res) => setTimeout(res, delay2));
+              return retryPublish(attempt + 1);
+            }
+            console.error(
+              `[E2EE KEYSYNC] All 3 attempts failed. Key will not be published this session. Last error: ${errText}`
+            );
+          }
+        };
+        await retryPublish(1);
       } catch (err) {
         const errText = err instanceof Error ? err.message : extractErrText(err);
-        console.warn("[E2EE KEYSYNC] Key sync error:", errText, err);
-        const lower = errText.toLowerCase();
-        const isAlreadyPublished = lower.includes("already") || lower.includes("no change") || lower.includes("unchanged") || lower.includes("not modified");
-        if (isAlreadyPublished) {
-          console.log(
-            "[E2EE KEYSYNC] Key already published on backend — skipping retry"
-          );
-          setIsNewKeyPair(false);
-          return;
-        }
+        console.error(
+          "[E2EE KEYSYNC] Unexpected error during publish setup:",
+          errText,
+          err
+        );
       }
     })();
   }, [isNewKeyPair, keyPair, isReady, principal, setIsNewKeyPair]);
@@ -51694,7 +52804,10 @@ function Skeleton({ className, ...props }) {
     "div",
     {
       "data-slot": "skeleton",
-      className: cn("bg-accent animate-pulse rounded-md", className),
+      className: cn(
+        "bg-[oklch(var(--skeleton))] animate-pulse rounded-md",
+        className
+      ),
       ...props
     }
   );
@@ -51755,7 +52868,7 @@ function useConversation(id2) {
       return actor.getConversation(id2);
     },
     enabled: !!actor && !isFetching && id2 !== null,
-    staleTime: 6e4,
+    staleTime: 0,
     gcTime: 3e5,
     refetchInterval: 3e4,
     refetchIntervalInBackground: false,
@@ -51855,6 +52968,8 @@ function useDeleteConversation() {
     mutationFn: async (conversationId) => {
       const convIdStr = conversationId.toString();
       addHiddenConvId(convIdStr);
+      await clearConversationCache(convIdStr);
+      await clearFileCacheForConversation(convIdStr);
       console.log(
         `[ChatDelete] User deleted chat locally only - convId=${convIdStr} (other user still has full history)`
       );
@@ -55323,7 +56438,8 @@ function getPriorityKey(convId) {
 function MessageInput({
   conversationId,
   onMessageSent,
-  isKeyReady = true
+  isKeyReady = true,
+  disabled = false
 }) {
   const { encryptForConv, isRestoringKeys, getConversationKey } = useCrypto();
   const { backend } = useBackend();
@@ -55451,6 +56567,17 @@ function MessageInput({
       console.log(
         `[E2EE SEND] Encrypted message → full blob size = ${encryptedClean.length} bytes (IV=12, tag=16)`
       );
+      if (encryptedClean.length === 0) {
+        throw new Error(
+          "Encrypted message is empty — encryption produced a zero-length buffer."
+        );
+      }
+      if (conversationId === 0n) {
+        throw new Error("Invalid conversation ID (0). Cannot send message.");
+      }
+      console.log(
+        `[E2EE SEND] Preparing backend.sendMessage — conversationId=${conversationId}, encryptedClean.length=${encryptedClean.length}`
+      );
       if (!connection.isOnline) {
         await queueMessage({
           conversationId: conversationId.toString(),
@@ -55502,7 +56629,7 @@ function MessageInput({
     },
     [handleSend]
   );
-  const canSend = text.trim().length > 0 && !sending && !isRestoringKeys && isKeyReady;
+  const canSend = text.trim().length > 0 && !sending && !isRestoringKeys && isKeyReady && !disabled;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
@@ -55624,810 +56751,809 @@ function MessageInput({
     }
   );
 }
-function PriorityMessageBadge() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(Tooltip, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "span",
-      {
-        className: "inline-flex items-center justify-center w-4 h-4 rounded-full bg-orange-500/20 flex-shrink-0",
-        "aria-label": "High priority message",
-        "data-ocid": "message.priority_badge",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { size: 9, className: "text-orange-500 fill-orange-500" })
-      }
-    ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipContent, { side: "top", className: "text-xs", children: "High priority message" })
-  ] });
-}
-function MessageStatus({
-  message,
-  isMine,
-  myPrincipal
-}) {
-  if (!isMine) return null;
-  const readCount = message.readBy.filter(
-    (r2) => r2.userId.toText() !== myPrincipal
-  ).length;
-  if (readCount > 0) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      CheckCheck,
-      {
-        size: 14,
-        className: "text-primary flex-shrink-0",
-        "aria-label": "Read"
-      }
-    );
-  }
-  if (message.readBy.length > 0) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      CheckCheck,
-      {
-        size: 14,
-        className: "text-muted-foreground flex-shrink-0",
-        "aria-label": "Delivered"
-      }
-    );
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Check,
-    {
-      size: 14,
-      className: "text-muted-foreground flex-shrink-0",
-      "aria-label": "Sent"
-    }
-  );
-}
-function isExpired(msg) {
-  if (!msg.ttlSeconds) return false;
-  const sentMs = Number(msg.sentAt) / 1e6;
-  const expiresMs = sentMs + Number(msg.ttlSeconds) * 1e3;
-  return Date.now() > expiresMs;
-}
-function useDecryptedContent(message, conversationId, _isMine) {
-  const { decryptFromConv, rekeyConversation } = useCrypto();
-  const [text, setText] = reactExports.useState(null);
-  const hasTriggeredRekey = reactExports.useRef(false);
-  const [failed, setFailed] = reactExports.useState(false);
+function useDecryptedContent(msg, conversationId, onRekey) {
+  const { decryptFromConv, isKeyReady } = useCrypto();
+  const [content, setContent] = reactExports.useState(null);
+  const [error, setError] = reactExports.useState(null);
   const [showStaleKeyButton, setShowStaleKeyButton] = reactExports.useState(false);
+  const [isRekeying, setIsRekeying] = reactExports.useState(false);
+  const [rekeyError, setRekeyError] = reactExports.useState(null);
+  const [isPermanentlyUnreadable, setIsPermanentlyUnreadable] = reactExports.useState(false);
+  const [retryVersion, setRetryVersion] = reactExports.useState(0);
+  const hasTriggeredRekey = reactExports.useRef(false);
+  const cancelledRef = reactExports.useRef(false);
+  const contentRef = reactExports.useRef(null);
+  const msgId = msg.id.toString();
+  const [cacheChecked, setCacheChecked] = reactExports.useState(false);
+  if (!cacheChecked) {
+    const raw = msg.encryptedContent;
+    if (!raw || raw.length === 0) {
+      setContent("");
+      setCacheChecked(true);
+    } else {
+      const fresh = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+      const cached = getDecryptedMessageSync(conversationId, msgId, fresh);
+      if (cached !== null) {
+        console.log(
+          `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (sync cache hit on mount)`
+        );
+        contentRef.current = cached;
+        setContent(cached);
+        setError(null);
+        setIsPermanentlyUnreadable(false);
+        setShowStaleKeyButton(false);
+        setCacheChecked(true);
+      } else {
+        setCacheChecked(true);
+      }
+    }
+  }
   reactExports.useEffect(() => {
-    if (message.messageType !== MessageType.text) return;
-    if (isExpired(message)) {
-      setFailed(false);
-      setText(null);
-      setShowStaleKeyButton(false);
+    const handleKeyReady = (e) => {
+      var _a3;
+      const customEvent = e;
+      if (((_a3 = customEvent.detail) == null ? void 0 : _a3.conversationId) === conversationId) {
+        console.log(
+          `[E2EE KEY] useDecryptedContent received keyReady for convId=${conversationId}, triggering retry`
+        );
+        setRetryVersion((v2) => v2 + 1);
+      }
+    };
+    const handleRekeyComplete = (e) => {
+      var _a3;
+      const customEvent = e;
+      if (((_a3 = customEvent.detail) == null ? void 0 : _a3.conversationId) === conversationId) {
+        console.log(
+          `[E2EE REKEY] useDecryptedContent received rekey:complete for convId=${conversationId}, triggering retry`
+        );
+        setRetryVersion((v2) => v2 + 1);
+      }
+    };
+    const handleDecryptionSuccess = (e) => {
+      var _a3, _b3;
+      const customEvent = e;
+      if (((_a3 = customEvent.detail) == null ? void 0 : _a3.conversationId) === conversationId && ((_b3 = customEvent.detail) == null ? void 0 : _b3.msgId) === msgId) {
+        console.log(
+          `[E2EE DECRYPT SUCCESS] useDecryptedContent received decryptionSuccess for msgId=${msgId}, updating UI`
+        );
+        if (!cancelledRef.current) {
+          contentRef.current = customEvent.detail.plaintext;
+          setContent(customEvent.detail.plaintext);
+          setError(null);
+          setIsPermanentlyUnreadable(false);
+          setShowStaleKeyButton(false);
+        }
+      }
+    };
+    window.addEventListener("keyReady", handleKeyReady);
+    window.addEventListener("rekey:complete", handleRekeyComplete);
+    window.addEventListener("decryptionSuccess", handleDecryptionSuccess);
+    return () => {
+      window.removeEventListener("keyReady", handleKeyReady);
+      window.removeEventListener("rekey:complete", handleRekeyComplete);
+      window.removeEventListener("decryptionSuccess", handleDecryptionSuccess);
+    };
+  }, [conversationId, msgId]);
+  const isKeyReadyRef = reactExports.useRef(isKeyReady);
+  reactExports.useEffect(() => {
+    isKeyReadyRef.current = isKeyReady;
+  }, [isKeyReady]);
+  reactExports.useEffect(() => {
+    if (contentRef.current !== null) {
+      console.log(
+        `[E2EE DECRYPT SKIP] async effect skipped for msgId=${msgId} — sync cache hit already set content`
+      );
       return;
     }
     let cancelled = false;
-    const RETRY_DELAYS = [0, 500];
-    let cumulativeDelay = 0;
-    const attempts = RETRY_DELAYS.map((delay2, index2) => {
-      cumulativeDelay += delay2;
-      return { attempt: index2 + 1, delay: cumulativeDelay };
-    });
-    const timers = [];
-    for (const { attempt, delay: delay2 } of attempts) {
-      const t = setTimeout(async () => {
-        if (cancelled) return;
-        console.log(
-          `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`
-        );
-        const raw = message.encryptedContent;
-        const rawLen = raw.length ?? Object.keys(raw).length;
-        const fresh = new Uint8Array(rawLen);
-        const rawU8 = raw;
-        for (let i = 0; i < rawLen; i++) fresh[i] = rawU8[i];
-        console.log(
-          `[E2EE RECV] Received blob = ${fresh.length} bytes, extracted IV=12, ciphertext+tag=${fresh.length - 12} bytes (attempt ${attempt}/${attempts.length}), convId=${conversationId}`
-        );
-        const result = await decryptFromConv(conversationId, fresh);
-        if (cancelled) return;
-        if (result !== null) {
-          setText(result);
-          setFailed(false);
-          setShowStaleKeyButton(false);
-          cancelled = true;
-        } else if (attempt === attempts.length) {
-          console.error(
-            `[E2EE] useDecryptedContent: all ${attempts.length} attempts failed for convId=${conversationId} msgId=${message.id}`
+    cancelledRef.current = false;
+    const myGeneration = Date.now() + Math.random();
+    const generationRef = { current: myGeneration };
+    async function decrypt() {
+      const raw = msg.encryptedContent;
+      if (!raw || raw.length === 0) {
+        if (!cancelled) setContent("");
+        return;
+      }
+      if (!cancelled) {
+        setError(null);
+        setIsPermanentlyUnreadable(false);
+        setShowStaleKeyButton(false);
+      }
+      const fresh = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+      const { getDecryptedMessage: getDecryptedMessage2 } = await __vitePreload(async () => {
+        const { getDecryptedMessage: getDecryptedMessage3 } = await Promise.resolve().then(() => decryptionCache);
+        return { getDecryptedMessage: getDecryptedMessage3 };
+      }, true ? void 0 : void 0);
+      const cachedPlaintext = await getDecryptedMessage2(
+        conversationId,
+        msgId,
+        fresh
+      );
+      if (cachedPlaintext) {
+        if (!cancelled && generationRef.current === myGeneration) {
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (async cache hit in useDecryptedContent)`
           );
-          if (!hasTriggeredRekey.current) {
-            hasTriggeredRekey.current = true;
-            console.log(
-              `[E2EE] Stale key detected — initiating rekey for convId=${conversationId} msgId=${message.id}`
-            );
-            rekeyConversation(conversationId).catch((err) => {
-              console.error(
-                `[E2EE] rekeyConversation failed for convId=${conversationId}:`,
-                err
-              );
-            });
-          }
-          console.error();
-          setFailed(true);
+          contentRef.current = cachedPlaintext;
+          setContent(cachedPlaintext);
+          setError(null);
+          setIsPermanentlyUnreadable(false);
+          setShowStaleKeyButton(false);
+        }
+        return;
+      }
+      const maxWait = 30;
+      let waited = 0;
+      while (!isKeyReadyRef.current(conversationId) && waited < maxWait) {
+        await new Promise((r2) => setTimeout(r2, 100));
+        waited++;
+      }
+      if (!isKeyReadyRef.current(conversationId)) {
+        console.log(
+          `[E2EE] useDecryptedContent: key not ready for convId=${conversationId} after wait`
+        );
+        if (!cancelled && generationRef.current === myGeneration) {
+          setError("Key not ready");
           setShowStaleKeyButton(true);
         }
-      }, delay2);
-      timers.push(t);
-    }
-    return () => {
-      cancelled = true;
-      for (const t of timers) clearTimeout(t);
-    };
-  }, [message, conversationId, decryptFromConv, rekeyConversation]);
-  return { text, failed, showStaleKeyButton };
-}
-function useAttachmentMeta(message, conversationId) {
-  const { decryptFromConv } = useCrypto();
-  const [meta, setMeta] = reactExports.useState({});
-  reactExports.useEffect(() => {
-    if (message.messageType === MessageType.text) return;
-    if (meta.name || meta.mime) return;
-    let cancelled = false;
-    const RETRY_DELAYS = [0, 500, 500, 1e3, 2e3];
-    let cumulative = 0;
-    const timers = [];
-    for (const delay2 of RETRY_DELAYS) {
-      cumulative += delay2;
-      const t = setTimeout(async () => {
-        if (cancelled) return;
-        const raw = message.encryptedContent;
-        const fresh = new Uint8Array(raw.length);
-        for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
-        const result = await decryptFromConv(conversationId, fresh);
-        if (cancelled || !result) return;
-        try {
-          const parsed = JSON.parse(result);
-          setMeta(parsed);
-          cancelled = true;
-          if (parsed.storageKey) {
+        return;
+      }
+      try {
+        const decrypted = await decryptFromConv(conversationId, fresh, msgId);
+        const postCache = await getDecryptedMessage2(
+          conversationId,
+          msgId,
+          fresh
+        );
+        const finalDecrypted = postCache ?? decrypted;
+        if (cancelled || generationRef.current !== myGeneration) return;
+        if (finalDecrypted === null) {
+          const finalCacheCheck = await getDecryptedMessage2(
+            conversationId,
+            msgId,
+            fresh
+          );
+          if (finalCacheCheck) {
             console.log(
-              `[E2EE FILE RECV] Metadata decoded: name=${parsed.name}, mime=${parsed.mime}, storageKey=${parsed.storageKey.slice(0, 12)}...`
+              `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (final cache check after decryptFromConv null)`
             );
-          } else {
-            console.log(
-              `[E2EE FILE RECV] Metadata decoded (no inline storageKey — will use attachment record): name=${parsed.name}, mime=${parsed.mime}`
-            );
+            contentRef.current = finalCacheCheck;
+            setContent(finalCacheCheck);
+            setError(null);
+            setIsPermanentlyUnreadable(false);
+            setShowStaleKeyButton(false);
+            return;
           }
-        } catch {
+          if (contentRef.current !== null) {
+            console.log(
+              `[E2EE DECRYPT RACE GUARD] contentRef already has plaintext for msgId=${msgId}, skipping error set`
+            );
+            return;
+          }
+          const finalStatus = await getDecryptionStatus(conversationId, msgId);
+          if (finalStatus === "permanently-unreadable") {
+            setIsPermanentlyUnreadable(true);
+            setError("Permanently unreadable (previous key rotated)");
+            setShowStaleKeyButton(false);
+          } else {
+            setError("Unable to decrypt");
+            setShowStaleKeyButton(true);
+          }
+        } else {
+          contentRef.current = finalDecrypted;
+          setContent(finalDecrypted);
+          setError(null);
+          setIsPermanentlyUnreadable(false);
+          setShowStaleKeyButton(false);
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (decryptFromConv success path)`
+          );
         }
-      }, cumulative);
-      timers.push(t);
+      } catch (err) {
+        if (cancelled || generationRef.current !== myGeneration) return;
+        console.error(
+          `[E2EE] useDecryptedContent error for convId=${conversationId}:`,
+          err
+        );
+        setError("Decryption error");
+        setShowStaleKeyButton(true);
+      }
     }
+    decrypt();
     return () => {
       cancelled = true;
-      for (const t of timers) clearTimeout(t);
+      cancelledRef.current = true;
+      generationRef.current = -1;
     };
-  }, [message, conversationId, decryptFromConv, meta.name, meta.mime]);
-  return meta;
-}
-function useAttachmentBlob(message, conversationId, enabled, mimeType, metaStorageKey, retryKey = 0) {
-  const { backend, downloadBlob } = useBackend();
-  const { getConversationKey } = useCrypto();
-  const [blobUrl, setBlobUrl] = reactExports.useState(null);
-  const [loading, setLoading] = reactExports.useState(false);
-  const [fetchError, setFetchError] = reactExports.useState(false);
-  const blobUrlRef = reactExports.useRef(null);
-  const fetchingRef = reactExports.useRef(false);
-  const doneRef = reactExports.useRef(false);
-  const decryptedRef = reactExports.useRef(false);
-  reactExports.useEffect(() => {
-    if (metaStorageKey && !doneRef.current && !decryptedRef.current) {
-      fetchingRef.current = false;
-    }
-  }, [metaStorageKey]);
-  reactExports.useEffect(() => {
-    if (decryptedRef.current) {
+  }, [conversationId, decryptFromConv, msgId, retryVersion]);
+  const handleRekey = async () => {
+    if (hasTriggeredRekey.current) {
       console.log(
-        "[E2EE FILE RECV] Already decrypted — skipping re-run of download effect"
+        `[E2EE REKEY] Already triggered rekey for msgId=${msg.id}, skipping`
       );
       return;
     }
-    fetchingRef.current = false;
-    doneRef.current = false;
-    decryptedRef.current = false;
-    if (!backend || !downloadBlob) return;
-    if (message.messageType === MessageType.text) return;
-    let cancelled = false;
-    setLoading(true);
-    setFetchError(false);
-    setBlobUrl(null);
-    const KEY_POLL_DELAYS = [0, 1500];
-    let cumulative = 0;
-    const timers = [];
-    for (let attemptIndex = 0; attemptIndex < KEY_POLL_DELAYS.length; attemptIndex++) {
-      const delay2 = KEY_POLL_DELAYS[attemptIndex];
-      cumulative += delay2;
-      const t = setTimeout(async () => {
-        if (cancelled || doneRef.current) return;
-        const convKey = getConversationKey(conversationId);
-        if (!convKey) {
-          console.log(
-            `[E2EE FILE RECV] Key not ready for convId=${conversationId}, will retry...`
-          );
-          if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
-            if (!cancelled) {
-              setFetchError(true);
-              setLoading(false);
-            }
-          }
-          return;
-        }
-        if (fetchingRef.current || decryptedRef.current) {
-          console.log(
-            decryptedRef.current ? "[E2EE FILE RECV] Already decrypted, skipping duplicate download" : "[E2EE FILE RECV] fetchingRef already locked, skipping"
-          );
-          return;
-        }
-        fetchingRef.current = true;
-        console.log(
-          `[E2EE FILE RECV] Starting download for storageKey=${metaStorageKey ? `${metaStorageKey.slice(0, 16)}...` : "pending"}`
-        );
-        try {
-          let isShortKey = function(k2) {
-            if (k2 == null) return false;
-            return k2.startsWith("sha256:") && k2.length >= 20 && k2.length <= MAX_KEY_LEN;
-          };
-          const attachments = await backend.getMessageAttachments(message.id);
-          if (cancelled) return;
-          const MAX_KEY_LEN = 200;
-          const backendKey = attachments.length > 0 ? attachments[0].storageKey : null;
-          const inlineKey = metaStorageKey ?? null;
-          const backendKeyLen = (backendKey == null ? void 0 : backendKey.length) ?? 0;
-          const inlineKeyLen = (inlineKey == null ? void 0 : inlineKey.length) ?? 0;
-          console.log(
-            `[E2EE FILE RECV] Available keys - short: ${backendKeyLen}, meta: ${inlineKeyLen}`
-          );
-          const candidateA = backendKey && backendKey.length <= MAX_KEY_LEN ? backendKey : null;
-          const candidateB = inlineKey && inlineKey.length <= MAX_KEY_LEN ? inlineKey : null;
-          let resolvedStorageKeyHex = null;
-          if (isShortKey(candidateA)) {
-            resolvedStorageKeyHex = candidateA;
-          } else if (isShortKey(candidateB)) {
-            resolvedStorageKeyHex = candidateB;
-          } else {
-            const a2 = candidateA;
-            const b2 = candidateB;
-            if (a2 && a2.length >= 20) {
-              resolvedStorageKeyHex = b2 && b2.length >= 20 ? a2.length <= b2.length ? a2 : b2 : a2;
-            } else {
-              resolvedStorageKeyHex = b2 && b2.length >= 20 ? b2 : null;
-            }
-          }
-          if (!resolvedStorageKeyHex) {
-            if (attachments.length === 0) {
-              console.log(
-                `[E2EE FILE RECV] No attachment record yet (attempt ${attemptIndex + 1}/${KEY_POLL_DELAYS.length}), will retry`
-              );
-            } else {
-              console.warn(
-                `[E2EE FILE RECV] Both keys exceed 200 chars — backendKey=${backendKeyLen}, inlineKey=${inlineKeyLen}. Cannot download.`
-              );
-            }
-            if (attemptIndex === KEY_POLL_DELAYS.length - 1) {
-              console.warn(
-                `[E2EE FILE RECV] No valid short storageKey found for msgId=${message.id} after all retries`
-              );
-              if (!cancelled) {
-                setFetchError(true);
-                setLoading(false);
-              }
-            }
-            return;
-          }
-          console.log(
-            `[E2EE FILE RECV] Selected final storageKey (length: ${resolvedStorageKeyHex.length}): ${resolvedStorageKeyHex}`
-          );
-          const storageKey2 = resolvedStorageKeyHex;
-          let encryptedBytes;
-          try {
-            encryptedBytes = await downloadBlob(storageKey2);
-          } catch (fetchErr) {
-            const errMsg = fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
-            console.error(
-              `[E2EE FILE RECV] Fetch failed: ${errMsg} storageKey=${storageKey2.slice(0, 16)}...`
-            );
-            if (fetchErr && typeof fetchErr.nonRetriable === "boolean" && fetchErr.nonRetriable === true) {
-              console.error(
-                "[E2EE FILE RECV] Non-retriable error — aborting all retries."
-              );
-              cancelled = true;
-              for (const t2 of timers) clearTimeout(t2);
-              if (!cancelled) {
-                setFetchError(true);
-                setLoading(false);
-              }
-              setFetchError(true);
-              setLoading(false);
-            }
-            throw fetchErr;
-          }
-          if (cancelled) return;
-          console.log(
-            `[E2EE FILE RECV] Downloaded raw encrypted data: ${encryptedBytes.length} bytes`
-          );
-          const { decryptBlob: decryptBlob2 } = await __vitePreload(async () => {
-            const { decryptBlob: decryptBlob3 } = await Promise.resolve().then(() => crypto$1);
-            return { decryptBlob: decryptBlob3 };
-          }, true ? void 0 : void 0);
-          const decryptedArrayBuffer = await decryptBlob2(
-            convKey,
-            encryptedBytes
-          );
-          if (cancelled) return;
-          console.log(
-            `[E2EE FILE RECV] Decrypted successfully: ${decryptedArrayBuffer.byteLength} bytes`
-          );
-          const blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
-            type: mimeType || "application/octet-stream"
-          });
-          const url = URL.createObjectURL(blob);
-          console.log("[E2EE FILE RECV] Created object URL for display");
-          if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
-          blobUrlRef.current = url;
-          decryptedRef.current = true;
-          setBlobUrl(url);
-          setLoading(false);
-          setFetchError(false);
-          console.log(
-            "[E2EE FILE RECV] UI Update: Successfully replaced spinner with file content"
-          );
-          doneRef.current = true;
-          console.log(
-            `[E2EE FILE RECV] Download succeeded for storageKey=${storageKey2.slice(0, 16)}...`
-          );
-          cancelled = true;
-          for (const t2 of timers) clearTimeout(t2);
-        } catch (err) {
-          console.error("[E2EE FILE RECV] Error during download/decrypt:", err);
-          if (!cancelled) {
-            setFetchError(true);
-            setLoading(false);
-          }
-        } finally {
-          fetchingRef.current = false;
-        }
-      }, cumulative);
-      timers.push(t);
+    hasTriggeredRekey.current = true;
+    setIsRekeying(true);
+    setRekeyError(null);
+    try {
+      if (!onRekey) {
+        throw new Error("Rekey handler not available");
+      }
+      await onRekey();
+      setIsRekeying(false);
+    } catch (err) {
+      console.error(
+        `[E2EE REKEY] MessageBubble rekey error for convId=${conversationId}:`,
+        err
+      );
+      setRekeyError(err instanceof Error ? err.message : "Rekey failed");
+      setIsRekeying(false);
+      setShowStaleKeyButton(false);
+      setError("Unreadable (key rotated)");
     }
-    return () => {
-      cancelled = true;
-      for (const t of timers) clearTimeout(t);
-    };
-  }, [
-    // retryKey triggers a full re-run and ref reset when the user taps "retry".
-    retryKey,
-    enabled,
-    backend,
-    downloadBlob,
-    message.id,
-    message.messageType,
-    conversationId,
-    getConversationKey,
-    mimeType,
-    metaStorageKey
-  ]);
-  reactExports.useEffect(() => {
-    return () => {
-      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
-    };
-  }, []);
-  return { blobUrl, loading, fetchError };
+  };
+  return {
+    content,
+    error,
+    showStaleKeyButton,
+    isRekeying,
+    rekeyError,
+    handleRekey,
+    hasTriggeredRekey: hasTriggeredRekey.current,
+    isPermanentlyUnreadable
+  };
 }
-function ImageAttachment({
+function MessageBubble({
   message,
+  isMine,
+  isGroup,
   conversationId,
-  meta
+  onReply,
+  onReaction,
+  onDelete,
+  onEdit,
+  onPin,
+  isPinned,
+  onThread,
+  threadCount,
+  onResend,
+  isFailed,
+  isSending,
+  showAvatar = true,
+  showTimestamp = true,
+  isLastMessage = false,
+  onScrollToMessage,
+  onRekey
 }) {
-  const [expanded, setExpanded] = reactExports.useState(false);
-  const [retryCount, setRetryCount] = reactExports.useState(0);
-  const prevBlobUrlRef = reactExports.useRef(null);
-  const { blobUrl, loading, fetchError } = useAttachmentBlob(
-    message,
-    conversationId,
-    true,
-    meta.mime ?? "application/octet-stream",
-    meta.storageKey,
-    retryCount
-  );
+  const {
+    content: decryptedContent,
+    error: decryptionError,
+    showStaleKeyButton,
+    isPermanentlyUnreadable
+  } = useDecryptedContent(message, conversationId, onRekey);
+  const [showReactions, setShowReactions] = reactExports.useState(false);
+  const [showMenu, setShowMenu] = reactExports.useState(false);
+  const [imageLoaded, setImageLoaded] = reactExports.useState(false);
+  const [imageError, setImageError] = reactExports.useState(false);
+  const [isRekeying, setIsRekeying] = reactExports.useState(false);
+  const [rekeyStatus, setRekeyStatus] = reactExports.useState("idle");
+  const menuRef = reactExports.useRef(null);
+  const bubbleRef = reactExports.useRef(null);
   reactExports.useEffect(() => {
-    if (blobUrl && !prevBlobUrlRef.current) {
-      console.log("[FileUI] Replaced loading spinner with actual content");
-      console.log(
-        "[FileUI] Final render: Displaying decrypted file with object URL"
+    const handleRekeyComplete = (e) => {
+      var _a3;
+      const customEvent = e;
+      if (((_a3 = customEvent.detail) == null ? void 0 : _a3.conversationId) === conversationId) {
+        console.log(
+          `[E2EE REKEY] Received rekey:complete for convId=${conversationId}, resetting decryption state`
+        );
+        setRekeyStatus("success");
+        setTimeout(() => setRekeyStatus("idle"), 3e3);
+      }
+    };
+    const handleKeyReady = (e) => {
+      var _a3;
+      const customEvent = e;
+      if (((_a3 = customEvent.detail) == null ? void 0 : _a3.conversationId) === conversationId) {
+        console.log(
+          `[E2EE KEY] Received keyReady for convId=${conversationId}, will retry decryption`
+        );
+      }
+    };
+    window.addEventListener("rekey:complete", handleRekeyComplete);
+    window.addEventListener("keyReady", handleKeyReady);
+    return () => {
+      window.removeEventListener("rekey:complete", handleRekeyComplete);
+      window.removeEventListener("keyReady", handleKeyReady);
+    };
+  }, [conversationId]);
+  const handleRekey = async () => {
+    if (isRekeying || rekeyStatus === "rekeying") return;
+    setIsRekeying(true);
+    setRekeyStatus("rekeying");
+    console.log(
+      `[E2EE REKEY] MessageBubble rekey clicked for convId=${conversationId}`
+    );
+    try {
+      if (onRekey) {
+        const result = await onRekey();
+        if (result.success) {
+          setRekeyStatus("success");
+          console.log(
+            `[E2EE REKEY] MessageBubble rekey succeeded for convId=${conversationId}`
+          );
+        } else {
+          setRekeyStatus("error");
+          console.error(
+            `[E2EE REKEY] MessageBubble rekey failed for convId=${conversationId}: ${result.error || "unknown error"}`
+          );
+        }
+      } else {
+        window.dispatchEvent(
+          new CustomEvent("rekey:request", {
+            detail: { convId: conversationId }
+          })
+        );
+        setRekeyStatus("rekeying");
+      }
+    } catch (err) {
+      setRekeyStatus("error");
+      console.error(
+        `[E2EE REKEY] MessageBubble rekey error for convId=${conversationId}:`,
+        err
+      );
+    } finally {
+      setIsRekeying(false);
+      setTimeout(() => {
+        setRekeyStatus((prev) => prev === "rekeying" ? "idle" : prev);
+      }, 3e3);
+    }
+  };
+  const isReply = !!message.replyTo;
+  const replyMessage = isReply ? message.replyTo : null;
+  const handleReplyClick = () => {
+    if (replyMessage && onScrollToMessage) {
+      onScrollToMessage(replyMessage.messageId);
+    }
+  };
+  const handleReaction = (emoji) => {
+    onReaction == null ? void 0 : onReaction(message.id, emoji);
+    setShowReactions(false);
+  };
+  const handleDelete = () => {
+    onDelete == null ? void 0 : onDelete(message.id);
+    setShowMenu(false);
+  };
+  const handleEdit = () => {
+    onEdit == null ? void 0 : onEdit(message.id);
+    setShowMenu(false);
+  };
+  const handlePin = () => {
+    onPin == null ? void 0 : onPin(message.id);
+    setShowMenu(false);
+  };
+  const handleThread = () => {
+    onThread == null ? void 0 : onThread(message.id);
+    setShowMenu(false);
+  };
+  const handleResend = () => {
+    onResend == null ? void 0 : onResend(message.id);
+  };
+  reactExports.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+    if (showMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showMenu]);
+  const bubbleColor = isMine ? "bg-primary text-primary-foreground" : "bg-card text-foreground border border-border";
+  const bubbleShape = isMine ? "rounded-2xl rounded-br-md" : "rounded-2xl rounded-bl-md";
+  const alignment = isMine ? "justify-end" : "justify-start";
+  const renderContent = () => {
+    if (message.isDeleted) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "italic text-gray-400 text-sm", children: "This message was deleted" });
+    }
+    if (decryptedContent === null && !decryptionError) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "w-4 h-4 animate-spin text-gray-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-gray-400", children: "Decrypting..." })
+      ] });
+    }
+    if (decryptionError) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2", children: [
+        isPermanentlyUnreadable ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            CircleAlert,
+            {
+              size: 14,
+              className: "text-muted-foreground flex-shrink-0"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-muted-foreground italic", children: "Message from previous key rotation — unreadable" })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-destructive", children: "Unable to decrypt message" }),
+        !isMine && !isGroup && showStaleKeyButton && !isPermanentlyUnreadable && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            onClick: handleRekey,
+            disabled: rekeyStatus === "rekeying",
+            className: `text-xs px-2 py-1 rounded-md transition-colors ${rekeyStatus === "rekeying" ? "bg-warning text-warning-foreground cursor-wait" : rekeyStatus === "success" ? "bg-success text-success-foreground" : rekeyStatus === "error" ? "bg-destructive/10 text-destructive hover:bg-destructive/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`,
+            "data-ocid": "message.rekey_button",
+            children: rekeyStatus === "rekeying" ? "Rekeying…" : rekeyStatus === "success" ? "Rekeyed — retrying…" : rekeyStatus === "error" ? "Rekey failed — try again" : "Stale key — tap to rekey"
+          }
+        )
+      ] });
+    }
+    if (message.attachment) {
+      return renderAttachment(
+        message.attachment
       );
     }
-    prevBlobUrlRef.current = blobUrl;
-  }, [blobUrl]);
-  if (fetchError) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm whitespace-pre-wrap break-words", children: decryptedContent || message.content || "" });
+  };
+  const renderAttachment = (attachment) => {
+    var _a3, _b3, _c2;
+    const isImage2 = (_a3 = attachment.mimeType) == null ? void 0 : _a3.startsWith("image/");
+    const isVideo = (_b3 = attachment.mimeType) == null ? void 0 : _b3.startsWith("video/");
+    const isAudio = (_c2 = attachment.mimeType) == null ? void 0 : _c2.startsWith("audio/");
+    if (isImage2) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+        !imageLoaded && !imageError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-48 h-48 bg-gray-200 animate-pulse rounded-lg" }),
+        imageError ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { className: "w-8 h-8 text-gray-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-gray-400 ml-2", children: "Failed to load" })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "img",
+          {
+            src: attachment.url || "",
+            alt: attachment.fileName || "Image",
+            className: `max-w-48 max-h-48 rounded-lg object-cover cursor-pointer transition-opacity ${imageLoaded ? "opacity-100" : "opacity-0"}`,
+            onLoad: () => setImageLoaded(true),
+            onError: () => setImageError(true),
+            tabIndex: 0,
+            role: "button",
+            "aria-label": "Expand image",
+            onKeyDown: (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                window.open(
+                  attachment.url || "#",
+                  "_blank"
+                );
+              }
+            },
+            onClick: () => window.open(
+              attachment.url || "#",
+              "_blank"
+            )
+          }
+        )
+      ] });
+    }
+    if (isVideo) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "video",
+        {
+          "aria-label": "Video message",
+          src: attachment.url || "",
+          controls: true,
+          className: "max-w-48 max-h-48 rounded-lg",
+          preload: "metadata"
+        }
+      );
+    }
+    if (isAudio) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "audio",
+        {
+          "aria-label": "Audio message",
+          src: attachment.url || "",
+          controls: true,
+          className: "max-w-48",
+          preload: "metadata"
+        }
+      );
+    }
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
+      "a",
       {
-        type: "button",
-        className: "flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer",
-        onClick: () => setRetryCount((c2) => c2 + 1),
-        "aria-label": "Retry loading image",
-        "data-ocid": "message.image_retry_button",
+        href: attachment.url || "#",
+        target: "_blank",
+        rel: "noopener noreferrer",
+        className: "flex items-center gap-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors",
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Failed to load — tap to retry" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "w-5 h-5 text-gray-500" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium truncate max-w-[150px]", children: attachment.fileName || "File" }),
+            attachment.fileSize && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-gray-400", children: ((size2) => {
+              if (size2 < 1024) return `${size2} B`;
+              if (size2 < 1024 * 1024) return `${(size2 / 1024).toFixed(1)} KB`;
+              return `${(size2 / (1024 * 1024)).toFixed(1)} MB`;
+            })(attachment.fileSize) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { className: "w-4 h-4 text-gray-400 ml-auto" })
         ]
       }
     );
-  }
-  if (loading) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading image..." })
-    ] });
-  }
-  if (!blobUrl) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Image, { size: 16 }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: meta.name ?? "Image" })
-    ] });
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
+  };
+  const renderReactions = () => {
+    const reactions = message.reactions;
+    if (!reactions || reactions.length === 0) return null;
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-1 mt-1", children: reactions.map((reaction, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
         type: "button",
-        className: "block rounded-lg overflow-hidden max-w-[200px] cursor-pointer hover:opacity-90 transition-opacity",
-        onClick: () => setExpanded(true),
-        "aria-label": "View full image",
-        "data-ocid": "message.image_preview",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "img",
-          {
-            src: blobUrl,
-            alt: meta.name ?? "Image attachment",
-            className: "w-full h-auto object-cover",
-            style: { maxHeight: 160 }
-          }
-        )
-      }
-    ),
-    meta.name && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-1 max-w-[200px]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs opacity-60 truncate flex-1", children: meta.name }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "a",
-        {
-          href: blobUrl,
-          download: meta.name ?? "image",
-          className: "opacity-70 hover:opacity-100 transition-opacity flex-shrink-0",
-          "aria-label": `Download ${meta.name ?? "image"}`,
-          "data-ocid": "message.download_button",
-          onClick: (e) => e.stopPropagation(),
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 14 })
-        }
-      )
-    ] }),
-    expanded && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
-      {
-        type: "button",
-        className: "fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out relative",
-        onClick: () => setExpanded(false),
-        "aria-label": "Close image",
-        "data-ocid": "message.image_lightbox",
+        onClick: () => handleReaction(reaction.emoji),
+        className: `text-xs px-1.5 py-0.5 rounded-full transition-colors ${reaction.users.includes("currentUser") ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground hover:bg-muted/80"}`,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "img",
+          reaction.emoji,
+          " ",
+          reaction.count
+        ]
+      },
+      `${reaction.emoji}-${index2}`
+    )) });
+  };
+  const renderReplyPreview = () => {
+    if (!replyMessage) return null;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "mb-2 p-2 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted transition-colors",
+        tabIndex: 0,
+        role: "button",
+        "aria-label": "Reply to message",
+        onKeyDown: (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleReplyClick();
+          }
+        },
+        onClick: handleReplyClick,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 mb-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Reply, { className: "w-3 h-3 text-muted-foreground" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-muted-foreground", children: replyMessage.senderName || "Unknown" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-foreground/70 truncate", children: replyMessage.content || "Original message" })
+        ]
+      }
+    );
+  };
+  const renderStatus = () => {
+    if (!isMine) return null;
+    if (isSending) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-muted-foreground flex items-center gap-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-3 h-3" }),
+        "Sending..."
+      ] });
+    }
+    if (isFailed) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          type: "button",
+          onClick: handleResend,
+          className: "text-xs text-destructive flex items-center gap-1 hover:text-destructive/80 transition-colors",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CircleAlert, { className: "w-3 h-3" }),
+            "Failed — tap to retry"
+          ]
+        }
+      );
+    }
+    if (message.readBy && message.readBy.length > 0) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-primary flex items-center gap-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-3 h-3" }),
+        "Read"
+      ] });
+    }
+    const deliveredTo = message.deliveredTo;
+    if (deliveredTo && deliveredTo.length > 0) {
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-muted-foreground flex items-center gap-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-3 h-3" }),
+        "Delivered"
+      ] });
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-muted-foreground flex items-center gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-3 h-3" }),
+      "Sent"
+    ] });
+  };
+  const renderMenu = () => {
+    if (!showMenu) return null;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        ref: menuRef,
+        className: "absolute z-50 bg-card shadow-lg rounded-lg py-1 min-w-[120px] border border-border",
+        style: {
+          [isMine ? "right" : "left"]: "0",
+          top: "100%",
+          marginTop: "4px"
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
             {
-              src: blobUrl,
-              alt: meta.name ?? "Image attachment",
-              className: "max-w-full max-h-full rounded-lg shadow-2xl object-contain"
+              type: "button",
+              onClick: () => {
+                onReply == null ? void 0 : onReply(message);
+                setShowMenu(false);
+              },
+              className: "w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Reply, { className: "w-4 h-4" }),
+                "Reply"
+              ]
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "a",
+            "button",
             {
-              href: blobUrl,
-              download: meta.name ?? "image",
-              className: "absolute top-4 right-4 flex items-center gap-2 bg-black/60 hover:bg-black/80 text-white text-sm px-3 py-2 rounded-lg transition-colors",
-              "aria-label": `Download ${meta.name ?? "image"}`,
-              "data-ocid": "message.lightbox_download_button",
-              onClick: (e) => e.stopPropagation(),
+              type: "button",
+              onClick: handleThread,
+              className: "w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2",
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 16 }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Download" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { className: "w-4 h-4" }),
+                threadCount ? `${threadCount} replies` : "Start thread"
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: () => setShowReactions(!showReactions),
+              className: "w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Smile, { className: "w-4 h-4" }),
+                "React"
+              ]
+            }
+          ),
+          isMine && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: handleEdit,
+                className: "w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(SquarePen, { className: "w-4 h-4" }),
+                  "Edit"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: handleDelete,
+                className: "w-full text-left px-3 py-2 text-sm text-destructive hover:bg-destructive/10 flex items-center gap-2",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Trash, { className: "w-4 h-4" }),
+                  "Delete"
+                ]
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: handlePin,
+              className: "w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Pin, { className: "w-4 h-4" }),
+                isPinned ? "Unpin" : "Pin"
               ]
             }
           )
         ]
       }
-    )
-  ] });
-}
-function FileAttachment({
-  message,
-  conversationId,
-  meta
-}) {
-  const [retryCount, setRetryCount] = reactExports.useState(0);
-  const prevBlobUrlRef = reactExports.useRef(null);
-  const { blobUrl, loading, fetchError } = useAttachmentBlob(
-    message,
-    conversationId,
-    true,
-    meta.mime ?? "application/octet-stream",
-    meta.storageKey,
-    retryCount
-  );
-  reactExports.useEffect(() => {
-    if (blobUrl && !prevBlobUrlRef.current) {
-      console.log("[FileUI] Replaced loading spinner with actual content");
-      console.log(
-        "[FileUI] Final render: Displaying decrypted file with object URL"
-      );
-    }
-    prevBlobUrlRef.current = blobUrl;
-  }, [blobUrl]);
-  const icon = message.messageType === MessageType.video ? /* @__PURE__ */ jsxRuntimeExports.jsx(Video, { size: 16 }) : message.messageType === MessageType.audio ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base leading-none", children: "🎤" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { size: 16 });
-  const label = meta.name ?? (message.messageType === MessageType.video ? "Video" : message.messageType === MessageType.audio ? "Voice note" : "File");
-  if (fetchError) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
+    );
+  };
+  const renderReactionPicker = () => {
+    if (!showReactions) return null;
+    const emojis = ["👍", "❤️", "😂", "😮", "😢", "🎉", "🔥", "👏"];
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
       {
-        type: "button",
-        className: "flex items-center gap-2 text-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer",
-        onClick: () => setRetryCount((c2) => c2 + 1),
-        "aria-label": `Retry loading ${label}`,
-        "data-ocid": "message.file_retry_button",
-        children: [
-          icon,
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs opacity-50", children: "Failed to load — tap to retry" })
-        ]
+        className: "absolute z-50 bg-white shadow-lg rounded-lg p-2 flex gap-1 border border-gray-200",
+        style: {
+          [isMine ? "right" : "left"]: "0",
+          bottom: "100%",
+          marginBottom: "4px"
+        },
+        children: emojis.map((emoji) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => handleReaction(emoji),
+            className: "text-lg hover:scale-125 transition-transform p-1",
+            children: emoji
+          },
+          emoji
+        ))
       }
     );
-  }
-  if (loading) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm opacity-70", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading..." })
-    ] });
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm", children: [
-    icon,
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[140px] opacity-90", children: label }),
-    blobUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "a",
-      {
-        href: blobUrl,
-        download: meta.name ?? label,
-        className: "opacity-70 hover:opacity-100 transition-opacity",
-        "aria-label": `Download ${label}`,
-        "data-ocid": "message.download_button",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { size: 14 })
-      }
-    ) : null
-  ] });
-}
-function MessageBubble({
-  message,
-  isMine,
-  senderProfile,
-  showAvatar,
-  conversationId,
-  myPrincipal,
-  isGroup: _isGroup = false,
-  onReply,
-  onDelete
-}) {
-  const [contextOpen, setContextOpen] = reactExports.useState(false);
-  const [contextPos, setContextPos] = reactExports.useState({ x: 0, y: 0 });
-  const menuRef = reactExports.useRef(null);
-  const { text, failed, showStaleKeyButton } = useDecryptedContent(
-    message,
-    conversationId
-  );
-  const { rekeyConversation } = useCrypto();
-  const meta = useAttachmentMeta(message, conversationId);
-  const expired = isExpired(message);
-  const sentMs = Number(message.sentAt) / 1e6;
-  const timeStr = new Date(sentMs).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-  const senderPrincipalText = message.sender.toText();
-  const [senderDisplayName, setSenderDisplayName] = reactExports.useState(
-    () => getDisplayName(senderPrincipalText)
-  );
-  reactExports.useEffect(() => {
-    if (!senderProfile || senderProfile.encryptedDisplayName.length === 0)
-      return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const key = await deriveDisplayNameKey(senderProfile.id);
-        const decrypted = await decryptMessage(
-          key,
-          new Uint8Array(senderProfile.encryptedDisplayName).slice(0)
-        );
-        if (cancelled || !(decrypted == null ? void 0 : decrypted.trim())) return;
-        setLocalDisplayName(senderPrincipalText, decrypted);
-        setSenderDisplayName(decrypted);
-      } catch (err) {
-        console.error(
-          "[DisplayName] Failed to decrypt sender display name for",
-          senderPrincipalText,
-          err
-        );
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [senderProfile, senderPrincipalText]);
-  const openContextMenu = reactExports.useCallback(
-    (e) => {
-      e.preventDefault();
-      const x3 = "touches" in e ? e.touches[0].clientX : e.clientX;
-      const y2 = "touches" in e ? e.touches[0].clientY : e.clientY;
-      setContextPos({ x: x3, y: y2 });
-      setContextOpen(true);
-    },
-    []
-  );
-  reactExports.useEffect(() => {
-    if (!contextOpen) return;
-    const close = () => setContextOpen(false);
-    document.addEventListener("click", close);
-    return () => document.removeEventListener("click", close);
-  }, [contextOpen]);
-  const isHighPriority = message.priority === "high";
-  const bubbleBg = isMine ? "bg-primary text-primary-foreground" : "bg-card text-card-foreground border border-border";
-  const isAttachment = message.messageType !== MessageType.text && !message.isDeleted && !expired;
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
-      className: `flex items-end gap-2 group ${isMine ? "flex-row-reverse" : "flex-row"} ${showAvatar ? "mt-2" : "mt-0.5"}`,
-      "data-ocid": `message.item.${message.id}`,
+      ref: bubbleRef,
+      className: `flex ${alignment} mb-4 ${isLastMessage ? "mb-6" : ""}`,
+      "data-message-id": message.id,
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 flex-shrink-0", children: showAvatar && !isMine && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        !isMine && showAvatar && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mr-2 flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           UserAvatar,
           {
-            principal: senderPrincipalText,
-            displayName: senderDisplayName !== senderPrincipalText ? senderDisplayName : void 0,
-            avatarUrl: (() => {
-              try {
-                return localStorage.getItem(`cs_avatar:${senderPrincipalText}`) ?? void 0;
-              } catch {
-                return void 0;
-              }
-            })(),
-            size: 30,
-            "aria-hidden": "true"
+            principal: message.sender.toText(),
+            displayName: message.senderName || "User",
+            size: 32
           }
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
-            className: `relative max-w-[70%] min-w-0 ${isMine ? "items-end" : "items-start"} flex flex-col`,
-            onContextMenu: openContextMenu,
+            className: `flex flex-col max-w-[70%] ${isMine ? "items-end" : "items-start"}`,
             children: [
-              !isMine && showAvatar && senderDisplayName.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full", children: senderDisplayName }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "div",
-                {
-                  className: `rounded-2xl px-3.5 py-2.5 shadow-message break-words ${isMine ? "rounded-br-sm" : "rounded-bl-sm"} ${bubbleBg}`,
-                  children: expired ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 text-xs opacity-60 italic", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Timer, { size: 12 }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Message expired" })
-                  ] }) : message.isDeleted ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Message deleted" }) : message.messageType === MessageType.text ? failed ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs italic opacity-60", children: "Unable to decrypt" }),
-                    showStaleKeyButton && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      "button",
-                      {
-                        type: "button",
-                        className: "text-xs underline text-destructive hover:text-destructive/80 transition-colors cursor-pointer",
-                        onClick: () => {
-                          console.log(
-                            `[E2EE UI] User tapped rekey for convId=${conversationId}`
-                          );
-                          rekeyConversation(conversationId).catch(
-                            (err) => {
-                              console.error(
-                                `[E2EE UI] Manual rekey failed for convId=${conversationId}:`,
-                                err
-                              );
-                            }
-                          );
-                        },
-                        "data-ocid": "message.rekey_button",
-                        children: "Stale key — tap to rekey"
-                      }
-                    )
-                  ] }) : text === null ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 14, className: "animate-spin opacity-40" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm leading-relaxed whitespace-pre-wrap break-words", children: text }) : isAttachment && message.messageType === MessageType.image ? isMine ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5 text-sm opacity-90", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(CheckCheck, { size: 14 }),
-                    "File delivered",
-                    (meta == null ? void 0 : meta.name) ? `: ${meta.name}` : ""
-                  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    ImageAttachment,
-                    {
-                      message,
-                      conversationId,
-                      meta
-                    }
-                  ) : isAttachment ? isMine ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-1.5 text-sm opacity-90", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(CheckCheck, { size: 14 }),
-                    "File delivered",
-                    (meta == null ? void 0 : meta.name) ? `: ${meta.name}` : ""
-                  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    FileAttachment,
-                    {
-                      message,
-                      conversationId,
-                      meta
-                    }
-                  ) : null
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                "div",
-                {
-                  className: `flex items-center gap-1 mt-0.5 px-1 ${isMine ? "flex-row-reverse" : "flex-row"}`,
-                  children: [
-                    isHighPriority && /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityMessageBadge, {}),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-muted-foreground", children: timeStr }),
-                    message.ttlSeconds && !expired && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      Timer,
-                      {
-                        size: 10,
-                        className: "text-muted-foreground",
-                        "aria-label": `Disappears in ${message.ttlSeconds}s`
-                      }
-                    ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      MessageStatus,
-                      {
-                        message,
-                        isMine,
-                        myPrincipal
-                      }
-                    )
-                  ]
-                }
-              )
+              isGroup && !isMine && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-gray-500 mb-1 ml-1", children: message.senderName || "Unknown" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                renderReactionPicker(),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: `${bubbleColor} ${bubbleShape} px-4 py-2.5 shadow-sm relative`,
+                    onContextMenu: (e) => {
+                      e.preventDefault();
+                      setShowMenu(!showMenu);
+                    },
+                    children: [
+                      renderReplyPreview(),
+                      renderContent(),
+                      renderReactions(),
+                      showTimestamp && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "div",
+                        {
+                          className: `flex items-center gap-1 mt-1 ${isMine ? "justify-end" : "justify-start"}`,
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] opacity-70", children: new Date(
+                              Number(message.sentAt) / 1e6
+                            ).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit"
+                            }) }),
+                            renderStatus()
+                          ]
+                        }
+                      )
+                    ]
+                  }
+                ),
+                renderMenu()
+              ] }),
+              message.isEdited && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-gray-400 mt-0.5 ml-1", children: "Edited" })
             ]
           }
         ),
-        contextOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
+        isMine && showAvatar && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ml-2 flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          UserAvatar,
           {
-            ref: menuRef,
-            className: "fixed z-50 min-w-[140px] bg-popover border border-border rounded-lg shadow-elevated py-1 text-sm",
-            style: { left: contextPos.x, top: contextPos.y },
-            "data-ocid": "message.dropdown_menu",
-            children: [
-              onReply && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  type: "button",
-                  className: "w-full text-left px-3 py-1.5 hover:bg-muted transition-colors",
-                  onClick: () => {
-                    onReply(message);
-                    setContextOpen(false);
-                  },
-                  "data-ocid": "message.reply_button",
-                  children: "Reply"
-                }
-              ),
-              isMine && onDelete && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  type: "button",
-                  className: "w-full text-left px-3 py-1.5 text-destructive hover:bg-destructive/10 transition-colors",
-                  onClick: () => {
-                    onDelete(message.id);
-                    setContextOpen(false);
-                  },
-                  "data-ocid": "message.delete_button",
-                  children: "Delete"
-                }
-              )
-            ]
+            principal: message.sender.toText(),
+            displayName: message.senderName || "You",
+            size: 32
           }
-        )
+        ) })
       ]
     }
   );
@@ -64688,7 +65814,8 @@ function DecryptedQueuedBubble({
   const [preview, setPreview] = reactExports.useState(null);
   reactExports.useEffect(() => {
     let cancelled = false;
-    decryptFromConv(convIdStr, message.encryptedContent).then((text) => {
+    const msgId = message.id.toString();
+    decryptFromConv(convIdStr, message.encryptedContent, msgId).then((text) => {
       if (!cancelled) setPreview(text);
     }).catch(() => {
       if (!cancelled) setPreview(null);
@@ -64696,7 +65823,7 @@ function DecryptedQueuedBubble({
     return () => {
       cancelled = true;
     };
-  }, [convIdStr, message.encryptedContent, decryptFromConv]);
+  }, [convIdStr, message.encryptedContent, decryptFromConv, message.id]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     QueuedMessageBubble,
     {
@@ -64718,7 +65845,7 @@ const MessageList = reactExports.memo(function MessageList2({
   const myPrincipal = (principal == null ? void 0 : principal.toText()) ?? "";
   const { data: messages = [], isLoading } = useMessages(conversationId);
   const { pendingMessages, retryMessage, deleteQueuedMessage } = useOfflineQueue();
-  const { decryptFromConv } = useCrypto();
+  const { decryptFromConv, rekeyConversation } = useCrypto();
   const markRead = useMarkRead();
   const markReadMutateRef = reactExports.useRef(markRead.mutate);
   markReadMutateRef.current = markRead.mutate;
@@ -64930,7 +66057,10 @@ const MessageList = reactExports.memo(function MessageList2({
                 showAvatar,
                 conversationId: conversationId.toString(),
                 myPrincipal,
-                isGroup
+                isGroup,
+                onRekey: async () => {
+                  return rekeyConversation(conversationId.toString());
+                }
               }
             ) }, msg.id.toString());
           })
@@ -65526,30 +66656,98 @@ function ChatSearchBar({
     }
   );
 }
-function RekeyButton({ convId }) {
+const _RekeyButton = ({
+  convId,
+  isGroup
+}) => {
   const { rekeyConversation } = useCrypto();
-  const [isRekeying, setIsRekeying] = reactExports.useState(false);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "button",
-    {
-      type: "button",
-      onClick: async () => {
-        setIsRekeying(true);
-        try {
-          await rekeyConversation(convId.toString());
-        } finally {
-          setIsRekeying(false);
+  const [status, setStatus] = reactExports.useState("idle");
+  const [errorMsg, setErrorMsg] = reactExports.useState(null);
+  const handleRekey = async () => {
+    if (status === "rekeying") return;
+    setStatus("rekeying");
+    setErrorMsg(null);
+    console.log(`[E2EE REKEY] User clicked rekey button for convId=${convId}`);
+    try {
+      await clearConversationStatusCache(convId);
+      console.log(
+        `[E2EE REKEY] Cleared decryption status cache for convId=${convId}`
+      );
+    } catch (err) {
+      console.warn(
+        `[E2EE REKEY] Failed to clear status cache for convId=${convId}:`,
+        err
+      );
+    }
+    try {
+      const result = await rekeyConversation(convId);
+      if (result.success) {
+        console.log(`[E2EE REKEY] Rekey succeeded for convId=${convId}`);
+        setStatus("success");
+        setTimeout(() => setStatus("idle"), 5e3);
+      } else {
+        console.error(
+          `[E2EE REKEY] Rekey failed for convId=${convId}: ${result.error}`
+        );
+        setStatus("error");
+        setErrorMsg(result.error || "rekey_failed");
+      }
+    } catch (err) {
+      console.error(`[E2EE REKEY] Rekey exception for convId=${convId}:`, err);
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "rekey_failed");
+    }
+  };
+  if (isGroup) return null;
+  if (status === "rekeying") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-xs text-muted-foreground", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3 w-3 animate-spin" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Rekeying…" })
+    ] });
+  }
+  if (status === "success") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-xs text-green-600", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { className: "h-3 w-3" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Rekey complete — refresh if needed" })
+    ] });
+  }
+  if (status === "error") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-xs text-red-600", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(CircleAlert, { className: "h-3 w-3" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          "Rekey failed",
+          errorMsg ? `: ${errorMsg}` : ""
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Button,
+        {
+          variant: "outline",
+          size: "sm",
+          className: "h-6 text-xs",
+          onClick: handleRekey,
+          "data-ocid": "chat.rekey.retry_button",
+          children: "Retry Rekey"
         }
-      },
-      disabled: isRekeying,
-      className: "relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth disabled:opacity-50",
-      "aria-label": "Rekey conversation",
-      title: "Rekey conversation",
-      "data-ocid": "chat.rekey_button",
-      children: isRekeying ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium", children: "Rekeying…" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(KeyRound, { size: 18 })
+      )
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Button,
+    {
+      variant: "outline",
+      size: "sm",
+      className: "h-6 text-xs",
+      onClick: handleRekey,
+      "data-ocid": "chat.rekey.button",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "h-3 w-3 mr-1" }),
+        "Rekey Conversation"
+      ]
     }
   );
-}
+};
 async function decryptGroupName(conv) {
   if (!conv.encryptedName || conv.encryptedName.length === 0) return null;
   const convIdStr = conv.id.toString();
@@ -65586,11 +66784,12 @@ function ChatHeader({
   isSearchOpen,
   isCreator,
   pendingRequestCount,
-  onManageOpen
+  onManageOpen,
+  isLoading = false
 }) {
   const navigate = useNavigate();
   const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
-  const isGroup = conv.kind === ConversationKind.group;
+  const isGroup = (conv == null ? void 0 : conv.kind) === ConversationKind.group;
   const [groupName, setGroupName] = reactExports.useState(null);
   reactExports.useEffect(() => {
     if (!isGroup) return;
@@ -65603,6 +66802,37 @@ function ChatHeader({
   const peerLastSeen = !isGroup && (profile == null ? void 0 : profile.lastSeen) !== void 0 ? profile.lastSeen : void 0;
   const peerIsOnline = peerLastSeen !== void 0 ? isOnline(peerLastSeen) : void 0;
   const peerLastSeenLabel = peerLastSeen !== void 0 ? formatLastSeen$1(peerLastSeen) : void 0;
+  if (isLoading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex items-center gap-3 px-4 py-3 bg-card border-b border-border shadow-elevated flex-shrink-0",
+        "data-ocid": "chat.header_skeleton",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: onBack,
+              className: "flex-shrink-0 p-1.5 -ml-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth md:hidden",
+              "aria-label": "Back to conversations",
+              "data-ocid": "chat.back_button",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeft, { size: 20 })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-[38px] w-[38px] rounded-full flex-shrink-0" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0 space-y-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-32" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-3 w-20" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 flex-shrink-0", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-9 w-9 rounded-lg" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-9 w-9 rounded-lg" })
+          ] })
+        ]
+      }
+    );
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
@@ -65670,7 +66900,7 @@ function ChatHeader({
               children: /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { size: 18 })
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(RekeyButton, { convId: conv.id }),
+          !isGroup && conv && /* @__PURE__ */ jsxRuntimeExports.jsx(_RekeyButton, { convId: conv.id.toString(), isGroup }),
           isCreator && /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "button",
             {
@@ -65744,7 +66974,7 @@ function ChatPage() {
       return null;
     }
   }, [id2]);
-  const { data: conv, isLoading } = useConversation(convId);
+  const { data: conv, isLoading, isFetching, status } = useConversation(convId);
   const cachedMessages = reactExports.useMemo(() => {
     if (!convId) return [];
     const cached = queryClient2.getQueryData([
@@ -65765,7 +66995,7 @@ function ChatPage() {
           const raw = m2.encryptedContent;
           const fresh = new Uint8Array(raw.length);
           for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
-          const text = await decryptFromConv(convIdStr, fresh);
+          const text = await decryptFromConv(convIdStr, fresh, m2.id.toString());
           return { id: m2.id.toString(), text: text ?? "" };
         } catch {
           return { id: m2.id.toString(), text: "" };
@@ -66025,39 +67255,29 @@ function ChatPage() {
     enabled: !!actor && !actorFetching && isGroup && !!principal,
     staleTime: 6e4
   });
-  if (isLoading) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        className: "flex h-full items-center justify-center",
-        "data-ocid": "chat.loading_state",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, {})
+  reactExports.useEffect(() => {
+    const handleDecryptionSuccess = (e) => {
+      var _a4;
+      const customEvent = e;
+      if (((_a4 = customEvent.detail) == null ? void 0 : _a4.conversationId) === (convId == null ? void 0 : convId.toString())) {
+        console.log(
+          `[E2EE DECRYPT SUCCESS] ChatPage received decryptionSuccess for msgId=${customEvent.detail.msgId}, invalidating messages query`
+        );
+        queryClient2.invalidateQueries({
+          queryKey: ["messages", convId == null ? void 0 : convId.toString()]
+        });
       }
-    );
-  }
-  if (!conv || convId === null) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: "flex h-full flex-col items-center justify-center gap-3",
-        "data-ocid": "chat.error_state",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "Conversation not found." }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              className: "text-primary text-sm hover:underline",
-              onClick: () => navigate({ to: "/app/conversations" }),
-              "data-ocid": "chat.back_button",
-              children: "Back to conversations"
-            }
-          )
-        ]
-      }
-    );
-  }
-  const handleBack = () => navigate({ to: "/app/conversations" });
+    };
+    window.addEventListener("decryptionSuccess", handleDecryptionSuccess);
+    return () => {
+      window.removeEventListener("decryptionSuccess", handleDecryptionSuccess);
+    };
+  }, [convId, queryClient2]);
+  const isConvLoading = (isLoading || isFetching) && !actorFetching;
+  const isConvNotFound = status === "success" && (!conv || convId === null || convId === 0n);
+  const handleBack = reactExports.useCallback(() => {
+    navigate({ to: "/app/conversations" });
+  }, [navigate]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full bg-background", "data-ocid": "chat.page", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       ChatHeader,
@@ -66069,10 +67289,11 @@ function ChatPage() {
         isSearchOpen: searchOpen,
         isCreator,
         pendingRequestCount,
-        onManageOpen: () => setManagePanelOpen(true)
+        onManageOpen: () => setManagePanelOpen(true),
+        isLoading
       }
     ),
-    searchOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    searchOpen && conv && /* @__PURE__ */ jsxRuntimeExports.jsx(
       ChatSearchBar,
       {
         decryptedMessages: decryptedMsgs,
@@ -66088,8 +67309,27 @@ function ChatPage() {
         isDraining: connection.isOnline && queueDepth > 0
       }
     ),
-    isGroup && /* @__PURE__ */ jsxRuntimeExports.jsx(RetentionBanner, { convId, isAdmin }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
+    isGroup && convId !== null && /* @__PURE__ */ jsxRuntimeExports.jsx(RetentionBanner, { convId, isAdmin }),
+    isConvNotFound ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex-1 flex flex-col items-center justify-center gap-3",
+        "data-ocid": "chat.error_state",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "Conversation not found." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "text-primary text-sm hover:underline",
+              onClick: handleBack,
+              "data-ocid": "chat.back_button",
+              children: "Back to conversations"
+            }
+          )
+        ]
+      }
+    ) : conv && convId !== null ? /* @__PURE__ */ jsxRuntimeExports.jsx(
       MessageList,
       {
         conversationId: convId,
@@ -66099,12 +67339,54 @@ function ChatPage() {
         onDeleteQueued: deleteQueuedMessage
       },
       String(convId)
+    ) : isConvLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex-1 flex flex-col px-4 py-3 gap-4",
+        "data-ocid": "chat.loading_state",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 items-end", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-8 rounded-full flex-shrink-0" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2 max-w-[70%]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-10 w-48 rounded-2xl rounded-bl-sm" }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2 items-end justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2 max-w-[70%]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-10 w-40 rounded-2xl rounded-br-sm" }) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 items-end", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-8 rounded-full flex-shrink-0" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2 max-w-[70%]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-14 w-56 rounded-2xl rounded-bl-sm" }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2 items-end justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2 max-w-[70%]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-10 w-32 rounded-2xl rounded-br-sm" }) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 items-end", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-8 rounded-full flex-shrink-0" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2 max-w-[70%]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-10 w-44 rounded-2xl rounded-bl-sm" }) })
+          ] })
+        ]
+      }
+    ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex-1 flex flex-col items-center justify-center gap-3",
+        "data-ocid": "chat.empty_state",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "Select a conversation to start chatting." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "text-primary text-sm hover:underline",
+              onClick: handleBack,
+              "data-ocid": "chat.back_button",
+              children: "Back to conversations"
+            }
+          )
+        ]
+      }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
+    convId !== null && !isConvNotFound ? /* @__PURE__ */ jsxRuntimeExports.jsx(
       MessageInput,
       {
         conversationId: convId,
         isKeyReady: isKeyReady(convId.toString()),
+        disabled: isConvLoading,
         onMessageSent: () => {
           queryClient2.invalidateQueries({
             queryKey: ["messages", convId.toString()]
@@ -66112,8 +67394,8 @@ function ChatPage() {
           queryClient2.invalidateQueries({ queryKey: ["conversations"] });
         }
       }
-    ),
-    isCreator && convId !== null && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ) : null,
+    isCreator && conv && convId !== null && /* @__PURE__ */ jsxRuntimeExports.jsx(
       GroupManagePanel,
       {
         conv,
@@ -66279,9 +67561,11 @@ function ConversationListItem({
     setConfirmOpen(true);
   }
   async function handleConfirmDelete() {
+    const convId = conversation.id.toString();
     await deleteConversation.mutateAsync(conversation.id);
+    await clearConversationCache(convId);
     setConfirmOpen(false);
-    if ((params == null ? void 0 : params.id) === conversation.id.toString()) {
+    if ((params == null ? void 0 : params.id) === convId) {
       navigate({ to: "/app/conversations" });
     }
     onDeleted == null ? void 0 : onDeleted();
@@ -67716,6 +69000,7 @@ function NewConversationDialog({
   const { actor } = useActor(createActor);
   const { principal } = useAuth();
   const navigate = useNavigate();
+  const queryClient2 = useQueryClient();
   const [directPeer, setDirectPeer] = reactExports.useState(null);
   const [directProfile, setDirectProfile] = reactExports.useState(
     null
@@ -67781,6 +69066,9 @@ function NewConversationDialog({
       }
       onOpenChange(false);
       resetState();
+      queryClient2.invalidateQueries({
+        queryKey: ["conversation", result.ok.id.toString()]
+      });
       navigate({
         to: "/app/conversations/$id",
         params: { id: result.ok.id.toString() }
@@ -67862,6 +69150,9 @@ function NewConversationDialog({
       }
       onOpenChange(false);
       resetState();
+      queryClient2.invalidateQueries({
+        queryKey: ["conversation", result.ok.id.toString()]
+      });
       navigate({
         to: "/app/conversations/$id",
         params: { id: result.ok.id.toString() }
@@ -70357,10 +71648,16 @@ function SettingsPage() {
     logout();
     navigate({ to: "/login" });
   };
-  const handleClearKeys = () => {
+  const handleClearKeys = async () => {
     try {
       const db = indexedDB.deleteDatabase("cs_keystore");
-      db.onsuccess = () => ue.success("Local encryption keys cleared. Reloading…", {
+      await new Promise((resolve, reject) => {
+        db.onsuccess = () => resolve();
+        db.onerror = () => reject(db.error);
+      });
+      await clearAllCache();
+      await clearAllFileCache();
+      ue.success("Local encryption keys and caches cleared. Reloading…", {
         duration: 3e3,
         onAutoClose: () => window.location.reload()
       });
@@ -70609,22 +71906,22 @@ function SettingsPage() {
     ] }) })
   ] }) });
 }
-const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-BY9-BXC8.js"), true ? __vite__mapDeps([0,1]) : void 0));
+const DiscoverPage = reactExports.lazy(() => __vitePreload(() => import("./DiscoverPage-DmFoUHka.js"), true ? __vite__mapDeps([0,1]) : void 0));
 const AdminOrganizationsPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminOrganizationsPage-lrduiwmQ.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
+  () => __vitePreload(() => import("./AdminOrganizationsPage-B0sReS_r.js"), true ? __vite__mapDeps([2,3,4,5,6]) : void 0)
 );
-const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-B6aeYjAr.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
-const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-eOUdySh_.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
-const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-yoCGzvEX.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
+const AdminUsersPage = reactExports.lazy(() => __vitePreload(() => import("./AdminUsersPage-HREUpBcz.js"), true ? __vite__mapDeps([7,3,4,8]) : void 0));
+const AdminGroupsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminGroupsPage-DpdyyeI3.js"), true ? __vite__mapDeps([9,3,4]) : void 0));
+const AdminAuditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminAuditPage-DjIZjeBP.js"), true ? __vite__mapDeps([10,6,8]) : void 0));
 const AdminKeyEscrowPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminKeyEscrowPage-B7DvTr_d.js"), true ? [] : void 0)
+  () => __vitePreload(() => import("./AdminKeyEscrowPage-DFJFODzR.js"), true ? [] : void 0)
 );
 const AdminRetentionPoliciesPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-D9nN-AH2.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
+  () => __vitePreload(() => import("./AdminRetentionPoliciesPage-is1d8-zr.js").then((n) => n.A), true ? __vite__mapDeps([11,4,1,5]) : void 0)
 );
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-Cdmzb_Ik.js"), true ? __vite__mapDeps([12,1]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettingsPage-B2el44gU.js"), true ? __vite__mapDeps([12,1]) : void 0));
 const AdminBootstrapPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AdminBootstrapPage-CJkEVCd7.js"), true ? __vite__mapDeps([13,6]) : void 0)
+  () => __vitePreload(() => import("./AdminBootstrapPage-Doi8CyaF.js"), true ? __vite__mapDeps([13,6]) : void 0)
 );
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
@@ -70874,129 +72171,134 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(InternetIdentityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) })
 );
 export {
-  Shield as $,
+  createActor as $,
   AdminLayout as A,
   Button as B,
   Compass as C,
-  SelectItem as D,
-  AlertDialog as E,
-  AlertDialogTrigger as F,
-  AlertDialogContent as G,
-  AlertDialogHeader as H,
+  SelectValue as D,
+  SelectContent as E,
+  RetentionPeriod as F,
+  SelectItem as G,
+  AlertDialog as H,
   Input as I,
-  AlertDialogTitle as J,
-  AlertDialogDescription as K,
+  AlertDialogTrigger as J,
+  AlertDialogContent as K,
   Layout as L,
-  AlertDialogFooter as M,
-  AlertDialogCancel as N,
+  AlertDialogHeader as M,
+  AlertDialogTitle as N,
   OrgRole as O,
   PasswordPolicy as P,
-  AlertDialogAction as Q,
+  AlertDialogDescription as Q,
   React$4 as R,
   Search as S,
   TriangleAlert as T,
   Users as U,
-  GroupCreationPermission as V,
-  DataExportPermission as W,
-  Textarea as X,
-  createActor as Y,
-  useIsSuperAdmin as Z,
-  useMyRole as _,
+  AlertDialogFooter as V,
+  AlertDialogCancel as W,
+  AlertDialogAction as X,
+  GroupCreationPermission as Y,
+  DataExportPermission as Z,
+  Textarea as _,
   Skeleton as a,
-  useId as a$,
-  useOrgDetails as a0,
-  useOrgUsers as a1,
-  useSuspendOrg as a2,
-  useDeleteOrg as a3,
-  ArrowLeft as a4,
-  Building2 as a5,
-  Trash2 as a6,
-  PrincipalDisplay as a7,
-  useOrgs as a8,
-  X as a9,
-  Download as aA,
-  useCallbackRef$1 as aB,
-  useDirection as aC,
-  Root2$3 as aD,
-  Anchor as aE,
-  Presence as aF,
-  Portal$3 as aG,
-  useComposedRefs$1 as aH,
-  composeEventHandlers as aI,
-  Primitive$1 as aJ,
-  createContextScope as aK,
-  createPopperScope as aL,
-  createRovingFocusGroupScope as aM,
-  createCollection as aN,
-  hideOthers as aO,
-  Item as aP,
-  dispatchDiscreteCustomEvent as aQ,
-  useFocusGuards as aR,
-  ReactRemoveScroll as aS,
-  FocusScope as aT,
-  DismissableLayer as aU,
-  Root$1 as aV,
-  Content$2 as aW,
-  createSlot$1 as aX,
-  Arrow as aY,
-  composeRefs$1 as aZ,
-  useControllableState as a_,
-  RefreshCw as aa,
-  ChevronDown as ab,
-  useCreateOrg as ac,
-  Dialog as ad,
-  DialogContent as ae,
-  DialogHeader as af,
-  DialogTitle as ag,
-  DialogDescription as ah,
-  DialogFooter as ai,
-  useUpdateOrg as aj,
-  Check as ak,
-  Copy as al,
-  useAllGroups as am,
-  GroupStatus as an,
-  useGroupMembers as ao,
-  useRemoveMemberFromGroup as ap,
-  UserMinus as aq,
-  LoaderCircle as ar,
-  Principal$1 as as,
-  EmptyState as at,
-  ShieldCheck as au,
-  AuditEventType as av,
-  useMyOrgs as aw,
-  useAdminAuditLog as ax,
-  useExportAuditLogs as ay,
-  Lock as az,
+  createSlot$1 as a$,
+  LoaderCircle as a0,
+  Shield as a1,
+  CircleCheck as a2,
+  Principal$1 as a3,
+  useIsSuperAdmin as a4,
+  useMyRole as a5,
+  useOrgDetails as a6,
+  useOrgUsers as a7,
+  useSuspendOrg as a8,
+  useDeleteOrg as a9,
+  useMyOrgs as aA,
+  useAdminAuditLog as aB,
+  useExportAuditLogs as aC,
+  Lock as aD,
+  Download as aE,
+  useCallbackRef$1 as aF,
+  useDirection as aG,
+  Root2$3 as aH,
+  Anchor as aI,
+  Presence as aJ,
+  Portal$3 as aK,
+  useComposedRefs$1 as aL,
+  composeEventHandlers as aM,
+  Primitive$1 as aN,
+  createContextScope as aO,
+  createPopperScope as aP,
+  createRovingFocusGroupScope as aQ,
+  createCollection as aR,
+  hideOthers as aS,
+  Item as aT,
+  dispatchDiscreteCustomEvent as aU,
+  useFocusGuards as aV,
+  ReactRemoveScroll as aW,
+  FocusScope as aX,
+  DismissableLayer as aY,
+  Root$1 as aZ,
+  Content$2 as a_,
+  ArrowLeft as aa,
+  Building2 as ab,
+  Trash2 as ac,
+  PrincipalDisplay as ad,
+  useOrgs as ae,
+  X as af,
+  RefreshCw as ag,
+  ChevronDown as ah,
+  useCreateOrg as ai,
+  Dialog as aj,
+  DialogContent as ak,
+  DialogHeader as al,
+  DialogTitle as am,
+  DialogDescription as an,
+  DialogFooter as ao,
+  useUpdateOrg as ap,
+  Check as aq,
+  Copy as ar,
+  useAllGroups as as,
+  GroupStatus as at,
+  useGroupMembers as au,
+  useRemoveMemberFromGroup as av,
+  UserMinus as aw,
+  EmptyState as ax,
+  ShieldCheck as ay,
+  AuditEventType as az,
   useSubmitJoinRequest as b,
-  useSuspendMember as b0,
-  useReactivateMember as b1,
-  useRemoveMember as b2,
-  UserPlus as b3,
-  Ellipsis as b4,
-  useInviteUser as b5,
-  useUpdateMemberRole as b6,
-  CircleCheckBig as b7,
-  Key as b8,
-  useEnrollUserKeyEscrow as b9,
-  useGetEncryptedEscrowKey as ba,
-  useEscrowStats as bb,
-  useEscrowedUsers as bc,
-  useRecoveryRequests as bd,
-  RecoveryRequestStatus as be,
-  ChevronUp as bf,
-  EscrowStatus as bg,
-  useEscrowGrants as bh,
-  useInitiateKeyRecovery as bi,
-  useApproveKeyRecovery as bj,
-  __vitePreload as bk,
-  useRejectKeyRecovery as bl,
-  useCheckPolicyExpiry as bm,
-  useLogPolicyExpiryCheck as bn,
-  useLogPolicyReportExported as bo,
-  usePolicyExpiryStore as bp,
-  FileText as bq,
-  commonjsGlobal as br,
-  getDefaultExportFromCjs as bs,
+  Arrow as b0,
+  composeRefs$1 as b1,
+  useControllableState as b2,
+  useId as b3,
+  useSuspendMember as b4,
+  useReactivateMember as b5,
+  useRemoveMember as b6,
+  UserPlus as b7,
+  Ellipsis as b8,
+  useInviteUser as b9,
+  useUpdateMemberRole as ba,
+  CircleCheckBig as bb,
+  Key as bc,
+  useEnrollUserKeyEscrow as bd,
+  useGetEncryptedEscrowKey as be,
+  useEscrowStats as bf,
+  useEscrowedUsers as bg,
+  useRecoveryRequests as bh,
+  RecoveryRequestStatus as bi,
+  ChevronUp as bj,
+  Clock as bk,
+  EscrowStatus as bl,
+  useEscrowGrants as bm,
+  useInitiateKeyRecovery as bn,
+  useApproveKeyRecovery as bo,
+  __vitePreload as bp,
+  useRejectKeyRecovery as bq,
+  useCheckPolicyExpiry as br,
+  useLogPolicyExpiryCheck as bs,
+  useLogPolicyReportExported as bt,
+  usePolicyExpiryStore as bu,
+  FileText as bv,
+  commonjsGlobal as bw,
+  getDefaultExportFromCjs as bx,
   Badge as c,
   ue as d,
   cn as e,
@@ -71007,18 +72309,18 @@ export {
   jsxRuntimeExports as j,
   useQuery as k,
   useNavigate as l,
-  useMutation as m,
-  Tabs as n,
-  TabsList as o,
-  TabsTrigger as p,
-  TabsContent as q,
+  usePurgeStatus as m,
+  usePurgeAll as n,
+  useResetPurgeFlag as o,
+  useMutation as p,
+  Tabs as q,
   reactExports as r,
-  Label as s,
-  Switch as t,
+  TabsList as s,
+  TabsTrigger as t,
   usePublicGroups as u,
-  Select as v,
-  SelectTrigger as w,
-  SelectValue as x,
-  SelectContent as y,
-  RetentionPeriod as z
+  TabsContent as v,
+  Label as w,
+  Switch as x,
+  Select as y,
+  SelectTrigger as z
 };

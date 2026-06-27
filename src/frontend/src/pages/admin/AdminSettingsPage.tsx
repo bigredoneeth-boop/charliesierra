@@ -42,6 +42,11 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/auth-context";
+import {
+  usePurgeAll,
+  usePurgeStatus,
+  useResetPurgeFlag,
+} from "@/hooks/use-admin";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -170,34 +175,10 @@ export default function AdminSettingsPage() {
     retry: 1,
   });
 
-  const dataResetDoneQuery = useQuery({
-    queryKey: ["hasDataResetBeenPerformed"],
-    queryFn: async () => {
-      const result = await actor!.hasDataResetBeenPerformed();
-      return result;
-    },
-    enabled: !!actor && isSuperAdmin,
-  });
+  const purgeStatusQuery = usePurgeStatus();
 
-  const doResetMutation = useMutation({
-    mutationFn: async () => {
-      const result = await actor!.resetAllTestData();
-      if ("err" in result) throw new Error((result as { err: string }).err);
-      return (result as { ok: string }).ok;
-    },
-    onSuccess: () => {
-      setResetDone(true);
-      setShowResetModal(false);
-      setResetConfirmInput("");
-      queryClient.invalidateQueries({
-        queryKey: ["hasDataResetBeenPerformed"],
-      });
-      setTimeout(() => navigate({ to: "/admin" }), 2000);
-    },
-    onError: (err: Error) => {
-      setResetError(err.message);
-    },
-  });
+  const purgeAllMutation = usePurgeAll();
+  const resetPurgeFlagMutation = useResetPurgeFlag();
 
   // ── Mutations ─────────────────────────────────────────────────────────────
   const { mutate: savePlatform, isPending: savingPlatform } = useMutation({
@@ -834,7 +815,7 @@ export default function AdminSettingsPage() {
                   {/* Danger Zone */}
                   {isSuperAdmin &&
                     !resetDone &&
-                    dataResetDoneQuery.data !== true && (
+                    !purgeStatusQuery.data?.purgeCompleted && (
                       <div className="mt-8 border border-red-700 rounded-lg bg-red-950/20 p-6">
                         <h3 className="text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
                           <span>⚠</span> Danger Zone
@@ -842,11 +823,11 @@ export default function AdminSettingsPage() {
                         <div className="flex items-start justify-between gap-4">
                           <div>
                             <p className="font-semibold text-gray-100">
-                              Reset All Testing Data
+                              Purge All Data
                             </p>
                             <p className="text-sm text-gray-400 mt-1 max-w-xl">
                               Permanently delete all messages, conversations,
-                              file attachments, and non-admin user profiles.
+                              group memberships, invites, and file attachments.
                               Your Super Admin role, organization settings,
                               audit logs, and platform configuration will be
                               preserved. This action is irreversible and can
@@ -861,11 +842,57 @@ export default function AdminSettingsPage() {
                             }}
                             className="flex-shrink-0 bg-red-700 hover:bg-red-600 text-white font-bold px-4 py-2 rounded transition-colors"
                           >
-                            Reset All Testing Data
+                            Purge All Data
                           </button>
                         </div>
                       </div>
                     )}
+
+                  {/* Reset Purge Flag (one-time use) */}
+                  {isSuperAdmin &&
+                    purgeStatusQuery.data?.purgeCompleted &&
+                    !purgeStatusQuery.data?.purgeResetUsed && (
+                      <div className="mt-8 border border-yellow-700 rounded-lg bg-yellow-950/20 p-6">
+                        <h3 className="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">
+                          <span>⚠</span> One-Time Reset
+                        </h3>
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="font-semibold text-gray-100">
+                              Reset Purge Flag
+                            </p>
+                            <p className="text-sm text-gray-400 mt-1 max-w-xl">
+                              The purge has already been completed. You can
+                              reset the flag one additional time to perform
+                              another purge. This is a one-time reset.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowResetModal(true);
+                              setResetError(null);
+                            }}
+                            className="flex-shrink-0 bg-yellow-700 hover:bg-yellow-600 text-white font-bold px-4 py-2 rounded transition-colors"
+                          >
+                            Reset Purge Flag
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Purge flag has been reset and used */}
+                  {isSuperAdmin && purgeStatusQuery.data?.purgeResetUsed && (
+                    <div className="mt-8 border border-gray-700 rounded-lg bg-gray-950/20 p-6">
+                      <h3 className="text-lg font-bold text-gray-400 mb-4 flex items-center gap-2">
+                        <span>ℹ</span> Purge Unavailable
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        The purge function has been used and the one-time reset
+                        has also been consumed. No further purges are available.
+                      </p>
+                    </div>
+                  )}
 
                   {/* Reset Confirmation Modal */}
                   {showResetModal && (
@@ -918,28 +945,68 @@ export default function AdminSettingsPage() {
                               setResetError(null);
                             }}
                             className="px-4 py-2 rounded border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors"
-                            disabled={doResetMutation.isPending}
+                            disabled={
+                              purgeAllMutation.isPending ||
+                              resetPurgeFlagMutation.isPending
+                            }
                           >
                             Cancel
                           </button>
                           <button
                             type="button"
-                            onClick={() => doResetMutation.mutate()}
+                            onClick={() => {
+                              if (
+                                purgeStatusQuery.data?.purgeCompleted &&
+                                !purgeStatusQuery.data?.purgeResetUsed
+                              ) {
+                                resetPurgeFlagMutation.mutate(undefined, {
+                                  onSuccess: () => {
+                                    setResetDone(true);
+                                    setShowResetModal(false);
+                                    setResetConfirmInput("");
+                                    setTimeout(
+                                      () => navigate({ to: "/admin" }),
+                                      2000,
+                                    );
+                                  },
+                                  onError: (err: Error) => {
+                                    setResetError(err.message);
+                                  },
+                                });
+                              } else {
+                                purgeAllMutation.mutate(undefined, {
+                                  onSuccess: () => {
+                                    setResetDone(true);
+                                    setShowResetModal(false);
+                                    setResetConfirmInput("");
+                                    setTimeout(
+                                      () => navigate({ to: "/admin" }),
+                                      2000,
+                                    );
+                                  },
+                                  onError: (err: Error) => {
+                                    setResetError(err.message);
+                                  },
+                                });
+                              }
+                            }}
                             disabled={
                               resetConfirmInput !== RESET_PHRASE ||
-                              doResetMutation.isPending
+                              purgeAllMutation.isPending ||
+                              resetPurgeFlagMutation.isPending
                             }
                             className="px-4 py-2 rounded bg-red-700 hover:bg-red-600 text-white font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
                           >
-                            {doResetMutation.isPending ? (
+                            {purgeAllMutation.isPending ||
+                            resetPurgeFlagMutation.isPending ? (
                               <>
                                 <span className="animate-spin inline-block">
                                   ⟳
                                 </span>{" "}
-                                Resetting...
+                                Processing...
                               </>
                             ) : (
-                              "Confirm Reset"
+                              "Confirm"
                             )}
                           </button>
                         </div>

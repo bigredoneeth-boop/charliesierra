@@ -23,6 +23,7 @@ import { deriveGroupKey, encryptMessage } from "@/lib/crypto";
 import { extractErrText } from "@/lib/error-utils";
 import { parseIcError } from "@/utils/ic-errors";
 import { useActor } from "@caffeineai/core-infrastructure";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { Globe, Loader2, X } from "lucide-react";
 import { useState } from "react";
@@ -40,6 +41,7 @@ export function NewConversationDialog({
   const { actor } = useActor(createActor);
   const { principal } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // Direct tab
   const [directPeer, setDirectPeer] = useState<UserId | null>(null);
@@ -128,6 +130,9 @@ export function NewConversationDialog({
       }
       onOpenChange(false);
       resetState();
+      queryClient.invalidateQueries({
+        queryKey: ["conversation", result.ok.id.toString()],
+      });
       navigate({
         to: "/app/conversations/$id",
         params: { id: result.ok.id.toString() },
@@ -234,6 +239,9 @@ export function NewConversationDialog({
 
       onOpenChange(false);
       resetState();
+      queryClient.invalidateQueries({
+        queryKey: ["conversation", result.ok.id.toString()],
+      });
       navigate({
         to: "/app/conversations/$id",
         params: { id: result.ok.id.toString() },

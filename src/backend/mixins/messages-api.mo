@@ -17,12 +17,11 @@ mixin (
   pushSubscriptions    : Map.Map<Principal, NotifTypes.PushSubscriptionRecord>,
   notificationPrefs    : Map.Map<Principal, NotifTypes.NotificationPreferences>,
   pendingNotifications : Map.Map<Principal, [NotifTypes.PendingNotification]>,
-  selfPrincipal        : Principal,
+  sendPushToUser       : shared (Principal, Text, Text, Text) -> async (),
 ) {
 
-  // Actor self-reference for firing real Web Push (fire-and-forget)
-  type PushActor = actor { sendPushToUser : (Principal, Text, Text, Text) -> async () };
-  let pushActor : PushActor = actor(selfPrincipal.toText());
+  // Push notifications are sent via the passed-in sendPushToUser function
+  // (defined in notifications-api.mo and included in the same actor).
 
   func isMember(userId : Common.UserId, convId : Common.ConversationId) : Bool {
     switch (convsState.conversations.get(convId)) {
@@ -81,7 +80,7 @@ mixin (
                   );
                   // Real Web Push (fire-and-forget async)
                   if (NotifLib.isPushEnabled(pushSubscriptions, notificationPrefs, member, "GroupMessage")) {
-                    ignore pushActor.sendPushToUser(member, senderText, "GroupMessage", convIdText);
+                    ignore sendPushToUser(member, senderText, "GroupMessage", convIdText);
                   };
                 };
               };
@@ -102,7 +101,7 @@ mixin (
                   );
                   // Real Web Push (fire-and-forget async)
                   if (NotifLib.isPushEnabled(pushSubscriptions, notificationPrefs, member, "DirectMessage")) {
-                    ignore pushActor.sendPushToUser(member, senderText, "DirectMessage", convIdText);
+                    ignore sendPushToUser(member, senderText, "DirectMessage", convIdText);
                   };
                 };
               };

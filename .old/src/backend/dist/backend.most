@@ -385,6 +385,8 @@ actor {
           var bootstrapCompleted : Bool;
           var dataResetCompleted : Bool;
           var nextEventId : Nat;
+          var purgeCompleted : Bool;
+          var purgeResetUsed : Bool;
           var seedPrincipal : ?Principal
         }
     };
@@ -497,8 +499,6 @@ actor {
       var root : Node__1000929467<Principal, [PendingNotification__525714583]>;
       var size : Nat__1040412405
     };
-  stable pushActor :
-    actor {sendPushToUser : shared (Principal, Text, Text, Text) -> async ()};
   stable pushSubscriptions :
     {
       var root :

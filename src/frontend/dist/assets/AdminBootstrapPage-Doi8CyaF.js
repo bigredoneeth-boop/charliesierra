@@ -1,16 +1,5 @@
-import { f as createLucideIcon, g as useActor, l as useNavigate, r as reactExports, j as jsxRuntimeExports, ar as LoaderCircle, $ as Shield, s as Label, I as Input, B as Button, as as Principal, Y as createActor } from "./index-C3mVycmL.js";
-import { S as ShieldAlert } from "./shield-alert-DgF3vJyS.js";
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
-];
-const CircleCheck = createLucideIcon("circle-check", __iconNode);
+import { g as useActor, l as useNavigate, r as reactExports, j as jsxRuntimeExports, a0 as LoaderCircle, a1 as Shield, a2 as CircleCheck, w as Label, I as Input, B as Button, a3 as Principal, $ as createActor } from "./index-DkCtzEA0.js";
+import { S as ShieldAlert } from "./shield-alert-Chtm8_Yw.js";
 function AdminBootstrapPage() {
   const { actor, isFetching } = useActor(createActor);
   const navigate = useNavigate();

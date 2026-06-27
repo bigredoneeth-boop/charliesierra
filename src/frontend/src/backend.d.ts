@@ -688,17 +688,23 @@ export enum AuditEventType {
     memberRoleChanged = "memberRoleChanged"
 }
 export enum AuditExportEventType {
+    legalHoldRemoved = "legalHoldRemoved",
     memberSuspended = "memberSuspended",
     userInvited = "userInvited",
     retentionEnabled = "retentionEnabled",
     memberAdded = "memberAdded",
+    policyExpiryCheckPerformed = "policyExpiryCheckPerformed",
+    retentionPolicyUpdated = "retentionPolicyUpdated",
     retentionDisabled = "retentionDisabled",
     groupMemberRemoved = "groupMemberRemoved",
     orgCreated = "orgCreated",
+    orgDeleted = "orgDeleted",
     escrowAccessGranted = "escrowAccessGranted",
     callInitiated = "callInitiated",
     keyRecoveryApproved = "keyRecoveryApproved",
     keyRecoveryInitiated = "keyRecoveryInitiated",
+    memberReactivated = "memberReactivated",
+    legalHoldPlaced = "legalHoldPlaced",
     keyRecoveryCompleted = "keyRecoveryCompleted",
     keyRecoveryRejected = "keyRecoveryRejected",
     adminAction = "adminAction",
@@ -706,10 +712,13 @@ export enum AuditExportEventType {
     escrowEnrolled = "escrowEnrolled",
     messageSent = "messageSent",
     escrowRevoked = "escrowRevoked",
+    policyReportExported = "policyReportExported",
     userRegistered = "userRegistered",
     memberRemoved = "memberRemoved",
+    retentionPolicyCreated = "retentionPolicyCreated",
     orgSuspended = "orgSuspended",
     userRemoved = "userRemoved",
+    orgUpdated = "orgUpdated",
     keyEscrowEnrolled = "keyEscrowEnrolled",
     memberRoleChanged = "memberRoleChanged"
 }
@@ -880,6 +889,10 @@ export interface backendInterface {
     getOrgUsers(req: GetOrgUsersRequest): Promise<Result_17>;
     getPendingNotifications(): Promise<Array<PendingNotification>>;
     getPlatformSettings(): Promise<PlatformSettings>;
+    getPurgeStatus(): Promise<{
+        purgeResetUsed: boolean;
+        purgeCompleted: boolean;
+    }>;
     getRecoveryDetails(requestId: bigint): Promise<Result_9>;
     getRecoveryRequests(orgId: OrgId | null, statusFilter: RecoveryRequestStatus | null): Promise<Result_16>;
     getRetentionMetadata(req: GetRetentionMetadataRequest): Promise<Result_15>;
@@ -890,6 +903,7 @@ export interface backendInterface {
     getUserProfiles(userIds: Array<UserId>): Promise<Array<UserProfilePublic>>;
     getVAPIDPublicKey(): Promise<string>;
     hasDataResetBeenPerformed(): Promise<boolean>;
+    hasPurgeBeenPerformed(): Promise<boolean>;
     hasSuperAdmin(): Promise<boolean>;
     initiateKeyRecovery(targetUserId: UserId, targetDeviceId: string, reason: string, orgId: OrgId | null): Promise<Result_9>;
     inviteUser(req: InviteUserRequest): Promise<Result_14>;
@@ -902,6 +916,7 @@ export interface backendInterface {
     logPolicyExpiryCheck(): Promise<void>;
     logPolicyReportExported(orgFilter: OrgId | null): Promise<void>;
     markMessageRead(messageId: MessageId): Promise<Result_6>;
+    purgeAllMessagesAndConversations(): Promise<Result_8>;
     reactivateMember(orgId: OrgId, userId: UserId): Promise<Result_2>;
     redeemDeviceSyncToken(token: string, deviceId: string, deviceLabel: string): Promise<Result_11>;
     registerAttachment(req: RegisterAttachmentRequest): Promise<Result_10>;
@@ -913,6 +928,7 @@ export interface backendInterface {
     removeMember(orgId: OrgId, userId: UserId): Promise<Result_2>;
     removeMemberFromGroup(req: RemoveMemberFromGroupRequest): Promise<Result_2>;
     resetAllTestData(): Promise<Result_8>;
+    resetPurgeFlag(): Promise<Result_6>;
     revokeDevice(deviceId: string): Promise<Result_6>;
     revokeKeyEscrow(deviceId: string, reason: string): Promise<Result_6>;
     sendMessage(req: SendMessageRequest): Promise<Result_7>;

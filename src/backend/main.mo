@@ -55,7 +55,11 @@ import T "types/users";
 
 
 
-actor self {
+
+
+
+
+actor {
   // ── Stable state slices ──────────────────────────────────────────────────────
 
   // Users
@@ -92,7 +96,7 @@ actor self {
   let adminState : AdminLib.State = {
     auditLog = Map.empty();
     adminPrincipals = Set.empty();
-    state = { var nextEventId = 0; var bootstrapCompleted = false; var dataResetCompleted = false; var seedPrincipal : ?Principal = null };
+    state = { var nextEventId = 0; var bootstrapCompleted = false; var dataResetCompleted = false; var purgeCompleted = false; var purgeResetUsed = false; var seedPrincipal : ?Principal = null };
   };
 
   // Sovereign deployment
@@ -181,14 +185,8 @@ actor self {
   let pendingNotifications : Map.Map<Principal, [NotifTypes.PendingNotification]>   = Map.empty();
   let vapidState           : { var value : ?NotifTypes.VapidState } = { var value = null };
 
-  // One-time bootstrap seed: adds the canister principal as a temporary admin so the deployer
-  // can call bootstrapSuperAdmin on first run. After bootstrap completes this is a no-op.
-  AdminLib.initBootstrapOnce(adminState, Principal.fromActor(self));
-  // Seed sovereign config with the canister's own principal text as the canister ID.
-  sovereignState.state.sovereignConfig := {
-    sovereignState.state.sovereignConfig with
-    canisters = Principal.fromActor(self).toText();
-  };
+  // Bootstrap and sovereign config are initialized without self-reference.
+  // The bootstrapSuperAdmin endpoint is open to any caller until bootstrapCompleted is set.
 
   /// Return all registered user profiles so clients can populate their local
   /// display-name search cache. Explicit wrapper required for Candid .did exposure.
@@ -200,7 +198,7 @@ actor self {
   include MixinObjectStorage();
   include UsersMixin(usersState);
   include ConvsMixin(convsState, msgsState);
-  include MsgsMixin(msgsState, convsState, enterpriseState, pushSubscriptions, notificationPrefs, pendingNotifications, Principal.fromActor(self));
+  include MsgsMixin(msgsState, convsState, enterpriseState, pushSubscriptions, notificationPrefs, pendingNotifications, sendPushToUser);
   include AttMixin(attState);
   include AdminMixin(adminState, memberships, usersState, convsState, msgsState, attState, invites);
   include EnterpriseMixin(adminState, enterpriseState, convsState);

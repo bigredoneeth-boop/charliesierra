@@ -1,5 +1,5 @@
-import { g as useActor, h as useAuth, i as useQueryClient, k as useQuery, O as OrgRole, r as reactExports, R as React, l as useNavigate, m as useMutation, d as ue, j as jsxRuntimeExports, A as AdminLayout, n as Tabs, o as TabsList, p as TabsTrigger, q as TabsContent, a as Skeleton, s as Label, I as Input, t as Switch, P as PasswordPolicy, v as Select, w as SelectTrigger, x as SelectValue, y as SelectContent, z as RetentionPeriod, D as SelectItem, E as AlertDialog, F as AlertDialogTrigger, B as Button, G as AlertDialogContent, H as AlertDialogHeader, J as AlertDialogTitle, K as AlertDialogDescription, M as AlertDialogFooter, N as AlertDialogCancel, Q as AlertDialogAction, V as GroupCreationPermission, W as DataExportPermission, c as Badge, X as Textarea, Y as createActor } from "./index-C3mVycmL.js";
-import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-BwKF9dLv.js";
+import { g as useActor, h as useAuth, i as useQueryClient, k as useQuery, O as OrgRole, r as reactExports, R as React, l as useNavigate, m as usePurgeStatus, n as usePurgeAll, o as useResetPurgeFlag, p as useMutation, d as ue, j as jsxRuntimeExports, A as AdminLayout, q as Tabs, s as TabsList, t as TabsTrigger, v as TabsContent, a as Skeleton, w as Label, I as Input, x as Switch, P as PasswordPolicy, y as Select, z as SelectTrigger, D as SelectValue, E as SelectContent, F as RetentionPeriod, G as SelectItem, H as AlertDialog, J as AlertDialogTrigger, B as Button, K as AlertDialogContent, M as AlertDialogHeader, N as AlertDialogTitle, Q as AlertDialogDescription, V as AlertDialogFooter, W as AlertDialogCancel, X as AlertDialogAction, Y as GroupCreationPermission, Z as DataExportPermission, c as Badge, _ as Textarea, $ as createActor } from "./index-DkCtzEA0.js";
+import { C as Card, a as CardHeader, c as CardTitle, d as CardDescription, b as CardContent } from "./card-BWpnYjwM.js";
 function formatCycles(n) {
   if (n >= 1000000000000n) return `${(Number(n) / 1e12).toFixed(1)}T`;
   if (n >= 1000000000n) return `${(Number(n) / 1e9).toFixed(1)}B`;
@@ -22,7 +22,7 @@ function retentionLabel(v) {
   return map[v] ?? v;
 }
 function AdminSettingsPage() {
-  var _a;
+  var _a, _b, _c, _d, _e;
   const { actor } = useActor(createActor);
   const { principal } = useAuth();
   const queryClient = useQueryClient();
@@ -90,33 +90,9 @@ function AdminSettingsPage() {
     enabled: !!actor && isSuperAdmin,
     retry: 1
   });
-  const dataResetDoneQuery = useQuery({
-    queryKey: ["hasDataResetBeenPerformed"],
-    queryFn: async () => {
-      const result = await actor.hasDataResetBeenPerformed();
-      return result;
-    },
-    enabled: !!actor && isSuperAdmin
-  });
-  const doResetMutation = useMutation({
-    mutationFn: async () => {
-      const result = await actor.resetAllTestData();
-      if ("err" in result) throw new Error(result.err);
-      return result.ok;
-    },
-    onSuccess: () => {
-      setResetDone(true);
-      setShowResetModal(false);
-      setResetConfirmInput("");
-      queryClient.invalidateQueries({
-        queryKey: ["hasDataResetBeenPerformed"]
-      });
-      setTimeout(() => navigate({ to: "/admin" }), 2e3);
-    },
-    onError: (err) => {
-      setResetError(err.message);
-    }
-  });
+  const purgeStatusQuery = usePurgeStatus();
+  const purgeAllMutation = usePurgeAll();
+  const resetPurgeFlagMutation = useResetPurgeFlag();
   const { mutate: savePlatform, isPending: savingPlatform } = useMutation({
     mutationFn: (update) => actor.updatePlatformSettings(update),
     onSuccess: (result) => {
@@ -628,15 +604,15 @@ function AdminSettingsPage() {
             ]
           }
         ) }),
-        isSuperAdmin && !resetDone && dataResetDoneQuery.data !== true && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 border border-red-700 rounded-lg bg-red-950/20 p-6", children: [
+        isSuperAdmin && !resetDone && !((_b = purgeStatusQuery.data) == null ? void 0 : _b.purgeCompleted) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 border border-red-700 rounded-lg bg-red-950/20 p-6", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-lg font-bold text-red-400 mb-4 flex items-center gap-2", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚠" }),
             " Danger Zone"
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-semibold text-gray-100", children: "Reset All Testing Data" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-400 mt-1 max-w-xl", children: "Permanently delete all messages, conversations, file attachments, and non-admin user profiles. Your Super Admin role, organization settings, audit logs, and platform configuration will be preserved. This action is irreversible and can only be performed once." })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-semibold text-gray-100", children: "Purge All Data" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-400 mt-1 max-w-xl", children: "Permanently delete all messages, conversations, group memberships, invites, and file attachments. Your Super Admin role, organization settings, audit logs, and platform configuration will be preserved. This action is irreversible and can only be performed once." })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "button",
@@ -647,10 +623,41 @@ function AdminSettingsPage() {
                   setResetError(null);
                 },
                 className: "flex-shrink-0 bg-red-700 hover:bg-red-600 text-white font-bold px-4 py-2 rounded transition-colors",
-                children: "Reset All Testing Data"
+                children: "Purge All Data"
               }
             )
           ] })
+        ] }),
+        isSuperAdmin && ((_c = purgeStatusQuery.data) == null ? void 0 : _c.purgeCompleted) && !((_d = purgeStatusQuery.data) == null ? void 0 : _d.purgeResetUsed) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 border border-yellow-700 rounded-lg bg-yellow-950/20 p-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚠" }),
+            " One-Time Reset"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-semibold text-gray-100", children: "Reset Purge Flag" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-400 mt-1 max-w-xl", children: "The purge has already been completed. You can reset the flag one additional time to perform another purge. This is a one-time reset." })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  setShowResetModal(true);
+                  setResetError(null);
+                },
+                className: "flex-shrink-0 bg-yellow-700 hover:bg-yellow-600 text-white font-bold px-4 py-2 rounded transition-colors",
+                children: "Reset Purge Flag"
+              }
+            )
+          ] })
+        ] }),
+        isSuperAdmin && ((_e = purgeStatusQuery.data) == null ? void 0 : _e.purgeResetUsed) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 border border-gray-700 rounded-lg bg-gray-950/20 p-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-lg font-bold text-gray-400 mb-4 flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ℹ" }),
+            " Purge Unavailable"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-400", children: "The purge function has been used and the one-time reset has also been consumed. No further purges are available." })
         ] }),
         showResetModal && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black/70", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#0d1117] border border-red-700 rounded-xl shadow-2xl p-8 max-w-lg w-full mx-4", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold text-red-400 mb-4", children: "Confirm: Permanently Reset All Testing Data" }),
@@ -695,7 +702,7 @@ function AdminSettingsPage() {
                   setResetError(null);
                 },
                 className: "px-4 py-2 rounded border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors",
-                disabled: doResetMutation.isPending,
+                disabled: purgeAllMutation.isPending || resetPurgeFlagMutation.isPending,
                 children: "Cancel"
               }
             ),
@@ -703,14 +710,47 @@ function AdminSettingsPage() {
               "button",
               {
                 type: "button",
-                onClick: () => doResetMutation.mutate(),
-                disabled: resetConfirmInput !== RESET_PHRASE || doResetMutation.isPending,
+                onClick: () => {
+                  var _a2, _b2;
+                  if (((_a2 = purgeStatusQuery.data) == null ? void 0 : _a2.purgeCompleted) && !((_b2 = purgeStatusQuery.data) == null ? void 0 : _b2.purgeResetUsed)) {
+                    resetPurgeFlagMutation.mutate(void 0, {
+                      onSuccess: () => {
+                        setResetDone(true);
+                        setShowResetModal(false);
+                        setResetConfirmInput("");
+                        setTimeout(
+                          () => navigate({ to: "/admin" }),
+                          2e3
+                        );
+                      },
+                      onError: (err) => {
+                        setResetError(err.message);
+                      }
+                    });
+                  } else {
+                    purgeAllMutation.mutate(void 0, {
+                      onSuccess: () => {
+                        setResetDone(true);
+                        setShowResetModal(false);
+                        setResetConfirmInput("");
+                        setTimeout(
+                          () => navigate({ to: "/admin" }),
+                          2e3
+                        );
+                      },
+                      onError: (err) => {
+                        setResetError(err.message);
+                      }
+                    });
+                  }
+                },
+                disabled: resetConfirmInput !== RESET_PHRASE || purgeAllMutation.isPending || resetPurgeFlagMutation.isPending,
                 className: "px-4 py-2 rounded bg-red-700 hover:bg-red-600 text-white font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2",
-                children: doResetMutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                children: purgeAllMutation.isPending || resetPurgeFlagMutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-spin inline-block", children: "⟳" }),
                   " ",
-                  "Resetting..."
-                ] }) : "Confirm Reset"
+                  "Processing..."
+                ] }) : "Confirm"
               }
             )
           ] })

@@ -732,15 +732,24 @@ type AuditExportEventType =
    keyRecoveryCompleted;
    keyRecoveryInitiated;
    keyRecoveryRejected;
+   legalHoldPlaced;
+   legalHoldRemoved;
    memberAdded;
+   memberReactivated;
    memberRemoved;
    memberRoleChanged;
    memberSuspended;
    messageSent;
    orgCreated;
+   orgDeleted;
    orgSuspended;
+   orgUpdated;
+   policyExpiryCheckPerformed;
+   policyReportExported;
    retentionDisabled;
    retentionEnabled;
+   retentionPolicyCreated;
+   retentionPolicyUpdated;
    userInvited;
    userRegistered;
    userRemoved;
@@ -904,6 +913,11 @@ service : {
   getOrgUsers: (req: GetOrgUsersRequest) -> (Result_17) query;
   getPendingNotifications: () -> (vec PendingNotification);
   getPlatformSettings: () -> (PlatformSettings) query;
+  getPurgeStatus: () ->
+   (record {
+      purgeCompleted: bool;
+      purgeResetUsed: bool;
+    }) query;
   getRecoveryDetails: (requestId: nat) -> (Result_9);
   getRecoveryRequests: (orgId: opt OrgId, statusFilter:
    opt RecoveryRequestStatus) -> (Result_16);
@@ -918,6 +932,7 @@ service : {
   getUserProfiles: (userIds: vec UserId) -> (vec UserProfilePublic) query;
   getVAPIDPublicKey: () -> (text);
   hasDataResetBeenPerformed: () -> (bool) query;
+  hasPurgeBeenPerformed: () -> (bool) query;
   hasSuperAdmin: () -> (bool) query;
   initiateKeyRecovery: (targetUserId: UserId, targetDeviceId: text, reason:
    text, orgId: opt OrgId) -> (Result_9);
@@ -932,6 +947,7 @@ service : {
   logPolicyExpiryCheck: () -> ();
   logPolicyReportExported: (orgFilter: opt OrgId) -> ();
   markMessageRead: (messageId: MessageId) -> (Result_6);
+  purgeAllMessagesAndConversations: () -> (Result_8);
   reactivateMember: (orgId: OrgId, userId: UserId) -> (Result_2);
   redeemDeviceSyncToken: (token: text, deviceId: text, deviceLabel: text) ->
    (Result_11);
@@ -945,6 +961,7 @@ service : {
   removeMember: (orgId: OrgId, userId: UserId) -> (Result_2);
   removeMemberFromGroup: (req: RemoveMemberFromGroupRequest) -> (Result_2);
   resetAllTestData: () -> (Result_8);
+  resetPurgeFlag: () -> (Result_6);
   revokeDevice: (deviceId: text) -> (Result_6);
   revokeKeyEscrow: (deviceId: text, reason: text) -> (Result_6);
   sendMessage: (req: SendMessageRequest) -> (Result_7);

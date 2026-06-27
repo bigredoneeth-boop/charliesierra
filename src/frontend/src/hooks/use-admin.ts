@@ -655,6 +655,61 @@ export function useLogPolicyExpiryCheck() {
   });
 }
 
+// ── Read: purge status ───────────────────────────────────────────────────────
+export interface PurgeStatus {
+  purgeCompleted: boolean;
+  purgeResetUsed: boolean;
+}
+
+export function usePurgeStatus() {
+  const { actor, isFetching } = useActor(createActor);
+  return useQuery<PurgeStatus>({
+    queryKey: ["admin", "purge-status"],
+    queryFn: async () => {
+      if (!actor) return { purgeCompleted: false, purgeResetUsed: false };
+      return actor.getPurgeStatus();
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: STALE,
+  });
+}
+
+// ── Mutation: reset purge flag (one-time) ──────────────────────────────────
+export function useResetPurgeFlag() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.resetPurgeFlag();
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "purge-status"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    },
+  });
+}
+
+// ── Mutation: purge all messages and conversations ───────────────────────────
+export function usePurgeAll() {
+  const { actor } = useActor(createActor);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      const res = await actor.purgeAllMessagesAndConversations();
+      if (res.__kind__ === "err") throw new Error(extractErrText(res));
+      return res.ok;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["admin", "purge-status"] });
+      void qc.invalidateQueries({ queryKey: ["admin", "audit-log"] });
+    },
+  });
+}
+
 export function useRejectKeyRecovery() {
   const { actor } = useActor(createActor);
   const qc = useQueryClient();

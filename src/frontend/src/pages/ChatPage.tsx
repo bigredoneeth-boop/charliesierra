@@ -21,6 +21,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { useCrypto } from "@/context/crypto-context";
 import { useConnection } from "@/hooks/use-connection";
@@ -46,17 +48,22 @@ import {
   getKeyFingerprint,
   toCleanUint8Array,
 } from "@/lib/crypto";
+import { clearConversationStatusCache } from "@/lib/decryption-cache";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import {
+  AlertCircle,
   AlertTriangle,
   ArrowLeft,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
   Database,
   Home,
   KeyRound,
+  Loader2,
+  RefreshCw,
   Search,
   Settings,
   Timer,
@@ -347,7 +354,7 @@ function ChatSearchBar({
 
 // ── Header ───────────────────────────────────────────────────────────────────
 interface HeaderProps {
-  conv: ConversationPublic;
+  conv: ConversationPublic | null | undefined;
   myPrincipal: string;
   onBack: () => void;
   onSearchOpen: () => void;
@@ -355,37 +362,118 @@ interface HeaderProps {
   isCreator: boolean;
   pendingRequestCount: number;
   onManageOpen: () => void;
+  isLoading?: boolean;
 }
 
-function RekeyButton({ convId }: { convId: bigint }) {
+const _RekeyButton = ({
+  convId,
+  isGroup,
+}: {
+  convId: string;
+  isGroup: boolean;
+}) => {
   const { rekeyConversation } = useCrypto();
-  const [isRekeying, setIsRekeying] = useState(false);
+  const [status, setStatus] = useState<
+    "idle" | "rekeying" | "success" | "error"
+  >("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleRekey = async () => {
+    if (status === "rekeying") return;
+    setStatus("rekeying");
+    setErrorMsg(null);
+
+    console.log(`[E2EE REKEY] User clicked rekey button for convId=${convId}`);
+
+    // Clear any previous permanently-unreadable statuses so messages get a fresh retry
+    try {
+      await clearConversationStatusCache(convId);
+      console.log(
+        `[E2EE REKEY] Cleared decryption status cache for convId=${convId}`,
+      );
+    } catch (err) {
+      console.warn(
+        `[E2EE REKEY] Failed to clear status cache for convId=${convId}:`,
+        err,
+      );
+    }
+
+    try {
+      const result = await rekeyConversation(convId);
+
+      if (result.success) {
+        console.log(`[E2EE REKEY] Rekey succeeded for convId=${convId}`);
+        setStatus("success");
+        // Auto-reset after 5 seconds
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        console.error(
+          `[E2EE REKEY] Rekey failed for convId=${convId}: ${result.error}`,
+        );
+        setStatus("error");
+        setErrorMsg(result.error || "rekey_failed");
+      }
+    } catch (err) {
+      console.error(`[E2EE REKEY] Rekey exception for convId=${convId}:`, err);
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "rekey_failed");
+    }
+  };
+
+  // Only show rekey button for direct (1:1) chats, not groups
+  if (isGroup) return null;
+
+  if (status === "rekeying") {
+    return (
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <Loader2 className="h-3 w-3 animate-spin" />
+        <span>Rekeying…</span>
+      </div>
+    );
+  }
+
+  if (status === "success") {
+    return (
+      <div className="flex items-center gap-2 text-xs text-green-600">
+        <CheckCircle2 className="h-3 w-3" />
+        <span>Rekey complete — refresh if needed</span>
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-2 text-xs text-red-600">
+          <AlertCircle className="h-3 w-3" />
+          <span>Rekey failed{errorMsg ? `: ${errorMsg}` : ""}</span>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-6 text-xs"
+          onClick={handleRekey}
+          data-ocid="chat.rekey.retry_button"
+        >
+          Retry Rekey
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <button
-      type="button"
-      onClick={async () => {
-        setIsRekeying(true);
-        try {
-          await rekeyConversation(convId.toString());
-        } finally {
-          setIsRekeying(false);
-        }
-      }}
-      disabled={isRekeying}
-      className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth disabled:opacity-50"
-      aria-label="Rekey conversation"
-      title="Rekey conversation"
-      data-ocid="chat.rekey_button"
+    <Button
+      variant="outline"
+      size="sm"
+      className="h-6 text-xs"
+      onClick={handleRekey}
+      data-ocid="chat.rekey.button"
     >
-      {isRekeying ? (
-        <span className="text-xs font-medium">Rekeying…</span>
-      ) : (
-        <KeyRound size={18} />
-      )}
-    </button>
+      <RefreshCw className="h-3 w-3 mr-1" />
+      Rekey Conversation
+    </Button>
   );
-}
+};
 
 async function decryptGroupName(
   conv: ConversationPublic,
@@ -427,10 +515,11 @@ function ChatHeader({
   isCreator,
   pendingRequestCount,
   onManageOpen,
+  isLoading = false,
 }: HeaderProps) {
   const navigate = useNavigate();
   const { peerId, displayName, profile } = usePeerName(conv, myPrincipal);
-  const isGroup = conv.kind === ConversationKind.group;
+  const isGroup = conv?.kind === ConversationKind.group;
 
   // Decrypt group name from encryptedName field
   const [groupName, setGroupName] = useState<string | null>(null);
@@ -452,6 +541,42 @@ function ChatHeader({
     peerLastSeen !== undefined ? isOnline(peerLastSeen) : undefined;
   const peerLastSeenLabel =
     peerLastSeen !== undefined ? formatLastSeen(peerLastSeen) : undefined;
+
+  // ── Skeleton header while loading ─────────────────────────────────────────
+  if (isLoading) {
+    return (
+      <div
+        className="flex items-center gap-3 px-4 py-3 bg-card border-b border-border shadow-elevated flex-shrink-0"
+        data-ocid="chat.header_skeleton"
+      >
+        {/* Back (mobile) */}
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex-shrink-0 p-1.5 -ml-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth md:hidden"
+          aria-label="Back to conversations"
+          data-ocid="chat.back_button"
+        >
+          <ArrowLeft size={20} />
+        </button>
+
+        {/* Avatar skeleton */}
+        <Skeleton className="h-[38px] w-[38px] rounded-full flex-shrink-0" />
+
+        {/* Name + meta skeleton */}
+        <div className="flex-1 min-w-0 space-y-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-20" />
+        </div>
+
+        {/* Actions skeleton */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <Skeleton className="h-9 w-9 rounded-lg" />
+          <Skeleton className="h-9 w-9 rounded-lg" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -533,7 +658,9 @@ function ChatHeader({
         >
           <Search size={18} />
         </button>
-        <RekeyButton convId={conv.id} />
+        {!isGroup && conv && (
+          <_RekeyButton convId={conv.id.toString()} isGroup={isGroup} />
+        )}
         {isCreator && (
           <button
             type="button"
@@ -619,7 +746,7 @@ export default function ChatPage() {
     }
   }, [id]);
 
-  const { data: conv, isLoading } = useConversation(convId);
+  const { data: conv, isLoading, isFetching, status } = useConversation(convId);
 
   // Read messages from cache for search (no extra fetch)
   const cachedMessages: MessagePublic[] = useMemo(() => {
@@ -648,7 +775,7 @@ export default function ChatPage() {
           const raw = m.encryptedContent as unknown as Uint8Array;
           const fresh = new Uint8Array(raw.length);
           for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
-          const text = await decryptFromConv(convIdStr, fresh);
+          const text = await decryptFromConv(convIdStr, fresh, m.id.toString());
           return { id: m.id.toString(), text: text ?? "" };
         } catch {
           return { id: m.id.toString(), text: "" };
@@ -994,37 +1121,43 @@ export default function ChatPage() {
     staleTime: 60_000,
   });
 
-  if (isLoading) {
-    return (
-      <div
-        className="flex h-full items-center justify-center"
-        data-ocid="chat.loading_state"
-      >
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  // Listen for decryption success events from crypto-context and invalidate
+  // the messages query so all MessageBubbles re-check their caches.
+  useEffect(() => {
+    const handleDecryptionSuccess = (e: Event) => {
+      const customEvent = e as CustomEvent<{
+        conversationId: string;
+        msgId: string;
+        plaintext: string;
+      }>;
+      if (customEvent.detail?.conversationId === convId?.toString()) {
+        console.log(
+          `[E2EE DECRYPT SUCCESS] ChatPage received decryptionSuccess for msgId=${customEvent.detail.msgId}, invalidating messages query`,
+        );
+        // Invalidate messages so MessageList re-renders and each
+        // MessageBubble picks up the newly cached plaintext.
+        queryClient.invalidateQueries({
+          queryKey: ["messages", convId?.toString()],
+        });
+      }
+    };
+    window.addEventListener("decryptionSuccess", handleDecryptionSuccess);
+    return () => {
+      window.removeEventListener("decryptionSuccess", handleDecryptionSuccess);
+    };
+  }, [convId, queryClient]);
 
-  if (!conv || convId === null) {
-    return (
-      <div
-        className="flex h-full flex-col items-center justify-center gap-3"
-        data-ocid="chat.error_state"
-      >
-        <p className="text-muted-foreground text-sm">Conversation not found.</p>
-        <button
-          type="button"
-          className="text-primary text-sm hover:underline"
-          onClick={() => navigate({ to: "/app/conversations" })}
-          data-ocid="chat.back_button"
-        >
-          Back to conversations
-        </button>
-      </div>
-    );
-  }
+  // Determine if we are genuinely in a loading state (fetching conversation data)
+  // When the query is disabled (actor not ready), isLoading and isFetching are both false,
+  // so we should NOT show skeletons. Only show skeleton when the query is actually running.
+  const isConvLoading = (isLoading || isFetching) && !actorFetching;
+  // Determine if the conversation is truly not found (query succeeded, no data)
+  const isConvNotFound =
+    status === "success" && (!conv || convId === null || convId === 0n);
 
-  const handleBack = () => navigate({ to: "/app/conversations" });
+  const handleBack = useCallback(() => {
+    navigate({ to: "/app/conversations" });
+  }, [navigate]);
 
   return (
     <div className="flex flex-col h-full bg-background" data-ocid="chat.page">
@@ -1037,9 +1170,10 @@ export default function ChatPage() {
         isCreator={isCreator}
         pendingRequestCount={pendingRequestCount}
         onManageOpen={() => setManagePanelOpen(true)}
+        isLoading={isLoading}
       />
 
-      {searchOpen && (
+      {searchOpen && conv && (
         <ChatSearchBar
           decryptedMessages={decryptedMsgs}
           onClose={handleSearchClose}
@@ -1053,29 +1187,107 @@ export default function ChatPage() {
         isDraining={connection.isOnline && queueDepth > 0}
       />
 
-      {isGroup && <RetentionBanner convId={convId} isAdmin={isAdmin} />}
+      {isGroup && convId !== null && (
+        <RetentionBanner convId={convId} isAdmin={isAdmin} />
+      )}
 
-      <MessageList
-        key={String(convId)}
-        conversationId={convId}
-        profiles={allProfiles}
-        isGroup={isGroup}
-        onRetryQueued={retryMessage}
-        onDeleteQueued={deleteQueuedMessage}
-      />
+      {/* Message list area — show data when available, skeleton only when genuinely loading without data, not-found when confirmed missing */}
+      {isConvNotFound ? (
+        <div
+          className="flex-1 flex flex-col items-center justify-center gap-3"
+          data-ocid="chat.error_state"
+        >
+          <p className="text-muted-foreground text-sm">
+            Conversation not found.
+          </p>
+          <button
+            type="button"
+            className="text-primary text-sm hover:underline"
+            onClick={handleBack}
+            data-ocid="chat.back_button"
+          >
+            Back to conversations
+          </button>
+        </div>
+      ) : conv && convId !== null ? (
+        <MessageList
+          key={String(convId)}
+          conversationId={convId}
+          profiles={allProfiles}
+          isGroup={isGroup}
+          onRetryQueued={retryMessage}
+          onDeleteQueued={deleteQueuedMessage}
+        />
+      ) : isConvLoading ? (
+        <div
+          className="flex-1 flex flex-col px-4 py-3 gap-4"
+          data-ocid="chat.loading_state"
+        >
+          {/* Skeleton message bubbles */}
+          <div className="flex gap-2 items-end">
+            <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+            <div className="space-y-2 max-w-[70%]">
+              <Skeleton className="h-10 w-48 rounded-2xl rounded-bl-sm" />
+            </div>
+          </div>
+          <div className="flex gap-2 items-end justify-end">
+            <div className="space-y-2 max-w-[70%]">
+              <Skeleton className="h-10 w-40 rounded-2xl rounded-br-sm" />
+            </div>
+          </div>
+          <div className="flex gap-2 items-end">
+            <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+            <div className="space-y-2 max-w-[70%]">
+              <Skeleton className="h-14 w-56 rounded-2xl rounded-bl-sm" />
+            </div>
+          </div>
+          <div className="flex gap-2 items-end justify-end">
+            <div className="space-y-2 max-w-[70%]">
+              <Skeleton className="h-10 w-32 rounded-2xl rounded-br-sm" />
+            </div>
+          </div>
+          <div className="flex gap-2 items-end">
+            <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+            <div className="space-y-2 max-w-[70%]">
+              <Skeleton className="h-10 w-44 rounded-2xl rounded-bl-sm" />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div
+          className="flex-1 flex flex-col items-center justify-center gap-3"
+          data-ocid="chat.empty_state"
+        >
+          <p className="text-muted-foreground text-sm">
+            Select a conversation to start chatting.
+          </p>
+          <button
+            type="button"
+            className="text-primary text-sm hover:underline"
+            onClick={handleBack}
+            data-ocid="chat.back_button"
+          >
+            Back to conversations
+          </button>
+        </div>
+      )}
 
-      <MessageInput
-        conversationId={convId}
-        isKeyReady={isKeyReady(convId.toString())}
-        onMessageSent={() => {
-          queryClient.invalidateQueries({
-            queryKey: ["messages", convId.toString()],
-          });
-          queryClient.invalidateQueries({ queryKey: ["conversations"] });
-        }}
-      />
+      {/* Input bar — always render real MessageInput when convId is valid; disable while loading */}
+      {convId !== null && !isConvNotFound ? (
+        <MessageInput
+          conversationId={convId}
+          isKeyReady={isKeyReady(convId.toString())}
+          disabled={isConvLoading}
+          onMessageSent={() => {
+            queryClient.invalidateQueries({
+              queryKey: ["messages", convId.toString()],
+            });
+            queryClient.invalidateQueries({ queryKey: ["conversations"] });
+          }}
+        />
+      ) : null}
 
-      {isCreator && convId !== null && (
+      {isCreator && conv && convId !== null && (
         <GroupManagePanel
           conv={conv}
           myPrincipal={myPrincipal}

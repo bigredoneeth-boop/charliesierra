@@ -97,6 +97,24 @@ mixin (
     adminState.state.dataResetCompleted;
   };
 
+  /// Returns true if the one-time purge has already been performed.
+  /// The frontend uses this to show or hide the purge button.
+  public query func hasPurgeBeenPerformed() : async Bool {
+    AdminLib.hasPurgeBeenPerformed(adminState);
+  };
+
+  /// Returns the full purge status (completed + reset used) for the admin panel.
+  public query func getPurgeStatus() : async { purgeCompleted : Bool; purgeResetUsed : Bool } {
+    AdminLib.getPurgeStatus(adminState);
+  };
+
+  /// One-time reset of the purgeCompleted flag so the purge can be run again.
+  /// Only callable by the Super Admin, only when purgeCompleted is true, and
+  /// only if purgeResetUsed is false (one-time reset).
+  public shared ({ caller }) func resetPurgeFlag() : async Common.Result<(), Common.Error> {
+    AdminLib.resetPurgeFlag(adminState, caller);
+  };
+
   /// One-time-use admin operation that clears all testing data (messages, conversations,
   /// attachments, and non-admin user profiles). Can only be called by a Super Admin and
   /// can only run once — the flag is set permanently after completion.
@@ -218,6 +236,93 @@ mixin (
     adminState.state.dataResetCompleted := true;
 
     #ok("All testing data has been cleared successfully. This operation has been permanently disabled.");
+  };
+
+  /// One-time Super Admin operation that purges ALL messages, conversations,
+  /// group memberships, invites, and file attachments.
+  /// Can only be called by the Super Admin principal and can only run once.
+  ///
+  /// Preserved: all user profiles (including principal IDs), adminPrincipals,
+  /// auditLog, bootstrapCompleted, orgsData, vetEscrowRecords, recoveryRequests,
+  /// platform settings, and all org memberships.
+  public shared ({ caller }) func purgeAllMessagesAndConversations() : async Common.Result<Text, Text> {
+    let superAdmin = Principal.fromText("dzdlk-gui4e-tacqa-6ptxj-jslvy-medgl-425ra-lbapw-3lmgh-hbulu-wqe");
+
+    // Access control: Super Admin only
+    if (caller != superAdmin) {
+      return #err("Unauthorized: Super Admin access required");
+    };
+
+    // One-time-use guard
+    if (adminState.state.purgeCompleted) {
+      return #err("Purge already completed. This operation can only be run once.");
+    };
+
+    // ── Clear conversations ──────────────────────────────────────────────────
+    let convKeys = convsState.conversations.keys().toArray();
+    for (k in convKeys.vals()) {
+      convsState.conversations.remove(k);
+    };
+    let directKeys = convsState.directIndex.keys().toArray();
+    for (k in directKeys.vals()) {
+      convsState.directIndex.remove(k);
+    };
+    convsState.state.nextId := 0;
+
+    // ── Clear messages ───────────────────────────────────────────────────────
+    let msgKeys = msgsState.messages.keys().toArray();
+    for (k in msgKeys.vals()) {
+      msgsState.messages.remove(k);
+    };
+    let convMsgKeys = msgsState.conversationMessages.keys().toArray();
+    for (k in convMsgKeys.vals()) {
+      msgsState.conversationMessages.remove(k);
+    };
+    // (MessageId, UserId) compare for readReceipts map
+    let cmpMsgUser = func(a : (Common.MessageId, Common.UserId), b : (Common.MessageId, Common.UserId)) : { #less; #equal; #greater } {
+      let c = Nat.compare(a.0, b.0);
+      if (c != #equal) c else Principal.compare(a.1, b.1);
+    };
+    let rrKeys = msgsState.readReceipts.keys().toArray();
+    for (k in rrKeys.vals()) {
+      msgsState.readReceipts.remove(cmpMsgUser, k);
+    };
+    let rbmKeys = msgsState.receiptsByMessage.keys().toArray();
+    for (k in rbmKeys.vals()) {
+      msgsState.receiptsByMessage.remove(k);
+    };
+    // (ConversationId, UserId) compare for typingIndicators map
+    let cmpConvUser = func(a : (Common.ConversationId, Common.UserId), b : (Common.ConversationId, Common.UserId)) : { #less; #equal; #greater } {
+      let c = Nat.compare(a.0, b.0);
+      if (c != #equal) c else Principal.compare(a.1, b.1);
+    };
+    let typingKeys = msgsState.typingIndicators.keys().toArray();
+    for (k in typingKeys.vals()) {
+      msgsState.typingIndicators.remove(cmpConvUser, k);
+    };
+    msgsState.state.nextId := 0;
+
+    // ── Clear attachments ────────────────────────────────────────────────────
+    let attKeys = attState.attachments.keys().toArray();
+    for (k in attKeys.vals()) {
+      attState.attachments.remove(k);
+    };
+    let msgAttKeys = attState.messageAttachments.keys().toArray();
+    for (k in msgAttKeys.vals()) {
+      attState.messageAttachments.remove(k);
+    };
+    attState.state.nextId := 0;
+
+    // ── Clear invites (all org invites) ────────────────────────────────────────
+    let inviteKeys = invites.keys().toArray();
+    for (k in inviteKeys.vals()) {
+      invites.remove(k);
+    };
+
+    // ── Permanently disable this operation and audit ─────────────────────────
+    AdminLib.markPurgeCompleted(adminState, caller);
+
+    #ok("All messages, conversations, attachments, and invites have been purged successfully. This operation has been permanently disabled.");
   };
 };
 

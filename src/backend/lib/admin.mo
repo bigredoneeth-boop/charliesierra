@@ -12,7 +12,14 @@ module {
   public type State = {
     auditLog : Map.Map<Nat, T.AuditEvent>;
     adminPrincipals : Set.Set<Common.UserId>;
-    state : { var nextEventId : Nat; var bootstrapCompleted : Bool; var dataResetCompleted : Bool; var seedPrincipal : ?Principal };
+    state : {
+      var nextEventId : Nat;
+      var bootstrapCompleted : Bool;
+      var dataResetCompleted : Bool;
+      var purgeCompleted : Bool;
+      var purgeResetUsed : Bool;
+      var seedPrincipal : ?Principal;
+    };
   };
 
   /// Append an audit event. Call from other lib modules — never expose raw log writes publicly.
@@ -307,5 +314,51 @@ module {
   /// Used by the frontend to decide whether to show or hide the bootstrap UI.
   public func hasSuperAdmin(s : State) : Bool {
     s.state.bootstrapCompleted;
+  };
+
+  /// Returns true if the one-time purge has already been performed.
+  public func hasPurgeBeenPerformed(s : State) : Bool {
+    s.state.purgeCompleted;
+  };
+
+  /// Returns the full purge status for the admin panel.
+  public func getPurgeStatus(s : State) : { purgeCompleted : Bool; purgeResetUsed : Bool } {
+    { purgeCompleted = s.state.purgeCompleted; purgeResetUsed = s.state.purgeResetUsed };
+  };
+
+  /// One-time reset of the purgeCompleted flag so the purge can be run again.
+  /// Only callable by the Super Admin, only when purgeCompleted is true, and
+  /// only if purgeResetUsed is false (one-time reset).
+  public func resetPurgeFlag(
+    s : State,
+    caller : Common.UserId,
+  ) : Common.Result<(), Common.Error> {
+    let superAdmin = Principal.fromText("dzdlk-gui4e-tacqa-6ptxj-jslvy-medgl-425ra-lbapw-3lmgh-hbulu-wqe");
+
+    if (caller != superAdmin) {
+      return #err(#error("unauthorized"));
+    };
+
+    if (not s.state.purgeCompleted) {
+      return #err(#error("notYetUsed"));
+    };
+
+    if (s.state.purgeResetUsed) {
+      return #err(#error("alreadyReset"));
+    };
+
+    s.state.purgeCompleted := false;
+    s.state.purgeResetUsed := true;
+    recordEvent(s, #adminAction, caller, null, null);
+    #ok(());
+  };
+
+  /// One-time purge: permanently mark purge as completed and record audit event.
+  public func markPurgeCompleted(
+    s : State,
+    actorId : Common.UserId,
+  ) : () {
+    s.state.purgeCompleted := true;
+    recordEvent(s, #adminAction, actorId, null, null);
   };
 };

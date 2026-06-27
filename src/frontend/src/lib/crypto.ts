@@ -106,7 +106,14 @@ export async function generateECDHKeyPair(): Promise<CryptoKeyPair> {
 
 export async function exportPublicKey(key: CryptoKey): Promise<Uint8Array> {
   const spki = await crypto.subtle.exportKey("spki", key);
-  return new Uint8Array(spki);
+  const bytes = new Uint8Array(spki);
+  const fp = Array.from(bytes.slice(0, 8))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  console.log(
+    `[E2EE KEYS] exportPublicKey: fingerprint(first8)=${fp}, byteLength=${bytes.byteLength}`,
+  );
+  return bytes;
 }
 
 /**

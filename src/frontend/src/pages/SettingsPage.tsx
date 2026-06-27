@@ -46,6 +46,7 @@ import {
 } from "@/hooks/use-enterprise";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { exportPublicKey, generateECDHKeyPair } from "@/lib/crypto";
+import { clearAllCache, clearAllFileCache } from "@/lib/decryption-cache";
 import { useNavigate } from "@tanstack/react-router";
 import {
   Bell,
@@ -1210,14 +1211,19 @@ export default function SettingsPage() {
     navigate({ to: "/login" });
   };
 
-  const handleClearKeys = () => {
+  const handleClearKeys = async () => {
     try {
       const db = indexedDB.deleteDatabase("cs_keystore");
-      db.onsuccess = () =>
-        toast.success("Local encryption keys cleared. Reloading…", {
-          duration: 3000,
-          onAutoClose: () => window.location.reload(),
-        });
+      await new Promise<void>((resolve, reject) => {
+        db.onsuccess = () => resolve();
+        db.onerror = () => reject(db.error);
+      });
+      await clearAllCache();
+      await clearAllFileCache();
+      toast.success("Local encryption keys and caches cleared. Reloading…", {
+        duration: 3000,
+        onAutoClose: () => window.location.reload(),
+      });
     } catch {
       toast.error("Failed to clear local keys");
     }

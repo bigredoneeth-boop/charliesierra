@@ -187,10 +187,13 @@ module {
     #auditLogExported;
     // Organisation management variants
     #orgCreated;
+    #orgUpdated;
     #orgSuspended;
+    #orgDeleted;
     #userInvited;
     #memberRoleChanged;
     #memberSuspended;
+    #memberReactivated;
     #groupMemberRemoved;
     // Key recovery variants
     #keyRecoveryInitiated;
@@ -198,5 +201,12 @@ module {
     #keyRecoveryRejected;
     #keyRecoveryCompleted;
     #keyEscrowEnrolled;
+    // Retention policy variants
+    #retentionPolicyCreated;
+    #retentionPolicyUpdated;
+    #legalHoldPlaced;
+    #legalHoldRemoved;
+    #policyReportExported;
+    #policyExpiryCheckPerformed;
   };
 };

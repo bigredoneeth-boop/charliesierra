@@ -20,6 +20,7 @@ import {
   useUserProfile,
 } from "@/hooks/use-profiles";
 import { decryptMessage, deriveDisplayNameKey } from "@/lib/crypto";
+import { clearConversationCache } from "@/lib/decryption-cache";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Trash2, Users } from "lucide-react";
@@ -220,10 +221,12 @@ export function ConversationListItem({
   }
 
   async function handleConfirmDelete() {
+    const convId = conversation.id.toString();
     await deleteConversation.mutateAsync(conversation.id);
+    await clearConversationCache(convId);
     setConfirmOpen(false);
     // If currently viewing this thread, navigate back to conversations list
-    if (params?.id === conversation.id.toString()) {
+    if (params?.id === convId) {
       navigate({ to: "/app/conversations" });
     }
     onDeleted?.();

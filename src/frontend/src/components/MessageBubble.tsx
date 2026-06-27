@@ -6,18 +6,33 @@ import { useCrypto } from "@/context/crypto-context";
 import { useBackend } from "@/hooks/use-backend";
 import { getDisplayName, setLocalDisplayName } from "@/hooks/use-profiles";
 import { decryptMessage, deriveDisplayNameKey } from "@/lib/crypto";
+import { getDecryptionStatus, setDecryptedFile } from "@/lib/decryption-cache";
+import { getDecryptedMessageSync } from "@/lib/decryption-cache";
 import {
+  AlertCircle,
   Check,
   CheckCheck,
   Clock,
   Download,
+  Edit,
   FileText,
   ImageIcon,
   Loader2,
+  MessageSquare,
+  Pin,
+  Reply,
+  Smile,
   Timer,
+  Trash,
   Video,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+
+interface ReplyToInfo {
+  messageId: bigint;
+  senderName: string;
+  content: string;
+}
 
 interface MessageBubbleProps {
   message: MessagePublic;
@@ -29,6 +44,19 @@ interface MessageBubbleProps {
   isGroup?: boolean;
   onReply?: (message: MessagePublic) => void;
   onDelete?: (messageId: bigint) => void;
+  onReaction?: (messageId: bigint, emoji: string) => void;
+  onEdit?: (messageId: bigint) => void;
+  onPin?: (messageId: bigint) => void;
+  isPinned?: boolean;
+  onThread?: (messageId: bigint) => void;
+  threadCount?: number;
+  onResend?: (messageId: bigint) => void;
+  isFailed?: boolean;
+  isSending?: boolean;
+  showTimestamp?: boolean;
+  isLastMessage?: boolean;
+  onScrollToMessage?: (messageId: bigint) => void;
+  onRekey?: () => Promise<{ success: boolean; error?: string }>;
 }
 
 export function MessageStatus({
@@ -74,108 +102,335 @@ export function isExpired(msg: MessagePublic): boolean {
   return Date.now() > expiresMs;
 }
 
-export function useDecryptedContent(
-  message: MessagePublic,
+function useDecryptedContent(
+  msg: MessagePublic,
   conversationId: string,
-  _isMine: boolean,
+  onRekey: (() => void) | undefined,
 ) {
-  const { decryptFromConv, rekeyConversation } = useCrypto();
-  const [text, setText] = useState<string | null>(null);
-  const hasTriggeredRekey = useRef(false);
-  const [failed, setFailed] = useState(false);
+  const { decryptFromConv, isKeyReady } = useCrypto();
+  const [content, setContent] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [showStaleKeyButton, setShowStaleKeyButton] = useState(false);
+  const [isRekeying, setIsRekeying] = useState(false);
+  const [rekeyError, setRekeyError] = useState<string | null>(null);
+  const [isPermanentlyUnreadable, setIsPermanentlyUnreadable] = useState(false);
+  const [retryVersion, setRetryVersion] = useState(0);
+  const hasTriggeredRekey = useRef(false);
+  // Ref to track cancellation across async boundaries for event handlers
+  const cancelledRef = useRef(false);
+  // CRITICAL: contentRef tracks the latest plaintext across all async
+  // boundaries. If a concurrent decryptionSuccess event fires and sets content,
+  // a stale effect run that later fails MUST NOT overwrite content with an
+  // error. We check contentRef before setting any error state.
+  const contentRef = useRef<string | null>(null);
 
+  const msgId = msg.id.toString();
+
+  // ── SYNCHRONOUS CACHE CHECK ON MOUNT ────────────────────────────────────────
+  // Before any async work, check the in-memory cache synchronously. If we have
+  // a hit, set content immediately and skip the async effect entirely. This
+  // prevents "Decrypting..." flicker and "Permanently Unreadable" from ever
+  // shadowing a successful cache hit on remount.
+  const [cacheChecked, setCacheChecked] = useState(false);
+  if (!cacheChecked) {
+    const raw = msg.encryptedContent as unknown as Uint8Array;
+    if (!raw || raw.length === 0) {
+      setContent("");
+      setCacheChecked(true);
+    } else {
+      const fresh = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+      const cached = getDecryptedMessageSync(conversationId, msgId, fresh);
+      if (cached !== null) {
+        console.log(
+          `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (sync cache hit on mount)`,
+        );
+        contentRef.current = cached;
+        setContent(cached);
+        setError(null);
+        setIsPermanentlyUnreadable(false);
+        setShowStaleKeyButton(false);
+        setCacheChecked(true);
+      } else {
+        setCacheChecked(true);
+      }
+    }
+  }
+
+  // Listen for external signals that the key is ready, rekey completed, or
+  // another message bubble successfully decrypted and cached this message.
   useEffect(() => {
-    if (message.messageType !== MessageType.text) return;
-    if (isExpired(message)) {
-      setFailed(false);
-      setText(null);
-      setShowStaleKeyButton(false);
+    const handleKeyReady = (e: Event) => {
+      const customEvent = e as CustomEvent<{ conversationId: string }>;
+      if (customEvent.detail?.conversationId === conversationId) {
+        console.log(
+          `[E2EE KEY] useDecryptedContent received keyReady for convId=${conversationId}, triggering retry`,
+        );
+        setRetryVersion((v) => v + 1);
+      }
+    };
+    const handleRekeyComplete = (e: Event) => {
+      const customEvent = e as CustomEvent<{ conversationId: string }>;
+      if (customEvent.detail?.conversationId === conversationId) {
+        console.log(
+          `[E2EE REKEY] useDecryptedContent received rekey:complete for convId=${conversationId}, triggering retry`,
+        );
+        setRetryVersion((v) => v + 1);
+      }
+    };
+    const handleDecryptionSuccess = (e: Event) => {
+      const customEvent = e as CustomEvent<{
+        conversationId: string;
+        msgId: string;
+        plaintext: string;
+      }>;
+      if (
+        customEvent.detail?.conversationId === conversationId &&
+        customEvent.detail?.msgId === msgId
+      ) {
+        console.log(
+          `[E2EE DECRYPT SUCCESS] useDecryptedContent received decryptionSuccess for msgId=${msgId}, updating UI`,
+        );
+        if (!cancelledRef.current) {
+          contentRef.current = customEvent.detail.plaintext;
+          setContent(customEvent.detail.plaintext);
+          setError(null);
+          setIsPermanentlyUnreadable(false);
+          setShowStaleKeyButton(false);
+        }
+      }
+    };
+    window.addEventListener("keyReady", handleKeyReady);
+    window.addEventListener("rekey:complete", handleRekeyComplete);
+    window.addEventListener("decryptionSuccess", handleDecryptionSuccess);
+    return () => {
+      window.removeEventListener("keyReady", handleKeyReady);
+      window.removeEventListener("rekey:complete", handleRekeyComplete);
+      window.removeEventListener("decryptionSuccess", handleDecryptionSuccess);
+    };
+  }, [conversationId, msgId]);
+
+  const isKeyReadyRef = useRef(isKeyReady);
+  useEffect(() => {
+    isKeyReadyRef.current = isKeyReady;
+  }, [isKeyReady]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: retryVersion is a primitive reset trigger; encryptedContent is read inside the effect via msg.encryptedContent to avoid Uint8Array reference churn
+  useEffect(() => {
+    // If the synchronous mount check already found cached plaintext, skip
+    // the entire async effect. The cache hit was handled during render.
+    if (contentRef.current !== null) {
+      console.log(
+        `[E2EE DECRYPT SKIP] async effect skipped for msgId=${msgId} — sync cache hit already set content`,
+      );
       return;
     }
 
     let cancelled = false;
+    cancelledRef.current = false;
+    // Track the current effect generation so stale async results don't overwrite
+    // newer successful results.  Each effect run gets a fresh generation number.
+    const myGeneration = Date.now() + Math.random();
+    const generationRef = { current: myGeneration };
 
-    // Retry loop: 2 total attempts (initial + 1 retry after 500ms).
-    const RETRY_DELAYS = [0, 500]; // ms before each attempt
-    let cumulativeDelay = 0;
+    async function decrypt() {
+      // Read encryptedContent from the message object directly (via closure)
+      // rather than from a ref — the closure captures the value at effect-run time.
+      const raw = msg.encryptedContent as unknown as Uint8Array;
+      if (!raw || raw.length === 0) {
+        if (!cancelled) setContent("");
+        return;
+      }
 
-    const attempts = RETRY_DELAYS.map((delay, index) => {
-      cumulativeDelay += delay;
-      return { attempt: index + 1, delay: cumulativeDelay };
-    });
+      // Reset error/unreadable state at the start of every decrypt attempt.
+      // This ensures that a retry (triggered by retryVersion or keyReady)
+      // clears any stale "Permanently Unreadable" from a previous run.
+      if (!cancelled) {
+        setError(null);
+        setIsPermanentlyUnreadable(false);
+        setShowStaleKeyButton(false);
+      }
 
-    const timers: ReturnType<typeof setTimeout>[] = [];
-
-    for (const { attempt, delay } of attempts) {
-      const t = setTimeout(async () => {
-        if (cancelled) return;
-        console.log(
-          `[E2EE] useDecryptedContent: attempt ${attempt}/${attempts.length} for convId=${conversationId} msgId=${message.id}`,
-        );
-        // CRITICAL: Element-by-element copy — the ONLY safe way to produce a
-        // Uint8Array with byteOffset=0 regardless of how the Candid decoder
-        // allocated the source buffer.
-        // CRITICAL: element-by-element copy into a fresh zero-offset buffer.
-        // encryptedContent from Candid decoding may carry a hidden byteOffset
-        // that causes IV extraction to read the wrong bytes.
-        const raw = message.encryptedContent as unknown as {
-          length: number;
-          [i: number]: number;
-        };
-        const rawLen =
-          (raw as unknown as Uint8Array).length ?? Object.keys(raw).length;
-        const fresh = new Uint8Array(rawLen);
-        const rawU8 = raw as unknown as Uint8Array;
-        for (let i = 0; i < rawLen; i++) fresh[i] = rawU8[i];
-        console.log(
-          `[E2EE RECV] Received blob = ${fresh.length} bytes, extracted IV=12, ciphertext+tag=${fresh.length - 12} bytes (attempt ${attempt}/${attempts.length}), convId=${conversationId}`,
-        );
-        const result = await decryptFromConv(conversationId, fresh);
-        if (cancelled) return;
-        if (result !== null) {
-          setText(result);
-          setFailed(false);
-          setShowStaleKeyButton(false);
-          // Cancel remaining retries — success
-          cancelled = true;
-        } else if (attempt === attempts.length) {
-          // All retries exhausted
-          console.error(
-            `[E2EE] useDecryptedContent: all ${attempts.length} attempts failed for convId=${conversationId} msgId=${message.id}`,
+      // Check local plaintext cache FIRST before any status checks.
+      // If we have cached plaintext, display it immediately and skip all
+      // decrypt work. This prevents "Permanently Unreadable" from ever
+      // shadowing a successful cache hit.
+      const fresh = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) fresh[i] = raw[i];
+      const { getDecryptedMessage } = await import("@/lib/decryption-cache");
+      const cachedPlaintext = await getDecryptedMessage(
+        conversationId,
+        msgId,
+        fresh,
+      );
+      if (cachedPlaintext) {
+        if (!cancelled && generationRef.current === myGeneration) {
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (async cache hit in useDecryptedContent)`,
           );
-          if (!hasTriggeredRekey.current) {
-            hasTriggeredRekey.current = true;
-            console.log(
-              `[E2EE] Stale key detected — initiating rekey for convId=${conversationId} msgId=${message.id}`,
-            );
-            rekeyConversation(conversationId).catch((err: unknown) => {
-              console.error(
-                `[E2EE] rekeyConversation failed for convId=${conversationId}:`,
-                err,
-              );
-            });
-          }
-          console.error();
-          setFailed(true);
+          contentRef.current = cachedPlaintext;
+          setContent(cachedPlaintext);
+          setError(null);
+          setIsPermanentlyUnreadable(false);
+          setShowStaleKeyButton(false);
+        }
+        return;
+      }
+
+      // Wait for key to be ready before attempting decrypt
+      const maxWait = 30; // 3 seconds (100ms * 30)
+      let waited = 0;
+      while (!isKeyReadyRef.current(conversationId) && waited < maxWait) {
+        await new Promise((r) => setTimeout(r, 100));
+        waited++;
+      }
+
+      if (!isKeyReadyRef.current(conversationId)) {
+        console.log(
+          `[E2EE] useDecryptedContent: key not ready for convId=${conversationId} after wait`,
+        );
+        if (!cancelled && generationRef.current === myGeneration) {
+          setError("Key not ready");
           setShowStaleKeyButton(true);
         }
-      }, delay);
-      timers.push(t);
+        return;
+      }
+
+      try {
+        const decrypted = await decryptFromConv(conversationId, fresh, msgId);
+
+        // After decryptFromConv returns, double-check the cache in case a
+        // concurrent call (from a different MessageBubble or a previous effect
+        // run that was "cancelled") succeeded and cached the plaintext.
+        const postCache = await getDecryptedMessage(
+          conversationId,
+          msgId,
+          fresh,
+        );
+        const finalDecrypted = postCache ?? decrypted;
+
+        if (cancelled || generationRef.current !== myGeneration) return;
+
+        if (finalDecrypted === null) {
+          // Check if it was marked permanently unreadable by decryptFromConv.
+          // CRITICAL: do one final cache check in case a concurrent success
+          // event wrote to the cache between decryptFromConv returning and now.
+          const finalCacheCheck = await getDecryptedMessage(
+            conversationId,
+            msgId,
+            fresh,
+          );
+          if (finalCacheCheck) {
+            console.log(
+              `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (final cache check after decryptFromConv null)`,
+            );
+            contentRef.current = finalCacheCheck;
+            setContent(finalCacheCheck);
+            setError(null);
+            setIsPermanentlyUnreadable(false);
+            setShowStaleKeyButton(false);
+            return;
+          }
+
+          // CRITICAL RACE FIX: If a concurrent decryptionSuccess event already
+          // populated contentRef with plaintext, do NOT overwrite it with an
+          // error. The event handler fires independently of this effect run.
+          if (contentRef.current !== null) {
+            console.log(
+              `[E2EE DECRYPT RACE GUARD] contentRef already has plaintext for msgId=${msgId}, skipping error set`,
+            );
+            return;
+          }
+
+          const finalStatus = await getDecryptionStatus(conversationId, msgId);
+          if (finalStatus === "permanently-unreadable") {
+            setIsPermanentlyUnreadable(true);
+            setError("Permanently unreadable (previous key rotated)");
+            setShowStaleKeyButton(false);
+          } else {
+            setError("Unable to decrypt");
+            setShowStaleKeyButton(true);
+          }
+        } else {
+          // SUCCESS PATH: plaintext returned and/or cached.
+          // Always update contentRef so race-guard checks in later runs see it.
+          contentRef.current = finalDecrypted;
+          setContent(finalDecrypted);
+          setError(null);
+          setIsPermanentlyUnreadable(false);
+          setShowStaleKeyButton(false);
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (decryptFromConv success path)`,
+          );
+        }
+      } catch (err) {
+        if (cancelled || generationRef.current !== myGeneration) return;
+        console.error(
+          `[E2EE] useDecryptedContent error for convId=${conversationId}:`,
+          err,
+        );
+        setError("Decryption error");
+        setShowStaleKeyButton(true);
+      }
     }
+
+    decrypt();
 
     return () => {
       cancelled = true;
-      for (const t of timers) clearTimeout(t);
+      cancelledRef.current = true;
+      // Increment generation so any in-flight async work from this run knows
+      // it is stale and won't overwrite state set by a newer effect run.
+      generationRef.current = -1;
     };
-  }, [message, conversationId, decryptFromConv, rekeyConversation]);
+  }, [conversationId, decryptFromConv, msgId, retryVersion]);
 
-  return { text, failed, showStaleKeyButton };
+  const handleRekey = async () => {
+    if (hasTriggeredRekey.current) {
+      console.log(
+        `[E2EE REKEY] Already triggered rekey for msgId=${msg.id}, skipping`,
+      );
+      return;
+    }
+    hasTriggeredRekey.current = true;
+    setIsRekeying(true);
+    setRekeyError(null);
+
+    try {
+      if (!onRekey) {
+        throw new Error("Rekey handler not available");
+      }
+      await onRekey();
+      setIsRekeying(false);
+      // After rekey, the parent should trigger a re-decrypt of all messages
+    } catch (err) {
+      console.error(
+        `[E2EE REKEY] MessageBubble rekey error for convId=${conversationId}:`,
+        err,
+      );
+      setRekeyError(err instanceof Error ? err.message : "Rekey failed");
+      setIsRekeying(false);
+      // After one failed attempt, permanently mark as unreadable
+      setShowStaleKeyButton(false);
+      setError("Unreadable (key rotated)");
+    }
+  };
+
+  return {
+    content,
+    error,
+    showStaleKeyButton,
+    isRekeying,
+    rekeyError,
+    handleRekey,
+    hasTriggeredRekey: hasTriggeredRekey.current,
+    isPermanentlyUnreadable,
+  };
 }
 
 /** Parse encrypted metadata JSON from a non-text message's encryptedContent */
 /** Parse encrypted metadata JSON from a non-text message's encryptedContent */
-function useAttachmentMeta(
+function _useAttachmentMeta(
   message: MessagePublic,
   conversationId: string,
 ): { name?: string; size?: number; mime?: string; storageKey?: string } {
@@ -252,7 +507,7 @@ function useAttachmentBlob(
   retryKey = 0,
 ) {
   const { backend, downloadBlob } = useBackend();
-  const { getConversationKey } = useCrypto();
+  const { getConversationKey, getDecryptedFileWithCache } = useCrypto();
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
@@ -487,22 +742,82 @@ function useAttachmentBlob(
 
           // 3. Decrypt using IV(12) + ciphertext+tag format.
           // encryptedBytes is already a fresh zero-offset buffer from downloadBlob.
-          const { decryptBlob } = await import("@/lib/crypto");
-          const decryptedArrayBuffer = await decryptBlob(
-            convKey,
-            encryptedBytes,
-          );
-          if (cancelled) return;
+          let blob: Blob;
+          let url: string;
 
-          console.log(
-            `[E2EE FILE RECV] Decrypted successfully: ${decryptedArrayBuffer.byteLength} bytes`,
-          );
+          const attachmentRecord =
+            attachments.length > 0 ? (attachments[0] as Attachment) : null;
+          const originalFileName = metaStorageKey || "unknown";
+          // Attachment interface has no fileName field; use metaStorageKey or "unknown"
+          // Attachment interface has no fileName field; use metaStorageKey or "unknown"
+          // originalFileName already set above
+          // originalFileName already set above
 
-          // 4. Create Blob with original mimeType and generate object URL
-          const blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
-            type: mimeType || "application/octet-stream",
-          });
-          const url = URL.createObjectURL(blob);
+          if (attachmentRecord?.storageKey && getDecryptedFileWithCache) {
+            const cachedBlob = await getDecryptedFileWithCache(
+              attachmentRecord.storageKey,
+              encryptedBytes,
+              mimeType || "application/octet-stream",
+              conversationId,
+              convKey,
+              originalFileName,
+            );
+            if (cachedBlob) {
+              blob = cachedBlob;
+              url = URL.createObjectURL(blob);
+              console.log(
+                `[E2EE FILE RECV] Decrypted via cache: ${blob.size} bytes`,
+              );
+            } else {
+              // Fallback to direct decrypt
+              const { decryptBlob } = await import("@/lib/crypto");
+              const decryptedArrayBuffer = await decryptBlob(
+                convKey,
+                encryptedBytes,
+              );
+              if (cancelled) return;
+              blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
+                type: mimeType || "application/octet-stream",
+              });
+              url = URL.createObjectURL(blob);
+              console.log(
+                `[E2EE FILE RECV] Decrypted successfully (fallback): ${decryptedArrayBuffer.byteLength} bytes`,
+              );
+              // Cache the fallback result for future reuse
+              const { hashCiphertext } = await import("@/lib/decryption-cache");
+              await setDecryptedFile(attachmentRecord.storageKey, blob, {
+                mimeType: mimeType || "application/octet-stream",
+                originalFileName,
+                size: blob.size,
+                ciphertextHash: hashCiphertext(encryptedBytes),
+                conversationId,
+              });
+            }
+          } else {
+            const { decryptBlob } = await import("@/lib/crypto");
+            const decryptedArrayBuffer = await decryptBlob(
+              convKey,
+              encryptedBytes,
+            );
+            if (cancelled) return;
+            blob = new Blob([new Uint8Array(decryptedArrayBuffer)], {
+              type: mimeType || "application/octet-stream",
+            });
+            url = URL.createObjectURL(blob);
+            console.log(
+              `[E2EE FILE RECV] Decrypted successfully: ${decryptedArrayBuffer.byteLength} bytes`,
+            );
+            if (attachmentRecord?.storageKey) {
+              const { hashCiphertext } = await import("@/lib/decryption-cache");
+              await setDecryptedFile(attachmentRecord.storageKey, blob, {
+                mimeType: mimeType || "application/octet-stream",
+                originalFileName,
+                size: blob.size,
+                ciphertextHash: hashCiphertext(encryptedBytes),
+                conversationId,
+              });
+            }
+          }
           console.log("[E2EE FILE RECV] Created object URL for display");
 
           // Revoke any previous URL
@@ -586,7 +901,7 @@ function useAttachmentBlob(
 }
 
 /** Inline image thumbnail with click-to-expand */
-function ImageAttachment({
+function _ImageAttachment({
   message,
   conversationId,
   meta,
@@ -715,7 +1030,7 @@ function ImageAttachment({
 }
 
 /** File/video/audio download button */
-function FileAttachment({
+function _FileAttachment({
   message,
   conversationId,
   meta,
@@ -812,274 +1127,659 @@ function FileAttachment({
 export function MessageBubble({
   message,
   isMine,
-  senderProfile,
-  showAvatar,
+  isGroup,
   conversationId,
-  myPrincipal,
-  isGroup: _isGroup = false,
   onReply,
+  onReaction,
   onDelete,
+  onEdit,
+  onPin,
+  isPinned,
+  onThread,
+  threadCount,
+  onResend,
+  isFailed,
+  isSending,
+  showAvatar = true,
+  showTimestamp = true,
+  isLastMessage = false,
+  onScrollToMessage,
+  onRekey,
 }: MessageBubbleProps) {
-  const [contextOpen, setContextOpen] = useState(false);
-  const [contextPos, setContextPos] = useState({ x: 0, y: 0 });
+  const {
+    content: decryptedContent,
+    error: decryptionError,
+    showStaleKeyButton,
+    isPermanentlyUnreadable,
+  } = useDecryptedContent(message, conversationId, onRekey);
+
+  const [showReactions, setShowReactions] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [isRekeying, setIsRekeying] = useState(false);
+  const [rekeyStatus, setRekeyStatus] = useState<
+    "idle" | "rekeying" | "success" | "error"
+  >("idle");
   const menuRef = useRef<HTMLDivElement>(null);
-  const { text, failed, showStaleKeyButton } = useDecryptedContent(
-    message,
-    conversationId,
-    isMine,
-  );
-  const { rekeyConversation } = useCrypto();
-  const meta = useAttachmentMeta(message, conversationId);
-  const expired = isExpired(message);
+  const bubbleRef = useRef<HTMLDivElement>(null);
 
-  const sentMs = Number(message.sentAt) / 1_000_000;
-  const timeStr = new Date(sentMs).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const senderPrincipalText = message.sender.toText();
-  // Resolve sender display name: use localStorage cache, fall back to short principal
-  const [senderDisplayName, setSenderDisplayName] = useState<string>(() =>
-    getDisplayName(senderPrincipalText),
-  );
-
-  // When senderProfile arrives, decrypt their encryptedDisplayName and populate
-  // the localStorage cache so the name is available instantly in future renders.
+  // Listen for rekey:complete and keyReady events to auto-retry decryption
   useEffect(() => {
-    if (!senderProfile || senderProfile.encryptedDisplayName.length === 0)
-      return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const key = await deriveDisplayNameKey(senderProfile.id);
-        const decrypted = await decryptMessage(
-          key,
-          new Uint8Array(senderProfile.encryptedDisplayName).slice(0),
+    const handleRekeyComplete = (e: Event) => {
+      const customEvent = e as CustomEvent<{ conversationId: string }>;
+      if (customEvent.detail?.conversationId === conversationId) {
+        console.log(
+          `[E2EE REKEY] Received rekey:complete for convId=${conversationId}, resetting decryption state`,
         );
-        if (cancelled || !decrypted?.trim()) return;
-        setLocalDisplayName(senderPrincipalText, decrypted);
-        setSenderDisplayName(decrypted);
-      } catch (err) {
-        console.error(
-          "[DisplayName] Failed to decrypt sender display name for",
-          senderPrincipalText,
-          err,
+        setRekeyStatus("success");
+        setTimeout(() => setRekeyStatus("idle"), 3000);
+      }
+    };
+    const handleKeyReady = (e: Event) => {
+      const customEvent = e as CustomEvent<{ conversationId: string }>;
+      if (customEvent.detail?.conversationId === conversationId) {
+        console.log(
+          `[E2EE KEY] Received keyReady for convId=${conversationId}, will retry decryption`,
         );
       }
-    })();
-    return () => {
-      cancelled = true;
     };
-  }, [senderProfile, senderPrincipalText]);
+    window.addEventListener("rekey:complete", handleRekeyComplete);
+    window.addEventListener("keyReady", handleKeyReady);
+    return () => {
+      window.removeEventListener("rekey:complete", handleRekeyComplete);
+      window.removeEventListener("keyReady", handleKeyReady);
+    };
+  }, [conversationId]);
 
-  const openContextMenu = useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
-      e.preventDefault();
-      const x = "touches" in e ? e.touches[0].clientX : e.clientX;
-      const y = "touches" in e ? e.touches[0].clientY : e.clientY;
-      setContextPos({ x, y });
-      setContextOpen(true);
-    },
-    [],
-  );
+  const handleRekey = async () => {
+    if (isRekeying || rekeyStatus === "rekeying") return;
+    setIsRekeying(true);
+    setRekeyStatus("rekeying");
+    console.log(
+      `[E2EE REKEY] MessageBubble rekey clicked for convId=${conversationId}`,
+    );
 
+    try {
+      if (onRekey) {
+        const result = await onRekey();
+        if (result.success) {
+          setRekeyStatus("success");
+          console.log(
+            `[E2EE REKEY] MessageBubble rekey succeeded for convId=${conversationId}`,
+          );
+        } else {
+          setRekeyStatus("error");
+          console.error(
+            `[E2EE REKEY] MessageBubble rekey failed for convId=${conversationId}: ${result.error || "unknown error"}`,
+          );
+        }
+      } else {
+        // Fallback: trigger window event for crypto-context to handle
+        window.dispatchEvent(
+          new CustomEvent("rekey:request", {
+            detail: { convId: conversationId },
+          }),
+        );
+        setRekeyStatus("rekeying");
+      }
+    } catch (err) {
+      setRekeyStatus("error");
+      console.error(
+        `[E2EE REKEY] MessageBubble rekey error for convId=${conversationId}:`,
+        err,
+      );
+    } finally {
+      setIsRekeying(false);
+      // After async completes, if still in rekeying state, transition to idle after delay
+      setTimeout(() => {
+        setRekeyStatus((prev) => (prev === "rekeying" ? "idle" : prev));
+      }, 3000);
+    }
+  };
+
+  const isReply = !!(message as unknown as { replyTo?: ReplyToInfo }).replyTo;
+  const replyMessage = isReply
+    ? (message as unknown as { replyTo: ReplyToInfo }).replyTo
+    : null;
+
+  const handleReplyClick = () => {
+    if (replyMessage && onScrollToMessage) {
+      onScrollToMessage(replyMessage.messageId);
+    }
+  };
+
+  const handleReaction = (emoji: string) => {
+    onReaction?.(message.id, emoji);
+    setShowReactions(false);
+  };
+
+  const handleDelete = () => {
+    onDelete?.(message.id);
+    setShowMenu(false);
+  };
+
+  const handleEdit = () => {
+    onEdit?.(message.id);
+    setShowMenu(false);
+  };
+
+  const handlePin = () => {
+    onPin?.(message.id);
+    setShowMenu(false);
+  };
+
+  const handleThread = () => {
+    onThread?.(message.id);
+    setShowMenu(false);
+  };
+
+  const handleResend = () => {
+    onResend?.(message.id);
+  };
+
+  // Close menu when clicking outside
   useEffect(() => {
-    if (!contextOpen) return;
-    const close = () => setContextOpen(false);
-    document.addEventListener("click", close);
-    return () => document.removeEventListener("click", close);
-  }, [contextOpen]);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
 
-  const isHighPriority = message.priority === "high";
+    if (showMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showMenu]);
 
-  const bubbleBg = isMine
+  const bubbleColor = isMine
     ? "bg-primary text-primary-foreground"
-    : "bg-card text-card-foreground border border-border";
+    : "bg-card text-foreground border border-border";
 
-  const isAttachment =
-    message.messageType !== MessageType.text && !message.isDeleted && !expired;
+  const bubbleShape = isMine
+    ? "rounded-2xl rounded-br-md"
+    : "rounded-2xl rounded-bl-md";
+
+  const alignment = isMine ? "justify-end" : "justify-start";
+
+  const renderContent = () => {
+    if (message.isDeleted) {
+      return (
+        <span className="italic text-gray-400 text-sm">
+          This message was deleted
+        </span>
+      );
+    }
+
+    if (decryptedContent === null && !decryptionError) {
+      return (
+        <div className="flex items-center gap-2">
+          <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+          <span className="text-sm text-gray-400">Decrypting...</span>
+        </div>
+      );
+    }
+
+    if (decryptionError) {
+      return (
+        <div className="flex flex-col gap-2">
+          {isPermanentlyUnreadable ? (
+            <div className="flex items-center gap-2">
+              <AlertCircle
+                size={14}
+                className="text-muted-foreground flex-shrink-0"
+              />
+              <span className="text-sm text-muted-foreground italic">
+                Message from previous key rotation — unreadable
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm text-destructive">
+              Unable to decrypt message
+            </span>
+          )}
+          {!isMine &&
+            !isGroup &&
+            showStaleKeyButton &&
+            !isPermanentlyUnreadable && (
+              <button
+                type="button"
+                onClick={handleRekey}
+                disabled={rekeyStatus === "rekeying"}
+                className={`text-xs px-2 py-1 rounded-md transition-colors ${
+                  rekeyStatus === "rekeying"
+                    ? "bg-warning text-warning-foreground cursor-wait"
+                    : rekeyStatus === "success"
+                      ? "bg-success text-success-foreground"
+                      : rekeyStatus === "error"
+                        ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
+                        : "bg-primary/10 text-primary hover:bg-primary/20"
+                }`}
+                data-ocid="message.rekey_button"
+              >
+                {rekeyStatus === "rekeying"
+                  ? "Rekeying…"
+                  : rekeyStatus === "success"
+                    ? "Rekeyed — retrying…"
+                    : rekeyStatus === "error"
+                      ? "Rekey failed — try again"
+                      : "Stale key — tap to rekey"}
+              </button>
+            )}
+        </div>
+      );
+    }
+
+    if ((message as unknown as { attachment?: Attachment }).attachment) {
+      return renderAttachment(
+        (message as unknown as { attachment: Attachment }).attachment,
+      );
+    }
+
+    return (
+      <p className="text-sm whitespace-pre-wrap break-words">
+        {decryptedContent ||
+          (message as unknown as { content?: string }).content ||
+          ""}
+      </p>
+    );
+  };
+
+  const renderAttachment = (attachment: Attachment) => {
+    const isImage = attachment.mimeType?.startsWith("image/");
+    const isVideo = attachment.mimeType?.startsWith("video/");
+    const isAudio = attachment.mimeType?.startsWith("audio/");
+
+    if (isImage) {
+      return (
+        <div className="relative">
+          {!imageLoaded && !imageError && (
+            <div className="w-48 h-48 bg-gray-200 animate-pulse rounded-lg" />
+          )}
+          {imageError ? (
+            <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+              <ImageIcon className="w-8 h-8 text-gray-400" />
+              <span className="text-xs text-gray-400 ml-2">Failed to load</span>
+            </div>
+          ) : (
+            <img
+              src={(attachment as unknown as { url?: string }).url || ""}
+              alt={
+                (attachment as unknown as { fileName?: string }).fileName ||
+                "Image"
+              }
+              className={`max-w-48 max-h-48 rounded-lg object-cover cursor-pointer transition-opacity ${
+                imageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+              tabIndex={0}
+              role="button"
+              aria-label="Expand image"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  window.open(
+                    (attachment as unknown as { url?: string }).url || "#",
+                    "_blank",
+                  );
+                }
+              }}
+              onClick={() =>
+                window.open(
+                  (attachment as unknown as { url?: string }).url || "#",
+                  "_blank",
+                )
+              }
+            />
+          )}
+        </div>
+      );
+    }
+
+    if (isVideo) {
+      return (
+        <video
+          aria-label="Video message"
+          src={(attachment as unknown as { url?: string }).url || ""}
+          controls
+          className="max-w-48 max-h-48 rounded-lg"
+          preload="metadata"
+        />
+      );
+    }
+
+    if (isAudio) {
+      return (
+        <audio
+          aria-label="Audio message"
+          src={(attachment as unknown as { url?: string }).url || ""}
+          controls
+          className="max-w-48"
+          preload="metadata"
+        />
+      );
+    }
+
+    // Generic file
+    return (
+      <a
+        href={(attachment as unknown as { url?: string }).url || "#"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
+      >
+        <FileText className="w-5 h-5 text-gray-500" />
+        <div className="flex flex-col">
+          <span className="text-sm font-medium truncate max-w-[150px]">
+            {(attachment as unknown as { fileName?: string }).fileName ||
+              "File"}
+          </span>
+          {(attachment as unknown as { fileSize?: number }).fileSize && (
+            <span className="text-xs text-gray-400">
+              {((size: number) => {
+                if (size < 1024) return `${size} B`;
+                if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+                return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+              })((attachment as unknown as { fileSize: number }).fileSize)}
+            </span>
+          )}
+        </div>
+        <Download className="w-4 h-4 text-gray-400 ml-auto" />
+      </a>
+    );
+  };
+
+  const renderReactions = () => {
+    const reactions = (
+      message as unknown as {
+        reactions?: Array<{ emoji: string; count: number; users: string[] }>;
+      }
+    ).reactions;
+    if (!reactions || reactions.length === 0) return null;
+
+    return (
+      <div className="flex flex-wrap gap-1 mt-1">
+        {reactions.map((reaction, index) => (
+          <button
+            type="button"
+            key={`${reaction.emoji}-${index}`}
+            onClick={() => handleReaction(reaction.emoji)}
+            className={`text-xs px-1.5 py-0.5 rounded-full transition-colors ${
+              reaction.users.includes("currentUser")
+                ? "bg-primary/15 text-primary"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            {reaction.emoji} {reaction.count}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  const renderReplyPreview = () => {
+    if (!replyMessage) return null;
+
+    return (
+      <div
+        className="mb-2 p-2 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted transition-colors"
+        tabIndex={0}
+        role="button"
+        aria-label="Reply to message"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleReplyClick();
+          }
+        }}
+        onClick={handleReplyClick}
+      >
+        <div className="flex items-center gap-1 mb-1">
+          <Reply className="w-3 h-3 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">
+            {replyMessage.senderName || "Unknown"}
+          </span>
+        </div>
+        <p className="text-xs text-foreground/70 truncate">
+          {replyMessage.content || "Original message"}
+        </p>
+      </div>
+    );
+  };
+
+  const renderStatus = () => {
+    if (!isMine) return null;
+
+    if (isSending) {
+      return (
+        <span className="text-xs text-muted-foreground flex items-center gap-1">
+          <Clock className="w-3 h-3" />
+          Sending...
+        </span>
+      );
+    }
+
+    if (isFailed) {
+      return (
+        <button
+          type="button"
+          onClick={handleResend}
+          className="text-xs text-destructive flex items-center gap-1 hover:text-destructive/80 transition-colors"
+        >
+          <AlertCircle className="w-3 h-3" />
+          Failed — tap to retry
+        </button>
+      );
+    }
+
+    if (message.readBy && message.readBy.length > 0) {
+      return (
+        <span className="text-xs text-primary flex items-center gap-1">
+          <Check className="w-3 h-3" />
+          Read
+        </span>
+      );
+    }
+
+    const deliveredTo = (message as unknown as { deliveredTo?: string[] })
+      .deliveredTo;
+    if (deliveredTo && deliveredTo.length > 0) {
+      return (
+        <span className="text-xs text-muted-foreground flex items-center gap-1">
+          <Check className="w-3 h-3" />
+          Delivered
+        </span>
+      );
+    }
+
+    return (
+      <span className="text-xs text-muted-foreground flex items-center gap-1">
+        <Check className="w-3 h-3" />
+        Sent
+      </span>
+    );
+  };
+
+  const renderMenu = () => {
+    if (!showMenu) return null;
+
+    return (
+      <div
+        ref={menuRef}
+        className="absolute z-50 bg-card shadow-lg rounded-lg py-1 min-w-[120px] border border-border"
+        style={{
+          [isMine ? "right" : "left"]: "0",
+          top: "100%",
+          marginTop: "4px",
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => {
+            onReply?.(message);
+            setShowMenu(false);
+          }}
+          className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2"
+        >
+          <Reply className="w-4 h-4" />
+          Reply
+        </button>
+        <button
+          type="button"
+          onClick={handleThread}
+          className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2"
+        >
+          <MessageSquare className="w-4 h-4" />
+          {threadCount ? `${threadCount} replies` : "Start thread"}
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowReactions(!showReactions)}
+          className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2"
+        >
+          <Smile className="w-4 h-4" />
+          React
+        </button>
+        {isMine && (
+          <>
+            <button
+              type="button"
+              onClick={handleEdit}
+              className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2"
+            >
+              <Edit className="w-4 h-4" />
+              Edit
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="w-full text-left px-3 py-2 text-sm text-destructive hover:bg-destructive/10 flex items-center gap-2"
+            >
+              <Trash className="w-4 h-4" />
+              Delete
+            </button>
+          </>
+        )}
+        <button
+          type="button"
+          onClick={handlePin}
+          className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-muted flex items-center gap-2"
+        >
+          <Pin className="w-4 h-4" />
+          {isPinned ? "Unpin" : "Pin"}
+        </button>
+      </div>
+    );
+  };
+
+  const renderReactionPicker = () => {
+    if (!showReactions) return null;
+
+    const emojis = ["👍", "❤️", "😂", "😮", "😢", "🎉", "🔥", "👏"];
+
+    return (
+      <div
+        className="absolute z-50 bg-white shadow-lg rounded-lg p-2 flex gap-1 border border-gray-200"
+        style={{
+          [isMine ? "right" : "left"]: "0",
+          bottom: "100%",
+          marginBottom: "4px",
+        }}
+      >
+        {emojis.map((emoji) => (
+          <button
+            type="button"
+            key={emoji}
+            onClick={() => handleReaction(emoji)}
+            className="text-lg hover:scale-125 transition-transform p-1"
+          >
+            {emoji}
+          </button>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div
-      className={`flex items-end gap-2 group ${
-        isMine ? "flex-row-reverse" : "flex-row"
-      } ${showAvatar ? "mt-2" : "mt-0.5"}`}
-      data-ocid={`message.item.${message.id}`}
+      ref={bubbleRef}
+      className={`flex ${alignment} mb-4 ${isLastMessage ? "mb-6" : ""}`}
+      data-message-id={message.id}
     >
-      {/* Avatar */}
-      <div className="w-8 flex-shrink-0">
-        {showAvatar && !isMine && (
+      {!isMine && showAvatar && (
+        <div className="mr-2 flex-shrink-0">
           <UserAvatar
-            principal={senderPrincipalText}
+            principal={message.sender.toText()}
             displayName={
-              senderDisplayName !== senderPrincipalText
-                ? senderDisplayName
-                : undefined
+              (message as unknown as { senderName?: string }).senderName ||
+              "User"
             }
-            avatarUrl={(() => {
-              try {
-                return (
-                  localStorage.getItem(`cs_avatar:${senderPrincipalText}`) ??
-                  undefined
-                );
-              } catch {
-                return undefined;
-              }
-            })()}
-            size={30}
-            aria-hidden="true"
+            size={32}
           />
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* Bubble */}
       <div
-        className={`relative max-w-[70%] min-w-0 ${
-          isMine ? "items-end" : "items-start"
-        } flex flex-col`}
-        onContextMenu={openContextMenu}
+        className={`flex flex-col max-w-[70%] ${isMine ? "items-end" : "items-start"}`}
       >
-        {/* Sender name label — shown whenever a display name is known (group or direct) */}
-        {!isMine && showAvatar && senderDisplayName.length > 0 && (
-          <span className="text-[11px] font-medium text-muted-foreground mb-0.5 px-1 truncate max-w-full">
-            {senderDisplayName}
+        {isGroup && !isMine && (
+          <span className="text-xs text-gray-500 mb-1 ml-1">
+            {(message as unknown as { senderName?: string }).senderName ||
+              "Unknown"}
           </span>
         )}
-        <div
-          className={`rounded-2xl px-3.5 py-2.5 shadow-message break-words ${
-            isMine ? "rounded-br-sm" : "rounded-bl-sm"
-          } ${bubbleBg}`}
-        >
-          {expired ? (
-            <div className="flex items-center gap-1.5 text-xs opacity-60 italic">
-              <Timer size={12} />
-              <span>Message expired</span>
-            </div>
-          ) : message.isDeleted ? (
-            <span className="text-xs italic opacity-60">Message deleted</span>
-          ) : message.messageType === MessageType.text ? (
-            failed ? (
-              <div className="flex flex-col gap-1">
-                <span className="text-xs italic opacity-60">
-                  Unable to decrypt
+
+        <div className="relative">
+          {renderReactionPicker()}
+
+          <div
+            className={`${bubbleColor} ${bubbleShape} px-4 py-2.5 shadow-sm relative`}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              setShowMenu(!showMenu);
+            }}
+          >
+            {renderReplyPreview()}
+            {renderContent()}
+            {renderReactions()}
+
+            {showTimestamp && (
+              <div
+                className={`flex items-center gap-1 mt-1 ${isMine ? "justify-end" : "justify-start"}`}
+              >
+                <span className="text-[10px] opacity-70">
+                  {new Date(
+                    Number(message.sentAt) / 1_000_000,
+                  ).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </span>
-                {showStaleKeyButton && (
-                  <button
-                    type="button"
-                    className="text-xs underline text-destructive hover:text-destructive/80 transition-colors cursor-pointer"
-                    onClick={() => {
-                      console.log(
-                        `[E2EE UI] User tapped rekey for convId=${conversationId}`,
-                      );
-                      rekeyConversation(conversationId).catch(
-                        (err: unknown) => {
-                          console.error(
-                            `[E2EE UI] Manual rekey failed for convId=${conversationId}:`,
-                            err,
-                          );
-                        },
-                      );
-                    }}
-                    data-ocid="message.rekey_button"
-                  >
-                    Stale key — tap to rekey
-                  </button>
-                )}
+                {renderStatus()}
               </div>
-            ) : text === null ? (
-              <Loader2 size={14} className="animate-spin opacity-40" />
-            ) : (
-              <span className="text-sm leading-relaxed whitespace-pre-wrap break-words">
-                {text}
-              </span>
-            )
-          ) : isAttachment && message.messageType === MessageType.image ? (
-            isMine ? (
-              <span className="flex items-center gap-1.5 text-sm opacity-90">
-                <CheckCheck size={14} />
-                File delivered{meta?.name ? `: ${meta.name}` : ""}
-              </span>
-            ) : (
-              <ImageAttachment
-                message={message}
-                conversationId={conversationId}
-                meta={meta}
-              />
-            )
-          ) : isAttachment ? (
-            isMine ? (
-              <span className="flex items-center gap-1.5 text-sm opacity-90">
-                <CheckCheck size={14} />
-                File delivered{meta?.name ? `: ${meta.name}` : ""}
-              </span>
-            ) : (
-              <FileAttachment
-                message={message}
-                conversationId={conversationId}
-                meta={meta}
-              />
-            )
-          ) : null}
+            )}
+          </div>
+
+          {renderMenu()}
         </div>
 
-        {/* Meta row: time + status + TTL */}
-        <div
-          className={`flex items-center gap-1 mt-0.5 px-1 ${
-            isMine ? "flex-row-reverse" : "flex-row"
-          }`}
-        >
-          {isHighPriority && <PriorityMessageBadge />}
-          <span className="text-[10px] text-muted-foreground">{timeStr}</span>
-          {message.ttlSeconds && !expired && (
-            <Timer
-              size={10}
-              className="text-muted-foreground"
-              aria-label={`Disappears in ${message.ttlSeconds}s`}
-            />
-          )}
-          <MessageStatus
-            message={message}
-            isMine={isMine}
-            myPrincipal={myPrincipal}
-          />
-        </div>
+        {(message as unknown as { isEdited?: boolean }).isEdited && (
+          <span className="text-[10px] text-gray-400 mt-0.5 ml-1">Edited</span>
+        )}
       </div>
 
-      {/* Context menu */}
-      {contextOpen && (
-        <div
-          ref={menuRef}
-          className="fixed z-50 min-w-[140px] bg-popover border border-border rounded-lg shadow-elevated py-1 text-sm"
-          style={{ left: contextPos.x, top: contextPos.y }}
-          data-ocid="message.dropdown_menu"
-        >
-          {onReply && (
-            <button
-              type="button"
-              className="w-full text-left px-3 py-1.5 hover:bg-muted transition-colors"
-              onClick={() => {
-                onReply(message);
-                setContextOpen(false);
-              }}
-              data-ocid="message.reply_button"
-            >
-              Reply
-            </button>
-          )}
-          {isMine && onDelete && (
-            <button
-              type="button"
-              className="w-full text-left px-3 py-1.5 text-destructive hover:bg-destructive/10 transition-colors"
-              onClick={() => {
-                onDelete(message.id);
-                setContextOpen(false);
-              }}
-              data-ocid="message.delete_button"
-            >
-              Delete
-            </button>
-          )}
+      {isMine && showAvatar && (
+        <div className="ml-2 flex-shrink-0">
+          <UserAvatar
+            principal={message.sender.toText()}
+            displayName={
+              (message as unknown as { senderName?: string }).senderName ||
+              "You"
+            }
+            size={32}
+          />
         </div>
       )}
     </div>

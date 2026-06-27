@@ -150,8 +150,8 @@ mixin (
 
     let msgLen = data.size();
     let bitLen : Nat64 = Nat64.fromNat(msgLen) * 8;
-    let rem64 = (msgLen + 1) % 64;
-    let padLen = if (rem64 <= 56) { 56 - rem64 } else { 120 - rem64 };
+    let rem64 = Nat.rem(msgLen + 1, 64);
+    let padLen = if (rem64 <= 56) { Nat.sub(56, rem64) } else { Nat.sub(120, rem64) };
     let paddedSize = msgLen + 1 + padLen + 8;
     let padded = Array.tabulate<Nat8>(paddedSize, func _ = 0).toVarArray();
     var i = 0;

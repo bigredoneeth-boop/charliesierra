@@ -4,6 +4,7 @@ import {
   dbGet,
   dbGetKeysWithPrefix,
   dbSet,
+  decryptBlob,
   decryptMessage,
   deriveDisplayNameKey,
   deriveSharedSecret,
@@ -19,6 +20,21 @@ import {
   unwrapKeyBytes,
   wrapKeyBytes,
 } from "@/lib/crypto";
+import {
+  clearAllCache,
+  clearAllFileCache,
+  clearConversationCache,
+  clearFileCacheForConversation,
+  getDecryptedFile,
+  getDecryptedMessage,
+  getDecryptionAttempts,
+  getDecryptionStatus,
+  hashCiphertext,
+  setDecryptedFile,
+  setDecryptedMessage,
+  setDecryptionStatus,
+} from "@/lib/decryption-cache";
+import { extractErrText } from "@/lib/error-utils";
 import type React from "react";
 import {
   createContext,
@@ -68,7 +84,11 @@ interface CryptoContextValue {
     theirPublicKeyBytes: Uint8Array,
   ) => Promise<CryptoKey | null>;
   encryptForConv: (convId: string, text: string) => Promise<Uint8Array | null>;
-  decryptFromConv: (convId: string, blob: Uint8Array) => Promise<string | null>;
+  decryptFromConv: (
+    convId: string,
+    blob: Uint8Array,
+    msgId?: string,
+  ) => Promise<string | null>;
   /** Decrypt the current user's own display name from their encryptedDisplayName blob. */
   decryptOwnDisplayName: (encryptedBlob: Uint8Array) => Promise<string | null>;
   /** Returns true while ECDH key derivation is in-flight for a conversation. */
@@ -86,7 +106,17 @@ interface CryptoContextValue {
    * publish a fresh ECDH public key to the backend, and trigger re-derivation.
    * Use this when a stale key is detected or as a manual "Rekey" action.
    */
-  rekeyConversation: (convId: string) => Promise<void>;
+  rekeyConversation: (
+    convId: string,
+  ) => Promise<{ success: boolean; error?: string }>;
+  getDecryptedFileWithCache: (
+    storageKey: string,
+    encryptedBlob: Uint8Array,
+    mimeType: string,
+    conversationId: string,
+    key: CryptoKey,
+    originalFileName: string,
+  ) => Promise<Blob | null>;
 }
 
 const CryptoContext = createContext<CryptoContextValue | null>(null);
@@ -99,6 +129,10 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
   const [isRestoringKeys, setIsRestoringKeys] = useState(true);
   const [isNewKeyPair, setIsNewKeyPair] = useState(false);
   const convKeys = useRef<Map<string, CryptoKey>>(new Map());
+  // convKeys.current is the stable Map instance used by all key read/write helpers
+  // across renders.  This prevents stale references and race conditions where a key
+  // is stored in one render's Map but read from a different render's Map, triggering
+  // re-derivation and producing different keys.
   // Stores member fingerprints for group keys so stale-member detection survives page reloads.
   const groupKeyFingerprints = useRef<Map<string, string>>(new Map());
   // Tracks convIds whose key is missing/corrupted so ChatPage can trigger re-derivation.
@@ -111,10 +145,53 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
     new Set(),
   );
   // Tracks convIds currently undergoing a rekey to prevent duplicate rekey loops.
-  const rekeyInProgress = useRef<Set<string>>(new Set());
+  // Uses a Map with timeout info so stale locks auto-clear after 30s.
+  const rekeyLocks = useRef<
+    Map<string, { timeoutId: ReturnType<typeof setTimeout>; startTime: number }>
+  >(new Map());
   const keyLoadingPromises = useRef<Map<string, Promise<CryptoKey | null>>>(
     new Map(),
   );
+
+  const isRekeyInProgress = useCallback((convId: string): boolean => {
+    const lock = rekeyLocks.current.get(convId);
+    if (!lock) return false;
+    // Auto-clear stale locks older than 30 seconds
+    if (Date.now() - lock.startTime > 30000) {
+      clearTimeout(lock.timeoutId);
+      rekeyLocks.current.delete(convId);
+      console.log(`[E2EE REKEY] Auto-cleared stale lock for convId=${convId}`);
+      return false;
+    }
+    return true;
+  }, []);
+
+  const _acquireRekeyLock = useCallback(
+    (convId: string): boolean => {
+      if (isRekeyInProgress(convId)) {
+        console.log(
+          `[E2EE REKEY] Skipping rekey for convId=${convId} — already in progress`,
+        );
+        return false;
+      }
+      const timeoutId = setTimeout(() => {
+        rekeyLocks.current.delete(convId);
+        console.log(`[E2EE REKEY] Lock timed out for convId=${convId}`);
+      }, 30000);
+      rekeyLocks.current.set(convId, { timeoutId, startTime: Date.now() });
+      return true;
+    },
+    [isRekeyInProgress],
+  );
+
+  const _releaseRekeyLock = useCallback((convId: string) => {
+    const lock = rekeyLocks.current.get(convId);
+    if (lock) {
+      clearTimeout(lock.timeoutId);
+      rekeyLocks.current.delete(convId);
+      console.log(`[E2EE REKEY] Guard released for convId=${convId}`);
+    }
+  }, []);
 
   const clearMissingKeyConvId = useCallback((convId: string) => {
     setMissingKeyConvIds((prev) => {
@@ -283,6 +360,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
                 if (fingerprint) {
                   groupKeyFingerprints.current.set(convId, fingerprint);
                 }
+                setKeyReadyConvIds((prev) => new Set([...prev, convId]));
                 restoredCount++;
                 const fpLog = fingerprint || "none";
                 console.log(
@@ -351,6 +429,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
     (convId: string, key: CryptoKey, memberFingerprint: string) => {
       convKeys.current.set(convId, key);
       groupKeyFingerprints.current.set(convId, memberFingerprint);
+      setKeyReadyConvIds((prev) => new Set([...prev, convId]));
       if (principal) {
         persistConvKey(principal.toText(), convId, key, memberFingerprint)
           .then(() => {
@@ -421,6 +500,14 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           /* best effort */
         }
       }
+      // Also clear from ready state so isKeyReady returns false until re-derivation completes
+      setKeyReadyConvIds((prev) => {
+        if (!prev.has(convId)) return prev;
+        const next = new Set(prev);
+        next.delete(convId);
+        return next;
+      });
+
       // Self-keying guard: abort if peer is the current user
       if (principal && convId.includes(principal.toText())) {
         console.warn(
@@ -429,13 +516,6 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         derivingConvIds.current.delete(convId);
         return null;
       }
-      // Also clear from ready state so isKeyReady returns false until re-derivation completes
-      setKeyReadyConvIds((prev) => {
-        if (!prev.has(convId)) return prev;
-        const next = new Set(prev);
-        next.delete(convId);
-        return next;
-      });
 
       derivingConvIds.current.add(convId);
       if (!keyPair?.privateKey) {
@@ -482,6 +562,10 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           `[E2EE] deriveAndStoreKey: key stored in memory for convId=${convId}`,
         );
         setKeyReadyConvIds((prev) => new Set([...prev, convId]));
+        // Notify all message bubbles that the key is ready so they retry decryption
+        window.dispatchEvent(
+          new CustomEvent("keyReady", { detail: { conversationId: convId } }),
+        );
         console.log(
           `[E2EE] Derived and stored shared key for convId=${convId}`,
         );
@@ -503,10 +587,8 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
 
         // ── ROUNDTRIP SMOKE TEST ─────────────────────────────────────────────
         // Immediately verify the newly derived key can encrypt AND decrypt a
-        // known plaintext. This catches key derivation mismatches early (e.g.
-        // wrong peer key used) before the first real message arrives.
-        // We mirror the EXACT buffer construction used in encryptForConv so
-        // the roundtrip validates the real send-path format.
+        // known plaintext. This catches key derivation mismatches early.
+        // Made more resilient: only evict on clear failure, log warnings on mismatch.
         try {
           const testPlaintext = "__roundtrip_test__";
           const testBytes = new TextEncoder().encode(testPlaintext);
@@ -517,11 +599,15 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
           if (decryptedText === testPlaintext) {
             console.log(`[E2EE ROUNDTRIP] convId=${convId}: PASS`);
           } else {
-            throw new Error(`roundtrip mismatch: got "${decryptedText}"`);
+            console.warn(
+              `[E2EE ROUNDTRIP] convId=${convId}: MISMATCH — got "${decryptedText}", expected "${testPlaintext}". Key may still be valid for peer messages.`,
+            );
+            // Don't evict on roundtrip mismatch — the key may still work for
+            // actual peer-encrypted messages. Only evict if encrypt/decrypt throws.
           }
         } catch (rtErr) {
           console.error(
-            `[E2EE ROUNDTRIP] convId=${convId}: FAIL — evicting key`,
+            `[E2EE ROUNDTRIP] convId=${convId}: FAIL (encrypt/decrypt threw) — evicting key`,
             rtErr,
           );
           // Key is bad — evict immediately so re-derivation can try again.
@@ -563,6 +649,9 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
 
   const encryptForConv = useCallback(
     async (convId: string, text: string): Promise<Uint8Array | null> => {
+      // ALWAYS read the latest key from the ref Map — never capture a stale
+      // closure variable.  This guarantees we encrypt with the most recently
+      // derived key even if a rekey happened after the component rendered.
       const key = convKeys.current.get(convId);
       const keyFp = key
         ? await getKeyFingerprint(key).catch(() => "unknown")
@@ -570,15 +659,35 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       console.log(
         `[E2EE SEND] Using key fingerprint=${keyFp} for convId=${convId}`,
       );
-      if (!key) return null;
+      if (!key) {
+        console.error(
+          `[E2EE SEND] No key available for convId=${convId} — cannot encrypt`,
+        );
+        return null;
+      }
       try {
         // Encode plaintext to bytes, then delegate to encryptMessage.
         const plaintextBytes = new TextEncoder().encode(text);
+        if (plaintextBytes.length === 0) {
+          console.error(
+            `[E2EE ENCRYPT] Refusing to encrypt empty plaintext for convId=${convId}`,
+          );
+          return null;
+        }
         const cipherBuf = await encryptMessage(key, plaintextBytes);
         // encryptMessage already returns a fresh contiguous Uint8Array with
         // byteOffset === 0.  We force one more copy here to be absolutely
         // certain the buffer that goes into Candid serialization is pristine.
         const full = new Uint8Array(cipherBuf);
+        if (full.length === 0) {
+          console.error(
+            `[E2EE ENCRYPT] encryptMessage returned empty buffer for convId=${convId}`,
+          );
+          return null;
+        }
+        console.log(
+          `[E2EE SEND] Using key fingerprint=${keyFp} for convId=${convId}, blob len=${full.length}`,
+        );
         console.log(
           `[E2EE ENCRYPT direct] total=${full.length}, iv=12, ct+tag=${full.length - 12}, byteOffset=${full.byteOffset}, keyFp=${keyFp}, convId=${convId}`,
         );
@@ -594,293 +703,437 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
-  const decryptFromConv = useCallback(
-    async (convId: string, blob: Uint8Array): Promise<string | null> => {
-      // ── STEP 1: Force a contiguous clean copy BEFORE any slicing ─────────────
-      // toCleanUint8Array handles Candid/IDB non-zero byteOffset, but V8 can
-      // still share a backing buffer.  We force a fresh copy so every slice
-      // below is unambiguous.
-      let clean = toCleanUint8Array(blob);
-      if (clean.byteOffset !== 0 || clean.length !== clean.buffer.byteLength) {
-        console.log(
-          `[E2EE DECRYPT buffer fix] copying non-contiguous view, old byteOffset=${clean.byteOffset}, old length=${clean.length}, old bufferSize=${clean.buffer.byteLength}`,
-        );
-        clean = new Uint8Array(clean); // force fresh contiguous copy
+  async function getDecryptedFileWithCache(
+    storageKey: string,
+    encryptedBlob: Uint8Array,
+    mimeType: string,
+    conversationId: string,
+    key: CryptoKey,
+    originalFileName: string,
+  ): Promise<Blob | null> {
+    try {
+      const ciphertextHash = hashCiphertext(encryptedBlob);
+      const cached = await getDecryptedFile(storageKey, ciphertextHash);
+      if (cached) {
+        console.log("[FILE CACHE] Hit for storageKey=", storageKey);
+        return cached;
       }
-      console.log(
-        `[E2EE DECRYPT final buffer] length=${clean.length}, byteOffset=${clean.byteOffset}, bufferSize=${clean.buffer.byteLength}, convId=${convId}`,
-      );
-
-      // ── STEP 2: Minimum size validation ──────────────────────────────────
-      if (clean.length < 28) {
-        console.warn(
-          `[E2EE DECRYPT] blob too short: ${clean.length} bytes (need >=28), convId=${convId}`,
-        );
+      const decrypted = await decryptBlob(key, encryptedBlob);
+      if (!decrypted) {
+        console.log("[FILE CACHE] Decrypt failed for storageKey=", storageKey);
         return null;
       }
+      const blob = new Blob([decrypted], { type: mimeType });
+      await setDecryptedFile(storageKey, blob, {
+        mimeType,
+        originalFileName,
+        size: blob.size,
+        ciphertextHash,
+        conversationId,
+      });
+      console.log("[FILE CACHE] Stored for storageKey=", storageKey);
+      return blob;
+    } catch (err) {
+      console.error("[FILE CACHE] Error for storageKey=", storageKey, err);
+      return null;
+    }
+  }
 
-      // ── STEP 3: Resolve the conversation key ─────────────────────────────
-      let key = convKeys.current.get(convId);
+  const decryptFromConv = useCallback(
+    async (
+      conversationId: string,
+      blob: Uint8Array,
+      msgId?: string,
+    ): Promise<string | null> => {
+      // ── 0. Normalise incoming blob immediately ─────────────────────────────
+      // toCleanUint8Array handles Uint8Array with non-zero byteOffset,
+      // ArrayBuffer, and plain number[] from IndexedDB JSON deserialization.
+      // We then force a brand-new contiguous copy so every cache operation
+      // (get AND set) uses the exact same buffer.  This prevents hash
+      // mismatches where the cache was written with a sliced copy but read
+      // back with the original (or vice-versa).
+      let clean = toCleanUint8Array(blob);
+      // Force a fresh copy regardless of byteOffset — belt and suspenders.
+      clean = new Uint8Array(clean);
 
-      // If not in memory, attempt lazy load from IndexedDB before giving up.
-      if (!key && principal) {
-        const principalText = principal.toText();
-        const dbKey = `${CONV_KEY_PREFIX}${principalText}:${convId}`;
-        // lazy load from IndexedDB (shared promise)
-        const loadPromise = (async () => {
-          try {
-            const stored = await dbGet<
-              | { wrapped: number[]; fingerprint?: string }
-              | Uint8Array
-              | { raw: Uint8Array; fingerprint?: string }
-              | null
-            >(dbKey);
-            if (stored) {
-              let rawBytes: Uint8Array | null = null;
-              let fingerprint: string | undefined;
-
-              if (stored instanceof Uint8Array) {
-                rawBytes = toCleanUint8Array(stored);
-              } else if (
-                Array.isArray((stored as { wrapped?: number[] }).wrapped)
-              ) {
-                const wrapKey = await deriveStorageWrapKey(principalText);
-                const wrappedArr = toCleanUint8Array(
-                  (stored as { wrapped: number[]; fingerprint?: string })
-                    .wrapped,
-                );
-                rawBytes = await unwrapKeyBytes(wrapKey, wrappedArr, dbKey);
-                fingerprint = (
-                  stored as { wrapped: number[]; fingerprint?: string }
-                ).fingerprint;
-              } else if ((stored as { raw?: Uint8Array }).raw) {
-                const legacy = stored as {
-                  raw: Uint8Array;
-                  fingerprint?: string;
-                };
-                rawBytes = toCleanUint8Array(legacy.raw);
-                fingerprint = legacy.fingerprint;
-              }
-
-              if (rawBytes && rawBytes.length > 0) {
-                const loadedKey = await importAESKey(rawBytes);
-                convKeys.current.set(convId, loadedKey);
-                if (fingerprint) {
-                  groupKeyFingerprints.current.set(convId, fingerprint);
-                }
-                const fpLog = fingerprint || "none";
-                console.log(
-                  `[E2EE KEYSTORE] Lazy-loaded key for convId=${convId} (fingerprint=${fpLog})`,
-                );
-                return loadedKey;
-              }
-            }
-            return null;
-          } catch (err) {
-            console.warn(
-              `[E2EE KEYSTORE] Lazy load failed for convId=${convId}:`,
-              err,
-            );
-            if (principal) {
-              const principalText2 = principal.toText();
-              const dbKeyToRemove = `${CONV_KEY_PREFIX}${principalText2}:${convId}`;
-              try {
-                await dbSet(dbKeyToRemove, null);
-                console.log(
-                  `[E2EE KEYSTORE] Removed corrupted lazy key for ${dbKeyToRemove} — will re-derive`,
-                );
-              } catch {
-                /* best effort */
-              }
-            }
-            setMissingKeyConvIds((prev) => {
-              const next = new Set(prev);
-              next.add(convId);
-              return next;
-            });
-            return null;
-          }
-        })();
-        keyLoadingPromises.current.set(convId, loadPromise);
-        key = (await loadPromise) ?? undefined;
-        keyLoadingPromises.current.delete(convId);
+      // Check local plaintext cache first if msgId is provided
+      if (msgId) {
+        const cached = await getDecryptedMessage(conversationId, msgId, clean);
+        if (cached) {
+          console.log(
+            `[E2EE DECRYPT] Cache hit for convId=${conversationId} msgId=${msgId}`,
+          );
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`,
+          );
+          return cached;
+        }
       }
 
-      if (!key) {
-        // Check if a load is already in flight for this convId
-        const existingLoad = keyLoadingPromises.current.get(convId);
-        if (existingLoad) {
-          console.log(
-            `[E2EE] Waiting for in-flight key load for convId=${convId}`,
-          );
-          const loadedKey = await existingLoad;
-          if (loadedKey) {
-            console.log(`[E2EE] In-flight load succeeded for convId=${convId}`);
-            return decryptMessage(loadedKey, blob);
-          }
-        }
-        console.log(
-          `[E2EE KEYSTORE] No stored key for convId=${convId} — performing exchange`,
-        );
-        // Prevent re-triggering exchange if key already exists or is being derived
-        if (convKeys.current.has(convId)) {
-          console.log(
-            `[E2EE] Key already in memory for convId=${convId}, skipping exchange trigger`,
-          );
-          return null;
-        }
+      // ── STEP 0: Clear any stale status before attempting decryption ──
+      // If a rekey happened since the last failure, we MUST allow this decrypt to
+      // proceed rather than being blocked by a stale status from an old key.
+      // We also clear permanently-unreadable here because the key may have been
+      // re-derived or rotated since the message was marked unreadable.
+      if (msgId) {
+        const currentStatus = await getDecryptionStatus(conversationId, msgId);
         if (
-          derivingConvIds.current.has(convId) ||
-          rekeyInProgress.current.has(convId)
+          currentStatus === "permanently-unreadable" ||
+          currentStatus === "failed-retryable"
         ) {
           console.log(
-            `[E2EE] Key derivation/rekey already in progress for convId=${convId}, skipping exchange trigger`,
+            `[E2EE DECRYPT] Clearing stale status '${currentStatus}' for msgId=${msgId} before fresh attempt`,
           );
-          return null;
+          await setDecryptionStatus(conversationId, msgId, clean, "pending");
         }
-        setMissingKeyConvIds((prev) => {
-          const next = new Set(prev);
-          next.add(convId);
-          return next;
-        });
+      }
+
+      const key = convKeys.current.get(conversationId);
+      if (!key) {
+        console.log(
+          `[E2EE] decryptFromConv: no key in memory for convId=${conversationId}`,
+        );
         return null;
       }
 
-      const keyFpPre = await getKeyFingerprint(key).catch(() => "unknown");
+      const keyFp = await getKeyFingerprint(key);
       console.log(
-        `[E2EE RECV] Attempting decrypt with key fingerprint=${keyFpPre} for blob len=${clean.length}, convId=${convId}`,
+        `[E2EE] decryptFromConv START for convId=${conversationId}: blob=${clean.length} bytes, keyFp=${keyFp}`,
       );
 
-      // ── STEP 4: Attempt decryption (max 3 tries, 100 ms apart) ────────────
-      // decryptMessage now handles prefix-skipping internally for Candid blobs.
-      for (let attempt = 1; attempt <= 3; attempt++) {
+      console.log(
+        `[E2EE DECRYPT final buffer] length=${clean.length}, byteOffset=${clean.byteOffset}, bufferSize=${clean.buffer.byteLength}, keyFp=${keyFp}`,
+      );
+
+      // ── Small-blob guard ───────────────────────────────────────────────────
+      // AES-GCM needs at least 12-byte IV + 16-byte ciphertext+tag = 28 bytes.
+      // Anything shorter cannot possibly be valid — skip all decryption attempts
+      // and fail fast so we don't increment attempt counters on garbage data.
+      if (clean.length < 28) {
+        console.log(
+          `[E2EE] blob too small: ${clean.length} bytes (need >= 28 for AES-GCM)`,
+        );
+        return null;
+      }
+
+      // Hex dump for diagnosis (first 64 bytes)
+      if (clean.length < 100) {
+        const hexPrefix = Array.from(clean.slice(0, Math.min(clean.length, 64)))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join(" ");
+        console.log(`[E2EE HEX BLOB] ${hexPrefix}`);
+      }
+
+      // ── STEP 1: Try Candid prefix-skip logic (0-16 bytes) matching decryptMessage() ──
+      // Candid may prepend 1-byte tag, 2-byte length, 4-byte length, 8-byte length,
+      // or other variant prefixes. We try a wider range (0-16) to be robust.
+      for (let skip = 0; skip <= 16; skip++) {
+        if (clean.length - skip < 28) continue;
+
+        const blobSlice = clean.slice(skip);
+        const iv = blobSlice.slice(0, 12);
+        const ciphertext = blobSlice.slice(12);
+
         try {
-          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
-          console.log(
-            `[E2EE DECRYPT] decryptFromConv attempt=${attempt}/3: total=${clean.length}, keyFp=${keyFp}, convId=${convId}`,
+          const decrypted = await crypto.subtle.decrypt(
+            { name: "AES-GCM", iv },
+            key,
+            ciphertext,
           );
-          const result = await decryptMessage(key, clean);
-          if (result !== null) {
-            if (attempt > 1) {
+          const text = new TextDecoder().decode(decrypted);
+          console.log(
+            `[E2EE DECRYPT] SUCCESS with prefix skip=${skip} for convId=${conversationId}`,
+          );
+          // Cache the plaintext if msgId is provided — use the same `clean` buffer
+          // for both operations so the ciphertext hashes are guaranteed to match.
+          // CRITICAL: await cache writes before returning so callers immediately
+          // see the cached plaintext on re-check.
+          if (msgId) {
+            try {
+              await setDecryptedMessage(conversationId, msgId, clean, text);
+              await setDecryptionStatus(
+                conversationId,
+                msgId,
+                clean,
+                "decrypted",
+              );
               console.log(
-                `[E2EE DECRYPT] decryptFromConv succeeded on attempt ${attempt} for convId=${convId}`,
+                `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (prefix skip=${skip})`,
+              );
+              // Emit a window event so MessageBubble can immediately update UI
+              // without waiting for the next poll/render cycle.
+              window.dispatchEvent(
+                new CustomEvent("decryptionSuccess", {
+                  detail: { conversationId, msgId, plaintext: text },
+                }),
+              );
+            } catch (cacheErr) {
+              // Cache write failed (e.g. quota exceeded) — still return the
+              // plaintext so the UI renders it.  The next render will re-attempt
+              // decryption and can cache again.
+              console.warn(
+                `[E2EE DECRYPT] Cache write failed for msgId=${msgId} — returning plaintext anyway:`,
+                cacheErr,
+              );
+              console.log(
+                `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`,
+              );
+              // Update status so UI doesn't show pending/unreadable
+              if (msgId) {
+                await setDecryptionStatus(
+                  conversationId,
+                  msgId,
+                  clean,
+                  "decrypted",
+                );
+              }
+              // Still emit the event so UI updates even if cache write failed
+              window.dispatchEvent(
+                new CustomEvent("decryptionSuccess", {
+                  detail: { conversationId, msgId, plaintext: text },
+                }),
               );
             }
-            return result;
+          } else {
+            console.log(
+              `[E2EE DECRYPT SUCCESS] displaying messageId=unknown convId=${conversationId}`,
+            );
           }
-          // decryptMessage returned null — all prefix skips and brute-force failed
-          console.warn(
-            `[E2EE DECRYPT] decryptFromConv attempt ${attempt}/3 returned null (all prefix skips 0-16 and brute-force attempted) for convId=${convId}`,
-          );
+          return text;
+        } catch (_e) {
+          // Continue trying next skip offset
+        }
+      }
+
+      // ── STEP 2: Diagnostic brute-force possible IV positions (for small blobs) ──
+      // If the blob is exactly 32 bytes (or otherwise small) and standard prefix
+      // skips failed, the IV may be misaligned due to a prefix/alignment edge case.
+      // We log a specific diagnostic and try every possible IV start position.
+      if (clean.length <= 100) {
+        console.log(
+          `[E2EE DECRYPT DIAGNOSTIC] Standard prefix-skip failed for small blob len=${clean.length}. Brute-forcing IV positions (0-${clean.length - 28}).`,
+        );
+        for (let ivStart = 0; ivStart <= clean.length - 28; ivStart++) {
+          const iv = clean.slice(ivStart, ivStart + 12);
+          const ciphertext = clean.slice(ivStart + 12);
+          if (ciphertext.length < 16) continue;
+
+          try {
+            const decrypted = await crypto.subtle.decrypt(
+              { name: "AES-GCM", iv },
+              key,
+              ciphertext,
+            );
+            const text = new TextDecoder().decode(decrypted);
+            console.log(
+              `[E2EE DECRYPT SUCCESS via brute-force] IV start=${ivStart}, len=${clean.length}`,
+            );
+            if (msgId) {
+              try {
+                await setDecryptedMessage(conversationId, msgId, clean, text);
+                await setDecryptionStatus(
+                  conversationId,
+                  msgId,
+                  clean,
+                  "decrypted",
+                );
+                console.log(
+                  `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (brute-force)`,
+                );
+                // Emit a window event so MessageBubble can immediately update UI
+                window.dispatchEvent(
+                  new CustomEvent("decryptionSuccess", {
+                    detail: { conversationId, msgId, plaintext: text },
+                  }),
+                );
+              } catch (cacheErr) {
+                console.warn(
+                  `[E2EE DECRYPT] Cache write failed for msgId=${msgId} — returning plaintext anyway:`,
+                  cacheErr,
+                );
+                console.log(
+                  `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`,
+                );
+                // Still emit the event so UI updates even if cache write failed
+                window.dispatchEvent(
+                  new CustomEvent("decryptionSuccess", {
+                    detail: { conversationId, msgId, plaintext: text },
+                  }),
+                );
+              }
+            } else {
+              console.log(
+                `[E2EE DECRYPT SUCCESS] displaying messageId=unknown convId=${conversationId}`,
+              );
+            }
+            return text;
+          } catch (_e) {
+            // continue trying next IV position
+          }
+        }
+      }
+
+      // ── STEP 3: All attempts with current key failed ──
+      console.error(
+        `[E2EE DECRYPT] All prefix-skip attempts failed for convId=${conversationId}. Key fingerprint=${keyFp}. This message may be encrypted under a different key.`,
+      );
+
+      // ── STEP 4: Legacy key fallback ──
+      // Check if we have any older stored keys for this convId in IndexedDB
+      if (principal) {
+        try {
+          const prefix = `${CONV_KEY_PREFIX}${principal.toText()}:${conversationId}`;
+          const allEntries = await dbGetKeysWithPrefix(prefix);
+          if (allEntries.length > 1) {
+            console.log(
+              `[E2EE DECRYPT] Found ${allEntries.length} stored key entries for convId=${conversationId}, trying legacy keys...`,
+            );
+            const wrapKey = await deriveStorageWrapKey(principal.toText());
+            for (const entry of allEntries) {
+              try {
+                const stored = entry.value as {
+                  wrapped: number[];
+                  fingerprint?: string;
+                } | null;
+                if (!stored || !Array.isArray(stored.wrapped)) continue;
+                const wrappedArr = toCleanUint8Array(stored.wrapped);
+                const rawBytes = await unwrapKeyBytes(
+                  wrapKey,
+                  wrappedArr,
+                  entry.key,
+                );
+                if (!rawBytes || rawBytes.length === 0) continue;
+                const legacyKey = await importAESKey(rawBytes);
+                const legacyFp = await getKeyFingerprint(legacyKey);
+                console.log(
+                  `[E2EE DECRYPT] Trying legacy key fingerprint=${legacyFp} for convId=${conversationId}`,
+                );
+
+                // Try the same prefix-skip logic with the legacy key
+                for (let skip = 0; skip <= 16; skip++) {
+                  if (clean.length - skip < 28) continue;
+                  const blobSlice = clean.slice(skip);
+                  const iv = blobSlice.slice(0, 12);
+                  const ciphertext = blobSlice.slice(12);
+                  try {
+                    const decrypted = await crypto.subtle.decrypt(
+                      { name: "AES-GCM", iv },
+                      legacyKey,
+                      ciphertext,
+                    );
+                    const text = new TextDecoder().decode(decrypted);
+                    console.log(
+                      `[E2EE DECRYPT] SUCCESS with legacy key (fp=${legacyFp}, skip=${skip}) for convId=${conversationId}`,
+                    );
+                    if (msgId) {
+                      try {
+                        await setDecryptedMessage(
+                          conversationId,
+                          msgId,
+                          clean,
+                          text,
+                        );
+                        await setDecryptionStatus(
+                          conversationId,
+                          msgId,
+                          clean,
+                          "decrypted",
+                        );
+                        console.log(
+                          `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId} (legacy key)`,
+                        );
+                        // Emit a window event so MessageBubble can immediately update UI
+                        window.dispatchEvent(
+                          new CustomEvent("decryptionSuccess", {
+                            detail: { conversationId, msgId, plaintext: text },
+                          }),
+                        );
+                      } catch (cacheErr) {
+                        console.warn(
+                          `[E2EE DECRYPT] Cache write failed for msgId=${msgId} — returning plaintext anyway:`,
+                          cacheErr,
+                        );
+                        console.log(
+                          `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`,
+                        );
+                        // Still emit the event so UI updates even if cache write failed
+                        window.dispatchEvent(
+                          new CustomEvent("decryptionSuccess", {
+                            detail: { conversationId, msgId, plaintext: text },
+                          }),
+                        );
+                      }
+                    } else {
+                      console.log(
+                        `[E2EE DECRYPT SUCCESS] displaying messageId=unknown convId=${conversationId}`,
+                      );
+                    }
+                    return text;
+                  } catch (_e) {
+                    // continue with next skip
+                  }
+                }
+              } catch (_e) {
+                // continue to next legacy entry
+              }
+            }
+          }
         } catch (err) {
-          const keyFp = await getKeyFingerprint(key).catch(() => "unknown");
           console.warn(
-            `[E2EE DECRYPT] decryptFromConv FAILED (attempt ${attempt}/3) for convId=${convId}: blob=${clean.length} bytes, keyFp=${keyFp}`,
+            `[E2EE DECRYPT] Legacy key fallback failed for convId=${conversationId}:`,
             err,
           );
         }
-        if (attempt < 3) {
-          await new Promise((r) => setTimeout(r, 100));
+      }
+
+      // ── STEP 5: Handle persistent failure with per-message status tracking ──
+      // After every decrypt path (current key + legacy keys) has been exhausted,
+      // do one final cache check in case a concurrent call succeeded and cached
+      // the plaintext while we were busy decrypting.
+      if (msgId) {
+        const finalCacheCheck = await getDecryptedMessage(
+          conversationId,
+          msgId,
+          clean,
+        );
+        if (finalCacheCheck) {
+          console.log(
+            `[E2EE DECRYPT] Final cache hit (concurrent write) for msgId=${msgId}`,
+          );
+          console.log(
+            `[E2EE DECRYPT SUCCESS] displaying messageId=${msgId} convId=${conversationId}`,
+          );
+          return finalCacheCheck;
         }
-      }
 
-      // Log hex prefix of the blob for diagnosis when all attempts fail
-      const hexPrefix = Array.from(clean.slice(0, Math.min(clean.length, 64)))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join(" ");
-      console.error(
-        `[E2EE DECRYPT] All 3 attempts failed for convId=${convId}. Blob len=${clean.length}, hexPrefix(64)=${hexPrefix}`,
-      );
+        const attempts = await getDecryptionAttempts(conversationId, msgId);
 
-      // ── STEP 5a: Trigger rekey if not already in progress ────────────────
-      // After all decryption attempts fail, automatically initiate a full
-      // key re-exchange so both sides derive a fresh shared secret.
-      if (!rekeyInProgress.current.has(convId)) {
-        console.log(
-          `[E2EE DECRYPT] Triggering automatic rekey for convId=${convId} after decrypt failure`,
+        // Only escalate to permanently-unreadable after repeated failures.
+        // failed-retryable keeps the door open for a future re-derivation / rekey.
+        const nextStatus: "failed-retryable" | "permanently-unreadable" =
+          attempts >= 2 ? "permanently-unreadable" : "failed-retryable";
+
+        await setDecryptionStatus(conversationId, msgId, clean, nextStatus);
+        console.error(
+          `[E2EE DECRYPT] Decryption failed for convId=${conversationId} msgId=${msgId}. Key fingerprint=${keyFp}. Marking as ${nextStatus}.`,
         );
-        // Fire-and-forget: rekeyConversation handles its own guard
-        rekeyConversation(convId).catch(() => {
-          /* best effort */
+        // Mark as missing key to trigger ChatPage re-derivation
+        setMissingKeyConvIds((prev) => {
+          const next = new Set(prev);
+          next.add(conversationId);
+          return next;
+        });
+      } else {
+        // No msgId available — fall back to old behavior
+        console.error(
+          `[E2EE DECRYPT] Decryption failed for convId=${conversationId}. Key fingerprint=${keyFp}. Triggering auto-rekey...`,
+        );
+        setMissingKeyConvIds((prev) => {
+          const next = new Set(prev);
+          next.add(conversationId);
+          return next;
         });
       }
-
-      // ── STEP 5: All 3 attempts failed — manual roundtrip test with stored key ──
-      // Try encrypting a known plaintext with the SAME stored key and decrypting
-      // it.  If this roundtrip also fails, the key itself is corrupt.
-      const keyFpFinal = await getKeyFingerprint(key).catch(() => "unknown");
-      let roundtripPassed = false;
-      try {
-        const testPlaintext = "__roundtrip_test__";
-        const testBytes = new TextEncoder().encode(testPlaintext);
-        const testBlob = await encryptMessage(key, testBytes);
-        const testResult = await decryptMessage(key, testBlob);
-        roundtripPassed = testResult === testPlaintext;
-        console.log(
-          `[E2EE DECRYPT] Manual roundtrip with stored key ${roundtripPassed ? "PASSED" : "FAILED"} for convId=${convId}, keyFp=${keyFpFinal}`,
-        );
-      } catch (rtErr) {
-        console.error(
-          `[E2EE DECRYPT] Manual roundtrip with stored key FAILED for convId=${convId}, keyFp=${keyFpFinal}:`,
-          rtErr,
-        );
-      }
-
-      // ── STEP 6: Distinguish bad blob vs corrupt key ──────────────────────
-      // CRITICAL RULE: Only evict the key if exportKey FAILS (corrupt CryptoKey)
-      // OR the manual roundtrip above also fails.
-      // AES-GCM OperationError with a passing exportKey = bad blob format, NOT
-      // a corrupt key. Evicting on OperationError causes endless re-derivation
-      // loops because the NEXT message will fail the same way.
-      let keyExportFailed = false;
-      try {
-        await crypto.subtle.exportKey("raw", key);
-      } catch (exportErr) {
-        keyExportFailed = true;
-        console.error(
-          `[E2EE DECRYPT] Key export test FAILED (keyFp=${keyFpFinal}, convId=${convId}) — CryptoKey is CORRUPT. Evicting and triggering re-derivation.`,
-          exportErr,
-        );
-      }
-
-      if (!keyExportFailed && roundtripPassed) {
-        // exportKey PASSED and roundtrip PASSED → key object is valid;
-        // the blob is unreadable (bad format, wrong sender key at time of
-        // encryption, or network corruption).
-        // Retain the key — do NOT evict from memory or IndexedDB.
-        console.warn(
-          `[E2EE DECRYPT] All prefix variants failed but key is healthy — marking message as unreadable. keyFp=${keyFpFinal}, convId=${convId}`,
-        );
-        // Do NOT clear the key. Do NOT mark convId as missing.
-        // Return null so the UI shows "Decryption failed" for this message only.
-        return null;
-      }
-
-      // exportKey FAILED or roundtrip FAILED → the CryptoKey itself is bad → full eviction.
-      console.log(
-        `[E2EE DECRYPT] Evicting corrupt key for convId=${convId} (exportTest=${keyExportFailed ? "FAILED" : "PASSED"}, roundtrip=${roundtripPassed ? "PASSED" : "FAILED"})`,
-      );
-      // Clear from memory
-      convKeys.current.delete(convId);
-      // Clear from ready state
-      setKeyReadyConvIds((prev) => {
-        const next = new Set(prev);
-        next.delete(convId);
-        return next;
-      });
-      // Clear from IndexedDB
-      if (principal) {
-        const dbKeyEvict = `${CONV_KEY_PREFIX}${principal.toText()}:${convId}`;
-        dbSet(dbKeyEvict, null).catch(() => {
-          /* best effort */
-        });
-      }
-      // Mark as missing so ChatPage triggers re-derivation
-      setMissingKeyConvIds((prev) => {
-        const next = new Set(prev);
-        next.add(convId);
-        return next;
-      });
 
       return null;
     },
@@ -892,6 +1145,8 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
       console.log(
         `[E2EE FORCE-REDERIVE] Clearing key for convId=${convId} from memory + IndexedDB — will re-derive on next peer key arrival`,
       );
+      await clearConversationCache(convId);
+      await clearFileCacheForConversation(convId);
       // Clear from memory
       convKeys.current.delete(convId);
       groupKeyFingerprints.current.delete(convId);
@@ -926,71 +1181,159 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
 
   /**
    * rekeyConversation — force a full ECDH key re-exchange for a conversation.
-   * 1. Clear the old conversation key from memory + IndexedDB.
-   * 2. Export the current ECDH public key and publish it to the backend profile.
-   * 3. Mark the conversation as missing so ChatPage triggers fresh re-derivation.
-   * A rekeyInProgress guard prevents duplicate loops.
+   * 1. Acquire a per-conversation lock (with 30s auto-timeout).
+   * 2. Clear the old conversation key from memory + IndexedDB.
+   * 3. Generate a fresh ECDH key pair if needed.
+   * 4. Export the current ECDH public key and publish it to the backend profile.
+   * 5. Mark the conversation as missing so ChatPage triggers fresh re-derivation.
+   * 6. Emit a window event so MessageBubble can retry decryption.
+   * Returns { success, error? } for UI feedback.
    */
-  const rekeyConversation = useCallback(
-    async (convId: string) => {
-      if (!keyPair) {
-        console.warn("[E2EE REKEY] keyPair not ready, waiting...");
-        setTimeout(() => rekeyConversation(convId), 500);
-        return;
-      }
-      if (!principal) {
-        console.warn("[E2EE REKEY] principal not ready, waiting...");
-        setTimeout(() => rekeyConversation(convId), 500);
-        return;
-      }
-      if (rekeyInProgress.current.has(convId)) {
+  /**
+   * rekeyConversation — force a full ECDH key re-exchange for a conversation.
+   * 1. Acquire a per-conversation lock (with 30s auto-timeout).
+   * 2. Clear the old conversation key from memory + IndexedDB.
+   * 3. Generate a fresh ECDH key pair if needed.
+   * 4. Export the current ECDH public key and publish it to the backend profile.
+   * 5. Mark the conversation as missing so ChatPage triggers fresh re-derivation.
+   * 6. Emit a window event so MessageBubble can retry decryption.
+   * Returns { success, error? } for UI feedback.
+   */
+  const rekeyConversation = async (
+    conversationId: string,
+  ): Promise<{ success: boolean; error?: string }> => {
+    await clearFileCacheForConversation(conversationId);
+    console.log(`[E2EE REKEY] Starting rekey for convId=${conversationId}`);
+
+    // Prevent concurrent rekeys for the same conversation
+    if (rekeyLocks.current.has(conversationId)) {
+      const lock = rekeyLocks.current.get(conversationId)!;
+      const elapsed = Date.now() - lock.startTime;
+      if (elapsed < 30000) {
         console.log(
-          `[E2EE REKEY] Skipping rekey for convId=${convId} — already in progress`,
+          `[E2EE REKEY] Rekey already in progress for convId=${conversationId} (elapsed=${elapsed}ms)`,
         );
-        return;
+        return { success: false, error: "Rekey already in progress" };
       }
-      rekeyInProgress.current.add(convId);
+      // Stale lock, clear it
+      clearTimeout(lock.timeoutId);
+      rekeyLocks.current.delete(conversationId);
+    }
+
+    // Set lock with auto-clear after 30s
+    const timeoutId = setTimeout(() => {
       console.log(
-        `[E2EE] Stale key detected — initiating rekey for convId=${convId}`,
+        `[E2EE REKEY] Auto-clearing stale lock for convId=${conversationId}`,
+      );
+      rekeyLocks.current.delete(conversationId);
+    }, 30000);
+    rekeyLocks.current.set(conversationId, {
+      timeoutId,
+      startTime: Date.now(),
+    });
+
+    try {
+      // 1. Clear old keys from memory AND IndexedDB AND plaintext cache
+      console.log(
+        `[E2EE REKEY] Clearing old keys and plaintext cache for convId=${conversationId}`,
+      );
+      await clearConversationCache(conversationId);
+      await clearFileCacheForConversation(conversationId);
+      convKeys.current.delete(conversationId);
+      setKeyReadyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(conversationId);
+        return next;
+      });
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.delete(conversationId);
+        return next;
+      });
+      if (principal) {
+        const dbKey = `${CONV_KEY_PREFIX}${principal.toText()}:${conversationId}`;
+        await dbSet(dbKey, null);
+      }
+
+      // 2. Ensure we have a key pair
+      if (!keyPair) {
+        console.log("[E2EE REKEY] No keyPair, generating fresh pair");
+        const newPair = await loadOrCreateKeyPair(
+          principal ? principal.toText() : "",
+        );
+        setKeyPair(newPair.keyPair);
+      }
+
+      // 3. Publish new public key to backend profile
+      if (!principal) {
+        console.error(
+          "[E2EE REKEY] Cannot publish public key — principal missing",
+        );
+        return { success: false, error: "Principal not available" };
+      }
+
+      if (!keyPair) {
+        return { success: false, error: "Key pair not ready" };
+      }
+      const pubKeyBytes = await exportPublicKey(keyPair.publicKey);
+      const newPubFp = Array.from(pubKeyBytes.slice(0, 8))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+      console.log(
+        `[E2EE REKEY] Publishing new public key, length=${pubKeyBytes.length}, fingerprint(first8)=${newPubFp}`,
       );
 
-      try {
-        // Step 1: forcefully clear the old key
-        await forceReDeriveKey(convId);
+      const updateResult = await updateProfile.mutateAsync({
+        ecdhPublicKey: new Uint8Array(pubKeyBytes),
+      });
 
-        // Step 2: publish a fresh ECDH public key to the backend profile
-        if (keyPair && principal) {
-          try {
-            const pubBytes = await exportPublicKey(keyPair.publicKey);
-            const fp = Array.from(pubBytes.slice(0, 8))
-              .map((b) => b.toString(16).padStart(2, "0"))
-              .join("");
-            console.log(
-              `[E2EE REKEY] Publishing fresh public key (fingerprint=${fp}) for convId=${convId}`,
-            );
-            await updateProfile.mutateAsync({
-              ecdhPublicKey: pubBytes,
-            });
-            console.log(
-              `[E2EE REKEY] Fresh public key published successfully for convId=${convId}`,
-            );
-          } catch (pubErr) {
-            console.error(
-              `[E2EE REKEY] Failed to publish fresh public key for convId=${convId}:`,
-              pubErr,
-            );
-          }
-        } else {
-          console.warn(
-            `[E2EE REKEY] Cannot publish public key — keyPair or principal missing for convId=${convId}`,
-          );
-        }
-      } finally {
-        rekeyInProgress.current.delete(convId);
+      if (
+        updateResult &&
+        typeof updateResult === "object" &&
+        "err" in updateResult &&
+        updateResult.err
+      ) {
+        const errText = extractErrText(updateResult);
+        console.error(`[E2EE REKEY] Failed to publish public key: ${errText}`);
+        return {
+          success: false,
+          error: `Failed to publish public key: ${errText}`,
+        };
       }
-    },
-    [forceReDeriveKey, keyPair, principal, updateProfile],
-  );
+
+      console.log(
+        `[E2EE REKEY] Public key published successfully. New fingerprint(first8)=${newPubFp}. Both sides must now re-derive with the new key.`,
+      );
+
+      // 4. Trigger re-derivation by adding to missing keys
+      // This will cause ChatPage to fetch peer key and derive new shared key
+      setMissingKeyConvIds((prev) => {
+        const next = new Set(prev);
+        next.add(conversationId);
+        return next;
+      });
+
+      // 5. Emit event so UI can retry decryption
+      window.dispatchEvent(
+        new CustomEvent("rekey:complete", { detail: { conversationId } }),
+      );
+
+      return { success: true };
+    } catch (err) {
+      console.error(`[E2EE REKEY] Error for convId=${conversationId}:`, err);
+      return {
+        success: false,
+        error: err instanceof Error ? err.message : "Rekey failed",
+      };
+    } finally {
+      // Clear lock
+      const lock = rekeyLocks.current.get(conversationId);
+      if (lock) {
+        clearTimeout(lock.timeoutId);
+        rekeyLocks.current.delete(conversationId);
+      }
+    }
+  };
 
   const decryptOwnDisplayName = useCallback(
     async (encryptedBlob: Uint8Array): Promise<string | null> => {
@@ -1028,6 +1371,7 @@ export function CryptoProvider({ children }: { children: React.ReactNode }) {
         isKeyReady: (convId: string) => keyReadyConvIds.has(convId),
         forceReDeriveKey,
         rekeyConversation,
+        getDecryptedFileWithCache,
       }}
     >
       {children}

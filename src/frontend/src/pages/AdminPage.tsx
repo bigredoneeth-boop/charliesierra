@@ -33,6 +33,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/auth-context";
+import { usePurgeAll, usePurgeStatus } from "@/hooks/use-admin";
 import {
   useApproveJoinRequest,
   useDenyJoinRequest,
@@ -58,6 +59,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Activity,
   AlertTriangle,
+  Bomb,
   Copy,
   Download,
   Globe,
@@ -1849,6 +1851,229 @@ function JoinRequestsTab() {
   );
 }
 
+// ── Danger Zone / Bootstrap Purge Tab ──────────────────────────────────────────────
+const SUPER_ADMIN_PRINCIPAL =
+  "dzdlk-gui4e-tacqa-6ptxj-jslvy-medgl-425ra-lbapw-3lmgh-hbulu-wqe";
+
+function PurgeTab() {
+  const { principal } = useAuth();
+  const { data: hasPurgeBeenPerformed = false } = usePurgeStatus();
+  const purgeAll = usePurgeAll();
+  const [confirmText, setConfirmText] = useState("");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  const isSuperAdmin = principal?.toText() === SUPER_ADMIN_PRINCIPAL;
+
+  const handlePurge = () => {
+    if (confirmText !== "PURGE ALL DATA") {
+      toast.error("Confirmation phrase does not match. Operation aborted.");
+      return;
+    }
+    purgeAll.mutate(undefined, {
+      onSuccess: () => {
+        toast.success(
+          "PURGE COMPLETE: All messages and conversations have been eradicated.",
+        );
+        setShowConfirmDialog(false);
+        setConfirmText("");
+      },
+      onError: (err) => {
+        toast.error(`PURGE FAILED: ${err.message}`);
+      },
+    });
+  };
+
+  if (hasPurgeBeenPerformed) {
+    return (
+      <div className="space-y-4" data-ocid="admin.danger_zone_panel">
+        <div className="flex items-start gap-3 p-3 rounded-lg bg-success/10 border border-success/30 text-xs">
+          <ShieldCheck
+            size={14}
+            className="text-success flex-shrink-0 mt-0.5"
+          />
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">SYSTEM PURGED.</strong> The
+            one-time bootstrap purge has been executed. All legacy messages and
+            conversations have been cleared. This operation is irreversible and
+            cannot be repeated.
+          </p>
+        </div>
+        <div className="bg-card border border-border rounded-lg p-6 text-center">
+          <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+            <ShieldCheck size={32} className="text-success" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">
+            Purge Executed
+          </h3>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            The bootstrap purge was completed successfully. All message history
+            and conversation records have been permanently removed from the
+            system. Principal IDs and admin configurations remain intact.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isSuperAdmin) {
+    return (
+      <div className="space-y-4" data-ocid="admin.danger_zone_panel">
+        <div className="flex items-start gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-xs">
+          <AlertTriangle
+            size={14}
+            className="text-destructive flex-shrink-0 mt-0.5"
+          />
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">ACCESS DENIED.</strong> This
+            area is restricted to the designated Super Administrator only.
+            Unauthorized access attempts are logged and may result in
+            administrative action.
+          </p>
+        </div>
+        <div className="bg-card border border-border rounded-lg p-6 text-center">
+          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+            <Shield size={32} className="text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">
+            Restricted Area
+          </h3>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            You do not possess the required clearance level to access this
+            function. Contact the Super Administrator if you believe this is an
+            error.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4" data-ocid="admin.danger_zone_panel">
+      <div className="flex items-start gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-xs">
+        <AlertTriangle
+          size={14}
+          className="text-destructive flex-shrink-0 mt-0.5"
+        />
+        <p className="text-muted-foreground">
+          <strong className="text-foreground">CRITICAL OPERATION.</strong> This
+          function performs a one-time bootstrap purge of all messages and
+          conversations. This action is irreversible and will permanently erase
+          all chat history. Principal IDs and administrative settings will be
+          preserved.
+        </p>
+      </div>
+
+      <div className="bg-card border border-border rounded-lg p-6 space-y-6">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-lg bg-destructive/10 flex items-center justify-center flex-shrink-0">
+            <Bomb size={24} className="text-destructive" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-foreground">
+              Bootstrap Purge
+            </h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Execute a one-time purge to clear all legacy messages and
+              conversations that cannot be decrypted due to key rotation. This
+              is required after major cryptographic protocol changes to ensure
+              system integrity.
+            </p>
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-4 space-y-4">
+          <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+            <h4 className="text-sm font-semibold text-foreground">
+              Operational Impact Assessment
+            </h4>
+            <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+              <li>All direct message history will be permanently deleted</li>
+              <li>
+                All group conversation history will be permanently deleted
+              </li>
+              <li>User principal IDs and profiles will remain intact</li>
+              <li>Administrative settings and audit logs will remain intact</li>
+              <li>This operation can only be performed once</li>
+              <li>Action is logged and auditable</li>
+            </ul>
+          </div>
+
+          <Button
+            variant="destructive"
+            size="lg"
+            className="w-full sm:w-auto"
+            onClick={() => setShowConfirmDialog(true)}
+            data-ocid="admin.purge.open_modal_button"
+          >
+            <Bomb size={16} className="mr-2" />
+            Initiate Bootstrap Purge
+          </Button>
+        </div>
+      </div>
+
+      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <DialogContent className="sm:max-w-md" data-ocid="admin.purge.dialog">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-destructive">
+              <AlertTriangle size={18} />
+              CONFIRM BOOTSTRAP PURGE
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              This is a critical, irreversible operation. All messages and
+              conversations will be permanently eradicated. Type the
+              confirmation phrase exactly to proceed.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-3">
+              <p className="text-xs text-destructive font-mono">
+                CONFIRMATION PHRASE: PURGE ALL DATA
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="purge-confirm" className="text-sm font-medium">
+                Enter Confirmation Phrase
+              </Label>
+              <Input
+                id="purge-confirm"
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder="Type PURGE ALL DATA"
+                className="font-mono"
+                autoComplete="off"
+                data-ocid="admin.purge.confirm_input"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowConfirmDialog(false);
+                setConfirmText("");
+              }}
+              data-ocid="admin.purge.cancel_button"
+            >
+              Abort Operation
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handlePurge}
+              disabled={purgeAll.isPending || confirmText !== "PURGE ALL DATA"}
+              data-ocid="admin.purge.confirm_button"
+            >
+              {purgeAll.isPending ? "Executing..." : "EXECUTE PURGE"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const { actor, isFetching } = useActor(createActor);
   const { principal } = useAuth();
@@ -1980,6 +2205,17 @@ export default function AdminPage() {
                 <UserCheck size={13} />
                 Join Requests
               </TabsTrigger>
+              <TabsTrigger
+                value="danger-zone"
+                className="flex items-center gap-1.5"
+                data-ocid="admin.tab.danger_zone"
+              >
+                <Bomb size={13} />
+                Danger Zone
+                <span className="ml-1 rounded-full bg-destructive/20 text-destructive text-[10px] font-semibold px-1.5 py-0.5">
+                  CRITICAL
+                </span>
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="accounts" className="mt-4">
@@ -2003,6 +2239,9 @@ export default function AdminPage() {
             </TabsContent>
             <TabsContent value="join-requests" className="mt-4">
               <JoinRequestsTab />
+            </TabsContent>
+            <TabsContent value="danger-zone" className="mt-4">
+              <PurgeTab />
             </TabsContent>
           </Tabs>
         </div>
